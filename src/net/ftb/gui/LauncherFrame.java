@@ -9,18 +9,23 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+
+import net.ftb.data.Settings;
 
 public class LauncherFrame extends JFrame
 {
@@ -38,6 +43,24 @@ public class LauncherFrame extends JFrame
 		{
 			e.printStackTrace();
 		}
+		
+		// Load settings
+		try
+		{
+			Settings.initSettings();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, 
+					"Failed to load config file: " + e.getMessage(),
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		// Create the install directory if it does not exist.
+		File installDir = new File(Settings.getSettings().getInstallPath());
+		if (!installDir.exists())
+			installDir.mkdirs();
+		
 		LauncherFrame mainFrame = new LauncherFrame();
 		mainFrame.setVisible(true);
 	}

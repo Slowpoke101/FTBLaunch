@@ -5,14 +5,21 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
+
+import net.ftb.data.Settings;
 
 public class OptionsDialog extends JDialog
 {
@@ -20,6 +27,7 @@ public class OptionsDialog extends JDialog
 	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField installFolderTextField;
+	private JToggleButton tglbtnForceUpdate;
 	
 	/**
 	 * Create the dialog.
@@ -65,7 +73,7 @@ public class OptionsDialog extends JDialog
 			contentPanel.add(installBrowseBtn, gbc_installBrowseBtn);
 		}
 		{
-			JToggleButton tglbtnForceUpdate = new JToggleButton("Force update?");
+			tglbtnForceUpdate = new JToggleButton("Force update?");
 			GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 			gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
 			gbc_tglbtnForceUpdate.gridwidth = 3;
@@ -80,16 +88,74 @@ public class OptionsDialog extends JDialog
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						saveSettings();
+						setVisible(false);
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						setVisible(false);
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		loadSettings();
 	}
 	
+	/**
+	 * "Loads" the settings from the settings class into their respective GUI
+	 * controls.
+	 */
+	private void loadSettings()
+	{
+		Settings settings = Settings.getSettings();
+		
+		installFolderTextField.setText(settings.getInstallPath());
+		
+		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+	}
+	
+	/**
+	 * "Saves" the settings from the GUI controls into the settings class.
+	 */
+	private void saveSettings()
+	{
+		Settings settings = Settings.getSettings();
+		
+		settings.setInstallPath(installFolderTextField.getText());
+		
+		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		
+		try
+		{
+			settings.save();
+		} catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, 
+					"Failed to save config file: " + e.getMessage(),
+					"Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, 
+					"Failed to save config file: " + e.getMessage(),
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 }

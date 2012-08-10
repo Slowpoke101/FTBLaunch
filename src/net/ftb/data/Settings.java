@@ -1,18 +1,48 @@
 package net.ftb.data;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 import net.ftb.util.OSUtils;
+import net.ftb.util.PathUtils;
 
 public class Settings extends Properties
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static void LoadSettings(String file) 
-			throws FileNotFoundException, IOException
+	public static void initSettings() throws IOException
+	{
+		File cfgFile;
+		
+		// Check for a config file in the current working directory.
+		cfgFile = new File("ftblaunch.cfg");
+		if (cfgFile.exists())
+		{
+			LoadSettings(cfgFile);
+			return;
+		}
+		
+		// Check for a config file in the default installation directory.
+		cfgFile = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
+				"ftblaunch.cfg"));
+		if (cfgFile.exists())
+		{
+			LoadSettings(cfgFile);
+			return;
+		}
+		
+		// If none are found, load a blank config file in the default 
+		// installation directory.
+		settings = new Settings();
+		settings.setConfigFile(cfgFile);
+	}
+	
+	public static void LoadSettings(File file) throws FileNotFoundException,
+			IOException
 	{
 		settings = new Settings(file);
 	}
@@ -29,9 +59,15 @@ public class Settings extends Properties
 		
 	}
 	
-	public Settings(String file) throws FileNotFoundException, IOException
+	public Settings(File file) throws FileNotFoundException, IOException
 	{
+		configPath = file;
 		load(new FileInputStream(file));
+	}
+	
+	public void save() throws FileNotFoundException, IOException
+	{
+		store(new FileOutputStream(configPath), "FTBLaunch Config File");
 	}
 	
 	public String getInstallPath()
@@ -43,4 +79,30 @@ public class Settings extends Properties
 	{
 		setProperty("installPath", path);
 	}
+	
+	public boolean getForceUpdate()
+	{
+		return forceUpdate;
+	}
+	
+	public void setForceUpdate(boolean force)
+	{
+		forceUpdate = force;
+	}
+	
+	public void setConfigFile(File path)
+	{
+		configPath = path;
+	}
+	
+	public File getConfigFile()
+	{
+		return configPath;
+	}
+	
+	
+	private File configPath;
+	
+	// This doesn't get saved to a config.
+	private boolean forceUpdate;
 }
