@@ -1,26 +1,26 @@
 package net.ftb.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class LauncherFrame extends JFrame
 {
@@ -163,13 +163,13 @@ public class LauncherFrame extends JFrame
 		loginPanel.add(verticalStrut, gbc_verticalStrut);
 	}
 	
-	JPanel bottomPanel;
-	JPanel loginPanel;
+	private JPanel bottomPanel;
+	private JPanel loginPanel;
 	
-	JTextPane newsPane;
+	private JTextPane newsPane;
 	
-	JTextField usernameField;
-	JPasswordField passwordField;
+	private JTextField usernameField;
+	private JPasswordField passwordField;
 	private Component horizontalFiller;
 	private JLabel lblUsername;
 	private JLabel lblPassword;
