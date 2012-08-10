@@ -31,9 +31,11 @@ public class LauncherFrame extends JFrame
 	 */
 	public static void main(String[] args)
 	{
-		try {
+		try
+		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		LauncherFrame mainFrame = new LauncherFrame();
@@ -97,10 +99,13 @@ public class LauncherFrame extends JFrame
 		loginPanel.add(lblUsername, gbc_lblUsername);
 		
 		btnOptions = new JButton("Options");
-		btnOptions.addActionListener(new ActionListener() {
+		btnOptions.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				//TODO: Handle Options button click
+			public void actionPerformed(ActionEvent e)
+			{
+				OptionsDialog optionsDlg = new OptionsDialog();
+				optionsDlg.setVisible(true);
 			}
 		});
 		GridBagConstraints gbc_btnOptions = new GridBagConstraints();
@@ -141,12 +146,13 @@ public class LauncherFrame extends JFrame
 		loginPanel.add(chckbxRemember, gbc_chckbxRemember);
 		
 		btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener() {
+		btnLogin.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				//TODO: Handle Login button click
 			}
-			
 		});
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
