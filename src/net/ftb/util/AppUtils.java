@@ -25,7 +25,7 @@ public class AppUtils
 	 * Downloads data from the given URL and returns it as a string.
 	 * @param url the URL to fetch data from.
 	 * @return the data downloaded from the given URL as a string.
-	 * @throws IOException if url.openStream throws an IOException
+	 * @throws IOException if an error occurs when reading from the stream.
 	 */
 	public static String downloadString(URL url) throws IOException
 	{

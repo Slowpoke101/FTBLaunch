@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.InvalidParameterException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -25,9 +28,14 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
+import net.ftb.data.LoginResponse;
 import net.ftb.data.Settings;
+import net.ftb.util.AppUtils;
 
-public class LauncherFrame extends JFrame
+import javax.swing.SwingConstants;
+import java.awt.Color;
+
+public class LauncherFrame extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -103,22 +111,32 @@ public class LauncherFrame extends JFrame
 		bottomPanel.add(loginPanel, BorderLayout.EAST);
 		GridBagLayout gbl_loginPanel = new GridBagLayout();
 		gbl_loginPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		gbl_loginPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE, 0.0, 0.0};
+		gbl_loginPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE, 0.0, 0.0};
 		loginPanel.setLayout(gbl_loginPanel);
 		
 		horizontalStrut = Box.createHorizontalStrut(5);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
-		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
+		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 0);
 		gbc_horizontalStrut.gridx = 3;
 		gbc_horizontalStrut.gridy = 0;
 		loginPanel.add(horizontalStrut, gbc_horizontalStrut);
+		
+		lblError = new JLabel();
+		lblError.setForeground(Color.RED);
+		lblError.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblError = new GridBagConstraints();
+		gbc_lblError.gridwidth = 3;
+		gbc_lblError.insets = new Insets(0, 0, 5, 5);
+		gbc_lblError.gridx = 0;
+		gbc_lblError.gridy = 1;
+		loginPanel.add(lblError, gbc_lblError);
 		
 		lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
 		gbc_lblUsername.gridx = 0;
-		gbc_lblUsername.gridy = 1;
+		gbc_lblUsername.gridy = 2;
 		loginPanel.add(lblUsername, gbc_lblUsername);
 		
 		btnOptions = new JButton("Options");
@@ -132,10 +150,9 @@ public class LauncherFrame extends JFrame
 			}
 		});
 		GridBagConstraints gbc_btnOptions = new GridBagConstraints();
-		gbc_btnOptions.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnOptions.insets = new Insets(0, 0, 5, 0);
+		gbc_btnOptions.insets = new Insets(0, 0, 5, 5);
 		gbc_btnOptions.gridx = 2;
-		gbc_btnOptions.gridy = 1;
+		gbc_btnOptions.gridy = 2;
 		loginPanel.add(btnOptions, gbc_btnOptions);
 
 		lblPassword = new JLabel("Password:");
@@ -143,21 +160,23 @@ public class LauncherFrame extends JFrame
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.gridx = 0;
-		gbc_lblPassword.gridy = 2;
+		gbc_lblPassword.gridy = 3;
 		loginPanel.add(lblPassword, gbc_lblPassword);
 
 		usernameField = new JTextField("", 17);
 		GridBagConstraints gbc_usernameField = new GridBagConstraints();
+		gbc_usernameField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_usernameField.insets = new Insets(0, 0, 5, 5);
 		gbc_usernameField.gridx = 1;
-		gbc_usernameField.gridy = 1;
+		gbc_usernameField.gridy = 2;
 		loginPanel.add(usernameField, gbc_usernameField);
 		
 		passwordField = new JPasswordField("", 17);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
+		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.gridx = 1;
-		gbc_passwordField.gridy = 2;
+		gbc_passwordField.gridy = 3;
 		loginPanel.add(passwordField, gbc_passwordField);
 		
 		chckbxRemember = new JCheckBox("Remember Password");
@@ -165,23 +184,15 @@ public class LauncherFrame extends JFrame
 		gbc_chckbxRemember.insets = new Insets(0, 0, 0, 5);
 		gbc_chckbxRemember.anchor = GridBagConstraints.NORTHWEST;
 		gbc_chckbxRemember.gridx = 1;
-		gbc_chckbxRemember.gridy = 3;
+		gbc_chckbxRemember.gridy = 4;
 		loginPanel.add(chckbxRemember, gbc_chckbxRemember);
 		
 		btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				//TODO: Handle Login button click
-			}
-		});
+		btnLogin.addActionListener(this);
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
-		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnLogin.insets = new Insets(0, 0, 5, 0);
+		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLogin.gridx = 2;
-		gbc_btnLogin.gridy = 2;
+		gbc_btnLogin.gridy = 3;
 		loginPanel.add(btnLogin, gbc_btnLogin);
 		
 		verticalStrut = Box.createVerticalStrut(5);
@@ -190,6 +201,109 @@ public class LauncherFrame extends JFrame
 		gbc_verticalStrut.gridy = 0;
 		gbc_verticalStrut.gridx = 0;
 		loginPanel.add(verticalStrut, gbc_verticalStrut);
+	}
+	
+	public void doLogin()
+	{
+		btnLogin.setEnabled(false);
+		btnOptions.setEnabled(false);
+		usernameField.setEnabled(false);
+		passwordField.setEnabled(false);
+		chckbxRemember.setEnabled(false);
+		
+		lblError.setForeground(Color.black);
+		lblError.setText("Logging in...");
+		
+		StringBuilder requestBuilder = new StringBuilder();
+		requestBuilder.append("https://login.minecraft.net/?username=");
+		requestBuilder.append(usernameField.getText());
+		requestBuilder.append("&password=");
+		requestBuilder.append(passwordField.getPassword());
+		requestBuilder.append("&version=13");
+		
+		URL url;
+		try
+		{
+			url = new URL(requestBuilder.toString());
+		} catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+			return;
+		}
+		
+		Thread loginThread = new Thread(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				try
+				{
+					launcherFrame.loginComplete(AppUtils.downloadString(url));
+				} catch (IOException e)
+				{
+					launcherFrame.loginFailed(e);
+				}
+			}
+			
+			public Runnable setValues(LauncherFrame frame, URL url)
+			{
+				this.launcherFrame = frame;
+				this.url = url;
+				return this;
+			}
+			
+			public LauncherFrame launcherFrame;
+			public URL url;
+		}.setValues(this, url));
+		loginThread.start();
+	}
+	
+	public void loginComplete(String loginResponseStr)
+	{
+		lblError.setText("");
+		
+		btnLogin.setEnabled(true);
+		btnOptions.setEnabled(true);
+		usernameField.setEnabled(true);
+		passwordField.setEnabled(true);
+		chckbxRemember.setEnabled(true);
+		
+		LoginResponse response;
+		try
+		{
+			response = new LoginResponse(loginResponseStr);
+		} catch (InvalidParameterException e)
+		{
+			e.printStackTrace();
+			lblError.setForeground(Color.red);
+			lblError.setText("Received invalid response from server.");
+			return;
+		}
+		
+		// Temporary placeholder.
+		JOptionPane.showMessageDialog(this, "Login complete.");
+	}
+	
+	public void loginFailed(IOException e)
+	{
+		lblError.setForeground(Color.red);
+		lblError.setText("Login failed: " + e);
+		
+		btnLogin.setEnabled(true);
+		btnOptions.setEnabled(true);
+		usernameField.setEnabled(true);
+		passwordField.setEnabled(true);
+		chckbxRemember.setEnabled(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getActionCommand().equalsIgnoreCase("login"))
+		{
+			doLogin();
+		}
 	}
 	
 	private JPanel bottomPanel;
@@ -207,4 +321,5 @@ public class LauncherFrame extends JFrame
 	private JButton btnOptions;
 	private Component verticalStrut;
 	private Component horizontalStrut;
+	private JLabel lblError;
 }
