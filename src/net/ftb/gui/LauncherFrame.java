@@ -110,33 +110,27 @@ public class LauncherFrame extends JFrame implements ActionListener
 		loginPanel = new JPanel();
 		bottomPanel.add(loginPanel, BorderLayout.EAST);
 		GridBagLayout gbl_loginPanel = new GridBagLayout();
-		gbl_loginPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		gbl_loginPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE, 0.0, 0.0};
+		gbl_loginPanel.columnWidths = new int[]{0, 0, 0};
+		gbl_loginPanel.columnWeights = new double[]{0.0, 1.0, 0.0};
+		gbl_loginPanel.rowWeights = new double[]{0.0, 0.0, 0.0};
 		loginPanel.setLayout(gbl_loginPanel);
-		
-		horizontalStrut = Box.createHorizontalStrut(5);
-		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
-		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 0);
-		gbc_horizontalStrut.gridx = 3;
-		gbc_horizontalStrut.gridy = 0;
-		loginPanel.add(horizontalStrut, gbc_horizontalStrut);
 		
 		lblError = new JLabel();
 		lblError.setForeground(Color.RED);
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblError = new GridBagConstraints();
 		gbc_lblError.gridwidth = 3;
-		gbc_lblError.insets = new Insets(0, 0, 5, 5);
+		gbc_lblError.insets = new Insets(0, 0, 5, 0);
 		gbc_lblError.gridx = 0;
 		gbc_lblError.gridy = 1;
 		loginPanel.add(lblError, gbc_lblError);
 		
 		lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
-		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.insets = new Insets(8, 0, 5, 5);
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
 		gbc_lblUsername.gridx = 0;
-		gbc_lblUsername.gridy = 2;
+		gbc_lblUsername.gridy = 0;
 		loginPanel.add(lblUsername, gbc_lblUsername);
 		
 		btnOptions = new JButton("Options");
@@ -150,25 +144,26 @@ public class LauncherFrame extends JFrame implements ActionListener
 			}
 		});
 		GridBagConstraints gbc_btnOptions = new GridBagConstraints();
-		gbc_btnOptions.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOptions.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnOptions.insets = new Insets(8, 0, 5, 8);
 		gbc_btnOptions.gridx = 2;
-		gbc_btnOptions.gridy = 2;
+		gbc_btnOptions.gridy = 0;
 		loginPanel.add(btnOptions, gbc_btnOptions);
 		
 		lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
-		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPassword.insets = new Insets(0, 8, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.gridx = 0;
-		gbc_lblPassword.gridy = 3;
+		gbc_lblPassword.gridy = 1;
 		loginPanel.add(lblPassword, gbc_lblPassword);
 		
 		usernameField = new JTextField("", 17);
 		GridBagConstraints gbc_usernameField = new GridBagConstraints();
 		gbc_usernameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_usernameField.insets = new Insets(0, 0, 5, 5);
+		gbc_usernameField.insets = new Insets(8, 0, 5, 5);
 		gbc_usernameField.gridx = 1;
-		gbc_usernameField.gridy = 2;
+		gbc_usernameField.gridy = 0;
 		loginPanel.add(usernameField, gbc_usernameField);
 		
 		passwordField = new JPasswordField("", 17);
@@ -176,23 +171,24 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.gridx = 1;
-		gbc_passwordField.gridy = 3;
+		gbc_passwordField.gridy = 1;
 		loginPanel.add(passwordField, gbc_passwordField);
 		
 		chckbxRemember = new JCheckBox("Remember Password");
 		GridBagConstraints gbc_chckbxRemember = new GridBagConstraints();
-		gbc_chckbxRemember.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxRemember.insets = new Insets(0, 0, 4, 5);
 		gbc_chckbxRemember.anchor = GridBagConstraints.NORTHWEST;
 		gbc_chckbxRemember.gridx = 1;
-		gbc_chckbxRemember.gridy = 4;
+		gbc_chckbxRemember.gridy = 2;
 		loginPanel.add(chckbxRemember, gbc_chckbxRemember);
 		
 		btnLogin = new JButton("Login");
 		btnLogin.addActionListener(this);
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
-		gbc_btnLogin.insets = new Insets(0, 0, 5, 5);
+		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnLogin.insets = new Insets(0, 0, 5, 8);
 		gbc_btnLogin.gridx = 2;
-		gbc_btnLogin.gridy = 3;
+		gbc_btnLogin.gridy = 1;
 		loginPanel.add(btnLogin, gbc_btnLogin);
 		
 		verticalStrut = Box.createVerticalStrut(5);
@@ -332,6 +328,5 @@ public class LauncherFrame extends JFrame implements ActionListener
 	private JButton btnLogin;
 	private JButton btnOptions;
 	private Component verticalStrut;
-	private Component horizontalStrut;
 	private JLabel lblError;
 }
