@@ -154,7 +154,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_btnOptions.gridx = 2;
 		gbc_btnOptions.gridy = 2;
 		loginPanel.add(btnOptions, gbc_btnOptions);
-
+		
 		lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -162,7 +162,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 3;
 		loginPanel.add(lblPassword, gbc_lblPassword);
-
+		
 		usernameField = new JTextField("", 17);
 		GridBagConstraints gbc_usernameField = new GridBagConstraints();
 		gbc_usernameField.fill = GridBagConstraints.HORIZONTAL;
@@ -215,7 +215,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		lblError.setText("Logging in...");
 		
 		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append("https://login.minecraft.net/?username=");
+		requestBuilder.append("https://login.minecraft.net/?user=");
 		requestBuilder.append(usernameField.getText());
 		requestBuilder.append("&password=");
 		requestBuilder.append(passwordField.getPassword());
@@ -273,11 +273,23 @@ public class LauncherFrame extends JFrame implements ActionListener
 		try
 		{
 			response = new LoginResponse(loginResponseStr);
-		} catch (InvalidParameterException e)
+		} catch (IllegalArgumentException e)
 		{
-			e.printStackTrace();
 			lblError.setForeground(Color.red);
-			lblError.setText("Received invalid response from server.");
+			
+			if (loginResponseStr.contains(":"))
+			{
+				lblError.setText("Received invalid response from server.");
+			}
+			else
+			{
+				if (loginResponseStr.equalsIgnoreCase("bad login"))
+					lblError.setText("Invalid username or password.");
+				else if (loginResponseStr.equalsIgnoreCase("old version"))
+					lblError.setText("Outdated launcher.");
+				else
+					lblError.setText("Login failed: " + loginResponseStr);
+			}
 			return;
 		}
 		

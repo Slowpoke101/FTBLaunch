@@ -1,6 +1,5 @@
 package net.ftb.data;
 
-import java.security.InvalidParameterException;
 
 public class LoginResponse
 {
@@ -24,7 +23,7 @@ public class LoginResponse
 		
 		if (responseValues.length < 4)
 		{
-			throw new InvalidParameterException("Invalid response string.");
+			throw new IllegalArgumentException("Invalid response string.");
 		}
 		else
 		{
