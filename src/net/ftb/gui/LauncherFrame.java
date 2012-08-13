@@ -112,7 +112,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		GridBagLayout gbl_loginPanel = new GridBagLayout();
 		gbl_loginPanel.columnWidths = new int[]{0, 0, 0};
 		gbl_loginPanel.columnWeights = new double[]{0.0, 1.0, 0.0};
-		gbl_loginPanel.rowWeights = new double[]{0.0, 0.0, 0.0};
+		gbl_loginPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		loginPanel.setLayout(gbl_loginPanel);
 		
 		lblError = new JLabel();
@@ -120,17 +120,17 @@ public class LauncherFrame extends JFrame implements ActionListener
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblError = new GridBagConstraints();
 		gbc_lblError.gridwidth = 3;
-		gbc_lblError.insets = new Insets(0, 0, 5, 0);
+		gbc_lblError.insets = new Insets(4, 0, 5, 0);
 		gbc_lblError.gridx = 0;
-		gbc_lblError.gridy = 1;
+		gbc_lblError.gridy = 0;
 		loginPanel.add(lblError, gbc_lblError);
 		
 		lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
-		gbc_lblUsername.insets = new Insets(8, 0, 5, 5);
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsername.anchor = GridBagConstraints.EAST;
 		gbc_lblUsername.gridx = 0;
-		gbc_lblUsername.gridy = 0;
+		gbc_lblUsername.gridy = 1;
 		loginPanel.add(lblUsername, gbc_lblUsername);
 		
 		btnOptions = new JButton("Options");
@@ -145,9 +145,9 @@ public class LauncherFrame extends JFrame implements ActionListener
 		});
 		GridBagConstraints gbc_btnOptions = new GridBagConstraints();
 		gbc_btnOptions.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnOptions.insets = new Insets(8, 0, 5, 8);
+		gbc_btnOptions.insets = new Insets(0, 0, 5, 8);
 		gbc_btnOptions.gridx = 2;
-		gbc_btnOptions.gridy = 0;
+		gbc_btnOptions.gridy = 1;
 		loginPanel.add(btnOptions, gbc_btnOptions);
 		
 		lblPassword = new JLabel("Password:");
@@ -155,15 +155,15 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_lblPassword.insets = new Insets(0, 8, 5, 5);
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.gridx = 0;
-		gbc_lblPassword.gridy = 1;
+		gbc_lblPassword.gridy = 2;
 		loginPanel.add(lblPassword, gbc_lblPassword);
 		
 		usernameField = new JTextField("", 17);
 		GridBagConstraints gbc_usernameField = new GridBagConstraints();
 		gbc_usernameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_usernameField.insets = new Insets(8, 0, 5, 5);
+		gbc_usernameField.insets = new Insets(0, 0, 5, 5);
 		gbc_usernameField.gridx = 1;
-		gbc_usernameField.gridy = 0;
+		gbc_usernameField.gridy = 1;
 		loginPanel.add(usernameField, gbc_usernameField);
 		
 		passwordField = new JPasswordField("", 17);
@@ -171,7 +171,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.gridx = 1;
-		gbc_passwordField.gridy = 1;
+		gbc_passwordField.gridy = 2;
 		loginPanel.add(passwordField, gbc_passwordField);
 		
 		chckbxRemember = new JCheckBox("Remember Password");
@@ -179,7 +179,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_chckbxRemember.insets = new Insets(0, 0, 4, 5);
 		gbc_chckbxRemember.anchor = GridBagConstraints.NORTHWEST;
 		gbc_chckbxRemember.gridx = 1;
-		gbc_chckbxRemember.gridy = 2;
+		gbc_chckbxRemember.gridy = 3;
 		loginPanel.add(chckbxRemember, gbc_chckbxRemember);
 		
 		btnLogin = new JButton("Login");
@@ -188,13 +188,13 @@ public class LauncherFrame extends JFrame implements ActionListener
 		gbc_btnLogin.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnLogin.insets = new Insets(0, 0, 5, 8);
 		gbc_btnLogin.gridx = 2;
-		gbc_btnLogin.gridy = 1;
+		gbc_btnLogin.gridy = 2;
 		loginPanel.add(btnLogin, gbc_btnLogin);
 		
 		verticalStrut = Box.createVerticalStrut(5);
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 5);
-		gbc_verticalStrut.gridy = 0;
+		gbc_verticalStrut.gridy = 1;
 		gbc_verticalStrut.gridx = 0;
 		loginPanel.add(verticalStrut, gbc_verticalStrut);
 	}
