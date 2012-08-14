@@ -1,6 +1,7 @@
 package net.ftb.workers;
 
 import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.swing.SwingWorker;
 
@@ -24,9 +25,9 @@ public class LoginWorker extends SwingWorker<String, Void>
 	{
 		StringBuilder requestBuilder = new StringBuilder();
 		requestBuilder.append("https://login.minecraft.net/?user=");
-		requestBuilder.append(username);
+		requestBuilder.append(URLEncoder.encode(username, "UTF-8"));
 		requestBuilder.append("&password=");
-		requestBuilder.append(password);
+		requestBuilder.append(URLEncoder.encode(password, "UTF-8"));
 		requestBuilder.append("&version=13");
 		
 		URL url = new URL(requestBuilder.toString());
