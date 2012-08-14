@@ -1,12 +1,15 @@
 package net.ftb.workers;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.SwingWorker;
 
 import net.ftb.util.AppUtils;
 
+/**
+ * SwingWorker that logs into minecraft.net. Returns a string containing the
+ * response received from the server.
+ */
 public class LoginWorker extends SwingWorker<String, Void>
 {
 	public LoginWorker(String username, String password)
@@ -26,16 +29,7 @@ public class LoginWorker extends SwingWorker<String, Void>
 		requestBuilder.append(password);
 		requestBuilder.append("&version=13");
 		
-		URL url;
-		try
-		{
-			url = new URL(requestBuilder.toString());
-		} catch (MalformedURLException e)
-		{
-			e.printStackTrace();
-			return "Malformed URL";
-		}
-		
+		URL url = new URL(requestBuilder.toString());
 		return AppUtils.downloadString(url);
 	}
 	

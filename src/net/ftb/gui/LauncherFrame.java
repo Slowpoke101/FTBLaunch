@@ -242,14 +242,17 @@ public class LauncherFrame extends JFrame implements ActionListener
 					return;
 				} catch (ExecutionException err)
 				{
+					err.printStackTrace();
 					if (err.getCause() instanceof IOException)
 					{
 						lblError.setForeground(Color.red);
-						lblError.setText("Login failed: " + err);
+						lblError.setText("Login failed: "
+								+ err.getCause().getMessage());
 					}
-					else
+					else if (err.getCause() instanceof MalformedURLException)
 					{
-						err.printStackTrace();
+						lblError.setForeground(Color.red);
+						lblError.setText("Error: Malformed URL");
 					}
 					return;
 				}
@@ -279,8 +282,7 @@ public class LauncherFrame extends JFrame implements ActionListener
 				}
 				
 				// Temporary placeholder.
-				JOptionPane.showMessageDialog(LauncherFrame.this,
-						"Login complete.");
+				lblError.setText("Login complete.");
 			}
 		};
 		loginWorker.execute();
