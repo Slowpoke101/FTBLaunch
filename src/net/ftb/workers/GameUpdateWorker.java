@@ -1,5 +1,7 @@
 package net.ftb.workers;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,10 +10,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.swing.SwingWorker;
 
 import net.ftb.util.AppUtils;
+import net.ftb.util.OSUtils;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
@@ -89,10 +93,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 			mainGameURL, "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
 		};
 		
-		jarURLs = new URL[jarList.length];
+		jarURLs = new URL[jarList.length + 1];
 		try
 		{
-			for (int i = 0; i < jarList.length; i++)
+			for (int i = 0; i < jarList.length - 1; i++)
 			{
 				jarURLs[i] = new URL("http://s3.amazonaws.com/MinecraftDownload/" 
 						+ jarList[i]);
@@ -100,6 +104,36 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 		}
 		catch (MalformedURLException e)
 		{
+			e.printStackTrace();
+			return false;
+		}
+		
+		String nativesFilename = "";
+		switch (OSUtils.getCurrentOS())
+		{
+		case WINDOWS:
+			nativesFilename = "windows_natives.jar";
+			break;
+			
+		case MACOSX:
+			nativesFilename = "macosx_natives.jar";
+			break;
+			
+		case UNIX:
+			nativesFilename = "linux_natives.jar";
+			break;
+			
+		default:
+			return false;
+		}
+		
+		try
+		{
+			jarURLs[jarURLs.length - 1] = new URL(
+					"http://s3.amazonaws.com/MinecraftDownload/" + nativesFilename);
+		} catch (MalformedURLException e)
+		{
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -108,6 +142,30 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	
 	protected boolean downloadJars()
 	{
+		File md5sFile = new File(binDir, "md5s");
+		Properties md5s = new Properties();
+		
+		try
+		{
+			md5s.load(new FileInputStream(md5sFile));
+		} catch (FileNotFoundException e)
+		{
+			// Ignore...
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		int totalDownloadSize = 0;
+		int[] fileSizes = new int[jarURLs.length];
+		boolean[] skip = new boolean[jarURLs.length];
+		
+		// Compare MD5s and skip ones that match.
+		for (int i = 0; i < jarURLs.length; i++)
+		{
+			
+		}
+		
 		return true;
 	}
 	
@@ -120,9 +178,11 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	{
 		try
 		{
-			FileInputStream inputStream = new FileInputStream(
-					new File(binDir, "version"));
-			return AppUtils.readString(inputStream);
+			DataInputStream inputStream = new DataInputStream(new FileInputStream(
+					new File(binDir, "version")));
+			String retVal = inputStream.readUTF();
+			inputStream.close();
+			return retVal;
 		} catch (FileNotFoundException e)
 		{
 			return "";
@@ -137,9 +197,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	{
 		try
 		{
-			FileOutputStream outputStream = new FileOutputStream(
-					new File(binDir, "version"));
-			AppUtils.writeString(outputStream, versionString);
+			DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(
+					new File(binDir, "version")));
+			outputStream.writeUTF(versionString);
+			outputStream.close();
 		} catch (IOException e)
 		{
 			e.printStackTrace();

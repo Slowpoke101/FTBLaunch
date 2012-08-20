@@ -38,7 +38,7 @@ public class OSUtils
 			return OS.OTHER;
 	}
 	
-	enum OS
+	public enum OS
 	{
 		WINDOWS,
 		UNIX,
