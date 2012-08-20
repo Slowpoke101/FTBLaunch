@@ -1,10 +1,17 @@
 package net.ftb.workers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.SwingWorker;
+
+import net.ftb.util.AppUtils;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
@@ -111,12 +118,32 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	
 	protected String readVersionFile()
 	{
-		return null;
+		try
+		{
+			FileInputStream inputStream = new FileInputStream(
+					new File(binDir, "version"));
+			return AppUtils.readString(inputStream);
+		} catch (FileNotFoundException e)
+		{
+			return "";
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	protected void writeVersionFile(String versionString)
 	{
-		
+		try
+		{
+			FileOutputStream outputStream = new FileOutputStream(
+					new File(binDir, "version"));
+			AppUtils.writeString(outputStream, versionString);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	protected String latestVersion;
