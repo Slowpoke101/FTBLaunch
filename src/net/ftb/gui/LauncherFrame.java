@@ -10,10 +10,12 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.Box;
@@ -27,12 +29,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ProgressMonitor;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Settings;
-import net.ftb.util.AppUtils;
+import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -281,11 +284,91 @@ public class LauncherFrame extends JFrame implements ActionListener
 					return;
 				}
 				
-				// Temporary placeholder.
 				lblError.setText("Login complete.");
+				runGameUpdater(response);
 			}
 		};
 		loginWorker.execute();
+	}
+	
+	public void runGameUpdater(LoginResponse response)
+	{
+		btnLogin.setEnabled(false);
+		btnOptions.setEnabled(false);
+		usernameField.setEnabled(false);
+		passwordField.setEnabled(false);
+		chckbxRemember.setEnabled(false);
+		
+		final ProgressMonitor progMonitor = 
+				new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+		
+		final GameUpdateWorker updater = new GameUpdateWorker(response.getLatestVersion(), 
+				"minecraft.jar", 
+				new File(Settings.getSettings().getInstallPath(), "bin").getPath(), 
+				false)
+		{
+			public void done()
+			{
+				btnLogin.setEnabled(true);
+				btnOptions.setEnabled(true);
+				usernameField.setEnabled(true);
+				passwordField.setEnabled(true);
+				chckbxRemember.setEnabled(true);
+				
+				progMonitor.close();
+				try
+				{
+					if (get() == true)
+					{
+						// Success
+						lblError.setForeground(Color.black);
+						lblError.setText("Game update complete.");
+					}
+					else
+					{
+						lblError.setForeground(Color.red);
+						lblError.setText("Error downloading game.");
+					}
+				} catch (CancellationException e)
+				{
+					lblError.setForeground(Color.black);
+					lblError.setText("Game update cancelled...");
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				} catch (ExecutionException e)
+				{
+					e.printStackTrace();
+					lblError.setForeground(Color.red);
+					lblError.setText("Failed to download game: " + e.getCause().getMessage());
+					return;
+				}
+			}
+		};
+		
+		updater.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				if (progMonitor.isCanceled())
+				{
+					updater.cancel(false);
+				}
+				
+				if (!updater.isDone())
+				{
+					int prog = updater.getProgress();
+					if (prog < 0)
+						prog = 0;
+					else if (prog > 100)
+						prog = 100;
+					progMonitor.setProgress(prog);
+					progMonitor.setNote(updater.getStatus());
+				}
+			}
+		});
+		updater.execute();
 	}
 	
 	@Override
