@@ -1,19 +1,24 @@
 package net.ftb.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -32,6 +37,7 @@ import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
@@ -50,8 +56,10 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JList;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 public class LaunchFrame extends JFrame {
-	
+
 	JCheckBox chckbxRemember;
 	JButton btnOptions;
 	JLabel lblError;
@@ -63,19 +71,45 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	
 
-	
+
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+
 				try {
 					LaunchFrame frame = new LaunchFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				try
+				{
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+
+				// Load settings
+				try
+				{
+					Settings.initSettings();
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Failed to load config file: "
+							+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+
+				// Create the install directory if it does not exist.
+				File installDir = new File(Settings.getSettings().getInstallPath());
+				if (!installDir.exists())
+					installDir.mkdirs();
+
 			}
+
 		});
 	}
 
@@ -87,7 +121,7 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher");
 		try {
 			UIManager.setLookAndFeel(
-			        UIManager.getSystemLookAndFeelClassName());
+					UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,24 +135,24 @@ public class LaunchFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	     
-	
+
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JPanel loginPanel = new JPanel();
 		loginPanel.setBounds(496, 11, 305, 139);
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
-		
+
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
 		loginPanel.add(chckbxRemember);
-		
+
 		btnOptions = new JButton("Options");
 		btnOptions.setBounds(226, 39, 69, 23);
 		loginPanel.add(btnOptions);
@@ -131,7 +165,7 @@ public class LaunchFrame extends JFrame {
 				optionsDlg.setVisible(true);
 			}
 		});
-		
+
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 72, 69, 23);
 		loginPanel.add(btnLogin);
@@ -145,105 +179,108 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JButton btnPlayOffline = new JButton("Play Offline");
 		btnPlayOffline.setBounds(199, 11, 96, 23);
 		loginPanel.add(btnPlayOffline);
-		
+
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 144, 14);
 		loginPanel.add(lblError);
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		lblError.setForeground(Color.RED);
-		
+
 		usernameField = new JTextField("", 17);
 		usernameField.setBounds(76, 39, 144, 22);
 		loginPanel.add(usernameField);
-		
+
 		passwordField = new JPasswordField("", 17);
 		passwordField.setBounds(76, 72, 144, 22);
 		loginPanel.add(passwordField);
-		
+
 		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(14, 43, 52, 14);
 		loginPanel.add(lblUsername);
 		lblUsername.setDisplayedMnemonic('u');
-		
+
 		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(16, 76, 50, 14);
 		loginPanel.add(lblPassword);
 		lblPassword.setDisplayedMnemonic('p');
-		
+
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		newsPane.setBounds(226, 41, 260, 234);
 		contentPane.add(newsPane);
-		
-		JTextArea txtrHelloWorld = new JTextArea();
-		txtrHelloWorld.setWrapStyleWord(true);
-		txtrHelloWorld.setLineWrap(true);
-		txtrHelloWorld.setEditable(false);
-		txtrHelloWorld.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
-		newsPane.setViewportView(txtrHelloWorld);
-		
+
+		JTextArea txtrNews = new JTextArea();
+		txtrNews.setWrapStyleWord(true);
+		txtrNews.setLineWrap(true);
+		txtrNews.setEditable(false);
+		txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
+		newsPane.setViewportView(txtrNews);
+
 		JScrollPane modPacksPane = new JScrollPane();
 		modPacksPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		modPacksPane.setBounds(6, 11, 210, 426);
 		contentPane.add(modPacksPane);
-		
+
 		JPanel panel = new JPanel();
 		modPacksPane.setViewportView(panel);
 		panel.setLayout(null);
-		
+
 		JRadioButton modPack1RB = new JRadioButton("");
 		modPack1RB.setBounds(6, 24, 28, 23);
 		panel.add(modPack1RB);
-		
+
 		JRadioButton modPack2RB = new JRadioButton("");
 		modPack2RB.setBounds(6, 85, 28, 23);
 		panel.add(modPack2RB);
-		
+
 		JLabel lblModPack2 = new JLabel("");
 		lblModPack2.setBounds(29, 72, 175, 50);
 		panel.add(lblModPack2);
-		
+
 		JLabel lblModPack1 = new JLabel("");
 		lblModPack1.setBounds(29, 11, 175, 50);
 		panel.add(lblModPack1);
-		
+
 		JPanel sponsorPanel = new JPanel();
 		sponsorPanel.setBounds(496, 166, 305, 109);
 		contentPane.add(sponsorPanel);
-		
+
 		JLabel lblTexturePacks = new JLabel("Texture packs");
 		lblTexturePacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTexturePacks.setBounds(226, 286, 260, 19);
 		contentPane.add(lblTexturePacks);
-		
+
 		JList texturesList = new JList();
 		texturesList.setBounds(226, 305, 258, 132);
 		contentPane.add(texturesList);
-		
+
 		JLabel lblWorldPacks = new JLabel("World packs");
 		lblWorldPacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblWorldPacks.setBounds(496, 286, 91, 19);
 		contentPane.add(lblWorldPacks);
-		
+
 		JLabel label = new JLabel("");
 		label.setBounds(226, 305, 260, 132);
 		contentPane.add(label);
-		
+
 		JList worldsList = new JList();
 		worldsList.setBounds(496, 305, 305, 132);
 		contentPane.add(worldsList);
-		
+
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(226, 11, 113, 19);
 		contentPane.add(lblNews);
-		
 
-		
+
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
+				usernameField, passwordField, chckbxRemember, btnLogin,
+				btnOptions, txtrNews }));
+
 	}
 	public void doLogin()
 	{
@@ -252,10 +289,10 @@ public class LaunchFrame extends JFrame {
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
-		
+
 		lblError.setForeground(Color.black);
 		lblError.setText("Logging in...");
-		
+
 		LoginWorker loginWorker = new LoginWorker(usernameField.getText(),
 				new String(passwordField.getPassword()))
 		{
@@ -263,13 +300,13 @@ public class LaunchFrame extends JFrame {
 			public void done()
 			{
 				lblError.setText("");
-				
+
 				btnLogin.setEnabled(true);
 				btnOptions.setEnabled(true);
 				usernameField.setEnabled(true);
 				passwordField.setEnabled(true);
 				chckbxRemember.setEnabled(true);
-				
+
 				String responseStr;
 				try
 				{
@@ -294,7 +331,7 @@ public class LaunchFrame extends JFrame {
 					}
 					return;
 				}
-				
+
 				LoginResponse response;
 				try
 				{
@@ -302,7 +339,7 @@ public class LaunchFrame extends JFrame {
 				} catch (IllegalArgumentException e)
 				{
 					lblError.setForeground(Color.red);
-					
+
 					if (responseStr.contains(":"))
 					{
 						lblError.setText("Received invalid response from server.");
@@ -318,14 +355,23 @@ public class LaunchFrame extends JFrame {
 					}
 					return;
 				}
-				
+
 				lblError.setText("Login complete.");
-				runGameUpdater(response);
+				if(getVersionMD5().equals("d41d8cd98f00b204e9800998ecf8427e")){
+					try {
+						launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", "PlayerTesting", "-");
+					} catch (IOException ex) {
+						System.out.println(ex.toString());
+					}
+				}else{
+					runGameUpdater(response);
+				}
+				
 			}
 		};
 		loginWorker.execute();
 	}
-	
+
 	public void runGameUpdater(LoginResponse response)
 	{
 		btnLogin.setEnabled(false);
@@ -333,13 +379,13 @@ public class LaunchFrame extends JFrame {
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
-		
+
 		final ProgressMonitor progMonitor = 
 				new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-		
+
 		final GameUpdateWorker updater = new GameUpdateWorker(response.getLatestVersion(), 
 				"minecraft.jar", 
-				new File(Settings.getSettings().getInstallPath(), "bin").getPath(), 
+				new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), 
 				false)
 		{
 			public void done()
@@ -349,7 +395,7 @@ public class LaunchFrame extends JFrame {
 				usernameField.setEnabled(true);
 				passwordField.setEnabled(true);
 				chckbxRemember.setEnabled(true);
-				
+
 				progMonitor.close();
 				try
 				{
@@ -359,7 +405,7 @@ public class LaunchFrame extends JFrame {
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update complete.");
 						try {
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath(), "PlayerTesting", "-");
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", "PlayerTesting", "-");
 						} catch (IOException ex) {
 							System.out.println(ex.toString());
 						}
@@ -385,7 +431,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		};
-		
+
 		updater.addPropertyChangeListener(new PropertyChangeListener()
 		{
 			@Override
@@ -395,7 +441,7 @@ public class LaunchFrame extends JFrame {
 				{
 					updater.cancel(false);
 				}
-				
+
 				if (!updater.isDone())
 				{
 					int prog = updater.getProgress();
@@ -410,13 +456,42 @@ public class LaunchFrame extends JFrame {
 		});
 		updater.execute();
 	}
+
+	protected String getVersionMD5(){
+		InputStream is = null;
+		MessageDigest md = null;
+		try{
+		md = MessageDigest.getInstance("MD5");
+		is = new FileInputStream(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		try {
+		  is = new DigestInputStream(is, md);
+		  // read stream to EOF as normal...
+		}
+		finally {
+		  try {
+			is.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		String result = "";
+		byte[] digest = md.digest();
+		for (int i=0; i < digest.length; i++) {
+	           result += Integer.toString( ( digest[i] & 0xff ) + 0x100, 16).substring( 1 );
+	       }
+	       return result;
+	}
 	
 	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {
 		try
 		{
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {
-				"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
+					"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
 			};
 
 			URL[] urls = new URL[jarFiles.length];
@@ -430,7 +505,7 @@ public class LaunchFrame extends JFrame {
 					System.out.println("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e)
 				{
-//					e.printStackTrace();
+					//					e.printStackTrace();
 					System.err.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
@@ -445,7 +520,7 @@ public class LaunchFrame extends JFrame {
 			System.setProperty("user.home", new File(workingDir).getParent());
 
 			URLClassLoader cl = 
-					new URLClassLoader(urls, LauncherFrame.class.getClassLoader());
+					new URLClassLoader(urls, LaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
