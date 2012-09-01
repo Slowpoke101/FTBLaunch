@@ -3,9 +3,19 @@ package net.ftb.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -15,11 +25,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
+import net.ftb.data.LoginResponse;
+import net.ftb.data.Settings;
 import net.ftb.util.OSUtils;
+import net.ftb.workers.GameUpdateWorker;
+import net.ftb.workers.LoginWorker;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
+import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -29,10 +45,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JList;
 
 public class LaunchFrame extends JFrame {
-
+	
+	JCheckBox chckbxRemember;
+	JButton btnOptions;
+	JLabel lblError;
+	JButton btnLogin;
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -60,6 +83,7 @@ public class LaunchFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public LaunchFrame() {
+		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		try {
 			UIManager.setLookAndFeel(
@@ -91,28 +115,46 @@ public class LaunchFrame extends JFrame {
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 		
-		JCheckBox checkBox = new JCheckBox("Remember Password");
-		checkBox.setBounds(86, 101, 125, 23);
-		loginPanel.add(checkBox);
+		chckbxRemember = new JCheckBox("Remember Password");
+		chckbxRemember.setBounds(86, 101, 125, 23);
+		loginPanel.add(chckbxRemember);
 		
-		JButton btnOptions = new JButton("Options");
+		btnOptions = new JButton("Options");
 		btnOptions.setBounds(226, 39, 69, 23);
 		loginPanel.add(btnOptions);
+		btnOptions.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				OptionsDialog optionsDlg = new OptionsDialog();
+				optionsDlg.setVisible(true);
+			}
+		});
 		
-		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(226, 66, 69, 23);
+		btnLogin = new JButton("Login");
+		btnLogin.setBounds(226, 72, 69, 23);
 		loginPanel.add(btnLogin);
+		btnLogin.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getActionCommand().equalsIgnoreCase("login"))
+				{
+					doLogin();
+				}
+			}
+		});
 		
 		JButton btnPlayOffline = new JButton("Play Offline");
 		btnPlayOffline.setBounds(199, 11, 96, 23);
 		loginPanel.add(btnPlayOffline);
 		
-		JLabel lblStatus = new JLabel();
-		lblStatus.setBounds(14, 15, 144, 14);
-		loginPanel.add(lblStatus);
-		lblStatus.setText("Invalid login data");
-		lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
-		lblStatus.setForeground(Color.RED);
+		lblError = new JLabel();
+		lblError.setBounds(14, 15, 144, 14);
+		loginPanel.add(lblError);
+		lblError.setHorizontalAlignment(SwingConstants.LEFT);
+		lblError.setForeground(Color.RED);
 		
 		usernameField = new JTextField("", 17);
 		usernameField.setBounds(76, 39, 144, 22);
@@ -134,7 +176,7 @@ public class LaunchFrame extends JFrame {
 		
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(226, 11, 260, 264);
+		newsPane.setBounds(226, 41, 260, 234);
 		contentPane.add(newsPane);
 		
 		JTextArea txtrHelloWorld = new JTextArea();
@@ -153,25 +195,21 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.setViewportView(panel);
 		panel.setLayout(null);
 		
-		JRadioButton radioButton = new JRadioButton("");
-		radioButton.setBounds(6, 24, 28, 23);
-		panel.add(radioButton);
+		JRadioButton modPack1RB = new JRadioButton("");
+		modPack1RB.setBounds(6, 24, 28, 23);
+		panel.add(modPack1RB);
 		
-		JRadioButton radioButton_1 = new JRadioButton("");
-		radioButton_1.setBounds(6, 85, 28, 23);
-		panel.add(radioButton_1);
+		JRadioButton modPack2RB = new JRadioButton("");
+		modPack2RB.setBounds(6, 85, 28, 23);
+		panel.add(modPack2RB);
 		
-		JLabel label_1 = new JLabel("");
-		label_1.setBounds(29, 72, 175, 50);
-		panel.add(label_1);
+		JLabel lblModPack2 = new JLabel("");
+		lblModPack2.setBounds(29, 72, 175, 50);
+		panel.add(lblModPack2);
 		
-		JLabel label_2 = new JLabel("");
-		label_2.setBounds(29, 133, 175, 50);
-		panel.add(label_2);
-		
-		JRadioButton radioButton_2 = new JRadioButton("");
-		radioButton_2.setBounds(6, 146, 28, 23);
-		panel.add(radioButton_2);
+		JLabel lblModPack1 = new JLabel("");
+		lblModPack1.setBounds(29, 11, 175, 50);
+		panel.add(lblModPack1);
 		
 		JPanel sponsorPanel = new JPanel();
 		sponsorPanel.setBounds(496, 166, 305, 109);
@@ -199,7 +237,273 @@ public class LaunchFrame extends JFrame {
 		worldsList.setBounds(496, 305, 305, 132);
 		contentPane.add(worldsList);
 		
+		JLabel lblNews = new JLabel("News");
+		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
+		lblNews.setBounds(226, 11, 113, 19);
+		contentPane.add(lblNews);
+		
 
 		
+	}
+	public void doLogin()
+	{
+		btnLogin.setEnabled(false);
+		btnOptions.setEnabled(false);
+		usernameField.setEnabled(false);
+		passwordField.setEnabled(false);
+		chckbxRemember.setEnabled(false);
+		
+		lblError.setForeground(Color.black);
+		lblError.setText("Logging in...");
+		
+		LoginWorker loginWorker = new LoginWorker(usernameField.getText(),
+				new String(passwordField.getPassword()))
+		{
+			@Override
+			public void done()
+			{
+				lblError.setText("");
+				
+				btnLogin.setEnabled(true);
+				btnOptions.setEnabled(true);
+				usernameField.setEnabled(true);
+				passwordField.setEnabled(true);
+				chckbxRemember.setEnabled(true);
+				
+				String responseStr;
+				try
+				{
+					responseStr = get();
+				} catch (InterruptedException err)
+				{
+					err.printStackTrace();
+					return;
+				} catch (ExecutionException err)
+				{
+					err.printStackTrace();
+					if (err.getCause() instanceof IOException)
+					{
+						lblError.setForeground(Color.red);
+						lblError.setText("Login failed: "
+								+ err.getCause().getMessage());
+					}
+					else if (err.getCause() instanceof MalformedURLException)
+					{
+						lblError.setForeground(Color.red);
+						lblError.setText("Error: Malformed URL");
+					}
+					return;
+				}
+				
+				LoginResponse response;
+				try
+				{
+					response = new LoginResponse(responseStr);
+				} catch (IllegalArgumentException e)
+				{
+					lblError.setForeground(Color.red);
+					
+					if (responseStr.contains(":"))
+					{
+						lblError.setText("Received invalid response from server.");
+					}
+					else
+					{
+						if (responseStr.equalsIgnoreCase("bad login"))
+							lblError.setText("Invalid username or password.");
+						else if (responseStr.equalsIgnoreCase("old version"))
+							lblError.setText("Outdated launcher.");
+						else
+							lblError.setText("Login failed: " + responseStr);
+					}
+					return;
+				}
+				
+				lblError.setText("Login complete.");
+				runGameUpdater(response);
+			}
+		};
+		loginWorker.execute();
+	}
+	
+	public void runGameUpdater(LoginResponse response)
+	{
+		btnLogin.setEnabled(false);
+		btnOptions.setEnabled(false);
+		usernameField.setEnabled(false);
+		passwordField.setEnabled(false);
+		chckbxRemember.setEnabled(false);
+		
+		final ProgressMonitor progMonitor = 
+				new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+		
+		final GameUpdateWorker updater = new GameUpdateWorker(response.getLatestVersion(), 
+				"minecraft.jar", 
+				new File(Settings.getSettings().getInstallPath(), "bin").getPath(), 
+				false)
+		{
+			public void done()
+			{
+				btnLogin.setEnabled(true);
+				btnOptions.setEnabled(true);
+				usernameField.setEnabled(true);
+				passwordField.setEnabled(true);
+				chckbxRemember.setEnabled(true);
+				
+				progMonitor.close();
+				try
+				{
+					if (get() == true)
+					{
+						// Success
+						lblError.setForeground(Color.black);
+						lblError.setText("Game update complete.");
+						try {
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath(), "PlayerTesting", "-");
+						} catch (IOException ex) {
+							System.out.println(ex.toString());
+						}
+					}
+					else
+					{
+						lblError.setForeground(Color.red);
+						lblError.setText("Error downloading game.");
+					}
+				} catch (CancellationException e)
+				{
+					lblError.setForeground(Color.black);
+					lblError.setText("Game update cancelled...");
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				} catch (ExecutionException e)
+				{
+					e.printStackTrace();
+					lblError.setForeground(Color.red);
+					lblError.setText("Failed to download game: " + e.getCause().getMessage());
+					return;
+				}
+			}
+		};
+		
+		updater.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				if (progMonitor.isCanceled())
+				{
+					updater.cancel(false);
+				}
+				
+				if (!updater.isDone())
+				{
+					int prog = updater.getProgress();
+					if (prog < 0)
+						prog = 0;
+					else if (prog > 100)
+						prog = 100;
+					progMonitor.setProgress(prog);
+					progMonitor.setNote(updater.getStatus());
+				}
+			}
+		});
+		updater.execute();
+	}
+	
+	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {
+		try
+		{
+			System.out.println("Loading jars...");
+			String[] jarFiles = new String[] {
+				"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
+			};
+
+			URL[] urls = new URL[jarFiles.length];
+
+			for (int i = 0; i < urls.length; i++)
+			{
+				try
+				{
+					File f = new File(new File(workingDir, "bin"), jarFiles[i]);
+					urls[i] = f.toURI().toURL();
+					System.out.println("Loading URL: " + urls[i].toString());
+				} catch (MalformedURLException e)
+				{
+//					e.printStackTrace();
+					System.err.println("MalformedURLException, " + e.toString());
+					System.exit(5);
+				}
+			}
+
+			System.out.println("Loading natives...");
+			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
+
+			System.setProperty("org.lwjgl.librarypath", nativesDir);
+			System.setProperty("net.java.games.input.librarypath", nativesDir);
+
+			System.setProperty("user.home", new File(workingDir).getParent());
+
+			URLClassLoader cl = 
+					new URLClassLoader(urls, LauncherFrame.class.getClassLoader());
+
+			// Get the Minecraft Class.
+			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
+			Field[] fields = mc.getDeclaredFields();
+
+			for (int i = 0; i < fields.length; i++)
+			{
+				Field f = fields[i];
+				if (f.getType() != File.class)
+				{
+					// Has to be File
+					continue;
+				}
+				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC))
+				{
+					// And Private Static.
+					continue;
+				}
+				f.setAccessible(true);
+				f.set(null, new File(workingDir));
+				// And set it.
+				System.out.println("Fixed Minecraft Path: Field was "
+						+ f.toString());
+			}
+
+			String[] mcArgs = new String[2];
+			mcArgs[0] = username;
+			mcArgs[1] = password;
+
+			String mcDir = 	mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
+
+			System.out.println("MCDIR: " + mcDir);
+
+			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+		} catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		} catch (IllegalArgumentException e)
+		{
+			e.printStackTrace();
+			System.exit(2);
+		} catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+			System.exit(2);
+		} catch (InvocationTargetException e)
+		{
+			e.printStackTrace();
+			System.exit(3);
+		} catch (NoSuchMethodException e)
+		{
+			e.printStackTrace();
+			System.exit(3);
+		} catch (SecurityException e)
+		{
+			e.printStackTrace();
+			System.exit(4);
+		}
 	}
 }
