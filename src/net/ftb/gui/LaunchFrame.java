@@ -31,6 +31,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
 import net.ftb.data.LoginResponse;
+import net.ftb.data.PasswordSettings;
 import net.ftb.data.Settings;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.GameUpdateWorker;
@@ -67,23 +68,16 @@ public class LaunchFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
+	
+	private PasswordSettings passwordSettings;
 
 	/**
 	 * Launch the application.
 	 */
 
-
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-
-				try {
-					LaunchFrame frame = new LaunchFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				try
 				{
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -107,6 +101,13 @@ public class LaunchFrame extends JFrame {
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
+				
+				try {
+					LaunchFrame frame = new LaunchFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 			}
 
@@ -135,7 +136,8 @@ public class LaunchFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
@@ -192,10 +194,12 @@ public class LaunchFrame extends JFrame {
 
 		usernameField = new JTextField("", 17);
 		usernameField.setBounds(76, 39, 144, 22);
+		usernameField.setText(passwordSettings.getUsername());
 		loginPanel.add(usernameField);
 
 		passwordField = new JPasswordField("", 17);
 		passwordField.setBounds(76, 72, 144, 22);
+		passwordField.setText(passwordSettings.getPassword());
 		loginPanel.add(passwordField);
 
 		JLabel lblUsername = new JLabel("Username:");
@@ -336,6 +340,7 @@ public class LaunchFrame extends JFrame {
 				try
 				{
 					response = new LoginResponse(responseStr);
+					passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
 				} catch (IllegalArgumentException e)
 				{
 					lblError.setForeground(Color.red);
