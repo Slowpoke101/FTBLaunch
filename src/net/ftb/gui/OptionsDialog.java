@@ -26,7 +26,7 @@ public class OptionsDialog extends JDialog
 	private static final long serialVersionUID = 1L;
 	
 	private final JPanel contentPanel = new JPanel();
-	private JTextField installFolderTextField;
+	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
 	
 	/**
@@ -66,6 +66,8 @@ public class OptionsDialog extends JDialog
 		}
 		{
 			JButton installBrowseBtn = new JButton("...");
+			installBrowseBtn.addActionListener(new ChooseDir());
+			
 			GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
 			gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
 			gbc_installBrowseBtn.gridx = 2;

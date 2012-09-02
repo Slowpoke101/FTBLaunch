@@ -72,7 +72,7 @@ public class Settings extends Properties
 	
 	public String getInstallPath()
 	{
-		return getProperty("installPath", OSUtils.getDefInstallPath());
+		return getProperty("installPath");
 	}
 	
 	public void setInstallPath(String path)
