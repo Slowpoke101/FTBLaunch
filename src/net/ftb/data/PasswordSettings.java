@@ -8,6 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.Scanner;
+
+import net.ftb.util.OSUtils;
 
 public class PasswordSettings {
 	private File _filename;
@@ -23,7 +26,11 @@ public class PasswordSettings {
 			} catch (IOException e) { }
 		}
 	}
-	
+	public void flush() throws IOException{
+		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
+		wri.write("");
+		wri.close();
+	}
 	public String getHex(String str) {
 		try {
 			return String.format("%040x", new BigInteger(str.getBytes("utf8")));
@@ -49,12 +56,15 @@ public class PasswordSettings {
 	}
 	
 	public void read() throws IOException {
+		Scanner in = new Scanner(OSUtils.getDefInstallPath() + "\\ftblaunch\\loginData");
+		if(in.hasNextBigInteger()){
 		BufferedReader read = new BufferedReader(new FileReader(_filename));
 		String str = fromHex(read.readLine());
 		String[] tokens = str.split(":");
 		_username = fromHex(tokens[0]);
 		_password = fromHex(tokens[1]);
 		read.close();
+		}
 	}
 	
 	public void storeUP(String username, String password) {

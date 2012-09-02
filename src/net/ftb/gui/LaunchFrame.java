@@ -170,8 +170,15 @@ public class LaunchFrame extends JFrame {
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 
+		
+		
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
+		if(passwordSettings.getUsername()!=""){
+			chckbxRemember.setSelected(true);
+		}else{
+			
+		}
 		loginPanel.add(chckbxRemember);
 
 		btnOptions = new JButton("Options");
@@ -194,6 +201,16 @@ public class LaunchFrame extends JFrame {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				if (chckbxRemember.isSelected()) {
+					passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
+				}else{
+					try {
+						passwordSettings.flush();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 				if (e.getActionCommand().equalsIgnoreCase("login"))
 				{
 					doLogin();
@@ -360,9 +377,7 @@ public class LaunchFrame extends JFrame {
 				{
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
-					if (chckbxRemember.isSelected()) {
-						passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
-					}
+					
 					
 				} catch (IllegalArgumentException e)
 				{
