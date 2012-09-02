@@ -566,8 +566,8 @@ public class LaunchFrame extends JFrame {
 				System.out.println(getSelectedModPack());
 				installJarMods(getSelectedModPack());
 				System.out.println("Installed jar mods");
-				//installMods(getSelectedModPack());
-				//launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
+				installMods(getSelectedModPack());
+				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
