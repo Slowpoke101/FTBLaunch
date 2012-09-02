@@ -77,6 +77,8 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LaunchFrame extends JFrame {
 
+	JPanel loginPanel;
+	JButton btnPlayOffline;
 	private PasswordSettings passwordSettings;
 	LoginResponse RESPONSE;
 	JCheckBox chckbxRemember;
@@ -97,7 +99,7 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
-				
+
 				try
 				{
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -133,9 +135,14 @@ public class LaunchFrame extends JFrame {
 		});
 	}
 
+
+
+
 	/**
 	 * Create the frame.
 	 */
+
+
 	public LaunchFrame() {
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
@@ -157,7 +164,7 @@ public class LaunchFrame extends JFrame {
 		}
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
 		contentPane = new JPanel();
@@ -165,19 +172,19 @@ public class LaunchFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel loginPanel = new JPanel();
-		loginPanel.setBounds(496, 11, 305, 139);
+		loginPanel = new JPanel();
+		loginPanel.setBounds(500, 15, 305, 139);
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 
-		
-		
+
+
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
 		if(passwordSettings.getUsername()!=""){
 			chckbxRemember.setSelected(true);
 		}else{
-			
+
 		}
 		loginPanel.add(chckbxRemember);
 
@@ -218,9 +225,8 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		JButton btnPlayOffline = new JButton("Play Offline");
+		btnPlayOffline = new JButton("Play Offline");
 		btnPlayOffline.setBounds(199, 11, 96, 23);
-		loginPanel.add(btnPlayOffline);
 
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 175, 14);
@@ -250,7 +256,7 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(226, 41, 260, 234);
+		newsPane.setBounds(230, 45, 260, 274);
 		contentPane.add(newsPane);
 
 		JTextArea txtrNews = new JTextArea();
@@ -262,7 +268,7 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane modPacksPane = new JScrollPane();
 		modPacksPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		modPacksPane.setBounds(6, 11, 210, 426);
+		modPacksPane.setBounds(10, 15, 210, 426);
 		contentPane.add(modPacksPane);
 
 		JPanel panel = new JPanel();
@@ -270,51 +276,73 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 
 		JRadioButton modPack1RB = new JRadioButton("");
-		modPack1RB.setBounds(6, 24, 28, 23);
+		modPack1RB.setBounds(182, 27, 20, 21);
 		panel.add(modPack1RB);
 
 		JRadioButton modPack2RB = new JRadioButton("");
-		modPack2RB.setBounds(6, 85, 28, 23);
+		modPack2RB.setBounds(182, 86, 20, 21);
 		panel.add(modPack2RB);
 
-		JLabel lblModPack2 = new JLabel("");
-		lblModPack2.setBounds(29, 72, 175, 50);
+		JLabel lblModPack2 = new JLabel("FTB (standard pack for new worlds)");
+		lblModPack2.setBackground(Color.YELLOW);
+		lblModPack2.setBounds(10, 72, 175, 50);
 		panel.add(lblModPack2);
 
-		JLabel lblModPack1 = new JLabel("");
-		lblModPack1.setBounds(29, 11, 175, 50);
+		JLabel lblModPack1 = new JLabel("FTB Classic (for use with FTB Maps)");
+		lblModPack1.setBackground(Color.YELLOW);
+		lblModPack1.setBounds(10, 11, 175, 50);
 		panel.add(lblModPack1);
+		
+		JLabel lblModPack3 = new JLabel("Direwolf20(for use with Direwolf's maps)");
+		lblModPack3.setBackground(Color.YELLOW);
+		lblModPack3.setBounds(10, 133, 175, 50);
+		panel.add(lblModPack3);
+		
+		JRadioButton modPack3RB = new JRadioButton("");
+		modPack3RB.setBounds(182, 147, 20, 21);
+		panel.add(modPack3RB);
+		
+		JLabel lblModPack4 = new JLabel("FTB Lite(stripped down version of the standard FTB pack)");
+		lblModPack4.setBackground(Color.YELLOW);
+		lblModPack4.setBounds(10, 194, 175, 50);
+		panel.add(lblModPack4);
+		
+		JRadioButton modPack4RB = new JRadioButton("");
+		modPack4RB.setBounds(182, 208, 20, 21);
+		panel.add(modPack4RB);
 
 		JPanel sponsorPanel = new JPanel();
-		sponsorPanel.setBounds(496, 166, 305, 109);
+		sponsorPanel.setBounds(500, 170, 305, 271);
 		contentPane.add(sponsorPanel);
+		sponsorPanel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Whatever slowpoke wants here");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(0, 5, 305, 266);
+		sponsorPanel.add(lblNewLabel);
 
 		JLabel lblTexturePacks = new JLabel("Texture packs");
 		lblTexturePacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblTexturePacks.setBounds(226, 286, 260, 19);
+		lblTexturePacks.setBounds(230, 330, 126, 19);
 		contentPane.add(lblTexturePacks);
-
-		JList texturesList = new JList();
-		texturesList.setBounds(226, 305, 258, 132);
-		contentPane.add(texturesList);
 
 		JLabel lblWorldPacks = new JLabel("World packs");
 		lblWorldPacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblWorldPacks.setBounds(496, 286, 91, 19);
+		lblWorldPacks.setBounds(365, 330, 91, 19);
 		contentPane.add(lblWorldPacks);
 
-		JLabel label = new JLabel("");
-		label.setBounds(226, 305, 260, 132);
-		contentPane.add(label);
-
 		JList worldsList = new JList();
-		worldsList.setBounds(496, 305, 305, 132);
+		worldsList.setBounds(365, 349, 125, 92);
 		contentPane.add(worldsList);
 
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNews.setBounds(226, 11, 113, 19);
+		lblNews.setBounds(230, 15, 113, 19);
 		contentPane.add(lblNews);
+		
+				JList texturesList = new JList();
+				texturesList.setBounds(230, 349, 126, 92);
+				contentPane.add(texturesList);
 
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
@@ -377,8 +405,8 @@ public class LaunchFrame extends JFrame {
 				{
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
-					
-					
+
+
 				} catch (IllegalArgumentException e)
 				{
 					lblError.setForeground(Color.red);
@@ -389,8 +417,12 @@ public class LaunchFrame extends JFrame {
 					}
 					else
 					{
-						if (responseStr.equalsIgnoreCase("bad login"))
+						if (responseStr.equalsIgnoreCase("bad login")){
 							lblError.setText("Invalid username or password.");
+							loginPanel.add(btnPlayOffline);
+							loginPanel.revalidate();
+							loginPanel.repaint();
+						}
 						else if (responseStr.equalsIgnoreCase("old version"))
 							lblError.setText("Outdated launcher.");
 						else
@@ -400,21 +432,17 @@ public class LaunchFrame extends JFrame {
 				}
 
 				lblError.setText("Login complete.");
-				if(getVersionMD5().equals("d41d8cd98f00b204e9800998ecf8427e")){
-					try {
-						launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
-					} catch (IOException ex) {
-						System.out.println(ex.toString());
-					}
-
-				}else{
+				String modPackName = ".minecraft";
 					runGameUpdater(response);
-				}
 			}
 		};
 		loginWorker.execute();
 	}
 
+	public String getSelectedModPack(){
+		return "";
+	}
+	
 	public void runGameUpdater(final LoginResponse response)
 	{
 		btnLogin.setEnabled(false);
@@ -452,7 +480,8 @@ public class LaunchFrame extends JFrame {
 
 
 						try {
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+							
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -506,14 +535,14 @@ public class LaunchFrame extends JFrame {
 		updater.execute();
 	}
 
-	protected String getVersionMD5(){
+	protected String getVersionMD5(String modPackName){
 		InputStream is = null;
 		MessageDigest md = null;
-		File f = new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+		File f = new File(OSUtils.getDefInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
 		if(f.exists()){
 			try{
 				md = MessageDigest.getInstance("MD5");
-				is = new FileInputStream(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+				is = new FileInputStream(OSUtils.getDefInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -539,9 +568,7 @@ public class LaunchFrame extends JFrame {
 		return "0";
 	}
 	@SuppressWarnings("deprecation")
-	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {
-		installMods("FTB SSP Mod Pack");
-		installJarMods("FTB SSP Mod Pack");
+	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {		
 		try
 		{
 			System.out.println("Loading jars...");
@@ -701,52 +728,52 @@ public class LaunchFrame extends JFrame {
 	public void extractZipTo(String zipLocation, String outputLocation) throws IOException
 	{
 		try
-        {
-                File fSourceZip = new File(zipLocation);
-                String zipPath = zipLocation.substring(0, zipLocation.length()-4);
-                File temp = new File(zipPath);
-                temp.mkdir();
-                System.out.println(zipPath + " created");
-                ZipFile zipFile = new ZipFile(fSourceZip);
-                Enumeration e = zipFile.entries();
-               
-                while(e.hasMoreElements())
-                {
-                        ZipEntry entry = (ZipEntry)e.nextElement();
-                        File destinationFilePath = new File(zipPath,entry.getName());
-                        destinationFilePath.getParentFile().mkdirs();
-                        if(entry.isDirectory())
-                        {
-                                continue;
-                        }
-                        else
-                        {
-                                System.out.println("Extracting " + destinationFilePath);
-                                BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-                                                                                                               
-                                int b;
-                                byte buffer[] = new byte[1024];
-                                
-                                FileOutputStream fos = new FileOutputStream(destinationFilePath);
-                                BufferedOutputStream bos = new BufferedOutputStream(fos,
-                                                                1024);
+		{
+			File fSourceZip = new File(zipLocation);
+			String zipPath = zipLocation.substring(0, zipLocation.length()-4);
+			File temp = new File(zipPath);
+			temp.mkdir();
+			System.out.println(zipPath + " created");
+			ZipFile zipFile = new ZipFile(fSourceZip);
+			Enumeration e = zipFile.entries();
 
-                                while ((b = bis.read(buffer, 0, 1024)) != -1) {
-                                                bos.write(buffer, 0, b);
-                                }
-                               
-                               
-                                bos.flush();
-                                bos.close();
-                                bis.close();
-                        }
-                }
-        }
-        catch(IOException ioe)
-        {
-                System.out.println("IOError :" + ioe);
-        }
-       
+			while(e.hasMoreElements())
+			{
+				ZipEntry entry = (ZipEntry)e.nextElement();
+				File destinationFilePath = new File(zipPath,entry.getName());
+				destinationFilePath.getParentFile().mkdirs();
+				if(entry.isDirectory())
+				{
+					continue;
+				}
+				else
+				{
+					System.out.println("Extracting " + destinationFilePath);
+					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+
+					int b;
+					byte buffer[] = new byte[1024];
+
+					FileOutputStream fos = new FileOutputStream(destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos,
+							1024);
+
+					while ((b = bis.read(buffer, 0, 1024)) != -1) {
+						bos.write(buffer, 0, b);
+					}
+
+
+					bos.flush();
+					bos.close();
+					bis.close();
+				}
+			}
+		}
+		catch(IOException ioe)
+		{
+			System.out.println("IOError :" + ioe);
+		}
+
 	}
 
 	public static void copyFolder(File src, File dest)
@@ -796,7 +823,8 @@ public class LaunchFrame extends JFrame {
 
 	protected void installJarMods(String modPackName){
 		try {
-			Scanner in = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\info.txt"));
+			File modlist = new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\modlist");
+			Scanner in = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\modlist"));
 			if(in.nextLine() != null){
 				try {
 					new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\").mkdir();
@@ -858,10 +886,9 @@ public class LaunchFrame extends JFrame {
 
 	}
 	protected void installMods(String modPackName){
-		/**reads modpack info file. This will contain the md5 of required minecraft.
-		 *inside instMods, there will be another info.txt, with, IN ORDER OF INSTALLATION, will tell what zips are going to be installed to the jar
+		/**reads modpack info file. There will be a file called modlist, with all JAR mods, IN ORDER OF INSTALLATION, will tell what zips are going to be installed to the jar
 		 *
-		 *"d41d8cd98f00b204e9800998ecf8427e" md5 for 1.3.2
+		 *
 		 ***/
 		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\").mkdir();
 		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\.minecraft\\").mkdir();
