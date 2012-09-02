@@ -53,6 +53,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -77,6 +78,11 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LaunchFrame extends JFrame {
 
+
+	JRadioButton modPack1RB;
+	JRadioButton modPack2RB;
+	JRadioButton modPack3RB;
+	JRadioButton modPack4RB;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
 	private PasswordSettings passwordSettings;
@@ -144,6 +150,7 @@ public class LaunchFrame extends JFrame {
 
 
 	public LaunchFrame() {
+		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		try {
@@ -204,6 +211,7 @@ public class LaunchFrame extends JFrame {
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 72, 69, 23);
 		loginPanel.add(btnLogin);
+		btnLogin.setEnabled(true);
 		btnLogin.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -275,11 +283,12 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.setViewportView(panel);
 		panel.setLayout(null);
 
-		JRadioButton modPack1RB = new JRadioButton("");
+		modPack1RB = new JRadioButton("");
 		modPack1RB.setBounds(182, 27, 20, 21);
+		modPack1RB.setSelected(true);
 		panel.add(modPack1RB);
 
-		JRadioButton modPack2RB = new JRadioButton("");
+		modPack2RB = new JRadioButton("");
 		modPack2RB.setBounds(182, 86, 20, 21);
 		panel.add(modPack2RB);
 
@@ -292,22 +301,22 @@ public class LaunchFrame extends JFrame {
 		lblModPack1.setBackground(Color.YELLOW);
 		lblModPack1.setBounds(10, 11, 175, 50);
 		panel.add(lblModPack1);
-		
+
 		JLabel lblModPack3 = new JLabel("Direwolf20(for use with Direwolf's maps)");
 		lblModPack3.setBackground(Color.YELLOW);
 		lblModPack3.setBounds(10, 133, 175, 50);
 		panel.add(lblModPack3);
-		
-		JRadioButton modPack3RB = new JRadioButton("");
+
+		modPack3RB = new JRadioButton("");
 		modPack3RB.setBounds(182, 147, 20, 21);
 		panel.add(modPack3RB);
-		
+
 		JLabel lblModPack4 = new JLabel("FTB Lite(stripped down version of the standard FTB pack)");
 		lblModPack4.setBackground(Color.YELLOW);
 		lblModPack4.setBounds(10, 194, 175, 50);
 		panel.add(lblModPack4);
-		
-		JRadioButton modPack4RB = new JRadioButton("");
+
+		modPack4RB = new JRadioButton("");
 		modPack4RB.setBounds(182, 208, 20, 21);
 		panel.add(modPack4RB);
 
@@ -315,7 +324,7 @@ public class LaunchFrame extends JFrame {
 		sponsorPanel.setBounds(500, 170, 305, 271);
 		contentPane.add(sponsorPanel);
 		sponsorPanel.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("Whatever slowpoke wants here");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(0, 5, 305, 266);
@@ -339,16 +348,23 @@ public class LaunchFrame extends JFrame {
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(230, 15, 113, 19);
 		contentPane.add(lblNews);
-		
-				JList texturesList = new JList();
-				texturesList.setBounds(230, 349, 126, 92);
-				contentPane.add(texturesList);
+
+		ButtonGroup group = new ButtonGroup();
+		group.add(modPack1RB);
+		group.add(modPack2RB);
+		group.add(modPack3RB);
+		group.add(modPack4RB);
+
+
+
+		JList texturesList = new JList();
+		texturesList.setBounds(230, 349, 126, 92);
+		contentPane.add(texturesList);
 
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
 				usernameField, passwordField, chckbxRemember, btnLogin,
-				btnOptions, txtrNews }));
-
+				btnOptions, txtrNews }));		
 	}
 	public void doLogin()
 	{
@@ -357,6 +373,7 @@ public class LaunchFrame extends JFrame {
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
+
 
 		lblError.setForeground(Color.black);
 		lblError.setText("Logging in...");
@@ -369,7 +386,6 @@ public class LaunchFrame extends JFrame {
 			{
 				lblError.setText("");
 
-				btnLogin.setEnabled(true);
 				btnOptions.setEnabled(true);
 				usernameField.setEnabled(true);
 				passwordField.setEnabled(true);
@@ -409,6 +425,7 @@ public class LaunchFrame extends JFrame {
 
 				} catch (IllegalArgumentException e)
 				{
+
 					lblError.setForeground(Color.red);
 
 					if (responseStr.contains(":"))
@@ -432,117 +449,140 @@ public class LaunchFrame extends JFrame {
 				}
 
 				lblError.setText("Login complete.");
-				String modPackName = ".minecraft";
-					runGameUpdater(response);
+				runGameUpdater(response);
 			}
 		};
 		loginWorker.execute();
 	}
 
 	public String getSelectedModPack(){
-		return "";
+		if(modPack1RB.isSelected() == true){
+			return "FTBCLASSIC";
+		}else if(modPack2RB.isSelected() == true){
+			return "FTB";
+		}else if(modPack3RB.isSelected() == true){
+			return "DIREWOLF20";
+		}else if(modPack4RB.isSelected() == true){
+			return "FTBLITE";
+		}
+		return null;
+
 	}
-	
+
 	public void runGameUpdater(final LoginResponse response)
 	{
-		btnLogin.setEnabled(false);
-		btnOptions.setEnabled(false);
-		usernameField.setEnabled(false);
-		passwordField.setEnabled(false);
-		chckbxRemember.setEnabled(false);
+		if(!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()){
+			btnLogin.setEnabled(false);
+			btnOptions.setEnabled(false);
+			usernameField.setEnabled(false);
+			passwordField.setEnabled(false);
+			chckbxRemember.setEnabled(false);
 
-		final ProgressMonitor progMonitor = 
-				new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			final ProgressMonitor progMonitor = 
+					new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 
-		final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), 
-				"minecraft.jar", 
-				new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), 
-				false)
-		{
-			public void done()
+			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), 
+					"minecraft.jar", 
+					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), 
+					false)
 			{
-
-				btnLogin.setEnabled(true);
-				btnOptions.setEnabled(true);
-				usernameField.setEnabled(true);
-				passwordField.setEnabled(true);
-				chckbxRemember.setEnabled(true);
-
-				progMonitor.close();
-				try
+				public void done()
 				{
-					if (get() == true)
+
+					btnLogin.setEnabled(true);
+					btnOptions.setEnabled(true);
+					usernameField.setEnabled(true);
+					passwordField.setEnabled(true);
+					chckbxRemember.setEnabled(true);
+
+					progMonitor.close();
+					try
 					{
-						// Success
-						lblError.setForeground(Color.black);
-						lblError.setText("Game update complete.");
+						if (get() == true)
+						{
+							// Success
+							lblError.setForeground(Color.black);
+							lblError.setText("Game update complete.");
 
 
 
-						try {
-							
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
-						} catch (IOException e) {
+							//try {
+							System.out.println(getSelectedModPack());
+							doLogin();
+							//launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
+							//} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							//e.printStackTrace();
+							//}
+
 						}
-
-					}
-					else
+						else
+						{
+							lblError.setForeground(Color.red);
+							lblError.setText("Error downloading game.");
+						}
+					} catch (CancellationException e)
 					{
+						lblError.setForeground(Color.black);
+						lblError.setText("Game update cancelled...");
+					} catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					} catch (ExecutionException e)
+					{
+						e.printStackTrace();
 						lblError.setForeground(Color.red);
-						lblError.setText("Error downloading game.");
+						lblError.setText("Failed to download game: " + e.getCause().getMessage());
+						return;
 					}
-				} catch (CancellationException e)
-				{
-					lblError.setForeground(Color.black);
-					lblError.setText("Game update cancelled...");
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				} catch (ExecutionException e)
-				{
-					e.printStackTrace();
-					lblError.setForeground(Color.red);
-					lblError.setText("Failed to download game: " + e.getCause().getMessage());
-					return;
 				}
-			}
-		};
+			};
 
-		updater.addPropertyChangeListener(new PropertyChangeListener()
-		{
-			@Override
-			public void propertyChange(PropertyChangeEvent evt)
+			updater.addPropertyChangeListener(new PropertyChangeListener()
 			{
-				if (progMonitor.isCanceled())
+				@Override
+				public void propertyChange(PropertyChangeEvent evt)
 				{
-					updater.cancel(false);
-				}
+					if (progMonitor.isCanceled())
+					{
+						updater.cancel(false);
+					}
 
-				if (!updater.isDone())
-				{
-					int prog = updater.getProgress();
-					if (prog < 0)
-						prog = 0;
-					else if (prog > 100)
-						prog = 100;
-					progMonitor.setProgress(prog);
-					progMonitor.setNote(updater.getStatus());
+					if (!updater.isDone())
+					{
+						int prog = updater.getProgress();
+						if (prog < 0)
+							prog = 0;
+						else if (prog > 100)
+							prog = 100;
+						progMonitor.setProgress(prog);
+						progMonitor.setNote(updater.getStatus());
+					}
 				}
+			});
+			updater.execute();
+		}else{
+			try {
+				System.out.println(getSelectedModPack());
+				installJarMods(getSelectedModPack());
+				System.out.println("Installed jar mods");
+				//installMods(getSelectedModPack());
+				//launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
-		updater.execute();
+		}
 	}
 
 	protected String getVersionMD5(String modPackName){
 		InputStream is = null;
 		MessageDigest md = null;
-		File f = new File(OSUtils.getDefInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
+		File f = new File(Settings.getSettings().getInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
 		if(f.exists()){
 			try{
 				md = MessageDigest.getInstance("MD5");
-				is = new FileInputStream(OSUtils.getDefInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
+				is = new FileInputStream(Settings.getSettings().getInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -670,7 +710,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			FileOutputStream fos = new FileOutputStream(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + ".zip");
+			FileOutputStream fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -679,7 +719,7 @@ public class LaunchFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		extractZip(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + ".zip");
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
 	}
 	public void extractZip(String zipLocation)
 	{
@@ -730,7 +770,7 @@ public class LaunchFrame extends JFrame {
 		try
 		{
 			File fSourceZip = new File(zipLocation);
-			String zipPath = zipLocation.substring(0, zipLocation.length()-4);
+			String zipPath = outputLocation;
 			File temp = new File(zipPath);
 			temp.mkdir();
 			System.out.println(zipPath + " created");
@@ -821,40 +861,19 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	protected void installJarMods(String modPackName){
-		try {
-			File modlist = new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\modlist");
-			Scanner in = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\modlist"));
-			if(in.nextLine() != null){
-				try {
-					new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\").mkdir();
-					copyFolder(new File(OSUtils.getDefInstallPath() + "\\.minecraft\\"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\"));
-					copyFolder(new File(OSUtils.getDefInstallPath() + "\\temp\\instMods\\"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\"));
-					File minecraft = new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
-					File mcbackup = new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-					minecraft.renameTo(new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-					copyFile(new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar"), mcbackup);
-					System.out.println("Backuped minecraft");
-					extractZipTo(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar", OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar\\");
-					(new File(OSUtils.getDefInstallPath() + "\\" + modPackName  + "\\instMods\\")).mkdir();
-					Scanner info = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\" + modPackName  + "\\instMods\\"));
-					while(info.hasNext()){
-						String fileName = info.nextLine();
-						extractZipTo(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar\\" + fileName, OSUtils.getDefInstallPath() + "\\" + modPackName + "\\bin\\minecraft.jar\\");
-					}
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	protected void installJarMods(String modPackName) throws IOException{
+		File modlist = new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist");
+		Scanner in = new Scanner(new FileReader(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist"));
+		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist").mkdirs();
+		while(in.hasNextLine()){
+			String modName = in.nextLine();
+			if(modName != ""){
+				System.out.println(modName);
+			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\instMods\\" + modName, Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\instMods\\jar\\");
 			}
-		}catch(FileNotFoundException e){
-
 		}
 	}
-	public static void zipFolder(File sourceDir, File destFile){
 
-	}
 	public static void copyFile(File src, File dest) throws IOException{
 		if(src.exists()){
 			InputStream in = new FileInputStream(src);
@@ -885,24 +904,15 @@ public class LaunchFrame extends JFrame {
 		return resource.delete();
 
 	}
-	protected void installMods(String modPackName){
-		/**reads modpack info file. There will be a file called modlist, with all JAR mods, IN ORDER OF INSTALLATION, will tell what zips are going to be installed to the jar
-		 *
-		 *
-		 ***/
-		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\").mkdir();
-		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\.minecraft\\").mkdir();
-		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\instMods\\").mkdir();
-		try {
-
-			copyFolder(new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\.minecraft"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName));
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected void installMods(String modPackName) throws IOException{
+		new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft").mkdirs();
+		System.out.println("dirs mk'd");
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\bin"));
+		File minecraft = new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		copyFile(minecraft, mcbackup);
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath() + "\\"  + getSelectedModPack() + "\\.minecraft"));
 	}
 }
