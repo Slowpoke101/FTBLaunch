@@ -7,20 +7,36 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.util.Enumeration;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -61,6 +77,8 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LaunchFrame extends JFrame {
 
+	private PasswordSettings passwordSettings;
+	LoginResponse RESPONSE;
 	JCheckBox chckbxRemember;
 	JButton btnOptions;
 	JLabel lblError;
@@ -68,16 +86,18 @@ public class LaunchFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	
-	private PasswordSettings passwordSettings;
 
 	/**
 	 * Launch the application.
 	 */
 
+
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+
+				
 				try
 				{
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -101,14 +121,13 @@ public class LaunchFrame extends JFrame {
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
-				
+
 				try {
 					LaunchFrame frame = new LaunchFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 			}
 
 		});
@@ -136,9 +155,9 @@ public class LaunchFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
 		contentPane = new JPanel();
@@ -187,7 +206,7 @@ public class LaunchFrame extends JFrame {
 		loginPanel.add(btnPlayOffline);
 
 		lblError = new JLabel();
-		lblError.setBounds(14, 15, 144, 14);
+		lblError.setBounds(14, 15, 175, 14);
 		loginPanel.add(lblError);
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		lblError.setForeground(Color.RED);
@@ -340,6 +359,7 @@ public class LaunchFrame extends JFrame {
 				try
 				{
 					response = new LoginResponse(responseStr);
+					RESPONSE = response;
 					passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
 				} catch (IllegalArgumentException e)
 				{
@@ -364,20 +384,20 @@ public class LaunchFrame extends JFrame {
 				lblError.setText("Login complete.");
 				if(getVersionMD5().equals("d41d8cd98f00b204e9800998ecf8427e")){
 					try {
-						launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", "PlayerTesting", "-");
+						launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 					} catch (IOException ex) {
 						System.out.println(ex.toString());
 					}
+
 				}else{
 					runGameUpdater(response);
 				}
-				
 			}
 		};
 		loginWorker.execute();
 	}
 
-	public void runGameUpdater(LoginResponse response)
+	public void runGameUpdater(final LoginResponse response)
 	{
 		btnLogin.setEnabled(false);
 		btnOptions.setEnabled(false);
@@ -388,13 +408,14 @@ public class LaunchFrame extends JFrame {
 		final ProgressMonitor progMonitor = 
 				new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 
-		final GameUpdateWorker updater = new GameUpdateWorker(response.getLatestVersion(), 
+		final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), 
 				"minecraft.jar", 
 				new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), 
 				false)
 		{
 			public void done()
 			{
+
 				btnLogin.setEnabled(true);
 				btnOptions.setEnabled(true);
 				usernameField.setEnabled(true);
@@ -409,11 +430,16 @@ public class LaunchFrame extends JFrame {
 						// Success
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update complete.");
+
+
+
 						try {
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", "PlayerTesting", "-");
-						} catch (IOException ex) {
-							System.out.println(ex.toString());
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "//.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
+
 					}
 					else
 					{
@@ -465,33 +491,39 @@ public class LaunchFrame extends JFrame {
 	protected String getVersionMD5(){
 		InputStream is = null;
 		MessageDigest md = null;
-		try{
-		md = MessageDigest.getInstance("MD5");
-		is = new FileInputStream(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
-		}catch(Exception e){
-			e.printStackTrace();
+		File f = new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+		if(f.exists()){
+			try{
+				md = MessageDigest.getInstance("MD5");
+				is = new FileInputStream(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			try {
+				is = new DigestInputStream(is, md);
+				// read stream to EOF as normal...
+			}
+			finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			String result = "";
+			byte[] digest = md.digest();
+			for (int i=0; i < digest.length; i++) {
+				result += Integer.toString( ( digest[i] & 0xff ) + 0x100, 16).substring( 1 );
+			}
+			return result;
 		}
-		try {
-		  is = new DigestInputStream(is, md);
-		  // read stream to EOF as normal...
-		}
-		finally {
-		  try {
-			is.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
-		String result = "";
-		byte[] digest = md.digest();
-		for (int i=0; i < digest.length; i++) {
-	           result += Integer.toString( ( digest[i] & 0xff ) + 0x100, 16).substring( 1 );
-	       }
-	       return result;
+		return "0";
 	}
-	
+	@SuppressWarnings("deprecation")
 	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {
+		installMods("FTB SSP Mod Pack");
+		installJarMods("FTB SSP Mod Pack");
 		try
 		{
 			System.out.println("Loading jars...");
@@ -547,6 +579,7 @@ public class LaunchFrame extends JFrame {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
+				this.hide();
 				System.out.println("Fixed Minecraft Path: Field was "
 						+ f.toString());
 			}
@@ -584,6 +617,247 @@ public class LaunchFrame extends JFrame {
 		{
 			e.printStackTrace();
 			System.exit(4);
+		}
+	}
+
+	protected void downloadModPack(String modPackName){
+		URL website;
+		try {
+			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos = new FileOutputStream(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + ".zip");
+			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		extractZip(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + ".zip");
+	}
+	public void extractZip(String zipLocation)
+	{
+		try
+		{
+			byte[] buf = new byte[1024];
+			ZipInputStream zipinputstream = null;
+			ZipEntry zipentry;
+			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
+
+			zipentry = zipinputstream.getNextEntry();
+			while (zipentry != null) 
+			{ 
+				//for each entry to be extracted
+				String entryName = zipentry.getName();
+				System.out.println("entryname "+entryName);
+				int n;
+				FileOutputStream fileoutputstream;
+				File newFile = new File(entryName);
+				String directory = newFile.getParent();
+
+				if(directory == null)
+				{
+					if(newFile.isDirectory())
+						break;
+				}
+
+				fileoutputstream = new FileOutputStream(zipLocation);             
+
+				while ((n = zipinputstream.read(buf, 0, 1024)) > -1)
+					fileoutputstream.write(buf, 0, n);
+
+				fileoutputstream.close(); 
+				zipinputstream.closeEntry();
+				zipentry = zipinputstream.getNextEntry();
+
+			}//while
+
+			zipinputstream.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void extractZipTo(String zipLocation, String outputLocation) throws IOException
+	{
+		try
+        {
+                File fSourceZip = new File(zipLocation);
+                String zipPath = zipLocation.substring(0, zipLocation.length()-4);
+                File temp = new File(zipPath);
+                temp.mkdir();
+                System.out.println(zipPath + " created");
+                ZipFile zipFile = new ZipFile(fSourceZip);
+                Enumeration e = zipFile.entries();
+               
+                while(e.hasMoreElements())
+                {
+                        ZipEntry entry = (ZipEntry)e.nextElement();
+                        File destinationFilePath = new File(zipPath,entry.getName());
+                        destinationFilePath.getParentFile().mkdirs();
+                        if(entry.isDirectory())
+                        {
+                                continue;
+                        }
+                        else
+                        {
+                                System.out.println("Extracting " + destinationFilePath);
+                                BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+                                                                                                               
+                                int b;
+                                byte buffer[] = new byte[1024];
+                                
+                                FileOutputStream fos = new FileOutputStream(destinationFilePath);
+                                BufferedOutputStream bos = new BufferedOutputStream(fos,
+                                                                1024);
+
+                                while ((b = bis.read(buffer, 0, 1024)) != -1) {
+                                                bos.write(buffer, 0, b);
+                                }
+                               
+                               
+                                bos.flush();
+                                bos.close();
+                                bis.close();
+                        }
+                }
+        }
+        catch(IOException ioe)
+        {
+                System.out.println("IOError :" + ioe);
+        }
+       
+	}
+
+	public static void copyFolder(File src, File dest)
+			throws IOException{
+
+		if(src.isDirectory()){
+
+			//if directory not exists, create it
+			if(!dest.exists()){
+				dest.mkdir();
+				System.out.println("Directory copied from " 
+						+ src + "  to " + dest);
+			}
+
+			//list all the directory contents
+			String files[] = src.list();
+
+			for (String file : files) {
+				//construct the src and dest file structure
+				File srcFile = new File(src, file);
+				File destFile = new File(dest, file);
+				//recursive copy
+				copyFolder(srcFile,destFile);
+			}
+
+		}else{
+			//if file, then copy it
+			//Use bytes stream to support all file types
+			if(src.exists()){
+				InputStream in = new FileInputStream(src);
+				OutputStream out = new FileOutputStream(dest); 
+
+				byte[] buffer = new byte[1024];
+
+				int length;
+				//copy the file content in bytes 
+				while ((length = in.read(buffer)) > 0){
+					out.write(buffer, 0, length);
+				}
+
+				in.close();
+				out.close();
+				System.out.println("File copied from " + src + " to " + dest);
+			}
+		}
+	}
+
+	protected void installJarMods(String modPackName){
+		try {
+			Scanner in = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName +  "\\info.txt"));
+			if(in.nextLine() != null){
+				try {
+					new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\").mkdir();
+					copyFolder(new File(OSUtils.getDefInstallPath() + "\\.minecraft\\"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\"));
+					copyFolder(new File(OSUtils.getDefInstallPath() + "\\temp\\instMods\\"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\"));
+					File minecraft = new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+					File mcbackup = new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+					minecraft.renameTo(new File(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+					copyFile(new File(OSUtils.getDefInstallPath() + "\\.minecraft\\bin\\minecraft.jar"), mcbackup);
+					System.out.println("Backuped minecraft");
+					extractZipTo(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar", OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar\\");
+					(new File(OSUtils.getDefInstallPath() + "\\" + modPackName  + "\\instMods\\")).mkdir();
+					Scanner info = new Scanner(new FileReader(OSUtils.getDefInstallPath() + "\\" + modPackName  + "\\instMods\\"));
+					while(info.hasNext()){
+						String fileName = info.nextLine();
+						extractZipTo(OSUtils.getDefInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\minecraft.jar\\" + fileName, OSUtils.getDefInstallPath() + "\\" + modPackName + "\\bin\\minecraft.jar\\");
+					}
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}catch(FileNotFoundException e){
+
+		}
+	}
+	public static void zipFolder(File sourceDir, File destFile){
+
+	}
+	public static void copyFile(File src, File dest) throws IOException{
+		if(src.exists()){
+			InputStream in = new FileInputStream(src);
+			OutputStream out = new FileOutputStream(dest); 
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			//copy the file content in bytes 
+			while ((length = in.read(buffer)) > 0){
+				out.write(buffer, 0, length);
+			}
+
+			in.close();
+			out.close();
+			System.out.println("File copied from " + src + " to " + dest);
+		}
+	}
+
+
+	public static boolean delete(File resource) throws IOException{ 
+		if(resource.isDirectory()){
+			File[] childFiles = resource.listFiles();
+			for(File child : childFiles){
+				delete(child);
+			}
+		}
+		return resource.delete();
+
+	}
+	protected void installMods(String modPackName){
+		/**reads modpack info file. This will contain the md5 of required minecraft.
+		 *inside instMods, there will be another info.txt, with, IN ORDER OF INSTALLATION, will tell what zips are going to be installed to the jar
+		 *
+		 *"d41d8cd98f00b204e9800998ecf8427e" md5 for 1.3.2
+		 ***/
+		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\").mkdir();
+		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\.minecraft\\").mkdir();
+		new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\instMods\\").mkdir();
+		try {
+
+			copyFolder(new File(OSUtils.getDefInstallPath() + "\\temp\\" + modPackName + " \\.minecraft"), new File(OSUtils.getDefInstallPath() + "\\" + modPackName));
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
