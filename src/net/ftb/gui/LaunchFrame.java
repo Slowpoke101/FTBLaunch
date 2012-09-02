@@ -360,7 +360,10 @@ public class LaunchFrame extends JFrame {
 				{
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
-					passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
+					if (chckbxRemember.isSelected()) {
+						passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
+					}
+					
 				} catch (IllegalArgumentException e)
 				{
 					lblError.setForeground(Color.red);
