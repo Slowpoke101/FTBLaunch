@@ -63,6 +63,8 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import de.schlichtherle.truezip.file.TFile;
+
 public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
@@ -817,83 +819,18 @@ public class LaunchFrame extends JFrame {
 		System.out.println("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
-		ZipFile forge = new ZipFile(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\forge.zip");
+		File minecraftJarDir = new TFile(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar\\");
+		File forge = new TFile(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\forge.zip\\");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+		File test = new TFile(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\test.zip");
 //		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
 //		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-		File packMinecraft = new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
+		File packMinecraftJarDir = new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\");
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"),new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft"));
-		addFilesToJar(packMinecraft, getFilesInZip(forge));
-	}
-	
-	public File[] getFilesInZip(ZipFile zf) {
-		entries = zf.entries();
-		
-		return null;
-	}
-
-	public static void addFilesToJar(File jarFile, File[] files) throws IOException {
-		
-		File tempFile = File.createTempFile(jarFile.getName(), null);
-		tempFile.delete();
-
-		boolean renameOk = jarFile.renameTo(tempFile);
-
-		if (!renameOk) {
-			throw new RuntimeException("could not rename the file "+ jarFile.getAbsolutePath() + " to "+ tempFile.getAbsolutePath());
-		}
-
-		byte[] buf = new byte[1024];
-
-		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
-
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(jarFile));
-
-		ZipEntry entry = zin.getNextEntry();
-
-		while (entry != null) {
-			String name = entry.getName();
-
-			boolean notInFiles = true;
-
-			for (File f : files) {
-				if (f.getName().equals(name)) {
-					notInFiles = false;
-					break;
-				}
-			}
-
-			if (notInFiles) {
-				// Add ZIP entry to output stream.
-				out.putNextEntry(new ZipEntry(name));
-				// Transfer bytes from the ZIP file to the output file
-				int len;
-				while ((len = zin.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-			}
-			entry = zin.getNextEntry();
-		}
-
-		// Close the streams
-		zin.close();
-		// Compress the files
-		for (int i = 0; i < files.length; i++) {
-			InputStream in = new FileInputStream(files[i]);
-			// Add ZIP entry to output stream.
-			out.putNextEntry(new ZipEntry(files[i].getName()));
-			// Transfer bytes from the file to the ZIP file
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			// Complete the entry
-			out.closeEntry();
-			in.close();
-		}
-		// Complete the ZIP file
-		out.close();
-		tempFile.delete();
+		copyFolder(packMinecraftJarDir, test);
+		copyFolder(forge, test);
+		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\test.zip\\META-INF"));
+		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\META-INF"));
 	}
 }
