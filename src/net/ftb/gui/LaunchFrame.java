@@ -64,6 +64,9 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import de.schlichtherle.truezip.file.TFile;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -155,22 +158,99 @@ public class LaunchFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{210, 126, 125, 305, 0};
+		gbl_contentPane.rowHeights = new int[]{19, 109, 149, 111, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
+				
+		JScrollPane modPacksPane = new JScrollPane();
+		modPacksPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		GridBagConstraints gbc_modPacksPane = new GridBagConstraints();
+		gbc_modPacksPane.fill = GridBagConstraints.BOTH;
+		gbc_modPacksPane.insets = new Insets(0, 0, 0, 5);
+		gbc_modPacksPane.gridheight = 4;
+		gbc_modPacksPane.gridx = 0;
+		gbc_modPacksPane.gridy = 0;
+		contentPane.add(modPacksPane, gbc_modPacksPane);
+						
+		ButtonGroup group = new ButtonGroup();
+						
+		JPanel panel = new JPanel();
+		modPacksPane.setViewportView(panel);
+		panel.setLayout(null);
+								
+		modPack1RB = new JRadioButton("");
+		modPack1RB.setBounds(182, 27, 20, 21);
+		modPack1RB.setSelected(true);
+		panel.add(modPack1RB);
+		
+		modPack2RB = new JRadioButton("");
+		modPack2RB.setBounds(182, 86, 20, 21);
+		panel.add(modPack2RB);
+		
+		JLabel lblModPack2 = new JLabel("FTB (standard pack for new worlds)");
+		lblModPack2.setBackground(Color.YELLOW);
+		lblModPack2.setBounds(10, 72, 175, 50);
+		panel.add(lblModPack2);
+		
+		JLabel lblModPack1 = new JLabel("FTB Classic (for use with FTB Maps)");
+		lblModPack1.setBackground(Color.YELLOW);
+		lblModPack1.setBounds(10, 11, 175, 50);
+		panel.add(lblModPack1);
+		
+		JLabel lblModPack3 = new JLabel(
+				"Direwolf20(for use with Direwolf's maps)");
+		lblModPack3.setBackground(Color.YELLOW);
+		lblModPack3.setBounds(10, 133, 175, 50);
+		panel.add(lblModPack3);
+		
+		modPack3RB = new JRadioButton("");
+		modPack3RB.setBounds(182, 147, 20, 21);
+		panel.add(modPack3RB);
+		
+		JLabel lblModPack4 = new JLabel(
+				"FTB Lite(stripped down version of the standard FTB pack)");
+		lblModPack4.setBackground(Color.YELLOW);
+		lblModPack4.setBounds(10, 194, 175, 50);
+		panel.add(lblModPack4);
+		
+		modPack4RB = new JRadioButton("");
+		modPack4RB.setBounds(182, 208, 20, 21);
+		panel.add(modPack4RB);
+		group.add(modPack1RB);
+		group.add(modPack2RB);
+		group.add(modPack3RB);
+		group.add(modPack4RB);
+			
+		JLabel lblNews = new JLabel("News");
+		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
+		GridBagConstraints gbc_lblNews = new GridBagConstraints();
+		gbc_lblNews.fill = GridBagConstraints.BOTH;
+		gbc_lblNews.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNews.gridx = 1;
+		gbc_lblNews.gridy = 0;
+		contentPane.add(lblNews, gbc_lblNews);
+		
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
+				usernameField, passwordField, chckbxRemember, btnLogin,
+				btnOptions }));
+		
 		loginPanel = new JPanel();
-		loginPanel.setBounds(500, 15, 305, 139);
-		contentPane.add(loginPanel);
+		GridBagConstraints gbc_loginPanel = new GridBagConstraints();
+		gbc_loginPanel.fill = GridBagConstraints.BOTH;
+		gbc_loginPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_loginPanel.gridheight = 2;
+		gbc_loginPanel.gridx = 3;
+		gbc_loginPanel.gridy = 0;
+		contentPane.add(loginPanel, gbc_loginPanel);
 		loginPanel.setLayout(null);
-
+		
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
-		if (passwordSettings.getUsername() != "") {
-			chckbxRemember.setSelected(true);
-		} else {
-
-		}
 		loginPanel.add(chckbxRemember);
-
+		
 		btnOptions = new JButton("Options");
 		btnOptions.setBounds(226, 39, 69, 23);
 		loginPanel.add(btnOptions);
@@ -181,7 +261,7 @@ public class LaunchFrame extends JFrame {
 				optionsDlg.setVisible(true);
 			}
 		});
-
+		
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 72, 69, 23);
 		loginPanel.add(btnLogin);
@@ -203,149 +283,109 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-
-		btnPlayOffline = new JButton("Play Offline");
-		btnPlayOffline.setBounds(199, 11, 96, 23);
-
+		
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 175, 14);
 		loginPanel.add(lblError);
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		lblError.setForeground(Color.RED);
-
+		
 		usernameField = new JTextField("", 17);
 		usernameField.setBounds(76, 39, 144, 22);
 		usernameField.setText(passwordSettings.getUsername());
 		loginPanel.add(usernameField);
-
+		
 		passwordField = new JPasswordField("", 17);
 		passwordField.setBounds(76, 72, 144, 22);
 		passwordField.setText(passwordSettings.getPassword());
 		loginPanel.add(passwordField);
-
+		
 		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(14, 43, 52, 14);
 		loginPanel.add(lblUsername);
 		lblUsername.setDisplayedMnemonic('u');
-
+		
 		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(16, 76, 50, 14);
 		loginPanel.add(lblPassword);
 		lblPassword.setDisplayedMnemonic('p');
-
+			
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(230, 45, 260, 274);
-		contentPane.add(newsPane);
-
+		GridBagConstraints gbc_newsPane = new GridBagConstraints();
+		gbc_newsPane.gridwidth = 2;
+		gbc_newsPane.fill = GridBagConstraints.BOTH;
+		gbc_newsPane.insets = new Insets(0, 0, 5, 5);
+		gbc_newsPane.gridheight = 2;
+		gbc_newsPane.gridx = 1;
+		gbc_newsPane.gridy = 1;
+		contentPane.add(newsPane, gbc_newsPane);
+		
 		JTextArea txtrNews = new JTextArea();
 		txtrNews.setWrapStyleWord(true);
 		txtrNews.setLineWrap(true);
 		txtrNews.setEditable(false);
 		txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
 		newsPane.setViewportView(txtrNews);
-
-		JScrollPane modPacksPane = new JScrollPane();
-		modPacksPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		modPacksPane.setBounds(10, 15, 210, 426);
-		contentPane.add(modPacksPane);
-
-		JPanel panel = new JPanel();
-		modPacksPane.setViewportView(panel);
-		panel.setLayout(null);
-
-		modPack1RB = new JRadioButton("");
-		modPack1RB.setBounds(182, 27, 20, 21);
-		modPack1RB.setSelected(true);
-		panel.add(modPack1RB);
-
-		modPack2RB = new JRadioButton("");
-		modPack2RB.setBounds(182, 86, 20, 21);
-		panel.add(modPack2RB);
-
-		JLabel lblModPack2 = new JLabel("FTB (standard pack for new worlds)");
-		lblModPack2.setBackground(Color.YELLOW);
-		lblModPack2.setBounds(10, 72, 175, 50);
-		panel.add(lblModPack2);
-
-		JLabel lblModPack1 = new JLabel("FTB Classic (for use with FTB Maps)");
-		lblModPack1.setBackground(Color.YELLOW);
-		lblModPack1.setBounds(10, 11, 175, 50);
-		panel.add(lblModPack1);
-
-		JLabel lblModPack3 = new JLabel(
-				"Direwolf20(for use with Direwolf's maps)");
-		lblModPack3.setBackground(Color.YELLOW);
-		lblModPack3.setBounds(10, 133, 175, 50);
-		panel.add(lblModPack3);
-
-		modPack3RB = new JRadioButton("");
-		modPack3RB.setBounds(182, 147, 20, 21);
-		panel.add(modPack3RB);
-
-		JLabel lblModPack4 = new JLabel(
-				"FTB Lite(stripped down version of the standard FTB pack)");
-		lblModPack4.setBackground(Color.YELLOW);
-		lblModPack4.setBounds(10, 194, 175, 50);
-		panel.add(lblModPack4);
-
-		modPack4RB = new JRadioButton("");
-		modPack4RB.setBounds(182, 208, 20, 21);
-		panel.add(modPack4RB);
-
+		
 		JPanel sponsorPanel = new JPanel();
-		sponsorPanel.setBounds(500, 170, 305, 271);
-		contentPane.add(sponsorPanel);
+		GridBagConstraints gbc_sponsorPanel = new GridBagConstraints();
+		gbc_sponsorPanel.fill = GridBagConstraints.BOTH;
+		gbc_sponsorPanel.gridheight = 2;
+		gbc_sponsorPanel.gridx = 3;
+		gbc_sponsorPanel.gridy = 2;
+		contentPane.add(sponsorPanel, gbc_sponsorPanel);
 		sponsorPanel.setLayout(null);
-
+		
 		JLabel lblNewLabel = new JLabel("Whatever slowpoke wants here");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(0, 5, 305, 266);
 		sponsorPanel.add(lblNewLabel);
-
+		
 		JLabel lblTexturePacks = new JLabel("Texture packs");
 		lblTexturePacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblTexturePacks.setBounds(230, 330, 126, 19);
-		contentPane.add(lblTexturePacks);
-
+		GridBagConstraints gbc_lblTexturePacks = new GridBagConstraints();
+		gbc_lblTexturePacks.anchor = GridBagConstraints.NORTH;
+		gbc_lblTexturePacks.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblTexturePacks.insets = new Insets(0, 0, 0, 5);
+		gbc_lblTexturePacks.gridx = 1;
+		gbc_lblTexturePacks.gridy = 3;
+		contentPane.add(lblTexturePacks, gbc_lblTexturePacks);
+		
 		JLabel lblWorldPacks = new JLabel("World packs");
 		lblWorldPacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblWorldPacks.setBounds(365, 330, 91, 19);
-		contentPane.add(lblWorldPacks);
-
-		JLabel lblNews = new JLabel("News");
-		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNews.setBounds(230, 15, 113, 19);
-		contentPane.add(lblNews);
-
-		ButtonGroup group = new ButtonGroup();
-		group.add(modPack1RB);
-		group.add(modPack2RB);
-		group.add(modPack3RB);
-		group.add(modPack4RB);
-
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
-				usernameField, passwordField, chckbxRemember, btnLogin,
-				btnOptions, txtrNews }));
-	}
-
+		GridBagConstraints gbc_lblWorldPacks = new GridBagConstraints();
+		gbc_lblWorldPacks.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblWorldPacks.insets = new Insets(0, 0, 0, 5);
+		gbc_lblWorldPacks.gridx = 2;
+		gbc_lblWorldPacks.gridy = 3;
+		contentPane.add(lblWorldPacks, gbc_lblWorldPacks);
+			if (passwordSettings.getUsername() != "") {
+				chckbxRemember.setSelected(true);
+		} else {	
+			
+		}	
+			
+		btnPlayOffline = new JButton("Play Offline");
+		btnPlayOffline.setBounds(199, 11, 96, 23);
+	}	
+	
 	public void doLogin() {
 		btnLogin.setEnabled(false);
 		btnOptions.setEnabled(false);
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
-
+		
 		lblError.setForeground(Color.black);
 		lblError.setText("Logging in...");
-
+		
 		LoginWorker loginWorker = new LoginWorker(usernameField.getText(),
 				new String(passwordField.getPassword())) {
 			@Override
 			public void done() {
 				lblError.setText("");
-
+				
 				btnOptions.setEnabled(true);
 				usernameField.setEnabled(true);
 				passwordField.setEnabled(true);
@@ -417,8 +457,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
-		if (!new File(Settings.getSettings().getInstallPath()
-				+ "\\.minecraft\\bin\\minecraft.jar").exists()) {
+		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			btnOptions.setEnabled(false);
 			usernameField.setEnabled(false);
@@ -428,10 +467,7 @@ public class LaunchFrame extends JFrame {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this,
 					"Downloading minecraft...", "", 0, 100);
 
-			final GameUpdateWorker updater = new GameUpdateWorker(
-					RESPONSE.getLatestVersion(), "minecraft.jar", new File(
-							Settings.getSettings().getInstallPath(),
-							".minecraft//bin").getPath(), false) {
+			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(),".minecraft//bin").getPath(), false) {
 				public void done() {
 
 					btnLogin.setEnabled(true);
@@ -470,8 +506,7 @@ public class LaunchFrame extends JFrame {
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						lblError.setForeground(Color.red);
-						lblError.setText("Failed to download game: "
-								+ e.getCause().getMessage());
+						lblError.setText("Failed to download game: "+ e.getCause().getMessage());
 						return;
 					}
 				}
@@ -828,9 +863,6 @@ public class LaunchFrame extends JFrame {
 		File packMinecraftJarDir = new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\");
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"),new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft"));
-		copyFolder(packMinecraftJarDir, test);
-		copyFolder(forge, test);
-		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\test.zip\\META-INF"));
 		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\META-INF"));
 	}
 }

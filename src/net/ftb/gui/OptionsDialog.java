@@ -23,6 +23,7 @@ import net.ftb.data.Settings;
 import javax.swing.JList;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.JPasswordField;
 
 public class OptionsDialog extends JDialog
 {
@@ -32,9 +33,9 @@ public class OptionsDialog extends JDialog
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField textField;
-	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	private JPasswordField passwordField;
 	
 	/**
 	 * Create the dialog.
@@ -133,20 +134,20 @@ public class OptionsDialog extends JDialog
 		{
 			JLabel lblPassword = new JLabel("Password:");
 			GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+			gbc_lblPassword.anchor = GridBagConstraints.EAST;
 			gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 			gbc_lblPassword.gridx = 3;
 			gbc_lblPassword.gridy = 4;
 			contentPanel.add(lblPassword, gbc_lblPassword);
 		}
 		{
-			textField_1 = new JTextField();
-			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-			gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField_1.gridx = 4;
-			gbc_textField_1.gridy = 4;
-			contentPanel.add(textField_1, gbc_textField_1);
-			textField_1.setColumns(10);
+			passwordField = new JPasswordField();
+			GridBagConstraints gbc_passwordField = new GridBagConstraints();
+			gbc_passwordField.insets = new Insets(0, 0, 5, 5);
+			gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_passwordField.gridx = 4;
+			gbc_passwordField.gridy = 4;
+			contentPanel.add(passwordField, gbc_passwordField);
 		}
 		{
 			JButton btnAdd = new JButton("Add");
