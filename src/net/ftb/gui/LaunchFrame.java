@@ -1,19 +1,14 @@
 package net.ftb.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,14 +18,11 @@ import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.Enumeration;
-import java.util.Scanner;
-import java.util.StringTokenizer;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
@@ -38,8 +30,6 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -49,7 +39,6 @@ import javax.swing.JButton;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.PasswordSettings;
 import net.ftb.data.Settings;
-import net.ftb.util.OSUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -72,13 +61,11 @@ import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JList;
-
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LaunchFrame extends JFrame {
-
-
+	private static final long serialVersionUID = 1L;
+	
 	JRadioButton modPack1RB;
 	JRadioButton modPack2RB;
 	JRadioButton modPack3RB;
@@ -94,39 +81,36 @@ public class LaunchFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
+	private Enumeration<? extends ZipEntry> entries;
 
 	/**
 	 * Launch the application.
 	 */
 
-
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
-
-				try
-				{
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (Exception e)
-				{
+				try {
+					UIManager.setLookAndFeel(UIManager
+							.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
 				// Load settings
-				try
-				{
+				try {
 					Settings.initSettings();
-				} catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Failed to load config file: "
-							+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,
+							"Failed to load config file: " + e.getMessage(),
+							"Error", JOptionPane.ERROR_MESSAGE);
 				}
 
 				// Create the install directory if it does not exist.
-				File installDir = new File(Settings.getSettings().getInstallPath());
+				File installDir = new File(Settings.getSettings()
+						.getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
 
@@ -141,36 +125,28 @@ public class LaunchFrame extends JFrame {
 		});
 	}
 
-
-
-
 	/**
 	 * Create the frame.
 	 */
-
 
 	public LaunchFrame() {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		try {
-			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
+				.getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
@@ -184,13 +160,11 @@ public class LaunchFrame extends JFrame {
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 
-
-
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
-		if(passwordSettings.getUsername()!=""){
+		if (passwordSettings.getUsername() != "") {
 			chckbxRemember.setSelected(true);
-		}else{
+		} else {
 
 		}
 		loginPanel.add(chckbxRemember);
@@ -198,11 +172,9 @@ public class LaunchFrame extends JFrame {
 		btnOptions = new JButton("Options");
 		btnOptions.setBounds(226, 39, 69, 23);
 		loginPanel.add(btnOptions);
-		btnOptions.addActionListener(new ActionListener()
-		{
+		btnOptions.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				OptionsDialog optionsDlg = new OptionsDialog();
 				optionsDlg.setVisible(true);
 			}
@@ -212,22 +184,19 @@ public class LaunchFrame extends JFrame {
 		btnLogin.setBounds(226, 72, 69, 23);
 		loginPanel.add(btnLogin);
 		btnLogin.setEnabled(true);
-		btnLogin.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				if (chckbxRemember.isSelected()) {
-					passwordSettings.storeUP(usernameField.getText(), new String(passwordField.getPassword()));
-				}else{
+					passwordSettings.storeUP(usernameField.getText(),
+							new String(passwordField.getPassword()));
+				} else {
 					try {
 						passwordSettings.flush();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
-				if (e.getActionCommand().equalsIgnoreCase("login"))
-				{
+				if (e.getActionCommand().equalsIgnoreCase("login")) {
 					doLogin();
 				}
 			}
@@ -275,7 +244,8 @@ public class LaunchFrame extends JFrame {
 		newsPane.setViewportView(txtrNews);
 
 		JScrollPane modPacksPane = new JScrollPane();
-		modPacksPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		modPacksPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		modPacksPane.setBounds(10, 15, 210, 426);
 		contentPane.add(modPacksPane);
 
@@ -302,7 +272,8 @@ public class LaunchFrame extends JFrame {
 		lblModPack1.setBounds(10, 11, 175, 50);
 		panel.add(lblModPack1);
 
-		JLabel lblModPack3 = new JLabel("Direwolf20(for use with Direwolf's maps)");
+		JLabel lblModPack3 = new JLabel(
+				"Direwolf20(for use with Direwolf's maps)");
 		lblModPack3.setBackground(Color.YELLOW);
 		lblModPack3.setBounds(10, 133, 175, 50);
 		panel.add(lblModPack3);
@@ -311,7 +282,8 @@ public class LaunchFrame extends JFrame {
 		modPack3RB.setBounds(182, 147, 20, 21);
 		panel.add(modPack3RB);
 
-		JLabel lblModPack4 = new JLabel("FTB Lite(stripped down version of the standard FTB pack)");
+		JLabel lblModPack4 = new JLabel(
+				"FTB Lite(stripped down version of the standard FTB pack)");
 		lblModPack4.setBackground(Color.YELLOW);
 		lblModPack4.setBounds(10, 194, 175, 50);
 		panel.add(lblModPack4);
@@ -340,10 +312,6 @@ public class LaunchFrame extends JFrame {
 		lblWorldPacks.setBounds(365, 330, 91, 19);
 		contentPane.add(lblWorldPacks);
 
-		JList worldsList = new JList();
-		worldsList.setBounds(365, 349, 125, 92);
-		contentPane.add(worldsList);
-
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(230, 15, 113, 19);
@@ -355,35 +323,25 @@ public class LaunchFrame extends JFrame {
 		group.add(modPack3RB);
 		group.add(modPack4RB);
 
-
-
-		JList texturesList = new JList();
-		texturesList.setBounds(230, 349, 126, 92);
-		contentPane.add(texturesList);
-
-
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
 				usernameField, passwordField, chckbxRemember, btnLogin,
-				btnOptions, txtrNews }));		
+				btnOptions, txtrNews }));
 	}
-	public void doLogin()
-	{
+
+	public void doLogin() {
 		btnLogin.setEnabled(false);
 		btnOptions.setEnabled(false);
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
 
-
 		lblError.setForeground(Color.black);
 		lblError.setText("Logging in...");
 
 		LoginWorker loginWorker = new LoginWorker(usernameField.getText(),
-				new String(passwordField.getPassword()))
-		{
+				new String(passwordField.getPassword())) {
 			@Override
-			public void done()
-			{
+			public void done() {
 				lblError.setText("");
 
 				btnOptions.setEnabled(true);
@@ -392,24 +350,18 @@ public class LaunchFrame extends JFrame {
 				chckbxRemember.setEnabled(true);
 
 				String responseStr;
-				try
-				{
+				try {
 					responseStr = get();
-				} catch (InterruptedException err)
-				{
+				} catch (InterruptedException err) {
 					err.printStackTrace();
 					return;
-				} catch (ExecutionException err)
-				{
+				} catch (ExecutionException err) {
 					err.printStackTrace();
-					if (err.getCause() instanceof IOException)
-					{
+					if (err.getCause() instanceof IOException) {
 						lblError.setForeground(Color.red);
 						lblError.setText("Login failed: "
 								+ err.getCause().getMessage());
-					}
-					else if (err.getCause() instanceof MalformedURLException)
-					{
+					} else if (err.getCause() instanceof MalformedURLException) {
 						lblError.setForeground(Color.red);
 						lblError.setText("Error: Malformed URL");
 					}
@@ -417,30 +369,23 @@ public class LaunchFrame extends JFrame {
 				}
 
 				LoginResponse response;
-				try
-				{
+				try {
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
 
-
-				} catch (IllegalArgumentException e)
-				{
+				} catch (IllegalArgumentException e) {
 
 					lblError.setForeground(Color.red);
 
-					if (responseStr.contains(":"))
-					{
+					if (responseStr.contains(":")) {
 						lblError.setText("Received invalid response from server.");
-					}
-					else
-					{
-						if (responseStr.equalsIgnoreCase("bad login")){
+					} else {
+						if (responseStr.equalsIgnoreCase("bad login")) {
 							lblError.setText("Invalid username or password.");
 							loginPanel.add(btnPlayOffline);
 							loginPanel.revalidate();
 							loginPanel.repaint();
-						}
-						else if (responseStr.equalsIgnoreCase("old version"))
+						} else if (responseStr.equalsIgnoreCase("old version"))
 							lblError.setText("Outdated launcher.");
 						else
 							lblError.setText("Login failed: " + responseStr);
@@ -455,39 +400,37 @@ public class LaunchFrame extends JFrame {
 		loginWorker.execute();
 	}
 
-	public String getSelectedModPack(){
-		if(modPack1RB.isSelected() == true){
+	public String getSelectedModPack() {
+		if (modPack1RB.isSelected() == true) {
 			return "FTBCLASSIC";
-		}else if(modPack2RB.isSelected() == true){
+		} else if (modPack2RB.isSelected() == true) {
 			return "FTB";
-		}else if(modPack3RB.isSelected() == true){
+		} else if (modPack3RB.isSelected() == true) {
 			return "DIREWOLF20";
-		}else if(modPack4RB.isSelected() == true){
+		} else if (modPack4RB.isSelected() == true) {
 			return "FTBLITE";
 		}
 		return null;
 
 	}
 
-	public void runGameUpdater(final LoginResponse response)
-	{
-		if(!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()){
+	public void runGameUpdater(final LoginResponse response) {
+		if (!new File(Settings.getSettings().getInstallPath()
+				+ "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			btnOptions.setEnabled(false);
 			usernameField.setEnabled(false);
 			passwordField.setEnabled(false);
 			chckbxRemember.setEnabled(false);
 
-			final ProgressMonitor progMonitor = 
-					new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			final ProgressMonitor progMonitor = new ProgressMonitor(this,
+					"Downloading minecraft...", "", 0, 100);
 
-			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), 
-					"minecraft.jar", 
-					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), 
-					false)
-			{
-				public void done()
-				{
+			final GameUpdateWorker updater = new GameUpdateWorker(
+					RESPONSE.getLatestVersion(), "minecraft.jar", new File(
+							Settings.getSettings().getInstallPath(),
+							".minecraft//bin").getPath(), false) {
+				public void done() {
 
 					btnLogin.setEnabled(true);
 					btnOptions.setEnabled(true);
@@ -496,60 +439,50 @@ public class LaunchFrame extends JFrame {
 					chckbxRemember.setEnabled(true);
 
 					progMonitor.close();
-					try
-					{
-						if (get() == true)
-						{
+					try {
+						if (get() == true) {
 							// Success
 							lblError.setForeground(Color.black);
 							lblError.setText("Game update complete.");
 
-
-
-							//try {
+							// try {
 							System.out.println(getSelectedModPack());
 							doLogin();
-							//launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
-							//} catch (IOException e) {
-							// TODO Auto-generated catch block
-							//e.printStackTrace();
-							//}
+							// launchMinecraft(new
+							// File(Settings.getSettings().getInstallPath()).getPath()
+							// + "\\" + getSelectedModPack() + "\\.minecraft",
+							// RESPONSE.getUsername(), RESPONSE.getSessionID());
+							// } catch (IOException e) {
+							// e.printStackTrace();
+							// }
 
-						}
-						else
-						{
+						} else {
 							lblError.setForeground(Color.red);
 							lblError.setText("Error downloading game.");
 						}
-					} catch (CancellationException e)
-					{
+					} catch (CancellationException e) {
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update cancelled...");
-					} catch (InterruptedException e)
-					{
+					} catch (InterruptedException e) {
 						e.printStackTrace();
-					} catch (ExecutionException e)
-					{
+					} catch (ExecutionException e) {
 						e.printStackTrace();
 						lblError.setForeground(Color.red);
-						lblError.setText("Failed to download game: " + e.getCause().getMessage());
+						lblError.setText("Failed to download game: "
+								+ e.getCause().getMessage());
 						return;
 					}
 				}
 			};
 
-			updater.addPropertyChangeListener(new PropertyChangeListener()
-			{
+			updater.addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
-				public void propertyChange(PropertyChangeEvent evt)
-				{
-					if (progMonitor.isCanceled())
-					{
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (progMonitor.isCanceled()) {
 						updater.cancel(false);
 					}
 
-					if (!updater.isDone())
-					{
+					if (!updater.isDone()) {
 						int prog = updater.getProgress();
 						if (prog < 0)
 							prog = 0;
@@ -561,103 +494,105 @@ public class LaunchFrame extends JFrame {
 				}
 			});
 			updater.execute();
-		}else{
+		} else {
 			try {
 				System.out.println(getSelectedModPack());
-				installJarMods(getSelectedModPack());
 				System.out.println("Installed jar mods");
 				installMods(getSelectedModPack());
-				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "\\" + getSelectedModPack() +  "\\.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());							
+				launchMinecraft(new File(Settings.getSettings()
+						.getInstallPath()).getPath()
+						+ "\\"
+						+ getSelectedModPack() + "\\.minecraft",
+						RESPONSE.getUsername(), RESPONSE.getSessionID());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
-	protected String getVersionMD5(String modPackName){
+	protected String getVersionMD5(String modPackName) {
 		InputStream is = null;
 		MessageDigest md = null;
-		File f = new File(Settings.getSettings().getInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
-		if(f.exists()){
-			try{
+		File f = new File(Settings.getSettings().getInstallPath() + "\\"
+				+ modPackName + "\\.minecraft\\bin\\minecraft.jar");
+		if (f.exists()) {
+			try {
 				md = MessageDigest.getInstance("MD5");
-				is = new FileInputStream(Settings.getSettings().getInstallPath() + "\\" + modPackName +  "\\.minecraft\\bin\\minecraft.jar");
-			}catch(Exception e){
+				is = new FileInputStream(Settings.getSettings()
+						.getInstallPath()
+						+ "\\"
+						+ modPackName
+						+ "\\.minecraft\\bin\\minecraft.jar");
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
 				is = new DigestInputStream(is, md);
 				// read stream to EOF as normal...
-			}
-			finally {
+			} finally {
 				try {
 					is.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			String result = "";
 			byte[] digest = md.digest();
-			for (int i=0; i < digest.length; i++) {
-				result += Integer.toString( ( digest[i] & 0xff ) + 0x100, 16).substring( 1 );
+			for (int i = 0; i < digest.length; i++) {
+				result += Integer.toString((digest[i] & 0xff) + 0x100, 16)
+						.substring(1);
 			}
 			return result;
 		}
 		return "0";
 	}
+
 	@SuppressWarnings("deprecation")
-	protected void launchMinecraft(String workingDir, String username, String password) throws IOException {		
-		try
-		{
+	protected void launchMinecraft(String workingDir, String username,
+			String password) throws IOException {
+		try {
 			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] {
-					"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
-			};
+			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
+					"lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
 
-			for (int i = 0; i < urls.length; i++)
-			{
-				try
-				{
+			for (int i = 0; i < urls.length; i++) {
+				try {
 					File f = new File(new File(workingDir, "bin"), jarFiles[i]);
 					urls[i] = f.toURI().toURL();
 					System.out.println("Loading URL: " + urls[i].toString());
-				} catch (MalformedURLException e)
-				{
-					//					e.printStackTrace();
-					System.err.println("MalformedURLException, " + e.toString());
+				} catch (MalformedURLException e) {
+					// e.printStackTrace();
+					System.err
+							.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
 			System.out.println("Loading natives...");
-			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
+			String nativesDir = new File(new File(workingDir, "bin"), "natives")
+					.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
 
 			System.setProperty("user.home", new File(workingDir).getParent());
 
-			URLClassLoader cl = 
-					new URLClassLoader(urls, LaunchFrame.class.getClassLoader());
+			URLClassLoader cl = new URLClassLoader(urls,
+					LaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 			Field[] fields = mc.getDeclaredFields();
 
-			for (int i = 0; i < fields.length; i++)
-			{
+			for (int i = 0; i < fields.length; i++) {
 				Field f = fields[i];
-				if (f.getType() != File.class)
-				{
+				if (f.getType() != File.class) {
 					// Has to be File
 					continue;
 				}
-				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC))
-				{
+				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC)) {
 					// And Private Static.
 					continue;
 				}
@@ -673,102 +608,93 @@ public class LaunchFrame extends JFrame {
 			mcArgs[0] = username;
 			mcArgs[1] = password;
 
-			String mcDir = 	mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
+			String mcDir = mc.getMethod("a", String.class)
+					.invoke(null, (Object) "minecraft").toString();
 
 			System.out.println("MCDIR: " + mcDir);
 
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
-		} catch (ClassNotFoundException e)
-		{
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
-		} catch (IllegalArgumentException e)
-		{
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			System.exit(2);
-		} catch (IllegalAccessException e)
-		{
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			System.exit(2);
-		} catch (InvocationTargetException e)
-		{
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			System.exit(3);
-		} catch (NoSuchMethodException e)
-		{
+		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			System.exit(3);
-		} catch (SecurityException e)
-		{
+		} catch (SecurityException e) {
 			e.printStackTrace();
 			System.exit(4);
 		}
 	}
 
-	protected void downloadModPack(String modPackName){
+	protected void downloadModPack(String modPackName) {
 		URL website;
 		try {
 			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			FileOutputStream fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
+			FileOutputStream fos = new FileOutputStream(Settings.getSettings()
+					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\"
+				+ modPackName + ".zip");
 	}
-	public void extractZip(String zipLocation)
-	{
-		try
-		{
+
+	public void extractZip(String zipLocation) {
+		try {
 			byte[] buf = new byte[1024];
 			ZipInputStream zipinputstream = null;
 			ZipEntry zipentry;
-			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
+			zipinputstream = new ZipInputStream(
+					new FileInputStream(zipLocation));
 
 			zipentry = zipinputstream.getNextEntry();
-			while (zipentry != null) 
-			{ 
-				//for each entry to be extracted
+			while (zipentry != null) {
+				// for each entry to be extracted
 				String entryName = zipentry.getName();
-				System.out.println("entryname "+entryName);
+				System.out.println("entryname " + entryName);
 				int n;
 				FileOutputStream fileoutputstream;
 				File newFile = new File(entryName);
 				String directory = newFile.getParent();
 
-				if(directory == null)
-				{
-					if(newFile.isDirectory())
+				if (directory == null) {
+					if (newFile.isDirectory())
 						break;
 				}
 
-				fileoutputstream = new FileOutputStream(zipLocation);             
+				fileoutputstream = new FileOutputStream(zipLocation);
 
 				while ((n = zipinputstream.read(buf, 0, 1024)) > -1)
 					fileoutputstream.write(buf, 0, n);
 
-				fileoutputstream.close(); 
+				fileoutputstream.close();
 				zipinputstream.closeEntry();
 				zipentry = zipinputstream.getNextEntry();
 
-			}//while
+			}// while
 
 			zipinputstream.close();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public void extractZipTo(String zipLocation, String outputLocation) throws IOException
-	{
-		try
-		{
+
+	public void extractZipTo(String zipLocation, String outputLocation)
+			throws IOException {
+		try {
 			File fSourceZip = new File(zipLocation);
 			String zipPath = outputLocation;
 			File temp = new File(zipPath);
@@ -777,24 +703,22 @@ public class LaunchFrame extends JFrame {
 			ZipFile zipFile = new ZipFile(fSourceZip);
 			Enumeration e = zipFile.entries();
 
-			while(e.hasMoreElements())
-			{
-				ZipEntry entry = (ZipEntry)e.nextElement();
-				File destinationFilePath = new File(zipPath,entry.getName());
+			while (e.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) e.nextElement();
+				File destinationFilePath = new File(zipPath, entry.getName());
 				destinationFilePath.getParentFile().mkdirs();
-				if(entry.isDirectory())
-				{
+				if (entry.isDirectory()) {
 					continue;
-				}
-				else
-				{
+				} else {
 					System.out.println("Extracting " + destinationFilePath);
-					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+					BufferedInputStream bis = new BufferedInputStream(
+							zipFile.getInputStream(entry));
 
 					int b;
 					byte buffer[] = new byte[1024];
 
-					FileOutputStream fos = new FileOutputStream(destinationFilePath);
+					FileOutputStream fos = new FileOutputStream(
+							destinationFilePath);
 					BufferedOutputStream bos = new BufferedOutputStream(fos,
 							1024);
 
@@ -802,55 +726,51 @@ public class LaunchFrame extends JFrame {
 						bos.write(buffer, 0, b);
 					}
 
-
 					bos.flush();
 					bos.close();
 					bis.close();
 				}
 			}
-		}
-		catch(IOException ioe)
-		{
+		} catch (IOException ioe) {
 			System.out.println("IOError :" + ioe);
 		}
 
 	}
 
-	public static void copyFolder(File src, File dest)
-			throws IOException{
+	public static void copyFolder(File src, File dest) throws IOException {
 
-		if(src.isDirectory()){
+		if (src.isDirectory()) {
 
-			//if directory not exists, create it
-			if(!dest.exists()){
+			// if directory not exists, create it
+			if (!dest.exists()) {
 				dest.mkdir();
-				System.out.println("Directory copied from " 
-						+ src + "  to " + dest);
+				System.out.println("Directory copied from " + src + "  to "
+						+ dest);
 			}
 
-			//list all the directory contents
+			// list all the directory contents
 			String files[] = src.list();
 
 			for (String file : files) {
-				//construct the src and dest file structure
+				// construct the src and dest file structure
 				File srcFile = new File(src, file);
 				File destFile = new File(dest, file);
-				//recursive copy
-				copyFolder(srcFile,destFile);
+				// recursive copy
+				copyFolder(srcFile, destFile);
 			}
 
-		}else{
-			//if file, then copy it
-			//Use bytes stream to support all file types
-			if(src.exists()){
+		} else {
+			// if file, then copy it
+			// Use bytes stream to support all file types
+			if (src.exists()) {
 				InputStream in = new FileInputStream(src);
-				OutputStream out = new FileOutputStream(dest); 
+				OutputStream out = new FileOutputStream(dest);
 
 				byte[] buffer = new byte[1024];
 
 				int length;
-				//copy the file content in bytes 
-				while ((length = in.read(buffer)) > 0){
+				// copy the file content in bytes
+				while ((length = in.read(buffer)) > 0) {
 					out.write(buffer, 0, length);
 				}
 
@@ -861,29 +781,17 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	protected void installJarMods(String modPackName) throws IOException{
-		File modlist = new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist");
-		Scanner in = new Scanner(new FileReader(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist"));
-		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\modlist").mkdirs();
-		while(in.hasNextLine()){
-			String modName = in.nextLine();
-			if(modName != ""){
-				System.out.println(modName);
-			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\instMods\\" + modName, Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName +  "\\instMods\\jar\\");
-			}
-		}
-	}
 
-	public static void copyFile(File src, File dest) throws IOException{
-		if(src.exists()){
+	public static void copyFile(File src, File dest) throws IOException {
+		if (src.exists()) {
 			InputStream in = new FileInputStream(src);
-			OutputStream out = new FileOutputStream(dest); 
+			OutputStream out = new FileOutputStream(dest);
 
 			byte[] buffer = new byte[1024];
 
 			int length;
-			//copy the file content in bytes 
-			while ((length = in.read(buffer)) > 0){
+			// copy the file content in bytes
+			while ((length = in.read(buffer)) > 0) {
 				out.write(buffer, 0, length);
 			}
 
@@ -893,26 +801,99 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-
-	public static boolean delete(File resource) throws IOException{ 
-		if(resource.isDirectory()){
+	public static boolean delete(File resource) throws IOException {
+		if (resource.isDirectory()) {
 			File[] childFiles = resource.listFiles();
-			for(File child : childFiles){
+			for (File child : childFiles) {
 				delete(child);
 			}
 		}
 		return resource.delete();
 
 	}
-	protected void installMods(String modPackName) throws IOException{
-		new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft").mkdirs();
+
+	protected void installMods(String modPackName) throws IOException {
+		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
+		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
+		ZipFile forge = new ZipFile(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\forge.zip");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		File packMinecraft = new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
-		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath() + "\\"  + getSelectedModPack() + "\\.minecraft"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"),new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft"));
+		addFilesToJar(packMinecraft, getFilesInZip(forge));
+	}
+	
+	public File[] getFilesInZip(ZipFile zf) {
+		entries = zf.entries();
+		
+		return null;
+	}
+
+	public static void addFilesToJar(File jarFile, File[] files) throws IOException {
+		
+		File tempFile = File.createTempFile(jarFile.getName(), null);
+		tempFile.delete();
+
+		boolean renameOk = jarFile.renameTo(tempFile);
+
+		if (!renameOk) {
+			throw new RuntimeException("could not rename the file "+ jarFile.getAbsolutePath() + " to "+ tempFile.getAbsolutePath());
+		}
+
+		byte[] buf = new byte[1024];
+
+		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
+
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(jarFile));
+
+		ZipEntry entry = zin.getNextEntry();
+
+		while (entry != null) {
+			String name = entry.getName();
+
+			boolean notInFiles = true;
+
+			for (File f : files) {
+				if (f.getName().equals(name)) {
+					notInFiles = false;
+					break;
+				}
+			}
+
+			if (notInFiles) {
+				// Add ZIP entry to output stream.
+				out.putNextEntry(new ZipEntry(name));
+				// Transfer bytes from the ZIP file to the output file
+				int len;
+				while ((len = zin.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+			}
+			entry = zin.getNextEntry();
+		}
+
+		// Close the streams
+		zin.close();
+		// Compress the files
+		for (int i = 0; i < files.length; i++) {
+			InputStream in = new FileInputStream(files[i]);
+			// Add ZIP entry to output stream.
+			out.putNextEntry(new ZipEntry(files[i].getName()));
+			// Transfer bytes from the file to the ZIP file
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			// Complete the entry
+			out.closeEntry();
+			in.close();
+		}
+		// Complete the ZIP file
+		out.close();
+		tempFile.delete();
 	}
 }
