@@ -63,7 +63,6 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import de.schlichtherle.truezip.file.TFile;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -167,6 +166,7 @@ public class LaunchFrame extends JFrame {
 
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
+		System.out.println(passwordSettings.getUsername());
 		if (passwordSettings.getUsername() != "") {
 			chckbxRemember.setSelected(true);
 		} else {
@@ -191,17 +191,18 @@ public class LaunchFrame extends JFrame {
 		btnLogin.setEnabled(true);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (chckbxRemember.isSelected()) {
-					passwordSettings.storeUP(usernameField.getText(),
-							new String(passwordField.getPassword()));
-				} else {
-					try {
-						passwordSettings.flush();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
+				
 				if (e.getActionCommand().equalsIgnoreCase("login")) {
+					if (chckbxRemember.isSelected()) {
+						passwordSettings.storeUP(usernameField.getText(),
+								new String(passwordField.getText()));
+					} else {
+						try {
+							passwordSettings.flush();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
 					doLogin();
 				}
 			}
@@ -250,7 +251,7 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane modPacksPane = new JScrollPane();
 		modPacksPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		modPacksPane.setBounds(10, 15, 210, 426);
 		contentPane.add(modPacksPane);
 
@@ -333,7 +334,9 @@ public class LaunchFrame extends JFrame {
 				btnOptions, txtrNews }));
 	}
 
+	@SuppressWarnings("deprecation")
 	public void doLogin() {
+		
 		btnLogin.setEnabled(false);
 		btnOptions.setEnabled(false);
 		usernameField.setEnabled(false);
@@ -388,6 +391,7 @@ public class LaunchFrame extends JFrame {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							lblError.setText("Invalid username or password.");
 							loginPanel.add(btnPlayOffline);
+							btnLogin.setEnabled(true);
 							loginPanel.revalidate();
 							loginPanel.repaint();
 						} else if (responseStr.equalsIgnoreCase("old version"))
@@ -468,6 +472,14 @@ public class LaunchFrame extends JFrame {
 					} catch (CancellationException e) {
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update cancelled...");
+						try {
+							delete(new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\bin\\minecraft.jar"));
+							lblError.setText("Deleting minecraft.jar...");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						lblError.setText("Done deleting minecraft.jar.");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
@@ -502,7 +514,6 @@ public class LaunchFrame extends JFrame {
 		} else {
 			try {
 				System.out.println(getSelectedModPack());
-				System.out.println("Installed jar mods");
 				installMods(getSelectedModPack());
 				launchMinecraft(new File(Settings.getSettings()
 						.getInstallPath()).getPath()
@@ -570,14 +581,14 @@ public class LaunchFrame extends JFrame {
 				} catch (MalformedURLException e) {
 					// e.printStackTrace();
 					System.err
-							.println("MalformedURLException, " + e.toString());
+					.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
 			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-					.toString();
+			.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -817,23 +828,17 @@ public class LaunchFrame extends JFrame {
 
 	}
 
-	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
-		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
-		File minecraftJarDir = new TFile(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar\\");
-		File forge = new TFile(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\forge.zip\\");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-		File test = new TFile(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\test.zip");
-//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-		File packMinecraftJarDir = new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\");
+	protected void installMods(String modPackName) throws IOException{
+		new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft").mkdirs();
+		lblError.setText("Copying minecraft.jar from vanilla Minecraft");
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\bin"));
+		File minecraft = new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+		lblError.setText("Backuping Minecraft...");
+		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
 		copyFile(minecraft, mcbackup);
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"),new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft"));
-		copyFolder(packMinecraftJarDir, test);
-		copyFolder(forge, test);
-		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\test.zip\\META-INF"));
-		delete(new TFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar\\META-INF"));
+		lblError.setText("Installing mods...");
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath() + "\\"  + getSelectedModPack() + "\\.minecraft"));
 	}
+
 }

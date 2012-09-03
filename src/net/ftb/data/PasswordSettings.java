@@ -50,15 +50,18 @@ public class PasswordSettings {
 	}
 	
 	public void write() throws IOException {
+		System.out.println("Writing to " +_filename);
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
 		wri.write(getHex(getHex(_username) + ":" + getHex(_password)));
+		System.out.println("Written " + getHex(_username) + ":" + getHex(_password) );
 		wri.close();
 	}
 	
 	public void read() throws IOException {
-		Scanner in = new Scanner(OSUtils.getDefInstallPath() + "\\ftblaunch\\loginData");
+		System.out.println("Reading from " + _filename);
+		Scanner in = new Scanner(Settings.getSettings().getInstallPath() + "\\loginData");
 		if(in.hasNextBigInteger()){
-		BufferedReader read = new BufferedReader(new FileReader(_filename));
+		BufferedReader read = new BufferedReader(new FileReader(Settings.getSettings().getInstallPath() + "\\loginData"));
 		String str = fromHex(read.readLine());
 		String[] tokens = str.split(":");
 		_username = fromHex(tokens[0]);
@@ -78,7 +81,9 @@ public class PasswordSettings {
 	}
 	
 	public String getUsername() {
+		System.out.println(_username);
 		return _username;
+		
 	}
 	
 	public String getPassword() {
