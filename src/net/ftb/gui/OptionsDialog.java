@@ -46,15 +46,15 @@ public class OptionsDialog extends JDialog
 	public OptionsDialog()
 	{
 		setModal(true);
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 600, 350);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{76, 78, 98, 96, 117, 49, 38};
-		gbl_contentPanel.rowHeights = new int[] {0, 0, 20, 26, 0, 29, 31, 33, 0};
+		gbl_contentPanel.columnWidths = new int[]{87, 78, 117, 96, 117, 49, 38};
+		gbl_contentPanel.rowHeights = new int[] {0, 0, 20, 26, 0, 29, 31, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblInstallFolder = new JLabel("Install folder:");
@@ -109,9 +109,9 @@ public class OptionsDialog extends JDialog
 			JList list = new JList();
 			GridBagConstraints gbc_list = new GridBagConstraints();
 			gbc_list.gridwidth = 2;
-			gbc_list.gridheight = 2;
-			gbc_list.insets = new Insets(0, 0, 5, 5);
 			gbc_list.fill = GridBagConstraints.BOTH;
+			gbc_list.gridheight = 3;
+			gbc_list.insets = new Insets(0, 0, 5, 5);
 			gbc_list.gridx = 1;
 			gbc_list.gridy = 3;
 			contentPanel.add(list, gbc_list);
@@ -162,12 +162,12 @@ public class OptionsDialog extends JDialog
 			contentPanel.add(btnAdd, gbc_btnAdd);
 		}
 		{
-			JLabel lblRamMinimum = new JLabel("RAM Minimum:");
+			JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
 			GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 			gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
 			gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
 			gbc_lblRamMinimum.gridx = 1;
-			gbc_lblRamMinimum.gridy = 5;
+			gbc_lblRamMinimum.gridy = 7;
 			contentPanel.add(lblRamMinimum, gbc_lblRamMinimum);
 		}
 		{
@@ -176,19 +176,19 @@ public class OptionsDialog extends JDialog
 			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 			gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textField_1.gridx = 2;
-			gbc_textField_1.gridy = 5;
-			ramMinimum.setText("");
-			ramMin = Integer.parseInt(ramMaximum.getText());
+			gbc_textField_1.gridy = 7;
+			ramMinimum.setText("256");
+			ramMin = Integer.parseInt(ramMinimum.getText());
 			contentPanel.add(ramMinimum, gbc_textField_1);
 			ramMinimum.setColumns(10);
 		}
 		{
-			JLabel lblRamMaximum = new JLabel("RAM Maximum:");
+			JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
 			GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 			gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
 			gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
 			gbc_lblRamMaximum.gridx = 1;
-			gbc_lblRamMaximum.gridy = 6;
+			gbc_lblRamMaximum.gridy = 8;
 			contentPanel.add(lblRamMaximum, gbc_lblRamMaximum);
 		}
 		{
@@ -197,8 +197,8 @@ public class OptionsDialog extends JDialog
 			gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 			gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textField_2.gridx = 2;
-			gbc_textField_2.gridy = 6;
-			ramMaximum.setText("");
+			gbc_textField_2.gridy = 8;
+			ramMaximum.setText("1024");
 			ramMax = Integer.parseInt(ramMaximum.getText());
 			contentPanel.add(ramMaximum, gbc_textField_2);
 			ramMaximum.setColumns(10);

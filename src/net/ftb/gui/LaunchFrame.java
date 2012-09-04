@@ -12,12 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
@@ -29,7 +25,6 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -64,11 +59,6 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import de.schlichtherle.truezip.file.TFile;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
 public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
@@ -87,8 +77,6 @@ public class LaunchFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private Enumeration<? extends ZipEntry> entries;
-	
 	public static String sysArch;
 
 	/**
@@ -597,14 +585,16 @@ public class LaunchFrame extends JFrame {
 			mcArgs[0] = username;
 			mcArgs[1] = password;
 			
+			System.out.println("Ram Min = " + OptionsDialog.ramMin + " Ram Max = " + OptionsDialog.ramMax);
+			
 			Runtime openMinecraft = Runtime.getRuntime();
 			
 			openMinecraft.exec(new String[] {"cd", Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\"});
-			openMinecraft.exec(new String[]{"java", "-Xms" + OptionsDialog.ramMin, "-Xmx" + OptionsDialog.ramMax,"-jar", "minecraft.jar"});
+			openMinecraft.exec(new String[]{"java", "-Xms" + OptionsDialog.ramMin + "M", "-Xmx" + OptionsDialog.ramMax + "M","-jar", "minecraft.jar"});
 			
 		} finally {
-		}
 			
+		}
 	}
 	
 /*	@SuppressWarnings("deprecation")
@@ -884,6 +874,5 @@ public class LaunchFrame extends JFrame {
 //		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
-		packMinecraft.getManifest().clear();
 	}
 }
