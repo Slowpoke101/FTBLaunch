@@ -58,16 +58,12 @@ public class PasswordSettings {
 	}
 	
 	public void read() throws IOException {
-		System.out.println("Reading from " + _filename);
-		Scanner in = new Scanner(Settings.getSettings().getInstallPath() + "\\loginData");
-		if(in.hasNextBigInteger()){
-		BufferedReader read = new BufferedReader(new FileReader(Settings.getSettings().getInstallPath() + "\\loginData"));
+		BufferedReader read = new BufferedReader(new FileReader(_filename));
 		String str = fromHex(read.readLine());
 		String[] tokens = str.split(":");
 		_username = fromHex(tokens[0]);
 		_password = fromHex(tokens[1]);
 		read.close();
-		}
 	}
 	
 	public void storeUP(String username, String password) {
