@@ -37,8 +37,8 @@ public class OptionsDialog extends JDialog
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
 	
-	public static int ramMin;
-	public static int ramMax;
+	public static int ramMin = 512;
+	public static int ramMax = 1024;
 	
 	/**
 	 * Create the dialog.

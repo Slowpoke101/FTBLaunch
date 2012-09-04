@@ -119,7 +119,7 @@ public class LaunchFrame extends JFrame {
 			}
 
 		});
-		
+
 		if(Integer.parseInt(System.getProperty("sun.arch.data.model")) == 64) {
 			System.out.println("64");
 			sysArch = "64";
@@ -211,6 +211,21 @@ public class LaunchFrame extends JFrame {
 
 		btnPlayOffline = new JButton("Play Offline");
 		btnPlayOffline.setBounds(199, 11, 96, 23);
+		btnPlayOffline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					launchMinecraft(new File(Settings.getSettings()
+							.getInstallPath()).getPath()
+							+ "\\"
+							+ getSelectedModPack() + "\\.minecraft",
+							"OFFLINE", "1");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 175, 14);
@@ -252,7 +267,7 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane modPacksPane = new JScrollPane();
 		modPacksPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		modPacksPane.setBounds(10, 15, 210, 426);
 		contentPane.add(modPacksPane);
 
@@ -389,6 +404,7 @@ public class LaunchFrame extends JFrame {
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							lblError.setText("Invalid username or password.");
+							btnLogin.setEnabled(true);
 							loginPanel.add(btnPlayOffline);
 							loginPanel.revalidate();
 							loginPanel.repaint();
@@ -567,14 +583,14 @@ public class LaunchFrame extends JFrame {
 				} catch (MalformedURLException e) {
 					// e.printStackTrace();
 					System.err
-							.println("MalformedURLException, " + e.toString());
+					.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
 			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-					.toString();
+			.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -584,20 +600,20 @@ public class LaunchFrame extends JFrame {
 			String[] mcArgs = new String[2];
 			mcArgs[0] = username;
 			mcArgs[1] = password;
-			
+
 			System.out.println("Ram Min = " + OptionsDialog.ramMin + " Ram Max = " + OptionsDialog.ramMax);
-			
+
 			Runtime openMinecraft = Runtime.getRuntime();
-			
+
 			openMinecraft.exec(new String[] {"cd", Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\"});
 			openMinecraft.exec(new String[]{"java", "-Xms" + OptionsDialog.ramMin + "M", "-Xmx" + OptionsDialog.ramMax + "M","-jar", "minecraft.jar"});
-			
+
 		} finally {
-			
+
 		}
 	}
-	
-/*	@SuppressWarnings("deprecation")
+
+	/*	@SuppressWarnings("deprecation")
 	protected void launchMinecraft(String workingDir, String username,
 			String password) throws IOException {
 		try {
@@ -731,7 +747,7 @@ public class LaunchFrame extends JFrame {
 				while ((n = zipinputstream.read(buf, 0, 1024)) > -1){
 					fileoutputstream.write(buf, 0, n);
 				}
-				
+
 				fileoutputstream.close();
 				zipinputstream.closeEntry();
 				zipentry = zipinputstream.getNextEntry();
@@ -870,8 +886,8 @@ public class LaunchFrame extends JFrame {
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
 	}
