@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,10 @@ import java.security.MessageDigest;
 import java.util.Enumeration;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -469,14 +473,14 @@ public class LaunchFrame extends JFrame {
 
 							// try {
 							System.out.println(getSelectedModPack());
-							doLogin();
-							// launchMinecraft(new
-							// File(Settings.getSettings().getInstallPath()).getPath()
-							// + "\\" + getSelectedModPack() + "\\.minecraft",
-							// RESPONSE.getUsername(), RESPONSE.getSessionID());
-							// } catch (IOException e) {
-							// e.printStackTrace();
-							// }
+							killMetaInf();
+							try {
+								// the old start testing code just put me in a infinite loop.
+								launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "/.minecraft", "TestingPlayer", "-");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 
 						} else {
 							lblError.setForeground(Color.red);
@@ -626,6 +630,10 @@ public class LaunchFrame extends JFrame {
 			String password) throws IOException {
 		try {
 			System.out.println("Loading jars...");
+			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
+			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
+			//String[] jarFiles = new String[] { "minecraftforge.zip", "minecraft.jar", "lwjgl.jar",
+			//		"lwjgl_util.jar", "jinput.jar" };
 			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
 					"lwjgl_util.jar", "jinput.jar" };
 
@@ -707,6 +715,43 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 			System.exit(4);
 		}
+	}
+	
+	public static void killMetaInf() {
+		// TODO Auto-generated method stub
+		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
+		try {
+			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
+			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
+			
+			JarEntry entry;
+			
+			while ((entry = input.getNextJarEntry()) != null) {
+				if (entry.getName().contains("META-INF")) {
+					continue;
+				}
+				output.putNextEntry(entry);
+				byte buffer[] = new byte[1024];
+				int amo = 0;
+				while ((amo = input.read(buffer, 0, 1024)) != -1) {
+					output.write(buffer, 0, amo);
+				}
+				output.closeEntry();
+			}
+			
+			input.close();
+			output.close();
+			
+			outputTmpFile.renameTo(inputFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	protected void downloadModPack(String modPackName) {
