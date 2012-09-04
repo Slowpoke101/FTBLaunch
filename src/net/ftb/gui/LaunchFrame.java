@@ -12,8 +12,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
@@ -564,9 +568,8 @@ public class LaunchFrame extends JFrame {
 		}
 		return "0";
 	}
-
-	@SuppressWarnings("deprecation")
-	protected void launchMinecraft(String workingDir, String username,
+	
+	/* protected void launchMinecraft(String workingDir, String username,
 			String password) throws IOException {
 		try {
 			System.out.println("Loading jars...");
@@ -611,9 +614,14 @@ public class LaunchFrame extends JFrame {
 		} finally {
 
 		}
-	}
+	} */
 
-	/*	@SuppressWarnings("deprecation")
+	// Vbitz : I'm changing this back, there's a reason why we launch minecraft like this
+	// A we can get the console easier and 2 we have complete control over it, including the location of the .minecraft dir
+	// Once the mod loading code is working I will fix the ram settings, to fix them we will need to launch a new copy of the launcher
+	// and then exit the old one. This is the same way the technic launcher does it for a good reason, we pretty much run
+	// minecraft the same way.
+	
 	protected void launchMinecraft(String workingDir, String username,
 			String password) throws IOException {
 		try {
@@ -665,7 +673,6 @@ public class LaunchFrame extends JFrame {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
-				this.hide();
 				System.out.println("Fixed Minecraft Path: Field was "
 						+ f.toString());
 			}
@@ -679,6 +686,7 @@ public class LaunchFrame extends JFrame {
 
 			System.out.println("MCDIR: " + mcDir);
 
+			this.setVisible(false);
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -699,7 +707,7 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 			System.exit(4);
 		}
-	}*/
+	}
 
 	protected void downloadModPack(String modPackName) {
 		URL website;
