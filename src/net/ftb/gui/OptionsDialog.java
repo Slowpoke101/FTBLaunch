@@ -33,9 +33,12 @@ public class OptionsDialog extends JDialog
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField textField;
-	private JTextField textField_2;
-	private JTextField textField_3;
 	private JPasswordField passwordField;
+	private JTextField ramMinimum;
+	private JTextField ramMaximum;
+	
+	public static int ramMin;
+	public static int ramMax;
 	
 	/**
 	 * Create the dialog.
@@ -49,9 +52,9 @@ public class OptionsDialog extends JDialog
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{76, 78, 98, 96, 117, 49, 38};
-		gbl_contentPanel.rowHeights = new int[] {0, 0, 20, 36, 33, 27, 46, 0};
-		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowHeights = new int[] {0, 0, 20, 26, 0, 29, 31, 33, 0};
+		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblInstallFolder = new JLabel("Install folder:");
@@ -116,6 +119,7 @@ public class OptionsDialog extends JDialog
 		{
 			JLabel lblUsername = new JLabel("Username:");
 			GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+			gbc_lblUsername.anchor = GridBagConstraints.EAST;
 			gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 			gbc_lblUsername.gridx = 3;
 			gbc_lblUsername.gridy = 3;
@@ -158,42 +162,46 @@ public class OptionsDialog extends JDialog
 			contentPanel.add(btnAdd, gbc_btnAdd);
 		}
 		{
-			JLabel lblAllocatedRam = new JLabel("Minimum RAM");
-			GridBagConstraints gbc_lblAllocatedRam = new GridBagConstraints();
-			gbc_lblAllocatedRam.anchor = GridBagConstraints.WEST;
-			gbc_lblAllocatedRam.insets = new Insets(0, 0, 5, 5);
-			gbc_lblAllocatedRam.gridx = 1;
-			gbc_lblAllocatedRam.gridy = 5;
-			contentPanel.add(lblAllocatedRam, gbc_lblAllocatedRam);
+			JLabel lblRamMinimum = new JLabel("RAM Minimum:");
+			GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
+			gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
+			gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
+			gbc_lblRamMinimum.gridx = 1;
+			gbc_lblRamMinimum.gridy = 5;
+			contentPanel.add(lblRamMinimum, gbc_lblRamMinimum);
 		}
 		{
-			textField_2 = new JTextField();
+			ramMinimum = new JTextField();
+			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+			gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textField_1.gridx = 2;
+			gbc_textField_1.gridy = 5;
+			ramMinimum.setText("");
+			ramMin = Integer.parseInt(ramMaximum.getText());
+			contentPanel.add(ramMinimum, gbc_textField_1);
+			ramMinimum.setColumns(10);
+		}
+		{
+			JLabel lblRamMaximum = new JLabel("RAM Maximum:");
+			GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
+			gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
+			gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
+			gbc_lblRamMaximum.gridx = 1;
+			gbc_lblRamMaximum.gridy = 6;
+			contentPanel.add(lblRamMaximum, gbc_lblRamMaximum);
+		}
+		{
+			ramMaximum = new JTextField();
 			GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 			gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 			gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textField_2.gridx = 2;
-			gbc_textField_2.gridy = 5;
-			contentPanel.add(textField_2, gbc_textField_2);
-			textField_2.setColumns(10);
-		}
-		{
-			JLabel lblMaximumRam = new JLabel("Maximum RAM");
-			GridBagConstraints gbc_lblMaximumRam = new GridBagConstraints();
-			gbc_lblMaximumRam.anchor = GridBagConstraints.WEST;
-			gbc_lblMaximumRam.insets = new Insets(0, 0, 0, 5);
-			gbc_lblMaximumRam.gridx = 1;
-			gbc_lblMaximumRam.gridy = 6;
-			contentPanel.add(lblMaximumRam, gbc_lblMaximumRam);
-		}
-		{
-			textField_3 = new JTextField();
-			GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-			gbc_textField_3.insets = new Insets(0, 0, 0, 5);
-			gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField_3.gridx = 2;
-			gbc_textField_3.gridy = 6;
-			contentPanel.add(textField_3, gbc_textField_3);
-			textField_3.setColumns(10);
+			gbc_textField_2.gridy = 6;
+			ramMaximum.setText("");
+			ramMax = Integer.parseInt(ramMaximum.getText());
+			contentPanel.add(ramMaximum, gbc_textField_2);
+			ramMaximum.setColumns(10);
 		}
 		{
 			JPanel buttonPane = new JPanel();
