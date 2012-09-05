@@ -384,15 +384,26 @@ public class LaunchFrame extends JFrame {
 					responseStr = get();
 				} catch (InterruptedException err) {
 					err.printStackTrace();
+					loginPanel.add(btnPlayOffline);
+					loginPanel.revalidate();
+					loginPanel.repaint();
 					return;
 				} catch (ExecutionException err) {
 					err.printStackTrace();
 					if (err.getCause() instanceof IOException) {
 						lblError.setForeground(Color.red);
+						loginPanel.add(btnPlayOffline);
+						loginPanel.revalidate();
+						loginPanel.repaint();
+						loginPanel.add(btnPlayOffline);
 						lblError.setText("Login failed: "
 								+ err.getCause().getMessage());
 					} else if (err.getCause() instanceof MalformedURLException) {
 						lblError.setForeground(Color.red);
+						loginPanel.add(btnPlayOffline);
+						loginPanel.revalidate();
+						loginPanel.repaint();
+						loginPanel.add(btnPlayOffline);
 						lblError.setText("Error: Malformed URL");
 					}
 					return;
@@ -409,6 +420,7 @@ public class LaunchFrame extends JFrame {
 
 					if (responseStr.contains(":")) {
 						lblError.setText("Received invalid response from server.");
+						btnLogin.setEnabled(true);
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							lblError.setText("Invalid username or password.");
@@ -416,10 +428,17 @@ public class LaunchFrame extends JFrame {
 							loginPanel.add(btnPlayOffline);
 							loginPanel.revalidate();
 							loginPanel.repaint();
-						} else if (responseStr.equalsIgnoreCase("old version"))
+							btnLogin.setEnabled(true);
+						} else if (responseStr.equalsIgnoreCase("old version")){
+
 							lblError.setText("Outdated launcher.");
-						else
+							btnLogin.setEnabled(true);
+						}
+						else{
+							btnLogin.setEnabled(true);
 							lblError.setText("Login failed: " + responseStr);
+						}
+
 					}
 					return;
 				}
@@ -578,7 +597,7 @@ public class LaunchFrame extends JFrame {
 	// Once the mod loading code is working I will fix the ram settings, to fix them we will need to launch a new copy of the launcher
 	// and then exit the old one. This is the same way the technic launcher does it for a good reason, we pretty much run
 	// minecraft the same way.
-	
+
 	protected void launchMinecraft(String workingDir, String username,
 			String password) throws IOException {
 		try {
@@ -598,14 +617,14 @@ public class LaunchFrame extends JFrame {
 				} catch (MalformedURLException e) {
 					// e.printStackTrace();
 					System.err
-							.println("MalformedURLException, " + e.toString());
+					.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
 			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-					.toString();
+			.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -616,8 +635,8 @@ public class LaunchFrame extends JFrame {
 					LaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
-			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-			Field[] fields = mc.getDeclaredFields();
+				Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
+				Field[] fields = mc.getDeclaredFields();
 
 			for (int i = 0; i < fields.length; i++) {
 				Field f = fields[i];
@@ -644,11 +663,13 @@ public class LaunchFrame extends JFrame {
 
 			System.out.println("MCDIR: " + mcDir);
 
-			this.setVisible(false);
+			
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
+			this.setVisible(true);
+			lblError.setText("Minecraft not found");
 			e.printStackTrace();
-			System.exit(1);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			System.exit(2);
@@ -665,8 +686,9 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 			System.exit(4);
 		}
+		
 	}
-	
+
 	public static void killMetaInf() {
 		// TODO Auto-generated method stub
 		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
@@ -674,9 +696,9 @@ public class LaunchFrame extends JFrame {
 		try {
 			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
 			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
-			
+
 			JarEntry entry;
-			
+
 			while ((entry = input.getNextJarEntry()) != null) {
 				if (entry.getName().contains("META-INF")) {
 					continue;
@@ -689,13 +711,13 @@ public class LaunchFrame extends JFrame {
 				}
 				output.closeEntry();
 			}
-			
+
 			input.close();
 			output.close();
-			
+
 			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -703,7 +725,7 @@ public class LaunchFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	protected void downloadModPack(String modPackName) {
