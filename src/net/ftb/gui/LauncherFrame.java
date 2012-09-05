@@ -24,6 +24,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.JarEntry;
@@ -81,6 +82,7 @@ public class LauncherFrame extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
+	private String[] jarMods;
 
 	/**
 	 * Launch the application.
@@ -255,7 +257,7 @@ public class LauncherFrame extends JFrame {
 		lblPassword.setBounds(16, 76, 50, 14);
 		loginPanel.add(lblPassword);
 		lblPassword.setDisplayedMnemonic('p');
-		
+
 		JLabel lblVersion = new JLabel("");
 		lblVersion.setText("<html><body><center>FTB Launcher BETA 0.1<br>The non-beta version is more complete.<br>Please report all errors.</center></body></html>");
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -363,7 +365,7 @@ public class LauncherFrame extends JFrame {
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
-		
+
 		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			btnOptions.setEnabled(false);
@@ -396,9 +398,9 @@ public class LauncherFrame extends JFrame {
 							try {
 								// the old start testing code just put me in a infinite loop.
 								URL website = new URL("http://www.assets-min.com/information.asp");
-							    ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-							    FileOutputStream fos = new FileOutputStream("information.html");
-							    fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+								ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+								FileOutputStream fos = new FileOutputStream("information.html");
+								fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 								launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "/.minecraft", "TestingPlayer", "-");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
@@ -445,9 +447,6 @@ public class LauncherFrame extends JFrame {
 			updater.execute();
 		} else {
 			try {
-				System.out.println(getSelectedModPack());
-				System.out.println("Installed jar mods");
-				installMods(getSelectedModPack());
 				launchMinecraft(new File(Settings.getSettings()
 						.getInstallPath()).getPath()
 						+ "\\"
@@ -502,13 +501,14 @@ public class LauncherFrame extends JFrame {
 	// and then exit the old one. This is the same way the technic launcher does it for a good reason, we pretty much run
 	// minecraft the same way.
 
-	protected void launchMinecraft(String workingDir, String username,
+	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException {
+		installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
 			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
-			String[] jarFiles = new String[] {"minecraftforge.zip" , "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
@@ -539,8 +539,8 @@ public class LauncherFrame extends JFrame {
 					LauncherFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
-				Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-				Field[] fields = mc.getDeclaredFields();
+			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
+			Field[] fields = mc.getDeclaredFields();
 
 			for (int i = 0; i < fields.length; i++) {
 				Field f = fields[i];
@@ -567,7 +567,7 @@ public class LauncherFrame extends JFrame {
 
 			System.out.println("MCDIR: " + mcDir);
 
-			
+
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
@@ -590,7 +590,7 @@ public class LauncherFrame extends JFrame {
 			e.printStackTrace();
 			System.exit(4);
 		}
-		
+
 	}
 
 	public static void killMetaInf() {
@@ -635,7 +635,7 @@ public class LauncherFrame extends JFrame {
 	protected void downloadModPack(String modPackName) {
 		URL website;
 		try {
-			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
+			website = new URL("http://repo.creeperhost.net/downloads/FTB2/Mod_Packs/" + modPackName + "/modpack.zip");
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos = new FileOutputStream(Settings.getSettings()
 					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
@@ -813,7 +813,6 @@ public class LauncherFrame extends JFrame {
 
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
-		System.out.println("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
@@ -821,5 +820,16 @@ public class LauncherFrame extends JFrame {
 		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
+		System.out.println("starting scanner");
+		Scanner in = new Scanner(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
+		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
+		int i = 0;
+		while(in.hasNextLine()){
+			
+			jarMods[i] = in.nextLine();
+			System.out.println(jarMods[i]);
+			i++;
+		}
+
 	}
 }
