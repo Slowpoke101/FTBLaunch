@@ -632,10 +632,8 @@ public class LaunchFrame extends JFrame {
 			System.out.println("Loading jars...");
 			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
-			//String[] jarFiles = new String[] { "minecraftforge.zip", "minecraft.jar", "lwjgl.jar",
-			//		"lwjgl_util.jar", "jinput.jar" };
-			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
-					"lwjgl_util.jar", "jinput.jar" };
+			String[] jarFiles = new String[] { "minecraftforge.zip", "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
 
@@ -681,8 +679,7 @@ public class LaunchFrame extends JFrame {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
-				System.out.println("Fixed Minecraft Path: Field was "
-						+ f.toString());
+				System.out.println("Fixed Minecraft Path: Field was " + f.toString());
 			}
 
 			String[] mcArgs = new String[2];
@@ -743,6 +740,7 @@ public class LaunchFrame extends JFrame {
 			input.close();
 			output.close();
 			
+			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
