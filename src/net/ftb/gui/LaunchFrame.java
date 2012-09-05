@@ -572,53 +572,6 @@ public class LaunchFrame extends JFrame {
 		}
 		return "0";
 	}
-	
-	/* protected void launchMinecraft(String workingDir, String username,
-			String password) throws IOException {
-		try {
-			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
-					"lwjgl_util.jar", "jinput.jar" };
-
-			URL[] urls = new URL[jarFiles.length];
-
-			for (int i = 0; i < urls.length; i++) {
-				try {
-					File f = new File(new File(workingDir, "bin"), jarFiles[i]);
-					urls[i] = f.toURI().toURL();
-					System.out.println("Loading URL: " + urls[i].toString());
-				} catch (MalformedURLException e) {
-					// e.printStackTrace();
-					System.err
-					.println("MalformedURLException, " + e.toString());
-					System.exit(5);
-				}
-			}
-
-			System.out.println("Loading natives...");
-			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-			.toString();
-
-			System.setProperty("org.lwjgl.librarypath", nativesDir);
-			System.setProperty("net.java.games.input.librarypath", nativesDir);
-
-			System.setProperty("user.home", new File(workingDir).getParent());
-
-			String[] mcArgs = new String[2];
-			mcArgs[0] = username;
-			mcArgs[1] = password;
-
-			System.out.println("Ram Min = " + OptionsDialog.ramMin + " Ram Max = " + OptionsDialog.ramMax);
-
-			Runtime openMinecraft = Runtime.getRuntime();
-
-			openMinecraft.exec(new String[] {"cd", Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\"});
-			openMinecraft.exec(new String[]{"java", "-Xms" + OptionsDialog.ramMin + "M", "-Xmx" + OptionsDialog.ramMax + "M","-jar", "minecraft.jar"});
-
-		} finally {
-
-		}
-	} */
 
 	// Vbitz : I'm changing this back, there's a reason why we launch minecraft like this
 	// A we can get the console easier and 2 we have complete control over it, including the location of the .minecraft dir
@@ -742,6 +695,7 @@ public class LaunchFrame extends JFrame {
 			
 			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
