@@ -2,17 +2,26 @@ package net.ftb.gui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +45,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -68,6 +78,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.SystemColor;
+import javax.swing.border.BevelBorder;
+import javax.swing.ImageIcon;
 
 public class LauncherFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -84,6 +97,8 @@ public class LauncherFrame extends JFrame {
 	private JPasswordField passwordField;
 	public static String sysArch;
 	private String[] jarMods;
+	Image img;
+	private static Point point = new Point();
 
 	/**
 	 * Launch the application.
@@ -143,6 +158,19 @@ public class LauncherFrame extends JFrame {
 	 */
 
 	public LauncherFrame() {
+		final JFrame frame = this;
+		frame.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				point.x = e.getX();
+				point.y = e.getY();
+			}
+		});
+		frame.addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				Point p = frame.getLocation();
+				frame.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+			}
+		});
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		setResizable(false);
@@ -170,8 +198,9 @@ public class LauncherFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		loginPanel = new JPanel();
-		loginPanel.setBounds(10, 11, 302, 179);
-		contentPane.add(loginPanel);
+		loginPanel.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
+		loginPanel.setForeground(new Color(24, 24, 24));
+		loginPanel.setBounds(10, 11, 308, 128);
 		loginPanel.setLayout(null);
 
 		chckbxRemember = new JCheckBox("Remember Password");
@@ -181,11 +210,9 @@ public class LauncherFrame extends JFrame {
 		} else {
 
 		}
-		loginPanel.add(chckbxRemember);
 
 		btnOptions = new JButton("Options");
 		btnOptions.setBounds(226, 39, 69, 23);
-		loginPanel.add(btnOptions);
 		btnOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -196,7 +223,6 @@ public class LauncherFrame extends JFrame {
 
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 72, 69, 23);
-		loginPanel.add(btnLogin);
 		btnLogin.setEnabled(true);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -236,14 +262,12 @@ public class LauncherFrame extends JFrame {
 
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 175, 14);
-		loginPanel.add(lblError);
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		lblError.setForeground(Color.RED);
 
 		usernameField = new JTextField("", 17);
 		usernameField.setBounds(76, 39, 144, 22);
 		usernameField.setText(passwordSettings.getUsername());
-		loginPanel.add(usernameField);
 
 		passwordField = new JPasswordField("", 17);
 		passwordField.setBounds(76, 72, 144, 22);
@@ -252,23 +276,36 @@ public class LauncherFrame extends JFrame {
 
 		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(14, 43, 52, 14);
-		loginPanel.add(lblUsername);
 		lblUsername.setDisplayedMnemonic('u');
 
 		JLabel lblPassword = new JLabel("Password:");
 		lblPassword.setBounds(16, 76, 50, 14);
-		loginPanel.add(lblPassword);
 		lblPassword.setDisplayedMnemonic('p');
 
 		JLabel lblVersion = new JLabel("");
+		lblVersion.setBounds(10, 150, 308, 48);
+
 		lblVersion.setText("<html><body><center>FTB Launcher BETA 0.1<br>The non-beta version is more complete.<br>Please report all errors.</center></body></html>");
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVersion.setBounds(0, 131, 302, 48);
-		loginPanel.add(lblVersion);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameField, passwordField, chckbxRemember, btnLogin, btnOptions}));
 
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameField, passwordField, chckbxRemember, btnLogin, btnOptions}));
 		ButtonGroup group = new ButtonGroup();
+		contentPane.add(lblVersion);
+		contentPane.add(loginPanel);
+		loginPanel.add(lblPassword);
+		loginPanel.add(lblUsername);
+		loginPanel.add(usernameField);
+		loginPanel.add(lblError);
+		loginPanel.add(btnLogin);
+		loginPanel.add(btnOptions);
+		loginPanel.add(chckbxRemember);
 	}
+	public void paintComponent(Graphics g)
+	{
+		g.drawImage(img, 0, 0, null);
+
+	}
+
 
 	public void doLogin() {
 		btnLogin.setEnabled(false);
@@ -505,13 +542,17 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException {
-		downloadModPack(getSelectedModPack());
 		installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
 			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
-			String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			
+			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			String[] jarFiles = concat(jarMods, vanillaJarFiles);
+			for(int i=0;i<jarFiles.length-1;i++){
+				System.out.println(jarFiles[i]);
+			}
 			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
@@ -814,7 +855,18 @@ public class LauncherFrame extends JFrame {
 		return resource.delete();
 
 	}
-
+	
+	protected String[] reverse(String[] x){
+		String buffer[] = new String[x.length-1];
+		for(int i = 0; i<x.length-1;i++){
+			System.out.println(x[x.length-i-1]);
+			buffer[i] = x[x.length-i-1];
+		}
+		
+		
+		return buffer;
+		
+	}
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
@@ -825,16 +877,46 @@ public class LauncherFrame extends JFrame {
 		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
 		System.out.println("starting scanner");
-		Scanner in = new Scanner(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
 		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
+		try{
+			  // Open the file that is the first 
+			  // command line parameter
+			  FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
+			  // Get the object of DataInputStream
+			  DataInputStream in = new DataInputStream(fstream);
+			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			  String strLine;
+			  //Read File Line By Line
+			  for(int i=0; i<jarMods.length;i++){
+			  while ((strLine = br.readLine()) != null)   {
+			  // Print the content on the console
+				  jarMods[i] = strLine;
+				  System.out.println(jarMods[i]);
+			  }
+			  }
+			  //Close the input stream
+			  in.close();
+			    }catch (Exception e){//Catch exception if any
+			  System.err.println("Error: " + e.getMessage());
+			  }
+		reverse(jarMods);
+		
+
+
+	}
+	
+	protected String[] concat(String[] x, String[] y){
+		String buffer[] = new String[(x.length-1)+(y.length-1)];
 		int i = 0;
-		while(in.hasNextLine()){
-
-			jarMods[i] = in.nextLine();
-			System.out.println(jarMods[i]);
-			i++;
+		for(i=0;i<buffer.length-1;i++){
+			if(i!=x.length){
+			buffer[i] = x[i];
+			}
+			for(int j=0;j<y.length-1;j++){
+				buffer[i] = y[j];
+			}
 		}
-
-
+		return buffer;
+		
 	}
 }
