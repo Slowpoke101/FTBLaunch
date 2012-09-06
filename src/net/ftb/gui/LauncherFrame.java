@@ -503,6 +503,7 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException {
+		downloadModPack(getSelectedModPack());
 		installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
@@ -632,21 +633,22 @@ public class LauncherFrame extends JFrame {
 
 	}
 
-	protected void downloadModPack(String modPackName) {
-		URL website;
-		try {
-			website = new URL("http://repo.creeperhost.net/downloads/FTB2/Mod_Packs/" + modPackName + "/modpack.zip");
-			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			FileOutputStream fos = new FileOutputStream(Settings.getSettings()
-					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
-			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+	protected void downloadModPack(String modPackName) throws IOException {
+		System.out.println(modPackName);
+		URL modPackURL = new URL("http://www.feed-the-beast.com/forum/files/modpack.zip");
+		FileInputStream fileInputStream  = new FileInputStream(modPackURL.getFile());
+		byte[] buf=new byte[8192];
+		int bytesread = 0, bytesBuffered = 0;
+		FileOutputStream out = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modpack.zip");
+		while( (bytesread = fileInputStream.read( buf )) > -1 ) {
+			out.write( buf, 0, bytesread );
+			bytesBuffered += bytesread;
+			if (bytesBuffered > 1024 * 1024) { //flush after 1MB
+				bytesBuffered = 0;
+				out.flush();
+			}
+
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\"
-				+ modPackName + ".zip");
 	}
 
 	public void extractZip(String zipLocation) {
@@ -825,11 +827,12 @@ public class LauncherFrame extends JFrame {
 		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
 		int i = 0;
 		while(in.hasNextLine()){
-			
+
 			jarMods[i] = in.nextLine();
 			System.out.println(jarMods[i]);
 			i++;
 		}
+
 
 	}
 }
