@@ -187,7 +187,7 @@ public class LauncherFrame extends JFrame {
 		btnOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OptionsDialog optionsDlg = new OptionsDialog();
+				OptionsDialogBeta optionsDlg = new OptionsDialogBeta();
 				optionsDlg.setVisible(true);
 			}
 		});
