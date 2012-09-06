@@ -1,6 +1,7 @@
 package net.ftb.gui;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -14,7 +15,7 @@ import javax.swing.JPanel;
 import net.ftb.data.Settings;
 import net.ftb.util.OSUtils;
 
-public class ChooseDirBeta extends JPanel implements ActionListener {
+public class ChooseDirBeta extends JFrame implements ActionListener {
 	JButton go;
 
 	JFileChooser chooser;
@@ -23,6 +24,7 @@ public class ChooseDirBeta extends JPanel implements ActionListener {
 	Settings settings = new Settings();
 
 	public ChooseDirBeta() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		go = new JButton("Do it");
 		go.addActionListener(this);
 		add(go);
@@ -35,6 +37,7 @@ public class ChooseDirBeta extends JPanel implements ActionListener {
 		chooser.setCurrentDirectory(new java.io.File(OptionsDialogBeta.installFolderTextField.getText()));
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
 		//
 		// disable the "All files" option.
 		//

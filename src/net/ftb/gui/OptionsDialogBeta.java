@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -43,6 +44,7 @@ public class OptionsDialogBeta extends JDialog
 	 */
 	public OptionsDialogBeta()
 	{
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		setModal(true);
 		setBounds(100, 100, 400, 200);
 		getContentPane().setLayout(new BorderLayout());

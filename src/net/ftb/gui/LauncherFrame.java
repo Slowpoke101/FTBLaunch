@@ -2,6 +2,7 @@ package net.ftb.gui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -143,6 +144,7 @@ public class LauncherFrame extends JFrame {
 
 	public LauncherFrame() {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		try {
