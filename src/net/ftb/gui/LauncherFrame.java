@@ -548,7 +548,7 @@ public class LauncherFrame extends JFrame {
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
 
 			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };			
-			String[] jarFiles = concat(jarMods, vanillaJarFiles);
+			String[] jarFiles = concat(reverse(jarMods), vanillaJarFiles);
 			for(int i = 0;i<jarFiles.length;i++){
 				System.out.println(jarFiles[i]);
 			}
@@ -704,12 +704,15 @@ public class LauncherFrame extends JFrame {
 	protected void downloadModPack(String modPackName) throws IOException {
 		System.out.println("Downloading modpack");
 		lblError.setText("Downloading modpack");
+		this.revalidate();
+		this.repaint();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
 		downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/rgn3g179rdsobej/FTBLITE.zip?dl=1");
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
 		extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
+		installMods(getSelectedModPack());
 	}
 	public void extractZip(String zipLocation) throws IOException {		
 		String fileName = zipLocation;
