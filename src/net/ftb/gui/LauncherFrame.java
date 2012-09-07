@@ -539,7 +539,7 @@ public class LauncherFrame extends JFrame {
 		if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
 			
 		}else{
-		downloadModPack(getSelectedModPack());
+			downloadModPack(getSelectedModPack());
 		}
 		installMods(getSelectedModPack());
 		try {
@@ -548,7 +548,7 @@ public class LauncherFrame extends JFrame {
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
 
 			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };			
-			String[] jarFiles = concat(reverse(jarMods), vanillaJarFiles);
+			String[] jarFiles = concat(jarMods, vanillaJarFiles);
 			for(int i = 0;i<jarFiles.length;i++){
 				System.out.println(jarFiles[i]);
 			}
@@ -697,6 +697,7 @@ public class LauncherFrame extends JFrame {
                 if (in != null)
                         in.close();
                 if (fout != null)
+                	fout.flush();
                         fout.close();
         }
     }
@@ -720,7 +721,6 @@ public class LauncherFrame extends JFrame {
 
 			zipentry = zipinputstream.getNextEntry();
 			while (zipentry != null) {
-				// for each entry to be extracted
 				String entryName = zipentry.getName();
 				int n;
 				FileOutputStream fileoutputstream;
@@ -732,19 +732,15 @@ public class LauncherFrame extends JFrame {
 						break;
 					}
 				}
-
 				fileoutputstream = new FileOutputStream(zipLocation);
 
 				while ((n = zipinputstream.read(buf, 0, 1024)) > -1){
 					fileoutputstream.write(buf, 0, n);
 				}
-
 				fileoutputstream.close();
 				zipinputstream.closeEntry();
 				zipentry = zipinputstream.getNextEntry();
-
-			}// while
-
+			}
 			zipinputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -908,7 +904,7 @@ public class LauncherFrame extends JFrame {
 		}
 		jarMods = reverse(jarMods);
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\instMods"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\bin\\"));
-		//copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
 		
 
 
