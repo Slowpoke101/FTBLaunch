@@ -142,10 +142,8 @@ public class LauncherFrame extends JFrame {
 		});
 
 		if(Integer.parseInt(System.getProperty("sun.arch.data.model")) == 64) {
-			System.out.println("64");
 			sysArch = "64";
 		} else if (Integer.parseInt(System.getProperty("sun.arch.data.model")) == 32) {
-			System.out.println("32");
 			sysArch = "32";
 		} else {
 			System.out.println("Unknown");
@@ -432,14 +430,10 @@ public class LauncherFrame extends JFrame {
 							lblError.setText("Game update complete.");
 
 							// try {
-							System.out.println(getSelectedModPack());
 							killMetaInf();
 							try {
 								// the old start testing code just put me in a infinite loop.
-								URL website = new URL("http://www.assets-min.com/information.asp");
-								ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-								FileOutputStream fos = new FileOutputStream("information.html");
-								fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+								
 								launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "/.minecraft", "TestingPlayer", "-");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
@@ -542,17 +536,20 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException {
+		downloadModPack(getSelectedModPack());
 		installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
 			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
 			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
-			
-			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			String[] jarFiles = concat(jarMods, vanillaJarFiles);
-			for(int i=0;i<jarFiles.length-1;i++){
+
+			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };			
+			String[] jarFiles = concat(reverse(jarMods), vanillaJarFiles);
+			for(int i = 0;i<jarFiles.length;i++){
 				System.out.println(jarFiles[i]);
 			}
+			//String[] jarFiles = {"OptiFine_1.2.5_HD_S_C6.zip","NotEnoughItems-Client1.3.0.1.zip","CodeChickenCore-Client0.5.5.zip" ,"minecraftforge-client-3.3.8.164.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			
 			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
@@ -566,7 +563,6 @@ public class LauncherFrame extends JFrame {
 					// e.printStackTrace();
 					System.err
 					.println("MalformedURLException, " + e.toString());
-					System.exit(5);
 				}
 			}
 
@@ -675,23 +671,39 @@ public class LauncherFrame extends JFrame {
 		}
 
 	}
+	
+	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException
+    {
+        BufferedInputStream in = null;
+        FileOutputStream fout = null;
+        try
+        {
+                in = new BufferedInputStream(new URL(urlString).openStream());
+                fout = new FileOutputStream(filename);
 
+                byte data[] = new byte[1024];
+                int count;
+                while ((count = in.read(data, 0, 1024)) != -1)
+                {
+                        fout.write(data, 0, count);
+                }
+        }
+        finally
+        {
+                if (in != null)
+                        in.close();
+                if (fout != null)
+                        fout.close();
+        }
+    }
+	
 	protected void downloadModPack(String modPackName) throws IOException {
-		System.out.println(modPackName);
-		URL modPackURL = new URL("http://www.feed-the-beast.com/forum/files/modpack.zip");
-		FileInputStream fileInputStream  = new FileInputStream(modPackURL.getFile());
-		byte[] buf=new byte[8192];
-		int bytesread = 0, bytesBuffered = 0;
-		FileOutputStream out = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modpack.zip");
-		while( (bytesread = fileInputStream.read( buf )) > -1 ) {
-			out.write( buf, 0, bytesread );
-			bytesBuffered += bytesread;
-			if (bytesBuffered > 1024 * 1024) { //flush after 1MB
-				bytesBuffered = 0;
-				out.flush();
-			}
-
-		}
+		System.out.println("Downloading modpack");
+		lblError.setText("Downloading modpack");
+		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
+	    downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/rgn3g179rdsobej/FTBLITE.zip?dl=1");
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip");
 	}
 
 	public void extractZip(String zipLocation) {
@@ -706,7 +718,6 @@ public class LauncherFrame extends JFrame {
 			while (zipentry != null) {
 				// for each entry to be extracted
 				String entryName = zipentry.getName();
-				System.out.println("entryname " + entryName);
 				int n;
 				FileOutputStream fileoutputstream;
 				File newFile = new File(entryName);
@@ -743,7 +754,6 @@ public class LauncherFrame extends JFrame {
 			String zipPath = outputLocation;
 			File temp = new File(zipPath);
 			temp.mkdir();
-			System.out.println(zipPath + " created");
 			ZipFile zipFile = new ZipFile(fSourceZip);
 			Enumeration e = zipFile.entries();
 
@@ -754,7 +764,6 @@ public class LauncherFrame extends JFrame {
 				if (entry.isDirectory()) {
 					continue;
 				} else {
-					System.out.println("Extracting " + destinationFilePath);
 					BufferedInputStream bis = new BufferedInputStream(
 							zipFile.getInputStream(entry));
 
@@ -788,8 +797,6 @@ public class LauncherFrame extends JFrame {
 			// if directory not exists, create it
 			if (!dest.exists()) {
 				dest.mkdir();
-				System.out.println("Directory copied from " + src + "  to "
-						+ dest);
 			}
 
 			// list all the directory contents
@@ -820,7 +827,6 @@ public class LauncherFrame extends JFrame {
 
 				in.close();
 				out.close();
-				System.out.println("File copied from " + src + " to " + dest);
 			}
 		}
 	}
@@ -841,7 +847,6 @@ public class LauncherFrame extends JFrame {
 
 			in.close();
 			out.close();
-			System.out.println("File copied from " + src + " to " + dest);
 		}
 	}
 
@@ -855,17 +860,16 @@ public class LauncherFrame extends JFrame {
 		return resource.delete();
 
 	}
-	
+
 	protected String[] reverse(String[] x){
-		String buffer[] = new String[x.length-1];
-		for(int i = 0; i<x.length-1;i++){
-			System.out.println(x[x.length-i-1]);
+		String buffer[] = new String[x.length];
+		for(int i = 0; i<x.length;i++){
 			buffer[i] = x[x.length-i-1];
 		}
-		
-		
+
+
 		return buffer;
-		
+
 	}
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
@@ -876,47 +880,48 @@ public class LauncherFrame extends JFrame {
 		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
-		System.out.println("starting scanner");
 		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
+	
 		try{
-			  // Open the file that is the first 
-			  // command line parameter
-			  FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
-			  // Get the object of DataInputStream
-			  DataInputStream in = new DataInputStream(fstream);
-			  BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			  String strLine;
-			  //Read File Line By Line
-			  for(int i=0; i<jarMods.length;i++){
-			  while ((strLine = br.readLine()) != null)   {
-			  // Print the content on the console
-				  jarMods[i] = strLine;
-				  System.out.println(jarMods[i]);
-			  }
-			  }
-			  //Close the input stream
-			  in.close();
-			    }catch (Exception e){//Catch exception if any
-			  System.err.println("Error: " + e.getMessage());
-			  }
-		reverse(jarMods);
+			// Open the file that is the first 
+			// command line parameter
+			FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			//Read File Line By Line
+			int i=0;
+				while ((strLine = br.readLine()) != null)   {
+					// Print the content on the console
+					jarMods[i] = strLine;
+					i++;		
+			}
+			//Close the input stream
+			in.close();
+		}catch (Exception e){//Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+		jarMods = reverse(jarMods);
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\instMods"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\bin\\"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
 		
 
 
 	}
-	
+
 	protected String[] concat(String[] x, String[] y){
-		String buffer[] = new String[(x.length-1)+(y.length-1)];
+		String buffer[] = new String[x.length+y.length];
 		int i = 0;
 		for(i=0;i<buffer.length-1;i++){
-			if(i!=x.length){
-			buffer[i] = x[i];
+			if(i<x.length){
+				buffer[i] = x[i];
 			}
-			for(int j=0;j<y.length-1;j++){
-				buffer[i] = y[j];
+			if(i<y.length){
+				buffer[i+x.length] = y[i];
 			}
 		}
 		return buffer;
-		
+
 	}
 }

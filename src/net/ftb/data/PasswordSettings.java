@@ -50,10 +50,8 @@ public class PasswordSettings {
 	}
 	
 	public void write() throws IOException {
-		System.out.println("Writing to " +_filename);
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
 		wri.write(getHex(getHex(_username) + ":" + getHex(_password)));
-		System.out.println("Written " + getHex(_username) + ":" + getHex(_password) );
 		wri.close();
 	}
 	
@@ -77,7 +75,6 @@ public class PasswordSettings {
 	}
 	
 	public String getUsername() {
-		System.out.println(_username);
 		return _username;
 		
 	}
