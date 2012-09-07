@@ -536,7 +536,11 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException {
+		if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
+			
+		}else{
 		downloadModPack(getSelectedModPack());
+		}
 		installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
@@ -904,7 +908,7 @@ public class LauncherFrame extends JFrame {
 		}
 		jarMods = reverse(jarMods);
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\instMods"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\bin\\"));
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
+		//copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
 		
 
 
