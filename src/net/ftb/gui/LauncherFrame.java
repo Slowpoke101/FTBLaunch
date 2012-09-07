@@ -434,7 +434,13 @@ public class LauncherFrame extends JFrame {
 							try {
 								// the old start testing code just put me in a infinite loop.
 
-								launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "/.minecraft", "TestingPlayer", "-");
+								if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
+									extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
+								}else{
+									downloadModPack(getSelectedModPack());
+								}
+								installMods(getSelectedModPack());
+								
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -456,6 +462,17 @@ public class LauncherFrame extends JFrame {
 								+ e.getCause().getMessage());
 						return;
 					}
+					try {
+						launchMinecraft(new File(Settings.getSettings()
+								.getInstallPath()).getPath()
+								+ "\\"
+								+ getSelectedModPack() + "\\.minecraft",
+								RESPONSE.getUsername(), RESPONSE.getSessionID());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			};
 
@@ -704,15 +721,21 @@ public class LauncherFrame extends JFrame {
 	protected void downloadModPack(String modPackName) throws IOException {
 		System.out.println("Downloading modpack");
 		lblError.setText("Downloading modpack");
+		final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading modpack...", "", 0, 100);
 		this.revalidate();
 		this.repaint();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
+		progMonitor.setProgress(10);
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
+		progMonitor.setProgress(20);
 		downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/rgn3g179rdsobej/FTBLITE.zip?dl=1");
+		progMonitor.setProgress(80);
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
 		extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
+		progMonitor.setProgress(90);
 		installMods(getSelectedModPack());
+		progMonitor.setProgress(100);
 	}
 	public void extractZip(String zipLocation) throws IOException {		
 		String fileName = zipLocation;
