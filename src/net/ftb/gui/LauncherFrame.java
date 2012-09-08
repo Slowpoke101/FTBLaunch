@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -33,6 +34,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
@@ -59,8 +64,10 @@ import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
@@ -185,8 +192,7 @@ public class LauncherFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
-				.getInstallPath(), "loginData"));
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 328, 229);
@@ -253,6 +259,9 @@ public class LauncherFrame extends JFrame {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				} catch (NoSuchAlgorithmException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
 			}
 		});
@@ -391,17 +400,30 @@ public class LauncherFrame extends JFrame {
 				}
 
 				lblError.setText("Login complete.");
-				runGameUpdater(response);
+				try {
+					runGameUpdater(response);
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		};
 		loginWorker.execute();
 	}
-
+	
+	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+		
+		String date = sdf.format(new Date());
+		
+		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);
+	}
+	
 	public String getSelectedModPack() {
-		return "FTB";
+		return "FTBLITE";
 	}
 
-	public void runGameUpdater(final LoginResponse response) {
+	public void runGameUpdater(final LoginResponse response) throws NoSuchAlgorithmException {
 
 		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
@@ -447,6 +469,9 @@ public class LauncherFrame extends JFrame {
 										RESPONSE.getUsername(), RESPONSE.getSessionID());
 
 							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (NoSuchAlgorithmException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
@@ -550,7 +575,7 @@ public class LauncherFrame extends JFrame {
 	// minecraft the same way.
 
 	protected void launchMinecraft(String workingDir, String username,			
-			String password) throws IOException {
+			String password) throws IOException, NoSuchAlgorithmException {
 		if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
 			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
 		}else{
@@ -567,7 +592,7 @@ public class LauncherFrame extends JFrame {
 			for(int i = 0;i<jarFiles.length;i++){
 				System.out.println(jarFiles[i]);
 			}
-			//String[] jarFiles = {"OptiFine_1.2.5_HD_S_C6.zip","NotEnoughItems-Client1.3.0.1.zip","CodeChickenCore-Client0.5.5.zip" ,"minecraftforge-client-3.3.8.164.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			//String[] jarFiles = {"NotEnoughItems-Client1.3.0.1.zip","CodeChickenCore-Client0.5.5.zip" ,"minecraftforge-client-3.3.8.164.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
@@ -715,26 +740,22 @@ public class LauncherFrame extends JFrame {
 				fout.flush();
 			fout.close();
 		}
-	}	
-	protected void downloadModPack(String modPackName) throws IOException {
+	}
+	
+	protected void downloadModPack(String modPackName) throws IOException, NoSuchAlgorithmException {
 		System.out.println("Downloading modpack");
 		lblError.setText("Downloading modpack");
-		final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading modpack...", "", 0, 100);
 		this.revalidate();
 		this.repaint();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
-		progMonitor.setProgress(10);
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
-		progMonitor.setProgress(20);
-		downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/o62ib7xpnt15s4x/FTB-PRE-1.3.zip?dl=1");
-		progMonitor.setProgress(80);
+		downloadPack(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","Client.zip");
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
 		extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
-		progMonitor.setProgress(90);
 		installMods(getSelectedModPack());
-		progMonitor.setProgress(100);
 	}
+	
 	public void extractZip(String zipLocation) throws IOException {		
 		String fileName = zipLocation;
 		byte[] buf = new byte[1024];
@@ -935,5 +956,19 @@ public class LauncherFrame extends JFrame {
 		}
 		return buffer;
 
+	}
+	
+	public static String md5(String input) throws NoSuchAlgorithmException {
+	    String result = input;
+	    if(input != null) {
+	        MessageDigest md = MessageDigest.getInstance("MD5");
+	        md.update(input.getBytes());
+	        BigInteger hash = new BigInteger(1, md.digest());
+	        result = hash.toString(16);
+	        while(result.length() < 32) {
+	            result = "0" + result;
+	        }
+	    }
+	    return result;
 	}
 }

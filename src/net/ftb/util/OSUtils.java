@@ -8,20 +8,7 @@ public class OSUtils
 	 */
 	public static String getDefInstallPath()
 	{
-		if (getCurrentOS() == OS.WINDOWS)
-		{
-			return PathUtils.combine(System.getenv("APPDATA"), "ftblaunch"); 
-		}
-		else if (getCurrentOS() == OS.MACOSX)
-		{
-			return PathUtils.combine(System.getProperty("user.home"), 
-					"Library", "Application Support", "ftblaunch");
-		}
-		else
-		{
-			return PathUtils.combine(System.getProperty("user.home"), 
-					".ftblaunch");
-		}
+		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 	
 	public static OS getCurrentOS()
