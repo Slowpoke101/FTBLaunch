@@ -440,7 +440,12 @@ public class LauncherFrame extends JFrame {
 									downloadModPack(getSelectedModPack());
 								}
 								installMods(getSelectedModPack());
-								
+								launchMinecraft(new File(Settings.getSettings()
+										.getInstallPath()).getPath()
+										+ "\\"
+										+ getSelectedModPack() + "\\.minecraft",
+										RESPONSE.getUsername(), RESPONSE.getSessionID());
+
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -453,6 +458,8 @@ public class LauncherFrame extends JFrame {
 					} catch (CancellationException e) {
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update cancelled...");
+						new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").delete();
+
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
@@ -462,17 +469,8 @@ public class LauncherFrame extends JFrame {
 								+ e.getCause().getMessage());
 						return;
 					}
-					try {
-						launchMinecraft(new File(Settings.getSettings()
-								.getInstallPath()).getPath()
-								+ "\\"
-								+ getSelectedModPack() + "\\.minecraft",
-								RESPONSE.getUsername(), RESPONSE.getSessionID());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+
+
 				}
 			};
 
@@ -748,7 +746,7 @@ public class LauncherFrame extends JFrame {
 			FileOutputStream output = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + entryName);
 			int n;
 			if(zipEntry.isDirectory()){
-				
+
 			}
 			while ((n = zipIn.read(buf, 0, 1024)) > -1) {
 				output.write(buf, 0, n);
