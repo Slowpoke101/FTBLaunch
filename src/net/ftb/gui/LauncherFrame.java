@@ -398,7 +398,7 @@ public class LauncherFrame extends JFrame {
 	}
 
 	public String getSelectedModPack() {
-		return "FTBLITE";
+		return "FTB";
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
@@ -726,7 +726,7 @@ public class LauncherFrame extends JFrame {
 		progMonitor.setProgress(10);
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
 		progMonitor.setProgress(20);
-		downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/rgn3g179rdsobej/FTBLITE.zip?dl=1");
+		downloadUrl(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","https://dl.dropbox.com/s/o62ib7xpnt15s4x/FTB-PRE-1.3.zip?dl=1");
 		progMonitor.setProgress(80);
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
