@@ -56,12 +56,18 @@ public class PasswordSettings {
 	}
 	
 	public void read() throws IOException {
-		BufferedReader read = new BufferedReader(new FileReader(_filename));
-		String str = fromHex(read.readLine());
-		String[] tokens = str.split(":");
-		_username = fromHex(tokens[0]);
-		_password = fromHex(tokens[1]);
-		read.close();
+		try {
+			BufferedReader read = new BufferedReader(new FileReader(_filename));
+			String str = fromHex(read.readLine());
+			String[] tokens = str.split(":");
+			_username = fromHex(tokens[0]);
+			_password = fromHex(tokens[1]);
+			read.close();
+		} catch (Exception ex) {
+			_username = "";
+			_password = "";
+			System.out.println("Error loading login data");
+		}
 	}
 	
 	public void storeUP(String username, String password) {
