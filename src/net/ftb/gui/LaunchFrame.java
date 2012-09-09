@@ -66,6 +66,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import javax.swing.JTabbedPane;
 
 public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -273,55 +274,6 @@ public class LaunchFrame extends JFrame {
 		txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
 		newsPane.setViewportView(txtrNews);
 
-		JScrollPane modPacksPane = new JScrollPane();
-		modPacksPane
-		.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		modPacksPane.setBounds(10, 15, 210, 426);
-		contentPane.add(modPacksPane);
-
-		JPanel panel = new JPanel();
-		modPacksPane.setViewportView(panel);
-		panel.setLayout(null);
-
-		modPack1RB = new JRadioButton("");
-		modPack1RB.setBounds(182, 27, 20, 21);
-		modPack1RB.setSelected(true);
-		panel.add(modPack1RB);
-
-		modPack2RB = new JRadioButton("");
-		modPack2RB.setBounds(182, 86, 20, 21);
-		panel.add(modPack2RB);
-
-		JLabel lblModPack2 = new JLabel("FTB (standard pack for new worlds)");
-		lblModPack2.setBackground(Color.YELLOW);
-		lblModPack2.setBounds(10, 72, 175, 50);
-		panel.add(lblModPack2);
-
-		JLabel lblModPack1 = new JLabel("FTB Classic (for use with FTB Maps)");
-		lblModPack1.setBackground(Color.YELLOW);
-		lblModPack1.setBounds(10, 11, 175, 50);
-		panel.add(lblModPack1);
-
-		JLabel lblModPack3 = new JLabel(
-				"Direwolf20(for use with Direwolf's maps)");
-		lblModPack3.setBackground(Color.YELLOW);
-		lblModPack3.setBounds(10, 133, 175, 50);
-		panel.add(lblModPack3);
-
-		modPack3RB = new JRadioButton("");
-		modPack3RB.setBounds(182, 147, 20, 21);
-		panel.add(modPack3RB);
-
-		JLabel lblModPack4 = new JLabel(
-				"FTB Lite(stripped down version of the standard FTB pack)");
-		lblModPack4.setBackground(Color.YELLOW);
-		lblModPack4.setBounds(10, 194, 175, 50);
-		panel.add(lblModPack4);
-
-		modPack4RB = new JRadioButton("");
-		modPack4RB.setBounds(182, 208, 20, 21);
-		panel.add(modPack4RB);
-
 		JPanel sponsorPanel = new JPanel();
 		sponsorPanel.setBounds(500, 170, 305, 271);
 		contentPane.add(sponsorPanel);
@@ -348,10 +300,37 @@ public class LaunchFrame extends JFrame {
 		contentPane.add(lblNews);
 
 		ButtonGroup group = new ButtonGroup();
-		group.add(modPack1RB);
-		group.add(modPack2RB);
-		group.add(modPack3RB);
-		group.add(modPack4RB);
+		
+				modPack1RB = new JRadioButton("");
+				modPack1RB.setBounds(474, 15, 20, 21);
+				contentPane.add(modPack1RB);
+				modPack1RB.setSelected(true);
+				group.add(modPack1RB);
+				
+						modPack2RB = new JRadioButton("");
+						modPack2RB.setBounds(452, 15, 20, 21);
+						contentPane.add(modPack2RB);
+						group.add(modPack2RB);
+						
+								modPack3RB = new JRadioButton("");
+								modPack3RB.setBounds(430, 15, 20, 21);
+								contentPane.add(modPack3RB);
+								group.add(modPack3RB);
+								
+										modPack4RB = new JRadioButton("");
+										modPack4RB.setBounds(408, 15, 20, 21);
+										contentPane.add(modPack4RB);
+										group.add(modPack4RB);
+										
+										JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+										tabbedPane.setBounds(10, 15, 210, 426);
+										tabbedPane.add(new JPanel(), 0);
+										tabbedPane.setTitleAt(0, "Official FTB Packs");
+										tabbedPane.add(new JPanel(), 1);
+										tabbedPane.setTitleAt(1, "Third Party Packs");
+										tabbedPane.add(new JPanel(), 2);
+										tabbedPane.setTitleAt(2, "Installed Mods");
+										contentPane.add(tabbedPane);
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
 				usernameField, passwordField, chckbxRemember, btnLogin,
