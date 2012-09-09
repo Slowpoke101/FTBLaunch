@@ -14,11 +14,13 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -410,15 +412,15 @@ public class LauncherFrame extends JFrame {
 		};
 		loginWorker.execute();
 	}
-	
+
 	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-		
+
 		String date = sdf.format(new Date());
-		
+
 		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);
 	}
-	
+
 	public String getSelectedModPack() {
 		return "FTB";
 	}
@@ -456,12 +458,12 @@ public class LauncherFrame extends JFrame {
 							try {
 								// the old start testing code just put me in a infinite loop.
 
-								if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
-									extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
-								}else{
-									downloadModPack(getSelectedModPack());
-								}
-								installMods(getSelectedModPack());
+								//if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
+								//	extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
+								//}else{
+								//	downloadModPack(getSelectedModPack());
+								//}
+								//installMods(getSelectedModPack());
 								launchMinecraft(new File(Settings.getSettings()
 										.getInstallPath()).getPath()
 										+ "\\"
@@ -529,6 +531,37 @@ public class LauncherFrame extends JFrame {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	protected String getFileMD5(File x){
+		InputStream is = null;
+		MessageDigest md = null;
+		if (x.exists()) {
+			try {
+				md = MessageDigest.getInstance("MD5");
+				is = new FileInputStream(x);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				is = new DigestInputStream(is, md);
+				// read stream to EOF as normal...
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			String result = "";
+			byte[] digest = md.digest();
+			for (int i = 0; i < digest.length; i++) {
+				result += Integer.toString((digest[i] & 0xff) + 0x100, 16)
+						.substring(1);
+			}
+			return result;
+		}
+		return "0";
 	}
 
 	protected String getVersionMD5(String modPackName) {
@@ -734,11 +767,11 @@ public class LauncherFrame extends JFrame {
 			if (in != null)
 				in.close();
 			if (fout != null)
-			fout.flush();	
+				fout.flush();	
 			fout.close();
 		}
 	}
-	
+
 	protected void downloadModPack(String modPackName) throws IOException, NoSuchAlgorithmException {
 		System.out.println("Downloading modpack");
 		lblError.setText("Downloading modpack");
@@ -749,10 +782,9 @@ public class LauncherFrame extends JFrame {
 		downloadPack(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","Client.zip");
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
-		extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
 		installMods(getSelectedModPack());
 	}
-	
+
 	public void extractZip(String zipLocation) throws IOException {		
 		String fileName = zipLocation;
 		byte[] buf = new byte[1024];
@@ -902,14 +934,27 @@ public class LauncherFrame extends JFrame {
 
 	}
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-		//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
-		copyFile(minecraft, mcbackup);
+		File f = new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\md5.txt");
+		FileWriter writer = new FileWriter(f);
+		BufferedWriter out = new BufferedWriter(writer);
+		out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() + ".zip")));
+		out.flush();
+		out.close();
+		Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\md5.txt"));
+		if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() + ".zip"))){
+
+		}
+		else{
+			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
+			new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
+			File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
+			File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+			//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+			//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+			JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
+			copyFile(minecraft, mcbackup);
+		}
 		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
 
 		try{
@@ -917,8 +962,8 @@ public class LauncherFrame extends JFrame {
 			// command line parameter
 			FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
 			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			DataInputStream in1 = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in1));
 			String strLine;
 			//Read File Line By Line
 			int i=0;
@@ -929,6 +974,7 @@ public class LauncherFrame extends JFrame {
 			}
 			//Close the input stream
 			in.close();
+			in1.close();
 		}catch (Exception e){//Catch exception if any
 			System.err.println("Error: " + e.getMessage());
 		}
@@ -954,18 +1000,18 @@ public class LauncherFrame extends JFrame {
 		return buffer;
 
 	}
-	
+
 	public static String md5(String input) throws NoSuchAlgorithmException {
-	    String result = input;
-	    if(input != null) {
-	        MessageDigest md = MessageDigest.getInstance("MD5");
-	        md.update(input.getBytes());
-	        BigInteger hash = new BigInteger(1, md.digest());
-	        result = hash.toString(16);
-	        while(result.length() < 32) {
-	            result = "0" + result;
-	        }
-	    }
-	    return result;
+		String result = input;
+		if(input != null) {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(input.getBytes());
+			BigInteger hash = new BigInteger(1, md.digest());
+			result = hash.toString(16);
+			while(result.length() < 32) {
+				result = "0" + result;
+			}
+		}
+		return result;
 	}
 }
