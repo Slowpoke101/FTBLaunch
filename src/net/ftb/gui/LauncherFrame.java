@@ -420,7 +420,7 @@ public class LauncherFrame extends JFrame {
 	}
 	
 	public String getSelectedModPack() {
-		return "FTBLITE";
+		return "FTB";
 	}
 
 	public void runGameUpdater(final LoginResponse response) throws NoSuchAlgorithmException {
@@ -589,9 +589,6 @@ public class LauncherFrame extends JFrame {
 
 			String[] vanillaJarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };			
 			String[] jarFiles = concat(reverse(jarMods), vanillaJarFiles);
-			for(int i = 0;i<jarFiles.length;i++){
-				System.out.println(jarFiles[i]);
-			}
 			//String[] jarFiles = {"NotEnoughItems-Client1.3.0.1.zip","CodeChickenCore-Client0.5.5.zip" ,"minecraftforge-client-3.3.8.164.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
@@ -737,7 +734,7 @@ public class LauncherFrame extends JFrame {
 			if (in != null)
 				in.close();
 			if (fout != null)
-				fout.flush();
+			fout.flush();	
 			fout.close();
 		}
 	}
