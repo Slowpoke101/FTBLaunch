@@ -139,7 +139,7 @@ public class LauncherFrame extends JFrame {
 						.getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
-
+				
 				try {
 					LauncherFrame frame = new LauncherFrame();
 					frame.setVisible(true);
@@ -775,7 +775,7 @@ public class LauncherFrame extends JFrame {
 	protected void downloadModPack(String modPackName) throws IOException, NoSuchAlgorithmException {
 		System.out.println("Downloading modpack");
 		lblError.setText("Downloading modpack");
-		this.revalidate();
+		this.invalidate();
 		this.repaint();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
 		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
