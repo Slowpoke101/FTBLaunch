@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -202,6 +203,7 @@ public class ModManager extends JFrame{
 
 	protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String date = sdf.format(new Date());
 		URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
 		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
