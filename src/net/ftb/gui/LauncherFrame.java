@@ -105,7 +105,7 @@ public class LauncherFrame extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
-	private String[] jarMods;
+	static String[] jarMods;
 	Image img;
 	private static Point point = new Point();
 
@@ -421,13 +421,13 @@ public class LauncherFrame extends JFrame {
 		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);
 	}
 
-	public String getSelectedModPack() {
-		return "FTB";
+	public static String getSelectedModPack() {
+		return "FTBHeadstart";
 	}
 
 	public void runGameUpdater(final LoginResponse response) throws NoSuchAlgorithmException {
 
-		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
+		if (!new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/bin/minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			btnOptions.setEnabled(false);
 			usernameField.setEnabled(false);
@@ -436,8 +436,10 @@ public class LauncherFrame extends JFrame {
 
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 
+			System.out.println(new File(Settings.getSettings().getInstallPath(), getSelectedModPack() + "/.minecraft/bin").getPath());
+			
 			final GameUpdateWorker updater = new GameUpdateWorker(
-					RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+					RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), getSelectedModPack() + "/.minecraft/bin").getPath(), false) {
 				public void done() {
 
 					btnLogin.setEnabled(true);
@@ -609,12 +611,13 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException, NoSuchAlgorithmException {
-		if(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack()  + ".zip").exists()){
-			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/");
-		}else{
-			downloadModPack(getSelectedModPack());
-		}
-		installMods(getSelectedModPack());
+		runModManager();
+		//if(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack()  + ".zip").exists()){
+		//	extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/");
+		//}else{
+		//	downloadModPack(getSelectedModPack());
+		//}
+		//installMods(getSelectedModPack());
 		try {
 			System.out.println("Loading jars...");
 			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
@@ -707,10 +710,14 @@ public class LauncherFrame extends JFrame {
 
 	}
 
+	private void runModManager() {
+		ModManager manager = new ModManager();
+	}
+
 	public static void killMetaInf() {
 		// TODO Auto-generated method stub
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
+		File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/bin", "minecraft.jar.tmp");
 		try {
 			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
 			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));

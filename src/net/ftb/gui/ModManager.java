@@ -1,0 +1,430 @@
+package net.ftb.gui;
+
+import java.awt.EventQueue;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Scanner;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import net.ftb.data.Settings;
+
+public class ModManager extends JFrame{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6897832855341265019L;
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+
+	double downloadedPerc;
+	JProgressBar progressBar;
+	JLabel label;
+	Settings settings = new Settings();
+
+	public static void main(String[] args) {
+		try {
+			Settings.initSettings();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ModManager frame = new ModManager();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+
+	
+	/**
+	 * Create the frame.
+	 */
+	
+	
+	
+	public ModManager() {
+		setTitle("Downloading...");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 313, 138);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(10, 63, 278, 22);
+		contentPane.add(progressBar);
+
+		JLabel lblDownloadingModPack = new JLabel("Downloading mod pack...");
+		lblDownloadingModPack.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDownloadingModPack.setBounds(10, 11, 278, 14);
+		contentPane.add(lblDownloadingModPack);
+
+		label = new JLabel("0%");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setBounds(10, 36, 278, 14);
+		contentPane.add(label);
+		this.setVisible(true);
+		File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip");
+		if(modPackZip.exists()){
+			try {
+				if(modPackZip.length() != getModPackSize()){
+					new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() +  "/").mkdir();
+					downloadModPack(getSelectedModPack());
+				}else{
+					installMods(getSelectedModPack());
+				}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			try {
+				downloadModPack(getSelectedModPack());
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setVisible(false);
+	}
+
+
+
+	String getSelectedModPack() {
+		return "FTBHeadstart";
+	}
+
+
+	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException
+	{
+		BufferedInputStream in = null;
+		FileOutputStream fout = null;
+		try
+		{
+			in = new BufferedInputStream(new URL(urlString).openStream());
+			fout = new FileOutputStream(filename);
+
+			byte data[] = new byte[1024];
+			int count;
+			int modPackSize = getModPackSize();
+			progressBar.setMaximum(10000);
+			while ((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+				downloadedPerc += (count*1.0/modPackSize)*100;
+				progressBar.setValue((int)downloadedPerc*100);
+				label.setText((int) downloadedPerc + "%");
+				this.invalidate();
+				this.repaint();
+				//System.out.println(downloadedPerc);
+			}
+
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{			
+			if (in != null)
+				in.close();
+			if (fout != null)
+				fout.flush();	
+			fout.close();
+		}
+	}
+	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+
+		String date = sdf.format(new Date());
+		System.out.println("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
+		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
+	}
+
+
+	protected void downloadModPack(String modPackName) throws IOException, NoSuchAlgorithmException {
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip").createNewFile();
+		downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip","FTBHeadstart.zip");
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/.minecraft").mkdirs();
+		installMods(getSelectedModPack());
+	}
+
+	protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+		String date = sdf.format(new Date());
+		URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+		String str;
+		while((str = in.readLine()) != null){
+			return Integer.parseInt(str);
+		}
+		return 1;		
+
+	}
+
+
+	protected void installMods(String modPackName) throws IOException, NoSuchAlgorithmException {
+		//new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft").mkdir();
+		File f = new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt");		
+		FileWriter writer = new FileWriter(f);
+		BufferedWriter out = new BufferedWriter(writer);
+		out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip")));
+		out.flush();
+		out.close();
+		Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt"));
+		if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip"))){
+
+		}
+		else{
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip", Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/");
+			new File(Settings.getSettings().getInstallPath() + "/"+ getSelectedModPack() + "/.minecraft").mkdirs();
+
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin"));
+			File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
+			File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
+			//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
+			//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+			JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin/minecraft.jar");
+			copyFile(minecraft, mcbackup);
+		}
+		LauncherFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
+
+		try{
+			// Open the file that is the first 
+			// command line parameter
+			FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/modlist");
+			// Get the object of DataInputStream
+			DataInputStream in1 = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in1));
+			String strLine;
+			//Read File Line By Line
+			int i=0;
+			while ((strLine = br.readLine()) != null)   {
+				// Print the content on the console
+				LauncherFrame.jarMods[i] = strLine;
+				i++;		
+			}
+			//Close the input stream
+			in.close();
+			in1.close();
+		}catch (Exception e){//Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+		LauncherFrame.jarMods = reverse(LauncherFrame.jarMods);
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/bin/"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/"));
+	}
+
+	public static String md5(String input) throws NoSuchAlgorithmException {
+		String result = input;
+		if(input != null) {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(input.getBytes());
+			BigInteger hash = new BigInteger(1, md.digest());
+			result = hash.toString(16);
+			while(result.length() < 32) {
+				result = "0" + result;
+			}
+		}
+		return result;
+	}
+
+	protected String[] reverse(String[] x){
+		String buffer[] = new String[x.length];
+		for(int i = 0; i<x.length;i++){
+			buffer[i] = x[x.length-i-1];
+		}
+
+
+		return buffer;
+
+	}
+
+
+	protected String getFileMD5(File x){
+		InputStream is = null;
+		MessageDigest md = null;
+		if (x.exists()) {
+			try {
+				md = MessageDigest.getInstance("MD5");
+				is = new FileInputStream(x);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				is = new DigestInputStream(is, md);
+				// read stream to EOF as normal...
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			String result = "";
+			byte[] digest = md.digest();
+			for (int i = 0; i < digest.length; i++) {
+				result += Integer.toString((digest[i] & 0xff) + 0x100, 16)
+						.substring(1);
+			}
+			return result;
+		}
+		return "0";
+	}
+
+	public void extractZipTo(String zipLocation, String outputLocation)
+			throws IOException {
+		try {
+			File fSourceZip = new File(zipLocation);
+			String zipPath = outputLocation;
+			File temp = new File(zipPath);
+			temp.mkdir();
+			ZipFile zipFile = new ZipFile(fSourceZip);
+			Enumeration e = zipFile.entries();
+
+			while (e.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) e.nextElement();
+				File destinationFilePath = new File(zipPath, entry.getName());
+				destinationFilePath.getParentFile().mkdirs();
+				if (entry.isDirectory()) {
+					continue;
+				} else {
+					BufferedInputStream bis = new BufferedInputStream(
+							zipFile.getInputStream(entry));
+
+					int b;
+					byte buffer[] = new byte[1024];
+
+					FileOutputStream fos = new FileOutputStream(
+							destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos,
+							1024);
+
+					while ((b = bis.read(buffer, 0, 1024)) != -1) {
+						bos.write(buffer, 0, b);
+					}
+
+					bos.flush();
+					bos.close();
+					bis.close();
+				}
+			}
+		} catch (IOException ioe) {
+			System.out.println("IOError :" + ioe);
+		}
+
+	}
+
+	public static void copyFolder(File src, File dest) throws IOException {
+
+		if (src.isDirectory()) {
+
+			// if directory not exists, create it
+			if (!dest.exists()) {
+				dest.mkdir();
+			}
+
+			// list all the directory contents
+			String files[] = src.list();
+
+			for (String file : files) {
+				// construct the src and dest file structure
+				File srcFile = new File(src, file);
+				File destFile = new File(dest, file);
+				// recursive copy
+				copyFolder(srcFile, destFile);
+			}
+
+		} else {
+			// if file, then copy it
+			// Use bytes stream to support all file types
+			if (src.exists()) {
+				InputStream in = new FileInputStream(src);
+				OutputStream out = new FileOutputStream(dest);
+
+				byte[] buffer = new byte[1024];
+
+				int length;
+				// copy the file content in bytes
+				while ((length = in.read(buffer)) > 0) {
+					out.write(buffer, 0, length);
+				}
+
+				in.close();
+				out.close();
+			}
+		}
+	}
+
+
+	public static void copyFile(File src, File dest) throws IOException {
+		if (src.exists()) {
+			InputStream in = new FileInputStream(src);
+			OutputStream out = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			// copy the file content in bytes
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+
+			in.close();
+			out.close();
+		}
+	}
+
+
+}
