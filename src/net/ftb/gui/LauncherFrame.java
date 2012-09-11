@@ -255,8 +255,8 @@ public class LauncherFrame extends JFrame {
 				try {
 					launchMinecraft(new File(Settings.getSettings()
 							.getInstallPath()).getPath()
-							+ "\\"
-							+ getSelectedModPack() + "\\.minecraft",
+							+ "/"
+							+ getSelectedModPack() + "/.minecraft",
 							"OFFLINE", "1");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -427,7 +427,7 @@ public class LauncherFrame extends JFrame {
 
 	public void runGameUpdater(final LoginResponse response) throws NoSuchAlgorithmException {
 
-		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
+		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			btnOptions.setEnabled(false);
 			usernameField.setEnabled(false);
@@ -458,16 +458,16 @@ public class LauncherFrame extends JFrame {
 							try {
 								// the old start testing code just put me in a infinite loop.
 
-								//if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
-								//	extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
+								//if(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack()  + ".zip").exists()){
+								//	extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/");
 								//}else{
 								//	downloadModPack(getSelectedModPack());
 								//}
 								//installMods(getSelectedModPack());
 								launchMinecraft(new File(Settings.getSettings()
 										.getInstallPath()).getPath()
-										+ "\\"
-										+ getSelectedModPack() + "\\.minecraft",
+										+ "/"
+										+ getSelectedModPack() + "/.minecraft",
 										RESPONSE.getUsername(), RESPONSE.getSessionID());
 
 							} catch (IOException e) {
@@ -485,7 +485,7 @@ public class LauncherFrame extends JFrame {
 					} catch (CancellationException e) {
 						lblError.setForeground(Color.black);
 						lblError.setText("Game update cancelled...");
-						new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").delete();
+						new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").delete();
 
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -524,8 +524,8 @@ public class LauncherFrame extends JFrame {
 			try {
 				launchMinecraft(new File(Settings.getSettings()
 						.getInstallPath()).getPath()
-						+ "\\"
-						+ getSelectedModPack() + "\\.minecraft",
+						+ "/"
+						+ getSelectedModPack() + "/.minecraft",
 						RESPONSE.getUsername(), RESPONSE.getSessionID());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -567,16 +567,16 @@ public class LauncherFrame extends JFrame {
 	protected String getVersionMD5(String modPackName) {
 		InputStream is = null;
 		MessageDigest md = null;
-		File f = new File(Settings.getSettings().getInstallPath() + "\\"
-				+ modPackName + "\\.minecraft\\bin\\minecraft.jar");
+		File f = new File(Settings.getSettings().getInstallPath() + "/"
+				+ modPackName + "/.minecraft/bin/minecraft.jar");
 		if (f.exists()) {
 			try {
 				md = MessageDigest.getInstance("MD5");
 				is = new FileInputStream(Settings.getSettings()
 						.getInstallPath()
-						+ "\\"
+						+ "/"
 						+ modPackName
-						+ "\\.minecraft\\bin\\minecraft.jar");
+						+ "/.minecraft/bin/minecraft.jar");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -609,8 +609,8 @@ public class LauncherFrame extends JFrame {
 
 	protected void launchMinecraft(String workingDir, String username,			
 			String password) throws IOException, NoSuchAlgorithmException {
-		if(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack()  + ".zip").exists()){
-			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\");
+		if(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack()  + ".zip").exists()){
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() +".zip", Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/");
 		}else{
 			downloadModPack(getSelectedModPack());
 		}
@@ -777,11 +777,11 @@ public class LauncherFrame extends JFrame {
 		lblError.setText("Downloading modpack");
 		this.invalidate();
 		this.repaint();
-		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\").mkdirs();
-		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip").createNewFile();
-		downloadPack(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip","Client.zip");
-		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").mkdirs();
-		new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\.minecraft").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip").createNewFile();
+		downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip","Client.zip");
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/.minecraft").mkdirs();
 		installMods(getSelectedModPack());
 	}
 
@@ -793,7 +793,7 @@ public class LauncherFrame extends JFrame {
 		ZipEntry zipEntry = zipIn.getNextEntry();
 		while (zipEntry != null) {
 			String entryName = zipEntry.getName();
-			FileOutputStream output = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + entryName);
+			FileOutputStream output = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + entryName);
 			int n;
 			if(zipEntry.isDirectory()){
 
@@ -934,33 +934,33 @@ public class LauncherFrame extends JFrame {
 
 	}
 	protected void installMods(String modPackName) throws IOException {
-		File f = new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\md5.txt");
+		File f = new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt");
 		FileWriter writer = new FileWriter(f);
 		BufferedWriter out = new BufferedWriter(writer);
-		out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() + ".zip")));
+		out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip")));
 		out.flush();
 		out.close();
-		Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "\\" + getSelectedModPack() + "\\.minecraft\\md5.txt"));
-		if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "\\temp\\" + getSelectedModPack() + "\\" + getSelectedModPack() + ".zip"))){
+		Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt"));
+		if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip"))){
 
 		}
 		else{
-			extractZipTo(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\" + modPackName +".zip", Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\");
-			new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
-			File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
-			File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-			//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip", Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/");
+			new File(Settings.getSettings().getInstallPath() + "/"+ getSelectedModPack() + "/.minecraft").mkdirs();
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin"));
+			File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
+			File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
+			//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 			//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-			JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
+			JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin/minecraft.jar");
 			copyFile(minecraft, mcbackup);
 		}
-		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\instMods").listFiles().length];
+		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
 
 		try{
 			// Open the file that is the first 
 			// command line parameter
-			FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + "\\modlist");
+			FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/modlist");
 			// Get the object of DataInputStream
 			DataInputStream in1 = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in1));
@@ -979,24 +979,14 @@ public class LauncherFrame extends JFrame {
 			System.err.println("Error: " + e.getMessage());
 		}
 		jarMods = reverse(jarMods);
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\instMods"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\bin\\"));
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\temp\\" + getSelectedModPack() + "\\.minecraft"), new File(Settings.getSettings().getInstallPath()+ "\\" + getSelectedModPack() +"\\.minecraft\\"));
-
-
-
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/bin/"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/"));
 	}
 
 	protected String[] concat(String[] x, String[] y){
-		String buffer[] = new String[x.length+y.length];
-		int i = 0;
-		for(i=0;i<buffer.length-1;i++){
-			if(i<x.length){
-				buffer[i] = x[i];
-			}
-			if(i<y.length){
-				buffer[i+x.length] = y[i];
-			}
-		}
+		String[] buffer = new String[x.length + y.length];
+		System.arraycopy(x, 0, buffer, 0, x.length);
+		System.arraycopy(y, 0, buffer, x.length, y.length);
 		return buffer;
 
 	}
