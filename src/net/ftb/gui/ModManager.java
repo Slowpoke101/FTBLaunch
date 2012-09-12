@@ -1,6 +1,8 @@
 package net.ftb.gui;
 
 import java.awt.EventQueue;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -30,6 +32,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,7 +42,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Settings;
 
-public class ModManager extends JFrame{
+public class ModManager extends JDialog {
 	
 	/**
 	 * 
@@ -55,37 +58,17 @@ public class ModManager extends JFrame{
 	double downloadedPerc;
 	JProgressBar progressBar;
 	JLabel label;
-	Settings settings = new Settings();
-
-	public static void main(String[] args) {
-		try {
-			Settings.initSettings();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ModManager frame = new ModManager();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-
+	Settings settings = new Settings();	
 	
 	/**
 	 * Create the frame.
 	 */
 	
 	
-	
-	public ModManager() {
+	public ModManager(JFrame owner, Boolean model) {
+		super(owner, model);
 		setTitle("Downloading...");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 313, 138);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,47 +79,66 @@ public class ModManager extends JFrame{
 		progressBar.setBounds(10, 63, 278, 22);
 		contentPane.add(progressBar);
 
-		JLabel lblDownloadingModPack = new JLabel("Downloading mod pack...");
+		JLabel lblDownloadingModPack = new JLabel("Downloading mod pack...\nPlease Wait");
 		lblDownloadingModPack.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDownloadingModPack.setBounds(10, 11, 278, 14);
 		contentPane.add(lblDownloadingModPack);
 
-		label = new JLabel("0%");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(10, 36, 278, 14);
-		contentPane.add(label);
-		this.setVisible(true);
-		File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip");
-		if(modPackZip.exists()){
-			try {
-				if(modPackZip.length() != getModPackSize()){
-					new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() +  "/").mkdir();
-					downloadModPack(getSelectedModPack());
+		//label = new JLabel("0%");
+		//label.setHorizontalAlignment(SwingConstants.CENTER);
+		//label.setBounds(10, 36, 278, 14);
+		//contentPane.add(label);
+		
+		addWindowListener(new WindowListener() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				System.out.println("Downloading Modpack");
+				File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip");
+				if(modPackZip.exists()){
+					try {
+						if(modPackZip.length() != getModPackSize()){
+							new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() +  "/").mkdir();
+							downloadModPack(getSelectedModPack());
+						}else{
+							installMods(getSelectedModPack());
+						}
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else{
-					installMods(getSelectedModPack());
+					try {
+						downloadModPack(getSelectedModPack());
+					} catch (NoSuchAlgorithmException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				setVisible(false);
 			}
-		}else{
-			try {
-				downloadModPack(getSelectedModPack());
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.setVisible(false);
+
+			@Override
+			public void windowActivated(WindowEvent e) { }
+			@Override
+			public void windowClosed(WindowEvent e) { }
+			@Override
+			public void windowClosing(WindowEvent e) { }
+			@Override
+			public void windowDeactivated(WindowEvent e) { }
+			@Override
+			public void windowDeiconified(WindowEvent e) { }
+			@Override
+			public void windowIconified(WindowEvent e) { }
+		});
 	}
 
 
@@ -164,9 +166,9 @@ public class ModManager extends JFrame{
 				fout.write(data, 0, count);
 				downloadedPerc += (count*1.0/modPackSize)*100;
 				progressBar.setValue((int)downloadedPerc*100);
-				label.setText((int) downloadedPerc + "%");
-				this.invalidate();
+				//label.setText(String.valueOf(downloadedPerc) + "%");
 				this.repaint();
+				this.update(getGraphics());
 				//System.out.println(downloadedPerc);
 			}
 
@@ -185,9 +187,9 @@ public class ModManager extends JFrame{
 	}
 	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-
+		TimeZone zone = TimeZone.getTimeZone("GMT");
+		sdf.setTimeZone(zone);
 		String date = sdf.format(new Date());
-		System.out.println("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
 		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
 	}
 
@@ -203,7 +205,8 @@ public class ModManager extends JFrame{
 
 	protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		TimeZone zone = TimeZone.getTimeZone("GMT");
+		sdf.setTimeZone(zone);
 		String date = sdf.format(new Date());
 		URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
 		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));

@@ -711,7 +711,11 @@ public class LauncherFrame extends JFrame {
 	}
 
 	private void runModManager() {
-		ModManager manager = new ModManager();
+		lblError.setForeground(Color.black);
+		lblError.setText("Downloading Modpack : Please Wait");
+		ModManager manager = new ModManager(this, true);
+		manager.setVisible(true);
+		lblError.setText("Modpack Installed");
 	}
 
 	public static void killMetaInf() {
