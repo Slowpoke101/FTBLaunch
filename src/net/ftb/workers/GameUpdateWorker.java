@@ -83,11 +83,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 				{
 					writeVersionFile(latestVersion);
 					setStatus("Downloading jars...");
-					if (!downloadJars())
+					System.out.println("Downloading Jars");
+					if (!downloadJars()) {
+						System.out.println("Download Failed :(");
 						return false;
+					}
 					setStatus("Extracting files...");
-					if (!extractNatives())
+					System.out.println("Extracting Files");
+					if (!extractNatives()) {
+						System.out.println("Extraction Failed :(");
 						return false;
+					}
 				}
 			}
 			
@@ -98,6 +104,8 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	
 	protected boolean loadJarURLs()
 	{
+		System.out.println("Loading Jar URLs");
+		
 		String[] jarList =
 		{
 			mainGameURL, "lwjgl.jar", "lwjgl_util.jar", "jinput.jar"
@@ -235,13 +243,15 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 				e.printStackTrace();
 			}
 			
-			int triesLeft = 5;
+			int triesLeft = 0;
 			boolean downloadSuccess = false;
-			while (!downloadSuccess && triesLeft > 0)
+			while (!downloadSuccess && triesLeft < 6)
 			{
-				try
-				{
-					triesLeft--;
+				
+				try {
+					triesLeft++;
+					
+					System.out.println("Connecting.. Try " + triesLeft + " of 5");
 					
 					String etag = "";
 					
@@ -257,17 +267,18 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 					
 					String jarFileName = getFilename(jarURLs[i]);
 					InputStream dlStream = dlConnection.getInputStream();
-					FileOutputStream outStream = new FileOutputStream(
-							new File(binDir, jarFileName));
+					FileOutputStream outStream = new FileOutputStream(new File(binDir, jarFileName));
 					
 					setStatus("Downloading " + jarFileName + "...");
 					
 					MessageDigest msgDigest = MessageDigest.getInstance("MD5");
-					byte[] buffer = new byte[65536];
+					byte[] buffer = new byte[10000];
 					int readLen = 0;
 					int currentDLSize = 0;
 					while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1)
 					{
+						System.out.println("reaading, read data: " + dlStream.read());
+						
 						outStream.write(buffer, 0, readLen);
 						msgDigest.update(buffer, 0, readLen);
 						
@@ -314,14 +325,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 							}
 						}
 					}
-				} catch (IOException e)
-				{
+				} catch (Exception e) {
+					downloadSuccess = false;
+					System.out.println("Connection failed, trying again");
 					e.printStackTrace();
-					return false;
-				} catch (NoSuchAlgorithmException e)
-				{
-					e.printStackTrace();
-					return false;
 				}
 			}
 			
