@@ -67,6 +67,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import org.jdesktop.swingx.JXCollapsiblePane;
 
 import javax.swing.JTabbedPane;
 
@@ -336,12 +337,12 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(new JPanel(), 2);
 		tabbedPane.setTitleAt(2, "Installed Mods");
 		
-/*		JXCollapsiblePane mods = new JXCollapsiblePane();
+		JXCollapsiblePane mods = new JXCollapsiblePane();
 		mods.setBounds(10, 15, 210, 426);
 		mods.setBackground(Color.black);
 		mods.setAnimated(true);
 		mods.add(tabbedPane);
-		contentPane.add(mods);*/
+		contentPane.add(mods);
 		
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
