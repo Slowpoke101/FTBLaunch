@@ -2,6 +2,7 @@ package net.ftb.gui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -66,6 +67,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import javax.swing.JTabbedPane;
 
 public class LaunchFrame extends JFrame {
@@ -149,7 +151,9 @@ public class LaunchFrame extends JFrame {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		try {
+			LauncherConsole con = new LauncherConsole();
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -158,6 +162,8 @@ public class LaunchFrame extends JFrame {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -301,36 +307,42 @@ public class LaunchFrame extends JFrame {
 
 		ButtonGroup group = new ButtonGroup();
 		
-				modPack1RB = new JRadioButton("");
-				modPack1RB.setBounds(474, 15, 20, 21);
-				contentPane.add(modPack1RB);
-				modPack1RB.setSelected(true);
-				group.add(modPack1RB);
-				
-						modPack2RB = new JRadioButton("");
-						modPack2RB.setBounds(452, 15, 20, 21);
-						contentPane.add(modPack2RB);
-						group.add(modPack2RB);
-						
-								modPack3RB = new JRadioButton("");
-								modPack3RB.setBounds(430, 15, 20, 21);
-								contentPane.add(modPack3RB);
-								group.add(modPack3RB);
-								
-										modPack4RB = new JRadioButton("");
-										modPack4RB.setBounds(408, 15, 20, 21);
-										contentPane.add(modPack4RB);
-										group.add(modPack4RB);
-										
-										JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-										tabbedPane.setBounds(10, 15, 210, 426);
-										tabbedPane.add(new JPanel(), 0);
-										tabbedPane.setTitleAt(0, "Official FTB Packs");
-										tabbedPane.add(new JPanel(), 1);
-										tabbedPane.setTitleAt(1, "Third Party Packs");
-										tabbedPane.add(new JPanel(), 2);
-										tabbedPane.setTitleAt(2, "Installed Mods");
-										contentPane.add(tabbedPane);
+		modPack1RB = new JRadioButton("");
+		modPack1RB.setBounds(474, 15, 20, 21);
+		contentPane.add(modPack1RB);
+		modPack1RB.setSelected(true);
+		group.add(modPack1RB);
+		
+		modPack2RB = new JRadioButton("");
+		modPack2RB.setBounds(452, 15, 20, 21);
+		contentPane.add(modPack2RB);
+		group.add(modPack2RB);
+		
+		modPack3RB = new JRadioButton("");
+		modPack3RB.setBounds(430, 15, 20, 21);
+		contentPane.add(modPack3RB);
+		group.add(modPack3RB);
+		
+		modPack4RB = new JRadioButton("");
+		modPack4RB.setBounds(408, 15, 20, 21);
+		contentPane.add(modPack4RB);
+		group.add(modPack4RB);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.add(new JPanel(), 0);
+		tabbedPane.setTitleAt(0, "Official FTB Packs");
+		tabbedPane.add(new JPanel(), 1);
+		tabbedPane.setTitleAt(1, "Third Party Packs");
+		tabbedPane.add(new JPanel(), 2);
+		tabbedPane.setTitleAt(2, "Installed Mods");
+		
+/*		JXCollapsiblePane mods = new JXCollapsiblePane();
+		mods.setBounds(10, 15, 210, 426);
+		mods.setBackground(Color.black);
+		mods.setAnimated(true);
+		mods.add(tabbedPane);
+		contentPane.add(mods);*/
+		
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
 				usernameField, passwordField, chckbxRemember, btnLogin,
