@@ -1,10 +1,13 @@
 package net.ftb.gui;
 
+import javax.swing.BoxLayout;
 import javax.swing.JDialog;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +19,8 @@ public class LauncherConsole extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	final JTextArea textArea;
+	
+	private JScrollPane scrollPane;
 	
 	private class OutputOverride extends PrintStream {
 		
@@ -50,12 +55,20 @@ public class LauncherConsole extends JDialog {
 		setVisible(true);
 		this.setSize(new Dimension(451, 300));
 		setResizable(false);
-		getContentPane().setLayout(null);
+		getContentPane().setLayout(new FlowLayout());
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
-		textArea = new JTextArea();
-		textArea.setBounds(10, 11, 425, 250);
-		getContentPane().add(textArea);
-		textArea.setColumns(10);
+		textArea = new JTextArea(10, 50);
+		//textArea.setBounds(10, 11, 425, 250);
+		
+		//getContentPane().add(textArea);
+		
+		scrollPane = new JScrollPane(textArea);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		getContentPane().add(scrollPane);
+		
+		pack();
+		
 		System.setOut(new OutputOverride(System.out));
 	}
 }
