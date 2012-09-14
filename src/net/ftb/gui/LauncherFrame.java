@@ -42,6 +42,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.JarEntry;
@@ -114,10 +115,12 @@ public class LauncherFrame extends JFrame {
 	 */
 
 	public static void main(String[] args) {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
 				try {
+					LauncherConsole con = new LauncherConsole();
 					UIManager.setLookAndFeel(UIManager
 							.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
@@ -415,7 +418,13 @@ public class LauncherFrame extends JFrame {
 
 	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-
+		
+		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+		} else {
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		}
+		
 		String date = sdf.format(new Date());
 
 		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);

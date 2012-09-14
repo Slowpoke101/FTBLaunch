@@ -22,6 +22,7 @@ import java.util.zip.ZipInputStream;
 import javax.swing.SwingWorker;
 
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
@@ -129,21 +130,13 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 		}
 		
 		String nativesFilename = "";
-		switch (OSUtils.getCurrentOS())
-		{
-		case WINDOWS:
+		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
 			nativesFilename = "windows_natives.jar";
-			break;
-			
-		case MACOSX:
+		} else if (OSUtils.getCurrentOS() == OS.MACOSX) {
 			nativesFilename = "macosx_natives.jar";
-			break;
-			
-		case UNIX:
+		} else if (OSUtils.getCurrentOS() == OS.UNIX) {
 			nativesFilename = "linux_natives.jar";
-			break;
-			
-		default:
+		} else {
 			return false;
 		}
 		
@@ -181,7 +174,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 		int totalDownloadSize = 0;
 		int[] fileSizes = new int[jarURLs.length];
 		boolean[] skip = new boolean[jarURLs.length];
-		URLConnection connection;
+		URLConnection connection = null;
 		
 		// Compare MD5s and skip ones that match.
 		for (int i = 0; i < jarURLs.length; i++)
@@ -245,7 +238,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 			
 			int triesLeft = 0;
 			boolean downloadSuccess = false;
-			while (!downloadSuccess && triesLeft < 6)
+			while (!downloadSuccess && triesLeft < 5)
 			{
 				
 				try {
@@ -255,14 +248,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 					
 					String etag = "";
 					
+					int fileSize = 0;
+					
 					URLConnection dlConnection = jarURLs[i].openConnection();
-					if (dlConnection instanceof HttpURLConnection)
-					{
+					if (dlConnection instanceof HttpURLConnection) {
 						dlConnection.setRequestProperty("Cache-Control", "no-cache");
 						dlConnection.connect();
 						
 						etag = dlConnection.getHeaderField("ETag");
 						etag = etag.substring(1, etag.length() - 1);
+						
+						fileSize = connection.getContentLength();
 					}
 					
 					String jarFileName = getFilename(jarURLs[i]);
@@ -272,13 +268,11 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 					setStatus("Downloading " + jarFileName + "...");
 					
 					MessageDigest msgDigest = MessageDigest.getInstance("MD5");
-					byte[] buffer = new byte[10000];
+					byte[] buffer = new byte[24000];
 					int readLen = 0;
 					int currentDLSize = 0;
 					while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1)
-					{
-						System.out.println("reaading, read data: " + dlStream.read());
-						
+					{						
 						outStream.write(buffer, 0, readLen);
 						msgDigest.update(buffer, 0, readLen);
 						
