@@ -420,7 +420,7 @@ public class LauncherFrame extends JFrame {
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 		
 		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
 		} else {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		}
