@@ -32,8 +32,6 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,18 +44,15 @@ import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
 import net.ftb.data.LoginResponse;
@@ -66,11 +61,8 @@ import net.ftb.data.Settings;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
@@ -80,17 +72,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Color;
 import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.SystemColor;
-import javax.swing.border.BevelBorder;
-import javax.swing.ImageIcon;
 
 public class LauncherFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -121,6 +107,7 @@ public class LauncherFrame extends JFrame {
 
 				try {
 					LauncherConsole con = new LauncherConsole();
+					con.setVisible(true);
 					UIManager.setLookAndFeel(UIManager
 							.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
@@ -301,7 +288,6 @@ public class LauncherFrame extends JFrame {
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
 
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameField, passwordField, chckbxRemember, btnLogin, btnOptions}));
-		ButtonGroup group = new ButtonGroup();
 		contentPane.add(lblVersion);
 		contentPane.add(loginPanel);
 		loginPanel.add(lblPassword);
@@ -837,7 +823,7 @@ public class LauncherFrame extends JFrame {
 			File temp = new File(zipPath);
 			temp.mkdir();
 			ZipFile zipFile = new ZipFile(fSourceZip);
-			Enumeration e = zipFile.entries();
+			Enumeration<?> e = zipFile.entries();
 
 			while (e.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry) e.nextElement();
@@ -972,7 +958,6 @@ public class LauncherFrame extends JFrame {
 			File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
 			//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 			//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-			JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin/minecraft.jar");
 			copyFile(minecraft, mcbackup);
 		}
 		jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];

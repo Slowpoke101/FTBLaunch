@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -248,7 +247,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 					
 					String etag = "";
 					
-					int fileSize = 0;
 					
 					URLConnection dlConnection = jarURLs[i].openConnection();
 					if (dlConnection instanceof HttpURLConnection) {
@@ -257,8 +255,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 						
 						etag = dlConnection.getHeaderField("ETag");
 						etag = etag.substring(1, etag.length() - 1);
-						
-						fileSize = connection.getContentLength();
 					}
 					
 					String jarFileName = getFilename(jarURLs[i]);

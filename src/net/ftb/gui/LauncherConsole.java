@@ -55,7 +55,6 @@ public class LauncherConsole extends JDialog {
 	
 	public LauncherConsole() throws IOException {
 		setTitle("FTB Launcher Console");
-		setVisible(true);
 		this.setSize(new Dimension(451, 300));
 		setResizable(false);
 		getContentPane().setLayout(new FlowLayout());

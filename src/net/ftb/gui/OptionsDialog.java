@@ -21,12 +21,9 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Settings;
 import javax.swing.JList;
-import java.awt.Component;
-import javax.swing.Box;
 import javax.swing.JPasswordField;
 
-public class OptionsDialog extends JDialog
-{
+public class OptionsDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private final JPanel contentPanel = new JPanel();
@@ -43,8 +40,7 @@ public class OptionsDialog extends JDialog
 	/**
 	 * Create the dialog.
 	 */
-	public OptionsDialog()
-	{
+	public OptionsDialog() {
 		setModal(true);
 		setBounds(100, 100, 600, 350);
 		getContentPane().setLayout(new BorderLayout());
@@ -56,7 +52,7 @@ public class OptionsDialog extends JDialog
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0};
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
-		{
+
 			JLabel lblInstallFolder = new JLabel("Install folder:");
 			GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
 			gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
@@ -64,8 +60,7 @@ public class OptionsDialog extends JDialog
 			gbc_lblInstallFolder.gridx = 0;
 			gbc_lblInstallFolder.gridy = 0;
 			contentPanel.add(lblInstallFolder, gbc_lblInstallFolder);
-		}
-		{
+
 			installFolderTextField = new JTextField();
 			GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
 			gbc_installFolderTextField.gridwidth = 5;
@@ -75,8 +70,7 @@ public class OptionsDialog extends JDialog
 			gbc_installFolderTextField.gridy = 0;
 			contentPanel.add(installFolderTextField, gbc_installFolderTextField);
 			installFolderTextField.setColumns(10);
-		}
-		{
+
 			JButton installBrowseBtn = new JButton("...");
 			installBrowseBtn.addActionListener(new ChooseDir());
 			
@@ -85,8 +79,7 @@ public class OptionsDialog extends JDialog
 			gbc_installBrowseBtn.gridx = 6;
 			gbc_installBrowseBtn.gridy = 0;
 			contentPanel.add(installBrowseBtn, gbc_installBrowseBtn);
-		}
-		{
+
 			tglbtnForceUpdate = new JToggleButton("Force update?");
 			GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 			gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
@@ -95,8 +88,7 @@ public class OptionsDialog extends JDialog
 			gbc_tglbtnForceUpdate.gridx = 1;
 			gbc_tglbtnForceUpdate.gridy = 1;
 			contentPanel.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-		}
-		{
+
 			JLabel lblSavedProfiles = new JLabel("Saved Profiles");
 			GridBagConstraints gbc_lblSavedProfiles = new GridBagConstraints();
 			gbc_lblSavedProfiles.gridwidth = 2;
@@ -104,8 +96,8 @@ public class OptionsDialog extends JDialog
 			gbc_lblSavedProfiles.gridx = 1;
 			gbc_lblSavedProfiles.gridy = 2;
 			contentPanel.add(lblSavedProfiles, gbc_lblSavedProfiles);
-		}
-		{
+
+			@SuppressWarnings("rawtypes")
 			JList list = new JList();
 			GridBagConstraints gbc_list = new GridBagConstraints();
 			gbc_list.gridwidth = 2;
@@ -115,8 +107,7 @@ public class OptionsDialog extends JDialog
 			gbc_list.gridx = 1;
 			gbc_list.gridy = 3;
 			contentPanel.add(list, gbc_list);
-		}
-		{
+
 			JLabel lblUsername = new JLabel("Username:");
 			GridBagConstraints gbc_lblUsername = new GridBagConstraints();
 			gbc_lblUsername.anchor = GridBagConstraints.EAST;
@@ -124,8 +115,7 @@ public class OptionsDialog extends JDialog
 			gbc_lblUsername.gridx = 3;
 			gbc_lblUsername.gridy = 3;
 			contentPanel.add(lblUsername, gbc_lblUsername);
-		}
-		{
+
 			textField = new JTextField();
 			GridBagConstraints gbc_textField = new GridBagConstraints();
 			gbc_textField.insets = new Insets(0, 0, 5, 5);
@@ -134,8 +124,7 @@ public class OptionsDialog extends JDialog
 			gbc_textField.gridy = 3;
 			contentPanel.add(textField, gbc_textField);
 			textField.setColumns(10);
-		}
-		{
+
 			JLabel lblPassword = new JLabel("Password:");
 			GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 			gbc_lblPassword.anchor = GridBagConstraints.EAST;
@@ -143,8 +132,7 @@ public class OptionsDialog extends JDialog
 			gbc_lblPassword.gridx = 3;
 			gbc_lblPassword.gridy = 4;
 			contentPanel.add(lblPassword, gbc_lblPassword);
-		}
-		{
+
 			passwordField = new JPasswordField();
 			GridBagConstraints gbc_passwordField = new GridBagConstraints();
 			gbc_passwordField.insets = new Insets(0, 0, 5, 5);
@@ -152,16 +140,14 @@ public class OptionsDialog extends JDialog
 			gbc_passwordField.gridx = 4;
 			gbc_passwordField.gridy = 4;
 			contentPanel.add(passwordField, gbc_passwordField);
-		}
-		{
+
 			JButton btnAdd = new JButton("Add");
 			GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 			gbc_btnAdd.insets = new Insets(0, 0, 5, 5);
 			gbc_btnAdd.gridx = 5;
 			gbc_btnAdd.gridy = 4;
 			contentPanel.add(btnAdd, gbc_btnAdd);
-		}
-		{
+	
 			JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
 			GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 			gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
@@ -169,8 +155,7 @@ public class OptionsDialog extends JDialog
 			gbc_lblRamMinimum.gridx = 1;
 			gbc_lblRamMinimum.gridy = 7;
 			contentPanel.add(lblRamMinimum, gbc_lblRamMinimum);
-		}
-		{
+		
 			ramMinimum = new JTextField();
 			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 			gbc_textField_1.insets = new Insets(0, 0, 5, 5);
@@ -181,8 +166,7 @@ public class OptionsDialog extends JDialog
 			ramMin = Integer.parseInt(ramMinimum.getText());
 			contentPanel.add(ramMinimum, gbc_textField_1);
 			ramMinimum.setColumns(10);
-		}
-		{
+	
 			JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
 			GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 			gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
@@ -190,8 +174,7 @@ public class OptionsDialog extends JDialog
 			gbc_lblRamMaximum.gridx = 1;
 			gbc_lblRamMaximum.gridy = 8;
 			contentPanel.add(lblRamMaximum, gbc_lblRamMaximum);
-		}
-		{
+	
 			ramMaximum = new JTextField();
 			GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 			gbc_textField_2.insets = new Insets(0, 0, 5, 5);
@@ -202,17 +185,13 @@ public class OptionsDialog extends JDialog
 			ramMax = Integer.parseInt(ramMaximum.getText());
 			contentPanel.add(ramMaximum, gbc_textField_2);
 			ramMaximum.setColumns(10);
-		}
-		{
+	
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
+			getContentPane().add(buttonPane, BorderLayout.SOUTH); 
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						saveSettings();
 						setVisible(false);
 					}
@@ -220,20 +199,14 @@ public class OptionsDialog extends JDialog
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-			}
-			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						setVisible(false);
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
-			}
-		}
 		
 		loadSettings();
 	}

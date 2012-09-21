@@ -28,7 +28,6 @@ import java.util.Enumeration;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
@@ -38,7 +37,6 @@ import java.util.zip.ZipInputStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
 import net.ftb.data.LoginResponse;
@@ -47,7 +45,6 @@ import net.ftb.data.Settings;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -67,23 +64,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
-import org.jdesktop.swingx.JXCollapsiblePane;
-
-import javax.swing.JTabbedPane;
 
 public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-
-	JRadioButton modPack1RB;
-	JRadioButton modPack2RB;
-	JRadioButton modPack3RB;
-	JRadioButton modPack4RB;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
 	private PasswordSettings passwordSettings;
 	LoginResponse RESPONSE;
 	JCheckBox chckbxRemember;
-	JButton btnOptions;
 	JLabel lblError;
 	JButton btnLogin;
 	private JPanel contentPane;
@@ -155,6 +143,7 @@ public class LaunchFrame extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 		try {
 			LauncherConsole con = new LauncherConsole();
+			con.setVisible(true);
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -179,7 +168,7 @@ public class LaunchFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		loginPanel = new JPanel();
-		loginPanel.setBounds(500, 15, 305, 139);
+		loginPanel.setBounds(500, 302, 305, 139);
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 
@@ -192,19 +181,8 @@ public class LaunchFrame extends JFrame {
 		}
 		loginPanel.add(chckbxRemember);
 
-		btnOptions = new JButton("Options");
-		btnOptions.setBounds(226, 39, 69, 23);
-		loginPanel.add(btnOptions);
-		btnOptions.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				OptionsDialog optionsDlg = new OptionsDialog();
-				optionsDlg.setVisible(true);
-			}
-		});
-
 		btnLogin = new JButton("Login");
-		btnLogin.setBounds(226, 72, 69, 23);
+		btnLogin.setBounds(226, 39, 69, 56);
 		loginPanel.add(btnLogin);
 		btnLogin.setEnabled(true);
 		btnLogin.addActionListener(new ActionListener() {
@@ -249,12 +227,12 @@ public class LaunchFrame extends JFrame {
 		lblError.setHorizontalAlignment(SwingConstants.LEFT);
 		lblError.setForeground(Color.RED);
 
-		usernameField = new JTextField("", 17);
+		usernameField = new JRoundTextField(17);
 		usernameField.setBounds(76, 39, 144, 22);
 		usernameField.setText(passwordSettings.getUsername());
 		loginPanel.add(usernameField);
 
-		passwordField = new JPasswordField("", 17);
+		passwordField = new JRoundPasswordField(17);
 		passwordField.setBounds(76, 72, 144, 22);
 		passwordField.setText(passwordSettings.getPassword());
 		loginPanel.add(passwordField);
@@ -271,88 +249,49 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(230, 45, 260, 274);
+		newsPane.setBounds(500, 95, 305, 196);
 		contentPane.add(newsPane);
-
-		JTextArea txtrNews = new JTextArea();
-		txtrNews.setWrapStyleWord(true);
-		txtrNews.setLineWrap(true);
-		txtrNews.setEditable(false);
-		txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
-		newsPane.setViewportView(txtrNews);
-
-		JPanel sponsorPanel = new JPanel();
-		sponsorPanel.setBounds(500, 170, 305, 271);
-		contentPane.add(sponsorPanel);
-		sponsorPanel.setLayout(null);
-
-		JLabel lblNewLabel = new JLabel("Whatever slowpoke wants here");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(0, 5, 305, 266);
-		sponsorPanel.add(lblNewLabel);
-
-		JLabel lblTexturePacks = new JLabel("Texture packs");
-		lblTexturePacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblTexturePacks.setBounds(230, 330, 126, 19);
-		contentPane.add(lblTexturePacks);
-
-		JLabel lblWorldPacks = new JLabel("World packs");
-		lblWorldPacks.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblWorldPacks.setBounds(365, 330, 91, 19);
-		contentPane.add(lblWorldPacks);
+		
+				JTextArea txtrNews = new JTextArea();
+				newsPane.setViewportView(txtrNews);
+				txtrNews.setWrapStyleWord(true);
+				txtrNews.setLineWrap(true);
+				txtrNews.setEditable(false);
+				txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
 
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNews.setBounds(230, 15, 113, 19);
+		lblNews.setBounds(500, 65, 113, 19);
 		contentPane.add(lblNews);
-
-		ButtonGroup group = new ButtonGroup();
 		
-		modPack1RB = new JRadioButton("");
-		modPack1RB.setBounds(474, 15, 20, 21);
-		contentPane.add(modPack1RB);
-		modPack1RB.setSelected(true);
-		group.add(modPack1RB);
+		JButton btnNewButton = new JButton("News");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton.setBounds(15, 11, 150, 40);
+		contentPane.add(btnNewButton);
 		
-		modPack2RB = new JRadioButton("");
-		modPack2RB.setBounds(452, 15, 20, 21);
-		contentPane.add(modPack2RB);
-		group.add(modPack2RB);
+		JButton button = new JButton("Featured");
+		button.setBounds(175, 11, 150, 40);
+		contentPane.add(button);
 		
-		modPack3RB = new JRadioButton("");
-		modPack3RB.setBounds(430, 15, 20, 21);
-		contentPane.add(modPack3RB);
-		group.add(modPack3RB);
+		JButton button_1 = new JButton("Modpacks");
+		button_1.setBounds(335, 11, 150, 40);
+		contentPane.add(button_1);
 		
-		modPack4RB = new JRadioButton("");
-		modPack4RB.setBounds(408, 15, 20, 21);
-		contentPane.add(modPack4RB);
-		group.add(modPack4RB);
+		JButton btnThirdParty = new JButton("Third Party");
+		btnThirdParty.setBounds(495, 11, 150, 40);
+		contentPane.add(btnThirdParty);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.add(new JPanel(), 0);
-		tabbedPane.setTitleAt(0, "Official FTB Packs");
-		tabbedPane.add(new JPanel(), 1);
-		tabbedPane.setTitleAt(1, "Third Party Packs");
-		tabbedPane.add(new JPanel(), 2);
-		tabbedPane.setTitleAt(2, "Installed Mods");
-		
-		JXCollapsiblePane mods = new JXCollapsiblePane();
-		mods.setBounds(10, 15, 210, 426);
-		mods.setBackground(Color.black);
-		mods.setAnimated(true);
-		mods.add(tabbedPane);
-		contentPane.add(mods);
-		
-
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] {
-				usernameField, passwordField, chckbxRemember, btnLogin,
-				btnOptions, txtrNews }));
+		JButton button_3 = new JButton("Options");
+		button_3.setBounds(655, 11, 150, 40);
+		contentPane.add(button_3);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameField, passwordField, chckbxRemember, btnLogin, txtrNews}));
 	}
 
 	public void doLogin() {
 		btnLogin.setEnabled(false);
-		btnOptions.setEnabled(false);
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
 		chckbxRemember.setEnabled(false);
@@ -366,7 +305,6 @@ public class LaunchFrame extends JFrame {
 			public void done() {
 				lblError.setText("");
 
-				btnOptions.setEnabled(true);
 				usernameField.setEnabled(true);
 				passwordField.setEnabled(true);
 				chckbxRemember.setEnabled(true);
@@ -443,7 +381,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public String getSelectedModPack() {
-		if (modPack1RB.isSelected()) {
+/*		if (modPack1RB.isSelected()) {
 			return "FTBCLASSIC";
 		} else if (modPack2RB.isSelected()) {
 			return "FTB";
@@ -451,14 +389,13 @@ public class LaunchFrame extends JFrame {
 			return "DIREWOLF20";
 		} else if (modPack4RB.isSelected()) {
 			return "FTBLITE";
-		}
+		}*/
 		return null;
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
-			btnOptions.setEnabled(false);
 			usernameField.setEnabled(false);
 			passwordField.setEnabled(false);
 			chckbxRemember.setEnabled(false);
@@ -470,7 +407,6 @@ public class LaunchFrame extends JFrame {
 				public void done() {
 
 					btnLogin.setEnabled(true);
-					btnOptions.setEnabled(true);
 					usernameField.setEnabled(true);
 					passwordField.setEnabled(true);
 					chckbxRemember.setEnabled(true);
@@ -788,7 +724,7 @@ public class LaunchFrame extends JFrame {
 			temp.mkdir();
 			System.out.println(zipPath + " created");
 			ZipFile zipFile = new ZipFile(fSourceZip);
-			Enumeration e = zipFile.entries();
+			Enumeration<?> e = zipFile.entries();
 
 			while (e.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry) e.nextElement();
@@ -907,7 +843,6 @@ public class LaunchFrame extends JFrame {
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
 		//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
 		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-		JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin\\minecraft.jar");
 		copyFile(minecraft, mcbackup);
 	}
 }

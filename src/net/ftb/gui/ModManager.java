@@ -1,6 +1,5 @@
 package net.ftb.gui;
 
-import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
@@ -28,7 +27,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.TimeZone;
-import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -189,7 +187,6 @@ public class ModManager extends JDialog {
 				File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
 				//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 				//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-				JarFile packMinecraft = new JarFile(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin/minecraft.jar");
 				copyFile(minecraft, mcbackup);
 			}
 			LauncherFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
@@ -285,7 +282,7 @@ public class ModManager extends JDialog {
 				File temp = new File(zipPath);
 				temp.mkdir();
 				ZipFile zipFile = new ZipFile(fSourceZip);
-				Enumeration e = zipFile.entries();
+				Enumeration<?> e = zipFile.entries();
 
 				while (e.hasMoreElements()) {
 					ZipEntry entry = (ZipEntry) e.nextElement();

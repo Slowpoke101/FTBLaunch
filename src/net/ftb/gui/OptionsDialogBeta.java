@@ -21,10 +21,6 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Settings;
-import javax.swing.JList;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JPasswordField;
 
 public class OptionsDialogBeta extends JDialog
 {
@@ -56,57 +52,51 @@ public class OptionsDialogBeta extends JDialog
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 0.0};
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
-		{
-			JLabel lblInstallFolder = new JLabel("Install folder:");
-			GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
-			gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
-			gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
-			gbc_lblInstallFolder.gridx = 0;
-			gbc_lblInstallFolder.gridy = 0;
-			contentPanel.add(lblInstallFolder, gbc_lblInstallFolder);
-		}
-		{
-			installFolderTextField = new JTextField();
-			GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
-			gbc_installFolderTextField.gridwidth = 3;
-			gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
-			gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
-			gbc_installFolderTextField.gridx = 1;
-			gbc_installFolderTextField.gridy = 0;
-			contentPanel.add(installFolderTextField, gbc_installFolderTextField);
-			installFolderTextField.setColumns(10);
-		}
-		{
-			JButton installBrowseBtn = new JButton("...");
-			installBrowseBtn.addActionListener(new ChooseDirBeta());
+	
+		JLabel lblInstallFolder = new JLabel("Install folder:");
+		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
+		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
+		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
+		gbc_lblInstallFolder.gridx = 0;
+		gbc_lblInstallFolder.gridy = 0;
+		contentPanel.add(lblInstallFolder, gbc_lblInstallFolder);
 			
-			GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
-			gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
-			gbc_installBrowseBtn.gridx = 4;
-			gbc_installBrowseBtn.gridy = 0;
-			contentPanel.add(installBrowseBtn, gbc_installBrowseBtn);
-		}
-		{
-			tglbtnForceUpdate = new JToggleButton("Force update?");
-			GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
-			gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
-			gbc_tglbtnForceUpdate.gridwidth = 3;
-			gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
-			gbc_tglbtnForceUpdate.gridx = 1;
-			gbc_tglbtnForceUpdate.gridy = 1;
-			contentPanel.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-		}
-		{
-			{
-				JLabel lblRamMinimum = new JLabel("RAM Minimum (Mb):");
-				GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
-				gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
-				gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
-				gbc_lblRamMinimum.gridx = 1;
-				gbc_lblRamMinimum.gridy = 2;
-				contentPanel.add(lblRamMinimum, gbc_lblRamMinimum);
-			}
-		}
+		installFolderTextField = new JTextField();
+		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
+		gbc_installFolderTextField.gridwidth = 3;
+		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
+		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
+		gbc_installFolderTextField.gridx = 1;
+		gbc_installFolderTextField.gridy = 0;
+		contentPanel.add(installFolderTextField, gbc_installFolderTextField);
+		installFolderTextField.setColumns(10);
+
+		JButton installBrowseBtn = new JButton("...");
+		installBrowseBtn.addActionListener(new ChooseDir());
+		
+		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
+		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
+		gbc_installBrowseBtn.gridx = 4;
+		gbc_installBrowseBtn.gridy = 0;
+		contentPanel.add(installBrowseBtn, gbc_installBrowseBtn);
+		
+		tglbtnForceUpdate = new JToggleButton("Force update?");
+		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
+		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
+		gbc_tglbtnForceUpdate.gridwidth = 3;
+		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnForceUpdate.gridx = 1;
+		gbc_tglbtnForceUpdate.gridy = 1;
+		contentPanel.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
+		
+		JLabel lblRamMinimum = new JLabel("RAM Minimum (Mb):");
+		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
+		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
+		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRamMinimum.gridx = 1;
+		gbc_lblRamMinimum.gridy = 2;
+		contentPanel.add(lblRamMinimum, gbc_lblRamMinimum);
+		
 		ramMinimum = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
@@ -117,8 +107,7 @@ public class OptionsDialogBeta extends JDialog
 		ramMin = Integer.parseInt(ramMinimum.getText());
 		contentPanel.add(ramMinimum, gbc_textField_1);
 		ramMinimum.setColumns(10);
-		{
-			{
+
 				JLabel lblRamMaximum = new JLabel("RAM Maximum (Mb):");
 				GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 				gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
@@ -126,8 +115,7 @@ public class OptionsDialogBeta extends JDialog
 				gbc_lblRamMaximum.gridx = 1;
 				gbc_lblRamMaximum.gridy = 3;
 				contentPanel.add(lblRamMaximum, gbc_lblRamMaximum);
-			}
-		}
+
 		ramMaximum = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 0, 5);
@@ -138,37 +126,30 @@ public class OptionsDialogBeta extends JDialog
 		ramMax = Integer.parseInt(ramMaximum.getText());
 		contentPanel.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						saveSettings();
-						setVisible(false);
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+		
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveSettings();
+				setVisible(false);
 			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						setVisible(false);
-					}
-				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+		});
+		okButton.setActionCommand("OK");
+		buttonPane.add(okButton);
+		getRootPane().setDefaultButton(okButton);
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 			}
-		}
+		});
+		cancelButton.setActionCommand("Cancel");
+		buttonPane.add(cancelButton);
 		
 		loadSettings();
 	}
