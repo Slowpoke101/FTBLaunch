@@ -12,14 +12,17 @@ public class ModPack {
 	private URLConnection connection;
 	private Image image;
 	private int size;
+	private String dir;
 	
-	
-	public ModPack(String name, URL url, Image image) throws IOException {
+	@SuppressWarnings("static-access")
+	public ModPack(String name, String url, String image, String dir) throws IOException {
 		this.name = name;
-		this.url = url;
-		this.image = image;
-		connection = url.openConnection();
+		this.url = new URL(url);
+		URL imageUrl = new URL(image);
+		this.image = java.awt.Toolkit.getDefaultToolkit().getDefaultToolkit().createImage(imageUrl);
+		connection = this.url.openConnection();
 		this.size = connection.getContentLength();
+		this.dir = dir;
 	}
 	
 	public String getName() {
@@ -36,5 +39,9 @@ public class ModPack {
 	
 	public int getSize() {
 		return size;
+	}
+	
+	public String getDir() {
+		return dir;
 	}
 }

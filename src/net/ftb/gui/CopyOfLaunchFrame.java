@@ -1,8 +1,10 @@
 package net.ftb.gui;
 
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,6 +35,9 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
 
 import net.ftb.data.LoginResponse;
 import net.ftb.data.PasswordSettings;
@@ -40,32 +45,27 @@ import net.ftb.data.Settings;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JCheckBox;
 import javax.swing.ProgressMonitor;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JTabbedPane;
-import javax.swing.border.EmptyBorder;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-public class LaunchFrame extends JFrame {
-	
+public class CopyOfLaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
@@ -79,8 +79,6 @@ public class LaunchFrame extends JFrame {
 	private JPasswordField passwordField;
 	public static String sysArch;
 	private static Color back = new Color(151, 151, 151);
-	
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
 	/**
 	 * Launch the application.
@@ -114,7 +112,7 @@ public class LaunchFrame extends JFrame {
 					installDir.mkdirs();
 
 				try {
-					LaunchFrame frame = new LaunchFrame();
+					CopyOfLaunchFrame frame = new CopyOfLaunchFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -124,15 +122,14 @@ public class LaunchFrame extends JFrame {
 		});
 		
 		
-		
-		switch(Integer.parseInt(System.getProperty("sun.arch.data.model"))) {
-		case 64 :
+
+		if(Integer.parseInt(System.getProperty("sun.arch.data.model")) == 64) {
 			System.out.println("64");
 			sysArch = "64";
-		case 32 :
+		} else if (Integer.parseInt(System.getProperty("sun.arch.data.model")) == 32) {
 			System.out.println("32");
 			sysArch = "32";
-		default:
+		} else {
 			System.out.println("Unknown");
 			sysArch = "Unknown";
 		}
@@ -142,7 +139,7 @@ public class LaunchFrame extends JFrame {
 	 * Create the frame.
 	 */
 
-	public LaunchFrame() {
+	public CopyOfLaunchFrame() {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
@@ -168,16 +165,14 @@ public class LaunchFrame extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
-		tabbedPane.setBounds(0, 0, 815, 452);
-		setContentPane(tabbedPane);
-		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.setBackground(back);
 
 		loginPanel = new JPanel();
-		loginPanel.setBounds(480, 282, 305, 139);
+		loginPanel.setBounds(500, 302, 305, 139);
 		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 		loginPanel.setBackground(back);
@@ -261,7 +256,7 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane newsPane = new JScrollPane();
 		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(480, 75, 305, 196);
+		newsPane.setBounds(500, 95, 305, 196);
 		contentPane.add(newsPane);
 		
 		JTextArea txtrNews = new JTextArea();
@@ -273,32 +268,10 @@ public class LaunchFrame extends JFrame {
 
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNews.setBounds(480, 45, 113, 19);
+		lblNews.setBounds(500, 65, 113, 19);
 		contentPane.add(lblNews);
 		
-		tabbedPane.add(contentPane, 0);
-		tabbedPane.setTitleAt(0, "Main");
-		
-		tabbedPane.add(new JPanel(), 1);
-		tabbedPane.setTitleAt(1, "News");
-		
-		tabbedPane.add(new JPanel(), 2);
-		tabbedPane.setTitleAt(2, "Featured");
-		
-		tabbedPane.add(new JPanel(), 3);
-		tabbedPane.setTitleAt(3, "ModPacks");
-		
-		tabbedPane.add(new JPanel(), 4);
-		tabbedPane.setTitleAt(4, "Third Party");
-		
-		tabbedPane.add(new JPanel(), 5);
-		tabbedPane.setTitleAt(5, "Options");
-		
-		if (passwordSettings.getUsername() != "") {
-			
-		} else {
-
-		}
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameField, passwordField, chckbxRemember, btnLogin, txtrNews}));
 	}
 
 	public void doLogin() {
@@ -390,7 +363,20 @@ public class LaunchFrame extends JFrame {
 		};
 		loginWorker.execute();
 	}
-	
+
+	public String getSelectedModPack() {
+/*		if (modPack1RB.isSelected()) {
+			return "FTBCLASSIC";
+		} else if (modPack2RB.isSelected()) {
+			return "FTB";
+		} else if (modPack3RB.isSelected()) {
+			return "DIREWOLF20";
+		} else if (modPack4RB.isSelected()) {
+			return "FTBLITE";
+		}*/
+		return null;
+	}
+
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
@@ -481,19 +467,6 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	public String getSelectedModPack() {
-/*		if (modPack1RB.isSelected()) {
-			return "FTBCLASSIC";
-		} else if (modPack2RB.isSelected()) {
-			return "FTB";
-		} else if (modPack3RB.isSelected()) {
-			return "DIREWOLF20";
-		} else if (modPack4RB.isSelected()) {
-			return "FTBLITE";
-		}*/
-		return null;
-	}
-
 	protected String getVersionMD5(String modPackName) {
 		InputStream is = null;
 		MessageDigest md = null;
@@ -571,7 +544,7 @@ public class LaunchFrame extends JFrame {
 			System.setProperty("user.home", new File(workingDir).getParent());
 
 			URLClassLoader cl = new URLClassLoader(urls,
-					LaunchFrame.class.getClassLoader());
+					CopyOfLaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
 				Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
@@ -607,6 +580,7 @@ public class LaunchFrame extends JFrame {
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
 			this.setVisible(true);
+			lblError.setText("Minecraft not found");
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
