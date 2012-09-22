@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -22,7 +23,12 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.JarEntry;
@@ -492,6 +498,73 @@ public class LaunchFrame extends JFrame {
 			return "FTBLITE";
 		}*/
 		return null;
+	}
+	
+	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
+		
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+		
+		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
+		} else {
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		}
+		
+		String date = sdf.format(new Date());
+		
+		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "//" + file;
+	}
+	
+	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+		
+		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
+		} else {
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		}
+		
+		String date = sdf.format(new Date());
+
+		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);
+	}
+	
+	public static String md5(String input) throws NoSuchAlgorithmException {
+		String result = input;
+		if(input != null) {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(input.getBytes());
+			BigInteger hash = new BigInteger(1, md.digest());
+			result = hash.toString(16);
+			while(result.length() < 32) {
+				result = "0" + result;
+			}
+		}
+		return result;
+	}
+	
+	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+		BufferedInputStream in = null;
+		FileOutputStream fout = null;
+		try {
+			in = new BufferedInputStream(new URL(urlString).openStream());
+			fout = new FileOutputStream(filename);
+
+			byte data[] = new byte[1024];
+			int count;
+			while ((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+			}
+		} finally {
+			if (in != null) {
+				in.close();
+			}
+			if (fout != null) {
+				fout.flush();	
+			}
+			fout.close();
+		}
 	}
 
 	protected String getVersionMD5(String modPackName) {

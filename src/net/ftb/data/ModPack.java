@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,16 +21,16 @@ import org.xml.sax.SAXException;
 public class ModPack {
 	
 	// static stuff
-	private static ArrayList<ModPack> _packs = new ArrayList<ModPack>();
+	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	
-	private static final String MODPACKSURL = "http://dl.dropbox.com/u/2014606/ftb/modpacks.xml";
+	private static final String MODPACKSFILE = "https://dl.dropbox.com/u/40374207/modpacks.xml";
 	
-	public static void LoadAll() {
+	public static void LoadAll() throws NoSuchAlgorithmException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		
 		Document doc = null;
 		try {
-			doc = docFactory.newDocumentBuilder().parse(MODPACKSURL);
+			doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 		} catch (SAXException e) { e.printStackTrace(); return;
 		} catch (IOException e) {
 			// TODO Add Fallback Methods
@@ -48,19 +49,28 @@ public class ModPack {
 			NamedNodeMap modPackAttr = modPack.getAttributes();
 			
 			try {
-				_packs.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(),
+				packs.add(new ModPack(
+						modPackAttr.getNamedItem("name").getTextContent(),
 						modPackAttr.getNamedItem("url").getTextContent(),
 						modPackAttr.getNamedItem("image").getTextContent(),
-						modPackAttr.getNamedItem("dir").getTextContent()));
-			} catch (DOMException e) { e.printStackTrace();
-			} catch (IOException e) { e.printStackTrace(); }
+						modPackAttr.getNamedItem("dir").getTextContent(),
+						modPackAttr.getNamedItem("mcVersion").getTextContent()
+					));
+			} catch (DOMException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 	public static void main(String[] args) {
-		LoadAll();
-		System.out.println(_packs.get(0).getName());
+		try {
+			LoadAll();
+			System.out.println(packs.get(0).getMcVersion());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// class stuff
@@ -71,8 +81,9 @@ public class ModPack {
 	private Image image;
 	private int size;
 	private String dir;
+	private String mcVersion;
 	
-	public ModPack(String name, String url, String image, String dir) throws IOException {
+	public ModPack(String name, String url, String image, String dir, String mcVersion) throws IOException {
 		this.name = name;
 		this.url = new URL(url);
 		URL imageUrl = new URL(image);
@@ -80,6 +91,7 @@ public class ModPack {
 		connection = this.url.openConnection();
 		this.size = connection.getContentLength();
 		this.dir = dir;
+		this.mcVersion = mcVersion;
 	}
 	
 	public String getName() {
@@ -100,5 +112,9 @@ public class ModPack {
 	
 	public String getDir() {
 		return dir;
+	}
+	
+	public String getMcVersion() {
+		return mcVersion;
 	}
 }
