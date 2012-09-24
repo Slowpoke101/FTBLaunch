@@ -48,6 +48,7 @@ import net.ftb.workers.LoginWorker;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,7 +57,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -128,20 +128,6 @@ public class LaunchFrame extends JFrame {
 			}
 
 		});
-		
-		
-		
-		switch(Integer.parseInt(System.getProperty("sun.arch.data.model"))) {
-		case 64 :
-			System.out.println("64");
-			sysArch = "64";
-		case 32 :
-			System.out.println("32");
-			sysArch = "32";
-		default:
-			System.out.println("Unknown");
-			sysArch = "Unknown";
-		}
 	}
 
 	/**
@@ -265,13 +251,19 @@ public class LaunchFrame extends JFrame {
 		loginPanel.add(lblPassword);
 		lblPassword.setDisplayedMnemonic('p');
 
-		JScrollPane newsPane = new JScrollPane();
-		newsPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPane.setBounds(480, 75, 305, 196);
-		contentPane.add(newsPane);
+		
+		JEditorPane newsPane = new JEditorPane();
+		newsPane.setEditable(false);
+		try {
+			newsPane.setPage(getCreeperhostLink("news.html"));
+		} catch (IOException | NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}
+		JScrollPane newsPanel = new JScrollPane(newsPane);
+		newsPanel.setBounds(480, 75, 305, 196);
+		contentPane.add(newsPanel);
 		
 		JTextArea txtrNews = new JTextArea();
-		newsPane.setViewportView(txtrNews);
 		txtrNews.setWrapStyleWord(true);
 		txtrNews.setLineWrap(true);
 		txtrNews.setEditable(false);
