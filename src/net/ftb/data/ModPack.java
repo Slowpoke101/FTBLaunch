@@ -64,6 +64,10 @@ public class ModPack {
 		}
 	}
 	
+	public static ArrayList<ModPack> getPackArray() {
+		return packs;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			LoadAll();
