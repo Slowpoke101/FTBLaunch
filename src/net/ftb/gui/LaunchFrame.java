@@ -86,6 +86,9 @@ public class LaunchFrame extends JFrame {
 	public static String sysArch;
 	private static Color back = new Color(151, 151, 151);
 	
+	private JButton leftPack;
+	private JButton rightPack;
+	
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
 	/**
@@ -180,10 +183,12 @@ public class LaunchFrame extends JFrame {
 		if (passwordSettings.getUsername() != "") {
 			chckbxRemember.setSelected(true);
 		} else {
-
+			
 		}
 		loginPanel.add(chckbxRemember);
-
+		
+		
+		
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 39, 69, 56);
 		btnLogin.setBackground(back);
@@ -255,22 +260,16 @@ public class LaunchFrame extends JFrame {
 		JEditorPane newsPane = new JEditorPane();
 		newsPane.setEditable(false);
 		try {
-			newsPane.setPage(getCreeperhostLink("news.html"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchAlgorithmException e1) {
+			String news = getCreeperhostLink("news.html");
+			newsPane.setPage(news);
+		} catch (IOException | NoSuchAlgorithmException e1) {
+			System.out.println("FAILURE");
 			e1.printStackTrace();
 		}
 		JScrollPane newsPanel = new JScrollPane(newsPane);
 		newsPanel.setBounds(480, 75, 305, 196);
 		contentPane.add(newsPanel);
 		
-		JTextArea txtrNews = new JTextArea();
-		txtrNews.setWrapStyleWord(true);
-		txtrNews.setLineWrap(true);
-		txtrNews.setEditable(false);
-		txtrNews.setText("Hello world, these are the news! And this is just a test to see if the text can be scrolled down as needed, when the news are too long, which they will maybe be. I think this is enough");
-
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(480, 45, 113, 19);
