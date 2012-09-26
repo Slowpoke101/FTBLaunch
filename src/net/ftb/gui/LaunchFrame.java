@@ -41,6 +41,7 @@ import java.util.zip.ZipInputStream;
 import javax.swing.JFrame;
 
 import net.ftb.data.LoginResponse;
+import net.ftb.data.ModPack;
 import net.ftb.data.PasswordSettings;
 import net.ftb.data.Settings;
 import net.ftb.workers.GameUpdateWorker;
@@ -51,6 +52,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -169,8 +171,7 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
-				.getInstallPath(), "loginData"));
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 		
 		backgroundImage1.setBounds(0, 0, 820, 480);
 		backgroundImage2.setBounds(0, 0, 820, 480);
@@ -196,7 +197,26 @@ public class LaunchFrame extends JFrame {
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
-		modPacksPane.add(backgroundImage3);
+//		modPacksPane.add(backgroundImage3);
+		
+		JList<JPanel> packs = new JList<JPanel>();
+		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
+		
+		JScrollPane packsScroll = new JScrollPane(packs);
+		packsScroll.setBounds(0, 0, 410, 380);
+		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		packsScroll.setWheelScrollingEnabled(true);
+		
+		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));
+		/**
+		 * uncomment to use the image based on which pack is selected,
+		 * above one is for testing purposes
+		 */
+//		JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
+		packImage.setBounds(410, 0, 410, 205);
+		modPacksPane.add(packImage);
+		modPacksPane.add(packsScroll);
 		
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));

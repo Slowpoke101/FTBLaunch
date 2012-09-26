@@ -68,6 +68,10 @@ public class ModPack {
 		return packs;
 	}
 	
+	public static ModPack getPack(int i) {
+		return packs.get(i);
+	}
+	
 	public static void main(String[] args) {
 		try {
 			LoadAll();
