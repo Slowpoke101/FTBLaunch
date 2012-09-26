@@ -102,7 +102,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel backgroundImage4 = new JLabel(new ImageIcon("res//background.png"));
 	private JLabel backgroundImage5 = new JLabel(new ImageIcon("res//background.png"));
 	
-	
+	JList<JPanel> packs;
 	
 	/**
 	 * Launch the application.
@@ -155,21 +155,6 @@ public class LaunchFrame extends JFrame {
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
-		try {
-			LauncherConsole con = new LauncherConsole();
-			con.setVisible(true);
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 		
@@ -183,23 +168,26 @@ public class LaunchFrame extends JFrame {
 		setBounds(100, 100, 821, 480);
 		tabbedPane.setBounds(0, 0, 815, 452);
 		setContentPane(tabbedPane);
-		
+
 		newsPane = new JPanel();
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		newsPane.setLayout(null);
-		newsPane.add(backgroundImage1);
+//		newsPane.add(backgroundImage1);
+		newsPane.setBackground(Color.WHITE);
 
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		optionsPane.setLayout(null);
-		optionsPane.add(backgroundImage2);
-		
+//		optionsPane.add(backgroundImage2);
+		optionsPane.setBackground(Color.WHITE);
+
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
 //		modPacksPane.add(backgroundImage3);
+		modPacksPane.setBackground(Color.WHITE);
 		
-		JList<JPanel> packs = new JList<JPanel>();
+		packs = new JList<JPanel>();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
 		
 		JScrollPane packsScroll = new JScrollPane(packs);
@@ -217,16 +205,17 @@ public class LaunchFrame extends JFrame {
 		packImage.setBounds(410, 0, 410, 205);
 		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
-		
+
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mapsPane.setLayout(null);
-		mapsPane.add(backgroundImage4);
-		
+//		mapsPane.add(backgroundImage4);
+		mapsPane.setBackground(Color.WHITE);
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
-		tpPane.add(backgroundImage5);
+//		tpPane.add(backgroundImage5);
+		tpPane.setBackground(Color.WHITE);
 		
 		loginPanel = new JPanel();
 		loginPanel.setBounds(480, 282, 305, 139);
@@ -358,6 +347,23 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void doLogin() {
+		
+		try {
+			LauncherConsole con = new LauncherConsole();
+			con.setVisible(true);
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		btnLogin.setEnabled(false);
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
