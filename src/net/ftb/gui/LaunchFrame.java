@@ -46,6 +46,7 @@ import net.ftb.data.Settings;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
@@ -54,7 +55,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingConstants;
@@ -80,17 +80,28 @@ public class LaunchFrame extends JFrame {
 	JCheckBox chckbxRemember;
 	JLabel lblError;
 	JButton btnLogin;
-	private JPanel contentPane;
+	
+	private JPanel newsPane;
+	private JPanel optionsPane;
+	private JPanel modPacksPane;
+	private JPanel mapsPane;
+	private JPanel tpPane;
+	
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
 	private static Color back = new Color(151, 151, 151);
 	
-	private JButton leftPack;
-	private JButton rightPack;
-	
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
+	private JLabel backgroundImage1 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage2 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage3 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage4 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage5 = new JLabel(new ImageIcon("res//background.png"));
+	
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -160,20 +171,45 @@ public class LaunchFrame extends JFrame {
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
 				.getInstallPath(), "loginData"));
+		
+		backgroundImage1.setBounds(0, 0, 820, 480);
+		backgroundImage2.setBounds(0, 0, 820, 480);
+		backgroundImage3.setBounds(0, 0, 820, 480);
+		backgroundImage4.setBounds(0, 0, 820, 480);
+		backgroundImage5.setBounds(0, 0, 820, 480);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 821, 480);
 		tabbedPane.setBounds(0, 0, 815, 452);
 		setContentPane(tabbedPane);
 		
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
-		contentPane.setBackground(back);
+		newsPane = new JPanel();
+		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		newsPane.setLayout(null);
+		newsPane.add(backgroundImage1);
 
+		optionsPane = new JPanel();
+		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		optionsPane.setLayout(null);
+		optionsPane.add(backgroundImage2);
+		
+		modPacksPane = new JPanel();
+		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		modPacksPane.setLayout(null);
+		modPacksPane.add(backgroundImage3);
+		
+		mapsPane = new JPanel();
+		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		mapsPane.setLayout(null);
+		mapsPane.add(backgroundImage4);
+		
+		tpPane = new JPanel();
+		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		tpPane.setLayout(null);
+		tpPane.add(backgroundImage5);
+		
 		loginPanel = new JPanel();
 		loginPanel.setBounds(480, 282, 305, 139);
-		contentPane.add(loginPanel);
 		loginPanel.setLayout(null);
 		loginPanel.setBackground(back);
 
@@ -257,44 +293,42 @@ public class LaunchFrame extends JFrame {
 		lblPassword.setDisplayedMnemonic('p');
 
 		
-		JEditorPane newsPane = new JEditorPane();
-		newsPane.setEditable(false);
-		try {
-			String news = getCreeperhostLink("news.html");
-			newsPane.setPage(news);
-		} catch (IOException e1) {
-			System.out.println("FAILURE");
-			e1.printStackTrace();
-		} catch (NoSuchAlgorithmException e1) {
-			System.out.println("FAILURE");
-			e1.printStackTrace();
-		}
-		JScrollPane newsPanel = new JScrollPane(newsPane);
+		JEditorPane newsTextPane = new JEditorPane();
+		newsTextPane.setEditable(false);
+//		try {
+//			String news = getCreeperhostLink("news.html");
+//			newsPane.setPage(news);
+//		} catch (IOException e1) {
+//			System.out.println("FAILURE");
+//			e1.printStackTrace();
+//		} catch (NoSuchAlgorithmException e1) {
+//			System.out.println("FAILURE");
+//			e1.printStackTrace();
+//		}
+		JScrollPane newsPanel = new JScrollPane(newsTextPane);
 		newsPanel.setBounds(480, 75, 305, 196);
-		contentPane.add(newsPanel);
 		
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(480, 45, 113, 19);
-		contentPane.add(lblNews);
+		newsTextPane.add(lblNews);
 		
-		tabbedPane.add(contentPane, 0);
-		tabbedPane.setTitleAt(0, "Main");
+		tabbedPane.add(newsPane, 0);
+		tabbedPane.setIconAt(0, new ImageIcon("res//newsTab.png"));
 		
-		tabbedPane.add(new JPanel(), 1);
-		tabbedPane.setTitleAt(1, "News");
+		tabbedPane.add(optionsPane, 1);
+		tabbedPane.setIconAt(1, new ImageIcon("res//optionsTab.png"));
 		
-		tabbedPane.add(new JPanel(), 2);
-		tabbedPane.setTitleAt(2, "Featured");
+		tabbedPane.add(modPacksPane, 2);
+		tabbedPane.setIconAt(2, new ImageIcon("res//packsTab.png"));
 		
-		tabbedPane.add(new JPanel(), 3);
-		tabbedPane.setTitleAt(3, "ModPacks");
+		tabbedPane.add(mapsPane, 3);
+		tabbedPane.setIconAt(3, new ImageIcon("res//mapsTab.png"));
 		
-		tabbedPane.add(new JPanel(), 4);
-		tabbedPane.setTitleAt(4, "Third Party");
+		tabbedPane.add(tpPane, 4);
+		tabbedPane.setIconAt(4, new ImageIcon("res//texturesTab.png"));
 		
-		tabbedPane.add(new JPanel(), 5);
-		tabbedPane.setTitleAt(5, "Options");
+		tabbedPane.setSelectedIndex(2);
 		
 		if (passwordSettings.getUsername() != "") {
 			
