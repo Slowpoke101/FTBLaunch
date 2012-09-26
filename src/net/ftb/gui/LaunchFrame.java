@@ -256,7 +256,9 @@ public class LaunchFrame extends JFrame {
 		newsPane.setEditable(false);
 		try {
 			newsPane.setPage(getCreeperhostLink("news.html"));
-		} catch (IOException | NoSuchAlgorithmException e1) {
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 		}
 		JScrollPane newsPanel = new JScrollPane(newsPane);
