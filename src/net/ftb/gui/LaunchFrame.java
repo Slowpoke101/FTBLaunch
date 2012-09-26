@@ -262,7 +262,10 @@ public class LaunchFrame extends JFrame {
 		try {
 			String news = getCreeperhostLink("news.html");
 			newsPane.setPage(news);
-		} catch (IOException | NoSuchAlgorithmException e1) {
+		} catch (IOException e1) {
+			System.out.println("FAILURE");
+			e1.printStackTrace();
+		} catch (NoSuchAlgorithmException e1) {
 			System.out.println("FAILURE");
 			e1.printStackTrace();
 		}
