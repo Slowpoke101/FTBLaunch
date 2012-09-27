@@ -354,7 +354,6 @@ public class LaunchFrame extends JFrame {
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				saveSettings();
-				label.setVisible(true);
 			}
 		});
 		okButton.setActionCommand("OK");
