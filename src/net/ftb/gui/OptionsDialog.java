@@ -47,7 +47,7 @@ public class OptionsDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{87, 78, 117, 96, 117, 49, 38};
+		gbl_contentPanel.columnWidths = new int[]{87, 78, 117, 73, 97, 81, 38};
 		gbl_contentPanel.rowHeights = new int[] {0, 0, 20, 26, 0, 29, 31, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0};
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -185,28 +185,38 @@ public class OptionsDialog extends JDialog {
 			ramMax = Integer.parseInt(ramMaximum.getText());
 			contentPanel.add(ramMaximum, gbc_textField_2);
 			ramMaximum.setColumns(10);
+			JButton okButton = new JButton("OK");
+			GridBagConstraints gbc_okButton = new GridBagConstraints();
+			gbc_okButton.fill = GridBagConstraints.BOTH;
+			gbc_okButton.insets = new Insets(0, 0, 0, 5);
+			gbc_okButton.gridx = 4;
+			gbc_okButton.gridy = 9;
+			contentPanel.add(okButton, gbc_okButton);
+			okButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					saveSettings();
+					setVisible(false);
+				}
+			});
+			okButton.setActionCommand("OK");
+			getRootPane().setDefaultButton(okButton);
+			JButton cancelButton = new JButton("Cancel");
+			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
+			gbc_cancelButton.fill = GridBagConstraints.BOTH;
+			gbc_cancelButton.insets = new Insets(0, 0, 0, 5);
+			gbc_cancelButton.gridx = 5;
+			gbc_cancelButton.gridy = 9;
+			contentPanel.add(cancelButton, gbc_cancelButton);
+			cancelButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+				}
+			});
+			cancelButton.setActionCommand("Cancel");
 	
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH); 
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						saveSettings();
-						setVisible(false);
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-					}
-				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
 		
 		loadSettings();
 	}

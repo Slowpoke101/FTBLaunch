@@ -1,7 +1,12 @@
 package net.ftb.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -58,6 +63,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -73,7 +79,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
 public class LaunchFrame extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
@@ -82,28 +88,44 @@ public class LaunchFrame extends JFrame {
 	JCheckBox chckbxRemember;
 	JLabel lblError;
 	JButton btnLogin;
-	
+
 	private JPanel newsPane;
 	private JPanel optionsPane;
 	private JPanel modPacksPane;
 	private JPanel mapsPane;
 	private JPanel tpPane;
-	
+
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
 	private static Color back = new Color(151, 151, 151);
-	
+
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-	private JLabel backgroundImage1 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage2 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage3 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage4 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage5 = new JLabel(new ImageIcon("res//background.png"));
-	
+	private JLabel backgroundImage1 = new JLabel(new ImageIcon(
+			"res//background.png"));
+	private JLabel backgroundImage2 = new JLabel(new ImageIcon(
+			"res//background.png"));
+	private JLabel backgroundImage3 = new JLabel(new ImageIcon(
+			"res//background.png"));
+	private JLabel backgroundImage4 = new JLabel(new ImageIcon(
+			"res//background.png"));
+	private JLabel backgroundImage5 = new JLabel(new ImageIcon(
+			"res//background.png"));
+
 	JList<JPanel> packs;
-	
+
+	public static JTextField installFolderTextField;
+	private JToggleButton tglbtnForceUpdate;
+	private JTextField saveUser;
+	@SuppressWarnings("unused")
+	private JPasswordField savePass;
+	private JTextField ramMinimum;
+	private JTextField ramMaximum;
+
+	public static int ramMin = 512;
+	public static int ramMax = 1024;
+
 	/**
 	 * Launch the application.
 	 */
@@ -156,8 +178,9 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
-		
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
+				.getInstallPath(), "loginData"));
+
 		backgroundImage1.setBounds(0, 0, 820, 480);
 		backgroundImage2.setBounds(0, 0, 820, 480);
 		backgroundImage3.setBounds(0, 0, 820, 480);
@@ -172,36 +195,201 @@ public class LaunchFrame extends JFrame {
 		newsPane = new JPanel();
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		newsPane.setLayout(null);
-//		newsPane.add(backgroundImage1);
+		// newsPane.add(backgroundImage1);
 		newsPane.setBackground(Color.WHITE);
 
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		optionsPane.setLayout(null);
-//		optionsPane.add(backgroundImage2);
+		// optionsPane.add(backgroundImage2);
 		optionsPane.setBackground(Color.WHITE);
+
+		getContentPane().add(optionsPane, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		optionsPane.setLayout(gbl_contentPanel);
+
+		JLabel lblInstallFolder = new JLabel("Install folder:");
+		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
+		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
+		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
+		gbc_lblInstallFolder.gridx = 0;
+		gbc_lblInstallFolder.gridy = 0;
+		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
+
+		installFolderTextField = new JTextField();
+		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
+		gbc_installFolderTextField.gridwidth = 5;
+		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
+		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
+		gbc_installFolderTextField.gridx = 1;
+		gbc_installFolderTextField.gridy = 0;
+		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
+		installFolderTextField.setColumns(10);
+
+		JButton installBrowseBtn = new JButton("...");
+		installBrowseBtn.addActionListener(new ChooseDir());
+
+		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
+		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
+		gbc_installBrowseBtn.gridx = 6;
+		gbc_installBrowseBtn.gridy = 0;
+		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
+
+		tglbtnForceUpdate = new JToggleButton("Force update?");
+		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
+		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
+		gbc_tglbtnForceUpdate.gridwidth = 5;
+		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnForceUpdate.gridx = 1;
+		gbc_tglbtnForceUpdate.gridy = 1;
+		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
+
+		JLabel lblSavedProfiles = new JLabel("Saved Profiles");
+		GridBagConstraints gbc_lblSavedProfiles = new GridBagConstraints();
+		gbc_lblSavedProfiles.gridwidth = 2;
+		gbc_lblSavedProfiles.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSavedProfiles.gridx = 1;
+		gbc_lblSavedProfiles.gridy = 2;
+		optionsPane.add(lblSavedProfiles, gbc_lblSavedProfiles);
+
+		@SuppressWarnings("rawtypes")
+		JList list = new JList();
+		GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.gridwidth = 2;
+		gbc_list.fill = GridBagConstraints.BOTH;
+		gbc_list.gridheight = 3;
+		gbc_list.insets = new Insets(0, 0, 5, 5);
+		gbc_list.gridx = 1;
+		gbc_list.gridy = 3;
+		optionsPane.add(list, gbc_list);
+
+		JLabel lblUsername = new JLabel("Username:");
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.anchor = GridBagConstraints.EAST;
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.gridx = 3;
+		gbc_lblUsername.gridy = 3;
+		optionsPane.add(lblUsername, gbc_lblUsername);
+
+		saveUser = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 4;
+		gbc_textField.gridy = 3;
+		optionsPane.add(saveUser, gbc_textField);
+		saveUser.setColumns(10);
+
+		JLabel lblPassword = new JLabel("Password:");
+		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPassword.gridx = 3;
+		gbc_lblPassword.gridy = 4;
+		optionsPane.add(lblPassword, gbc_lblPassword);
+
+		passwordField = new JPasswordField();
+		GridBagConstraints gbc_passwordField = new GridBagConstraints();
+		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passwordField.gridx = 4;
+		gbc_passwordField.gridy = 4;
+		optionsPane.add(passwordField, gbc_passwordField);
+
+		JButton btnAdd = new JButton("Add");
+		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
+		gbc_btnAdd.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAdd.gridx = 5;
+		gbc_btnAdd.gridy = 4;
+		optionsPane.add(btnAdd, gbc_btnAdd);
+
+		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
+		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
+		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
+		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRamMinimum.gridx = 1;
+		gbc_lblRamMinimum.gridy = 7;
+		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
+
+		ramMinimum = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 7;
+		ramMinimum.setText("256");
+		ramMin = Integer.parseInt(ramMinimum.getText());
+		optionsPane.add(ramMinimum, gbc_textField_1);
+		ramMinimum.setColumns(10);
+
+		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
+		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
+		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
+		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRamMaximum.gridx = 1;
+		gbc_lblRamMaximum.gridy = 8;
+		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
+
+		ramMaximum = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 2;
+		gbc_textField_2.gridy = 8;
+		ramMaximum.setText("1024");
+		ramMax = Integer.parseInt(ramMaximum.getText());
+		optionsPane.add(ramMaximum, gbc_textField_2);
+		ramMaximum.setColumns(10);
+		
+		JButton okButton = new JButton("OK");
+		GridBagConstraints gbc_okButton = new GridBagConstraints();
+		gbc_okButton.fill = GridBagConstraints.BOTH;
+		gbc_okButton.insets = new Insets(0, 0, 0, 5);
+		gbc_okButton.gridx = 4;
+		gbc_okButton.gridy = 9;
+		optionsPane.add(okButton, gbc_okButton);
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveSettings();
+				label.setVisible(true);
+			}
+		});
+		okButton.setActionCommand("OK");
+		getRootPane().setDefaultButton(okButton);
+
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		optionsPane.add(buttonPane);
+
+		loadSettings();
 
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
-//		modPacksPane.add(backgroundImage3);
+		// modPacksPane.add(backgroundImage3);
 		modPacksPane.setBackground(Color.WHITE);
-		
+
 		packs = new JList<JPanel>();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
-		
+
 		JScrollPane packsScroll = new JScrollPane(packs);
 		packsScroll.setBounds(0, 0, 410, 380);
-		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		packsScroll
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		packsScroll
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
-		
+
 		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));
 		/**
-		 * uncomment to use the image based on which pack is selected,
-		 * above one is for testing purposes
+		 * uncomment to use the image based on which pack is selected, above one
+		 * is for testing purposes
 		 */
-//		JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
+		// JLabel packImage = new JLabel(new
+		// ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
 		packImage.setBounds(410, 0, 410, 205);
 		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
@@ -209,14 +397,14 @@ public class LaunchFrame extends JFrame {
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mapsPane.setLayout(null);
-//		mapsPane.add(backgroundImage4);
+		// mapsPane.add(backgroundImage4);
 		mapsPane.setBackground(Color.WHITE);
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
-//		tpPane.add(backgroundImage5);
+		// tpPane.add(backgroundImage5);
 		tpPane.setBackground(Color.WHITE);
-		
+
 		loginPanel = new JPanel();
 		loginPanel.setBounds(480, 282, 305, 139);
 		loginPanel.setLayout(null);
@@ -228,12 +416,10 @@ public class LaunchFrame extends JFrame {
 		if (passwordSettings.getUsername() != "") {
 			chckbxRemember.setSelected(true);
 		} else {
-			
+
 		}
 		loginPanel.add(chckbxRemember);
-		
-		
-		
+
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 39, 69, 56);
 		btnLogin.setBackground(back);
@@ -265,15 +451,14 @@ public class LaunchFrame extends JFrame {
 					launchMinecraft(new File(Settings.getSettings()
 							.getInstallPath()).getPath()
 							+ "\\"
-							+ getSelectedModPack() + "\\.minecraft",
-							"OFFLINE", "1");
+							+ getSelectedModPack() + "\\.minecraft", "OFFLINE",
+							"1");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
-
 
 		lblError = new JLabel();
 		lblError.setBounds(14, 15, 175, 14);
@@ -291,63 +476,62 @@ public class LaunchFrame extends JFrame {
 		passwordField.setText(passwordSettings.getPassword());
 		loginPanel.add(passwordField);
 
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(14, 43, 52, 14);
-		loginPanel.add(lblUsername);
-		lblUsername.setDisplayedMnemonic('u');
+		JLabel lblUser = new JLabel("Username:");
+		lblUser.setBounds(14, 43, 52, 14);
+		loginPanel.add(lblUser);
+		lblUser.setDisplayedMnemonic('u');
 
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(16, 76, 50, 14);
-		loginPanel.add(lblPassword);
-		lblPassword.setDisplayedMnemonic('p');
+		JLabel lblPass = new JLabel("Password:");
+		lblPass.setBounds(16, 76, 50, 14);
+		loginPanel.add(lblPass);
+		lblPass.setDisplayedMnemonic('p');
 
-		
 		JEditorPane newsTextPane = new JEditorPane();
 		newsTextPane.setEditable(false);
-//		try {
-//			String news = getCreeperhostLink("news.html");
-//			newsPane.setPage(news);
-//		} catch (IOException e1) {
-//			System.out.println("FAILURE");
-//			e1.printStackTrace();
-//		} catch (NoSuchAlgorithmException e1) {
-//			System.out.println("FAILURE");
-//			e1.printStackTrace();
-//		}
+		// try {
+		// String news = getCreeperhostLink("news.html");
+		// newsPane.setPage(news);
+		// } catch (IOException e1) {
+		// System.out.println("FAILURE");
+		// e1.printStackTrace();
+		// } catch (NoSuchAlgorithmException e1) {
+		// System.out.println("FAILURE");
+		// e1.printStackTrace();
+		// }
 		JScrollPane newsPanel = new JScrollPane(newsTextPane);
 		newsPanel.setBounds(480, 75, 305, 196);
-		
+
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(480, 45, 113, 19);
 		newsTextPane.add(lblNews);
-		
+
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon("res//newsTab.png"));
-		
+
 		tabbedPane.add(optionsPane, 1);
 		tabbedPane.setIconAt(1, new ImageIcon("res//optionsTab.png"));
-		
+
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.setIconAt(2, new ImageIcon("res//packsTab.png"));
-		
+
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon("res//mapsTab.png"));
-		
+
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon("res//texturesTab.png"));
-		
+
 		tabbedPane.setSelectedIndex(2);
-		
+
 		if (passwordSettings.getUsername() != "") {
-			
+
 		} else {
 
 		}
 	}
 
 	public void doLogin() {
-		
+
 		try {
 			LauncherConsole con = new LauncherConsole();
 			con.setVisible(true);
@@ -363,7 +547,7 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		btnLogin.setEnabled(false);
 		usernameField.setEnabled(false);
 		passwordField.setEnabled(false);
@@ -432,12 +616,11 @@ public class LaunchFrame extends JFrame {
 							loginPanel.revalidate();
 							loginPanel.repaint();
 							btnLogin.setEnabled(true);
-						} else if (responseStr.equalsIgnoreCase("old version")){
+						} else if (responseStr.equalsIgnoreCase("old version")) {
 
 							lblError.setText("Outdated launcher.");
 							btnLogin.setEnabled(true);
-						}
-						else{
+						} else {
 							btnLogin.setEnabled(true);
 							lblError.setText("Login failed: " + responseStr);
 						}
@@ -452,18 +635,22 @@ public class LaunchFrame extends JFrame {
 		};
 		loginWorker.execute();
 	}
-	
+
 	public void runGameUpdater(final LoginResponse response) {
-		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
+		if (!new File(Settings.getSettings().getInstallPath()
+				+ "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			btnLogin.setEnabled(false);
 			usernameField.setEnabled(false);
 			passwordField.setEnabled(false);
 			chckbxRemember.setEnabled(false);
 
-			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			final ProgressMonitor progMonitor = new ProgressMonitor(this,
+					"Downloading minecraft...", "", 0, 100);
 
 			final GameUpdateWorker updater = new GameUpdateWorker(
-					RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+					RESPONSE.getLatestVersion(), "minecraft.jar", new File(
+							Settings.getSettings().getInstallPath(),
+							".minecraft//bin").getPath(), false) {
 				public void done() {
 
 					btnLogin.setEnabled(true);
@@ -482,8 +669,11 @@ public class LaunchFrame extends JFrame {
 							System.out.println(getSelectedModPack());
 							killMetaInf();
 							try {
-								// the old start testing code just put me in a infinite loop.
-								launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath() + "/.minecraft", "TestingPlayer", "-");
+								// the old start testing code just put me in a
+								// infinite loop.
+								launchMinecraft(new File(Settings.getSettings()
+										.getInstallPath()).getPath()
+										+ "/.minecraft", "TestingPlayer", "-");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -544,62 +734,64 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public String getSelectedModPack() {
-/*		if (modPack1RB.isSelected()) {
-			return "FTBCLASSIC";
-		} else if (modPack2RB.isSelected()) {
-			return "FTB";
-		} else if (modPack3RB.isSelected()) {
-			return "DIREWOLF20";
-		} else if (modPack4RB.isSelected()) {
-			return "FTBLITE";
-		}*/
+		/*
+		 * if (modPack1RB.isSelected()) { return "FTBCLASSIC"; } else if
+		 * (modPack2RB.isSelected()) { return "FTB"; } else if
+		 * (modPack3RB.isSelected()) { return "DIREWOLF20"; } else if
+		 * (modPack4RB.isSelected()) { return "FTBLITE"; }
+		 */
 		return null;
 	}
-	
-	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		
+
+	public static String getCreeperhostLink(String file)
+			throws NoSuchAlgorithmException {
+
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-		
-		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+
+		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
 			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
 		} else {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		}
-		
-		String date = sdf.format(new Date());
-		
-		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "//" + file;
-	}
-	
-	public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
-		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-		
-		if(TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
-		} else {
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		}
-		
+
 		String date = sdf.format(new Date());
 
-		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "//" + file);
+		return "http://repo.creeperhost.net/direct/FTB2/"
+				+ md5("mcepoch1" + date) + "//" + file;
 	}
-	
+
+	public void downloadPack(String dest, String file)
+			throws MalformedURLException, NoSuchAlgorithmException, IOException {
+		DateFormat sdf = new SimpleDateFormat("ddMMyy");
+
+		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
+		} else {
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		}
+
+		String date = sdf.format(new Date());
+
+		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/"
+				+ md5("mcepoch1" + date) + "//" + file);
+	}
+
 	public static String md5(String input) throws NoSuchAlgorithmException {
 		String result = input;
-		if(input != null) {
+		if (input != null) {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(input.getBytes());
 			BigInteger hash = new BigInteger(1, md.digest());
 			result = hash.toString(16);
-			while(result.length() < 32) {
+			while (result.length() < 32) {
 				result = "0" + result;
 			}
 		}
 		return result;
 	}
-	
-	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+
+	public void downloadUrl(String filename, String urlString)
+			throws MalformedURLException, IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 		try {
@@ -608,8 +800,7 @@ public class LaunchFrame extends JFrame {
 
 			byte data[] = new byte[1024];
 			int count;
-			while ((count = in.read(data, 0, 1024)) != -1)
-			{
+			while ((count = in.read(data, 0, 1024)) != -1) {
 				fout.write(data, 0, count);
 			}
 		} finally {
@@ -617,7 +808,7 @@ public class LaunchFrame extends JFrame {
 				in.close();
 			}
 			if (fout != null) {
-				fout.flush();	
+				fout.flush();
 			}
 			fout.close();
 		}
@@ -660,20 +851,30 @@ public class LaunchFrame extends JFrame {
 		return "0";
 	}
 
-	// Vbitz : I'm changing this back, there's a reason why we launch minecraft like this
-	// A we can get the console easier and 2 we have complete control over it, including the location of the .minecraft dir
-	// Once the mod loading code is working I will fix the ram settings, to fix them we will need to launch a new copy of the launcher
-	// and then exit the old one. This is the same way the technic launcher does it for a good reason, we pretty much run
+	// Vbitz : I'm changing this back, there's a reason why we launch minecraft
+	// like this
+	// A we can get the console easier and 2 we have complete control over it,
+	// including the location of the .minecraft dir
+	// Once the mod loading code is working I will fix the ram settings, to fix
+	// them we will need to launch a new copy of the launcher
+	// and then exit the old one. This is the same way the technic launcher does
+	// it for a good reason, we pretty much run
 	// minecraft the same way.
 
 	protected void launchMinecraft(String workingDir, String username,
 			String password) throws IOException {
 		try {
 			System.out.println("Loading jars...");
-			// if you want to test with forge then uncomment these following 2 lines after downloading the latest 1.3.2 version of minecraft forge from the forums
-			// and putting it in your bin directory, you do not need to unzip the file just make sure it's named minecraftforge.zip
-			String[] jarFiles = new String[] { "minecraftforge.zip", "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			//String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			// if you want to test with forge then uncomment these following 2
+			// lines after downloading the latest 1.3.2 version of minecraft
+			// forge from the forums
+			// and putting it in your bin directory, you do not need to unzip
+			// the file just make sure it's named minecraftforge.zip
+			String[] jarFiles = new String[] { "minecraftforge.zip",
+					"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar",
+					"jinput.jar" };
+			// String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
+			// "lwjgl_util.jar", "jinput.jar" };
 
 			URL[] urls = new URL[jarFiles.length];
 
@@ -685,14 +886,14 @@ public class LaunchFrame extends JFrame {
 				} catch (MalformedURLException e) {
 					// e.printStackTrace();
 					System.err
-					.println("MalformedURLException, " + e.toString());
+							.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
 			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-			.toString();
+					.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -703,8 +904,8 @@ public class LaunchFrame extends JFrame {
 					LaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
-				Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-				Field[] fields = mc.getDeclaredFields();
+			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
+			Field[] fields = mc.getDeclaredFields();
 
 			for (int i = 0; i < fields.length; i++) {
 				Field f = fields[i];
@@ -719,7 +920,8 @@ public class LaunchFrame extends JFrame {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
-				System.out.println("Fixed Minecraft Path: Field was " + f.toString());
+				System.out.println("Fixed Minecraft Path: Field was "
+						+ f.toString());
 			}
 
 			String[] mcArgs = new String[2];
@@ -731,7 +933,6 @@ public class LaunchFrame extends JFrame {
 
 			System.out.println("MCDIR: " + mcDir);
 
-			
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
@@ -753,16 +954,20 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 			System.exit(4);
 		}
-		
+
 	}
 
 	public static void killMetaInf() {
 		// TODO Auto-generated method stub
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
+		File inputFile = new File(Settings.getSettings().getInstallPath()
+				+ "/.minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath()
+				+ "/.minecraft/bin", "minecraft.jar.tmp");
 		try {
-			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
+			JarInputStream input = new JarInputStream(new FileInputStream(
+					inputFile));
+			JarOutputStream output = new JarOutputStream(new FileOutputStream(
+					outputTmpFile));
 
 			JarEntry entry;
 
@@ -838,7 +1043,7 @@ public class LaunchFrame extends JFrame {
 
 				fileoutputstream = new FileOutputStream(zipLocation);
 
-				while ((n = zipinputstream.read(buf, 0, 1024)) > -1){
+				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
 					fileoutputstream.write(buf, 0, n);
 				}
 
@@ -943,7 +1148,6 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-
 	public static void copyFile(File src, File dest) throws IOException {
 		if (src.exists()) {
 			InputStream in = new FileInputStream(src);
@@ -975,13 +1179,57 @@ public class LaunchFrame extends JFrame {
 	}
 
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "\\"+ getSelectedModPack() + "\\.minecraft").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "\\"
+				+ getSelectedModPack() + "\\.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\"), new File(Settings.getSettings().getInstallPath()+ "\\"+ getSelectedModPack()+ "\\.minecraft\\bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath()+ "\\.minecraft\\bin\\minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
-		//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
-		//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		copyFolder(new File(Settings.getSettings().getInstallPath()
+				+ "\\.minecraft\\bin\\"), new File(Settings.getSettings()
+				.getInstallPath()
+				+ "\\"
+				+ getSelectedModPack()
+				+ "\\.minecraft\\bin"));
+		File minecraft = new File(Settings.getSettings().getInstallPath()
+				+ "\\.minecraft\\bin\\minecraft.jar");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"
+				+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+		// minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+
+		// "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+		// System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
+	}
+
+	/**
+	 * "Loads" the settings from the settings class into their respective GUI
+	 * controls.
+	 */
+	private void loadSettings() {
+		Settings settings = Settings.getSettings();
+
+		installFolderTextField.setText(settings.getInstallPath());
+
+		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+	}
+
+	/**
+	 * "Saves" the settings from the GUI controls into the settings class.
+	 */
+	private void saveSettings() {
+		Settings settings = Settings.getSettings();
+
+		settings.setInstallPath(installFolderTextField.getText());
+
+		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+
+		try {
+			settings.save();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Failed to save config file: "
+					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Failed to save config file: "
+					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
