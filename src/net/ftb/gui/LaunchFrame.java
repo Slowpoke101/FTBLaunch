@@ -55,6 +55,7 @@ import net.ftb.workers.LoginWorker;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -98,7 +99,9 @@ public class LaunchFrame extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
-	private static Color back = new Color(151, 151, 151);
+	private static Color back = new Color(50, 50, 50);
+	
+	static String[] jarMods;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -344,7 +347,7 @@ public class LaunchFrame extends JFrame {
 		optionsPane.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
 		
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Save");
 		GridBagConstraints gbc_okButton = new GridBagConstraints();
 		gbc_okButton.fill = GridBagConstraints.BOTH;
 		gbc_okButton.insets = new Insets(0, 0, 0, 5);
@@ -356,7 +359,7 @@ public class LaunchFrame extends JFrame {
 				saveSettings();
 			}
 		});
-		okButton.setActionCommand("OK");
+		okButton.setActionCommand("Save");
 		getRootPane().setDefaultButton(okButton);
 
 		JPanel buttonPane = new JPanel();
@@ -376,10 +379,8 @@ public class LaunchFrame extends JFrame {
 
 		JScrollPane packsScroll = new JScrollPane(packs);
 		packsScroll.setBounds(0, 0, 410, 380);
-		packsScroll
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		packsScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
 
 		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));

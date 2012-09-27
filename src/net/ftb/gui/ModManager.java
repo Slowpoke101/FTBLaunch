@@ -189,7 +189,7 @@ public class ModManager extends JDialog {
 				//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 				copyFile(minecraft, mcbackup);
 			}
-			LauncherFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
+			LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
 
 			try{
 				// Open the file that is the first 
@@ -203,7 +203,7 @@ public class ModManager extends JDialog {
 				int i=0;
 				while ((strLine = br.readLine()) != null)   {
 					// Print the content on the console
-					LauncherFrame.jarMods[i] = strLine;
+					LaunchFrame.jarMods[i] = strLine;
 					i++;		
 				}
 				//Close the input stream
@@ -212,7 +212,7 @@ public class ModManager extends JDialog {
 			}catch (Exception e){//Catch exception if any
 				System.err.println("Error: " + e.getMessage());
 			}
-			LauncherFrame.jarMods = reverse(LauncherFrame.jarMods);
+			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
 			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/bin/"));
 			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/"));
 		}
