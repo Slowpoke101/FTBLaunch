@@ -99,7 +99,7 @@ public class LaunchFrame extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
-	private static Color back = new Color(50, 50, 50);
+	private static Color back = new Color(222, 222, 222);
 	
 	static String[] jarMods;
 
@@ -199,12 +199,12 @@ public class LaunchFrame extends JFrame {
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		newsPane.setLayout(null);
 		// newsPane.add(backgroundImage1);
-		newsPane.setBackground(Color.WHITE);
+		newsPane.setBackground(back);
 
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// optionsPane.add(backgroundImage2);
-		optionsPane.setBackground(Color.WHITE);
+		optionsPane.setBackground(back);
 
 		getContentPane().add(optionsPane, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
@@ -372,24 +372,25 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
 		// modPacksPane.add(backgroundImage3);
-		modPacksPane.setBackground(Color.WHITE);
+		modPacksPane.setBackground(back);
 
 		packs = new JList<JPanel>();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
-
+		packs.setOpaque(false);
+		
 		JScrollPane packsScroll = new JScrollPane(packs);
 		packsScroll.setBounds(0, 0, 410, 380);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
-
+		packsScroll.setOpaque(false);
+		
 		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));
 		/**
 		 * uncomment to use the image based on which pack is selected, above one
 		 * is for testing purposes
 		 */
-		// JLabel packImage = new JLabel(new
-		// ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
+		// JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
 		packImage.setBounds(410, 0, 410, 205);
 		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
@@ -398,12 +399,13 @@ public class LaunchFrame extends JFrame {
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mapsPane.setLayout(null);
 		// mapsPane.add(backgroundImage4);
-		mapsPane.setBackground(Color.WHITE);
+		mapsPane.setBackground(back);
+		
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
 		// tpPane.add(backgroundImage5);
-		tpPane.setBackground(Color.WHITE);
+		tpPane.setBackground(back);
 
 		loginPanel = new JPanel();
 		loginPanel.setBounds(480, 282, 305, 139);
