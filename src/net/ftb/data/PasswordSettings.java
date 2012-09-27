@@ -27,11 +27,13 @@ public class PasswordSettings {
 			} catch (IOException e) { }
 		}
 	}
+	
 	public void flush() throws IOException{
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
 		wri.write("");
 		wri.close();
 	}
+	
 	public String getHex(String str) {
 		try {
 			return String.format("%040x", new BigInteger(str.getBytes("utf8")));

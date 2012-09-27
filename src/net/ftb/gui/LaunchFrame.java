@@ -3,7 +3,6 @@ package net.ftb.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -55,7 +54,7 @@ import net.ftb.workers.LoginWorker;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
+import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -104,23 +103,30 @@ public class LaunchFrame extends JFrame {
 	static String[] jarMods;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	
+	private JPanel panel = new JPanel();
+	
+	private JPanel footer = new JPanel();
+	
+	private JLabel footerLogo = new JLabel(new ImageIcon("res//logo.png"));
+	private JLabel footerCreeper = new JLabel(new ImageIcon("res//creeperhostLogo.png"));
+	
+	private JButton launch = new JButton(new ImageIcon("res//loginButton.png"));
+	
+	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
+	
+	private JComboBox<String> users = new JComboBox<String>(dropdown);
 
-	private JLabel backgroundImage1 = new JLabel(new ImageIcon(
-			"res//background.png"));
-	private JLabel backgroundImage2 = new JLabel(new ImageIcon(
-			"res//background.png"));
-	private JLabel backgroundImage3 = new JLabel(new ImageIcon(
-			"res//background.png"));
-	private JLabel backgroundImage4 = new JLabel(new ImageIcon(
-			"res//background.png"));
-	private JLabel backgroundImage5 = new JLabel(new ImageIcon(
-			"res//background.png"));
+	private JLabel backgroundImage1 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage2 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage3 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage4 = new JLabel(new ImageIcon("res//background.png"));
+	private JLabel backgroundImage5 = new JLabel(new ImageIcon("res//background.png"));
 
 	JList<JPanel> packs;
 
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	private JTextField saveUser;
 	@SuppressWarnings("unused")
 	private JPasswordField savePass;
 	private JTextField ramMinimum;
@@ -138,8 +144,7 @@ public class LaunchFrame extends JFrame {
 			public void run() {
 
 				try {
-					UIManager.setLookAndFeel(UIManager
-							.getSystemLookAndFeelClassName());
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -181,8 +186,7 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
 
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings()
-				.getInstallPath(), "loginData"));
+		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		backgroundImage1.setBounds(0, 0, 820, 480);
 		backgroundImage2.setBounds(0, 0, 820, 480);
@@ -191,9 +195,34 @@ public class LaunchFrame extends JFrame {
 		backgroundImage5.setBounds(0, 0, 820, 480);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 821, 480);
-		tabbedPane.setBounds(0, 0, 815, 452);
-		setContentPane(tabbedPane);
+		setBounds(100, 100, 820, 480);
+		panel.setBounds(0, 0, 820, 480);
+		panel.setLayout(null);
+		footer.setBounds(0, 380, 820, 100);
+		footer.setLayout(null);
+		footer.setBackground(Color.WHITE);
+		tabbedPane.setBounds(0, 0, 820, 380);
+		panel.add(tabbedPane);
+		panel.add(footer);
+		setContentPane(panel);
+		
+		//Footer
+		footerLogo.setBounds(20, 20, 32, 32);
+		footerCreeper.setBounds(72, 20, 136, 32);
+		users.setBounds(600, 20, 150, 30);
+		launch.setBounds(761, 20, 39, 39);
+		launch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				doLogin();
+			}
+		});
+		
+		
+		footer.add(users);
+		footer.add(footerLogo);
+		footer.add(footerCreeper);
+		footer.add(launch);
 
 		newsPane = new JPanel();
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -201,172 +230,6 @@ public class LaunchFrame extends JFrame {
 		// newsPane.add(backgroundImage1);
 		newsPane.setBackground(back);
 
-		optionsPane = new JPanel();
-		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		// optionsPane.add(backgroundImage2);
-		optionsPane.setBackground(back);
-
-		getContentPane().add(optionsPane, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		optionsPane.setLayout(gbl_contentPanel);
-
-		JLabel lblInstallFolder = new JLabel("Install folder:");
-		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
-		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
-		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
-		gbc_lblInstallFolder.gridx = 0;
-		gbc_lblInstallFolder.gridy = 0;
-		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
-
-		installFolderTextField = new JTextField();
-		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
-		gbc_installFolderTextField.gridwidth = 5;
-		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
-		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
-		gbc_installFolderTextField.gridx = 1;
-		gbc_installFolderTextField.gridy = 0;
-		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
-		installFolderTextField.setColumns(10);
-
-		JButton installBrowseBtn = new JButton("...");
-		installBrowseBtn.addActionListener(new ChooseDir());
-
-		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
-		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
-		gbc_installBrowseBtn.gridx = 6;
-		gbc_installBrowseBtn.gridy = 0;
-		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
-
-		tglbtnForceUpdate = new JToggleButton("Force update?");
-		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
-		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
-		gbc_tglbtnForceUpdate.gridwidth = 5;
-		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tglbtnForceUpdate.gridx = 1;
-		gbc_tglbtnForceUpdate.gridy = 1;
-		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-
-		JLabel lblSavedProfiles = new JLabel("Saved Profiles");
-		GridBagConstraints gbc_lblSavedProfiles = new GridBagConstraints();
-		gbc_lblSavedProfiles.gridwidth = 2;
-		gbc_lblSavedProfiles.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSavedProfiles.gridx = 1;
-		gbc_lblSavedProfiles.gridy = 2;
-		optionsPane.add(lblSavedProfiles, gbc_lblSavedProfiles);
-
-		@SuppressWarnings("rawtypes")
-		JList list = new JList();
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.gridwidth = 2;
-		gbc_list.fill = GridBagConstraints.BOTH;
-		gbc_list.gridheight = 3;
-		gbc_list.insets = new Insets(0, 0, 5, 5);
-		gbc_list.gridx = 1;
-		gbc_list.gridy = 3;
-		optionsPane.add(list, gbc_list);
-
-		JLabel lblUsername = new JLabel("Username:");
-		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
-		gbc_lblUsername.anchor = GridBagConstraints.EAST;
-		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUsername.gridx = 3;
-		gbc_lblUsername.gridy = 3;
-		optionsPane.add(lblUsername, gbc_lblUsername);
-
-		saveUser = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 4;
-		gbc_textField.gridy = 3;
-		optionsPane.add(saveUser, gbc_textField);
-		saveUser.setColumns(10);
-
-		JLabel lblPassword = new JLabel("Password:");
-		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
-		gbc_lblPassword.anchor = GridBagConstraints.EAST;
-		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPassword.gridx = 3;
-		gbc_lblPassword.gridy = 4;
-		optionsPane.add(lblPassword, gbc_lblPassword);
-
-		passwordField = new JPasswordField();
-		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_passwordField.gridx = 4;
-		gbc_passwordField.gridy = 4;
-		optionsPane.add(passwordField, gbc_passwordField);
-
-		JButton btnAdd = new JButton("Add");
-		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
-		gbc_btnAdd.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAdd.gridx = 5;
-		gbc_btnAdd.gridy = 4;
-		optionsPane.add(btnAdd, gbc_btnAdd);
-
-		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
-		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
-		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
-		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRamMinimum.gridx = 1;
-		gbc_lblRamMinimum.gridy = 7;
-		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
-
-		ramMinimum = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 7;
-		ramMinimum.setText("256");
-		ramMin = Integer.parseInt(ramMinimum.getText());
-		optionsPane.add(ramMinimum, gbc_textField_1);
-		ramMinimum.setColumns(10);
-
-		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
-		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
-		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
-		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRamMaximum.gridx = 1;
-		gbc_lblRamMaximum.gridy = 8;
-		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
-
-		ramMaximum = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 2;
-		gbc_textField_2.gridy = 8;
-		ramMaximum.setText("1024");
-		ramMax = Integer.parseInt(ramMaximum.getText());
-		optionsPane.add(ramMaximum, gbc_textField_2);
-		ramMaximum.setColumns(10);
-		
-		JButton okButton = new JButton("Save");
-		GridBagConstraints gbc_okButton = new GridBagConstraints();
-		gbc_okButton.fill = GridBagConstraints.BOTH;
-		gbc_okButton.insets = new Insets(0, 0, 0, 5);
-		gbc_okButton.gridx = 4;
-		gbc_okButton.gridy = 9;
-		optionsPane.add(okButton, gbc_okButton);
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveSettings();
-			}
-		});
-		okButton.setActionCommand("Save");
-		getRootPane().setDefaultButton(okButton);
-
-		JPanel buttonPane = new JPanel();
-		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		optionsPane.add(buttonPane);
-
-		loadSettings();
 
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -379,7 +242,7 @@ public class LaunchFrame extends JFrame {
 		packs.setOpaque(false);
 		
 		JScrollPane packsScroll = new JScrollPane(packs);
-		packsScroll.setBounds(0, 0, 410, 380);
+		packsScroll.setBounds(0, 0, 410, 310);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
@@ -507,7 +370,114 @@ public class LaunchFrame extends JFrame {
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(480, 45, 113, 19);
 		newsTextPane.add(lblNews);
+		
+		//Options Tab
+		optionsPane = new JPanel();
+		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		// optionsPane.add(backgroundImage2);
+		optionsPane.setBackground(back);
 
+		getContentPane().add(optionsPane, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		optionsPane.setLayout(gbl_contentPanel);
+
+		
+		ramMaximum = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 2;
+		gbc_textField_2.gridy = 7;
+		ramMaximum.setText("1024");
+		ramMax = Integer.parseInt(ramMaximum.getText());
+				
+		ramMinimum = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 6;
+		ramMinimum.setText("256");
+		ramMin = Integer.parseInt(ramMinimum.getText());
+		
+		JButton installBrowseBtn = new JButton("...");
+		installBrowseBtn.addActionListener(new ChooseDir());
+		
+		JLabel lblInstallFolder = new JLabel("Install folder:");
+		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
+		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
+		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
+		gbc_lblInstallFolder.gridx = 0;
+		gbc_lblInstallFolder.gridy = 3;
+		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
+		
+		installFolderTextField = new JTextField();
+		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
+		gbc_installFolderTextField.gridwidth = 5;
+		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
+		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
+		gbc_installFolderTextField.gridx = 1;
+		gbc_installFolderTextField.gridy = 3;
+		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
+		installFolderTextField.setColumns(10);
+		
+		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
+		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
+		gbc_installBrowseBtn.gridx = 6;
+		gbc_installBrowseBtn.gridy = 3;
+		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
+		
+		tglbtnForceUpdate = new JToggleButton("Force update?");
+		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
+		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
+		gbc_tglbtnForceUpdate.gridwidth = 5;
+		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnForceUpdate.gridx = 1;
+		gbc_tglbtnForceUpdate.gridy = 4;
+		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
+		
+		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
+		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
+		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
+		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRamMinimum.gridx = 1;
+		gbc_lblRamMinimum.gridy = 6;
+		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
+		optionsPane.add(ramMinimum, gbc_textField_1);
+		ramMinimum.setColumns(10);
+		
+		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
+		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
+		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
+		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRamMaximum.gridx = 1;
+		gbc_lblRamMaximum.gridy = 7;
+		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
+		optionsPane.add(ramMaximum, gbc_textField_2);
+		ramMaximum.setColumns(10);
+		
+		JButton okButton = new JButton("Save");
+		GridBagConstraints gbc_okButton = new GridBagConstraints();
+		gbc_okButton.fill = GridBagConstraints.BOTH;
+		gbc_okButton.insets = new Insets(0, 0, 5, 5);
+		gbc_okButton.gridx = 4;
+		gbc_okButton.gridy = 8;
+		optionsPane.add(okButton, gbc_okButton);
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveSettings();
+			}
+		});
+		okButton.setActionCommand("Save");
+		getRootPane().setDefaultButton(okButton);
+		
+		loadSettings();
+		
+		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon("res//newsTab.png"));
 
@@ -1208,7 +1178,7 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		installFolderTextField.setText(settings.getInstallPath());
-
+		
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 	}
 
