@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.ftb.gui.LaunchFrame;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -23,9 +25,14 @@ public class ModPack {
 	// static stuff
 	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	
-	private static final String MODPACKSFILE = "https://dl.dropbox.com/u/40374207/modpacks.xml";
+	private static String MODPACKSFILE;
 	
 	public static void LoadAll() throws NoSuchAlgorithmException {
+	
+		System.out.println("loading modpack information...");
+		
+		MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
+		
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		
 		Document doc = null;
@@ -33,7 +40,6 @@ public class ModPack {
 			doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 		} catch (SAXException e) { e.printStackTrace(); return;
 		} catch (IOException e) {
-			// TODO Add Fallback Methods
 			e.printStackTrace();
 			return;
 		} catch (ParserConfigurationException e) { e.printStackTrace(); return; }
@@ -75,7 +81,7 @@ public class ModPack {
 	public static void main(String[] args) {
 		try {
 			LoadAll();
-			System.out.println(packs.get(0).getMcVersion());
+			System.out.println(packs.get(1).getName());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

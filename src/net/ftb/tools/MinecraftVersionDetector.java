@@ -13,11 +13,13 @@ import java.util.jar.JarFile;
 
 public class MinecraftVersionDetector {
 	
+	private URLClassLoader cl;
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
 	 * @return The version of the jar file
 	 */
+	@SuppressWarnings("resource")
 	public String getMinecraftVersion(String jarFilePath) {
 		String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar" };
 
@@ -32,9 +34,8 @@ public class MinecraftVersionDetector {
 			}
 		}
 
-		URLClassLoader cl = new URLClassLoader(urls,
-				this.getClass().getClassLoader());
-			
+		cl = new URLClassLoader(urls,this.getClass().getClassLoader());
+		
 		JarFile file = null;
 		try {
 			file = new JarFile(new File(jarFilePath + "/bin", "minecraft.jar"));

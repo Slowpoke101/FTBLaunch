@@ -47,6 +47,9 @@ public class ModManager extends JDialog {
 	
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 
+		private ZipFile zipFile;
+
+
 		@Override
 		protected Boolean doInBackground() throws Exception {
 			// TODO Auto-generated method stub
@@ -281,7 +284,7 @@ public class ModManager extends JDialog {
 				String zipPath = outputLocation;
 				File temp = new File(zipPath);
 				temp.mkdir();
-				ZipFile zipFile = new ZipFile(fSourceZip);
+				zipFile = new ZipFile(fSourceZip);
 				Enumeration<?> e = zipFile.entries();
 
 				while (e.hasMoreElements()) {

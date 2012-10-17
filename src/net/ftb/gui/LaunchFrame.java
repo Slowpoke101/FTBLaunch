@@ -117,12 +117,6 @@ public class LaunchFrame extends JFrame {
 	
 	private JComboBox<String> users = new JComboBox<String>(dropdown);
 
-	private JLabel backgroundImage1 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage2 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage3 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage4 = new JLabel(new ImageIcon("res//background.png"));
-	private JLabel backgroundImage5 = new JLabel(new ImageIcon("res//background.png"));
-
 	JList<JPanel> packs;
 
 	public static JTextField installFolderTextField;
@@ -134,6 +128,9 @@ public class LaunchFrame extends JFrame {
 
 	public static int ramMin = 512;
 	public static int ramMax = 1024;
+	private URLClassLoader cl;
+	private FileOutputStream fos;
+	private ZipFile zipFile;
 
 	/**
 	 * Launch the application.
@@ -148,7 +145,7 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
+				
 				// Load settings
 				try {
 					Settings.initSettings();
@@ -188,12 +185,6 @@ public class LaunchFrame extends JFrame {
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
-		backgroundImage1.setBounds(0, 0, 820, 480);
-		backgroundImage2.setBounds(0, 0, 820, 480);
-		backgroundImage3.setBounds(0, 0, 820, 480);
-		backgroundImage4.setBounds(0, 0, 820, 480);
-		backgroundImage5.setBounds(0, 0, 820, 480);
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 820, 480);
 		panel.setBounds(0, 0, 820, 480);
@@ -229,8 +220,7 @@ public class LaunchFrame extends JFrame {
 		newsPane.setLayout(null);
 		// newsPane.add(backgroundImage1);
 		newsPane.setBackground(back);
-
-
+		
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
@@ -319,7 +309,6 @@ public class LaunchFrame extends JFrame {
 							+ getSelectedModPack() + "\\.minecraft", "OFFLINE",
 							"1");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -351,25 +340,20 @@ public class LaunchFrame extends JFrame {
 		loginPanel.add(lblPass);
 		lblPass.setDisplayedMnemonic('p');
 
-		JEditorPane newsTextPane = new JEditorPane();
-		newsTextPane.setEditable(false);
-		// try {
-		// String news = getCreeperhostLink("news.html");
-		// newsPane.setPage(news);
-		// } catch (IOException e1) {
-		// System.out.println("FAILURE");
-		// e1.printStackTrace();
-		// } catch (NoSuchAlgorithmException e1) {
-		// System.out.println("FAILURE");
-		// e1.printStackTrace();
-		// }
-		JScrollPane newsPanel = new JScrollPane(newsTextPane);
-		newsPanel.setBounds(480, 75, 305, 196);
+		JEditorPane news = new JEditorPane();
+		news.setEditable(false);
+		try {
+			news.setPage("");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JScrollPane newsPanel = new JScrollPane(news);
+		newsPanel.setBounds(10, 10, 790, 290);
+		newsPane.add(newsPanel);
 
 		JLabel lblNews = new JLabel("News");
 		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNews.setBounds(480, 45, 113, 19);
-		newsTextPane.add(lblNews);
 		
 		//Options Tab
 		optionsPane = new JPanel();
@@ -647,7 +631,6 @@ public class LaunchFrame extends JFrame {
 										.getInstallPath()).getPath()
 										+ "/.minecraft", "TestingPlayer", "-");
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
@@ -715,8 +698,7 @@ public class LaunchFrame extends JFrame {
 		return null;
 	}
 
-	public static String getCreeperhostLink(String file)
-			throws NoSuchAlgorithmException {
+	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
 
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
@@ -727,9 +709,10 @@ public class LaunchFrame extends JFrame {
 		}
 
 		String date = sdf.format(new Date());
+		
+		System.out.println("http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file);
 
-		return "http://repo.creeperhost.net/direct/FTB2/"
-				+ md5("mcepoch1" + date) + "//" + file;
+		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
 	}
 
 	public void downloadPack(String dest, String file)
@@ -744,8 +727,7 @@ public class LaunchFrame extends JFrame {
 
 		String date = sdf.format(new Date());
 
-		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/"
-				+ md5("mcepoch1" + date) + "//" + file);
+		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file);
 	}
 
 	public static String md5(String input) throws NoSuchAlgorithmException {
@@ -872,8 +854,7 @@ public class LaunchFrame extends JFrame {
 
 			System.setProperty("user.home", new File(workingDir).getParent());
 
-			URLClassLoader cl = new URLClassLoader(urls,
-					LaunchFrame.class.getClassLoader());
+			cl = new URLClassLoader(urls, LaunchFrame.class.getClassLoader());
 
 			// Get the Minecraft Class.
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
@@ -930,7 +911,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public static void killMetaInf() {
-		// TODO Auto-generated method stub
 		File inputFile = new File(Settings.getSettings().getInstallPath()
 				+ "/.minecraft/bin", "minecraft.jar");
 		File outputTmpFile = new File(Settings.getSettings().getInstallPath()
@@ -963,10 +943,8 @@ public class LaunchFrame extends JFrame {
 			outputTmpFile.renameTo(inputFile);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -977,7 +955,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			FileOutputStream fos = new FileOutputStream(Settings.getSettings()
+			fos = new FileOutputStream(Settings.getSettings()
 					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
@@ -1039,7 +1017,7 @@ public class LaunchFrame extends JFrame {
 			File temp = new File(zipPath);
 			temp.mkdir();
 			System.out.println(zipPath + " created");
-			ZipFile zipFile = new ZipFile(fSourceZip);
+			zipFile = new ZipFile(fSourceZip);
 			Enumeration<?> e = zipFile.entries();
 
 			while (e.hasMoreElements()) {
