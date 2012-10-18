@@ -2,10 +2,14 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -79,6 +83,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
+import org.jdesktop.swingx.painter.Painter;
+
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -140,6 +146,20 @@ public class LaunchFrame extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
+				/*Enumeration<Object> obj = UIManager.getDefaults().keys();
+				
+				while (obj.hasMoreElements()) {
+					String str = obj.nextElement().toString();
+					if (str.contains("TabbedPane")) {
+						System.out.println(str + " : " + UIManager.get(str).toString());
+					}
+				}*/
+				
+				UIManager.put("control", new Color(255, 255, 255));
+				UIManager.put("nimbusBase", new Color(255, 255, 255));
+				UIManager.put("nimbusFocus", new Color(0, 0, 0));
+				UIManager.put("nimbusBorder", new Color(0, 0, 0));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -149,7 +169,12 @@ public class LaunchFrame extends JFrame {
 				        }
 				    }
 				} catch (Exception e) {
-				    // If Nimbus is not available, you can set the GUI to another look and feel.
+				    try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+					} catch (ClassNotFoundException e1) { }
+				    catch (InstantiationException e1) { }
+				    catch (IllegalAccessException e1) { }
+				    catch (UnsupportedLookAndFeelException e1) { }
 				}
 
 				
@@ -198,7 +223,7 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 840, 100);
 		footer.setLayout(null);
-		footer.setBackground(Color.WHITE);
+		//footer.setBackground(Color.WHITE);
 		tabbedPane.setBounds(0, 0, 840, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
@@ -226,13 +251,13 @@ public class LaunchFrame extends JFrame {
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		newsPane.setLayout(null);
 		// newsPane.add(backgroundImage1);
-		newsPane.setBackground(back);
+		//newsPane.setBackground(back);
 		
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
 		// modPacksPane.add(backgroundImage3);
-		modPacksPane.setBackground(back);
+		//modPacksPane.setBackground(back);
 
 		packs = new JList();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
@@ -259,22 +284,22 @@ public class LaunchFrame extends JFrame {
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mapsPane.setLayout(null);
 		// mapsPane.add(backgroundImage4);
-		mapsPane.setBackground(back);
+		//mapsPane.setBackground(back);
 		
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
 		// tpPane.add(backgroundImage5);
-		tpPane.setBackground(back);
+		//tpPane.setBackground(back);
 
 		loginPanel = new JPanel();
 		loginPanel.setBounds(480, 282, 305, 139);
 		loginPanel.setLayout(null);
-		loginPanel.setBackground(back);
+		//loginPanel.setBackground(back);
 
 		chckbxRemember = new JCheckBox("Remember Password");
 		chckbxRemember.setBounds(86, 101, 125, 23);
-		chckbxRemember.setBackground(back);
+		//chckbxRemember.setBackground(back);
 		if (passwordSettings.getUsername() != "") {
 			chckbxRemember.setSelected(true);
 		} else {
@@ -284,7 +309,7 @@ public class LaunchFrame extends JFrame {
 
 		btnLogin = new JButton("Login");
 		btnLogin.setBounds(226, 39, 69, 56);
-		btnLogin.setBackground(back);
+		//btnLogin.setBackground(back);
 		loginPanel.add(btnLogin);
 		btnLogin.setEnabled(true);
 		btnLogin.addActionListener(new ActionListener() {
@@ -366,7 +391,7 @@ public class LaunchFrame extends JFrame {
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// optionsPane.add(backgroundImage2);
-		optionsPane.setBackground(back);
+		//optionsPane.setBackground(back);
 
 		getContentPane().add(optionsPane, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
