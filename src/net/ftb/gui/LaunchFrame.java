@@ -234,7 +234,7 @@ public class LaunchFrame extends JFrame {
 		// modPacksPane.add(backgroundImage3);
 		modPacksPane.setBackground(back);
 
-		packs = new JList();
+		packs = new JList<JPanel>();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
 		packs.setOpaque(false);
 		
@@ -349,11 +349,7 @@ public class LaunchFrame extends JFrame {
 
 		JEditorPane news = new JEditorPane();
 		news.setEditable(false);
-		try {
-			news.setPage("");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		news.setText("f");
 		JScrollPane newsPanel = new JScrollPane(news);
 		newsPanel.setBounds(10, 10, 790, 290);
 		newsPane.add(newsPanel);
