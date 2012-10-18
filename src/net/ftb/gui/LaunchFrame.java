@@ -67,6 +67,7 @@ import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Font;
@@ -115,9 +116,9 @@ public class LaunchFrame extends JFrame {
 	
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
 	
-	private JComboBox<String> users = new JComboBox<String>(dropdown);
+	private JComboBox users = new JComboBox(dropdown);
 
-	JList<JPanel> packs;
+	JList packs;
 
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
@@ -141,10 +142,16 @@ public class LaunchFrame extends JFrame {
 			public void run() {
 
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				        if ("Nimbus".equals(info.getName())) {
+				            UIManager.setLookAndFeel(info.getClassName());
+				            break;
+				        }
+				    }
 				} catch (Exception e) {
-					e.printStackTrace();
+				    // If Nimbus is not available, you can set the GUI to another look and feel.
 				}
+
 				
 				// Load settings
 				try {
@@ -186,13 +193,13 @@ public class LaunchFrame extends JFrame {
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 820, 480);
-		panel.setBounds(0, 0, 820, 480);
+		setBounds(100, 100, 840, 480);
+		panel.setBounds(0, 0, 840, 480);
 		panel.setLayout(null);
-		footer.setBounds(0, 380, 820, 100);
+		footer.setBounds(0, 380, 840, 100);
 		footer.setLayout(null);
 		footer.setBackground(Color.WHITE);
-		tabbedPane.setBounds(0, 0, 820, 380);
+		tabbedPane.setBounds(0, 0, 840, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
@@ -227,7 +234,7 @@ public class LaunchFrame extends JFrame {
 		// modPacksPane.add(backgroundImage3);
 		modPacksPane.setBackground(back);
 
-		packs = new JList<JPanel>();
+		packs = new JList();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
 		packs.setOpaque(false);
 		
