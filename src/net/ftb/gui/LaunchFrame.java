@@ -2,14 +2,10 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -83,8 +79,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
-import org.jdesktop.swingx.painter.Painter;
-
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -105,7 +99,6 @@ public class LaunchFrame extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	public static String sysArch;
-	private static Color back = new Color(222, 222, 222);
 	
 	static String[] jarMods;
 
@@ -115,16 +108,16 @@ public class LaunchFrame extends JFrame {
 	
 	private JPanel footer = new JPanel();
 	
-	private JLabel footerLogo = new JLabel(new ImageIcon("res//logo.png"));
-	private JLabel footerCreeper = new JLabel(new ImageIcon("res//creeperhostLogo.png"));
+	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo.png")));
+	private JLabel footerCreeper = new JLabel(new ImageIcon("/image/creeperhostLogo.png"));
 	
-	private JButton launch = new JButton(new ImageIcon("res//loginButton.png"));
+	private JButton launch = new JButton(new ImageIcon("/image/loginButton.png"));
 	
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
 	
-	private JComboBox users = new JComboBox(dropdown);
+	private JComboBox<String> users = new JComboBox<String>(dropdown);
 
-	JList packs;
+	JList<JPanel> packs;
 
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
@@ -147,19 +140,19 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
-				/*Enumeration<Object> obj = UIManager.getDefaults().keys();
+				Enumeration<Object> obj = UIManager.getDefaults().keys();
 				
 				while (obj.hasMoreElements()) {
 					String str = obj.nextElement().toString();
 					if (str.contains("TabbedPane")) {
 						System.out.println(str + " : " + UIManager.get(str).toString());
 					}
-				}*/
+				}
 				
-				UIManager.put("control", new Color(255, 255, 255));
-				UIManager.put("nimbusBase", new Color(255, 255, 255));
-				UIManager.put("nimbusFocus", new Color(0, 0, 0));
-				UIManager.put("nimbusBorder", new Color(0, 0, 0));
+				UIManager.put("control", new Color(77, 77, 77));
+				UIManager.put("nimbusBase", new Color(0, 0, 0));
+				UIManager.put("nimbusFocus", new Color(222, 222, 222));
+				UIManager.put("nimbusBorder", new Color(222, 222, 222));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -213,7 +206,7 @@ public class LaunchFrame extends JFrame {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo.png")));
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
@@ -223,7 +216,7 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 840, 100);
 		footer.setLayout(null);
-		//footer.setBackground(Color.WHITE);
+		footer.setBackground(Color.WHITE);
 		tabbedPane.setBounds(0, 0, 840, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
@@ -270,14 +263,14 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
 		
-		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));
+//		JLabel packImage = new JLabel(new ImageIcon(this.getClass().getResource("/image/pack1.png")));
 		/**
 		 * uncomment to use the image based on which pack is selected, above one
 		 * is for testing purposes
 		 */
 		// JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
-		packImage.setBounds(410, 0, 410, 205);
-		modPacksPane.add(packImage);
+//		packImage.setBounds(410, 0, 410, 205);
+//		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
 
 		mapsPane = new JPanel();
@@ -375,7 +368,10 @@ public class LaunchFrame extends JFrame {
 		JEditorPane news = new JEditorPane();
 		news.setEditable(false);
 		news.setText("f");
+		
 		JScrollPane newsPanel = new JScrollPane(news);
+		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		newsPanel.setBounds(10, 10, 790, 290);
 		newsPane.add(newsPanel);
 
@@ -491,19 +487,19 @@ public class LaunchFrame extends JFrame {
 		
 		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
-		tabbedPane.setIconAt(0, new ImageIcon("res//newsTab.png"));
-
+		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/newsTab.png")));
+		
 		tabbedPane.add(optionsPane, 1);
-		tabbedPane.setIconAt(1, new ImageIcon("res//optionsTab.png"));
+		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/optionsTab.png")));
 
 		tabbedPane.add(modPacksPane, 2);
-		tabbedPane.setIconAt(2, new ImageIcon("res//packsTab.png"));
+		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/packsTab.png")));
 
 		tabbedPane.add(mapsPane, 3);
-		tabbedPane.setIconAt(3, new ImageIcon("res//mapsTab.png"));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/mapsTab.png")));
 
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setIconAt(4, new ImageIcon("res//texturesTab.png"));
+		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/texturesTab.png")));
 
 		tabbedPane.setSelectedIndex(2);
 

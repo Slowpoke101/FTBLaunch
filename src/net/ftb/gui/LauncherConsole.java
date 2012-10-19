@@ -58,7 +58,7 @@ public class LauncherConsole extends JDialog {
 		this.setSize(new Dimension(451, 300));
 		setResizable(false);
 		getContentPane().setLayout(new FlowLayout());
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo.png")));
 		textArea = new JTextArea(10, 50);
 		//textArea.setBounds(10, 11, 425, 250);
 		
