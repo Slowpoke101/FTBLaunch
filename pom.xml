@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.ftb</groupId>
+  <artifactId>ftblaunch</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>FTB Launcher</name>
+  <url>https://github.com/Slowpoke101/FTBLaunch</url>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>  
+      <resource>  
+        <directory>res</directory>
+        <targetPath>res</targetPath>
+      </resource>  
+    </resources>  
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>swingx</artifactId>
+      <version>1.6.4</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/External Jars/swingx-all-1.6.4.jar</systemPath>
+    </dependency>
+  </dependencies>
+</project>

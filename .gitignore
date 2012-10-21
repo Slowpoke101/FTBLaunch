@@ -2,3 +2,4 @@
 bin/
 .metadata/
 ftblaunch.cfg
+target/

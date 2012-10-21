@@ -259,7 +259,7 @@ public class LaunchFrame extends JFrame {
 		// modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
 
-		packs = new JList<JPanel>();
+		packs = new JList();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
 		packs.setOpaque(false);
 		
