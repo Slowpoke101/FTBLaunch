@@ -15,7 +15,6 @@
     <resources>  
       <resource>  
         <directory>res</directory>
-        <targetPath>res</targetPath>
       </resource>  
     </resources>  
   </build>

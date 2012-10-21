@@ -127,12 +127,12 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon("/image/creeperhostLogo.png"));
 	private JButton launch = new JButton(new ImageIcon("/image/loginButton.png"));
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
-	private JComboBox<String> users = new JComboBox<String>(dropdown);
+	private JComboBox users = new JComboBox(dropdown);
 
 	/**
 	 * things to go on the modpacks panel
 	 */
-	JList<JPanel> packs;
+	JList packs;
 	JScrollPane packsScroll;
 
 	/**
@@ -286,13 +286,8 @@ public class LaunchFrame extends JFrame {
 		// modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
 
-<<<<<<< HEAD
 		packs = new JList();
-		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
-=======
-		packs = new JList<JPanel>();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
->>>>>>> ae88f41593da5087a52747e95a2da89e7b01457c
 		packs.setOpaque(false);
 		
 		packsScroll = new JScrollPane(packs);
