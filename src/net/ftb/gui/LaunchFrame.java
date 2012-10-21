@@ -2,14 +2,10 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,7 +25,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -83,8 +78,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
-import org.jdesktop.swingx.painter.Painter;
-
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -96,43 +89,77 @@ public class LaunchFrame extends JFrame {
 	JLabel lblError;
 	JButton btnLogin;
 
+	/**
+	 * the panels to appear in the tabs
+	 */
 	private JPanel newsPane;
 	private JPanel optionsPane;
 	private JPanel modPacksPane;
 	private JPanel mapsPane;
 	private JPanel tpPane;
 
+	/**
+	 * the fields for typing username and password
+	 */
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	public static String sysArch;
-	private static Color back = new Color(222, 222, 222);
 	
+	/**
+	 * an array of all mods to be added to classpath
+	 */
 	static String[] jarMods;
 
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	
+	/**
+	 * the panel that contains the footer and the tabbed pane
+	 */
 	private JPanel panel = new JPanel();
 	
+	/**
+	 * tabbedpane and footer (shocker, right)
+	 */
+	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel footer = new JPanel();
 	
-	private JLabel footerLogo = new JLabel(new ImageIcon("res//logo.png"));
-	private JLabel footerCreeper = new JLabel(new ImageIcon("res//creeperhostLogo.png"));
-	
-	private JButton launch = new JButton(new ImageIcon("res//loginButton.png"));
-	
+	/**
+	 * the things to go on the footer
+	 */
+	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo.png")));
+	private JLabel footerCreeper = new JLabel(new ImageIcon("/image/creeperhostLogo.png"));
+	private JButton launch = new JButton(new ImageIcon("/image/loginButton.png"));
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
-	
-	private JComboBox users = new JComboBox(dropdown);
+	private JComboBox<String> users = new JComboBox<String>(dropdown);
 
-	JList packs;
+	/**
+	 * things to go on the modpacks panel
+	 */
+	JList<JPanel> packs;
+	JScrollPane packsScroll;
 
+	/**
+	 * things to go on the options panel
+	 */
 	public static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	@SuppressWarnings("unused")
-	private JPasswordField savePass;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
+	
+	/**
+	 * things to go on the news panel
+	 */
+	JEditorPane news;
+	JScrollPane newsPanel;
+	
+	/**
+	 * things to go on the texture packs panel
+	 */
+	
+	/**
+	 * things to go on the maps panel
+	 */
 
+	/**
+	 * random crap
+	 */
 	public static int ramMin = 512;
 	public static int ramMax = 1024;
 	private URLClassLoader cl;
@@ -147,19 +174,19 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
-				/*Enumeration<Object> obj = UIManager.getDefaults().keys();
+				Enumeration<Object> obj = UIManager.getDefaults().keys();
 				
 				while (obj.hasMoreElements()) {
 					String str = obj.nextElement().toString();
 					if (str.contains("TabbedPane")) {
 						System.out.println(str + " : " + UIManager.get(str).toString());
 					}
-				}*/
+				}
 				
-				UIManager.put("control", new Color(255, 255, 255));
-				UIManager.put("nimbusBase", new Color(255, 255, 255));
-				UIManager.put("nimbusFocus", new Color(0, 0, 0));
-				UIManager.put("nimbusBorder", new Color(0, 0, 0));
+				UIManager.put("control", new Color(77, 77, 77));
+				UIManager.put("nimbusBase", new Color(0, 0, 0));
+				UIManager.put("nimbusFocus", new Color(222, 222, 222));
+				UIManager.put("nimbusBorder", new Color(222, 222, 222));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -213,7 +240,7 @@ public class LaunchFrame extends JFrame {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("res//logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo.png")));
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
@@ -223,7 +250,7 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 840, 100);
 		footer.setLayout(null);
-		//footer.setBackground(Color.WHITE);
+		footer.setBackground(Color.WHITE);
 		tabbedPane.setBounds(0, 0, 840, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
@@ -259,25 +286,30 @@ public class LaunchFrame extends JFrame {
 		// modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
 
+<<<<<<< HEAD
 		packs = new JList();
 		packs.setBounds(0, 0, 410, (ModPack.getPackArray().size()) * 55);
+=======
+		packs = new JList<JPanel>();
+		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
+>>>>>>> ae88f41593da5087a52747e95a2da89e7b01457c
 		packs.setOpaque(false);
 		
-		JScrollPane packsScroll = new JScrollPane(packs);
-		packsScroll.setBounds(0, 0, 410, 310);
+		packsScroll = new JScrollPane(packs);
+		packsScroll.setBounds(0, 0, 420, 310);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
 		
-		JLabel packImage = new JLabel(new ImageIcon("res//pack1.png"));
+//		JLabel packImage = new JLabel(new ImageIcon(this.getClass().getResource("/image/pack1.png")));
 		/**
 		 * uncomment to use the image based on which pack is selected, above one
 		 * is for testing purposes
 		 */
 		// JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
-		packImage.setBounds(410, 0, 410, 205);
-		modPacksPane.add(packImage);
+//		packImage.setBounds(410, 0, 410, 205);
+//		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
 
 		mapsPane = new JPanel();
@@ -334,15 +366,7 @@ public class LaunchFrame extends JFrame {
 		btnPlayOffline.setBounds(199, 11, 96, 23);
 		btnPlayOffline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					launchMinecraft(new File(Settings.getSettings()
-							.getInstallPath()).getPath()
-							+ "\\"
-							+ getSelectedModPack() + "\\.minecraft", "OFFLINE",
-							"1");
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ getSelectedModPack() + "\\.minecraft", "OFFLINE","1");
 			}
 		});
 
@@ -362,26 +386,15 @@ public class LaunchFrame extends JFrame {
 		passwordField.setText(passwordSettings.getPassword());
 		loginPanel.add(passwordField);
 
-		JLabel lblUser = new JLabel("Username:");
-		lblUser.setBounds(14, 43, 52, 14);
-		loginPanel.add(lblUser);
-		lblUser.setDisplayedMnemonic('u');
-
-		JLabel lblPass = new JLabel("Password:");
-		lblPass.setBounds(16, 76, 50, 14);
-		loginPanel.add(lblPass);
-		lblPass.setDisplayedMnemonic('p');
-
-		JEditorPane news = new JEditorPane();
+		news = new JEditorPane();
 		news.setEditable(false);
 		news.setText("f");
-		JScrollPane newsPanel = new JScrollPane(news);
+		
+		newsPanel = new JScrollPane(news);
+		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		newsPanel.setBounds(10, 10, 790, 290);
 		newsPane.add(newsPanel);
-
-		JLabel lblNews = new JLabel("News");
-		lblNews.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNews.setBounds(480, 45, 113, 19);
 		
 		//Options Tab
 		optionsPane = new JPanel();
@@ -491,19 +504,19 @@ public class LaunchFrame extends JFrame {
 		
 		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
-		tabbedPane.setIconAt(0, new ImageIcon("res//newsTab.png"));
-
+		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/newsTab.png")));
+		
 		tabbedPane.add(optionsPane, 1);
-		tabbedPane.setIconAt(1, new ImageIcon("res//optionsTab.png"));
+		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/optionsTab.png")));
 
 		tabbedPane.add(modPacksPane, 2);
-		tabbedPane.setIconAt(2, new ImageIcon("res//packsTab.png"));
+		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/packsTab.png")));
 
 		tabbedPane.add(mapsPane, 3);
-		tabbedPane.setIconAt(3, new ImageIcon("res//mapsTab.png"));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/mapsTab.png")));
 
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setIconAt(4, new ImageIcon("res//texturesTab.png"));
+		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/texturesTab.png")));
 
 		tabbedPane.setSelectedIndex(2);
 
@@ -514,6 +527,9 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * call this to login
+	 */
 	public void doLogin() {
 
 		try {
@@ -652,15 +668,9 @@ public class LaunchFrame extends JFrame {
 							// try {
 							System.out.println(getSelectedModPack());
 							killMetaInf();
-							try {
-								// the old start testing code just put me in a
-								// infinite loop.
-								launchMinecraft(new File(Settings.getSettings()
-										.getInstallPath()).getPath()
-										+ "/.minecraft", "TestingPlayer", "-");
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+							// the old start testing code just put me in a
+							// infinite loop.
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
 
 						} else {
 							lblError.setForeground(Color.red);
@@ -705,11 +715,7 @@ public class LaunchFrame extends JFrame {
 				System.out.println(getSelectedModPack());
 				System.out.println("Installed jar mods");
 				installMods(getSelectedModPack());
-				launchMinecraft(new File(Settings.getSettings()
-						.getInstallPath()).getPath()
-						+ "\\"
-						+ getSelectedModPack() + "\\.minecraft",
-						RESPONSE.getUsername(), RESPONSE.getSessionID());
+				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ getSelectedModPack() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -726,6 +732,11 @@ public class LaunchFrame extends JFrame {
 		return null;
 	}
 
+	/**
+	 * @param file - the name of the file, as saved o the repo
+	 * @return - the direct link
+	 * @throws NoSuchAlgorithmException - see md5
+	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
 
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
@@ -742,22 +753,23 @@ public class LaunchFrame extends JFrame {
 
 		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
 	}
+	
+	/**
+	 * @param dest - the destination to be saved
+	 * @param file - the file as on the repo
+	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
+	 * @throws IOException - see downloadUrl
+	 */
 
-	public void downloadPack(String dest, String file)
-			throws MalformedURLException, NoSuchAlgorithmException, IOException {
-		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-
-		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
-		} else {
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		}
-
-		String date = sdf.format(new Date());
-
-		downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file);
+	public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException{
+		downloadUrl(dest, getCreeperhostLink(file));
 	}
 
+	/**
+	 * @param input - String to hash
+	 * @return - hashed string
+	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
+	 */
 	public static String md5(String input) throws NoSuchAlgorithmException {
 		String result = input;
 		if (input != null) {
@@ -772,8 +784,13 @@ public class LaunchFrame extends JFrame {
 		return result;
 	}
 
-	public void downloadUrl(String filename, String urlString)
-			throws MalformedURLException, IOException {
+	/**
+	 * @param filename - what to save it as on the system
+	 * @param urlString - the url to download
+	 * @throws MalformedURLException - for URL
+	 * @throws IOException - various
+	 */
+	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 		try {
@@ -795,69 +812,19 @@ public class LaunchFrame extends JFrame {
 			fout.close();
 		}
 	}
-
-	protected String getVersionMD5(String modPackName) {
-		InputStream is = null;
-		MessageDigest md = null;
-		File f = new File(Settings.getSettings().getInstallPath() + "\\"
-				+ modPackName + "\\.minecraft\\bin\\minecraft.jar");
-		if (f.exists()) {
-			try {
-				md = MessageDigest.getInstance("MD5");
-				is = new FileInputStream(Settings.getSettings()
-						.getInstallPath()
-						+ "\\"
-						+ modPackName
-						+ "\\.minecraft\\bin\\minecraft.jar");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				is = new DigestInputStream(is, md);
-				// read stream to EOF as normal...
-			} finally {
-				try {
-					is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			String result = "";
-			byte[] digest = md.digest();
-			for (int i = 0; i < digest.length; i++) {
-				result += Integer.toString((digest[i] & 0xff) + 0x100, 16)
-						.substring(1);
-			}
-			return result;
-		}
-		return "0";
-	}
-
-	// Vbitz : I'm changing this back, there's a reason why we launch minecraft
-	// like this
-	// A we can get the console easier and 2 we have complete control over it,
-	// including the location of the .minecraft dir
-	// Once the mod loading code is working I will fix the ram settings, to fix
-	// them we will need to launch a new copy of the launcher
-	// and then exit the old one. This is the same way the technic launcher does
-	// it for a good reason, we pretty much run
-	// minecraft the same way.
-
-	protected void launchMinecraft(String workingDir, String username,
-			String password) throws IOException {
+	
+	/**
+	 * launch the game with the mods in the classpath
+	 * @param workingDir - install path
+	 * @param username - the MC username
+	 * @param password - the MC password
+	 * @throws IOException
+	 */
+	protected void launchMinecraft(String workingDir, String username, String password) {
+		
 		try {
 			System.out.println("Loading jars...");
-			// if you want to test with forge then uncomment these following 2
-			// lines after downloading the latest 1.3.2 version of minecraft
-			// forge from the forums
-			// and putting it in your bin directory, you do not need to unzip
-			// the file just make sure it's named minecraftforge.zip
-			String[] jarFiles = new String[] { "minecraftforge.zip",
-					"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar",
-					"jinput.jar" };
-			// String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar",
-			// "lwjgl_util.jar", "jinput.jar" };
-
+			String[] jarFiles = new String[] { "minecraftforge.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
 			URL[] urls = new URL[jarFiles.length];
 
 			for (int i = 0; i < urls.length; i++) {
@@ -867,8 +834,7 @@ public class LaunchFrame extends JFrame {
 					System.out.println("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e) {
 					// e.printStackTrace();
-					System.err
-							.println("MalformedURLException, " + e.toString());
+					System.err.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
@@ -938,6 +904,9 @@ public class LaunchFrame extends JFrame {
 
 	}
 
+	/**
+	 * deletes the META-INF
+	 */
 	public static void killMetaInf() {
 		File inputFile = new File(Settings.getSettings().getInstallPath()
 				+ "/.minecraft/bin", "minecraft.jar");
@@ -977,11 +946,15 @@ public class LaunchFrame extends JFrame {
 		}
 
 	}
-
-	protected void downloadModPack(String modPackName) {
+	
+	/**
+	 * @param modPackName - the name of the pack 
+	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
+	 */
+	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
 		URL website;
 		try {
-			website = new URL("TODO!!!!!!!SERVER/" + modPackName + ".zip");
+			website = new URL(getCreeperhostLink(modPackName + ".zip"));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			fos = new FileOutputStream(Settings.getSettings()
 					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
@@ -995,6 +968,10 @@ public class LaunchFrame extends JFrame {
 				+ modPackName + ".zip");
 	}
 
+	/**
+	 * extracts zip to the location of the zip
+	 * @param zipLocation - the location
+	 */
 	public void extractZip(String zipLocation) {
 		try {
 			byte[] buf = new byte[1024];
@@ -1037,8 +1014,11 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	public void extractZipTo(String zipLocation, String outputLocation)
-			throws IOException {
+	/**
+	 * @param zipLocation - the zip to be extracted
+	 * @param outputLocation - where to extract to
+	 */
+	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
 		try {
 			File fSourceZip = new File(zipLocation);
 			String zipPath = outputLocation;
@@ -1082,6 +1062,11 @@ public class LaunchFrame extends JFrame {
 
 	}
 
+	/**
+	 * @param src - the folder to be moved
+	 * @param dest - where to move to
+	 * @throws IOException
+	 */
 	public static void copyFolder(File src, File dest) throws IOException {
 
 		if (src.isDirectory()) {
@@ -1126,6 +1111,11 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * @param src - the file to be moved
+	 * @param dest - where to move to
+	 * @throws IOException
+	 */
 	public static void copyFile(File src, File dest) throws IOException {
 		if (src.exists()) {
 			InputStream in = new FileInputStream(src);
@@ -1145,6 +1135,11 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * @param resource - the resource to delete
+	 * @return - the deleted resource
+	 * @throws IOException
+	 */
 	public static boolean delete(File resource) throws IOException {
 		if (resource.isDirectory()) {
 			File[] childFiles = resource.listFiles();
@@ -1156,6 +1151,10 @@ public class LaunchFrame extends JFrame {
 
 	}
 
+	/**
+	 * @param modPackName - The pack to install (should already be downloaded)
+	 * @throws IOException
+	 */
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "\\"
 				+ getSelectedModPack() + "\\.minecraft").mkdirs();
