@@ -127,11 +127,13 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon("/image/creeperhostLogo.png"));
 	private JButton launch = new JButton(new ImageIcon("/image/loginButton.png"));
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private JComboBox users = new JComboBox(dropdown);
 
 	/**
 	 * things to go on the modpacks panel
 	 */
+	@SuppressWarnings("rawtypes")
 	JList packs;
 	JScrollPane packsScroll;
 
@@ -236,6 +238,7 @@ public class LaunchFrame extends JFrame {
 	 * Create the frame.
 	 */
 
+	@SuppressWarnings("rawtypes")
 	public LaunchFrame() {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
