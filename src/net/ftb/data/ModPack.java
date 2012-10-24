@@ -57,6 +57,9 @@ public class ModPack {
 			try {
 				packs.add(new ModPack(
 						modPackAttr.getNamedItem("name").getTextContent(),
+						modPackAttr.getNamedItem("author").getTextContent(),
+						modPackAttr.getNamedItem("version").getTextContent(),
+						modPackAttr.getNamedItem("logo").getTextContent(),
 						modPackAttr.getNamedItem("url").getTextContent(),
 						modPackAttr.getNamedItem("image").getTextContent(),
 						modPackAttr.getNamedItem("dir").getTextContent(),
@@ -90,6 +93,9 @@ public class ModPack {
 	// class stuff
 	
 	private String name;
+	private String author;
+	private String version;
+	private Image logo;
 	private URL url;
 	private URLConnection connection;
 	private Image image;
@@ -97,12 +103,16 @@ public class ModPack {
 	private String dir;
 	private String mcVersion;
 	
-	public ModPack(String name, String url, String image, String dir, String mcVersion) throws IOException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion) throws IOException, NoSuchAlgorithmException {
 		this.name = name;
-		this.url = new URL(url);
-		URL imageUrl = new URL(image);
+		this.author = author;
+		this.version = version;
+		URL logoURL = new URL(LaunchFrame.getCreeperhostLink(logo));
+		this.logo = Toolkit.getDefaultToolkit().createImage(logoURL);
+		this.url = new URL(LaunchFrame.getCreeperhostLink(url));
+		URL imageUrl = new URL(LaunchFrame.getCreeperhostLink(image));
 		this.image = Toolkit.getDefaultToolkit().createImage(imageUrl);
-		connection = this.url.openConnection();
+		this.connection = this.url.openConnection();
 		this.size = connection.getContentLength();
 		this.dir = dir;
 		this.mcVersion = mcVersion;
@@ -110,6 +120,18 @@ public class ModPack {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getAuthor() {
+		return author;
+	}
+	
+	public String getVersion() {
+		return version;
+	}
+	
+	public Image getLogo() {
+		return logo;
 	}
 	
 	public URL getUrl() {
