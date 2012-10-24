@@ -123,9 +123,9 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * the things to go on the footer
 	 */
-	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo.png")));
-	private JLabel footerCreeper = new JLabel(new ImageIcon("/image/creeperhostLogo.png"));
-	private JButton launch = new JButton(new ImageIcon("/image/loginButton.png"));
+	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JButton launch = new JButton(new ImageIcon(this.getClass().getResource("/image/btn_play.png")));
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private JComboBox users = new JComboBox(dropdown);
@@ -188,7 +188,7 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("control", new Color(77, 77, 77));
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
 				UIManager.put("nimbusFocus", new Color(222, 222, 222));
-				UIManager.put("nimbusBorder", new Color(222, 222, 222));
+				UIManager.put("nimbusBorder", new Color(77, 77, 77));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -243,7 +243,7 @@ public class LaunchFrame extends JFrame {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
@@ -253,7 +253,7 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 840, 100);
 		footer.setLayout(null);
-		footer.setBackground(Color.WHITE);
+		footer.setBackground(new Color(25, 25, 25));
 		tabbedPane.setBounds(0, 0, 840, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
@@ -502,19 +502,19 @@ public class LaunchFrame extends JFrame {
 		
 		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
-		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/newsTab.png")));
+		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 		
 		tabbedPane.add(optionsPane, 1);
-		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/optionsTab.png")));
+		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 
 		tabbedPane.add(modPacksPane, 2);
-		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/packsTab.png")));
+		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 
 		tabbedPane.add(mapsPane, 3);
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/mapsTab.png")));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
 
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/texturesTab.png")));
+		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 
 		tabbedPane.setSelectedIndex(2);
 
