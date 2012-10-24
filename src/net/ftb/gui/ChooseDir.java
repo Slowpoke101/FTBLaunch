@@ -24,7 +24,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 	Settings settings = new Settings();
 
 	public ChooseDir() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		go = new JButton("Do it");
 		go.addActionListener(this);
 		add(go);

@@ -222,13 +222,9 @@ public class LaunchFrame extends JFrame {
 						.getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
-
-				try {
-					LaunchFrame frame = new LaunchFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				
+				KeyChecker k = new KeyChecker();
+				k.setVisible(true);
 			}
 
 		});
