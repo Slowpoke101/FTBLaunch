@@ -36,7 +36,7 @@ public class KeyChecker extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					if(rightKey(key.getText())) {
-						LaunchFrame frame = new LaunchFrame();
+						LaunchFrame frame = new LaunchFrame(2);
 						frame.setVisible(true);
 						setVisible(false);
 					} else {

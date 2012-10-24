@@ -115,7 +115,7 @@ public class LaunchFrame extends JFrame {
 	private JPanel panel = new JPanel();
 	
 	/**
-	 * tabbedpane and footer (shocker, right)
+	 * tabbedpane and footer
 	 */
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel footer = new JPanel();
@@ -136,7 +136,8 @@ public class LaunchFrame extends JFrame {
 	@SuppressWarnings("rawtypes")
 	JList packs;
 	JScrollPane packsScroll;
-
+	JLabel splash;
+	
 	/**
 	 * things to go on the options panel
 	 */
@@ -223,8 +224,10 @@ public class LaunchFrame extends JFrame {
 				if (!installDir.exists())
 					installDir.mkdirs();
 				
-				KeyChecker k = new KeyChecker();
-				k.setVisible(true);
+				//KeyChecker k = new KeyChecker();
+				//k.setVisible(true);
+				LaunchFrame frame = new LaunchFrame(2);
+				frame.setVisible(true);
 			}
 
 		});
@@ -235,12 +238,19 @@ public class LaunchFrame extends JFrame {
 	 */
 
 	@SuppressWarnings("rawtypes")
-	public LaunchFrame() {
+	public LaunchFrame(int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
+		try {
+			ModPack.LoadAll();
+		} catch (NoSuchAlgorithmException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -295,16 +305,11 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
-		
-//		JLabel packImage = new JLabel(new ImageIcon(this.getClass().getResource("/image/pack1.png")));
-		/**
-		 * uncomment to use the image based on which pack is selected, above one
-		 * is for testing purposes
-		 */
-		// JLabel packImage = new JLabel(new ImageIcon(ModPack.getPack(packs.getSelectedIndex()).getImage()));
-//		packImage.setBounds(410, 0, 410, 205);
-//		modPacksPane.add(packImage);
 		modPacksPane.add(packsScroll);
+
+		splash = new JLabel(new ImageIcon(ModPack.getPack(0).getImage()));
+		splash.setBounds(420, 0, 420, 250);
+		modPacksPane.add(splash);
 
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -512,7 +517,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 
-		tabbedPane.setSelectedIndex(2);
+		tabbedPane.setSelectedIndex(tab);
 
 		if (passwordSettings.getUsername() != "") {
 
