@@ -56,7 +56,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -133,8 +132,8 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * things to go on the modpacks panel
 	 */
-	@SuppressWarnings("rawtypes")
-	JList packs;
+	JPanel packs;
+	JPanel[] packPanels;
 	JScrollPane packsScroll;
 	JLabel splash;
 	
@@ -155,7 +154,6 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * things to go on the texture packs panel
 	 */
-	
 	/**
 	 * things to go on the maps panel
 	 */
@@ -236,8 +234,6 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-
-	@SuppressWarnings("rawtypes")
 	public LaunchFrame(int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
@@ -247,7 +243,6 @@ public class LaunchFrame extends JFrame {
 		try {
 			ModPack.LoadAll();
 		} catch (NoSuchAlgorithmException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		
@@ -294,10 +289,27 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.setLayout(null);
 		// modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
-
-		packs = new JList();
+		
+		packPanels = new JPanel[ModPack.getPackArray().size()];
+		for(int i = 0; i < packPanels.length; i++) {
+			System.out.println("adding pack "+i);
+			ModPack pack = ModPack.getPack(i);
+			JPanel p = new JPanel();
+			p.setBounds(0, i * 55, 420, 55);
+			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
+			logo.setBounds(6, 6, 42, 42);
+			logo.setVisible(true);
+			p.add(logo);
+			p.setVisible(true);
+			packPanels[i] = p;
+		}
+		
+		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setOpaque(false);
+		for(JPanel p : packPanels) {
+			packs.add(p);
+		}
 		
 		packsScroll = new JScrollPane(packs);
 		packsScroll.setBounds(0, 0, 420, 310);
@@ -520,9 +532,9 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setSelectedIndex(tab);
 
 		if (passwordSettings.getUsername() != "") {
-
+			//dostuff
 		} else {
-
+			//dootherstuff
 		}
 	}
 
