@@ -59,6 +59,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
@@ -128,6 +129,7 @@ public class LaunchFrame extends JFrame {
 	JPanel[] packPanels;
 	JScrollPane packsScroll;
 	JLabel splash;
+	JTextArea packInfo;
 	
 	/**
 	 * things to go on the options panel
@@ -299,7 +301,7 @@ public class LaunchFrame extends JFrame {
 			System.out.println("adding pack "+i);
 			ModPack pack = ModPack.getPack(i);
 			JPanel p = new JPanel();
-			p.setBounds(0, i * 55, 420, 55);
+			p.setBounds(0, i * 200, 420, 200);
 			p.setVisible(true);
 			p.setBackground(Color.white);
 			p.setLayout(null);
@@ -311,24 +313,34 @@ public class LaunchFrame extends JFrame {
 		}
 		
 		packs = new JPanel();
-		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
-		packs.setOpaque(false);
-		packs.setLayout(null);
-		for(JPanel p : packPanels) {
-			packs.add(p);
+		packs.setLayout(new GridBagLayout());
+		for(int i = 0; i < packPanels.length; i++) {
+			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+			gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+			gbc_panel_1.fill = GridBagConstraints.BOTH;
+			gbc_panel_1.gridx = 0;
+			gbc_panel_1.gridy = i;
+			gbc_panel_1.weightx = 1;
+			gbc_panel_1.weighty = 1;
+			packs.add(packPanels[i], gbc_panel_1);
 		}
 		
-		packsScroll = new JScrollPane(packs);
-		packsScroll.setBounds(0, 0, 420, 310);
+		packsScroll = new JScrollPane();
+		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
+		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
 
 		splash = new JLabel(new ImageIcon(ModPack.getPack(0).getImage()));
-		splash.setBounds(420, 0, 420, 250);
+		splash.setBounds(420, 0, 410, 200);
 		modPacksPane.add(splash);
+		
+		packInfo = new JTextArea(ModPack.getPack(0).getInfo());
+		packInfo.setBounds(420, 210, 410, 90);
+		modPacksPane.add(packInfo);
 
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
