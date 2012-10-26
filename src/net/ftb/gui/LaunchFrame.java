@@ -124,7 +124,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton(new ImageIcon(this.getClass().getResource("/image/btn_play.png")));
+	private JButton launch = new JButton("Launch");
 	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private JComboBox users = new JComboBox(dropdown);
@@ -263,8 +263,8 @@ public class LaunchFrame extends JFrame {
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
 		footerCreeper.setBounds(72, 20, 136, 32);
-		users.setBounds(600, 20, 150, 30);
-		launch.setBounds(761, 20, 39, 39);
+		users.setBounds(550, 20, 150, 30);
+		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -296,11 +296,12 @@ public class LaunchFrame extends JFrame {
 			ModPack pack = ModPack.getPack(i);
 			JPanel p = new JPanel();
 			p.setBounds(0, i * 55, 420, 55);
+			p.setVisible(true);
+			p.setBackground(Color.white);
 			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
 			p.add(logo);
-			p.setVisible(true);
 			packPanels[i] = p;
 		}
 		
