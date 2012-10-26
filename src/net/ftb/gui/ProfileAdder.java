@@ -1,5 +1,6 @@
 package net.ftb.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class ProfileAdder extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -26,6 +29,8 @@ public class ProfileAdder extends JDialog {
 	JButton addButton = new JButton("Add");
 	
 	public ProfileAdder() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle("FTB Launcher Profile Adder");
 		setBounds(300, 300, 300, 200);
 		setResizable(false);
 		
@@ -39,6 +44,22 @@ public class ProfileAdder extends JDialog {
 		
 		username.setBounds(100, 10, 170, 30);
 		username.setVisible(true);
+		username.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				name.setText(username.getText());
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				name.setText(username.getText());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+		});
 		panel.add(username);
 		
 		passLabel.setBounds(10, 50, 80, 30);

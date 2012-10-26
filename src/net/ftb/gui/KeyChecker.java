@@ -1,5 +1,6 @@
 package net.ftb.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -19,6 +20,7 @@ public class KeyChecker extends JDialog {
 	private JButton button;
 	
 	public KeyChecker() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setBounds(100, 100, 200, 200);
 		setResizable(false);
 		
