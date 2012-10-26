@@ -58,12 +58,10 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -98,12 +96,6 @@ public class LaunchFrame extends JFrame {
 	private JPanel tpPane;
 
 	/**
-	 * the fields for typing username and password
-	 */
-	private JTextField usernameField;
-	private JPasswordField passwordField;
-	
-	/**
 	 * an array of all mods to be added to classpath
 	 */
 	static String[] jarMods;
@@ -125,7 +117,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch");
-	private String[] dropdown = {"Select Username", "Your name Here", "Create Username"};
+	private String[] dropdown = {"Select Username", "Create Username"};
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private JComboBox users = new JComboBox(dropdown);
 
@@ -263,12 +255,24 @@ public class LaunchFrame extends JFrame {
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
 		footerCreeper.setBounds(72, 20, 136, 32);
+		
 		users.setBounds(550, 20, 150, 30);
+		users.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(users.getSelectedIndex() == 1) {
+					ProfileAdder p = new ProfileAdder();
+					p.setVisible(true);
+					users.setSelectedIndex(0);
+				}
+			}
+		});
+		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				doLogin();
+				doLogin("", "");
 			}
 		});
 		
@@ -298,6 +302,7 @@ public class LaunchFrame extends JFrame {
 			p.setBounds(0, i * 55, 420, 55);
 			p.setVisible(true);
 			p.setBackground(Color.white);
+			p.setLayout(null);
 			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
@@ -308,6 +313,7 @@ public class LaunchFrame extends JFrame {
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setOpaque(false);
+		packs.setLayout(null);
 		for(JPanel p : packPanels) {
 			packs.add(p);
 		}
@@ -335,68 +341,6 @@ public class LaunchFrame extends JFrame {
 		tpPane.setLayout(null);
 		// tpPane.add(backgroundImage5);
 		//tpPane.setBackground(back);
-
-		loginPanel = new JPanel();
-		loginPanel.setBounds(480, 282, 305, 139);
-		loginPanel.setLayout(null);
-		//loginPanel.setBackground(back);
-
-		chckbxRemember = new JCheckBox("Remember Password");
-		chckbxRemember.setBounds(86, 101, 125, 23);
-		//chckbxRemember.setBackground(back);
-		if (passwordSettings.getUsername() != "") {
-			chckbxRemember.setSelected(true);
-		} else {
-
-		}
-		loginPanel.add(chckbxRemember);
-
-		btnLogin = new JButton("Login");
-		btnLogin.setBounds(226, 39, 69, 56);
-		//btnLogin.setBackground(back);
-		loginPanel.add(btnLogin);
-		btnLogin.setEnabled(true);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (chckbxRemember.isSelected()) {
-					passwordSettings.storeUP(usernameField.getText(),
-							new String(passwordField.getPassword()));
-				} else {
-					try {
-						passwordSettings.flush();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
-				if (e.getActionCommand().equalsIgnoreCase("login")) {
-					doLogin();
-				}
-			}
-		});
-
-		btnPlayOffline = new JButton("Play Offline");
-		btnPlayOffline.setBounds(199, 11, 96, 23);
-		btnPlayOffline.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ getSelectedModPack() + "\\.minecraft", "OFFLINE","1");
-			}
-		});
-
-		lblError = new JLabel();
-		lblError.setBounds(14, 15, 175, 14);
-		loginPanel.add(lblError);
-		lblError.setHorizontalAlignment(SwingConstants.LEFT);
-		lblError.setForeground(Color.RED);
-
-		usernameField = new JRoundTextField(17);
-		usernameField.setBounds(76, 39, 144, 22);
-		usernameField.setText(passwordSettings.getUsername());
-		loginPanel.add(usernameField);
-
-		passwordField = new JRoundPasswordField(17);
-		passwordField.setBounds(76, 72, 144, 22);
-		passwordField.setText(passwordSettings.getPassword());
-		loginPanel.add(passwordField);
 
 		news = new JEditorPane();
 		news.setEditable(false);
@@ -542,7 +486,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * call this to login
 	 */
-	public void doLogin() {
+	public void doLogin(String username, String password) {
 
 		try {
 			LauncherConsole con = new LauncherConsole();
@@ -560,23 +504,15 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		btnLogin.setEnabled(false);
-		usernameField.setEnabled(false);
-		passwordField.setEnabled(false);
-		chckbxRemember.setEnabled(false);
 
 		lblError.setForeground(Color.black);
 		lblError.setText("Logging in...");
 
-		LoginWorker loginWorker = new LoginWorker(usernameField.getText(),
-				new String(passwordField.getPassword())) {
+		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
 				lblError.setText("");
 
-				usernameField.setEnabled(true);
-				passwordField.setEnabled(true);
-				chckbxRemember.setEnabled(true);
 
 				String responseStr;
 				try {
@@ -651,10 +587,6 @@ public class LaunchFrame extends JFrame {
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath()
 				+ "\\.minecraft\\bin\\minecraft.jar").exists()) {
-			btnLogin.setEnabled(false);
-			usernameField.setEnabled(false);
-			passwordField.setEnabled(false);
-			chckbxRemember.setEnabled(false);
 
 			final ProgressMonitor progMonitor = new ProgressMonitor(this,
 					"Downloading minecraft...", "", 0, 100);
@@ -664,11 +596,6 @@ public class LaunchFrame extends JFrame {
 							Settings.getSettings().getInstallPath(),
 							".minecraft//bin").getPath(), false) {
 				public void done() {
-
-					btnLogin.setEnabled(true);
-					usernameField.setEnabled(true);
-					passwordField.setEnabled(true);
-					chckbxRemember.setEnabled(true);
 
 					progMonitor.close();
 					try {
