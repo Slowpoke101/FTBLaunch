@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.ftb.data.UserManager;
+
 public class ProfileAdder extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
@@ -83,9 +85,7 @@ public class ProfileAdder extends JDialog {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				/*
-				 * TODO save Username and passwords to file to be picked up in the JComboBox
-				 */
+				UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
 			}
 		});
 		panel.add(addButton);

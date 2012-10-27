@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class UserManager {
 	
-	private ArrayList<User> _users = new ArrayList<User>();
+	private static ArrayList<User> _users = new ArrayList<User>();
 	
 	private File _filename;
 	
@@ -87,6 +87,7 @@ public class UserManager {
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(_filename));
 			String str = fromHexThing(read.readLine());
+			@SuppressWarnings("unused")
 			String[] tokens = str.split(":");
 			//_username = fromHex(tokens[0]);
 			//_password = fromHex(tokens[1]);
@@ -135,5 +136,9 @@ public class UserManager {
 		} catch (Exception e) {
 			return new byte[] {};
 		}
+	}
+	
+	public static void addUser(String user, String pass, String name) {
+		_users.add(new User(user, pass, name));
 	}
 }

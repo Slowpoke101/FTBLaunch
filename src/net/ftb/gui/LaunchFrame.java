@@ -61,7 +61,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
@@ -84,9 +83,10 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
+	@SuppressWarnings("unused")
 	private UserManager userManager;
 	LoginResponse RESPONSE;
-	JCheckBox chckbxRemember;
+	static JCheckBox chckbxRemember;
 	JLabel lblError;
 	JButton btnLogin;
 
@@ -181,12 +181,12 @@ public class LaunchFrame extends JFrame {
 					}
 				}
 				
-				UIManager.put("control", new Color(77, 77, 77));
+				UIManager.put("control", new Color(40, 40, 40));
 				UIManager.put("text", new Color(222, 222, 222));
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
-				UIManager.put("nimbusFocus", new Color(222, 222, 222));
-				UIManager.put("nimbusBorder", new Color(77, 77, 77));
-				UIManager.put("nimbusLightBackground", new Color(77, 77, 77));
+				UIManager.put("nimbusFocus", new Color(40, 40, 40));
+				UIManager.put("nimbusBorder", new Color(40, 40, 40));
+				UIManager.put("nimbusLightBackground", new Color(40, 40, 40));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -261,7 +261,7 @@ public class LaunchFrame extends JFrame {
 		
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
-		footerCreeper.setBounds(72, 20, 136, 32);
+		footerCreeper.setBounds(72, 20, 132, 42);
 		
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
@@ -279,7 +279,9 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				doLogin("", "");
+				if(users.getSelectedIndex() > 1) {
+					doLogin("", "");
+				}
 			}
 		});
 		
@@ -542,12 +544,12 @@ public class LaunchFrame extends JFrame {
 
 
 		lblError.setForeground(Color.black);
-		lblError.setText("Logging in...");
+		System.out.println("Logging in...");
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
-				lblError.setText("");
+				System.out.println("");
 
 
 				String responseStr;
@@ -567,7 +569,7 @@ public class LaunchFrame extends JFrame {
 						loginPanel.revalidate();
 						loginPanel.repaint();
 						loginPanel.add(btnPlayOffline);
-						lblError.setText("Login failed: "
+						System.out.println("Login failed: "
 								+ err.getCause().getMessage());
 					} else if (err.getCause() instanceof MalformedURLException) {
 						lblError.setForeground(Color.red);
@@ -575,7 +577,7 @@ public class LaunchFrame extends JFrame {
 						loginPanel.revalidate();
 						loginPanel.repaint();
 						loginPanel.add(btnPlayOffline);
-						lblError.setText("Error: Malformed URL");
+						System.out.println("Error: Malformed URL");
 					}
 					return;
 				}
@@ -590,30 +592,29 @@ public class LaunchFrame extends JFrame {
 					lblError.setForeground(Color.red);
 
 					if (responseStr.contains(":")) {
-						lblError.setText("Received invalid response from server.");
+						System.out.println("Received invalid response from server.");
 						btnLogin.setEnabled(true);
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
-							lblError.setText("Invalid username or password.");
+							System.out.println("Invalid username or password.");
 							btnLogin.setEnabled(true);
 							loginPanel.add(btnPlayOffline);
 							loginPanel.revalidate();
 							loginPanel.repaint();
 							btnLogin.setEnabled(true);
 						} else if (responseStr.equalsIgnoreCase("old version")) {
-
-							lblError.setText("Outdated launcher.");
+							System.out.println("Outdated launcher.");
 							btnLogin.setEnabled(true);
 						} else {
 							btnLogin.setEnabled(true);
-							lblError.setText("Login failed: " + responseStr);
+							System.out.println("Login failed: " + responseStr);
 						}
 
 					}
 					return;
 				}
 
-				lblError.setText("Login complete.");
+				System.out.println("Login complete.");
 				runGameUpdater(response);
 			}
 		};
@@ -638,7 +639,7 @@ public class LaunchFrame extends JFrame {
 						if (get() == true) {
 							// Success
 							lblError.setForeground(Color.black);
-							lblError.setText("Game update complete.");
+							System.out.println("Game update complete.");
 
 							// try {
 							System.out.println(getSelectedModPack());
@@ -649,17 +650,17 @@ public class LaunchFrame extends JFrame {
 
 						} else {
 							lblError.setForeground(Color.red);
-							lblError.setText("Error downloading game.");
+							System.out.println("Error downloading game.");
 						}
 					} catch (CancellationException e) {
 						lblError.setForeground(Color.black);
-						lblError.setText("Game update cancelled...");
+						System.out.println("Game update cancelled...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						lblError.setForeground(Color.red);
-						lblError.setText("Failed to download game: "
+						System.out.println("Failed to download game: "
 								+ e.getCause().getMessage());
 						return;
 					}
@@ -1165,6 +1166,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * "Saves" the settings from the GUI controls into the settings class.
 	 */
+	@SuppressWarnings("unused")
 	private void saveSettings() {
 		Settings settings = Settings.getSettings();
 
