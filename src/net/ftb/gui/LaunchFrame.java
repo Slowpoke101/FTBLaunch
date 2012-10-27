@@ -295,10 +295,15 @@ public class LaunchFrame extends JFrame {
 			System.out.println("adding pack "+i);
 			ModPack pack = ModPack.getPack(i);
 			JPanel p = new JPanel();
+			p.setLayout(null);
 			p.setBounds(0, i * 55, 420, 55);
 			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
+			JLabel filler = new JLabel(pack.getName() + " : " + pack.getAuthor());
+			filler.setForeground(Color.white);
+			filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+			p.add(filler);
 			p.add(logo);
 			p.setVisible(true);
 			packPanels[i] = p;
@@ -306,6 +311,7 @@ public class LaunchFrame extends JFrame {
 		
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
+		packs.setLayout(null);
 		packs.setOpaque(false);
 		for(JPanel p : packPanels) {
 			packs.add(p);
