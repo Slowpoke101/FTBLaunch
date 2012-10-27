@@ -45,8 +45,8 @@ import javax.swing.JFrame;
 
 import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
-import net.ftb.data.PasswordSettings;
 import net.ftb.data.Settings;
+import net.ftb.data.UserManager;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -82,7 +82,7 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
-	private PasswordSettings passwordSettings;
+	private UserManager userManager;
 	LoginResponse RESPONSE;
 	JCheckBox chckbxRemember;
 	JLabel lblError;
@@ -180,9 +180,11 @@ public class LaunchFrame extends JFrame {
 				}
 				
 				UIManager.put("control", new Color(77, 77, 77));
+				UIManager.put("text", new Color(222, 222, 222));
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
 				UIManager.put("nimbusFocus", new Color(222, 222, 222));
 				UIManager.put("nimbusBorder", new Color(77, 77, 77));
+				UIManager.put("nimbusLightBackground", new Color(77, 77, 77));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -241,7 +243,7 @@ public class LaunchFrame extends JFrame {
 			e2.printStackTrace();
 		}
 		
-		passwordSettings = new PasswordSettings(new File(Settings.getSettings().getInstallPath(), "loginData"));
+		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 840, 480);
@@ -489,11 +491,11 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.setSelectedIndex(tab);
 
-		if (passwordSettings.getUsername() != "") {
-			//dostuff
-		} else {
-			//dootherstuff
-		}
+		//if (passwordSettings.getUsername() != "") {
+		//	//dostuff
+		//} else {
+		//	//dootherstuff
+		//}
 	}
 
 	/**

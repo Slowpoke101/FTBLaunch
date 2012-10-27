@@ -12,14 +12,17 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
-public class PasswordSettings {
+public class UserManager {
+	
+	private ArrayList<User> _users = new ArrayList<User>();
+	
 	private File _filename;
 	
-	private String _username = "";
-	private String _password = "";
+
 	
-	public PasswordSettings(File filename) {
+	public UserManager(File filename) {
 		_filename = filename;
 		if (_filename.exists()) {
 			try {
@@ -76,7 +79,7 @@ public class PasswordSettings {
 	
 	public void write() throws IOException {
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		wri.write(getHexThing(getHex(_username) + ":" + getHex(_password)));
+		//wri.write(getHexThing(getHex(_username) + ":" + getHex(_password)));
 		wri.close();
 	}
 	
@@ -85,33 +88,24 @@ public class PasswordSettings {
 			BufferedReader read = new BufferedReader(new FileReader(_filename));
 			String str = fromHexThing(read.readLine());
 			String[] tokens = str.split(":");
-			_username = fromHex(tokens[0]);
-			_password = fromHex(tokens[1]);
+			//_username = fromHex(tokens[0]);
+			//_password = fromHex(tokens[1]);
 			read.close();
 		} catch (Exception ex) {
-			_username = "";
-			_password = "";
+			//_username = "";
+			//_password = "";
 			System.out.println("Error loading login data");
 		}
 	}
 	
 	public void storeUP(String username, String password) {
 		try {
-			_username = username;
-			_password = password;
+			//_username = username;
+			//_password = password;
 			write();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public String getUsername() {
-		return _username;
-		
-	}
-	
-	public String getPassword() {
-		return _password;
 	}
 	
 	public static byte[] getFileMD5(URL string) throws Exception {
