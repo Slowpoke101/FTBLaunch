@@ -102,6 +102,7 @@ public class ModPack {
 	private int size;
 	private String dir;
 	private String mcVersion;
+	private String info = "This is the info until there is an actual info thingy";
 	
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion) throws IOException, NoSuchAlgorithmException {
 		this.name = name;
@@ -152,5 +153,9 @@ public class ModPack {
 	
 	public String getMcVersion() {
 		return mcVersion;
+	}
+	
+	public String getInfo() {
+		return info;
 	}
 }
