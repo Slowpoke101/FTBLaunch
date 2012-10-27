@@ -76,6 +76,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class LaunchFrame extends JFrame {
 
@@ -389,7 +391,23 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
 		ramMaximum.setText("1024");
-		ramMax = Integer.parseInt(ramMaximum.getText());
+		ramMaximum.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				ramMax = Integer.parseInt(ramMaximum.getText());
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				ramMax = Integer.parseInt(ramMaximum.getText());
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+		});
 				
 		ramMinimum = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
@@ -398,7 +416,23 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
 		ramMinimum.setText("256");
-		ramMin = Integer.parseInt(ramMinimum.getText());
+		ramMinimum.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				ramMin = Integer.parseInt(ramMinimum.getText());
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				ramMin = Integer.parseInt(ramMinimum.getText());
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+		});
 		
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir());
@@ -456,20 +490,7 @@ public class LaunchFrame extends JFrame {
 		optionsPane.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
 		
-		JButton okButton = new JButton("Save");
-		GridBagConstraints gbc_okButton = new GridBagConstraints();
-		gbc_okButton.fill = GridBagConstraints.BOTH;
-		gbc_okButton.insets = new Insets(0, 0, 5, 5);
-		gbc_okButton.gridx = 4;
-		gbc_okButton.gridy = 8;
-		optionsPane.add(okButton, gbc_okButton);
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveSettings();
-			}
-		});
-		okButton.setActionCommand("Save");
-		getRootPane().setDefaultButton(okButton);
+		getRootPane().setDefaultButton(launch);
 		
 		loadSettings();
 		
