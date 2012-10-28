@@ -325,47 +325,47 @@ public class LaunchFrame extends JFrame {
 		
 		packPanels = new JPanel[ModPack.getPackArray().size()];
 		for(int i = 0; i < packPanels.length; i++) {
+			final int packIndex = i;
 			System.out.println("adding pack "+i);
 			ModPack pack = ModPack.getPack(i);
-			JPanel p = new JPanel();
+			final JPanel p = new JPanel();
 			p.setBounds(0, i * 55, 420, 55);
 			p.setLayout(null);
 			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
 			JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
-			if(selectedPack == i) {
-				filler.setBackground(UIManager.getColor("control").darker().darker());
-			} else {
-				filler.setBackground(UIManager.getColor("control"));
-			}
 			filler.setBorder(null);
 			filler.setEditable(false);
 			filler.setForeground(Color.white);
 			filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
-			p.addMouseListener(new MouseListener() {
+			filler.setBackground(new Color(255, 255, 255, 0));
+			MouseListener lin = new MouseListener() {
 				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					
+				public void mouseReleased(MouseEvent e) {
 				}
+				
 				@Override
-				public void mousePressed(MouseEvent arg0) {
-					
+				public void mousePressed(MouseEvent e) {
 				}
+				
 				@Override
-				public void mouseExited(MouseEvent arg0) {
-					
+				public void mouseExited(MouseEvent e) {
 				}
+				
 				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					
+				public void mouseEntered(MouseEvent e) {
 				}
+				
 				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					//TODO something in here to select the pack of i,
-					//ive been racking my brain for the best part of 2 hours trying to figure it out
+				public void mouseClicked(MouseEvent e) {
+					selectedPack = packIndex;
+					updatePacks();
 				}
-			});
+			};
+			p.addMouseListener(lin);
+			filler.addMouseListener(lin);
+			logo.addMouseListener(lin);
 			p.add(filler);
 			p.add(logo);
 			packPanels[i] = p;
@@ -571,6 +571,16 @@ public class LaunchFrame extends JFrame {
 		//} else {
 		//	//dootherstuff
 		//}
+	}
+	
+	private void updatePacks() {
+		for (int i = 0; i < packPanels.length; i++) {
+			if(selectedPack == i) {
+				packPanels[i].setBackground(UIManager.getColor("control").darker().darker());
+			} else {
+				packPanels[i].setBackground(UIManager.getColor("control"));
+			}
+		}
 	}
 
 	/**
