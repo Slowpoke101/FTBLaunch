@@ -12,6 +12,13 @@ public class User {
 		_name = name;
 	}
 	
+	public User(String input) {
+		String[] tokens = input.split(":");
+		_name = tokens[0];
+		_username = tokens[1];
+		_password = tokens[2];
+	}
+	
 	public String getUsername() {
 		return _username;
 	}
@@ -22,5 +29,10 @@ public class User {
 	
 	public String getName() {
 		return _name;
+	}
+	
+	@Override
+	public String toString() {
+		return _name + ":" + _username + ":" + _password; 
 	}
 }

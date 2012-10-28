@@ -79,7 +79,11 @@ public class UserManager {
 	
 	public void write() throws IOException {
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		//wri.write(getHexThing(getHex(_username) + ":" + getHex(_password)));
+		String str = "";
+		for (int i = 0; i < _users.size(); i++) {
+			str += _users.get(i).toString();
+		}
+		wri.write(getHexThing(str));
 		wri.close();
 	}
 	
@@ -88,24 +92,13 @@ public class UserManager {
 			BufferedReader read = new BufferedReader(new FileReader(_filename));
 			String str = fromHexThing(read.readLine());
 			@SuppressWarnings("unused")
-			String[] tokens = str.split(":");
-			//_username = fromHex(tokens[0]);
-			//_password = fromHex(tokens[1]);
+			String[] users = str.split("\n");
+			for (int i = 0; i < users.length; i++) {
+				_users.add(new User(users[i]));
+			}
 			read.close();
 		} catch (Exception ex) {
-			//_username = "";
-			//_password = "";
 			System.out.println("Error loading login data");
-		}
-	}
-	
-	public void storeUP(String username, String password) {
-		try {
-			//_username = username;
-			//_password = password;
-			write();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	
