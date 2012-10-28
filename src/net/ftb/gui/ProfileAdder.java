@@ -85,9 +85,11 @@ public class ProfileAdder extends JDialog {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-				LaunchFrame.writeUsers();
-				setVisible(false);
+				if(!UserManager.getNames().contains(name.getText())/* && !UserManager.getUsernames().contains(username.getText())*/) {
+					UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
+					LaunchFrame.writeUsers();
+					setVisible(false);
+				}
 			}
 		});
 		panel.add(addButton);

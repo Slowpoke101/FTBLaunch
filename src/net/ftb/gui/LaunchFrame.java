@@ -122,9 +122,9 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch");
-	private String[] dropdown_ = {"Select Username", "Create Username"};
+	private static String[] dropdown_ = {"Select Username", "Create Username"};
 	@SuppressWarnings({"rawtypes"})
-	private JComboBox users;
+	private static JComboBox users;
 
 	/**
 	 * things to go on the modpacks panel
@@ -1252,6 +1252,7 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void writeUsers() {
 		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
@@ -1260,9 +1261,15 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		String[] usernames = UserManager.getNames().toArray(new String[] {});
+		
+		for(String name : usernames) {
+			users.addItem(name);
+		}
 	}
 	
-	public String[] merge(String[] A, String[] B) {
+	public static String[] merge(String[] A, String[] B) {
 		String[] merged = new String[A.length+B.length];
 		System.arraycopy(A, 0, merged, 0, A.length);
 		System.arraycopy(B, 0, merged, A.length, B.length);
