@@ -131,7 +131,7 @@ public class UserManager {
 		}
 	}
 	
-	public static void addUser(String name, String username, String password) {
+	public static void addUser(String username, String password, String name) {
 		_users.add(new User(username, password, name));
 	}
 	
