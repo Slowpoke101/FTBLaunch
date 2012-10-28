@@ -1257,18 +1257,6 @@ public class LaunchFrame extends JFrame {
 		return merged;
 	}
 	
-	@SuppressWarnings("unused")
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		try {
-			LaunchFrame f = new LaunchFrame(tabbedPane.getSelectedIndex());
-		} catch (Exception e) {
-			e.printStackTrace();
-			LaunchFrame f = new LaunchFrame(2);
-		}
-	}
-	
 	public static int getSelectedPack() {
 		return selectedPack;
 	}

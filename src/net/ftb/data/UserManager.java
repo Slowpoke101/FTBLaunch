@@ -67,6 +67,7 @@ public class UserManager {
 	}
 	
 	public String getHexThing(String str) {
+		System.out.println(str);
 		BigInteger str2;
 		try {
 			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getSelfMD5()));
@@ -128,5 +129,17 @@ public class UserManager {
 		} catch (Exception e) {
 			return new byte[] {};
 		}
+	}
+	
+	public static void addUser(String name, String username, String password) {
+		_users.add(new User(username, password, name));
+	}
+	
+	public static ArrayList<String> getNames() {
+		ArrayList<String> ret = new ArrayList<String>();
+		for (User user : _users) {
+			ret.add(user.getName());
+		}
+		return ret;
 	}
 }
