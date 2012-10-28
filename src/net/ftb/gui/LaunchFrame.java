@@ -190,6 +190,7 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("nimbusFocus", new Color(40, 40, 40));
 				UIManager.put("nimbusBorder", new Color(40, 40, 40));
 				UIManager.put("nimbusLightBackground", new Color(40, 40, 40));
+				UIManager.put("info", new Color(55, 55, 55));
 
 				try {
 				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
