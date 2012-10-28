@@ -135,6 +135,14 @@ public class UserManager {
 		_users.add(new User(username, password, name));
 	}
 	
+	public static ArrayList<String> getUsernames() {
+		ArrayList<String> ret = new ArrayList<String>();
+		for (User user : _users) {
+			ret.add(user.getName());
+		}
+		return ret;
+	}
+	
 	public static ArrayList<String> getNames() {
 		ArrayList<String> ret = new ArrayList<String>();
 		for (User user : _users) {
