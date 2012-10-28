@@ -248,13 +248,13 @@ public class LaunchFrame extends JFrame {
 		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 840, 480);
-		panel.setBounds(0, 0, 840, 480);
+		setBounds(100, 100, 850, 480);
+		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
-		footer.setBounds(0, 380, 840, 100);
+		footer.setBounds(0, 380, 850, 100);
 		footer.setLayout(null);
 		footer.setBackground(new Color(25, 25, 25));
-		tabbedPane.setBounds(0, 0, 840, 380);
+		tabbedPane.setBounds(0, 0, 850, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
