@@ -225,6 +225,9 @@ public class LaunchFrame extends JFrame {
 				if (!installDir.exists())
 					installDir.mkdirs();
 				
+				//jjw create userManager here
+				//userManager = new UserManager(new File(installDir, ));
+				
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
 				LaunchFrame frame = new LaunchFrame(2);
@@ -268,17 +271,14 @@ public class LaunchFrame extends JFrame {
 		footerLogo.setBounds(20, 20, 32, 32);
 		footerCreeper.setBounds(72, 20, 132, 42);
 		
-//		try {
-//			userManager.read();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
-		String[] usernames = new String[UserManager._users.size()];
-		for(int i = 0; i < usernames.length; i++) {
-			usernames[i] = UserManager._users.get(i).getName();
+		try {
+			userManager.read();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+		String[] usernames = UserManager.getNames().toArray(new String[] {});
 		
 		String[] dropdown = merge(dropdown_, usernames);
 		
