@@ -1254,8 +1254,6 @@ public class LaunchFrame extends JFrame {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void writeUsers() {
-		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
-
 		try {
 			userManager.write();
 		} catch (IOException e) {
@@ -1264,6 +1262,9 @@ public class LaunchFrame extends JFrame {
 		
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
 		
+		// right now this will remove the 2 hard coded items as well
+		// jjw you can add them back in
+		users.removeAllItems();
 		for(String name : usernames) {
 			users.addItem(name);
 		}
