@@ -67,7 +67,6 @@ public class UserManager {
 	}
 	
 	public String getHexThing(String str) {
-		System.out.println(str);
 		BigInteger str2;
 		try {
 			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getSelfMD5()));
@@ -98,6 +97,7 @@ public class UserManager {
 			}
 			read.close();
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			System.out.println("Error loading login data");
 		}
 	}

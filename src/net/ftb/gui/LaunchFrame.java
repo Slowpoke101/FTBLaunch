@@ -3,7 +3,6 @@ package net.ftb.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -71,6 +70,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
@@ -78,8 +79,6 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 public class LaunchFrame extends JFrame {
 
@@ -135,7 +134,7 @@ public class LaunchFrame extends JFrame {
 	JScrollPane packsScroll;
 	JLabel splash;
 	JTextArea packInfo;
-	public static int selectedPack;
+	public static int selectedPack = 0;
 	
 
 	/**
@@ -225,8 +224,7 @@ public class LaunchFrame extends JFrame {
 				if (!installDir.exists())
 					installDir.mkdirs();
 				
-				//jjw create userManager here
-				//userManager = new UserManager(new File(installDir, ));
+				userManager = new UserManager(new File(installDir, "logindata.cfg"));
 				
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
@@ -370,6 +368,7 @@ public class LaunchFrame extends JFrame {
 			p.add(logo);
 			packPanels[i] = p;
 		}
+		updatePacks();
 		
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
@@ -445,20 +444,16 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
 		ramMaximum.setText("1024");
-		ramMaximum.getDocument().addDocumentListener(new DocumentListener() {
+		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void focusLost(FocusEvent e) {
 				ramMax = Integer.parseInt(ramMaximum.getText());
+				saveSettings();
 			}
 			
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-				ramMax = Integer.parseInt(ramMaximum.getText());
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void focusGained(FocusEvent e) {
 				
 			}
 		});
@@ -470,20 +465,16 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
 		ramMinimum.setText("256");
-		ramMinimum.getDocument().addDocumentListener(new DocumentListener() {
+		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void focusLost(FocusEvent e) {
 				ramMin = Integer.parseInt(ramMinimum.getText());
+				saveSettings();
 			}
 			
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-				ramMin = Integer.parseInt(ramMinimum.getText());
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void focusGained(FocusEvent e) {
 				
 			}
 		});
@@ -506,6 +497,18 @@ public class LaunchFrame extends JFrame {
 		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
 		gbc_installFolderTextField.gridx = 1;
 		gbc_installFolderTextField.gridy = 3;
+		installFolderTextField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				saveSettings();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				
+			}
+		});
 		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
 		installFolderTextField.setColumns(10);
 		
