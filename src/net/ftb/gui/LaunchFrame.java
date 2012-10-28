@@ -3,6 +3,7 @@ package net.ftb.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -70,6 +71,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -83,8 +86,7 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JPanel loginPanel;
 	JButton btnPlayOffline;
-	@SuppressWarnings("unused")
-	private UserManager userManager;
+	public static UserManager userManager;
 	LoginResponse RESPONSE;
 	static JCheckBox chckbxRemember;
 	JLabel lblError;
@@ -121,9 +123,9 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch");
-	private String[] dropdown = {"Select Username", "Create Username"};
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private JComboBox users = new JComboBox(dropdown);
+	private String[] dropdown_ = {"Select Username", "Create Username"};
+	@SuppressWarnings({"rawtypes"})
+	private JComboBox users;
 
 	/**
 	 * things to go on the modpacks panel
@@ -133,7 +135,9 @@ public class LaunchFrame extends JFrame {
 	JScrollPane packsScroll;
 	JLabel splash;
 	JTextArea packInfo;
+	public static int selectedPack;
 	
+
 	/**
 	 * things to go on the options panel
 	 */
@@ -233,6 +237,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public LaunchFrame(int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
@@ -241,12 +246,12 @@ public class LaunchFrame extends JFrame {
 
 		try {
 			ModPack.LoadAll();
-		} catch (NoSuchAlgorithmException e2) {
-			e2.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 		
-		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
-
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
@@ -263,6 +268,21 @@ public class LaunchFrame extends JFrame {
 		footerLogo.setBounds(20, 20, 32, 32);
 		footerCreeper.setBounds(72, 20, 132, 42);
 		
+//		try {
+//			userManager.read();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+		String[] usernames = new String[UserManager._users.size()];
+		for(int i = 0; i < usernames.length; i++) {
+			usernames[i] = UserManager._users.get(i).getName();
+		}
+		
+		String[] dropdown = merge(dropdown_, usernames);
+		
+		users = new JComboBox(dropdown);
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -314,11 +334,38 @@ public class LaunchFrame extends JFrame {
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
 			JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
-			filler.setBackground(UIManager.getColor("control"));
+			if(selectedPack == i) {
+				filler.setBackground(UIManager.getColor("control").darker().darker());
+			} else {
+				filler.setBackground(UIManager.getColor("control"));
+			}
 			filler.setBorder(null);
 			filler.setEditable(false);
 			filler.setForeground(Color.white);
 			filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+			p.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					//TODO something in here to select the pack of i,
+					//ive been racking my brain for the best part of 2 hours trying to figure it out
+				}
+			});
 			p.add(filler);
 			p.add(logo);
 			packPanels[i] = p;
@@ -363,7 +410,12 @@ public class LaunchFrame extends JFrame {
 
 		news = new JEditorPane();
 		news.setEditable(false);
-		news.setText("f");
+		try {
+			news.setPage("http://feed-the-beast.com/lanuchernews.php");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		newsPanel = new JScrollPane(news);
 		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -1185,5 +1237,43 @@ public class LaunchFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "Failed to save config file: "
 					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public static void writeUsers() {
+		userManager = new UserManager(new File(Settings.getSettings().getInstallPath(), "loginData"));
+
+		try {
+			userManager.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String[] merge(String[] A, String[] B) {
+		String[] merged = new String[A.length+B.length];
+		System.arraycopy(A, 0, merged, 0, A.length);
+		System.arraycopy(B, 0, merged, A.length, B.length);
+		
+		return merged;
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		try {
+			LaunchFrame f = new LaunchFrame(tabbedPane.getSelectedIndex());
+		} catch (Exception e) {
+			e.printStackTrace();
+			LaunchFrame f = new LaunchFrame(2);
+		}
+	}
+	
+	public static int getSelectedPack() {
+		return selectedPack;
+	}
+
+	public static void setSelectedPack(int selectedPack) {
+		LaunchFrame.selectedPack = selectedPack;
 	}
 }
