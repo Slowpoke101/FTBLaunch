@@ -1232,7 +1232,6 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * "Saves" the settings from the GUI controls into the settings class.
 	 */
-	@SuppressWarnings("unused")
 	private void saveSettings() {
 		Settings settings = Settings.getSettings();
 
