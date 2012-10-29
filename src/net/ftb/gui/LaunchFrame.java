@@ -161,7 +161,6 @@ public class LaunchFrame extends JFrame {
 	public static int ramMax = 1024;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
-	private ZipFile zipFile;
 
 	/**
 	 * Launch the application.
@@ -675,7 +674,6 @@ public class LaunchFrame extends JFrame {
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
 							try {
-								extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/" + ModPack.getPack(selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir());
 								installMods(ModPack.getPack(selectedPack).getDir());
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -1016,56 +1014,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * @param zipLocation - the zip to be extracted
-	 * @param outputLocation - where to extract to
-	 */
-	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
-		try {
-			System.out.println("Extracting!!!");
-			File fSourceZip = new File(zipLocation);
-			String zipPath = outputLocation;
-			File temp = new File(zipPath);
-			temp.mkdir();
-			System.out.println(zipPath + " created");
-			zipFile = new ZipFile(fSourceZip);
-			Enumeration<?> e = zipFile.entries();
-
-			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry) e.nextElement();
-				File destinationFilePath = new File(zipPath, entry.getName());
-				destinationFilePath.getParentFile().mkdirs();
-				if (entry.isDirectory()) {
-					continue;
-				} else {
-					System.out.println("Extracting " + destinationFilePath);
-					BufferedInputStream bis = new BufferedInputStream(
-							zipFile.getInputStream(entry));
-
-					int b;
-					byte buffer[] = new byte[1024];
-
-					FileOutputStream fos = new FileOutputStream(
-							destinationFilePath);
-					BufferedOutputStream bos = new BufferedOutputStream(fos,
-							1024);
-
-					while ((b = bis.read(buffer, 0, 1024)) != -1) {
-						bos.write(buffer, 0, b);
-					}
-
-					bos.flush();
-					bos.close();
-					bis.close();
-				}
-			}
-		} catch (IOException ioe) {
-			System.out.println("IOError :");
-			ioe.printStackTrace();
-		}
-
-	}
-
-	/**
 	 * @param src - the folder to be moved
 	 * @param dest - where to move to
 	 * @throws IOException
@@ -1164,16 +1112,15 @@ public class LaunchFrame extends JFrame {
 		System.out.println("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()
 				+ "/.minecraft/bin/"), new File(Settings.getSettings()
-				.getInstallPath()
-				+ "/"
+				.getInstallPath() + "/"
 				+ ModPack.getPack(selectedPack).getDir()
 				+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()
 				+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"
 				+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		// minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+
-		// "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
+		// minecraft.renameTo(new File(Settings.getSettings().getInstallPath() +
+		// "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 		// System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
 	}

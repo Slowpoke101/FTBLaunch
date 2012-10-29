@@ -5,12 +5,10 @@ import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,6 +44,8 @@ public class ModManager extends JDialog {
 	private final JProgressBar progressBar;
 	private final JLabel label;
 	
+	private ZipFile zipFile;
+	
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 
 		private ZipFile zipFile;
@@ -59,7 +59,6 @@ public class ModManager extends JDialog {
 				try {
 						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() +  "/").mkdir();
 						downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
-						installMods(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException e) {
@@ -129,11 +128,13 @@ public class ModManager extends JDialog {
 
 
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
+			System.out.println("Downloading");
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/").mkdirs();
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName).createNewFile();
 			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir());
 			installMods(modPackName, dir);
 		}
 //
@@ -154,27 +155,12 @@ public class ModManager extends JDialog {
 
 		protected void installMods(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			//new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft").mkdir();
-			File f = new File(Settings.getSettings().getInstallPath() + "/" + dir + "/.minecraft/md5.txt");		
-			FileWriter writer = new FileWriter(f);
-			BufferedWriter out = new BufferedWriter(writer);
-			out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName)));
-			out.flush();
-			out.close();
-			Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "/" + dir + "/.minecraft/md5.txt"));
-			if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName))){
-
-			}
-			else{
-				extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/");
+			System.out.println("Installing");
 				new File(Settings.getSettings().getInstallPath() + "/"+ dir + "/.minecraft").mkdirs();
 
 				copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
-				File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
-				File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
 				//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 				//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-				copyFile(minecraft, mcbackup);
-			}
 			LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
 
 			try{
@@ -193,7 +179,6 @@ public class ModManager extends JDialog {
 					i++;		
 				}
 				//Close the input stream
-				in.close();
 				in1.close();
 			}catch (Exception e){//Catch exception if any
 				System.err.println("Error: " + e.getMessage());
@@ -435,6 +420,55 @@ public class ModManager extends JDialog {
 			public void windowIconified(WindowEvent e) { }
 		});
 	}
+	/**
+	 * @param zipLocation - the zip to be extracted
+	 * @param outputLocation - where to extract to
+	 */
+	
+	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
+		try {
+			System.out.println("Extracting!!!");
+			File fSourceZip = new File(zipLocation);
+			String zipPath = outputLocation;
+			File temp = new File(zipPath);
+			temp.mkdir();
+			System.out.println(zipPath + " created");
+			zipFile = new ZipFile(fSourceZip);
+			Enumeration<?> e = zipFile.entries();
 
+			while (e.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) e.nextElement();
+				File destinationFilePath = new File(zipPath, entry.getName());
+				destinationFilePath.getParentFile().mkdirs();
+				if (entry.isDirectory()) {
+					continue;
+				} else {
+					System.out.println("Extracting " + destinationFilePath);
+					BufferedInputStream bis = new BufferedInputStream(
+							zipFile.getInputStream(entry));
+
+					int b;
+					byte buffer[] = new byte[1024];
+
+					FileOutputStream fos = new FileOutputStream(
+							destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos,
+							1024);
+
+					while ((b = bis.read(buffer, 0, 1024)) != -1) {
+						bos.write(buffer, 0, b);
+					}
+
+					bos.flush();
+					bos.close();
+					bis.close();
+				}
+			}
+		} catch (IOException ioe) {
+			System.out.println("IOError :");
+			ioe.printStackTrace();
+		}
+
+	}
 
 }
