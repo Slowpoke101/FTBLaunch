@@ -81,7 +81,6 @@ public class ModManager extends JDialog {
 		}
 
 
-		@SuppressWarnings("resource")
 		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException
 		{
 			BufferedInputStream in = null;

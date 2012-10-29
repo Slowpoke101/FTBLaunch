@@ -672,13 +672,8 @@ public class LaunchFrame extends JFrame {
 							// try {
 							System.out.println(ModPack.getPack(selectedPack).getDir());
 							killMetaInf();
-							try {
-								downloadPack(Settings.getSettings().getInstallPath() + "//temp//", ModPack.getPack(selectedPack).getUrl());
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (NoSuchAlgorithmException e) {
-								e.printStackTrace();
-							}
+							ModManager man = new ModManager(new JFrame(), true);
+							man.setVisible(true);
 							try {
 								installMods(ModPack.getPack(selectedPack).getDir());
 							} catch (IOException e) {
@@ -723,7 +718,7 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			
+			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
