@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,7 +29,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +36,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.swing.JFrame;
@@ -267,7 +264,6 @@ public class LaunchFrame extends JFrame {
 		try {
 			userManager.read();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -408,7 +404,6 @@ public class LaunchFrame extends JFrame {
 		try {
 			news.setPage("http://feed-the-beast.com/lanuchernews.php");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -1107,22 +1102,16 @@ public class LaunchFrame extends JFrame {
 	 * @throws IOException
 	 */
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "/"
-				+ ModPack.getPack(selectedPack).getDir() + "/.minecraft").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir() + "/.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath()
-				+ "/.minecraft/bin/"), new File(Settings.getSettings()
-				.getInstallPath() + "/"
-				+ ModPack.getPack(selectedPack).getDir()
-				+ "/.minecraft/bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath()
-				+ "/.minecraft/bin/minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"
-				+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		// minecraft.renameTo(new File(Settings.getSettings().getInstallPath() +
-		// "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
-		// System.out.println("Renamed minecraft.jar to mcbackup.jar");
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir()+ "/.minecraft/bin"));
+		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
+		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
+		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"));
+		copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/minecraftforge.zip"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/"));
 	}
 
 	/**

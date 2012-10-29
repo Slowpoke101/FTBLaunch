@@ -16,14 +16,12 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -53,9 +51,8 @@ public class ModManager extends JDialog {
 
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			
 			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl());
-			if(modPackZip.exists()){
+			if(!modPackZip.exists()){
 				try {
 						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() +  "/").mkdir();
 						downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
@@ -66,16 +63,7 @@ public class ModManager extends JDialog {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}else{
-				try {
-					downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
-			
 			return false;
 		}
 
@@ -161,7 +149,7 @@ public class ModManager extends JDialog {
 				copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
 				//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 				//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-			LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
+				LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
 
 			try{
 				// Open the file that is the first 
@@ -213,41 +201,10 @@ public class ModManager extends JDialog {
 
 		}
 
-
-		protected String getFileMD5(File x){
-			InputStream is = null;
-			MessageDigest md = null;
-			if (x.exists()) {
-				try {
-					md = MessageDigest.getInstance("MD5");
-					is = new FileInputStream(x);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					is = new DigestInputStream(is, md);
-					// read stream to EOF as normal...
-				} finally {
-					try {
-						is.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				String result = "";
-				byte[] digest = md.digest();
-				for (int i = 0; i < digest.length; i++) {
-					result += Integer.toString((digest[i] & 0xff) + 0x100, 16)
-							.substring(1);
-				}
-				return result;
-			}
-			return "0";
-		}
-
 		public void extractZipTo(String zipLocation, String outputLocation)
 				throws IOException {
 			try {
+				System.out.println("Entracting");
 				File fSourceZip = new File(zipLocation);
 				String zipPath = outputLocation;
 				File temp = new File(zipPath);
@@ -326,25 +283,6 @@ public class ModManager extends JDialog {
 					in.close();
 					out.close();
 				}
-			}
-		}
-
-
-		public void copyFile(File src, File dest) throws IOException {
-			if (src.exists()) {
-				InputStream in = new FileInputStream(src);
-				OutputStream out = new FileOutputStream(dest);
-
-				byte[] buffer = new byte[1024];
-
-				int length;
-				// copy the file content in bytes
-				while ((length = in.read(buffer)) > 0) {
-					out.write(buffer, 0, length);
-				}
-
-				in.close();
-				out.close();
 			}
 		}
 		
