@@ -79,7 +79,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
+//import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
 public class LaunchFrame extends JFrame {
 
