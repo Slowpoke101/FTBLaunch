@@ -52,7 +52,6 @@ import net.ftb.workers.LoginWorker;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -83,13 +82,8 @@ import javax.swing.border.EmptyBorder;
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	JPanel loginPanel;
-	JButton btnPlayOffline;
 	public static UserManager userManager;
 	LoginResponse RESPONSE;
-	static JCheckBox chckbxRemember;
-	JLabel lblError;
-	JButton btnLogin;
 
 	/**
 	 * the panels to appear in the tabs
@@ -298,10 +292,11 @@ public class LaunchFrame extends JFrame {
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
-					doLogin("", "");
+					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
@@ -384,7 +379,7 @@ public class LaunchFrame extends JFrame {
 		for(JPanel p : packPanels) {
 			packs.add(p);
 		}
-			
+		
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -569,6 +564,9 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+		
+		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.setSelectedIndex(tab);
 
@@ -612,7 +610,6 @@ public class LaunchFrame extends JFrame {
 		}
 
 
-		lblError.setForeground(Color.black);
 		System.out.println("Logging in...");
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -626,26 +623,13 @@ public class LaunchFrame extends JFrame {
 					responseStr = get();
 				} catch (InterruptedException err) {
 					err.printStackTrace();
-					loginPanel.add(btnPlayOffline);
-					loginPanel.revalidate();
-					loginPanel.repaint();
 					return;
 				} catch (ExecutionException err) {
 					err.printStackTrace();
 					if (err.getCause() instanceof IOException) {
-						lblError.setForeground(Color.red);
-						loginPanel.add(btnPlayOffline);
-						loginPanel.revalidate();
-						loginPanel.repaint();
-						loginPanel.add(btnPlayOffline);
 						System.out.println("Login failed: "
 								+ err.getCause().getMessage());
 					} else if (err.getCause() instanceof MalformedURLException) {
-						lblError.setForeground(Color.red);
-						loginPanel.add(btnPlayOffline);
-						loginPanel.revalidate();
-						loginPanel.repaint();
-						loginPanel.add(btnPlayOffline);
 						System.out.println("Error: Malformed URL");
 					}
 					return;
@@ -657,28 +641,17 @@ public class LaunchFrame extends JFrame {
 					RESPONSE = response;
 
 				} catch (IllegalArgumentException e) {
-
-					lblError.setForeground(Color.red);
-
+					
 					if (responseStr.contains(":")) {
 						System.out.println("Received invalid response from server.");
-						btnLogin.setEnabled(true);
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							System.out.println("Invalid username or password.");
-							btnLogin.setEnabled(true);
-							loginPanel.add(btnPlayOffline);
-							loginPanel.revalidate();
-							loginPanel.repaint();
-							btnLogin.setEnabled(true);
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							System.out.println("Outdated launcher.");
-							btnLogin.setEnabled(true);
 						} else {
-							btnLogin.setEnabled(true);
 							System.out.println("Login failed: " + responseStr);
 						}
-
 					}
 					return;
 				}
@@ -707,7 +680,6 @@ public class LaunchFrame extends JFrame {
 					try {
 						if (get() == true) {
 							// Success
-							lblError.setForeground(Color.black);
 							System.out.println("Game update complete.");
 
 							// try {
@@ -718,17 +690,14 @@ public class LaunchFrame extends JFrame {
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
 
 						} else {
-							lblError.setForeground(Color.red);
 							System.out.println("Error downloading game.");
 						}
 					} catch (CancellationException e) {
-						lblError.setForeground(Color.black);
 						System.out.println("Game update cancelled...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
 						e.printStackTrace();
-						lblError.setForeground(Color.red);
 						System.out.println("Failed to download game: "
 								+ e.getCause().getMessage());
 						return;
