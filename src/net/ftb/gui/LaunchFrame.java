@@ -674,7 +674,7 @@ public class LaunchFrame extends JFrame {
 							}
 							// the old start testing code just put me in a
 							// infinite loop.
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 							
 						} else {
 							System.out.println("Error downloading game.");
@@ -711,9 +711,7 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-				System.out.println(ModPack.getPack(selectedPack).getDir());
-				System.out.println("Downloading Mods");
-				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+			
 		}
 	}
 
@@ -936,18 +934,20 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
 	 */
 	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
+		System.out.println("DOWNLAODING!!!");
 		URL website;
 		try {
-			website = new URL(modPackName);
+			System.out.println("STILL DOWNLOADING!!!");
+			website = new URL(modPackName + ".zip");
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
+			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
 	}
 
 	/**
@@ -959,8 +959,7 @@ public class LaunchFrame extends JFrame {
 			byte[] buf = new byte[1024];
 			ZipInputStream zipinputstream = null;
 			ZipEntry zipentry;
-			zipinputstream = new ZipInputStream(
-					new FileInputStream(zipLocation));
+			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
 
 			zipentry = zipinputstream.getNextEntry();
 			while (zipentry != null) {
