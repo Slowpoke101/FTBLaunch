@@ -79,6 +79,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
+
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -662,7 +664,9 @@ public class LaunchFrame extends JFrame {
 							System.out.println(ModPack.getPack(selectedPack).getDir());
 							killMetaInf();
 							try {
-								downloadModPack(ModPack.getPack(selectedPack).getUrl().toString());
+								downloadPack(Settings.getSettings().getInstallPath() + "//temp//", ModPack.getPack(selectedPack).getUrl());
+							} catch (IOException e) {
+								e.printStackTrace();
 							} catch (NoSuchAlgorithmException e) {
 								e.printStackTrace();
 							}
