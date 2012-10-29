@@ -169,15 +169,6 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
-				Enumeration<Object> obj = UIManager.getDefaults().keys();
-				
-				while (obj.hasMoreElements()) {
-					String str = obj.nextElement().toString();
-					if (str.contains("TabbedPane")) {
-						System.out.println(str + " : " + UIManager.get(str).toString());
-					}
-				}
-				
 				Color baseColor = new Color(40, 40, 40);
 				
 				UIManager.put("control", baseColor);
