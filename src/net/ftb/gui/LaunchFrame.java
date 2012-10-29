@@ -304,7 +304,6 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 		
-		
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
@@ -313,13 +312,13 @@ public class LaunchFrame extends JFrame {
 		newsPane = new JPanel();
 		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		newsPane.setLayout(null);
-		// newsPane.add(backgroundImage1);
+		//newsPane.add(backgroundImage1);
 		//newsPane.setBackground(back);
 		
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
-		// modPacksPane.add(backgroundImage3);
+		//modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
 		
 		packPanels = new JPanel[ModPack.getPackArray().size()];
@@ -388,8 +387,9 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
 
-		splash = new JLabel(new ImageIcon(ModPack.getPack(0).getImage()));
+		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
+		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
 		
 		packInfo = new JTextArea(ModPack.getPack(0).getInfo());
@@ -399,13 +399,13 @@ public class LaunchFrame extends JFrame {
 		mapsPane = new JPanel();
 		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mapsPane.setLayout(null);
-		// mapsPane.add(backgroundImage4);
+		//mapsPane.add(backgroundImage4);
 		//mapsPane.setBackground(back);
 		
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
-		// tpPane.add(backgroundImage5);
+		//tpPane.add(backgroundImage5);
 		//tpPane.setBackground(back);
 
 		news = new JEditorPane();
@@ -426,7 +426,7 @@ public class LaunchFrame extends JFrame {
 		//Options Tab
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		// optionsPane.add(backgroundImage2);
+		//optionsPane.add(backgroundImage2);
 		//optionsPane.setBackground(back);
 
 		getContentPane().add(optionsPane, BorderLayout.CENTER);
@@ -581,6 +581,7 @@ public class LaunchFrame extends JFrame {
 		for (int i = 0; i < packPanels.length; i++) {
 			if(selectedPack == i) {
 				packPanels[i].setBackground(UIManager.getColor("control").darker().darker());
+				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
 			} else {
 				packPanels[i].setBackground(UIManager.getColor("control"));
 			}
@@ -1266,6 +1267,7 @@ public class LaunchFrame extends JFrame {
 		for (String s : dropdown_) {
 			users.addItem(s);
 		}
+		
 		for(String name : usernames) {
 			users.addItem(name);
 		}
