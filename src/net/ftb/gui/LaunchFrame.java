@@ -225,7 +225,7 @@ public class LaunchFrame extends JFrame {
 				if (!installDir.exists())
 					installDir.mkdirs();
 				
-				userManager = new UserManager(new File(installDir, "logindata.cfg"));
+				userManager = new UserManager(new File(installDir, "logindata"));
 				
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
@@ -783,11 +783,11 @@ public class LaunchFrame extends JFrame {
 
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
-		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
-		} else {
+//		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+//			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
+//		} else {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		}
+//		}
 
 		String date = sdf.format(new Date());
 		
@@ -1252,7 +1252,7 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public static void writeUsers() {
 		try {
 			userManager.write();
@@ -1265,6 +1265,7 @@ public class LaunchFrame extends JFrame {
 		// right now this will remove the 2 hard coded items as well
 		// jjw you can add them back in
 		users.removeAllItems();
+		users.addItem(dropdown_);
 		for(String name : usernames) {
 			users.addItem(name);
 		}
