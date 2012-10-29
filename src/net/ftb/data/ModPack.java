@@ -110,7 +110,7 @@ public class ModPack {
 		this.version = version;
 		URL logoURL = new URL(LaunchFrame.getCreeperhostLink(logo));
 		this.logo = Toolkit.getDefaultToolkit().createImage(logoURL);
-		this.url = new URL(LaunchFrame.getCreeperhostLink(url));
+		this.url = new URL(url);
 		URL imageUrl = new URL(LaunchFrame.getCreeperhostLink(image));
 		this.image = Toolkit.getDefaultToolkit().createImage(imageUrl);
 		this.connection = this.url.openConnection();

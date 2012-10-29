@@ -938,7 +938,7 @@ public class LaunchFrame extends JFrame {
 		URL website;
 		try {
 			System.out.println("STILL DOWNLOADING!!!");
-			website = new URL(modPackName + ".zip");
+			website = new URL(getCreeperhostLink(modPackName + ".zip"));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
