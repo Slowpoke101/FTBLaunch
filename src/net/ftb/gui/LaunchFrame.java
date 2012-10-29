@@ -675,6 +675,7 @@ public class LaunchFrame extends JFrame {
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
 							try {
+								extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + ModPack.getPack(selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir());
 								installMods(ModPack.getPack(selectedPack).getDir());
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -1008,6 +1009,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
 		try {
+			System.out.println("Extracting!!!");
 			File fSourceZip = new File(zipLocation);
 			String zipPath = outputLocation;
 			File temp = new File(zipPath);
@@ -1045,7 +1047,8 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		} catch (IOException ioe) {
-			System.out.println("IOError :" + ioe);
+			System.out.println("IOError :");
+			ioe.printStackTrace();
 		}
 
 	}
