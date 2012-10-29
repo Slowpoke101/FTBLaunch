@@ -1262,10 +1262,10 @@ public class LaunchFrame extends JFrame {
 		
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
 		
-		// right now this will remove the 2 hard coded items as well
-		// jjw you can add them back in
 		users.removeAllItems();
-		users.addItem(dropdown_);
+		for (String s : dropdown_) {
+			users.addItem(s);
+		}
 		for(String name : usernames) {
 			users.addItem(name);
 		}
