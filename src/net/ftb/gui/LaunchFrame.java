@@ -938,7 +938,7 @@ public class LaunchFrame extends JFrame {
 	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
 		URL website;
 		try {
-			website = new URL(getCreeperhostLink(modPackName));
+			website = new URL(modPackName);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
