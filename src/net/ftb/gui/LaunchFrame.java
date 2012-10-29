@@ -646,7 +646,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
-		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
+		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
 			
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			
@@ -677,7 +677,7 @@ public class LaunchFrame extends JFrame {
 							}
 							// the old start testing code just put me in a
 							// infinite loop.
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 							
 						} else {
 							System.out.println("Error downloading game.");
@@ -943,14 +943,14 @@ public class LaunchFrame extends JFrame {
 			System.out.println("STILL DOWNLOADING!!!");
 			website = new URL(getCreeperhostLink(modPackName));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
+			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
+		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 	}
 
 	/**
@@ -1140,19 +1140,19 @@ public class LaunchFrame extends JFrame {
 	 * @throws IOException
 	 */
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "\\"
-				+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/"
+				+ ModPack.getPack(selectedPack).getDir() + "/.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()
-				+ "\\.minecraft\\bin\\"), new File(Settings.getSettings()
+				+ "/.minecraft/bin/"), new File(Settings.getSettings()
 				.getInstallPath()
-				+ "\\"
+				+ "/"
 				+ ModPack.getPack(selectedPack).getDir()
-				+ "\\.minecraft\\bin"));
+				+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()
-				+ "\\.minecraft\\bin\\minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "\\"
-				+ modPackName + "\\.minecraft\\bin\\mcbackup.jar");
+				+ "/.minecraft/bin/minecraft.jar");
+		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"
+				+ modPackName + "/.minecraft/bin/mcbackup.jar");
 		// minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+
 		// "\\" + modPackName + "\\.minecraft\\bin\\mcbackup.jar"));
 		// System.out.println("Renamed minecraft.jar to mcbackup.jar");
