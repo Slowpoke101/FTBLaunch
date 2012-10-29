@@ -298,10 +298,11 @@ public class LaunchFrame extends JFrame {
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
-					doLogin("", "");
+					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
@@ -384,7 +385,7 @@ public class LaunchFrame extends JFrame {
 		for(JPanel p : packPanels) {
 			packs.add(p);
 		}
-			
+		
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -612,7 +613,6 @@ public class LaunchFrame extends JFrame {
 		}
 
 
-		lblError.setForeground(Color.black);
 		System.out.println("Logging in...");
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -626,26 +626,13 @@ public class LaunchFrame extends JFrame {
 					responseStr = get();
 				} catch (InterruptedException err) {
 					err.printStackTrace();
-					loginPanel.add(btnPlayOffline);
-					loginPanel.revalidate();
-					loginPanel.repaint();
 					return;
 				} catch (ExecutionException err) {
 					err.printStackTrace();
 					if (err.getCause() instanceof IOException) {
-						lblError.setForeground(Color.red);
-						loginPanel.add(btnPlayOffline);
-						loginPanel.revalidate();
-						loginPanel.repaint();
-						loginPanel.add(btnPlayOffline);
 						System.out.println("Login failed: "
 								+ err.getCause().getMessage());
 					} else if (err.getCause() instanceof MalformedURLException) {
-						lblError.setForeground(Color.red);
-						loginPanel.add(btnPlayOffline);
-						loginPanel.revalidate();
-						loginPanel.repaint();
-						loginPanel.add(btnPlayOffline);
 						System.out.println("Error: Malformed URL");
 					}
 					return;
@@ -658,7 +645,6 @@ public class LaunchFrame extends JFrame {
 
 				} catch (IllegalArgumentException e) {
 
-					lblError.setForeground(Color.red);
 
 					if (responseStr.contains(":")) {
 						System.out.println("Received invalid response from server.");
@@ -666,16 +652,9 @@ public class LaunchFrame extends JFrame {
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							System.out.println("Invalid username or password.");
-							btnLogin.setEnabled(true);
-							loginPanel.add(btnPlayOffline);
-							loginPanel.revalidate();
-							loginPanel.repaint();
-							btnLogin.setEnabled(true);
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							System.out.println("Outdated launcher.");
-							btnLogin.setEnabled(true);
 						} else {
-							btnLogin.setEnabled(true);
 							System.out.println("Login failed: " + responseStr);
 						}
 
