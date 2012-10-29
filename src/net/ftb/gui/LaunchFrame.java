@@ -675,7 +675,7 @@ public class LaunchFrame extends JFrame {
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
 							try {
-								extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + ModPack.getPack(selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir());
+								extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/" + ModPack.getPack(selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir());
 								installMods(ModPack.getPack(selectedPack).getDir());
 							} catch (IOException e) {
 								e.printStackTrace();
