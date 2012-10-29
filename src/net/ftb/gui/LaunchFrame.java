@@ -643,19 +643,16 @@ public class LaunchFrame extends JFrame {
 		loginWorker.execute();
 	}
 
+	@SuppressWarnings("unused")
 	public void runGameUpdater(final LoginResponse response) {
-		if (!new File(Settings.getSettings().getInstallPath()
-				+ "\\.minecraft\\bin\\minecraft.jar").exists()) {
-
-			final ProgressMonitor progMonitor = new ProgressMonitor(this,
-					"Downloading minecraft...", "", 0, 100);
-
-			final GameUpdateWorker updater = new GameUpdateWorker(
-					RESPONSE.getLatestVersion(), "minecraft.jar", new File(
-							Settings.getSettings().getInstallPath(),
-							".minecraft//bin").getPath(), false) {
+		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
+			
+			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			
+			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+				
 				public void done() {
-
+					
 					progMonitor.close();
 					try {
 						if (get() == true) {
@@ -663,12 +660,12 @@ public class LaunchFrame extends JFrame {
 							System.out.println("Game update complete.");
 
 							// try {
-							System.out.println(getSelectedModPack());
+							System.out.println(ModPack.getPack(selectedPack).getDir());
 							killMetaInf();
 							// the old start testing code just put me in a
 							// infinite loop.
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
-
+							
 						} else {
 							System.out.println("Error downloading game.");
 						}
@@ -678,8 +675,7 @@ public class LaunchFrame extends JFrame {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
 						e.printStackTrace();
-						System.out.println("Failed to download game: "
-								+ e.getCause().getMessage());
+						System.out.println("Failed to download game: " + e.getCause().getMessage());
 						return;
 					}
 				}
@@ -706,24 +702,17 @@ public class LaunchFrame extends JFrame {
 			updater.execute();
 		} else {
 			try {
-				System.out.println(getSelectedModPack());
-				System.out.println("Installed jar mods");
-				installMods(getSelectedModPack());
-				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ getSelectedModPack() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+				System.out.println(ModPack.getPack(selectedPack).getDir());
+				System.out.println("Downloading Mods");
+				downloadModPack(ModPack.getPack(selectedPack).getUrl().toString());
+				installMods(ModPack.getPack(selectedPack).getDir());
+				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public String getSelectedModPack() {
-		/*
-		 * if (modPack1RB.isSelected()) { return "FTBCLASSIC"; } else if
-		 * (modPack2RB.isSelected()) { return "FTB"; } else if
-		 * (modPack3RB.isSelected()) { return "DIREWOLF20"; } else if
-		 * (modPack4RB.isSelected()) { return "FTBLITE"; }
-		 */
-		return null;
 	}
 
 	/**
@@ -948,18 +937,16 @@ public class LaunchFrame extends JFrame {
 	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
 		URL website;
 		try {
-			website = new URL(getCreeperhostLink(modPackName + ".zip"));
+			website = new URL(getCreeperhostLink(modPackName));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			fos = new FileOutputStream(Settings.getSettings()
-					.getInstallPath() + "\\temp\\" + modPackName + ".zip");
+			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\"
-				+ modPackName + ".zip");
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
 	}
 
 	/**
@@ -1151,13 +1138,13 @@ public class LaunchFrame extends JFrame {
 	 */
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "\\"
-				+ getSelectedModPack() + "\\.minecraft").mkdirs();
+				+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()
 				+ "\\.minecraft\\bin\\"), new File(Settings.getSettings()
 				.getInstallPath()
 				+ "\\"
-				+ getSelectedModPack()
+				+ ModPack.getPack(selectedPack).getDir()
 				+ "\\.minecraft\\bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()
 				+ "\\.minecraft\\bin\\minecraft.jar");
@@ -1228,7 +1215,6 @@ public class LaunchFrame extends JFrame {
 		String[] merged = new String[A.length+B.length];
 		System.arraycopy(A, 0, merged, 0, A.length);
 		System.arraycopy(B, 0, merged, A.length, B.length);
-		
 		return merged;
 	}
 	

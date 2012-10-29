@@ -115,7 +115,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 		try
 		{
 			//changed int i = 0 to 1, and set minecraft download link manually;
-			jarURLs[0] = new URL("http://assets.minecraft.net/1_2_5/minecraft.jar");
+			jarURLs[0] = new URL("http://assets.minecraft.net/1_4_2/minecraft.jar");
 			for (int i = 1; i < jarList.length; i++)
 			{
 				jarURLs[i] = new URL("http://s3.amazonaws.com/MinecraftDownload/" 
