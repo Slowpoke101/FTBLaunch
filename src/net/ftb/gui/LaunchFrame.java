@@ -956,6 +956,18 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 		}
 		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
+		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/mods").delete();
+		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/coremods").delete();
+		File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/").listFiles();
+		String files;
+		for (int i = 0; i < contents.length; i++){             
+			if (contents[i].isFile()){
+				files = contents[i].getName();
+				if (files.endsWith(".zip") || files.endsWith(".ZIP")){
+					contents[i].delete();
+				}
+			}	
+		}
 	}
 
 	/**
