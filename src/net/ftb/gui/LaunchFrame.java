@@ -216,6 +216,12 @@ public class LaunchFrame extends JFrame {
 				
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
+				try {
+					LauncherConsole con = new LauncherConsole();
+					con.setVisible(true);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				LaunchFrame frame = new LaunchFrame(2);
 				frame.setVisible(true);
 			}
@@ -583,23 +589,6 @@ public class LaunchFrame extends JFrame {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
-
-		try {
-			LauncherConsole con = new LauncherConsole();
-			con.setVisible(true);
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 
 		System.out.println("Logging in...");
 
