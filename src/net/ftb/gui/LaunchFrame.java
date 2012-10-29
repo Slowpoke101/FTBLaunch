@@ -52,7 +52,6 @@ import net.ftb.workers.LoginWorker;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -83,13 +82,8 @@ import javax.swing.border.EmptyBorder;
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	JPanel loginPanel;
-	JButton btnPlayOffline;
 	public static UserManager userManager;
 	LoginResponse RESPONSE;
-	static JCheckBox chckbxRemember;
-	JLabel lblError;
-	JButton btnLogin;
 
 	/**
 	 * the panels to appear in the tabs
@@ -644,11 +638,9 @@ public class LaunchFrame extends JFrame {
 					RESPONSE = response;
 
 				} catch (IllegalArgumentException e) {
-
-
+					
 					if (responseStr.contains(":")) {
 						System.out.println("Received invalid response from server.");
-						btnLogin.setEnabled(true);
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							System.out.println("Invalid username or password.");
@@ -657,7 +649,6 @@ public class LaunchFrame extends JFrame {
 						} else {
 							System.out.println("Login failed: " + responseStr);
 						}
-
 					}
 					return;
 				}
@@ -686,7 +677,6 @@ public class LaunchFrame extends JFrame {
 					try {
 						if (get() == true) {
 							// Success
-							lblError.setForeground(Color.black);
 							System.out.println("Game update complete.");
 
 							// try {
@@ -697,17 +687,14 @@ public class LaunchFrame extends JFrame {
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
 
 						} else {
-							lblError.setForeground(Color.red);
 							System.out.println("Error downloading game.");
 						}
 					} catch (CancellationException e) {
-						lblError.setForeground(Color.black);
 						System.out.println("Game update cancelled...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
 						e.printStackTrace();
-						lblError.setForeground(Color.red);
 						System.out.println("Failed to download game: "
 								+ e.getCause().getMessage());
 						return;
