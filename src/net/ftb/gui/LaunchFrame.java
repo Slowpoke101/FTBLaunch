@@ -323,6 +323,11 @@ public class LaunchFrame extends JFrame {
 		//modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
 		
+		splash = new JLabel();
+		splash.setBounds(420, 0, 410, 200);
+//		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
+		modPacksPane.add(splash);
+		
 		packPanels = new JPanel[ModPack.getPackArray().size()];
 		for(int i = 0; i < packPanels.length; i++) {
 			final int packIndex = i;
@@ -388,11 +393,6 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
-
-		splash = new JLabel();
-		splash.setBounds(420, 0, 410, 200);
-		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
-		modPacksPane.add(splash);
 		
 		packInfo = new JTextArea(ModPack.getPack(0).getInfo());
 		packInfo.setBounds(420, 210, 410, 90);
