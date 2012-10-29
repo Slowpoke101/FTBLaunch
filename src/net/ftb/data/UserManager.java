@@ -88,6 +88,7 @@ public class UserManager {
 	}
 	
 	public void read() throws IOException {
+		_users.clear();
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(_filename));
 			String str = fromHexThing(read.readLine());
