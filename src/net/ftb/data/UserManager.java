@@ -150,4 +150,22 @@ public class UserManager {
 		}
 		return ret;
 	}
+	
+	public static String getUsername(String name) {
+		for (User user : _users) {
+			if (user.getName() == name) {
+				return user.getUsername();
+			}
+		}
+		return "";
+	}
+	
+	public static String getPassword(String name) {
+		for (User user : _users) {
+			if (user.getName() == name) {
+				return user.getPassword();
+			}
+		}
+		return "";
+	}
 }
