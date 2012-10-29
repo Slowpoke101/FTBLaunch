@@ -662,6 +662,16 @@ public class LaunchFrame extends JFrame {
 							// try {
 							System.out.println(ModPack.getPack(selectedPack).getDir());
 							killMetaInf();
+							try {
+								downloadModPack(ModPack.getPack(selectedPack).getUrl().toString());
+							} catch (NoSuchAlgorithmException e) {
+								e.printStackTrace();
+							}
+							try {
+								installMods(ModPack.getPack(selectedPack).getDir());
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 							// the old start testing code just put me in a
 							// infinite loop.
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/.minecraft", "TestingPlayer", "-");
@@ -701,17 +711,9 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			try {
 				System.out.println(ModPack.getPack(selectedPack).getDir());
 				System.out.println("Downloading Mods");
-				downloadModPack(ModPack.getPack(selectedPack).getUrl().toString());
-				installMods(ModPack.getPack(selectedPack).getDir());
 				launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "\\"+ ModPack.getPack(selectedPack).getDir() + "\\.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -823,8 +825,7 @@ public class LaunchFrame extends JFrame {
 			}
 
 			System.out.println("Loading natives...");
-			String nativesDir = new File(new File(workingDir, "bin"), "natives")
-					.toString();
+			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
