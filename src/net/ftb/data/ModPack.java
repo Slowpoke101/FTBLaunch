@@ -96,10 +96,8 @@ public class ModPack {
 	private String author;
 	private String version;
 	private Image logo;
-	private URL url;
-	private URLConnection connection;
+	private String url;
 	private Image image;
-	private int size;
 	private String dir;
 	private String mcVersion;
 	private String info = "This is the info until there is an actual info thingy";
@@ -110,11 +108,9 @@ public class ModPack {
 		this.version = version;
 		URL logoURL = new URL(LaunchFrame.getCreeperhostLink(logo));
 		this.logo = Toolkit.getDefaultToolkit().createImage(logoURL);
-		this.url = new URL(url);
+		this.url = url;
 		URL imageUrl = new URL(LaunchFrame.getCreeperhostLink(image));
 		this.image = Toolkit.getDefaultToolkit().createImage(imageUrl);
-		this.connection = this.url.openConnection();
-		this.size = connection.getContentLength();
 		this.dir = dir;
 		this.mcVersion = mcVersion;
 	}
@@ -135,16 +131,12 @@ public class ModPack {
 		return logo;
 	}
 	
-	public URL getUrl() {
+	public String getUrl() {
 		return url;
 	}
 	
 	public Image getImage() {
 		return image;
-	}
-	
-	public int getSize() {
-		return size;
 	}
 	
 	public String getDir() {

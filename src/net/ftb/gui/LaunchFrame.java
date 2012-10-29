@@ -643,7 +643,6 @@ public class LaunchFrame extends JFrame {
 		loginWorker.execute();
 	}
 
-	@SuppressWarnings("unused")
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath() + "\\.minecraft\\bin\\minecraft.jar").exists()) {
 			
@@ -938,16 +937,16 @@ public class LaunchFrame extends JFrame {
 		URL website;
 		try {
 			System.out.println("STILL DOWNLOADING!!!");
-			website = new URL(getCreeperhostLink(modPackName + ".zip"));
+			website = new URL(getCreeperhostLink(modPackName));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
+			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName + ".zip");
+		extractZip(Settings.getSettings().getInstallPath() + "\\temp\\" + modPackName);
 	}
 
 	/**
