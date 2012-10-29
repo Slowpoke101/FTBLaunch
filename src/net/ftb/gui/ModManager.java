@@ -39,6 +39,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 
 public class ModManager extends JDialog {
@@ -52,35 +53,26 @@ public class ModManager extends JDialog {
 
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			// TODO Auto-generated method stub
 			
-			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip");
+			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl());
 			if(modPackZip.exists()){
 				try {
-					if(modPackZip.length() != getModPackSize()){
-						new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() +  "/").mkdir();
-						downloadModPack(getSelectedModPack());
-					}else{
-						installMods(getSelectedModPack());
-					}
+						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() +  "/").mkdir();
+						downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
+						installMods(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else{
 				try {
-					downloadModPack(getSelectedModPack());
+					downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
 				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -88,11 +80,8 @@ public class ModManager extends JDialog {
 			return false;
 		}
 
-		String getSelectedModPack() {
-			return "FTBHeadstart";
-		}
 
-
+		@SuppressWarnings("resource")
 		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException
 		{
 			BufferedInputStream in = null;
@@ -101,11 +90,11 @@ public class ModManager extends JDialog {
 			{
 				in = new BufferedInputStream(new URL(urlString).openStream());
 				fout = new FileOutputStream(filename);
-				
+
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
-				int modPackSize = getModPackSize();
+				int modPackSize = ModPack.getPack(LaunchFrame.selectedPack).getSize();
 				progressBar.setMaximum(10000);
 				int steps = 0;
 				while ((count = in.read(data, 0, 1024)) != -1)
@@ -122,12 +111,7 @@ public class ModManager extends JDialog {
 					//System.out.println(downloadedPerc);
 				}
 
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally
-			{			
+			} finally {			
 				if (in != null)
 					in.close();
 				if (fout != null)
@@ -135,6 +119,7 @@ public class ModManager extends JDialog {
 				fout.close();
 			}
 		}
+		
 		public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
 			DateFormat sdf = new SimpleDateFormat("ddMMyy");
 			TimeZone zone = TimeZone.getTimeZone("GMT");
@@ -144,48 +129,47 @@ public class ModManager extends JDialog {
 		}
 
 
-		protected void downloadModPack(String modPackName) throws IOException, NoSuchAlgorithmException {
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/").mkdirs();
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip").createNewFile();
-			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip","FTBHeadstart.zip");
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").mkdirs();
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/.minecraft").mkdirs();
-			installMods(getSelectedModPack());
+		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
+			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/").mkdirs();
+			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName).createNewFile();
+			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
+			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
+			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
+			installMods(modPackName, dir);
 		}
+//
+//		protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
+//			DateFormat sdf = new SimpleDateFormat("ddMMyy");
+//			TimeZone zone = TimeZone.getTimeZone("GMT");
+//			sdf.setTimeZone(zone);
+//			String date = sdf.format(new Date());
+//			URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
+//			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+//			String str;
+//			while((str = in.readLine()) != null){
+//				return Integer.parseInt(str);
+//			}
+//			return 1;		
+//		}
 
-		protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
-			DateFormat sdf = new SimpleDateFormat("ddMMyy");
-			TimeZone zone = TimeZone.getTimeZone("GMT");
-			sdf.setTimeZone(zone);
-			String date = sdf.format(new Date());
-			URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-			String str;
-			while((str = in.readLine()) != null){
-				return Integer.parseInt(str);
-			}
-			return 1;		
 
-		}
-
-
-		protected void installMods(String modPackName) throws IOException, NoSuchAlgorithmException {
+		protected void installMods(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			//new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft").mkdir();
-			File f = new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt");		
+			File f = new File(Settings.getSettings().getInstallPath() + "/" + dir + "/.minecraft/md5.txt");		
 			FileWriter writer = new FileWriter(f);
 			BufferedWriter out = new BufferedWriter(writer);
-			out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip")));
+			out.write(getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName)));
 			out.flush();
 			out.close();
-			Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft/md5.txt"));
-			if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + getSelectedModPack() + "/" + getSelectedModPack() + ".zip"))){
+			Scanner in = new Scanner(new File(Settings.getSettings().getInstallPath() + "/" + dir + "/.minecraft/md5.txt"));
+			if(in.next() == getFileMD5(new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName))){
 
 			}
 			else{
-				extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/" + modPackName +".zip", Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/");
-				new File(Settings.getSettings().getInstallPath() + "/"+ getSelectedModPack() + "/.minecraft").mkdirs();
+				extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/");
+				new File(Settings.getSettings().getInstallPath() + "/"+ dir + "/.minecraft").mkdirs();
 
-				copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ getSelectedModPack()+ "/.minecraft/bin"));
+				copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
 				File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 				File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
 				//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
@@ -216,8 +200,8 @@ public class ModManager extends JDialog {
 				System.err.println("Error: " + e.getMessage());
 			}
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/bin/"));
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + getSelectedModPack() + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + getSelectedModPack() +"/.minecraft/"));
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + dir +"/.minecraft/bin/"));
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + dir +"/.minecraft/"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {

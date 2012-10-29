@@ -101,6 +101,7 @@ public class ModPack {
 	private String dir;
 	private String mcVersion;
 	private String info = "This is the info until there is an actual info thingy";
+	private int size;
 	
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion) throws IOException, NoSuchAlgorithmException {
 		this.name = name;
@@ -109,6 +110,9 @@ public class ModPack {
 		URL logoURL = new URL(LaunchFrame.getCreeperhostLink(logo));
 		this.logo = Toolkit.getDefaultToolkit().createImage(logoURL);
 		this.url = url;
+		URL url_ = new URL(LaunchFrame.getCreeperhostLink(url));
+		URLConnection c = url_.openConnection();
+		this.size = c.getContentLength();
 		URL imageUrl = new URL(LaunchFrame.getCreeperhostLink(image));
 		this.image = Toolkit.getDefaultToolkit().createImage(imageUrl);
 		this.dir = dir;
@@ -149,5 +153,9 @@ public class ModPack {
 	
 	public String getInfo() {
 		return info;
+	}
+	
+	public int getSize() {
+		return size;
 	}
 }

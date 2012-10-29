@@ -593,6 +593,15 @@ public class LaunchFrame extends JFrame {
 	public void doLogin(String username, String password) {
 
 		System.out.println("Logging in...");
+		
+		tabbedPane.setEnabledAt(0, false);
+		tabbedPane.setEnabledAt(1, false);
+		tabbedPane.setEnabledAt(2, false);
+		
+		tabbedPane.getSelectedComponent().setEnabled(false);
+		
+		launch.setEnabled(false);
+		users.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
