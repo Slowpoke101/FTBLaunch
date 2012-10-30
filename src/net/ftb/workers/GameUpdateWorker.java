@@ -54,54 +54,43 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 		
 		if (!binDir.exists())
 			binDir.mkdirs();
-		
-		if (!latestVersion.isEmpty())
+
+		if (shouldUpdate())
 		{
-			File versionFile = new File(binDir, "version");
-			boolean cacheAvailable = false;
-			
-			if (!forceUpdate && versionFile.exists() && 
-					(latestVersion == "-1" || latestVersion == readVersionFile()))
-			{
-				cacheAvailable = true;
-				setProgress(90);
+			setProgress(90);
+			writeVersionFile(latestVersion);
+			setStatus("Downloading jars...");
+			System.out.println("Downloading Jars");
+			if (!downloadJars()) {
+				System.out.println("Download Failed :(");
+				return false;
 			}
-			
-			if (forceUpdate || !cacheAvailable)
-			{
-				shouldUpdate = true;
-				if (!forceUpdate && versionFile.exists())
-				{
-					// Ask to update.
-				}
-				
-				
-				// This check is not actually stupid. 
-				// The AskToUpdate method will set shouldUpdate to true or false  
-				// depending on whether or not the user wants to update.
-				if (shouldUpdate)
-				{
-					writeVersionFile(latestVersion);
-					setStatus("Downloading jars...");
-					System.out.println("Downloading Jars");
-					if (!downloadJars()) {
-						System.out.println("Download Failed :(");
-						return false;
-					}
-					setStatus("Extracting files...");
-					System.out.println("Extracting Files");
-					if (!extractNatives()) {
-						System.out.println("Extraction Failed :(");
-						return false;
-					}
-				}
+			setStatus("Extracting files...");
+			System.out.println("Extracting Files");
+			if (!extractNatives()) {
+				System.out.println("Extraction Failed :(");
+				return false;
 			}
-			
 		}
 		
 		return true;
 	}
-	
+
+	protected boolean shouldUpdate(){
+		if(forceUpdate){
+			return true;
+		}
+		if(latestVersion.isEmpty()){
+			return false;
+		}
+		File versionFile = new File(binDir, "version");
+		// TODO Fix comparison - version format is currently undecided, so this just checks if it has changed.
+		// This could result in a downgrade if the version had gone down - although maybe that's intended?
+		// TODO Ask user if they want to update
+		return !versionFile.exists() || latestVersion == "-1" || latestVersion != readVersionFile();
+	}
+
+
 	protected boolean loadJarURLs()
 	{
 		System.out.println("Loading Jar URLs");
@@ -455,14 +444,13 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void>
 	{
 		return status;
 	}
-	
+
 	protected String status;
 	
 	protected String latestVersion;
 	protected String mainGameURL;
 	protected File binDir;
 	protected boolean forceUpdate;
-	protected boolean shouldUpdate;
 	
 	protected URL[] jarURLs;
 }
