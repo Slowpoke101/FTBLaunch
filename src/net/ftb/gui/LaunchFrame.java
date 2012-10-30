@@ -289,6 +289,17 @@ public class LaunchFrame extends JFrame {
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
 		edit.setEnabled(users.getSelectedIndex() > 1);
+		edit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(users.getSelectedIndex() > 1){
+					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
+					p.setVisible(true);
+					users.setSelectedIndex(0);
+				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
+			}
+		});
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
