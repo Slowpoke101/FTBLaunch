@@ -265,6 +265,13 @@ public class LaunchFrame extends JFrame {
 		String[] dropdown = merge(dropdown_, usernames);
 		
 		users = new JComboBox(dropdown);
+		if(Settings.getSettings().getLastUser() != null){
+			for(int i = 0; i < dropdown.length; i++){
+				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())){
+					users.setSelectedIndex(i);
+				}
+			}
+		}
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -289,6 +296,14 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
+					Settings.getSettings().setLastUser(""+users.getSelectedItem());
+					try {
+						Settings.getSettings().save();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
