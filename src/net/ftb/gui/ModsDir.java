@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 
 import net.ftb.data.Settings;
 
-public class ChooseDir extends JFrame implements ActionListener {
+public class ModsDir extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	JButton go;
@@ -23,7 +23,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 	
 	Settings settings = new Settings();
 
-	public ChooseDir() {
+	public ModsDir() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		go = new JButton("Do it");
 		go.addActionListener(this);
@@ -33,7 +33,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File(LaunchFrame.installFolderTextField.getText()));	
+		chooser.setCurrentDirectory(new java.io.File(LaunchFrame.modsFolderTextField.getText()));	
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		
@@ -48,9 +48,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 					+ chooser.getCurrentDirectory());
 			System.out.println("getSelectedFile() : "
 					+ chooser.getSelectedFile());
-				LaunchFrame.installFolderTextField.setText(chooser.getSelectedFile().getPath());	
-			
-			
+			LaunchFrame.modsFolderTextField.setText(chooser.getSelectedFile().getPath());		
 		} else {
 			System.out.println("No Selection ");
 		}
@@ -62,7 +60,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 
 	public static void main(String s[]) {
 		JFrame frame = new JFrame("");
-		ChooseDir panel = new ChooseDir();
+		ModsDir panel = new ModsDir();
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);

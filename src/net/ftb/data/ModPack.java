@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.gui.LaunchFrame;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -29,13 +28,35 @@ public class ModPack {
 	
 	public static void LoadAll() throws NoSuchAlgorithmException {
 	
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		Document doc = null;
+		
+		
+		
+		/********************* Offline XML loading********************************
+		File cpack;
+		cpack = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
+				"/CPACKS/modpacks.xml"));
+		if (cpack.exists())
+		{
+			
+			System.out.println("loading Custom modpack information...");
+			
+				
+			try {
+				doc = docFactory.newDocumentBuilder().parse(cpack);
+			} catch (SAXException e) { e.printStackTrace(); return;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			} catch (ParserConfigurationException e) { e.printStackTrace(); return; }
+			
+			
+		}else {
+		********************* Offline XML loading********************************/
 		System.out.println("loading modpack information...");
 		
 		MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
-		
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		
-		Document doc = null;
 		try {
 			doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 		} catch (SAXException e) { e.printStackTrace(); return;
@@ -43,6 +64,10 @@ public class ModPack {
 			e.printStackTrace();
 			return;
 		} catch (ParserConfigurationException e) { e.printStackTrace(); return; }
+	//	}
+		
+		
+		
 		
 		if (doc == null) {
 			return;
