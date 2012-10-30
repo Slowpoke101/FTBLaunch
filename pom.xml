@@ -9,12 +9,16 @@
   <properties>
     <buildNumber>0</buildNumber>
     <mainClass>net.ftb.gui.LaunchFrame</mainClass>
+    <minimumJreVersion>1.6</minimumJreVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <name>FTB Launcher</name>
   <url>https://github.com/Slowpoke101/FTBLaunch</url>
 
   <build>
+    <defaultGoal>clean install package</defaultGoal>
+
     <sourceDirectory>src</sourceDirectory>
     <resources>  
       <resource>  
@@ -25,26 +29,27 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>${minimumJreVersion}</source>
+          <target>${minimumJreVersion}</target>
+          <compilerArgument>-Xlint:all</compilerArgument>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
         <configuration>
           <archive>
             <manifest>
               <mainClass>${mainClass}</mainClass>
             </manifest>
           </archive>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
         </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id> <!-- this is used for inheritance merges -->
-            <phase>package</phase> <!-- append to the packaging phase. -->
-            <goals>
-              <goal>attached</goal> <!-- goals == mojos -->
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.bluestemsoftware.open.maven.plugin</groupId>
