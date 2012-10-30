@@ -309,12 +309,6 @@ public class LaunchFrame extends JFrame {
 //		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
 
-		try {
-			ModPack.LoadAll();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				initialiseModpacks(tab);
@@ -323,6 +317,12 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void initialiseModpacks(int tab){
+		try {
+			ModPack.LoadAll();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
 		packPanels = new JPanel[ModPack.getPackArray().size()];
 		for(int i = 0; i < packPanels.length; i++) {
 			final int packIndex = i;
