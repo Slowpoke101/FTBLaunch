@@ -265,6 +265,13 @@ public class LaunchFrame extends JFrame {
 		String[] dropdown = merge(dropdown_, usernames);
 		
 		users = new JComboBox(dropdown);
+		if(Settings.getSettings().getLastUser() != null){
+			for(int i = 0; i < dropdown.length; i++){
+				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())){
+					users.setSelectedIndex(i);
+				}
+			}
+		}
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -282,6 +289,17 @@ public class LaunchFrame extends JFrame {
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
 		edit.setEnabled(users.getSelectedIndex() > 1);
+		edit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(users.getSelectedIndex() > 1){
+					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
+					p.setVisible(true);
+					users.setSelectedIndex(0);
+				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
+			}
+		});
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
@@ -289,6 +307,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
+					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
@@ -448,7 +467,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText("1024");
+		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -469,7 +488,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText("256");
+		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -609,6 +628,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(false);
 		
 		launch.setEnabled(false);
+		edit.setEnabled(false);
 		users.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -631,6 +651,7 @@ public class LaunchFrame extends JFrame {
 					} else if (err.getCause() instanceof MalformedURLException) {
 						System.out.println("Error: Malformed URL");
 					}
+					enableObjects();
 					return;
 				}
 
@@ -652,6 +673,7 @@ public class LaunchFrame extends JFrame {
 							System.out.println("Login failed: " + responseStr);
 						}
 					}
+					enableObjects();
 					return;
 				}
 
@@ -1147,8 +1169,10 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		settings.setInstallPath(installFolderTextField.getText());
-
+		settings.setLastUser((String)users.getSelectedItem());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		settings.setRamMax(ramMaximum.getText());
+		settings.setRamMin(ramMinimum.getText());
 
 		try {
 			settings.save();
@@ -1196,5 +1220,17 @@ public class LaunchFrame extends JFrame {
 
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
+	}
+	
+	private void enableObjects(){
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.getSelectedComponent().setEnabled(true);
+		launch.setEnabled(true);
+		if(users.getSelectedIndex() > 1){
+			edit.setEnabled(true);
+		}
+		users.setEnabled(true);
 	}
 }
