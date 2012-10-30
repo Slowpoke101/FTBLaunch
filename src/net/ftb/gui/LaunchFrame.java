@@ -118,6 +118,7 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
 	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
+	private JButton edit;
 
 	/**
 	 * things to go on the modpacks panel
@@ -273,8 +274,14 @@ public class LaunchFrame extends JFrame {
 					p.setVisible(true);
 					users.setSelectedIndex(0);
 				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
+		
+		edit = new JButton("Edit");
+		edit.setBounds(480, 20, 60, 30);
+		edit.setVisible(true);
+		edit.setEnabled(users.getSelectedIndex() > 1);
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
@@ -287,6 +294,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 		
+		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
