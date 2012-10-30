@@ -1,0 +1,18 @@
+Here In This zip copy the intire FTBA or FTBB pack zip from the temp directory that FTBlauncher creates.
+so fin this path 
+FTBLAUNCHERFOLDER\temp\FTBA\FTBA.zip  or FTBLAUNCHERFOLDER\temp\FTBA\FTBA.zip
+copy that to 
+FTBLAUNCHERFOLDER\CPACKS\PACKNAME.zip
+
+and Edit the modpacks.xml to match the file names of you logos and packs.
+
+*************** Example modpacks.xml file ****************************************8
+
+<modpacks>
+	<modpack name="Pack Long Name" author="GiveCreditWhereItsDo" version="1" logo = "logo_NAME.png" url="PACKNAME.zip" image="splash_NAME.png" dir="PACKNAME" mcVersion="1.4.2"/>
+
+</modpacks>
+
+
+
+

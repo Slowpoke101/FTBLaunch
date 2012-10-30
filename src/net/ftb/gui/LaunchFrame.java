@@ -44,6 +44,8 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.util.OSUtils;
+import net.ftb.util.PathUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -736,7 +738,15 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-
+		
+		File cpack;
+		
+		cpack = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
+				"/CPACKS/modpacks.xml"));
+		if (cpack.exists())
+		{ return "file:///" + OSUtils.getDefInstallPath() + "/CPACKS/" + file; }
+		
+		
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
 //		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
