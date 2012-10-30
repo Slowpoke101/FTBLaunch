@@ -28,6 +28,7 @@ public class ModpackLoader extends Thread {
 	private static String MODPACKSFILE;
 
 	public ModpackLoader() {
+		// this.modPack = modPack;
 	}
 
 	public void run() {
@@ -35,13 +36,13 @@ public class ModpackLoader extends Thread {
 			System.out.println("loading modpack information...");
 
 			// Lets emulate heavy server load ;)
-			/*
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e1) {
-				// can be ignored
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			*/
+			
 			
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
@@ -93,6 +94,7 @@ public class ModpackLoader extends Thread {
 				}
 			}
 		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 

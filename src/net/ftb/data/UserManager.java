@@ -77,41 +77,38 @@ public class UserManager {
 		;
 		return String.format("%040x", str2);
 	}
-	
+
 	public void write() throws IOException {
-		
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
+		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
+		String str = "";
 		for (int i = 0; i < _users.size(); i++) {
-			String str = _users.get(i).toString();
-			wri.write(getHexThing(str));
-			if((i+1) != _users.size()) {
-				wri.newLine();
-			}
+			str += _users.get(i).toString();
 		}
+		wri.write(getHexThing(str));
 		wri.close();
- 	}
- 	
- 	public void read() throws IOException {
- 		_users.clear();
- 		
- 		if(_filename.exists()) {
- 			try {
- 				BufferedReader read = new BufferedReader(new FileReader(_filename));
- 				String str;
- 				while((str = read.readLine()) != null) {
-					str = fromHexThing(str);
-					_users.add(new User(str));
+	}
+
+	public void read() throws IOException {
+		_users.clear();
+		try {
+			if (_filename.exists()) {
+				BufferedReader read = new BufferedReader(new FileReader(
+						_filename));
+				String str = fromHexThing(read.readLine());
+				String[] users = str.split("\n");
+				for (int i = 0; i < users.length; i++) {
+					_users.add(new User(users[i]));
 				}
 				read.close();
-			} catch (Exception ex) {
-				System.out.println("The following error is normal on first startup!!");
-				ex.printStackTrace();
-				System.out.println("Error loading login data");
- 			}
- 		}
- 	}
+			} else {
+				System.out.println("Warning: could not load logindata, file does not exist ("+_filename.getAbsolutePath()+")");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Error loading login data");
+		}
+	}
 
-	
 	public static byte[] getFileMD5(URL string) throws Exception {
 		MessageDigest dgest = null;
 		try {
@@ -178,31 +175,5 @@ public class UserManager {
 			}
 		}
 		return "";
-	}
-
-	private static User findUser(String name) {
-		for (User user : _users) {
-			if (user.getName().equals(name)) {
-				return user;
-			}
-		}
-		return null;
-	}
-
-	public static void removeUser(String name) {
-		User temp = findUser(name);
-		if (temp != null) {
-			_users.remove(_users.indexOf(temp));
-		}
-	}
-
-	public static void updateUser(String oldName, String username,
-			String password, String name) {
-		User temp = findUser(oldName);
-		if (temp != null) {
-			_users.get(_users.indexOf(temp)).setUsername(username);
-			_users.get(_users.indexOf(temp)).setPassword(password);
-			_users.get(_users.indexOf(temp)).setName(name);
-		}
 	}
 }
