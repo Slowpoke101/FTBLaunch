@@ -1198,7 +1198,6 @@ public class LaunchFrame extends JFrame {
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
 		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"));
