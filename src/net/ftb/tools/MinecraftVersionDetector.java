@@ -36,7 +36,7 @@ public class MinecraftVersionDetector {
 
 		cl = new URLClassLoader(urls,this.getClass().getClassLoader());
 		
-		JarFile file = null;
+		JarFile file;
 		try {
 			file = new JarFile(new File(jarFilePath + "/bin", "minecraft.jar"));
 		} catch (IOException e1) { return "unknown"; }
@@ -84,7 +84,7 @@ public class MinecraftVersionDetector {
 				}
 			}
 		}
-		
+
 		return "unknown";
 
 	}

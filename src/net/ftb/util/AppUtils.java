@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.Scanner;
 
 public class AppUtils
 {
@@ -32,14 +34,8 @@ public class AppUtils
 	public static String readString(InputStream stream) 
 			throws IOException
 	{
-		StringWriter writer = new StringWriter();
-		int c;
-		while ((c = stream.read()) != -1)
-		{
-			writer.write(c);
-		}
-		
-		return writer.toString();
+		Scanner scanner = new Scanner(stream).useDelimiter("\\A");
+		return scanner.hasNext() ? scanner.next() : "";
 	}
 	
 	/**
@@ -51,12 +47,7 @@ public class AppUtils
 	public static void writeString(OutputStream stream, String str) 
 			throws IOException
 	{
-		StringReader reader = new StringReader(str);
-		int c;
-		while ((c = reader.read()) != -1)
-		{
-			stream.write(c);
-		}
+		new PrintWriter(stream).write(str);
 	}
 	
 	/**

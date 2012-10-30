@@ -1,5 +1,6 @@
 package net.ftb.util;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class OSUtils
 		try {
 			return directory.getCanonicalPath();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Failed to get path for current directory - falling back to user's home directory.");
 			e.printStackTrace();
 		}
 
