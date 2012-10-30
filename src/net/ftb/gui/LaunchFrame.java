@@ -2,6 +2,7 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
@@ -258,7 +261,59 @@ public class LaunchFrame extends JFrame {
 		
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
+		footerLogo.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		footerCreeper.setBounds(72, 20, 132, 42);
+		footerCreeper.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.creeperhost.net"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		
 		try {
 			userManager.read();
@@ -295,6 +350,17 @@ public class LaunchFrame extends JFrame {
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
 		edit.setEnabled(users.getSelectedIndex() > 1);
+		edit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(users.getSelectedIndex() > 1){
+					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
+					p.setVisible(true);
+					users.setSelectedIndex(0);
+				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
+			}
+		});
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
@@ -302,14 +368,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
-					Settings.getSettings().setLastUser(""+users.getSelectedItem());
-					try {
-						Settings.getSettings().save();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
@@ -470,7 +529,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText("1024");
+		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -491,7 +550,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText("256");
+		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -763,6 +822,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(false);
 		
 		launch.setEnabled(false);
+		edit.setEnabled(false);
 		users.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -785,6 +845,7 @@ public class LaunchFrame extends JFrame {
 					} else if (err.getCause() instanceof MalformedURLException) {
 						System.out.println("Error: Malformed URL");
 					}
+					enableObjects();
 					return;
 				}
 
@@ -806,6 +867,7 @@ public class LaunchFrame extends JFrame {
 							System.out.println("Login failed: " + responseStr);
 						}
 					}
+					enableObjects();
 					return;
 				}
 
@@ -1320,6 +1382,9 @@ public class LaunchFrame extends JFrame {
 		settings.setExtraModsEnabled(modsFolderEnabledField.isSelected());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 		settings.setExtraModsPath(modsFolderTextField.getText());
+		settings.setRamMax(ramMaximum.getText());
+		settings.setRamMin(ramMinimum.getText());
+
 
 		try {
 			settings.save();
@@ -1368,4 +1433,29 @@ public class LaunchFrame extends JFrame {
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
 	}
+	
+	private void enableObjects(){
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.getSelectedComponent().setEnabled(true);
+		launch.setEnabled(true);
+		if(users.getSelectedIndex() > 1){
+			edit.setEnabled(true);
+		}
+		users.setEnabled(true);
+	}
+	
+	public void Hlink(MouseEvent me, URI uri) {
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch(Exception exc) {
+				System.out.println(exc);
+			}
+		} else {
+			System.out.println("else working");
+		}
+	} 
 }

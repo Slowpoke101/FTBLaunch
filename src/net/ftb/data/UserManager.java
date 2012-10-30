@@ -141,6 +141,31 @@ public class UserManager {
 		}
 	}
 	
+	private static User findUser(String name){
+		for(User user : _users){
+			if(user.getName().equals(name)){
+				return user;
+			}
+		}
+		return null;
+	}
+	
+	public static void removeUser(String name){
+		User temp = findUser(name);
+		if(temp != null){
+			_users.remove(_users.indexOf(temp));
+		}
+	}
+	
+	public static void updateUser(String oldName, String username, String password, String name){
+		User temp = findUser(oldName);
+		if(temp != null){
+			_users.get(_users.indexOf(temp)).setUsername(username);
+			_users.get(_users.indexOf(temp)).setPassword(password);
+			_users.get(_users.indexOf(temp)).setName(name);
+		}
+	}
+	
 	public static void addUser(String username, String password, String name) {
 		_users.add(new User(username, password, name));
 	}
