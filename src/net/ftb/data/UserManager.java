@@ -98,6 +98,7 @@ public class UserManager {
 			}
 			read.close();
 		} catch (Exception ex) {
+			System.out.println("The following error is normal on first startup!!");
 			ex.printStackTrace();
 			System.out.println("Error loading login data");
 		}
