@@ -24,11 +24,11 @@ public class LoginWorker extends SwingWorker<String, Void>
 	protected String doInBackground() throws Exception
 	{
 		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append("https://login.minecraft.net/?user=");
-		requestBuilder.append(URLEncoder.encode(username, "UTF-8"));
-		requestBuilder.append("&password=");
-		requestBuilder.append(URLEncoder.encode(password, "UTF-8"));
-		requestBuilder.append("&version=13");
+		requestBuilder.append("https://login.minecraft.net/?user=")
+		.append(URLEncoder.encode(username, "UTF-8"))
+		.append("&password=")
+		.append(URLEncoder.encode(password, "UTF-8"))
+		.append("&version=13");
 		
 		URL url = new URL(requestBuilder.toString());
 		return AppUtils.downloadString(url);
