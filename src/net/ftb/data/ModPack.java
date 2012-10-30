@@ -7,69 +7,52 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
-
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import net.ftb.workers.ModpackLoader;
 
 public class ModPack {
 	
 	// static stuff
+	
+	
 	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	
-	private static String MODPACKSFILE;
+	/*
+	 * List of Listeners that will be informed if a modpack was added
+	 */
+	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 	
-	public static void LoadAll() throws NoSuchAlgorithmException {
 	
-		System.out.println("loading modpack information...");
-		
-		MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
-		
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		
-		Document doc = null;
-		try {
-			doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
-		} catch (SAXException e) { e.printStackTrace(); return;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		} catch (ParserConfigurationException e) { e.printStackTrace(); return; }
-		
-		if (doc == null) {
-			return;
+	/*
+	 * Invoking async Load of Modpacks
+	 */
+	
+	public static void LoadAll() {
+		ModpackLoader loader = new ModpackLoader();
+		loader.start();
+	
+	}
+	
+	/*
+	 * Add a Listener that will be informed if a pack has been added
+	 */
+	public static void addListener(ModPackListener listener) {
+		listeners.add(listener);
+	}
+	
+	/*
+	 * Function to add a Modpack to the Model (used by the ModPackLoader)
+	 * this will also inform listeners.
+	 */
+	public static void addPack(ModPack pack) {
+		synchronized (packs) {
+			packs.add(pack);
 		}
-		
-		NodeList modPacks = doc.getElementsByTagName("modpack");
-		
-		for (int i = 0; i < modPacks.getLength(); i++) {
-			Node modPack = modPacks.item(i);
-			NamedNodeMap modPackAttr = modPack.getAttributes();
-			
-			try {
-				packs.add(new ModPack(
-						modPackAttr.getNamedItem("name").getTextContent(),
-						modPackAttr.getNamedItem("author").getTextContent(),
-						modPackAttr.getNamedItem("version").getTextContent(),
-						modPackAttr.getNamedItem("logo").getTextContent(),
-						modPackAttr.getNamedItem("url").getTextContent(),
-						modPackAttr.getNamedItem("image").getTextContent(),
-						modPackAttr.getNamedItem("dir").getTextContent(),
-						modPackAttr.getNamedItem("mcVersion").getTextContent()
-					));
-			} catch (DOMException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (ModPackListener listener : listeners) {
+			listener.onMobPackAdded(pack);
 		}
 	}
 	
@@ -81,13 +64,14 @@ public class ModPack {
 		return packs.get(i);
 	}
 	
+	/*
+	 * Test Function, no use in production
+	 */
 	public static void main(String[] args) {
-		try {
+	
 			LoadAll();
-			System.out.println(packs.get(1).getName());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		//	System.out.println(packs.get(1).getName());
+		
 	}
 	
 	// class stuff

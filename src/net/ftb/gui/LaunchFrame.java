@@ -2,7 +2,6 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,8 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
@@ -31,6 +28,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
@@ -47,6 +45,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.data.events.ModPackListener;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -81,7 +80,7 @@ import javax.swing.border.EmptyBorder;
 
 //import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
-public class LaunchFrame extends JFrame {
+public class LaunchFrame extends JFrame implements ModPackListener {
 
 	private static final long serialVersionUID = 1L;
 	public static UserManager userManager;
@@ -121,13 +120,12 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
 	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
-	private JButton edit;
 
 	/**
 	 * things to go on the modpacks panel
 	 */
 	JPanel packs;
-	JPanel[] packPanels;
+	ArrayList<JPanel> packPanels;
 	JScrollPane packsScroll;
 	JLabel splash;
 	JTextArea packInfo;
@@ -226,6 +224,11 @@ public class LaunchFrame extends JFrame {
 				}
 				LaunchFrame frame = new LaunchFrame(2);
 				frame.setVisible(true);
+				
+				ModPack.addListener(frame);
+				ModPack.LoadAll();
+				
+				
 			}
 
 		});
@@ -235,12 +238,12 @@ public class LaunchFrame extends JFrame {
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public LaunchFrame(final int tab) {
+	public LaunchFrame(int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v0.1.1");
+		setTitle("Feed the Beast Launcher Beta v0.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
@@ -255,59 +258,7 @@ public class LaunchFrame extends JFrame {
 		
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
-		footerLogo.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				try {
-					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
-			}
-		});
 		footerCreeper.setBounds(72, 20, 132, 42);
-		footerCreeper.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				try {
-					Hlink(arg0, new URI("http://www.creeperhost.net"));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
-			}
-		});
 		
 		try {
 			userManager.read();
@@ -320,13 +271,6 @@ public class LaunchFrame extends JFrame {
 		String[] dropdown = merge(dropdown_, usernames);
 		
 		users = new JComboBox(dropdown);
-		if(Settings.getSettings().getLastUser() != null){
-			for(int i = 0; i < dropdown.length; i++){
-				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())){
-					users.setSelectedIndex(i);
-				}
-			}
-		}
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -336,23 +280,6 @@ public class LaunchFrame extends JFrame {
 					p.setVisible(true);
 					users.setSelectedIndex(0);
 				}
-				edit.setEnabled(users.getSelectedIndex() > 1);
-			}
-		});
-		
-		edit = new JButton("Edit");
-		edit.setBounds(480, 20, 60, 30);
-		edit.setVisible(true);
-		edit.setEnabled(users.getSelectedIndex() > 1);
-		edit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(users.getSelectedIndex() > 1){
-					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
-					p.setVisible(true);
-					users.setSelectedIndex(0);
-				}
-				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
 		
@@ -362,13 +289,11 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
-					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
 		
-		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
@@ -390,77 +315,33 @@ public class LaunchFrame extends JFrame {
 		splash.setBounds(420, 0, 410, 200);
 //		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				initialiseModpacks(tab);
-			}
-		});
-	}
-
-	public void initialiseModpacks(int tab){
-		try {
-			ModPack.LoadAll();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-
-		packPanels = new JPanel[ModPack.getPackArray().size()];
-		for(int i = 0; i < packPanels.length; i++) {
-			final int packIndex = i;
-			System.out.println("adding pack "+i);
-			ModPack pack = ModPack.getPack(i);
-			final JPanel p = new JPanel();
-			p.setBounds(0, i * 55, 420, 55);
-			p.setLayout(null);
-			JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
-			logo.setBounds(6, 6, 42, 42);
-			logo.setVisible(true);
-			JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
-			filler.setBorder(null);
-			filler.setEditable(false);
-			filler.setForeground(Color.white);
-			filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
-			filler.setBackground(new Color(255, 255, 255, 0));
-			MouseListener lin = new MouseListener() {
-				@Override
-				public void mouseReleased(MouseEvent e) {
-				}
-				
-				@Override
-				public void mousePressed(MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseExited(MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseEntered(MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					selectedPack = packIndex;
-					updatePacks();
-				}
-			};
-			p.addMouseListener(lin);
-			filler.addMouseListener(lin);
-			logo.addMouseListener(lin);
-			p.add(filler);
-			p.add(logo);
-			packPanels[i] = p;
-		}
-		updatePacks();
+		
+		packPanels = new ArrayList<JPanel>();
+		
+		//packPanels = new JPanel[ModPack.getPackArray().size()];
+		//for(int i = 0; i < packPanels.length; i++) {
+			
+		//}
+		//for (ModPack pack : ModPack.getPackArray())
+		//	addPack(pack);
+		
+		// updatePacks(); 
+		
+		
+		// i suggest some loading animation here until first mod gets added
+		
+		
+		
 		
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
 		packs.setOpaque(false);
-		for(JPanel p : packPanels) {
+		
+		// Not needed anymore
+		/*for(JPanel p : packPanels) {
 			packs.add(p);
-		}
+		}*/
 		
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
@@ -471,7 +352,7 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
 		
-		packInfo = new JTextArea(ModPack.getPack(0).getInfo());
+		packInfo = new JTextArea("N/A");//ModPack.getPack(0).getInfo());
 		packInfo.setBounds(420, 210, 410, 90);
 		modPacksPane.add(packInfo);
 
@@ -489,6 +370,7 @@ public class LaunchFrame extends JFrame {
 
 		news = new JEditorPane();
 		news.setEditable(false);
+		
 		try {
 			news.setPage("http://feed-the-beast.com/lanuchernews.php");
 		} catch (IOException e1) {
@@ -522,7 +404,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText(Settings.getSettings().getRamMax());
+		ramMaximum.setText("1024");
 		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -543,7 +425,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText(Settings.getSettings().getRamMin());
+		ramMinimum.setText("256");
 		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -658,13 +540,71 @@ public class LaunchFrame extends JFrame {
 		//}
 	}
 	
+	/*
+	 * GUI Code to add a modpack to the selection
+	 */
+	public void addPack(ModPack pack) {
+		final int packIndex = packPanels.size();
+		System.out.println("adding pack "+packIndex);
+		//ModPack pack = ModPack.getPack(i);
+		final JPanel p = new JPanel();
+		p.setBounds(0, packIndex * 55, 420, 55);
+		p.setLayout(null);
+		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
+		logo.setBounds(6, 6, 42, 42);
+		logo.setVisible(true);
+		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
+		filler.setBorder(null);
+		filler.setEditable(false);
+		filler.setForeground(Color.white);
+		filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+		filler.setBackground(new Color(255, 255, 255, 0));
+		MouseListener lin = new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				selectedPack = packIndex;
+				updatePacks();
+			}
+		};
+		p.addMouseListener(lin);
+		filler.addMouseListener(lin);
+		logo.addMouseListener(lin);
+		p.add(filler);
+		p.add(logo);
+		packPanels.add(p);
+		packs.add(p);
+	}
+
+	@Override
+	public void onMobPackAdded(ModPack pack) {
+		addPack(pack);
+		updatePacks();
+	}
+	
+	
 	private void updatePacks() {
-		for (int i = 0; i < packPanels.length; i++) {
+		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
-				packPanels[i].setBackground(UIManager.getColor("control").darker().darker());
+				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
 			} else {
-				packPanels[i].setBackground(UIManager.getColor("control"));
+				packPanels.get(i).setBackground(UIManager.getColor("control"));
 			}
 		}
 	}
@@ -683,7 +623,6 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(false);
 		
 		launch.setEnabled(false);
-		edit.setEnabled(false);
 		users.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -706,7 +645,6 @@ public class LaunchFrame extends JFrame {
 					} else if (err.getCause() instanceof MalformedURLException) {
 						System.out.println("Error: Malformed URL");
 					}
-					enableObjects();
 					return;
 				}
 
@@ -728,7 +666,6 @@ public class LaunchFrame extends JFrame {
 							System.out.println("Login failed: " + responseStr);
 						}
 					}
-					enableObjects();
 					return;
 				}
 
@@ -824,9 +761,11 @@ public class LaunchFrame extends JFrame {
 
 		String date = sdf.format(new Date());
 		
-		System.out.println("http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file);
+//		String resolved = "file:///E:/Projects/mc/local/"+file;
+		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
+		System.out.println(resolved);
 
-		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
+		return resolved; 
 	}
 	
 	/**
@@ -1224,10 +1163,8 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		settings.setInstallPath(installFolderTextField.getText());
-		settings.setLastUser((String)users.getSelectedItem());
+
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
-		settings.setRamMax(ramMaximum.getText());
-		settings.setRamMin(ramMinimum.getText());
 
 		try {
 			settings.save();
@@ -1276,29 +1213,5 @@ public class LaunchFrame extends JFrame {
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
 	}
-	
-	private void enableObjects(){
-		tabbedPane.setEnabledAt(0, true);
-		tabbedPane.setEnabledAt(1, true);
-		tabbedPane.setEnabledAt(2, true);
-		tabbedPane.getSelectedComponent().setEnabled(true);
-		launch.setEnabled(true);
-		if(users.getSelectedIndex() > 1){
-			edit.setEnabled(true);
-		}
-		users.setEnabled(true);
-	}
-	
-	public void Hlink(MouseEvent me, URI uri) {
-		if(Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				desktop.browse(uri);
-			} catch(Exception exc) {
-				System.out.println(exc);
-			}
-		} else {
-			System.out.println("else working");
-		}
-	} 
+
 }
