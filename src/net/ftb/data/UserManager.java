@@ -77,40 +77,41 @@ public class UserManager {
 		;
 		return String.format("%040x", str2);
 	}
-
+	
 	public void write() throws IOException {
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		String str = "";
+		
+		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
 		for (int i = 0; i < _users.size(); i++) {
-			str += _users.get(i).toString();
+			String str = _users.get(i).toString();
+			wri.write(getHexThing(str));
+			if((i+1) != _users.size()) {
+				wri.newLine();
+			}
 		}
-		wri.write(getHexThing(str));
 		wri.close();
-	}
-
-	public void read() throws IOException {
-		_users.clear();
-		try {
-			if (_filename.exists()) {
-				BufferedReader read = new BufferedReader(new FileReader(
-						_filename));
-				String str = fromHexThing(read.readLine());
-				String[] users = str.split("\n");
-				for (int i = 0; i < users.length; i++) {
-					_users.add(new User(users[i]));
+ 	}
+ 	
+ 	public void read() throws IOException {
+ 		_users.clear();
+ 		
+ 		if(_filename.exists()) {
+ 			try {
+ 				BufferedReader read = new BufferedReader(new FileReader(_filename));
+ 				String str;
+ 				while((str = read.readLine()) != null) {
+					str = fromHexThing(str);
+					_users.add(new User(str));
 				}
 				read.close();
-			} else {
-				System.out
-						.println("Warning: could not load logindata, file does not exist ("
-								+ _filename.getAbsolutePath() + ")");
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error loading login data");
-		}
-	}
+			} catch (Exception ex) {
+				System.out.println("The following error is normal on first startup!!");
+				ex.printStackTrace();
+				System.out.println("Error loading login data");
+ 			}
+ 		}
+ 	}
 
+	
 	public static byte[] getFileMD5(URL string) throws Exception {
 		MessageDigest dgest = null;
 		try {

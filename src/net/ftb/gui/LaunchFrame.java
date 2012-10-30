@@ -2,6 +2,7 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
@@ -120,6 +123,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
 	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
+	private JButton edit;
 
 	/**
 	 * things to go on the modpacks panel
@@ -238,10 +242,10 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public LaunchFrame(int tab) {
+	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v0.1");
+		setTitle("Feed the Beast Launcher Beta v0.1.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -257,9 +261,61 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		setContentPane(panel);
 		
 		//Footer
-		footerLogo.setBounds(20, 20, 32, 32);
+		footerLogo.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		footerCreeper.setBounds(72, 20, 132, 42);
+		footerCreeper.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.creeperhost.net"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		
+			
 		try {
 			userManager.read();
 		} catch (IOException e1) {
@@ -271,6 +327,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		String[] dropdown = merge(dropdown_, usernames);
 		
 		users = new JComboBox(dropdown);
+		if(Settings.getSettings().getLastUser() != null){
+			for(int i = 0; i < dropdown.length; i++){
+				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())){
+					users.setSelectedIndex(i);
+				}
+			}
+		}
+
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -280,8 +344,27 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					p.setVisible(true);
 					users.setSelectedIndex(0);
 				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
+ 		
+		edit = new JButton("Edit");
+		edit.setBounds(480, 20, 60, 30);
+		edit.setVisible(true);
+		edit.setEnabled(users.getSelectedIndex() > 1);
+		edit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(users.getSelectedIndex() > 1){
+					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
+					p.setVisible(true);
+					users.setSelectedIndex(0);
+				}
+				edit.setEnabled(users.getSelectedIndex() > 1);
+			}
+		});
+
+
 		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
@@ -289,11 +372,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
+					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
 		
+		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
@@ -352,7 +437,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
 		
-		packInfo = new JTextArea("N/A");//ModPack.getPack(0).getInfo());
+		packInfo = new JTextArea();
 		packInfo.setBounds(420, 210, 410, 90);
 		modPacksPane.add(packInfo);
 
@@ -404,7 +489,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText("1024");
+		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -425,7 +510,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText("256");
+		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -603,6 +688,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			if(selectedPack == i) {
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
+				packInfo.setText(ModPack.getPack(i).getInfo());
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 			}
@@ -624,6 +710,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		
 		launch.setEnabled(false);
 		users.setEnabled(false);
+		edit.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
@@ -660,10 +747,12 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							System.out.println("Invalid username or password.");
+							enableObjects();
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							System.out.println("Outdated launcher.");
 						} else {
 							System.out.println("Login failed: " + responseStr);
+							enableObjects();
 						}
 					}
 					return;
@@ -1163,8 +1252,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		Settings settings = Settings.getSettings();
 
 		settings.setInstallPath(installFolderTextField.getText());
-
+		settings.setLastUser((String)users.getSelectedItem());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		settings.setRamMax(ramMaximum.getText());
+		settings.setRamMin(ramMinimum.getText());
+
 
 		try {
 			settings.save();
@@ -1213,5 +1305,31 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
 	}
+	
+	private void enableObjects(){
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.getSelectedComponent().setEnabled(true);
+		launch.setEnabled(true);
+		if(users.getSelectedIndex() > 1){
+			edit.setEnabled(true);
+		}
+		users.setEnabled(true);
+	}
+			
+	public void Hlink(MouseEvent me, URI uri) {
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch(Exception exc) {
+				System.out.println(exc);
+			}
+		} else {
+			System.out.println("else working");
+		}
+	} 
+
 
 }
