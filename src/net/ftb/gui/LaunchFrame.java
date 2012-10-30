@@ -231,19 +231,11 @@ public class LaunchFrame extends JFrame {
 	 * Create the frame.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public LaunchFrame(int tab) {
+	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Feed the Beast Launcher Beta v0.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-
-		try {
-			ModPack.LoadAll();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		
-		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
@@ -316,7 +308,21 @@ public class LaunchFrame extends JFrame {
 		splash.setBounds(420, 0, 410, 200);
 //		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
-		
+
+		try {
+			ModPack.LoadAll();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				initialiseModpacks(tab);
+			}
+		});
+	}
+
+	public void initialiseModpacks(int tab){
 		packPanels = new JPanel[ModPack.getPackArray().size()];
 		for(int i = 0; i < packPanels.length; i++) {
 			final int packIndex = i;
