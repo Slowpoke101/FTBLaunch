@@ -70,6 +70,16 @@ public class Settings extends Properties
 		store(new FileOutputStream(configPath), "FTBLaunch Config File");
 	}
 	
+	public String getLastUser()
+	{
+		return getProperty("lastUser", null);
+	}
+	
+	public void setLastUser(String user)
+	{
+		setProperty("lastUser", user);
+	}
+	
 	public String getInstallPath()
     {
         return getProperty("installPath", OSUtils.getDefInstallPath());
