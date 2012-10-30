@@ -2,7 +2,6 @@ package net.ftb.data;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,9 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.util.OSUtils;
-import net.ftb.util.PathUtils;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -34,10 +30,11 @@ public class ModPack {
 	
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		Document doc = null;
+		
+		
+		
+		/********************* Offline XML loading********************************
 		File cpack;
-		
-		
-		// Check for a modpacks.xml file in the CPACKS directory.
 		cpack = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
 				"/CPACKS/modpacks.xml"));
 		if (cpack.exists())
@@ -56,7 +53,7 @@ public class ModPack {
 			
 			
 		}else {
-		
+		********************* Offline XML loading********************************/
 		System.out.println("loading modpack information...");
 		
 		MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
@@ -67,7 +64,7 @@ public class ModPack {
 			e.printStackTrace();
 			return;
 		} catch (ParserConfigurationException e) { e.printStackTrace(); return; }
-		}
+	//	}
 		
 		
 		

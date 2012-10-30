@@ -90,6 +90,28 @@ public class Settings extends Properties
 		setProperty("installPath", path);
 	}
 	
+	public String getExtraModsPath()
+    {
+        return getProperty("ExtraModsPath", OSUtils.getDefInstallPath());
+    }
+	
+	public void setExtraModsPath(String path)
+	{
+		setProperty("ExtraModsPath", path);
+	}
+	public Boolean getExtraModsEnabled()
+    {
+         String tmp = getProperty("ExtraModsEnabled", OSUtils.getDefInstallPath());
+         if (tmp == "true" ){  return true; }
+         else { return false; }         
+    }
+	
+	public void setExtraModsEnabled(Boolean cfg)
+	{
+		if (cfg == true) {	setProperty("ExtraModsEnabled", "true"); }
+		else { setProperty("ExtraModsEnabled", "false"); }
+	}
+	
 	public boolean getForceUpdate()
 	{
 		return forceUpdate;

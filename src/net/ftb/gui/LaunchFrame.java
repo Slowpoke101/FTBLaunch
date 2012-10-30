@@ -44,8 +44,6 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
-import net.ftb.util.OSUtils;
-import net.ftb.util.PathUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -75,11 +73,16 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
 //import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
+/**
+ * @author gatz
+ *
+ */
 public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -121,7 +124,6 @@ public class LaunchFrame extends JFrame {
 	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
 	private JButton edit;
-
 	/**
 	 * things to go on the modpacks panel
 	 */
@@ -137,6 +139,8 @@ public class LaunchFrame extends JFrame {
 	 * things to go on the options panel
 	 */
 	public static JTextField installFolderTextField;
+	public static JTextField modsFolderTextField;
+	public static JToggleButton modsFolderEnabledField;
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
@@ -310,6 +314,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
+		
 		
 		footer.add(edit);
 		footer.add(users);
@@ -569,6 +574,138 @@ public class LaunchFrame extends JFrame {
 		optionsPane.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
 		
+		
+		
+		
+		
+		// Custom Mod Folder
+		JButton extraModsBrowseBtn = new JButton("...");
+		extraModsBrowseBtn.addActionListener(new ModsDir());
+		
+		
+		GridBagConstraints gbc_extraModsBrowseBtn = new GridBagConstraints();
+		gbc_extraModsBrowseBtn.insets = new Insets(8, 0, 5, 8);
+		gbc_extraModsBrowseBtn.gridx = 6;
+		gbc_extraModsBrowseBtn.gridy = 9;
+		optionsPane.add(extraModsBrowseBtn, gbc_extraModsBrowseBtn);
+		
+		
+		
+		
+		JLabel lblExtraModsFolder = new JLabel("Extra Mods folder:");
+		GridBagConstraints gbc_lblExtraModsFolder = new GridBagConstraints();
+		gbc_lblExtraModsFolder.anchor = GridBagConstraints.EAST;
+		gbc_lblExtraModsFolder.insets = new Insets(8, 8, 5, 5);
+		gbc_lblExtraModsFolder.gridx = 0;
+		gbc_lblExtraModsFolder.gridy = 9;
+		optionsPane.add(lblExtraModsFolder, gbc_lblExtraModsFolder);
+		
+		
+		modsFolderTextField = new JTextField();
+		GridBagConstraints gbc_modsFolderTextField = new GridBagConstraints();
+		gbc_modsFolderTextField.gridwidth = 5;
+		gbc_modsFolderTextField.insets = new Insets(8, 8, 5, 8);
+		gbc_modsFolderTextField.fill = GridBagConstraints.BOTH;
+		gbc_modsFolderTextField.gridx = 1;
+		gbc_modsFolderTextField.gridy = 9;
+		modsFolderTextField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				saveSettings();
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				
+			}
+		});
+		optionsPane.add(modsFolderTextField, gbc_modsFolderTextField);
+		modsFolderTextField.setColumns(10);
+		
+		
+		
+		modsFolderEnabledField = new JToggleButton("Use Extra Mods!");
+		GridBagConstraints gbc_modsFolderEnabledField = new GridBagConstraints();
+		gbc_modsFolderEnabledField.insets = new Insets(4, 8, 8, 8);
+		gbc_modsFolderEnabledField.gridwidth = 5;
+		gbc_modsFolderEnabledField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_modsFolderEnabledField.gridx = 1;
+		gbc_modsFolderEnabledField.gridy = 10;
+		optionsPane.add(modsFolderEnabledField, gbc_modsFolderEnabledField);
+		modsFolderEnabledField.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				saveSettings();
+			 if(!Settings.getSettings().getExtraModsEnabled()){
+				 String tmp = Settings.getSettings().getExtraModsPath().toString();
+				 String tmp2 = ModPack.getPack(selectedPack).getDir() + "/.minecraft/mods/";
+				 File dir = new File(tmp);
+		            if (dir.isDirectory())
+		            {
+		                File [] files = dir.listFiles();
+		                if (files != null)
+		                {
+		                    for (int i = 0; i < files.length; i++)
+		                        {
+		                            if (files[i].isFile())
+		                            {
+		                            	File f  = new File(tmp2 + files[i].getName());
+		                            		if (f.isFile()) 
+		                            		{
+		                            			System.out.println("Delete Mod:" + f.getName());
+		                            			f.delete();
+		                            			
+		                            	}
+		                            }
+		                        }
+		                    
+		                }			
+		            }
+		            else
+		            {
+		                System.out.println(dir.getName() + " is not a directory");
+		            }
+		        } else {
+		    		// Only entire needed here for extra mods
+		    		if (Settings.getSettings().getExtraModsEnabled()){
+		    			try {
+							copyFolder(new File(Settings.getSettings().getExtraModsPath() ), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/mods"));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+		    		}
+		    		// End Extra mods
+		        }
+		            	
+		            	
+		            	
+		            	
+		            	
+		            	
+		            	
+		            	
+		            	
+		            	
+		            
+			 
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				
+			}
+		});
+		
+		
+		
+		// End of the Custom Mods
+		
+		
+		
 		getRootPane().setDefaultButton(launch);
 		
 		loadSettings();
@@ -754,13 +891,14 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
 		
-		File cpack;
 		
+		/********************* Offline XML loading********************************
+		File cpack;
 		cpack = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
 				"/CPACKS/modpacks.xml"));
 		if (cpack.exists())
 		{ return "file:///" + OSUtils.getDefInstallPath() + "/CPACKS/" + file; }
-		
+		********************* Offline XML loading********************************/
 		
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
@@ -1161,7 +1299,13 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		installFolderTextField.setText(settings.getInstallPath());
-		
+		modsFolderTextField.setText(settings.getExtraModsPath());
+		if (settings.getExtraModsEnabled()) {
+			modsFolderEnabledField.setSelected(true);
+		} else {
+			modsFolderEnabledField.setSelected(false);
+		}
+			
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 	}
 
@@ -1173,7 +1317,9 @@ public class LaunchFrame extends JFrame {
 
 		settings.setInstallPath(installFolderTextField.getText());
 		settings.setLastUser((String)users.getSelectedItem());
+		settings.setExtraModsEnabled(modsFolderEnabledField.isSelected());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		settings.setExtraModsPath(modsFolderTextField.getText());
 
 		try {
 			settings.save();
