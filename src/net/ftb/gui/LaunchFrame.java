@@ -80,6 +80,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 //import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
@@ -164,6 +166,8 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	public static int ramMax = 1024;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
+	
+	private boolean modPacksAdded = false;
 
 	/**
 	 * Launch the application.
@@ -403,30 +407,31 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		
 		packPanels = new ArrayList<JPanel>();
 		
-		//packPanels = new JPanel[ModPack.getPackArray().size()];
-		//for(int i = 0; i < packPanels.length; i++) {
-			
-		//}
-		//for (ModPack pack : ModPack.getPackArray())
-		//	addPack(pack);
-		
-		// updatePacks(); 
-		
-		
 		// i suggest some loading animation here until first mod gets added
 		
-		
-		
-		
+
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
 		packs.setOpaque(false);
 		
-		// Not needed anymore
-		/*for(JPanel p : packPanels) {
-			packs.add(p);
-		}*/
+		
+		
+		// stub for a real wait message
+		final JPanel p = new JPanel();
+		p.setBounds(0, 0 * 55, 420, 55);
+		p.setLayout(null);
+		
+		JTextArea filler = new JTextArea("please wait while mods are beeing load...");
+		filler.setBorder(null);
+		filler.setEditable(false);
+		filler.setForeground(Color.white);
+		filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+		filler.setBackground(new Color(255, 255, 255, 0));
+		p.add(filler);
+		packs.add(p);
+		
+		
 		
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
@@ -456,11 +461,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		news = new JEditorPane();
 		news.setEditable(false);
 		
-		try {
-			news.setPage("http://feed-the-beast.com/lanuchernews.php");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		
 		
 		newsPanel = new JScrollPane(news);
 		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -618,6 +619,23 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 		tabbedPane.setSelectedIndex(tab);
 
+		tabbedPane.addChangeListener(new ChangeListener(){
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				if (tabbedPane.getSelectedComponent().equals(newsPane)) {
+					try {
+						news.setPage("http://feed-the-beast.com/lanuchernews.php");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+			
+		});
+		
+		
+		
+		
 		//if (passwordSettings.getUsername() != "") {
 		//	//dostuff
 		//} else {
@@ -629,6 +647,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * GUI Code to add a modpack to the selection
 	 */
 	public void addPack(ModPack pack) {
+		if (!modPacksAdded) {
+			modPacksAdded = true;
+			packs.removeAll();
+		}
+		
 		final int packIndex = packPanels.size();
 		System.out.println("adding pack "+packIndex);
 		//ModPack pack = ModPack.getPack(i);
