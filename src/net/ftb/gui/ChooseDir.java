@@ -33,7 +33,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File(LaunchFrame.installFolderTextField.getText()));
+		chooser.setCurrentDirectory(new java.io.File(LaunchFrame.installFolderTextField.getText()));	
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		
@@ -48,8 +48,9 @@ public class ChooseDir extends JFrame implements ActionListener {
 					+ chooser.getCurrentDirectory());
 			System.out.println("getSelectedFile() : "
 					+ chooser.getSelectedFile());
+				LaunchFrame.installFolderTextField.setText(chooser.getSelectedFile().getPath());	
 			
-			LaunchFrame.installFolderTextField.setText(chooser.getSelectedFile().getPath());
+			
 		} else {
 			System.out.println("No Selection ");
 		}
