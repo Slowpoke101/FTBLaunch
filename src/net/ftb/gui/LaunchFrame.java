@@ -2,6 +2,7 @@ package net.ftb.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,6 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
@@ -252,7 +255,59 @@ public class LaunchFrame extends JFrame {
 		
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
+		footerLogo.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		footerCreeper.setBounds(72, 20, 132, 42);
+		footerCreeper.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					Hlink(arg0, new URI("http://www.creeperhost.net"));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		
 		try {
 			userManager.read();
@@ -1233,4 +1288,17 @@ public class LaunchFrame extends JFrame {
 		}
 		users.setEnabled(true);
 	}
+	
+	public void Hlink(MouseEvent me, URI uri) {
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch(Exception exc) {
+				System.out.println(exc);
+			}
+		} else {
+			System.out.println("else working");
+		}
+	} 
 }
