@@ -307,14 +307,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
-					Settings.getSettings().setLastUser(""+users.getSelectedItem());
-					try {
-						Settings.getSettings().save();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
@@ -474,7 +467,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText("1024");
+		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -495,7 +488,7 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText("256");
+		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -1178,6 +1171,8 @@ public class LaunchFrame extends JFrame {
 		settings.setInstallPath(installFolderTextField.getText());
 		settings.setLastUser((String)users.getSelectedItem());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		settings.setRamMax(ramMaximum.getText());
+		settings.setRamMin(ramMinimum.getText());
 
 		try {
 			settings.save();

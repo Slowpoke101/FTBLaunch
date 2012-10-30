@@ -70,6 +70,26 @@ public class Settings extends Properties
 		store(new FileOutputStream(configPath), "FTBLaunch Config File");
 	}
 	
+	public String getRamMin()
+	{
+		return getProperty("ramMin", Integer.toString(265));
+	}
+	
+	public void setRamMin(String min)
+	{
+		setProperty("ramMin", min);
+	}
+
+	public String getRamMax()
+	{
+		return getProperty("ramMax", Integer.toString(1024));
+	}
+	
+	public void setRamMax(String max)
+	{
+		setProperty("ramMax", max);
+	}
+	
 	public String getLastUser()
 	{
 		return getProperty("lastUser", null);
