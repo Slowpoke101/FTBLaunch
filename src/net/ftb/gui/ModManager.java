@@ -51,11 +51,11 @@ public class ModManager extends JDialog {
 
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl());
+			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl());
 			if(!modPackZip.exists()){
 				try {
-						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() +  "/").mkdir();
-						downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
+						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() +  "/").mkdir();
+						downloadModPack(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException e) {
@@ -80,7 +80,7 @@ public class ModManager extends JDialog {
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
-				int modPackSize = ModPack.getPack(LaunchFrame.selectedPack).getSize();
+				int modPackSize = ModPack.getPack(LaunchFrame.getSelectedModIndex()).getSize();
 				progressBar.setMaximum(10000);
 				int steps = 0;
 				while ((count = in.read(data, 0, 1024)) != -1)
@@ -122,7 +122,7 @@ public class ModManager extends JDialog {
 			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
-			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir());
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 			installMods(modPackName, dir);
 		}
 //
