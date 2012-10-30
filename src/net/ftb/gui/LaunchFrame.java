@@ -1162,7 +1162,7 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		settings.setInstallPath(installFolderTextField.getText());
-
+		settings.setLastUser((String)users.getSelectedItem());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 
 		try {

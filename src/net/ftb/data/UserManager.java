@@ -78,12 +78,14 @@ public class UserManager {
 	}
 	
 	public void write() throws IOException {
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		String str = "";
+		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
 		for (int i = 0; i < _users.size(); i++) {
-			str += _users.get(i).toString();
+			String str = _users.get(i).toString();
+			wri.write(getHexThing(str));
+			if((i+1) != _users.size()){
+				wri.newLine();
+			}
 		}
-		wri.write(getHexThing(str));
 		wri.close();
 	}
 	
@@ -91,10 +93,10 @@ public class UserManager {
 		_users.clear();
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(_filename));
-			String str = fromHexThing(read.readLine());
-			String[] users = str.split("\n");
-			for (int i = 0; i < users.length; i++) {
-				_users.add(new User(users[i]));
+			String str;
+			while((str = read.readLine()) != null){
+				str = fromHexThing(str);
+				_users.add(new User(str));
 			}
 			read.close();
 		} catch (Exception ex) {
