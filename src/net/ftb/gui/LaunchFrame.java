@@ -635,6 +635,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(false);
 		
 		launch.setEnabled(false);
+		edit.setEnabled(false);
 		users.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -657,6 +658,7 @@ public class LaunchFrame extends JFrame {
 					} else if (err.getCause() instanceof MalformedURLException) {
 						System.out.println("Error: Malformed URL");
 					}
+					enableObjects();
 					return;
 				}
 
@@ -678,6 +680,7 @@ public class LaunchFrame extends JFrame {
 							System.out.println("Login failed: " + responseStr);
 						}
 					}
+					enableObjects();
 					return;
 				}
 
@@ -1222,5 +1225,17 @@ public class LaunchFrame extends JFrame {
 
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
+	}
+	
+	private void enableObjects(){
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.getSelectedComponent().setEnabled(true);
+		launch.setEnabled(true);
+		if(users.getSelectedIndex() > 1){
+			edit.setEnabled(true);
+		}
+		users.setEnabled(true);
 	}
 }
