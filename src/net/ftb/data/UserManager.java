@@ -79,10 +79,12 @@ public class UserManager {
 	
 	public void write() throws IOException {
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
-		for (int i = 0; i < _users.size(); i++) {
+		for (int i = 0; i < _users.size(); i++) 
+		{
 			String str = _users.get(i).toString();
 			wri.write(getHexThing(str));
-			if((i+1) != _users.size()){
+			if((i+1) != _users.size())
+			{
 				wri.newLine();
 			}
 		}
@@ -91,18 +93,22 @@ public class UserManager {
 	
 	public void read() throws IOException {
 		_users.clear();
-		try {
-			BufferedReader read = new BufferedReader(new FileReader(_filename));
-			String str;
-			while((str = read.readLine()) != null){
-				str = fromHexThing(str);
-				_users.add(new User(str));
+		if(_filename.exists())
+		{
+			try {
+				BufferedReader read = new BufferedReader(new FileReader(_filename));
+				String str;
+				while((str = read.readLine()) != null)
+				{
+					str = fromHexThing(str);
+					_users.add(new User(str));
+				}
+				read.close();
+			} catch (Exception ex) {
+				System.out.println("The following error is normal on first startup!!");
+				ex.printStackTrace();
+				System.out.println("Error loading login data");
 			}
-			read.close();
-		} catch (Exception ex) {
-			System.out.println("The following error is normal on first startup!!");
-			ex.printStackTrace();
-			System.out.println("Error loading login data");
 		}
 	}
 	
