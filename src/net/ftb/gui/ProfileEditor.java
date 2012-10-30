@@ -89,9 +89,11 @@ public class ProfileEditor extends JDialog {
 		updateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				UserManager.updateUser(varName, username.getText(), new String(password.getPassword()), name.getText());
-				LaunchFrame.writeUsers();
-				setVisible(false);
+				if(!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText())){
+					UserManager.updateUser(varName, username.getText(), new String(password.getPassword()), name.getText());
+					LaunchFrame.writeUsers();
+					setVisible(false);
+				}
 			}
 		});
 		panel.add(updateButton);
