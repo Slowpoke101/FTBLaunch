@@ -8,6 +8,5 @@ public interface ModPackListener {
 	 * Fired by the ModPack Singleton once a modpack has been added.
 	 * Beware its called for EVERY pack thats added!
 	 */
-	
-	public void onMobPackAdded(ModPack pack);
+	public void onModPackAdded(ModPack pack);
 }

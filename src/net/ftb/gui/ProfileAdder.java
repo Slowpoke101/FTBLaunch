@@ -17,33 +17,33 @@ import net.ftb.data.UserManager;
 
 public class ProfileAdder extends JDialog {
 	private static final long serialVersionUID = 1L;
-	
+
 	JPanel panel = new JPanel();
-	
+
 	JTextField username = new JTextField(1);
 	JPasswordField password = new JPasswordField(1);
 	JTextField name = new JTextField(1);
-	
+
 	JLabel userLabel = new JLabel("Username:");
 	JLabel passLabel = new JLabel("Password:");
 	JLabel nameLabel = new JLabel("Profile Name:");
 
 	JButton addButton = new JButton("Add");
-	
+
 	public ProfileAdder() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Adder");
 		setBounds(300, 300, 300, 200);
 		setResizable(false);
-		
+
 		panel.setBounds(0, 0, 300, 200);
 		setContentPane(panel);
 		panel.setLayout(null);
-		
+
 		userLabel.setBounds(10, 10, 80, 30);
 		userLabel.setVisible(true);
 		panel.add(userLabel);
-		
+
 		username.setBounds(100, 10, 170, 30);
 		username.setVisible(true);
 		username.getDocument().addDocumentListener(new DocumentListener() {
@@ -51,35 +51,31 @@ public class ProfileAdder extends JDialog {
 			public void removeUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
 			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				
-			}
+			@Override public void changedUpdate(DocumentEvent e) { }
 		});
 		panel.add(username);
-		
+
 		passLabel.setBounds(10, 50, 80, 30);
 		passLabel.setVisible(true);
 		panel.add(passLabel);
-		
+
 		password.setBounds(100, 50, 170, 30);
 		password.setVisible(true);
 		panel.add(password);
-		
+
 		nameLabel.setBounds(10, 90, 80, 30);
 		nameLabel.setVisible(true);
 		panel.add(nameLabel);
-		
+
 		name.setBounds(100, 90, 170, 30);
 		name.setVisible(true);
 		panel.add(name);
-		
+
 		addButton.setBounds(125, 130, 50, 25);
 		addButton.setVisible(true);
 		addButton.addActionListener(new ActionListener() {
@@ -94,13 +90,10 @@ public class ProfileAdder extends JDialog {
 		});
 		panel.add(addButton);
 	}
-	
-	private boolean validate(String name, String user, char[] pass)
-	{
-		if(name != null && !name.equals("") && user != null && !user.equals("") && pass.length > 1)
-		{
-			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user))
-			{
+
+	private boolean validate(String name, String user, char[] pass) {
+		if(name != null && !name.equals("") && user != null && !user.equals("") && pass.length > 1) {
+			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
 				return true;
 			}
 		}

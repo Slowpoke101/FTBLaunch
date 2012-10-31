@@ -6,16 +6,15 @@ import java.security.NoSuchAlgorithmException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.ftb.data.ModPack;
+import net.ftb.gui.LaunchFrame;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import net.ftb.data.ModPack;
-import net.ftb.gui.LaunchFrame;
-
 
 /*
  * Async ModPack loader
@@ -24,7 +23,6 @@ import net.ftb.gui.LaunchFrame;
  */
 
 public class ModpackLoader extends Thread {
-
 	private static String MODPACKSFILE;
 
 	public ModpackLoader() {
@@ -39,15 +37,12 @@ public class ModpackLoader extends Thread {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			
+
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
 			Document doc = null;
 			try {
@@ -71,22 +66,14 @@ public class ModpackLoader extends Thread {
 			NodeList modPacks = doc.getElementsByTagName("modpack");
 
 			for (int i = 0; i < modPacks.getLength(); i++) {
-				
 				Node modPack = modPacks.item(i);
 				NamedNodeMap modPackAttr = modPack.getAttributes();
 
 				try {
-					ModPack.addPack(new ModPack(modPackAttr
-							.getNamedItem("name").getTextContent(), modPackAttr
-							.getNamedItem("author").getTextContent(),
-							modPackAttr.getNamedItem("version")
-									.getTextContent(), modPackAttr
-									.getNamedItem("logo").getTextContent(),
-							modPackAttr.getNamedItem("url").getTextContent(),
-							modPackAttr.getNamedItem("image").getTextContent(),
-							modPackAttr.getNamedItem("dir").getTextContent(),
-							modPackAttr.getNamedItem("mcVersion")
-									.getTextContent()));
+					ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
+							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
+							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
+							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent()));
 				} catch (DOMException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -94,10 +81,7 @@ public class ModpackLoader extends Thread {
 				}
 			}
 		} catch (NoSuchAlgorithmException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 	}
-
 }

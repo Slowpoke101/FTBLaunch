@@ -104,13 +104,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * the panel that contains the footer and the tabbed pane
 	 */
 	private JPanel panel = new JPanel();
-	
+
 	/**
 	 * tabbedpane and footer
 	 */
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel footer = new JPanel();
-	
+
 	/**
 	 * the things to go on the footer
 	 */
@@ -131,7 +131,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	JLabel splash;
 	JTextArea packInfo;
 	public static int selectedPack = 0;
-	
+
 
 	/**
 	 * things to go on the options panel
@@ -140,13 +140,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
-	
+
 	/**
 	 * things to go on the news panel
 	 */
 	JEditorPane news;
 	JScrollPane newsPanel;
-	
+
 	/**
 	 * things to go on the texture packs panel
 	 */
@@ -165,13 +165,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	/**
 	 * Launch the application.
 	 */
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				
 				Color baseColor = new Color(40, 40, 40);
-				
+
 				UIManager.put("control", baseColor);
 				UIManager.put("text", new Color(222, 222, 222));
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
@@ -181,64 +179,55 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				UIManager.put("info", new Color(55, 55, 55));
 
 				try {
-				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				        if ("Nimbus".equals(info.getName())) {
-				            UIManager.setLookAndFeel(info.getClassName());
-				            break;
-				        }
-				    }
+					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+						if ("Nimbus".equals(info.getName())) {
+							UIManager.setLookAndFeel(info.getClassName());
+							break;
+						}
+					}
 				} catch (Exception e) {
-				    try {
+					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 					} catch (ClassNotFoundException e1) { }
-				    catch (InstantiationException e1) { }
-				    catch (IllegalAccessException e1) { }
-				    catch (UnsupportedLookAndFeelException e1) { }
+					catch (InstantiationException e1) { }
+					catch (IllegalAccessException e1) { }
+					catch (UnsupportedLookAndFeelException e1) { }
 				}
 
-				
 				// Load settings
 				try {
 					Settings.initSettings();
 				} catch (IOException e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(null,
-							"Failed to load config file: " + e.getMessage(),
-							"Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
 				// Create the install directory if it does not exist.
-				File installDir = new File(Settings.getSettings()
-						.getInstallPath());
-				if (!installDir.exists())
+				File installDir = new File(Settings.getSettings().getInstallPath());
+				if (!installDir.exists()) {
 					installDir.mkdirs();
-				
+				}
+
 				userManager = new UserManager(new File(installDir, "logindata"));
-				
+
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
 				try {
 					LauncherConsole con = new LauncherConsole();
 					con.setVisible(true);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				} catch (IOException e) { e.printStackTrace(); }
 				LaunchFrame frame = new LaunchFrame(2);
 				frame.setVisible(true);
-				
+
 				ModPack.addListener(frame);
 				ModPack.LoadAll();
-				
-				
 			}
-
 		});
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
@@ -256,26 +245,10 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
-		
+
 		//Footer
 		footerLogo.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-			@Override
+			@Override 
 			public void mouseClicked(MouseEvent arg0) {
 				try {
 					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
@@ -283,26 +256,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					e.printStackTrace();
 				}
 			}
+			@Override public void mouseReleased(MouseEvent arg0) { }
+			@Override public void mousePressed(MouseEvent arg0) { }
+			@Override public void mouseExited(MouseEvent arg0) { }
+			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-			@Override
+			@Override 
 			public void mouseClicked(MouseEvent arg0) {
 				try {
 					Hlink(arg0, new URI("http://www.creeperhost.net"));
@@ -310,23 +271,23 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					e.printStackTrace();
 				}
 			}
+			@Override public void mouseReleased(MouseEvent arg0) { }
+			@Override public void mousePressed(MouseEvent arg0) { }
+			@Override public void mouseExited(MouseEvent arg0) { }
+			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
-		
-			
+
 		try {
 			userManager.read();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
+		} catch (IOException e1) { e1.printStackTrace(); }
+
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
-		
 		String[] dropdown = merge(dropdown_, usernames);
-		
+
 		users = new JComboBox(dropdown);
-		if(Settings.getSettings().getLastUser() != null){
-			for(int i = 0; i < dropdown.length; i++){
-				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())){
+		if(Settings.getSettings().getLastUser() != null) {
+			for(int i = 0; i < dropdown.length; i++) {
+				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
 					users.setSelectedIndex(i);
 				}
 			}
@@ -344,7 +305,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
- 		
+
 		edit = new JButton("Edit");
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
@@ -352,7 +313,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(users.getSelectedIndex() > 1){
+				if(users.getSelectedIndex() > 1) {
 					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
 					p.setVisible(true);
 					users.setSelectedIndex(0);
@@ -361,11 +322,8 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			}
 		});
 
-
-		
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
-			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
@@ -374,7 +332,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				}
 			}
 		});
-		
+
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
@@ -386,45 +344,41 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		newsPane.setLayout(null);
 		//newsPane.add(backgroundImage1);
 		//newsPane.setBackground(back);
-		
+
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
 		//modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
-		
+
 		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
-//		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
+		//splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
-		
+
 		packPanels = new ArrayList<JPanel>();
-		
+
 		//packPanels = new JPanel[ModPack.getPackArray().size()];
 		//for(int i = 0; i < packPanels.length; i++) {
-			
+
 		//}
 		//for (ModPack pack : ModPack.getPackArray())
 		//	addPack(pack);
-		
+
 		// updatePacks(); 
-		
-		
+
 		// i suggest some loading animation here until first mod gets added
-		
-		
-		
-		
+
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
 		packs.setOpaque(false);
-		
+
 		// Not needed anymore
 		/*for(JPanel p : packPanels) {
 			packs.add(p);
 		}*/
-		
+
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -433,7 +387,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
-		
+
 		packInfo = new JTextArea();
 		packInfo.setBounds(420, 210, 410, 90);
 		modPacksPane.add(packInfo);
@@ -443,7 +397,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		mapsPane.setLayout(null);
 		//mapsPane.add(backgroundImage4);
 		//mapsPane.setBackground(back);
-		
+
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
@@ -452,19 +406,17 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 		news = new JEditorPane();
 		news.setEditable(false);
-		
+
 		try {
 			news.setPage("http://feed-the-beast.com/lanuchernews.php");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
+		} catch (IOException e1) { e1.printStackTrace(); }
+
 		newsPanel = new JScrollPane(news);
 		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		newsPanel.setBounds(10, 10, 790, 290);
 		newsPane.add(newsPanel);
-		
+
 		//Options Tab
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -479,7 +431,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		optionsPane.setLayout(gbl_contentPanel);
 
-		
 		ramMaximum = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
@@ -488,19 +439,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_textField_2.gridy = 7;
 		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
-			
 			@Override
 			public void focusLost(FocusEvent e) {
 				ramMax = Integer.parseInt(ramMaximum.getText());
 				saveSettings();
 			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				
-			}
+			@Override public void focusGained(FocusEvent e) { }
 		});
-				
+
 		ramMinimum = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
@@ -509,22 +455,17 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_textField_1.gridy = 6;
 		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
-			
 			@Override
 			public void focusLost(FocusEvent e) {
 				ramMin = Integer.parseInt(ramMinimum.getText());
 				saveSettings();
 			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				
-			}
+			@Override public void focusGained(FocusEvent e) { }
 		});
-		
+
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir());
-		
+
 		JLabel lblInstallFolder = new JLabel("Install folder:");
 		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
 		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
@@ -532,7 +473,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_lblInstallFolder.gridx = 0;
 		gbc_lblInstallFolder.gridy = 3;
 		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
-		
+
 		installFolderTextField = new JTextField();
 		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
 		gbc_installFolderTextField.gridwidth = 5;
@@ -541,26 +482,21 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_installFolderTextField.gridx = 1;
 		gbc_installFolderTextField.gridy = 3;
 		installFolderTextField.addFocusListener(new FocusListener() {
-			
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				saveSettings();
 			}
-			
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				
-			}
+			@Override public void focusGained(FocusEvent arg0) { }
 		});
 		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
 		installFolderTextField.setColumns(10);
-		
+
 		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
 		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
 		gbc_installBrowseBtn.gridx = 6;
 		gbc_installBrowseBtn.gridy = 3;
 		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
-		
+
 		tglbtnForceUpdate = new JToggleButton("Force update?");
 		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
@@ -569,7 +505,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		gbc_tglbtnForceUpdate.gridx = 1;
 		gbc_tglbtnForceUpdate.gridy = 4;
 		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-		
+
 		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
 		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
@@ -579,7 +515,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
 		optionsPane.add(ramMinimum, gbc_textField_1);
 		ramMinimum.setColumns(10);
-		
+
 		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
@@ -589,15 +525,15 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
 		optionsPane.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
-		
+
 		getRootPane().setDefaultButton(launch);
-		
+
 		loadSettings();
-		
+
 		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-		
+
 		tabbedPane.add(optionsPane, 1);
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 
@@ -609,19 +545,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
-		
+
 		tabbedPane.setEnabledAt(3, false);
 		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.setSelectedIndex(tab);
-
-		//if (passwordSettings.getUsername() != "") {
-		//	//dostuff
-		//} else {
-		//	//dootherstuff
-		//}
 	}
-	
+
 	/*
 	 * GUI Code to add a modpack to the selection
 	 */
@@ -643,26 +573,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		filler.setBackground(new Color(255, 255, 255, 0));
 		MouseListener lin = new MouseListener() {
 			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-			
-			@Override
 			public void mouseClicked(MouseEvent e) {
 				selectedPack = packIndex;
 				updatePacks();
 			}
+			@Override public void mouseReleased(MouseEvent e) { }
+			@Override public void mousePressed(MouseEvent e) { }
+			@Override public void mouseExited(MouseEvent e) { }
+			@Override public void mouseEntered(MouseEvent e) { }
 		};
 		p.addMouseListener(lin);
 		filler.addMouseListener(lin);
@@ -673,13 +591,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		packs.add(p);
 	}
 
+	// Is this override needed?
+	// refactored name from onMobPackAdded to onModPackAdded
 	@Override
-	public void onMobPackAdded(ModPack pack) {
+	public void onModPackAdded(ModPack pack) {
 		addPack(pack);
 		updatePacks();
 	}
-	
-	
+
 	private void updatePacks() {
 		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
@@ -696,15 +615,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
-
 		System.out.println("Logging in...");
-		
+
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
-		
+
 		tabbedPane.getSelectedComponent().setEnabled(false);
-		
+
 		launch.setEnabled(false);
 		users.setEnabled(false);
 		edit.setEnabled(false);
@@ -712,8 +630,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
-				System.out.println("");
-
+				System.out.println();
 
 				String responseStr;
 				try {
@@ -724,8 +641,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				} catch (ExecutionException err) {
 					err.printStackTrace();
 					if (err.getCause() instanceof IOException) {
-						System.out.println("Login failed: "
-								+ err.getCause().getMessage());
+						System.out.println("Login failed: "	+ err.getCause().getMessage());
 					} else if (err.getCause() instanceof MalformedURLException) {
 						System.out.println("Error: Malformed URL");
 					}
@@ -736,22 +652,19 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				try {
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
-
 				} catch (IllegalArgumentException e) {
-					
 					if (responseStr.contains(":")) {
 						System.out.println("Received invalid response from server.");
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							System.out.println("Invalid username or password.");
-							enableObjects();
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							System.out.println("Outdated launcher.");
 						} else {
 							System.out.println("Login failed: " + responseStr);
-							enableObjects();
 						}
 					}
+					enableObjects();
 					return;
 				}
 
@@ -764,20 +677,16 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
-			
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			
-			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
-				
+			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", 
+					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
 				public void done() {
-					
 					progMonitor.close();
 					try {
 						if (get() == true) {
 							// Success
 							System.out.println("Game update complete.");
 
-							// try {
 							System.out.println(ModPack.getPack(selectedPack).getDir());
 							killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
@@ -787,17 +696,15 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-							// the old start testing code just put me in a
-							// infinite loop.
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
-							
+
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() 
+									+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							System.out.println("Error downloading game.");
 						}
-					} catch (CancellationException e) {
-						System.out.println("Game update cancelled...");
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					} catch (CancellationException e) { 
+						System.out.println("Game update cancelled..."); 
+					} catch (InterruptedException e) { e.printStackTrace(); 
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						System.out.println("Failed to download game: " + e.getCause().getMessage());
@@ -815,10 +722,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 					if (!updater.isDone()) {
 						int prog = updater.getProgress();
-						if (prog < 0)
+						if (prog < 0) {
 							prog = 0;
-						else if (prog > 100)
+						} else if (prog > 100) {
 							prog = 100;
+						}
 						progMonitor.setProgress(prog);
 						progMonitor.setNote(updater.getStatus());
 					}
@@ -826,6 +734,16 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			});
 			updater.execute();
 		} else {
+			// Check if you need to install the mods
+			System.out.println(ModPack.getPack(selectedPack).getDir());
+			killMetaInf();
+			ModManager man = new ModManager(new JFrame(), true);
+			man.setVisible(true);
+			try {
+				installMods(ModPack.getPack(selectedPack).getDir());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
@@ -836,32 +754,25 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
-//		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-//			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
-//		} else {
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-//		}
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		String date = sdf.format(new Date());
-		
-//		String resolved = "file:///E:/Projects/mc/local/"+file;
+
 		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
 		System.out.println(resolved);
 
 		return resolved; 
 	}
-	
+
 	/**
 	 * @param dest - the destination to be saved
 	 * @param file - the file as on the repo
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
 	 * @throws IOException - see downloadUrl
 	 */
-
-	public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException{
+	public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException {
 		downloadUrl(dest, getCreeperhostLink(file));
 	}
 
@@ -912,7 +823,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			fout.close();
 		}
 	}
-	
+
 	/**
 	 * launch the game with the mods in the classpath
 	 * @param workingDir - install path
@@ -921,7 +832,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * @throws IOException
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		
 		try {
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] { "minecraftforge.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
@@ -933,7 +843,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					urls[i] = f.toURI().toURL();
 					System.out.println("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e) {
-					// e.printStackTrace();
 					System.err.println("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
@@ -966,16 +875,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
-				System.out.println("Fixed Minecraft Path: Field was "
-						+ f.toString());
+				System.out.println("Fixed Minecraft Path: Field was " + f.toString());
 			}
 
 			String[] mcArgs = new String[2];
 			mcArgs[0] = username;
 			mcArgs[1] = password;
 
-			String mcDir = mc.getMethod("a", String.class)
-					.invoke(null, (Object) "minecraft").toString();
+			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
 
 			System.out.println("MCDIR: " + mcDir);
 
@@ -1007,16 +914,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * deletes the META-INF
 	 */
 	public static void killMetaInf() {
-		File inputFile = new File(Settings.getSettings().getInstallPath()
-				+ "/.minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath()
-				+ "/.minecraft/bin", "minecraft.jar.tmp");
+		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
 		try {
-			JarInputStream input = new JarInputStream(new FileInputStream(
-					inputFile));
-			JarOutputStream output = new JarOutputStream(new FileOutputStream(
-					outputTmpFile));
-
+			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
+			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
 			JarEntry entry;
 
 			while ((entry = input.getNextJarEntry()) != null) {
@@ -1037,15 +939,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 
 			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
-	
+
 	/**
 	 * @param modPackName - the name of the pack 
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
@@ -1059,20 +959,18 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (MalformedURLException e) { e.printStackTrace(); 
+		} catch (IOException e) {	e.printStackTrace(); }
+
 		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/mods").delete();
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/coremods").delete();
 		File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
-		for (int i = 0; i < contents.length; i++){             
-			if (contents[i].isFile()){
+		for (int i = 0; i < contents.length; i++) {             
+			if (contents[i].isFile()) {
 				files = contents[i].getName();
-				if (files.endsWith(".zip") || files.endsWith(".ZIP")){
+				if (files.endsWith(".zip") || files.endsWith(".ZIP")) {
 					contents[i].delete();
 				}
 			}	
@@ -1115,9 +1013,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				fileoutputstream.close();
 				zipinputstream.closeEntry();
 				zipentry = zipinputstream.getNextEntry();
-
-			}// while
-
+			}
 			zipinputstream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1130,14 +1026,11 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * @throws IOException
 	 */
 	public static void copyFolder(File src, File dest) throws IOException {
-
 		if (src.isDirectory()) {
-
 			// if directory not exists, create it
 			if (!dest.exists()) {
 				dest.mkdir();
-				System.out.println("Directory copied from " + src + "  to "
-						+ dest);
+				System.out.println("Directory copied from " + src + "  to " + dest);
 			}
 
 			// list all the directory contents
@@ -1150,7 +1043,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 				// recursive copy
 				copyFolder(srcFile, destFile);
 			}
-
 		} else {
 			// if file, then copy it
 			// Use bytes stream to support all file types
@@ -1210,7 +1102,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			}
 		}
 		return resource.delete();
-
 	}
 
 	/**
@@ -1223,8 +1114,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
-		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"));
 		copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/instMods/minecraftforge.zip"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/minecraftforge.zip"));
@@ -1236,9 +1125,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 */
 	private void loadSettings() {
 		Settings settings = Settings.getSettings();
-
 		installFolderTextField.setText(settings.getInstallPath());
-		
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 	}
 
@@ -1254,26 +1141,21 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
 
-
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Failed to save config file: "
-					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Failed to save config file: "
-					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
 
@@ -1281,7 +1163,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		for (String s : dropdown_) {
 			users.addItem(s);
 		}
-		
+
 		int counter = 1;
 		for(String name : usernames) {
 			counter++;
@@ -1291,14 +1173,14 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			}
 		}
 	}
-	
+
 	public static String[] merge(String[] A, String[] B) {
 		String[] merged = new String[A.length+B.length];
 		System.arraycopy(A, 0, merged, 0, A.length);
 		System.arraycopy(B, 0, merged, A.length, B.length);
 		return merged;
 	}
-	
+
 	public static int getSelectedPack() {
 		return selectedPack;
 	}
@@ -1306,7 +1188,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
 	}
-	
+
 	private void enableObjects(){
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
@@ -1318,7 +1200,7 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		}
 		users.setEnabled(true);
 	}
-			
+
 	public void Hlink(MouseEvent me, URI uri) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
@@ -1330,7 +1212,5 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		} else {
 			System.out.println("else working");
 		}
-	} 
-
-
+	}
 }
