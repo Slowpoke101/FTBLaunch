@@ -31,7 +31,7 @@ public class ProfileEditor extends JDialog {
 	JButton updateButton = new JButton("Update");
 	JButton removeButton = new JButton("Remove");
 	
-	public ProfileEditor(final String varName) {
+	public ProfileEditor(final String editingName) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Editor");
 		setBounds(300, 300, 300, 200);
@@ -46,7 +46,7 @@ public class ProfileEditor extends JDialog {
 		panel.add(userLabel);
 		
 		username.setBounds(100, 10, 170, 30);
-		username.setText(UserManager.getUsername(varName));
+		username.setText(UserManager.getUsername(editingName));
 		username.setVisible(true);
 		username.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -72,7 +72,7 @@ public class ProfileEditor extends JDialog {
 		
 		password.setBounds(100, 50, 170, 30);
 		password.setVisible(true);
-		password.setText(UserManager.getPassword(varName));
+		password.setText(UserManager.getPassword(editingName));
 		panel.add(password);
 		
 		nameLabel.setBounds(10, 90, 80, 30);
@@ -81,7 +81,7 @@ public class ProfileEditor extends JDialog {
 		
 		name.setBounds(100, 90, 170, 30);
 		name.setVisible(true);
-		name.setText(varName);
+		name.setText(editingName);
 		panel.add(name);
 		
 		updateButton.setBounds(57, 130, 80, 25);
@@ -90,8 +90,8 @@ public class ProfileEditor extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText())){
-					UserManager.updateUser(varName, username.getText(), new String(password.getPassword()), name.getText());
-					LaunchFrame.writeUsers();
+					UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
+					LaunchFrame.writeUsers(name.getText());
 					setVisible(false);
 				}
 			}
@@ -103,8 +103,8 @@ public class ProfileEditor extends JDialog {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				UserManager.removeUser(varName);
-				LaunchFrame.writeUsers();
+				UserManager.removeUser(editingName);
+				LaunchFrame.writeUsers(null);
 				setVisible(false);
 			}
 		});

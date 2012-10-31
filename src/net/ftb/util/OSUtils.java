@@ -1,8 +1,10 @@
 package net.ftb.util;
 
-import java.io.Console;
 import java.io.File;
-import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
+
+import net.ftb.gui.LaunchFrame;
 
 public class OSUtils
 {
@@ -12,14 +14,17 @@ public class OSUtils
 	 */
 	public static String getDefInstallPath()
 	{
-		File directory = new File (".");
 		try {
-			return directory.getCanonicalPath();
-		} catch (IOException e) {
+
 			System.out.println("Failed to get path for current directory - falling back to user's home directory.");
+			CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+			File jarFile;
+			jarFile = new File(codeSource.getLocation().toURI().getPath());
+			String jarDir = jarFile.getParentFile().getPath();
+			return jarDir;
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 

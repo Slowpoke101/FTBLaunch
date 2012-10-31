@@ -87,7 +87,7 @@ public class ProfileAdder extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validate(name.getText(), username.getText(), password.getPassword())) {
 					UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-					LaunchFrame.writeUsers();
+					LaunchFrame.writeUsers(name.getText());
 					setVisible(false);
 				}
 			}

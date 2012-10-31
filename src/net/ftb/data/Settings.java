@@ -16,19 +16,7 @@ public class Settings extends Properties
 	
 	public static void initSettings() throws IOException
 	{
-		File cfgFile;
-		
-		// Check for a config file in the current working directory.
-		cfgFile = new File("ftblaunch.cfg");
-		if (cfgFile.exists())
-		{
-			LoadSettings(cfgFile);
-			return;
-		}
-		
-		// Check for a config file in the default installation directory.
-		cfgFile = new File(PathUtils.combine(OSUtils.getDefInstallPath(),
-				"ftblaunch.cfg"));
+		File cfgFile = new File(PathUtils.combine(OSUtils.getDefInstallPath(), "ftblaunch.cfg"));
 		if (cfgFile.exists())
 		{
 			LoadSettings(cfgFile);
