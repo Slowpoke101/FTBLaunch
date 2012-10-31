@@ -894,7 +894,8 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void saveSettings() {
 		Settings settings = Settings.getSettings();
-
+		
+		settings.setLastUser((String)users.getSelectedItem());
 		instance.optionsPane.saveSettingsInto(settings);
 
 		try {
