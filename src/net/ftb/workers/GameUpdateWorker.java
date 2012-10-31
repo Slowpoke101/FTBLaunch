@@ -90,7 +90,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		// TODO Fix comparison - version format is currently undecided, so this just checks if it has changed.
 		// This could result in a downgrade if the version had gone down - although maybe that's intended?
 		// TODO Ask user if they want to update
-		return !versionFile.exists() || latestVersion == "-1" || latestVersion != readVersionFile();
+		return !versionFile.exists() || latestVersion.equals("-1") || !latestVersion.equals(readVersionFile());
 	}
 
 
@@ -111,15 +111,19 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			return false;
 		}
 
-		String nativesFilename = "";
-		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-			nativesFilename = "windows_natives.jar";
-		} else if (OSUtils.getCurrentOS() == OS.MACOSX) {
-			nativesFilename = "macosx_natives.jar";
-		} else if (OSUtils.getCurrentOS() == OS.UNIX) {
-			nativesFilename = "linux_natives.jar";
-		} else {
-			return false;
+		String nativesFilename;
+		switch(OSUtils.getCurrentOS()){
+			case WINDOWS:
+				nativesFilename = "windows_natives.jar";
+				break;
+			case UNIX:
+				nativesFilename = "macosx_natives.jar";
+				break;
+			case MACOSX:
+				nativesFilename = "linux_natives.jar";
+				break;
+			default:
+				return false;
 		}
 
 		try {
@@ -148,7 +152,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		int totalDownloadSize = 0;
 		int[] fileSizes = new int[jarURLs.length];
 		boolean[] skip = new boolean[jarURLs.length];
-		URLConnection connection = null;
+		URLConnection connection;
 
 		// Compare MD5s and skip ones that match.
 		for (int i = 0; i < jarURLs.length; i++) {
@@ -229,7 +233,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 					MessageDigest msgDigest = MessageDigest.getInstance("MD5");
 					byte[] buffer = new byte[24000];
-					int readLen = 0;
+					int readLen;
 					int currentDLSize = 0;
 					while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {						
 						outStream.write(buffer, 0, readLen);
@@ -316,7 +320,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				setStatus("Extracting " + currentEntry + "...");
 				FileOutputStream outStream = new FileOutputStream(new File(nativesDir, currentEntry.getName()));
 
-				int readLen = 0;
+				int readLen;
 				byte[] buffer = new byte[1024];
 				while ((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
 					outStream.write(buffer, 0, readLen);

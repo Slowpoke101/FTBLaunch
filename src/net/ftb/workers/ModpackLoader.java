@@ -41,7 +41,7 @@ public class ModpackLoader extends Thread {
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-			Document doc = null;
+			Document doc;
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {
