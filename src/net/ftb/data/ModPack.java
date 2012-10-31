@@ -40,7 +40,6 @@ public class ModPack {
 	 */
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 
-
 	/*
 	 * Invoking async Load of Modpacks
 	 */
