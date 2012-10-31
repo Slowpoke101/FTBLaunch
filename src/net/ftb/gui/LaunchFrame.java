@@ -592,7 +592,7 @@ public class LaunchFrame extends JFrame {
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
 			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] { "minecraftforge.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
+			String[] jarFiles = new String[] { "minecraftforge-universal-6.0.1.353.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
 			URL[] urls = new URL[jarFiles.length];
 
 			for (int i = 0; i < urls.length; i++) {
@@ -875,8 +875,8 @@ public class LaunchFrame extends JFrame {
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
 				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
-	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge.zip"), 
-	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge.zip"));
+	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge-universal-6.0.1.353.zip"), 
+	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge-universal-6.0.1.353.zip"));
 	}
 
 	/**
