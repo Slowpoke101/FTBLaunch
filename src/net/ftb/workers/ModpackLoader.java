@@ -21,24 +21,21 @@ import org.xml.sax.SAXException;
  * 
  * 
  */
-
 public class ModpackLoader extends Thread {
 	private static String MODPACKSFILE;
 
-	public ModpackLoader() {
-		// this.modPack = modPack;
-	}
+	public ModpackLoader() { }
 
 	public void run() {
 		try {
 			System.out.println("loading modpack information...");
 
-			// Lets emulate heavy server load ;)
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+//			// Lets emulate heavy server load ;)
+//			try {
+//				Thread.sleep(2000);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
 
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
