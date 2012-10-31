@@ -4,10 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,23 +50,16 @@ import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.swing.JFrame;
-
-import net.ftb.data.LoginResponse;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.data.UserManager;
-import net.ftb.workers.GameUpdateWorker;
-import net.ftb.workers.LoginWorker;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -65,19 +67,14 @@ import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+
+import net.ftb.data.LoginResponse;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.data.UserManager;
+import net.ftb.workers.GameUpdateWorker;
+import net.ftb.workers.LoginWorker;
 
 //import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 

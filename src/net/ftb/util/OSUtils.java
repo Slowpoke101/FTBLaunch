@@ -2,6 +2,10 @@ package net.ftb.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
+
+import net.ftb.gui.LaunchFrame;
 
 public class OSUtils
 {
@@ -11,14 +15,17 @@ public class OSUtils
 	 */
 	public static String getDefInstallPath()
 	{
-		File directory = new File (".");
 		try {
-			return directory.getCanonicalPath();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+			File jarFile;
+			jarFile = new File(codeSource.getLocation().toURI().getPath());
+			String jarDir = jarFile.getParentFile().getPath();
+			System.out.println (jarDir);
+			return jarDir;
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-
+		// Back-up incase this fails.
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
