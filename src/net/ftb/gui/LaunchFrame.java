@@ -165,7 +165,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	/**
 	 * Launch the application.
 	 */
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -229,7 +228,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	/**
 	 * Create the frame.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
@@ -737,6 +735,15 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			updater.execute();
 		} else {
 			// Check if you need to install the mods
+			System.out.println(ModPack.getPack(selectedPack).getDir());
+			killMetaInf();
+			ModManager man = new ModManager(new JFrame(), true);
+			man.setVisible(true);
+			try {
+				installMods(ModPack.getPack(selectedPack).getDir());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
@@ -1107,8 +1114,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		minecraft.renameTo(new File(Settings.getSettings().getInstallPath() + "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
-		System.out.println("Renamed minecraft.jar to mcbackup.jar");
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"));
 		copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/instMods/minecraftforge.zip"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/minecraftforge.zip"));
