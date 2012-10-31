@@ -1,6 +1,7 @@
 package net.ftb.gui.panes;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -154,8 +155,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			if(selectedPack == i) {
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
+				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
+				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 		}
 	}
