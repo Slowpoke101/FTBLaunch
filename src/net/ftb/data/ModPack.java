@@ -120,6 +120,7 @@ public class ModPack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()){
+				verFile.mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
