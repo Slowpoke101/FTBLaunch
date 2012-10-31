@@ -19,7 +19,6 @@ public class OSUtils
 			File jarFile;
 			jarFile = new File(codeSource.getLocation().toURI().getPath());
 			String jarDir = jarFile.getParentFile().getPath();
-			System.out.println (jarDir);
 			return jarDir;
 		} catch (URISyntaxException e) {
 			e.printStackTrace();

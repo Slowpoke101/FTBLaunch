@@ -950,7 +950,8 @@ public class LaunchFrame extends JFrame {
 					.invoke(null, (Object) "minecraft").toString();
 
 			System.out.println("MCDIR: " + mcDir);
-
+			
+			
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
