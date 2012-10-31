@@ -6,17 +6,13 @@ import java.security.CodeSource;
 
 import net.ftb.gui.LaunchFrame;
 
-public class OSUtils
-{
+public class OSUtils {
 	/**
 	 * Gets the default installation path for the current OS.
 	 * @return a string containing the default install path for the current OS.
 	 */
-	public static String getDefInstallPath()
-	{
+	public static String getDefInstallPath() {
 		try {
-
-			System.out.println("Failed to get path for current directory - falling back to user's home directory.");
 			CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
 			File jarFile;
 			jarFile = new File(codeSource.getLocation().toURI().getPath());
@@ -25,25 +21,24 @@ public class OSUtils
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Failed to get path for current directory - falling back to user's home directory.");
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
-	public static OS getCurrentOS()
-	{
+	public static OS getCurrentOS() {
 		String osString = System.getProperty("os.name").toLowerCase();
-
-		if (osString.contains("win"))
+		if (osString.contains("win")) {
 			return OS.WINDOWS;
-		else if (osString.contains("nix") || osString.contains("nux"))
+		} else if (osString.contains("nix") || osString.contains("nux")) {
 			return OS.UNIX;
-		else if (osString.contains("mac"))
+		} else if (osString.contains("mac")) {
 			return OS.MACOSX;
-		else
+		} else {
 			return OS.OTHER;
+		}
 	}
 
-	public enum OS
-	{
+	public enum OS {
 		WINDOWS,
 		UNIX,
 		MACOSX,
