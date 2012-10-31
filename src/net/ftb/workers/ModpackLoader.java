@@ -6,15 +6,17 @@ import java.security.NoSuchAlgorithmException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import net.ftb.data.ModPack;
-import net.ftb.gui.LaunchFrame;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import net.ftb.data.ModPack;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
+
 
 /*
  * Async ModPack loader
@@ -28,14 +30,7 @@ public class ModpackLoader extends Thread {
 
 	public void run() {
 		try {
-			System.out.println("loading modpack information...");
-
-//			// Lets emulate heavy server load ;)
-//			try {
-//				Thread.sleep(2000);
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
+			Logger.logInfo("starting modpack information loading");
 
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
@@ -45,18 +40,18 @@ public class ModpackLoader extends Thread {
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {
-				e.printStackTrace();
+				Logger.logError("could not read modpackinfo: "+e.getMessage());
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.logError("could not read modpackinfo: "+e.getMessage());
 				return;
 			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
+				Logger.logError("could not read modpackinfo: "+e.getMessage());
 				return;
 			}
 
 			if (doc == null) {
-				System.out.println("Error: could not load modpackdata!");
+				Logger.logError("could not read modpackinfo: doc==null");
 				return;
 			}
 
@@ -72,13 +67,13 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent()));
 				} catch (DOMException e) {
-					e.printStackTrace();
+					Logger.logError("could not read modpackinfo: "+e.getMessage());
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.logError("could not read modpackinfo: "+e.getMessage());
 				}
 			}
 		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
+			Logger.logError("could not load modpackinfo: "+e1.getMessage());
 		}
 	}
 }
