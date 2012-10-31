@@ -3,22 +3,22 @@ package net.ftb.gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JLabel;
 
 public class CreateProfile extends JDialog {
 	private static final long serialVersionUID = 1L;
-	
+
 	private final JPanel contentPanel = new JPanel();
 	private JRoundTextField textField;
 	private JRoundPasswordField passwordField;
@@ -44,19 +44,15 @@ public class CreateProfile extends JDialog {
 		setResizable(false);
 		setTitle("Feed the Beast Launcher");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException e) { e.printStackTrace(); 
+		} catch (InstantiationException e) { e.printStackTrace();
+		} catch (IllegalAccessException e) { e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) { e.printStackTrace();
 		}
-		
+
 		setBounds(100, 100, 300, 200);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,7 +80,7 @@ public class CreateProfile extends JDialog {
 		gbc_textField.gridy = 1;
 		contentPanel.add(textField, gbc_textField);
 		textField.setColumns(10);
-		
+
 		JLabel lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.insets = new Insets(0, 0, 0, 5);
@@ -92,7 +88,7 @@ public class CreateProfile extends JDialog {
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 2;
 		contentPanel.add(lblPassword, gbc_lblPassword);
-		
+
 		passwordField = new JRoundPasswordField(10);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
@@ -102,7 +98,7 @@ public class CreateProfile extends JDialog {
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
-		
+
 		JButton okButton = new JButton("OK");
 		okButton.setActionCommand("OK");
 		buttonPane.add(okButton);
@@ -111,5 +107,4 @@ public class CreateProfile extends JDialog {
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
 	}
-
 }

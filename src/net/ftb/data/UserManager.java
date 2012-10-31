@@ -15,7 +15,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class UserManager {
-
 	public static ArrayList<User> _users = new ArrayList<User>();
 
 	private File _filename;
@@ -25,8 +24,7 @@ public class UserManager {
 		if (_filename.exists()) {
 			try {
 				read();
-			} catch (IOException e) {
-			}
+			} catch (IOException e) { }
 		}
 	}
 
@@ -68,18 +66,15 @@ public class UserManager {
 	public String getHexThing(String str) {
 		BigInteger str2;
 		try {
-			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1,
-					getSelfMD5()));
+			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getSelfMD5()));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return "";
 		}
-		;
 		return String.format("%040x", str2);
 	}
 	
 	public void write() throws IOException {
-		
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
 		for (int i = 0; i < _users.size(); i++) {
 			String str = _users.get(i).toString();
@@ -119,7 +114,6 @@ public class UserManager {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-
 		InputStream str = string.openStream();
 
 		byte[] buffer = new byte[65536];
@@ -127,7 +121,6 @@ public class UserManager {
 		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
-
 		str.close();
 
 		return dgest.digest();
@@ -137,9 +130,7 @@ public class UserManager {
 		try {
 			return getFileMD5(ClassLoader.getSystemClassLoader().getResource(
 					"net/ftb/gui/LauncherFrame.class"));
-		} catch (Exception e) {
-			return new byte[] {};
-		}
+		} catch (Exception e) {	return new byte[] {}; }
 	}
 
 	public static void addUser(String username, String password, String name) {
@@ -196,8 +187,7 @@ public class UserManager {
 		}
 	}
 
-	public static void updateUser(String oldName, String username,
-			String password, String name) {
+	public static void updateUser(String oldName, String username, String password, String name) {
 		User temp = findUser(oldName);
 		if (temp != null) {
 			_users.get(_users.indexOf(temp)).setUsername(username);

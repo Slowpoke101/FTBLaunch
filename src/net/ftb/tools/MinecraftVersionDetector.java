@@ -12,14 +12,13 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class MinecraftVersionDetector {
-	
 	private URLClassLoader cl;
+
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
 	 * @return The version of the jar file
 	 */
-	@SuppressWarnings("resource")
 	public String getMinecraftVersion(String jarFilePath) {
 		String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar" };
 
@@ -35,14 +34,14 @@ public class MinecraftVersionDetector {
 		}
 
 		cl = new URLClassLoader(urls,this.getClass().getClassLoader());
-		
+
 		JarFile file;
 		try {
 			file = new JarFile(new File(jarFilePath + "/bin", "minecraft.jar"));
 		} catch (IOException e1) { return "unknown"; }
-			
+
 		Enumeration<JarEntry> ent = file.entries();
-			
+
 		while (ent.hasMoreElements()) {
 			JarEntry entry = ent.nextElement();
 			if (entry.getName().endsWith(".class")) {
@@ -70,7 +69,7 @@ public class MinecraftVersionDetector {
 										meth.invoke(obj, testing); // invoke the getSectionsInStringBuilder method
 										String search = "Minecraft Version: ";
 										return testing.toString().substring(testing.indexOf(search) + search.length(), testing.indexOf("\n"));
-											// Finally return the cut out version from the report
+										// Finally return the cut out version from the report
 									}
 								}
 							} catch (IllegalArgumentException e) { return "unknown";
@@ -84,8 +83,6 @@ public class MinecraftVersionDetector {
 				}
 			}
 		}
-
 		return "unknown";
-
 	}
 }
