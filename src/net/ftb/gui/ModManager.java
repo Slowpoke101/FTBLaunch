@@ -39,23 +39,29 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 
 public class ModManager extends JDialog {
+	private static final long serialVersionUID = 6897832855341265019L;
+
+	private JPanel contentPane;
+
+	private double downloadedPerc;
+	private Settings settings = new Settings();	
+
 	private final JProgressBar progressBar;
 	private final JLabel label;
-	
+
 	private ZipFile zipFile;
-	
+
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
-
 		private ZipFile zipFile;
-
 
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl());
-			if(!modPackZip.exists()){
+			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() 
+					+ "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl());
+			if(!modPackZip.exists()) {
 				try {
-						new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() +  "/").mkdir();
-						downloadModPack(ModPack.getPack(LaunchFrame.selectedPack).getUrl(), ModPack.getPack(LaunchFrame.selectedPack).getDir());
+					new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() +  "/").mkdir();
+					downloadModPack(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException e) {
@@ -68,23 +74,20 @@ public class ModManager extends JDialog {
 		}
 
 
-		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException
-		{
+		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
-			try
-			{
+			try {
 				in = new BufferedInputStream(new URL(urlString).openStream());
 				fout = new FileOutputStream(filename);
 
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
-				int modPackSize = ModPack.getPack(LaunchFrame.selectedPack).getSize();
+				int modPackSize = ModPack.getPack(LaunchFrame.getSelectedModIndex()).getSize();
 				progressBar.setMaximum(10000);
 				int steps = 0;
-				while ((count = in.read(data, 0, 1024)) != -1)
-				{
+				while ((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
 					downloadedPerc += (count*1.0/modPackSize)*100;
 					amount += count;
@@ -94,18 +97,18 @@ public class ModManager extends JDialog {
 						progressBar.setValue((int)downloadedPerc*100);
 						label.setText(String.valueOf(amount / 1024) + "Kb / " + String.valueOf(modPackSize / 1024) + "Kb");
 					}
-					//System.out.println(downloadedPerc);
 				}
-
 			} finally {			
-				if (in != null)
+				if (in != null) {
 					in.close();
-				if (fout != null)
+				}
+				if (fout != null) {
 					fout.flush();	
+				}
 				fout.close();
 			}
 		}
-		
+
 		public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
 			DateFormat sdf = new SimpleDateFormat("ddMMyy");
 			TimeZone zone = TimeZone.getTimeZone("GMT");
@@ -114,7 +117,6 @@ public class ModManager extends JDialog {
 			downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
 		}
 
-
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/").mkdirs();
@@ -122,36 +124,19 @@ public class ModManager extends JDialog {
 			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
-			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir() + "/" + ModPack.getPack(LaunchFrame.selectedPack).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.selectedPack).getDir());
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" 
+					+ ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 			installMods(modPackName, dir);
 		}
-//
-//		protected int getModPackSize() throws MalformedURLException, NoSuchAlgorithmException, IOException{
-//			DateFormat sdf = new SimpleDateFormat("ddMMyy");
-//			TimeZone zone = TimeZone.getTimeZone("GMT");
-//			sdf.setTimeZone(zone);
-//			String date = sdf.format(new Date());
-//			URL url = new URL("http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + getSelectedModPack() + ".txt");
-//			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-//			String str;
-//			while((str = in.readLine()) != null){
-//				return Integer.parseInt(str);
-//			}
-//			return 1;		
-//		}
-
 
 		protected void installMods(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
-			//new File(Settings.getSettings().getInstallPath() + "/" + getSelectedModPack() + "/.minecraft").mkdir();
 			System.out.println("Installing");
-				new File(Settings.getSettings().getInstallPath() + "/"+ dir + "/.minecraft").mkdirs();
+			new File(Settings.getSettings().getInstallPath() + "/"+ dir + "/.minecraft").mkdirs();
 
-				copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
-				//		minecraft.renameTo(new File(Settings.getSettings().getInstallPath()+ "/" + modPackName + "/.minecraft/bin/mcbackup.jar"));
-				//		System.out.println("Renamed minecraft.jar to mcbackup.jar");
-				LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
+			LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
 
-			try{
+			try {
 				// Open the file that is the first 
 				// command line parameter
 				FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/modlist");
@@ -161,19 +146,19 @@ public class ModManager extends JDialog {
 				String strLine;
 				//Read File Line By Line
 				int i=0;
-				while ((strLine = br.readLine()) != null)   {
+				while ((strLine = br.readLine()) != null) {
 					// Print the content on the console
 					LaunchFrame.jarMods[i] = strLine;
 					i++;		
 				}
 				//Close the input stream
 				in1.close();
-			}catch (Exception e){//Catch exception if any
-				System.err.println("Error: " + e.getMessage());
-			}
+			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" + dir +"/.minecraft/bin/"));
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" + dir +"/.minecraft/"));
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" 
+					+ dir +"/.minecraft/bin/"));
+			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" 
+					+ dir +"/.minecraft/"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -190,19 +175,15 @@ public class ModManager extends JDialog {
 			return result;
 		}
 
-		protected String[] reverse(String[] x){
+		protected String[] reverse(String[] x) {
 			String buffer[] = new String[x.length];
-			for(int i = 0; i<x.length;i++){
+			for(int i = 0; i<x.length;i++) {
 				buffer[i] = x[x.length-i-1];
 			}
-
-
 			return buffer;
-
 		}
 
-		public void extractZipTo(String zipLocation, String outputLocation)
-				throws IOException {
+		public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
 			try {
 				System.out.println("Entracting");
 				File fSourceZip = new File(zipLocation);
@@ -219,16 +200,12 @@ public class ModManager extends JDialog {
 					if (entry.isDirectory()) {
 						continue;
 					} else {
-						BufferedInputStream bis = new BufferedInputStream(
-								zipFile.getInputStream(entry));
-
+						BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
 						int b;
 						byte buffer[] = new byte[1024];
 
-						FileOutputStream fos = new FileOutputStream(
-								destinationFilePath);
-						BufferedOutputStream bos = new BufferedOutputStream(fos,
-								1024);
+						FileOutputStream fos = new FileOutputStream(destinationFilePath);
+						BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
 
 						while ((b = bis.read(buffer, 0, 1024)) != -1) {
 							bos.write(buffer, 0, b);
@@ -239,21 +216,15 @@ public class ModManager extends JDialog {
 						bis.close();
 					}
 				}
-			} catch (IOException ioe) {
-				System.out.println("IOError :" + ioe);
-			}
-
+			} catch (IOException ioe) { System.out.println("IOError :" + ioe); }
 		}
 
 		public void copyFolder(File src, File dest) throws IOException {
-
 			if (src.isDirectory()) {
-
 				// if directory not exists, create it
 				if (!dest.exists()) {
 					dest.mkdir();
 				}
-
 				// list all the directory contents
 				String files[] = src.list();
 
@@ -264,7 +235,6 @@ public class ModManager extends JDialog {
 					// recursive copy
 					copyFolder(srcFile, destFile);
 				}
-
 			} else {
 				// if file, then copy it
 				// Use bytes stream to support all file types
@@ -279,34 +249,18 @@ public class ModManager extends JDialog {
 					while ((length = in.read(buffer)) > 0) {
 						out.write(buffer, 0, length);
 					}
-
 					in.close();
 					out.close();
 				}
 			}
 		}
-		
+
 	}
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6897832855341265019L;
 
-	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-
-	double downloadedPerc;
-	Settings settings = new Settings();	
-	
 	/**
 	 * Create the frame.
 	 */
-	
-	
 	public ModManager(JFrame owner, Boolean model) {
 		super(owner, model);
 		setTitle("Downloading...");
@@ -330,7 +284,7 @@ public class ModManager extends JDialog {
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setBounds(10, 36, 278, 14);
 		contentPane.add(label);
-		
+
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
@@ -343,26 +297,19 @@ public class ModManager extends JDialog {
 				};
 				worker.execute();
 			}
-
-			@Override
-			public void windowActivated(WindowEvent e) { }
-			@Override
-			public void windowClosed(WindowEvent e) { }
-			@Override
-			public void windowClosing(WindowEvent e) { }
-			@Override
-			public void windowDeactivated(WindowEvent e) { }
-			@Override
-			public void windowDeiconified(WindowEvent e) { }
-			@Override
-			public void windowIconified(WindowEvent e) { }
+			@Override public void windowActivated(WindowEvent e) { }
+			@Override public void windowClosed(WindowEvent e) { }
+			@Override public void windowClosing(WindowEvent e) { }
+			@Override public void windowDeactivated(WindowEvent e) { }
+			@Override public void windowDeiconified(WindowEvent e) { }
+			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
+
 	/**
 	 * @param zipLocation - the zip to be extracted
 	 * @param outputLocation - where to extract to
 	 */
-	
 	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
 		try {
 			System.out.println("Extracting!!!");
@@ -382,21 +329,17 @@ public class ModManager extends JDialog {
 					continue;
 				} else {
 					System.out.println("Extracting " + destinationFilePath);
-					BufferedInputStream bis = new BufferedInputStream(
-							zipFile.getInputStream(entry));
+					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
 
 					int b;
 					byte buffer[] = new byte[1024];
 
-					FileOutputStream fos = new FileOutputStream(
-							destinationFilePath);
-					BufferedOutputStream bos = new BufferedOutputStream(fos,
-							1024);
+					FileOutputStream fos = new FileOutputStream(destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
 
 					while ((b = bis.read(buffer, 0, 1024)) != -1) {
 						bos.write(buffer, 0, b);
 					}
-
 					bos.flush();
 					bos.close();
 					bis.close();
@@ -406,7 +349,5 @@ public class ModManager extends JDialog {
 			System.out.println("IOError :");
 			ioe.printStackTrace();
 		}
-
 	}
-
 }
