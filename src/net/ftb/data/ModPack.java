@@ -120,7 +120,7 @@ public class ModPack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()){
-				verFile.mkdirs();
+				new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir).mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
