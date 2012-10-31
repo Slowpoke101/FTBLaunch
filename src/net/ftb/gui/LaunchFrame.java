@@ -30,6 +30,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -802,48 +803,36 @@ public class LaunchFrame extends JFrame {
 				copyFolder(srcFile, destFile);
 			}
 		} else {
-			// if file, then copy it
-			// Use bytes stream to support all file types
-			if (src.exists()) {
-				InputStream in = new FileInputStream(src);
-				OutputStream out = new FileOutputStream(dest);
-
-				byte[] buffer = new byte[1024];
-
-				int length;
-				// copy the file content in bytes
-				while ((length = in.read(buffer)) > 0) {
-					out.write(buffer, 0, length);
-				}
-
-				in.close();
-				out.close();
-				System.out.println("File copied from " + src + " to " + dest);
-			}
+			copyFile(src, dest);
 		}
 	}
 
 	/**
-	 * @param src - the file to be moved
-	 * @param dest - where to move to
+	 * @param sourceFile - the file to be moved
+	 * @param destinationFile - where to move to
 	 * @throws IOException
 	 */
-	public static void copyFile(File src, File dest) throws IOException {
-		if (src.exists()) {
-			InputStream in = new FileInputStream(src);
-			OutputStream out = new FileOutputStream(dest);
-
-			byte[] buffer = new byte[1024];
-
-			int length;
-			// copy the file content in bytes
-			while ((length = in.read(buffer)) > 0) {
-				out.write(buffer, 0, length);
+	public static void copyFile(File sourceFile, File destinationFile) throws IOException {
+		if (sourceFile.exists()) {
+			if(!destinationFile.exists()){
+				destinationFile.createNewFile();
 			}
 
-			in.close();
-			out.close();
-			System.out.println("File copied from " + src + " to " + dest);
+			FileChannel sourceStream = null, destinationStream = null;
+
+			try{
+				sourceStream = new FileInputStream(sourceFile).getChannel();
+				destinationStream = new FileOutputStream(destinationFile).getChannel();
+				destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
+			}finally{
+				if(sourceStream != null){
+					sourceStream.close();
+				}
+				if(destinationStream != null){
+					destinationStream.close();
+				}
+			}
+			System.out.println("File copied from " + sourceFile + " to " + destinationFile);
 		}
 	}
 
