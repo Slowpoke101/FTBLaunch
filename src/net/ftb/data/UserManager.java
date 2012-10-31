@@ -75,7 +75,7 @@ public class UserManager {
 	}
 	
 	public void write() throws IOException {
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename, false));
+		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
 		for (int i = 0; i < _users.size(); i++) {
 			String str = _users.get(i).toString();
 			wri.write(getHexThing(str));

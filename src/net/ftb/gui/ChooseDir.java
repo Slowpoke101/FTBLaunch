@@ -31,7 +31,6 @@ public class ChooseDir extends JFrame implements ActionListener {
 		chooser.setCurrentDirectory(new java.io.File(optionsPane.getInstallFolderText()));
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
 		chooser.setAcceptAllFileFilterUsed(false);
 
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

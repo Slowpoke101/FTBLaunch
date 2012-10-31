@@ -91,7 +91,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		final int packIndex = packPanels.size();
 		System.out.println("adding pack "+packIndex);
-		//ModPack pack = ModPack.getPack(i);
 		final JPanel p = new JPanel();
 		p.setBounds(0, packIndex * 55, 420, 55);
 		p.setLayout(null);
