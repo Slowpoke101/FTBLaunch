@@ -455,6 +455,7 @@ public class LaunchFrame extends JFrame {
 						}
 					} catch (CancellationException e) { 
 						System.out.println("Game update cancelled..."); 
+						enableObjects();
 					} catch (InterruptedException e) { e.printStackTrace(); 
 					} catch (ExecutionException e) {
 						e.printStackTrace();
@@ -507,7 +508,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * @param file - the name of the file, as saved o the repo
+	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
 	 * @throws NoSuchAlgorithmException - see md5
 	 */

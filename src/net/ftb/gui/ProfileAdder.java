@@ -35,7 +35,7 @@ public class ProfileAdder extends JDialog {
 		setTitle("FTB Launcher Profile Adder");
 		setBounds(300, 300, 300, 200);
 		setResizable(false);
-		
+
 		getRootPane().setDefaultButton(addButton);
 
 		panel.setBounds(0, 0, 300, 200);
