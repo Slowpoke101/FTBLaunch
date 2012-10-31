@@ -1,11 +1,18 @@
 package net.ftb.gui.panes;
 
 import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
+import net.ftb.gui.LaunchFrame;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +31,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private ArrayList<JPanel> packPanels;
 	private JScrollPane packsScroll;
 	private JLabel splash;
-	private JTextArea packInfo;
+	private JButton serverLink;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
 
@@ -73,9 +81,21 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setViewportView(packs);
 		this.add(packsScroll);
 
-		packInfo = new JTextArea();
-		packInfo.setBounds(420, 210, 410, 90);
-		this.add(packInfo);
+		serverLink = new JButton("Grab The Server Version Here!!");
+		serverLink.setBounds(420, 210, 410, 90);
+		serverLink.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Hlink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		this.add(serverLink);
 	}
 
 	@Override public void onVisible() { }
@@ -134,7 +154,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			if(selectedPack == i) {
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
-				packInfo.setText(ModPack.getPack(i).getInfo());
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 			}
@@ -144,5 +163,18 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	public int getSelectedModIndex() {
 		return modPacksAdded ? selectedPack : -1;
+	}
+	
+	public void Hlink(ActionEvent ae, URI uri) {
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch(Exception exc) {
+				System.out.println(exc);
+			}
+		} else {
+			System.out.println("else working");
+		}
 	}
 }

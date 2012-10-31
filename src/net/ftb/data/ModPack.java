@@ -32,6 +32,7 @@ public class ModPack {
 	private String mcVersion;
 	private String info = "This is the info until there is an actual info thingy";
 	private int size;
+	private String serverUrl;
 
 	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
@@ -84,7 +85,7 @@ public class ModPack {
 	}
 
 	// class stuff
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl) throws IOException, NoSuchAlgorithmException {
 		// Always get this information
 		this.name = name;
 		this.author = author;
@@ -92,6 +93,7 @@ public class ModPack {
 		this.dir = dir;
 		this.mcVersion = mcVersion;
 		this.url = url;
+		this.serverUrl = serverUrl;
 		// Check version files
 		File verFile = new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir + File.separator + "version");
 		if(!upToDate(verFile)){
@@ -178,5 +180,9 @@ public class ModPack {
 
 	public int getSize() {
 		return size;
+	}
+	
+	public String getServerUrl() {
+		return serverUrl;
 	}
 }

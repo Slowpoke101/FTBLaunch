@@ -1,6 +1,7 @@
 package net.ftb.gui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -218,6 +219,7 @@ public class LaunchFrame extends JFrame {
 		setContentPane(panel);
 
 		//Footer
+		footerLogo.setBounds(20, 20, 42, 42);
 		footerLogo.addMouseListener(new MouseListener() {
 			@Override 
 			public void mouseClicked(MouseEvent arg0) {
@@ -237,7 +239,7 @@ public class LaunchFrame extends JFrame {
 			@Override 
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-					Hlink(arg0, new URI("http://www.creeperhost.net"));
+					Hlink(arg0, new URI("http://www.creeperhost.net/aff.php?aff=293"));
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
@@ -304,6 +306,9 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
@@ -450,6 +455,7 @@ public class LaunchFrame extends JFrame {
 						}
 					} catch (CancellationException e) { 
 						System.out.println("Game update cancelled..."); 
+						enableObjects();
 					} catch (InterruptedException e) { e.printStackTrace(); 
 					} catch (ExecutionException e) {
 						e.printStackTrace();
@@ -502,7 +508,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * @param file - the name of the file, as saved o the repo
+	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
@@ -587,7 +593,7 @@ public class LaunchFrame extends JFrame {
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
 			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] { "minecraftforge.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
+			String[] jarFiles = new String[] { "minecraftforge-universal-6.0.1.353.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
 			URL[] urls = new URL[jarFiles.length];
 
 			for (int i = 0; i < urls.length; i++) {
@@ -870,8 +876,8 @@ public class LaunchFrame extends JFrame {
 		copyFile(minecraft, mcbackup);
 		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
 				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
-	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge.zip"), 
-	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge.zip"));
+	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge-universal-6.0.1.353.zip"), 
+	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge-universal-6.0.1.353.zip"));
 	}
 
 	/**

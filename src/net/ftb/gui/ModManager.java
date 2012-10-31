@@ -124,8 +124,7 @@ public class ModManager extends JDialog {
 			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
 			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
-			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" 
-					+ ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
+			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 			installMods(modPackName, dir);
 		}
 
@@ -184,40 +183,44 @@ public class ModManager extends JDialog {
 		}
 
 		public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
-			try {
-				System.out.println("Entracting");
-				File fSourceZip = new File(zipLocation);
-				String zipPath = outputLocation;
-				File temp = new File(zipPath);
-				temp.mkdir();
-				zipFile = new ZipFile(fSourceZip);
-				Enumeration<?> e = zipFile.entries();
+            try {
+                    System.out.println("Entracting");
+                    File fSourceZip = new File(zipLocation);
+                    String zipPath = outputLocation;
+                    File temp = new File(zipPath);
+                    temp.mkdir();
+                    zipFile = new ZipFile(fSourceZip);
+                    Enumeration<?> e = zipFile.entries();
+                    
+                    while (e.hasMoreElements()) {
+                            ZipEntry entry = (ZipEntry) e.nextElement();
+                            File destinationFilePath = new File(zipPath, entry.getName());
+                            destinationFilePath.getParentFile().mkdirs();
+//                          System.out.println(entry.getName());
+                            if (entry.isDirectory() || entry.getName().equals(".minecraft")) {
+                                    continue;
+                            } else {
+                                    BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+                                    int b;
+                                    byte buffer[] = new byte[1024];
 
-				while (e.hasMoreElements()) {
-					ZipEntry entry = (ZipEntry) e.nextElement();
-					File destinationFilePath = new File(zipPath, entry.getName());
-					destinationFilePath.getParentFile().mkdirs();
-					if (entry.isDirectory()) {
-						continue;
-					} else {
-						BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-						int b;
-						byte buffer[] = new byte[1024];
+                                    FileOutputStream fos = new FileOutputStream(destinationFilePath);
+                                    BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
 
-						FileOutputStream fos = new FileOutputStream(destinationFilePath);
-						BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+                                    while ((b = bis.read(buffer, 0, 1024)) != -1) {
+                                            bos.write(buffer, 0, b);
+                                    }
 
-						while ((b = bis.read(buffer, 0, 1024)) != -1) {
-							bos.write(buffer, 0, b);
-						}
-
-						bos.flush();
-						bos.close();
-						bis.close();
-					}
-				}
-			} catch (IOException ioe) { System.out.println("IOError :" + ioe); }
-		}
+                                    bos.flush();
+                                    bos.close();
+                                    bis.close();
+                            }
+                    }
+            } catch (IOException ioe) {
+                    System.out.println("IOError :");
+                    ioe.printStackTrace();
+            }
+    }
 
 		public void copyFolder(File src, File dest) throws IOException {
 			if (src.isDirectory()) {
