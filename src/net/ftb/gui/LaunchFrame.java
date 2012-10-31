@@ -218,6 +218,7 @@ public class LaunchFrame extends JFrame {
 		setContentPane(panel);
 
 		//Footer
+		footerLogo.setBounds(20, 20, 42, 42);
 		footerLogo.addMouseListener(new MouseListener() {
 			@Override 
 			public void mouseClicked(MouseEvent arg0) {
@@ -229,23 +230,31 @@ public class LaunchFrame extends JFrame {
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) { }
-			@Override public void mouseEntered(MouseEvent arg0) { }
+			@Override public void mouseExited(MouseEvent arg0) {
+				//set background back
+			}
+			@Override public void mouseEntered(MouseEvent arg0) {
+				//change background
+			}
 		});
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
 			@Override 
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-					Hlink(arg0, new URI("http://www.creeperhost.net"));
+					Hlink(arg0, new URI("http://www.creeperhost.net/aff.php?aff=293"));
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) { }
-			@Override public void mouseEntered(MouseEvent arg0) { }
+			@Override public void mouseExited(MouseEvent arg0) {
+				//set background back
+			}
+			@Override public void mouseEntered(MouseEvent arg0) {
+				//change background
+			}
 		});
 
 		try {
