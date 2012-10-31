@@ -1,6 +1,7 @@
 package net.ftb.gui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -230,12 +231,8 @@ public class LaunchFrame extends JFrame {
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) {
-				//set background back
-			}
-			@Override public void mouseEntered(MouseEvent arg0) {
-				//change background
-			}
+			@Override public void mouseExited(MouseEvent arg0) { }
+			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
@@ -249,12 +246,8 @@ public class LaunchFrame extends JFrame {
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) {
-				//set background back
-			}
-			@Override public void mouseEntered(MouseEvent arg0) {
-				//change background
-			}
+			@Override public void mouseExited(MouseEvent arg0) { }
+			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
 		try {
@@ -313,6 +306,9 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
