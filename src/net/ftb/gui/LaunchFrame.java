@@ -70,6 +70,7 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.NewsPane;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.log.Logger;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -115,7 +116,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch");
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
-	private static JComboBox users;
+	private static JComboBox<String> users;
 	private JButton edit;
 
 	/**
@@ -137,6 +138,28 @@ public class LaunchFrame extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Logger.logInfo("FTBLaunch starting up");
+		{
+			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+			String now = dateFormatGmt.format(new Date());
+			Logger.logInfo("Now is: "+now);
+		}
+		Logger.logInfo("Java version: "+System.getProperty("java.version"));
+		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
+		Logger.logInfo("Java home: "+System.getProperty("java.home"));
+		Logger.logInfo("Java specification: "+System.getProperty("java.vm.specification.name")+" version: "+
+				System.getProperty("java.vm.specification.version")+" by "+
+				System.getProperty("java.vm.specification.vendor"));
+		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name")+" version: "+
+				System.getProperty("java.vm.version")+" by "+
+				System.getProperty("java.vm.vendor"));
+		Logger.logInfo("OS: "+System.getProperty("os.arch")+" "+
+				System.getProperty("os.name")+" "+
+				System.getProperty("os.version"));
+		Logger.logInfo("Working directory: "+
+				System.getProperty("user.dir"));
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
@@ -169,7 +192,7 @@ public class LaunchFrame extends JFrame {
 				try {
 					Settings.initSettings();
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.logError("while loading settings: IOException "+e.getMessage());
 					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
@@ -186,7 +209,9 @@ public class LaunchFrame extends JFrame {
 				try {
 					LauncherConsole con = new LauncherConsole();
 					con.setVisible(true);
-				} catch (IOException e) { e.printStackTrace(); }
+				} catch (IOException e) {
+					Logger.logError("while console startup: IOException "+e.getMessage());
+				}
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
 				frame.setVisible(true);
@@ -226,7 +251,7 @@ public class LaunchFrame extends JFrame {
 				try {
 					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
 				} catch (URISyntaxException e) {
-					e.printStackTrace();
+					Logger.logError("Could not open link: URISytanxException "+e.getMessage());
 				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
@@ -241,7 +266,7 @@ public class LaunchFrame extends JFrame {
 				try {
 					Hlink(arg0, new URI("http://www.creeperhost.net/aff.php?aff=293"));
 				} catch (URISyntaxException e) {
-					e.printStackTrace();
+					Logger.logError("Could not open link: URISyntaxException "+e.getMessage());
 				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
@@ -252,12 +277,14 @@ public class LaunchFrame extends JFrame {
 
 		try {
 			userManager.read();
-		} catch (IOException e1) { e1.printStackTrace(); }
-
+		} catch (IOException e1) {
+			Logger.logError("Could not load userdata: IOException "+e1.getMessage());
+		}
+		
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
 		String[] dropdown = merge(dropdown_, usernames);
 
-		users = new JComboBox(dropdown);
+		users = new JComboBox<String>(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
 			for(int i = 0; i < dropdown.length; i++) {
 				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
@@ -301,7 +328,7 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
 					saveSettings();
-					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
@@ -360,7 +387,7 @@ public class LaunchFrame extends JFrame {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
-		System.out.println("Logging in...");
+		Logger.logInfo("Logging in...");
 
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
@@ -375,20 +402,20 @@ public class LaunchFrame extends JFrame {
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
-				System.out.println();
+			
 
 				String responseStr;
 				try {
 					responseStr = get();
 				} catch (InterruptedException err) {
-					err.printStackTrace();
+					Logger.logInfo("Interupted");
 					return;
 				} catch (ExecutionException err) {
-					err.printStackTrace();
+					Logger.logError("Login error: ExecutionException "+err.getMessage());
 					if (err.getCause() instanceof IOException) {
-						System.out.println("Login failed: "	+ err.getCause().getMessage());
+							Logger.logError("Login failed: IOException "+err.getMessage());	
 					} else if (err.getCause() instanceof MalformedURLException) {
-						System.out.println("Error: Malformed URL");
+						Logger.logError("Login failed (Malformed): "+err.getMessage());	
 					}
 					return;
 				}
@@ -399,21 +426,21 @@ public class LaunchFrame extends JFrame {
 					RESPONSE = response;
 				} catch (IllegalArgumentException e) {
 					if (responseStr.contains(":")) {
-						System.out.println("Received invalid response from server.");
+						Logger.logError("Login error: receiving invalid data from server");
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
-							System.out.println("Invalid username or password.");
+							Logger.logWarn("Login failed: Invalid username or password.");
 						} else if (responseStr.equalsIgnoreCase("old version")) {
-							System.out.println("Outdated launcher.");
+							Logger.logWarn("Login failed: Outdated launcher.");
 						} else {
-							System.out.println("Login failed: " + responseStr);
+							Logger.logWarn("Login failed: "+responseStr);
 						}
 					}
 					enableObjects();
 					return;
 				}
 
-				System.out.println("Login complete.");
+				Logger.logInfo("Login success");
 				runGameUpdater(response);
 			}
 		};
@@ -430,14 +457,15 @@ public class LaunchFrame extends JFrame {
 					try {
 						if (get() == true) {
 							// Success
-							System.out.println("Game update complete.");
-
-							if(modPacksPane.getSelectedModIndex() < 0) {
-								System.err.println("No Modpack selected!");
+							Logger.logInfo("Game update complete.");
+							
+							// Throw an error out if there is no mod selected (then called prior load ie)
+							if (modPacksPane.getSelectedModIndex() < 0) {
+								Logger.logWarn("No Modpack selected");	
 								return;
 							}
-							
-							System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+							Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+					
 							
 							killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
@@ -445,21 +473,20 @@ public class LaunchFrame extends JFrame {
 							try {
 								installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 							} catch (IOException e) {
-								e.printStackTrace();
+								Logger.logError("while game update: IOException "+e.getMessage());
 							}
 
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
 									+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
-							System.out.println("Error downloading game.");
+							Logger.logError("Error downloading game.");
 						}
-					} catch (CancellationException e) { 
-						System.out.println("Game update cancelled..."); 
-						enableObjects();
-					} catch (InterruptedException e) { e.printStackTrace(); 
+					} catch (CancellationException e) {
+						Logger.logInfo("Game update cancelled...");
+					} catch (InterruptedException e) {
+						Logger.logInfo("Game update interrupted...");
 					} catch (ExecutionException e) {
-						e.printStackTrace();
-						System.out.println("Failed to download game: " + e.getCause().getMessage());
+						Logger.logError("Failed to download game: ExecutionException " + e.getCause().getMessage());
 						return;
 					}
 				}
@@ -491,7 +518,7 @@ public class LaunchFrame extends JFrame {
 				return;
 			}
 			
-			System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+			Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			
 			killMetaInf();
 			ModManager man = new ModManager(new JFrame(), true);
@@ -499,7 +526,7 @@ public class LaunchFrame extends JFrame {
 			try {
 				installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.logError("while game update: IOException "+e.getMessage());
 			}
 			
 			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
@@ -520,8 +547,7 @@ public class LaunchFrame extends JFrame {
 		String date = sdf.format(new Date());
 
 		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
-		System.out.println(resolved);
-
+		Logger.logInfo("resolved file to "+resolved);
 		return resolved; 
 	}
 
@@ -592,7 +618,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
-			System.out.println("Loading jars...");
+			Logger.logInfo("Loading jars...");
 			String[] jarFiles = new String[] { "minecraftforge-universal-6.0.1.353.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
 			URL[] urls = new URL[jarFiles.length];
 
@@ -600,14 +626,14 @@ public class LaunchFrame extends JFrame {
 				try {
 					File f = new File(new File(workingDir, "bin"), jarFiles[i]);
 					urls[i] = f.toURI().toURL();
-					System.out.println("Loading URL: " + urls[i].toString());
+					Logger.logInfo("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e) {
-					System.err.println("MalformedURLException, " + e.toString());
+					Logger.logError("MalformedURLException, " + e.toString());
 					System.exit(5);
 				}
 			}
 
-			System.out.println("Loading natives...");
+			Logger.logInfo("Loading natives...");
 			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
@@ -634,7 +660,8 @@ public class LaunchFrame extends JFrame {
 				f.setAccessible(true);
 				f.set(null, new File(workingDir));
 				// And set it.
-				System.out.println("Fixed Minecraft Path: Field was " + f.toString());
+				Logger.logInfo("Fixed Minecraft Path: Field was "
+						+ f.toString());
 			}
 
 			String[] mcArgs = new String[2];
@@ -643,27 +670,27 @@ public class LaunchFrame extends JFrame {
 
 			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
 
-			System.out.println("MCDIR: " + mcDir);
+			Logger.logInfo("MCDIR: " + mcDir);
 
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
 			this.setVisible(true);
-			e.printStackTrace();
+			Logger.logError("failed to load natives: ClassNotFound" + e.getMessage());
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			Logger.logError("failed to load natives: IllegalArgument" + e.getMessage());
 			System.exit(2);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			Logger.logError("failed to load natives: IllegalAccess" + e.getMessage());
 			System.exit(2);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			Logger.logError("failed to load natives: InvocationTarget" + e.getMessage());
 			System.exit(3);
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			Logger.logError("failed to load natives: NoSuchMethod" + e.getMessage());
 			System.exit(3);
 		} catch (SecurityException e) {
-			e.printStackTrace();
+			Logger.logError("failed to load natives: SecurityException" + e.getMessage());
 			System.exit(4);
 		}
 	}
@@ -698,9 +725,9 @@ public class LaunchFrame extends JFrame {
 			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Logger.logError("Killing metainf failed: FileNotFound "+e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.logError("Killing metainf failed: IOException "+e.getMessage());
 		}
 	}
 
@@ -709,17 +736,21 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
 	 */
 	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
-		System.out.println("DOWNLAODING!!!");
+		Logger.logInfo("Downloading...");
 		URL website;
 		try {
-			System.out.println("STILL DOWNLOADING!!!");
+			Logger.logInfo("still downloading...");
 			website = new URL(getCreeperhostLink(modPackName));
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		} catch (MalformedURLException e) { e.printStackTrace(); 
-		} catch (IOException e) { e.printStackTrace(); }
-
+		} catch (MalformedURLException e) {
+			// No message for security
+			Logger.logError("failed to download modpack: MalformedURL");
+		} catch (IOException e) {
+			// No Message for security
+			Logger.logError("failed to download modpack: UIException ");
+		}
 		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/mods").delete();
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
@@ -750,7 +781,7 @@ public class LaunchFrame extends JFrame {
 			while (zipentry != null) {
 				// for each entry to be extracted
 				String entryName = zipentry.getName();
-				System.out.println("entryname " + entryName);
+				Logger.logInfo("entryname " + entryName);
 				int n;
 				FileOutputStream fileoutputstream;
 				File newFile = new File(entryName);
@@ -774,7 +805,7 @@ public class LaunchFrame extends JFrame {
 			}
 			zipinputstream.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.logError("failed to unzip: " + e.getMessage());
 		}
 	}
 
@@ -788,7 +819,9 @@ public class LaunchFrame extends JFrame {
 			// if directory not exists, create it
 			if (!dest.exists()) {
 				dest.mkdir();
-				System.out.println("Directory copied from " + src + "  to " + dest);
+				
+				Logger.logInfo("Directory copied from " + src + "  to "
+						+ dest);
 			}
 
 			// list all the directory contents
@@ -818,7 +851,7 @@ public class LaunchFrame extends JFrame {
 
 				in.close();
 				out.close();
-				System.out.println("File copied from " + src + " to " + dest);
+				Logger.logInfo("File copied from " + src + " to " + dest);
 			}
 		}
 	}
@@ -843,7 +876,7 @@ public class LaunchFrame extends JFrame {
 
 			in.close();
 			out.close();
-			System.out.println("File copied from " + src + " to " + dest);
+			Logger.logInfo("File copied from " + src + " to " + dest);
 		}
 	}
 
@@ -868,7 +901,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft").mkdirs();
-		System.out.println("dirs mk'd");
+		Logger.logInfo("dirs mk'd");
 		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/" 
 				+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
@@ -901,18 +934,22 @@ public class LaunchFrame extends JFrame {
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			Logger.logError("failed save settings: FileNotFound " + e.getMessage());
+			JOptionPane.showMessageDialog(this, "Failed to save config file: "
+					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			Logger.logError("failed save settings: IOException " + e.getMessage());
+			JOptionPane.showMessageDialog(this, "Failed to save config file: "
+					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) {
+			Logger.logError("failed save userdata: IOException " + e.getMessage());
+		}
 
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
 
@@ -964,10 +1001,10 @@ public class LaunchFrame extends JFrame {
 			try {
 				desktop.browse(uri);
 			} catch(Exception exc) {
-				System.out.println(exc);
+				Logger.logError("Exception while opening link: " + exc.getMessage());
 			}
 		} else {
-			System.out.println("else working");
+			Logger.logWarn("Enviorment dont support opening of urls");
 		}
 	}
 }
