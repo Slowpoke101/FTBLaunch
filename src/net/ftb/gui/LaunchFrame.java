@@ -1227,8 +1227,7 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	public static void writeUsers() {
+	public static void writeUsers(String user) {
 		try {
 			userManager.write();
 		} catch (IOException e) {
@@ -1241,9 +1240,14 @@ public class LaunchFrame extends JFrame {
 		for (String s : dropdown_) {
 			users.addItem(s);
 		}
-
+		
+		int counter = 1;
 		for(String name : usernames) {
+			counter++;
 			users.addItem(name);
+			if(name.equals(user)){
+				users.setSelectedIndex(counter);
+			}
 		}
 	}
 
