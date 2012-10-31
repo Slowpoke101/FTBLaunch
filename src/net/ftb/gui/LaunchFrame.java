@@ -102,13 +102,13 @@ public class LaunchFrame extends JFrame {
 	 * the panel that contains the footer and the tabbed pane
 	 */
 	private JPanel panel = new JPanel();
-	
+
 	/**
 	 * tabbedpane and footer
 	 */
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel footer = new JPanel();
-	
+
 	/**
 	 * the things to go on the footer
 	 */
@@ -129,7 +129,7 @@ public class LaunchFrame extends JFrame {
 	JLabel splash;
 	JTextArea packInfo;
 	public static int selectedPack = 0;
-	
+
 
 	/**
 	 * things to go on the options panel
@@ -138,13 +138,13 @@ public class LaunchFrame extends JFrame {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
-	
+
 	/**
 	 * things to go on the news panel
 	 */
 	JEditorPane news;
 	JScrollPane newsPanel;
-	
+
 	/**
 	 * things to go on the texture packs panel
 	 */
@@ -155,8 +155,6 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	public static int ramMin = 512;
-	public static int ramMax = 1024;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
 
@@ -167,9 +165,9 @@ public class LaunchFrame extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				
+
 				Color baseColor = new Color(40, 40, 40);
-				
+
 				UIManager.put("control", baseColor);
 				UIManager.put("text", new Color(222, 222, 222));
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
@@ -179,22 +177,22 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("info", new Color(55, 55, 55));
 
 				try {
-				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				        if ("Nimbus".equals(info.getName())) {
-				            UIManager.setLookAndFeel(info.getClassName());
-				            break;
-				        }
-				    }
+					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+						if ("Nimbus".equals(info.getName())) {
+							UIManager.setLookAndFeel(info.getClassName());
+							break;
+						}
+					}
 				} catch (Exception e) {
-				    try {
+					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 					} catch (ClassNotFoundException e1) { }
-				    catch (InstantiationException e1) { }
-				    catch (IllegalAccessException e1) { }
-				    catch (UnsupportedLookAndFeelException e1) { }
+					catch (InstantiationException e1) { }
+					catch (IllegalAccessException e1) { }
+					catch (UnsupportedLookAndFeelException e1) { }
 				}
 
-				
+
 				// Load settings
 				try {
 					Settings.initSettings();
@@ -210,9 +208,9 @@ public class LaunchFrame extends JFrame {
 						.getInstallPath());
 				if (!installDir.exists())
 					installDir.mkdirs();
-				
+
 				userManager = new UserManager(new File(installDir, "logindata"));
-				
+
 				//KeyChecker k = new KeyChecker();
 				//k.setVisible(true);
 				try {
@@ -237,7 +235,7 @@ public class LaunchFrame extends JFrame {
 		setResizable(false);
 		setTitle("Feed the Beast Launcher Beta v0.1.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
@@ -249,25 +247,25 @@ public class LaunchFrame extends JFrame {
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
-		
+
 		//Footer
 		footerLogo.setBounds(20, 20, 32, 32);
 		footerLogo.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -282,19 +280,19 @@ public class LaunchFrame extends JFrame {
 		footerCreeper.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				
+
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -305,17 +303,17 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		try {
 			userManager.read();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
-		
+
 		String[] dropdown = merge(dropdown_, usernames);
-		
+
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null){
 			for(int i = 0; i < dropdown.length; i++){
@@ -336,7 +334,7 @@ public class LaunchFrame extends JFrame {
 				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
-		
+
 		edit = new JButton("Edit");
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
@@ -352,7 +350,7 @@ public class LaunchFrame extends JFrame {
 				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
 		});
-		
+
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
@@ -364,7 +362,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
@@ -376,16 +374,16 @@ public class LaunchFrame extends JFrame {
 		newsPane.setLayout(null);
 		//newsPane.add(backgroundImage1);
 		//newsPane.setBackground(back);
-		
+
 		modPacksPane = new JPanel();
 		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		modPacksPane.setLayout(null);
 		//modPacksPane.add(backgroundImage3);
 		//modPacksPane.setBackground(back);
-		
+
 		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
-//		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
+		//		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		modPacksPane.add(splash);
 
 		EventQueue.invokeLater(new Runnable() {
@@ -423,19 +421,19 @@ public class LaunchFrame extends JFrame {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent e) {
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent e) {
 				}
-				
+
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					selectedPack = packIndex;
@@ -450,7 +448,7 @@ public class LaunchFrame extends JFrame {
 			packPanels[i] = p;
 		}
 		updatePacks();
-		
+
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
@@ -458,7 +456,7 @@ public class LaunchFrame extends JFrame {
 		for(JPanel p : packPanels) {
 			packs.add(p);
 		}
-		
+
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -467,7 +465,7 @@ public class LaunchFrame extends JFrame {
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
 		modPacksPane.add(packsScroll);
-		
+
 		packInfo = new JTextArea(ModPack.getPack(0).getInfo());
 		packInfo.setBounds(420, 210, 410, 90);
 		modPacksPane.add(packInfo);
@@ -477,7 +475,7 @@ public class LaunchFrame extends JFrame {
 		mapsPane.setLayout(null);
 		//mapsPane.add(backgroundImage4);
 		//mapsPane.setBackground(back);
-		
+
 		tpPane = new JPanel();
 		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		tpPane.setLayout(null);
@@ -491,13 +489,13 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		newsPanel = new JScrollPane(news);
 		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		newsPanel.setBounds(10, 10, 790, 290);
 		newsPane.add(newsPanel);
-		
+
 		//Options Tab
 		optionsPane = new JPanel();
 		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -512,7 +510,7 @@ public class LaunchFrame extends JFrame {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		optionsPane.setLayout(gbl_contentPanel);
 
-		
+
 		ramMaximum = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
@@ -521,19 +519,14 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_2.gridy = 7;
 		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(new FocusListener() {
-			
 			@Override
 			public void focusLost(FocusEvent e) {
-				ramMax = Integer.parseInt(ramMaximum.getText());
 				saveSettings();
 			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				
-			}
+
+			@Override public void focusGained(FocusEvent e) { }
 		});
-				
+
 		ramMinimum = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
@@ -542,22 +535,17 @@ public class LaunchFrame extends JFrame {
 		gbc_textField_1.gridy = 6;
 		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(new FocusListener() {
-			
 			@Override
 			public void focusLost(FocusEvent e) {
-				ramMin = Integer.parseInt(ramMinimum.getText());
 				saveSettings();
 			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				
-			}
+
+			@Override public void focusGained(FocusEvent e) { }
 		});
-		
+
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir());
-		
+
 		JLabel lblInstallFolder = new JLabel("Install folder:");
 		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
 		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
@@ -565,7 +553,7 @@ public class LaunchFrame extends JFrame {
 		gbc_lblInstallFolder.gridx = 0;
 		gbc_lblInstallFolder.gridy = 3;
 		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
-		
+
 		installFolderTextField = new JTextField();
 		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
 		gbc_installFolderTextField.gridwidth = 5;
@@ -574,26 +562,26 @@ public class LaunchFrame extends JFrame {
 		gbc_installFolderTextField.gridx = 1;
 		gbc_installFolderTextField.gridy = 3;
 		installFolderTextField.addFocusListener(new FocusListener() {
-			
+
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				saveSettings();
 			}
-			
+
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				
+
 			}
 		});
 		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
 		installFolderTextField.setColumns(10);
-		
+
 		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
 		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
 		gbc_installBrowseBtn.gridx = 6;
 		gbc_installBrowseBtn.gridy = 3;
 		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
-		
+
 		tglbtnForceUpdate = new JToggleButton("Force update?");
 		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
@@ -602,7 +590,7 @@ public class LaunchFrame extends JFrame {
 		gbc_tglbtnForceUpdate.gridx = 1;
 		gbc_tglbtnForceUpdate.gridy = 4;
 		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-		
+
 		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
 		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
@@ -612,7 +600,7 @@ public class LaunchFrame extends JFrame {
 		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
 		optionsPane.add(ramMinimum, gbc_textField_1);
 		ramMinimum.setColumns(10);
-		
+
 		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
@@ -622,15 +610,15 @@ public class LaunchFrame extends JFrame {
 		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
 		optionsPane.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
-		
+
 		getRootPane().setDefaultButton(launch);
-		
+
 		loadSettings();
-		
+
 		//Adding tabs to the panel
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-		
+
 		tabbedPane.add(optionsPane, 1);
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 
@@ -642,7 +630,7 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
-		
+
 		tabbedPane.setEnabledAt(3, false);
 		tabbedPane.setEnabledAt(4, false);
 
@@ -654,7 +642,7 @@ public class LaunchFrame extends JFrame {
 		//	//dootherstuff
 		//}
 	}
-	
+
 	private void updatePacks() {
 		for (int i = 0; i < packPanels.length; i++) {
 			if(selectedPack == i) {
@@ -672,13 +660,13 @@ public class LaunchFrame extends JFrame {
 	public void doLogin(String username, String password) {
 
 		System.out.println("Logging in...");
-		
+
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
-		
+
 		tabbedPane.getSelectedComponent().setEnabled(false);
-		
+
 		launch.setEnabled(false);
 		edit.setEnabled(false);
 		users.setEnabled(false);
@@ -713,7 +701,7 @@ public class LaunchFrame extends JFrame {
 					RESPONSE = response;
 
 				} catch (IllegalArgumentException e) {
-					
+
 					if (responseStr.contains(":")) {
 						System.out.println("Received invalid response from server.");
 					} else {
@@ -738,13 +726,13 @@ public class LaunchFrame extends JFrame {
 
 	public void runGameUpdater(final LoginResponse response) {
 		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
-			
+
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			
+
 			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
-				
+
 				public void done() {
-					
+
 					progMonitor.close();
 					try {
 						if (get() == true) {
@@ -764,7 +752,7 @@ public class LaunchFrame extends JFrame {
 							// the old start testing code just put me in a
 							// infinite loop.
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
-							
+
 						} else {
 							System.out.println("Error downloading game.");
 						}
@@ -813,19 +801,19 @@ public class LaunchFrame extends JFrame {
 
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 
-//		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
-//			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
-//		} else {
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-//		}
+		//		if (TimeZone.getTimeZone("Europe/London").inDaylightTime(new Date())) {
+		//			sdf.setTimeZone(TimeZone.getTimeZone("Etc/GMT+1"));
+		//		} else {
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+		//		}
 
 		String date = sdf.format(new Date());
-		
+
 		System.out.println("http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file);
 
 		return "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
 	}
-	
+
 	/**
 	 * @param dest - the destination to be saved
 	 * @param file - the file as on the repo
@@ -884,7 +872,7 @@ public class LaunchFrame extends JFrame {
 			fout.close();
 		}
 	}
-	
+
 	/**
 	 * launch the game with the mods in the classpath
 	 * @param workingDir - install path
@@ -893,7 +881,7 @@ public class LaunchFrame extends JFrame {
 	 * @throws IOException
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		
+
 		try {
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] { "minecraftforge.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
@@ -950,8 +938,8 @@ public class LaunchFrame extends JFrame {
 					.invoke(null, (Object) "minecraft").toString();
 
 			System.out.println("MCDIR: " + mcDir);
-			
-			
+
+
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			this.setVisible(false);
 		} catch (ClassNotFoundException e) {
@@ -1018,7 +1006,7 @@ public class LaunchFrame extends JFrame {
 		}
 
 	}
-	
+
 	/**
 	 * @param modPackName - the name of the pack 
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
@@ -1210,7 +1198,7 @@ public class LaunchFrame extends JFrame {
 		Settings settings = Settings.getSettings();
 
 		installFolderTextField.setText(settings.getInstallPath());
-		
+
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 	}
 
@@ -1238,7 +1226,7 @@ public class LaunchFrame extends JFrame {
 					+ e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked" })
 	public static void writeUsers() {
 		try {
@@ -1246,26 +1234,26 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String[] usernames = UserManager.getNames().toArray(new String[] {});
-		
+
 		users.removeAllItems();
 		for (String s : dropdown_) {
 			users.addItem(s);
 		}
-		
+
 		for(String name : usernames) {
 			users.addItem(name);
 		}
 	}
-	
+
 	public static String[] merge(String[] A, String[] B) {
 		String[] merged = new String[A.length+B.length];
 		System.arraycopy(A, 0, merged, 0, A.length);
 		System.arraycopy(B, 0, merged, A.length, B.length);
 		return merged;
 	}
-	
+
 	public static int getSelectedPack() {
 		return selectedPack;
 	}
@@ -1273,7 +1261,7 @@ public class LaunchFrame extends JFrame {
 	public static void setSelectedPack(int selectedPack) {
 		LaunchFrame.selectedPack = selectedPack;
 	}
-	
+
 	private void enableObjects(){
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
@@ -1285,7 +1273,7 @@ public class LaunchFrame extends JFrame {
 		}
 		users.setEnabled(true);
 	}
-	
+
 	public void Hlink(MouseEvent me, URI uri) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
