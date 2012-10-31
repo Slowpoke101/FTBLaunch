@@ -117,7 +117,7 @@ public class UserManager {
 		InputStream str = string.openStream();
 
 		byte[] buffer = new byte[65536];
-		int readLen = 0;
+		int readLen;
 		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
@@ -155,7 +155,7 @@ public class UserManager {
 
 	public static String getUsername(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getUsername();
 			}
 		}
@@ -164,7 +164,7 @@ public class UserManager {
 
 	public static String getPassword(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getPassword();
 			}
 		}

@@ -57,6 +57,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -206,7 +207,7 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher Beta v0.1.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
@@ -301,7 +302,7 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
 					saveSettings();
-					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
@@ -428,7 +429,7 @@ public class LaunchFrame extends JFrame {
 				public void done() {
 					progMonitor.close();
 					try {
-						if (get() == true) {
+						if (get()) {
 							// Success
 							System.out.println("Game update complete.");
 
@@ -460,7 +461,6 @@ public class LaunchFrame extends JFrame {
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						System.out.println("Failed to download game: " + e.getCause().getMessage());
-						return;
 					}
 				}
 			};
@@ -588,7 +588,6 @@ public class LaunchFrame extends JFrame {
 	 * @param workingDir - install path
 	 * @param username - the MC username
 	 * @param password - the MC password
-	 * @throws IOException
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
@@ -621,13 +620,12 @@ public class LaunchFrame extends JFrame {
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 			Field[] fields = mc.getDeclaredFields();
 
-			for (int i = 0; i < fields.length; i++) {
-				Field f = fields[i];
+			for (Field f : fields) {
 				if (f.getType() != File.class) {
 					// Has to be File
 					continue;
 				}
-				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC)) {
+				if (0 != (f.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC))) {
 					// And Private Static.
 					continue;
 				}
@@ -685,7 +683,7 @@ public class LaunchFrame extends JFrame {
 				}
 				output.putNextEntry(entry);
 				byte buffer[] = new byte[1024];
-				int amo = 0;
+				int amo;
 				while ((amo = input.read(buffer, 0, 1024)) != -1) {
 					output.write(buffer, 0, amo);
 				}
@@ -725,11 +723,11 @@ public class LaunchFrame extends JFrame {
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
 	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
-		for (int i = 0; i < contents.length; i++) {             
-			if (contents[i].isFile()) {
-				files = contents[i].getName();
+		for (File content : contents) {
+			if (content.isFile()) {
+				files = content.getName();
 				if (files.endsWith(".zip") || files.endsWith(".ZIP")) {
-					contents[i].delete();
+					content.delete();
 				}
 			}	
 		}
@@ -742,7 +740,7 @@ public class LaunchFrame extends JFrame {
 	public void extractZip(String zipLocation) {
 		try {
 			byte[] buf = new byte[1024];
-			ZipInputStream zipinputstream = null;
+			ZipInputStream zipinputstream;
 			ZipEntry zipentry;
 			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
 

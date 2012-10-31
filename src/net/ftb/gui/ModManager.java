@@ -193,29 +193,26 @@ public class ModManager extends JDialog {
                     Enumeration<?> e = zipFile.entries();
                     
                     while (e.hasMoreElements()) {
-                            ZipEntry entry = (ZipEntry) e.nextElement();
-                            File destinationFilePath = new File(zipPath, entry.getName());
-                            destinationFilePath.getParentFile().mkdirs();
-//                          System.out.println(entry.getName());
-                            if (entry.isDirectory() || entry.getName().equals(".minecraft")) {
-                                    continue;
-                            } else {
-                                    BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-                                    int b;
-                                    byte buffer[] = new byte[1024];
+                        ZipEntry entry = (ZipEntry) e.nextElement();
+                        File destinationFilePath = new File(zipPath, entry.getName());
+                        destinationFilePath.getParentFile().mkdirs();
+						if(!entry.isDirectory() && !entry.getName().equals(".minecraft")){
+								BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+								int b;
+								byte buffer[] = new byte[1024];
 
-                                    FileOutputStream fos = new FileOutputStream(destinationFilePath);
-                                    BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+								FileOutputStream fos = new FileOutputStream(destinationFilePath);
+								BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
 
-                                    while ((b = bis.read(buffer, 0, 1024)) != -1) {
-                                            bos.write(buffer, 0, b);
-                                    }
+								while ((b = bis.read(buffer, 0, 1024)) != -1) {
+										bos.write(buffer, 0, b);
+								}
 
-                                    bos.flush();
-                                    bos.close();
-                                    bis.close();
-                            }
-                    }
+								bos.flush();
+								bos.close();
+								bis.close();
+						}
+					}
             } catch (IOException ioe) {
                     System.out.println("IOError :");
                     ioe.printStackTrace();
@@ -328,9 +325,7 @@ public class ModManager extends JDialog {
 				ZipEntry entry = (ZipEntry) e.nextElement();
 				File destinationFilePath = new File(zipPath, entry.getName());
 				destinationFilePath.getParentFile().mkdirs();
-				if (entry.isDirectory()) {
-					continue;
-				} else {
+				if(!entry.isDirectory()){
 					System.out.println("Extracting " + destinationFilePath);
 					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
 
