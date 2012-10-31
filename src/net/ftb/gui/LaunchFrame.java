@@ -114,7 +114,6 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch");
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
-	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
 	private JButton edit;
 
