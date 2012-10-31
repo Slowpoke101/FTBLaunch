@@ -1,18 +1,12 @@
 package net.ftb.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
@@ -40,7 +34,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
@@ -54,44 +47,48 @@ import java.util.zip.ZipInputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
-import net.ftb.data.events.ModPackListener;
+import net.ftb.gui.panes.ILauncherPane;
+import net.ftb.gui.panes.MapsPane;
+import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.panes.NewsPane;
+import net.ftb.gui.panes.OptionsPane;
+import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 //import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
 
-public class LaunchFrame extends JFrame implements ModPackListener {
+public class LaunchFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static LaunchFrame instance = null;
+	
 	public static UserManager userManager;
 	LoginResponse RESPONSE;
 
 	/**
 	 * the panels to appear in the tabs
 	 */
-	private JPanel newsPane;
-	private JPanel optionsPane;
-	private JPanel modPacksPane;
+	private NewsPane newsPane;
+	private OptionsPane optionsPane;
+	private ModpacksPane modPacksPane;
 	private JPanel mapsPane;
 	private JPanel tpPane;
 
@@ -121,31 +118,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	@SuppressWarnings({"rawtypes"})
 	private static JComboBox users;
 	private JButton edit;
-
-	/**
-	 * things to go on the modpacks panel
-	 */
-	JPanel packs;
-	ArrayList<JPanel> packPanels;
-	JScrollPane packsScroll;
-	JLabel splash;
-	JTextArea packInfo;
-	public static int selectedPack = 0;
-
-
-	/**
-	 * things to go on the options panel
-	 */
-	public static JTextField installFolderTextField;
-	private JToggleButton tglbtnForceUpdate;
-	private JTextField ramMinimum;
-	private JTextField ramMaximum;
-
-	/**
-	 * things to go on the news panel
-	 */
-	JEditorPane news;
-	JScrollPane newsPanel;
 
 	/**
 	 * things to go on the texture packs panel
@@ -217,9 +189,10 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 					con.setVisible(true);
 				} catch (IOException e) { e.printStackTrace(); }
 				LaunchFrame frame = new LaunchFrame(2);
+				instance = frame;
 				frame.setVisible(true);
 
-				ModPack.addListener(frame);
+				ModPack.addListener(frame.modPacksPane);
 				ModPack.LoadAll();
 			}
 		});
@@ -338,193 +311,12 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
 		footer.add(launch);
-
-		newsPane = new JPanel();
-		newsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		newsPane.setLayout(null);
-		//newsPane.add(backgroundImage1);
-		//newsPane.setBackground(back);
-
-		modPacksPane = new JPanel();
-		modPacksPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		modPacksPane.setLayout(null);
-		//modPacksPane.add(backgroundImage3);
-		//modPacksPane.setBackground(back);
-
-		splash = new JLabel();
-		splash.setBounds(420, 0, 410, 200);
-		//splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
-		modPacksPane.add(splash);
-
-		packPanels = new ArrayList<JPanel>();
-
-		//packPanels = new JPanel[ModPack.getPackArray().size()];
-		//for(int i = 0; i < packPanels.length; i++) {
-
-		//}
-		//for (ModPack pack : ModPack.getPackArray())
-		//	addPack(pack);
-
-		// updatePacks(); 
-
-		// i suggest some loading animation here until first mod gets added
-
-		packs = new JPanel();
-		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
-		packs.setLayout(null);
-		packs.setOpaque(false);
-
-		// Not needed anymore
-		/*for(JPanel p : packPanels) {
-			packs.add(p);
-		}*/
-
-		packsScroll = new JScrollPane();
-		packsScroll.setBounds(0, 0, 420, 300);
-		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		packsScroll.setWheelScrollingEnabled(true);
-		packsScroll.setOpaque(false);
-		packsScroll.setViewportView(packs);
-		modPacksPane.add(packsScroll);
-
-		packInfo = new JTextArea();
-		packInfo.setBounds(420, 210, 410, 90);
-		modPacksPane.add(packInfo);
-
-		mapsPane = new JPanel();
-		mapsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		mapsPane.setLayout(null);
-		//mapsPane.add(backgroundImage4);
-		//mapsPane.setBackground(back);
-
-		tpPane = new JPanel();
-		tpPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		tpPane.setLayout(null);
-		//tpPane.add(backgroundImage5);
-		//tpPane.setBackground(back);
-
-		news = new JEditorPane();
-		news.setEditable(false);
-
-		try {
-			news.setPage("http://feed-the-beast.com/lanuchernews.php");
-		} catch (IOException e1) { e1.printStackTrace(); }
-
-		newsPanel = new JScrollPane(news);
-		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		newsPanel.setBounds(10, 10, 790, 290);
-		newsPane.add(newsPanel);
-
-		//Options Tab
-		optionsPane = new JPanel();
-		optionsPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//optionsPane.add(backgroundImage2);
-		//optionsPane.setBackground(back);
-
-		getContentPane().add(optionsPane, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		optionsPane.setLayout(gbl_contentPanel);
-
-		ramMaximum = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 2;
-		gbc_textField_2.gridy = 7;
-		ramMaximum.setText(Settings.getSettings().getRamMax());
-		ramMaximum.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				ramMax = Integer.parseInt(ramMaximum.getText());
-				saveSettings();
-			}
-			@Override public void focusGained(FocusEvent e) { }
-		});
-
-		ramMinimum = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 6;
-		ramMinimum.setText(Settings.getSettings().getRamMin());
-		ramMinimum.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				ramMin = Integer.parseInt(ramMinimum.getText());
-				saveSettings();
-			}
-			@Override public void focusGained(FocusEvent e) { }
-		});
-
-		JButton installBrowseBtn = new JButton("...");
-		installBrowseBtn.addActionListener(new ChooseDir());
-
-		JLabel lblInstallFolder = new JLabel("Install folder:");
-		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
-		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
-		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
-		gbc_lblInstallFolder.gridx = 0;
-		gbc_lblInstallFolder.gridy = 3;
-		optionsPane.add(lblInstallFolder, gbc_lblInstallFolder);
-
-		installFolderTextField = new JTextField();
-		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
-		gbc_installFolderTextField.gridwidth = 5;
-		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
-		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
-		gbc_installFolderTextField.gridx = 1;
-		gbc_installFolderTextField.gridy = 3;
-		installFolderTextField.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				saveSettings();
-			}
-			@Override public void focusGained(FocusEvent arg0) { }
-		});
-		optionsPane.add(installFolderTextField, gbc_installFolderTextField);
-		installFolderTextField.setColumns(10);
-
-		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
-		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
-		gbc_installBrowseBtn.gridx = 6;
-		gbc_installBrowseBtn.gridy = 3;
-		optionsPane.add(installBrowseBtn, gbc_installBrowseBtn);
-
-		tglbtnForceUpdate = new JToggleButton("Force update?");
-		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
-		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
-		gbc_tglbtnForceUpdate.gridwidth = 5;
-		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tglbtnForceUpdate.gridx = 1;
-		gbc_tglbtnForceUpdate.gridy = 4;
-		optionsPane.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-
-		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
-		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
-		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
-		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRamMinimum.gridx = 1;
-		gbc_lblRamMinimum.gridy = 6;
-		optionsPane.add(lblRamMinimum, gbc_lblRamMinimum);
-		optionsPane.add(ramMinimum, gbc_textField_1);
-		ramMinimum.setColumns(10);
-
-		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
-		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
-		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
-		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRamMaximum.gridx = 1;
-		gbc_lblRamMaximum.gridy = 7;
-		optionsPane.add(lblRamMaximum, gbc_lblRamMaximum);
-		optionsPane.add(ramMaximum, gbc_textField_2);
-		ramMaximum.setColumns(10);
+		
+		newsPane = new NewsPane();
+		modPacksPane = new ModpacksPane();
+		mapsPane = new MapsPane();
+		tpPane = new TexturepackPane();
+		optionsPane = new OptionsPane();
 
 		getRootPane().setDefaultButton(launch);
 
@@ -550,65 +342,15 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.setSelectedIndex(tab);
-	}
-
-	/*
-	 * GUI Code to add a modpack to the selection
-	 */
-	public void addPack(ModPack pack) {
-		final int packIndex = packPanels.size();
-		System.out.println("adding pack "+packIndex);
-		//ModPack pack = ModPack.getPack(i);
-		final JPanel p = new JPanel();
-		p.setBounds(0, packIndex * 55, 420, 55);
-		p.setLayout(null);
-		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
-		logo.setBounds(6, 6, 42, 42);
-		logo.setVisible(true);
-		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
-		filler.setBorder(null);
-		filler.setEditable(false);
-		filler.setForeground(Color.white);
-		filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
-		filler.setBackground(new Color(255, 255, 255, 0));
-		MouseListener lin = new MouseListener() {
+		
+		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				selectedPack = packIndex;
-				updatePacks();
+			public void stateChanged(ChangeEvent event){
+				if(tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
+					((ILauncherPane)tabbedPane.getSelectedComponent()).onVisible();
+				}
 			}
-			@Override public void mouseReleased(MouseEvent e) { }
-			@Override public void mousePressed(MouseEvent e) { }
-			@Override public void mouseExited(MouseEvent e) { }
-			@Override public void mouseEntered(MouseEvent e) { }
-		};
-		p.addMouseListener(lin);
-		filler.addMouseListener(lin);
-		logo.addMouseListener(lin);
-		p.add(filler);
-		p.add(logo);
-		packPanels.add(p);
-		packs.add(p);
-	}
-
-	// Is this override needed?
-	// refactored name from onMobPackAdded to onModPackAdded
-	@Override
-	public void onModPackAdded(ModPack pack) {
-		addPack(pack);
-		updatePacks();
-	}
-
-	private void updatePacks() {
-		for (int i = 0; i < packPanels.size(); i++) {
-			if(selectedPack == i) {
-				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
-				packInfo.setText(ModPack.getPack(i).getInfo());
-			} else {
-				packPanels.get(i).setBackground(UIManager.getColor("control"));
-			}
-		}
+		});
 	}
 
 	/**
@@ -687,17 +429,23 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 							// Success
 							System.out.println("Game update complete.");
 
-							System.out.println(ModPack.getPack(selectedPack).getDir());
+							if(modPacksPane.getSelectedModIndex() < 0) {
+								System.err.println("No Modpack selected!");
+								return;
+							}
+							
+							System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+							
 							killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
 							try {
-								installMods(ModPack.getPack(selectedPack).getDir());
+								installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
 
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() 
+							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
 									+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							System.out.println("Error downloading game.");
@@ -734,17 +482,24 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			});
 			updater.execute();
 		} else {
-			// Check if you need to install the mods
-			System.out.println(ModPack.getPack(selectedPack).getDir());
+			if(modPacksPane.getSelectedModIndex() < 0) {
+				System.err.println("No Modpack selected!");
+				return;
+			}
+			
+			System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+			
 			killMetaInf();
 			ModManager man = new ModManager(new JFrame(), true);
 			man.setVisible(true);
 			try {
-				installMods(ModPack.getPack(selectedPack).getDir());
+				installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+			
+			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
+					+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
@@ -907,7 +662,6 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			e.printStackTrace();
 			System.exit(4);
 		}
-
 	}
 
 	/**
@@ -960,12 +714,12 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		} catch (MalformedURLException e) { e.printStackTrace(); 
-		} catch (IOException e) {	e.printStackTrace(); }
+		} catch (IOException e) { e.printStackTrace(); }
 
 		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
-		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/mods").delete();
-		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/coremods").delete();
-		File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/").listFiles();
+		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/mods").delete();
+		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
+	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
 		for (int i = 0; i < contents.length; i++) {             
 			if (contents[i].isFile()) {
@@ -1109,14 +863,17 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 * @throws IOException
 	 */
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir() + "/.minecraft").mkdirs();
+		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(selectedPack).getDir()+ "/.minecraft/bin"));
+		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/" 
+				+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
 		copyFile(minecraft, mcbackup);
-		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft"));
-		copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(selectedPack).getDir() + "/instMods/minecraftforge.zip"), new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(selectedPack).getDir() + "/.minecraft/bin/minecraftforge.zip"));
+		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
+				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
+	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge.zip"), 
+	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge.zip"));
 	}
 
 	/**
@@ -1125,21 +882,16 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 	 */
 	private void loadSettings() {
 		Settings settings = Settings.getSettings();
-		installFolderTextField.setText(settings.getInstallPath());
-		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+		optionsPane.loadSettings(settings);
 	}
 
 	/**
 	 * "Saves" the settings from the GUI controls into the settings class.
 	 */
-	private void saveSettings() {
+	public void saveSettings() {
 		Settings settings = Settings.getSettings();
 
-		settings.setInstallPath(installFolderTextField.getText());
-		settings.setLastUser((String)users.getSelectedItem());
-		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
-		settings.setRamMax(ramMaximum.getText());
-		settings.setRamMin(ramMinimum.getText());
+		instance.optionsPane.saveSettingsInto(settings);
 
 		try {
 			settings.save();
@@ -1180,13 +932,13 @@ public class LaunchFrame extends JFrame implements ModPackListener {
 		System.arraycopy(B, 0, merged, A.length, B.length);
 		return merged;
 	}
+	
+	public static int getSelectedModIndex() {
+		return instance.modPacksPane.getSelectedModIndex();
+	} 
 
-	public static int getSelectedPack() {
-		return selectedPack;
-	}
-
-	public static void setSelectedPack(int selectedPack) {
-		LaunchFrame.selectedPack = selectedPack;
+	public static LaunchFrame getInstance() {
+		return instance;
 	}
 
 	private void enableObjects(){

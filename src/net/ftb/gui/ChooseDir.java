@@ -12,40 +12,34 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import net.ftb.data.Settings;
+import net.ftb.gui.panes.OptionsPane;
 
 public class ChooseDir extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	JButton go;
+	private OptionsPane optionsPane;
+	private JButton go;
 
-	JFileChooser chooser;
-	String choosertitle;
+	private JFileChooser chooser;
+	private String choosertitle;
 
-	Settings settings = new Settings();
-
-	public ChooseDir() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		go = new JButton("Do it");
-		go.addActionListener(this);
-		add(go);
+	public ChooseDir(OptionsPane optionsPane) {
+		super();
+		this.optionsPane = optionsPane;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File(LaunchFrame.installFolderTextField.getText()));
+		chooser.setCurrentDirectory(new java.io.File(optionsPane.getInstallFolderText()));
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		//
-		// disable the "All files" option.
-		//
 		chooser.setAcceptAllFileFilterUsed(false);
-		//
 
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
 			System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
-			LaunchFrame.installFolderTextField.setText(chooser.getSelectedFile().getPath());
+			optionsPane.setInstallFolderText(chooser.getSelectedFile().getPath());
 		} else {
 			System.out.println("No Selection ");
 		}
@@ -57,7 +51,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 
 	public static void main(String s[]) {
 		JFrame frame = new JFrame("");
-		ChooseDir panel = new ChooseDir();
+		ChooseDir panel = new ChooseDir(new OptionsPane());
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
