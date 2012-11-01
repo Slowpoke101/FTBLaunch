@@ -7,14 +7,20 @@
   <version>0.1.2-Beta</version>
   <packaging>jar</packaging>
   <properties>
-    <buildNumber>012</buildNumber>
+    <buildNumber>0</buildNumber> <!-- This will be set by the CI (eg: jenkins, or FTB_Bot)-->
     <mainClass>net.ftb.gui.LaunchFrame</mainClass>
     <minimumJreVersion>1.6</minimumJreVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <exeVersionNumber>0.1.2.${buildNumber}</exeVersionNumber> <!-- Must be of the form x.x.x.x -->
   </properties>
 
   <name>FTB Launcher</name>
   <url>https://github.com/Slowpoke101/FTBLaunch</url>
+
+  <organization>
+    <name>FTB Launcher Contributors</name>
+    <url>https://github.com/Slowpoke101/FTBLaunch</url>
+  </organization>
 
   <build>
     <defaultGoal>clean install package</defaultGoal>
@@ -72,15 +78,15 @@
               </jre>
               <icon>${basedir}/res/image/logo_ftb.ico</icon>
               <versionInfo>
-                <fileVersion>2.0.0.${buildNumber}</fileVersion>
-                <txtFileVersion>2.0.0.${buildNumber}</txtFileVersion>
-                <productVersion>2.0.0.${buildNumber}</productVersion>
-                <txtProductVersion>2.0.0.${buildNumber}</txtProductVersion>
+                <fileVersion>${exeVersionNumber}</fileVersion>
+                <txtFileVersion>${exeVersionNumber}</txtFileVersion>
+                <productVersion>${exeVersionNumber}</productVersion>
+                <txtProductVersion>${exeVersionNumber}</txtProductVersion>
                 <fileDescription>${project.name}</fileDescription>
                 <productName>${project.name}</productName>
                 <copyright>${project.organization.name}, ${project.organization.url}</copyright>
                 <internalName>${project.artifactId}</internalName>
-                <originalFilename>${project.artifactId}.exe</originalFilename>
+                <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
               </versionInfo>
             </configuration>
             <phase>package</phase>

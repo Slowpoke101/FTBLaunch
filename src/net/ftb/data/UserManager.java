@@ -15,16 +15,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class UserManager {
-	public static ArrayList<User> _users = new ArrayList<User>();
+	public static final ArrayList<User> _users = new ArrayList<User>();
 
-	private File _filename;
+	private final File _filename;
 
 	public UserManager(File filename) {
 		_filename = filename;
 		if (_filename.exists()) {
-			try {
-				read();
-			} catch (IOException e) { }
+			read();
 		}
 	}
 
@@ -86,7 +84,7 @@ public class UserManager {
 		wri.close();
  	}
  	
- 	public void read() throws IOException {
+ 	public void read(){
  		_users.clear();
  		
  		if(_filename.exists()) {
@@ -107,7 +105,7 @@ public class UserManager {
  	}
 
 	
-	public static byte[] getFileMD5(URL string) throws Exception {
+	public static byte[] getFileMD5(URL string) throws IOException{
 		MessageDigest dgest = null;
 		try {
 			dgest = MessageDigest.getInstance("md5");
@@ -117,7 +115,7 @@ public class UserManager {
 		InputStream str = string.openStream();
 
 		byte[] buffer = new byte[65536];
-		int readLen = 0;
+		int readLen;
 		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
@@ -155,7 +153,7 @@ public class UserManager {
 
 	public static String getUsername(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getUsername();
 			}
 		}
@@ -164,7 +162,7 @@ public class UserManager {
 
 	public static String getPassword(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getPassword();
 			}
 		}

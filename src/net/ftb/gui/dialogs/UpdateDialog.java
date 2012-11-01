@@ -14,11 +14,13 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.ModManager;
 
 public class UpdateDialog  extends JDialog {
-	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("New mod pack version availible!");
-	private JLabel textTwo = new JLabel("Do you wish to update?");
-	JButton yesButton = new JButton("Yes");
-	JButton noButton = new JButton("No");
+	private static final long serialVersionUID = 1L;
+	
+	private final JPanel panel = new JPanel();
+	private final JLabel textOne = new JLabel("New mod pack version availible!");
+	private final JLabel textTwo = new JLabel("Do you wish to update?");
+	final JButton yesButton = new JButton("Yes");
+	final JButton noButton = new JButton("No");
 
 	public UpdateDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);

@@ -32,6 +32,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
@@ -49,6 +50,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -72,11 +74,11 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * the panels to appear in the tabs
 	 */
-	private NewsPane newsPane;
-	private OptionsPane optionsPane;
-	private ModpacksPane modPacksPane;
-	private JPanel mapsPane;
-	private JPanel tpPane;
+	private final NewsPane newsPane;
+	private final OptionsPane optionsPane;
+	private final ModpacksPane modPacksPane;
+	private final JPanel mapsPane;
+	private final JPanel tpPane;
 
 	/**
 	 * an array of all mods to be added to classpath
@@ -86,21 +88,21 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * the panel that contains the footer and the tabbed pane
 	 */
-	private JPanel panel = new JPanel();
+	private final JPanel panel = new JPanel();
 
 	/**
 	 * tabbedpane and footer
 	 */
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	private JPanel footer = new JPanel();
+	private final JPanel footer = new JPanel();
 
 	/**
 	 * the things to go on the footer
 	 */
-	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch");
-	private static String[] dropdown_ = {"Select Username", "Create Username"};
+	private final JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private final JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private final JButton launch = new JButton("Launch");
+	private static final String[] dropdown_ = {"Select Username", "Create Username"};
 	private static JComboBox users;
 	private JButton edit;
 
@@ -115,7 +117,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static final int version = 012;
+	private static final int version = 12;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
@@ -126,10 +128,11 @@ public class LaunchFrame extends JFrame {
 
 	/**
 	 * Launch the application.
-	 * @param args
+	 * @param args CLI arguments
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
 
@@ -151,10 +154,10 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					} catch (ClassNotFoundException e1) { }
-					catch (InstantiationException e1) { }
-					catch (IllegalAccessException e1) { }
-					catch (UnsupportedLookAndFeelException e1) { }
+					} catch (ClassNotFoundException ignored) { }
+					catch (InstantiationException ignored) { }
+					catch (IllegalAccessException ignored) { }
+					catch (UnsupportedLookAndFeelException ignored) { }
 				}
 
 				// Load settings
@@ -173,10 +176,9 @@ public class LaunchFrame extends JFrame {
 
 				userManager = new UserManager(new File(installDir, "logindata"));
 
-				try {
-					LauncherConsole con = new LauncherConsole();
-					con.setVisible(true);
-				} catch (IOException e) { e.printStackTrace(); }
+				LauncherConsole con = new LauncherConsole();
+				con.setVisible(true);
+
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
 				frame.setVisible(true);
@@ -196,7 +198,7 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher Beta v0.1.2");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
@@ -211,17 +213,31 @@ public class LaunchFrame extends JFrame {
 		//Footer
 		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo.setBounds(20, 20, 42, 42);
-		footerLogo.addMouseListener(new MouseListener() {
-			@Override 
-			public void mouseClicked(MouseEvent event) {
-				try {
+		footerLogo.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent event){
+				try{
 					Hlink(event, new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) { e.printStackTrace(); }
+				}catch(URISyntaxException e){
+					e.printStackTrace();
+				}
 			}
-			@Override public void mouseReleased(MouseEvent arg0) { }
-			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) { }
-			@Override public void mouseEntered(MouseEvent arg0) { }
+
+			@Override
+			public void mouseReleased(MouseEvent arg0){
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0){
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0){
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0){
+			}
 		});
 		
 		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -239,11 +255,10 @@ public class LaunchFrame extends JFrame {
 			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
-		try {
-			userManager.read();
-		} catch (IOException e1) { e1.printStackTrace(); }
+		userManager.read();
 
-		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
+		ArrayList<String> var = UserManager.getNames();
+		String[] dropdown = merge(dropdown_, var.toArray(new String[var.size()]));
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
 			for(int i = 0; i < dropdown.length; i++) {
@@ -288,7 +303,7 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1) {
 					saveSettings();
-					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
@@ -408,10 +423,11 @@ public class LaunchFrame extends JFrame {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", 
 					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+				@Override
 				public void done() {
 					progMonitor.close();
 					try {
-						if (get() == true) {
+						if (get()) {
 							// Success
 							System.out.println("Game update complete.");
 
@@ -441,7 +457,6 @@ public class LaunchFrame extends JFrame {
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						System.out.println("Failed to download game: " + e.getCause().getMessage());
-						return;
 					}
 				}
 			};
@@ -533,7 +548,7 @@ public class LaunchFrame extends JFrame {
 	 * @throws MalformedURLException - for URL
 	 * @throws IOException - various
 	 */
-	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+	public void downloadUrl(String filename, String urlString) throws IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 		try {
@@ -561,7 +576,6 @@ public class LaunchFrame extends JFrame {
 	 * @param workingDir - install path
 	 * @param username - the MC username
 	 * @param password - the MC password
-	 * @throws IOException
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
@@ -594,13 +608,12 @@ public class LaunchFrame extends JFrame {
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 			Field[] fields = mc.getDeclaredFields();
 
-			for (int i = 0; i < fields.length; i++) {
-				Field f = fields[i];
-				if (f.getType() != File.class) {
+			for(Field f : fields){
+				if(f.getType() != File.class){
 					// Has to be File
 					continue;
 				}
-				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC)) {
+				if(0 == (f.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC))){
 					// And Private Static.
 					continue;
 				}
@@ -662,13 +675,13 @@ public class LaunchFrame extends JFrame {
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
 	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
-		for (int i = 0; i < contents.length; i++) {             
-			if (contents[i].isFile()) {
-				files = contents[i].getName();
-				if (files.endsWith(".zip") || files.endsWith(".ZIP")) {
-					contents[i].delete();
+		for(File content : contents){
+			if(content.isFile()){
+				files = content.getName();
+				if(files.endsWith(".zip") || files.endsWith(".ZIP")){
+					content.delete();
 				}
-			}	
+			}
 		}
 	}
 
@@ -724,7 +737,8 @@ public class LaunchFrame extends JFrame {
 		try {
 			userManager.write();
 		} catch (IOException e) { e.printStackTrace(); }
-		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));;
+		ArrayList<String> var = UserManager.getNames();
+		String[] usernames = merge(dropdown_, var.toArray(new String[var.size()]));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++){
 			users.addItem(usernames[i]);
