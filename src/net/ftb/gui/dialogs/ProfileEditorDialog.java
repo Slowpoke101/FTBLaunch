@@ -1,4 +1,4 @@
-package net.ftb.gui;
+package net.ftb.gui.dialogs;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -14,8 +15,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
+import net.ftb.gui.LaunchFrame;
 
-public class ProfileAdder extends JDialog {
+public class ProfileEditorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	JPanel panel = new JPanel();
@@ -28,15 +30,15 @@ public class ProfileAdder extends JDialog {
 	JLabel passLabel = new JLabel("Password:");
 	JLabel nameLabel = new JLabel("Profile Name:");
 
-	JButton addButton = new JButton("Add");
+	JButton updateButton = new JButton("Update");
+	JButton removeButton = new JButton("Remove");
 
-	public ProfileAdder() {
+	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
+		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("FTB Launcher Profile Adder");
+		setTitle("FTB Launcher Profile Editor");
 		setBounds(300, 300, 300, 200);
 		setResizable(false);
-
-		getRootPane().setDefaultButton(addButton);
 
 		panel.setBounds(0, 0, 300, 200);
 		setContentPane(panel);
@@ -47,6 +49,7 @@ public class ProfileAdder extends JDialog {
 		panel.add(userLabel);
 
 		username.setBounds(100, 10, 170, 30);
+		username.setText(UserManager.getUsername(editingName));
 		username.setVisible(true);
 		username.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -68,6 +71,7 @@ public class ProfileAdder extends JDialog {
 
 		password.setBounds(100, 50, 170, 30);
 		password.setVisible(true);
+		password.setText(UserManager.getPassword(editingName));
 		panel.add(password);
 
 		nameLabel.setBounds(10, 90, 80, 30);
@@ -76,29 +80,33 @@ public class ProfileAdder extends JDialog {
 
 		name.setBounds(100, 90, 170, 30);
 		name.setVisible(true);
+		name.setText(editingName);
 		panel.add(name);
 
-		addButton.setBounds(125, 130, 50, 25);
-		addButton.setVisible(true);
-		addButton.addActionListener(new ActionListener() {
+		updateButton.setBounds(57, 130, 80, 25);
+		updateButton.setVisible(true);
+		updateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(validate(name.getText(), username.getText(), password.getPassword())) {
-					UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
+				if(editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))){
+					UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
 					LaunchFrame.writeUsers(name.getText());
 					setVisible(false);
 				}
 			}
 		});
-		panel.add(addButton);
-	}
+		panel.add(updateButton);
 
-	private boolean validate(String name, String user, char[] pass) {
-		if(name != null && !name.equals("") && user != null && !user.equals("") && pass.length > 1) {
-			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
-				return true;
+		removeButton.setBounds(163, 130, 80, 25);
+		removeButton.setVisible(true);
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				UserManager.removeUser(editingName);
+				LaunchFrame.writeUsers(null);
+				setVisible(false);
 			}
-		}
-		return false;
+		});
+		panel.add(removeButton);
 	}
 }

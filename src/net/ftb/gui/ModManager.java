@@ -34,11 +34,14 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.dialogs.UpdateDialog;
 import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 
+	public static boolean update = false;
+	
 	private JPanel contentPane;
 
 	private double downloadedPerc;
@@ -240,11 +243,17 @@ public class ModManager extends JDialog {
 		String line;
 		if((line = in.readLine()) == null || Integer.parseInt(pack.getVersion()) > Integer.parseInt(line)) {
 			System.out.println("File found, out of date.");
+			UpdateDialog p = new UpdateDialog(LaunchFrame.getInstance(), true);
+			p.setVisible(true);
+			in.close();
+			if(!update){
+				return true;
+			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
 			out.flush();
 			out.close();
-			in.close();
+			
 			return false;
 		} else {
 			System.out.println("File found, up to date.");
