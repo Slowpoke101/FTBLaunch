@@ -42,7 +42,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 	
 	private JScrollPane scrollPane;
 	private final JButton switchToExtendedBtn;
-	
+	private JButton ircButton;
 	
 	private boolean extendedLog = false;
 	
@@ -58,14 +58,14 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(b);
 			String text = new String(b).trim();
 			if (!text.equals("") && !text.equals("\n"))
-				Logger.log("From Console: "+text,type);
+				Logger.log("From Console: "+text,type,null);
 		}
 		@Override
 		public void write(byte[] buf, int off, int len) {
 			super.write(buf, off, len);
 			String text = new String(buf,off,len).trim();
 			if (!text.equals("") && !text.equals("\n"))
-				Logger.log("From Console: "+text,type);
+				Logger.log("From Console: "+text,type,null);
 				
 		}
 		
@@ -108,7 +108,6 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					    for (int k = 0; k < options.length; k++)
 					      if (options[k].equals(obj))
 					        result = k;
-					    Logger.logInfo("result:"+result);
 					    if (result == 0) {
 					    	StringSelection content = new StringSelection(Logger.getInstance().getLogbufferExtensive().toString());
 					    	Toolkit.getDefaultToolkit().getSystemClipboard().setContents(content, null);
@@ -136,6 +135,25 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			}
 		});
 		panel.add(switchToExtendedBtn);
+		
+
+		ircButton = new JButton("Join support webchat");
+		ircButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+		    	if(Desktop.isDesktopSupported()) {
+					Desktop desktop = Desktop.getDesktop();
+					try {
+						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
+					} catch(Exception exc) {
+						Logger.logError("could not open url: "+exc.getMessage());
+					}
+				} else {
+					Logger.logWarn("could not open url, not supported");
+				}
+			}
+		});
+		panel.add(ircButton);
+		
 		
 		displayArea = new JEditorPane("text/html","test");
 		kit = new HTMLEditorKit();

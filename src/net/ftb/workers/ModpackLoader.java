@@ -40,13 +40,13 @@ public class ModpackLoader extends Thread {
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {
-				Logger.logError("could not read modpackinfo: "+e.getMessage());
+				Logger.logError("could not read modpackinfo: "+e.getMessage(),e);
 				return;
 			} catch (IOException e) {
-				Logger.logError("could not read modpackinfo: "+e.getMessage());
+				Logger.logError("could not read modpackinfo: "+e.getMessage(),e);
 				return;
 			} catch (ParserConfigurationException e) {
-				Logger.logError("could not read modpackinfo: "+e.getMessage());
+				Logger.logError("could not read modpackinfo: "+e.getMessage(),e);
 				return;
 			}
 
@@ -67,13 +67,13 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent()));
 				} catch (DOMException e) {
-					Logger.logError("could not read modpackinfo: "+e.getMessage());
+					Logger.logError("could not read modpackinfo: "+e.getMessage(),e);
 				} catch (IOException e) {
-					Logger.logError("could not read modpackinfo: "+e.getMessage());
+					Logger.logError("could not read modpackinfo: "+e.getMessage(),e);
 				}
 			}
 		} catch (NoSuchAlgorithmException e1) {
-			Logger.logError("could not load modpackinfo: "+e1.getMessage());
+			Logger.logError("could not load modpackinfo: "+e1.getMessage(),e1);
 		}
 	}
 }
