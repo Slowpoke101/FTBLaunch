@@ -257,9 +257,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				color = "red";
 			
 			if (extendedLog)
-				addText(date+" "+source+" "+level+" - "+msg,color);
+				addText(date+" "+source+" ["+level+"] "+msg,color);
 			else
-				addText(level+" - "+msg,color);
+				addText("["+level+"] "+msg,color);
 		}
 		
 	}
