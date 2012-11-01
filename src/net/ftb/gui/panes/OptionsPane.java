@@ -49,7 +49,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		ramMaximum.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				LaunchFrame.ramMax = Integer.parseInt(ramMaximum.getText());
 				LaunchFrame.getInstance().saveSettings();
 			}
 			@Override public void focusGained(FocusEvent e) { }
@@ -65,7 +64,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		ramMinimum.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				LaunchFrame.ramMin = Integer.parseInt(ramMinimum.getText());
 				LaunchFrame.getInstance().saveSettings();
 			}
 			@Override public void focusGained(FocusEvent e) { }
