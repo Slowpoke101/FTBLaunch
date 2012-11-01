@@ -3,16 +3,16 @@ package net.ftb.gui;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,10 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.TimeZone;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -37,6 +34,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
@@ -49,30 +47,29 @@ public class ModManager extends JDialog {
 	private final JProgressBar progressBar;
 	private final JLabel label;
 
-	private ZipFile zipFile;
-
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
-		private ZipFile zipFile;
-
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			File modPackZip = new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() 
-					+ "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl());
-			if(!modPackZip.exists()) {
-				try {
-					new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() +  "/").mkdir();
-					downloadModPack(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+			if(!upToDate()){
+				System.out.println("Not up to date!");
+				String installPath = Settings.getSettings().getInstallPath();
+				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+				File modPackZip = new File(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl());
+				if(!modPackZip.exists()) {
+					System.out.println("Pack not found, downloading!");
+					try {
+						new File(installPath + "/temp/" + pack.getDir() +  "/").mkdir();
+						downloadModPack(pack.getUrl(), pack.getDir());
+					} catch (MalformedURLException e) { e.printStackTrace();
+					} catch (NoSuchAlgorithmException e) { e.printStackTrace();
+					} catch (IOException e) { e.printStackTrace(); }
+				} else {
+					System.out.println("Pack found!");
+					installMods(pack.getUrl(), pack.getDir());
 				}
 			}
 			return false;
 		}
-
 
 		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
 			BufferedInputStream in = null;
@@ -99,12 +96,8 @@ public class ModManager extends JDialog {
 					}
 				}
 			} finally {			
-				if (in != null) {
-					in.close();
-				}
-				if (fout != null) {
-					fout.flush();	
-				}
+				in.close();
+				fout.flush();	
 				fout.close();
 			}
 		}
@@ -119,31 +112,28 @@ public class ModManager extends JDialog {
 
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/").mkdirs();
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName).createNewFile();
-			downloadPack(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/" + modPackName, modPackName);
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/instMods").mkdirs();
-			new File(Settings.getSettings().getInstallPath() + "/temp/" + dir + "/.minecraft").mkdirs();
-			extractZipTo(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl(), Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
+			String installPath = Settings.getSettings().getInstallPath();
+			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+			new File(installPath + "/temp/" + dir + "/").mkdirs();
+			new File(installPath + "/temp/" + dir + "/" + modPackName).createNewFile();
+			downloadPack(installPath + "/temp/" + dir + "/" + modPackName, modPackName);
+			new File(installPath + "/temp/" + dir + "/instMods").mkdirs();
+			new File(installPath + "/temp/" + dir + "/.minecraft").mkdirs();
+			FileUtils.extractZipTo(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/temp/" + pack.getDir());
 			installMods(modPackName, dir);
 		}
 
 		protected void installMods(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Installing");
-			new File(Settings.getSettings().getInstallPath() + "/"+ dir + "/.minecraft").mkdirs();
-
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath()+ "/"+ dir+ "/.minecraft/bin"));
-			LaunchFrame.jarMods = new String[new File(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/instMods").listFiles().length];
-
+			String installPath = Settings.getSettings().getInstallPath();
+			new File(installPath + "/"+ dir + "/.minecraft").mkdirs();
+			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/"+ dir+ "/.minecraft/bin"));
+			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
 			try {
-				// Open the file that is the first 
-				// command line parameter
-				FileInputStream fstream = new FileInputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName + "/modlist");
-				// Get the object of DataInputStream
+				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");
 				DataInputStream in1 = new DataInputStream(fstream);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in1));
 				String strLine;
-				//Read File Line By Line
 				int i=0;
 				while ((strLine = br.readLine()) != null) {
 					// Print the content on the console
@@ -154,10 +144,10 @@ public class ModManager extends JDialog {
 				in1.close();
 			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/instMods"), new File(Settings.getSettings().getInstallPath()+ "/" 
-					+ dir +"/.minecraft/bin/"));
-			copyFolder(new File(Settings.getSettings().getInstallPath()+ "/temp/" + dir + "/.minecraft"), new File(Settings.getSettings().getInstallPath()+ "/" 
-					+ dir +"/.minecraft/"));
+			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
+			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir +"/.minecraft/bin/"));
+			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir +"/.minecraft/"));
+			// Test cleaning up files
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -181,83 +171,6 @@ public class ModManager extends JDialog {
 			}
 			return buffer;
 		}
-
-		public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
-            try {
-                    System.out.println("Entracting");
-                    File fSourceZip = new File(zipLocation);
-                    String zipPath = outputLocation;
-                    File temp = new File(zipPath);
-                    temp.mkdir();
-                    zipFile = new ZipFile(fSourceZip);
-                    Enumeration<?> e = zipFile.entries();
-                    
-                    while (e.hasMoreElements()) {
-                            ZipEntry entry = (ZipEntry) e.nextElement();
-                            File destinationFilePath = new File(zipPath, entry.getName());
-                            destinationFilePath.getParentFile().mkdirs();
-//                          System.out.println(entry.getName());
-                            if (entry.isDirectory() || entry.getName().equals(".minecraft")) {
-                                    continue;
-                            } else {
-                                    BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-                                    int b;
-                                    byte buffer[] = new byte[1024];
-
-                                    FileOutputStream fos = new FileOutputStream(destinationFilePath);
-                                    BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
-
-                                    while ((b = bis.read(buffer, 0, 1024)) != -1) {
-                                            bos.write(buffer, 0, b);
-                                    }
-
-                                    bos.flush();
-                                    bos.close();
-                                    bis.close();
-                            }
-                    }
-            } catch (IOException ioe) {
-                    System.out.println("IOError :");
-                    ioe.printStackTrace();
-            }
-    }
-
-		public void copyFolder(File src, File dest) throws IOException {
-			if (src.isDirectory()) {
-				// if directory not exists, create it
-				if (!dest.exists()) {
-					dest.mkdir();
-				}
-				// list all the directory contents
-				String files[] = src.list();
-
-				for (String file : files) {
-					// construct the src and dest file structure
-					File srcFile = new File(src, file);
-					File destFile = new File(dest, file);
-					// recursive copy
-					copyFolder(srcFile, destFile);
-				}
-			} else {
-				// if file, then copy it
-				// Use bytes stream to support all file types
-				if (src.exists()) {
-					InputStream in = new FileInputStream(src);
-					OutputStream out = new FileOutputStream(dest);
-
-					byte[] buffer = new byte[1024];
-
-					int length;
-					// copy the file content in bytes
-					while ((length = in.read(buffer)) > 0) {
-						out.write(buffer, 0, length);
-					}
-					in.close();
-					out.close();
-				}
-			}
-		}
-
 	}
 
 
@@ -266,6 +179,7 @@ public class ModManager extends JDialog {
 	 */
 	public ModManager(JFrame owner, Boolean model) {
 		super(owner, model);
+		setResizable(false);
 		setTitle("Downloading...");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 313, 138);
@@ -308,49 +222,45 @@ public class ModManager extends JDialog {
 			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
-
-	/**
-	 * @param zipLocation - the zip to be extracted
-	 * @param outputLocation - where to extract to
-	 */
-	public void extractZipTo(String zipLocation, String outputLocation) throws IOException {
-		try {
-			System.out.println("Extracting!!!");
-			File fSourceZip = new File(zipLocation);
-			String zipPath = outputLocation;
-			File temp = new File(zipPath);
-			temp.mkdir();
-			System.out.println(zipPath + " created");
-			zipFile = new ZipFile(fSourceZip);
-			Enumeration<?> e = zipFile.entries();
-
-			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry) e.nextElement();
-				File destinationFilePath = new File(zipPath, entry.getName());
-				destinationFilePath.getParentFile().mkdirs();
-				if (entry.isDirectory()) {
-					continue;
-				} else {
-					System.out.println("Extracting " + destinationFilePath);
-					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-
-					int b;
-					byte buffer[] = new byte[1024];
-
-					FileOutputStream fos = new FileOutputStream(destinationFilePath);
-					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
-
-					while ((b = bis.read(buffer, 0, 1024)) != -1) {
-						bos.write(buffer, 0, b);
-					}
-					bos.flush();
-					bos.close();
-					bis.close();
-				}
+	
+	private boolean upToDate() throws IOException {
+		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+		File version = new File(Settings.getSettings().getInstallPath() + File.separator + pack.getDir() + File.separator + "version");
+		if(!version.exists()){
+			System.out.println("File not found.");
+			version.getParentFile().mkdirs();
+			version.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(version));
+			out.write(pack.getVersion());
+			out.flush();
+			out.close();
+			return false;
+		}
+		BufferedReader in = new BufferedReader(new FileReader(version));
+		String line;
+		if((line = in.readLine()) == null || Integer.parseInt(pack.getVersion()) > Integer.parseInt(line)) {
+			System.out.println("File found, out of date.");
+			BufferedWriter out = new BufferedWriter(new FileWriter(version));
+			out.write(pack.getVersion());
+			out.flush();
+			out.close();
+			in.close();
+			return false;
+		} else {
+			System.out.println("File found, up to date.");
+			in.close();
+			return true;
+		}
+	}
+	
+	public static void cleanUp() {
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator);
+		for(String file : tempFolder.list()){
+			if(!file.equals("logo_ftb.png") && !file.equals("splash_FTB.png") && !file.equals("version")){
+				try {
+					FileUtils.delete(new File(tempFolder, file));
+				} catch (IOException e) { e.printStackTrace(); }
 			}
-		} catch (IOException ioe) {
-			System.out.println("IOError :");
-			ioe.printStackTrace();
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -85,7 +86,7 @@ public class ProfileEditor extends JDialog {
 		updateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText())){
+				if(editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))){
 					UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
 					LaunchFrame.writeUsers(name.getText());
 					setVisible(false);
