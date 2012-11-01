@@ -14,12 +14,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -30,7 +27,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,11 +36,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -71,19 +62,11 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.NewsPane;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
-//import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion.Setting;
-
 public class LaunchFrame extends JFrame {
-
-	private static final long serialVersionUID = 1L;
-	private static LaunchFrame instance = null;
-	
-	public static UserManager userManager;
-	LoginResponse RESPONSE;
-
 	/**
 	 * the panels to appear in the tabs
 	 */
@@ -122,6 +105,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * things to go on the texture packs panel
 	 */
+	
 	/**
 	 * things to go on the maps panel
 	 */
@@ -133,9 +117,15 @@ public class LaunchFrame extends JFrame {
 	public static int ramMax = 1024;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
+	private static final long serialVersionUID = 1L;
+	private static LaunchFrame instance = null;
+	private static final String FORGENAME = "minecraftforge-universal-6.0.1.353.zip";
+	public static UserManager userManager;
+	private LoginResponse RESPONSE;
 
 	/**
 	 * Launch the application.
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -182,8 +172,6 @@ public class LaunchFrame extends JFrame {
 
 				userManager = new UserManager(new File(installDir, "logindata"));
 
-				//KeyChecker k = new KeyChecker();
-				//k.setVisible(true);
 				try {
 					LauncherConsole con = new LauncherConsole();
 					con.setVisible(true);
@@ -220,12 +208,13 @@ public class LaunchFrame extends JFrame {
 		setContentPane(panel);
 
 		//Footer
+		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo.setBounds(20, 20, 42, 42);
 		footerLogo.addMouseListener(new MouseListener() {
 			@Override 
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent event) {
 				try {
-					Hlink(arg0, new URI("http://www.feed-the-beast.com"));
+					Hlink(event, new URI("http://www.feed-the-beast.com"));
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
@@ -235,12 +224,14 @@ public class LaunchFrame extends JFrame {
 			@Override public void mouseExited(MouseEvent arg0) { }
 			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
+		
+		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
 			@Override 
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent event) {
 				try {
-					Hlink(arg0, new URI("http://www.creeperhost.net/aff.php?aff=293"));
+					Hlink(event, new URI("http://www.creeperhost.net/aff.php?aff=293"));
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
@@ -255,9 +246,7 @@ public class LaunchFrame extends JFrame {
 			userManager.read();
 		} catch (IOException e1) { e1.printStackTrace(); }
 
-		String[] usernames = UserManager.getNames().toArray(new String[] {});
-		String[] dropdown = merge(dropdown_, usernames);
-
+		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
 			for(int i = 0; i < dropdown.length; i++) {
@@ -273,8 +262,8 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() == 1) {
 					ProfileAdder p = new ProfileAdder();
-					p.setVisible(true);
 					users.setSelectedIndex(0);
+					p.setVisible(true);
 				}
 				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
@@ -289,8 +278,8 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() > 1) {
 					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
-					p.setVisible(true);
 					users.setSelectedIndex(0);
+					p.setVisible(true);
 				}
 				edit.setEnabled(users.getSelectedIndex() > 1);
 			}
@@ -306,9 +295,6 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-
-		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		footer.add(edit);
 		footer.add(users);
@@ -338,13 +324,12 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
-
-		tabbedPane.setEnabledAt(3, false);
 		tabbedPane.setEnabledAt(4, false);
-
+		
 		tabbedPane.setSelectedIndex(tab);
 		
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -440,15 +425,13 @@ public class LaunchFrame extends JFrame {
 							
 							System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 							
-							killMetaInf();
+							FileUtils.killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
 							try {
 								installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
+								ModManager.cleanUp();
+							} catch (IOException e) { e.printStackTrace(); }
 							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
 									+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
@@ -472,7 +455,6 @@ public class LaunchFrame extends JFrame {
 					if (progMonitor.isCanceled()) {
 						updater.cancel(false);
 					}
-
 					if (!updater.isDone()) {
 						int prog = updater.getProgress();
 						if (prog < 0) {
@@ -493,16 +475,13 @@ public class LaunchFrame extends JFrame {
 			}
 			
 			System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-			
-			killMetaInf();
+			FileUtils.killMetaInf();
 			ModManager man = new ModManager(new JFrame(), true);
 			man.setVisible(true);
 			try {
 				installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
+				ModManager.cleanUp();
+			} catch (IOException e) { e.printStackTrace(); }
 			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
 					+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
@@ -515,14 +494,10 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
 		String date = sdf.format(new Date());
-
 		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
 		System.out.println(resolved);
-
 		return resolved; 
 	}
 
@@ -594,7 +569,7 @@ public class LaunchFrame extends JFrame {
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
 			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] { "minecraftforge-universal-6.0.1.353.zip","minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
+			String[] jarFiles = new String[] { FORGENAME,"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
 			URL[] urls = new URL[jarFiles.length];
 
 			for (int i = 0; i < urls.length; i++) {
@@ -670,42 +645,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * deletes the META-INF
-	 */
-	public static void killMetaInf() {
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
-		try {
-			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
-			JarEntry entry;
-
-			while ((entry = input.getNextJarEntry()) != null) {
-				if (entry.getName().contains("META-INF")) {
-					continue;
-				}
-				output.putNextEntry(entry);
-				byte buffer[] = new byte[1024];
-				int amo = 0;
-				while ((amo = input.read(buffer, 0, 1024)) != -1) {
-					output.write(buffer, 0, amo);
-				}
-				output.closeEntry();
-			}
-
-			input.close();
-			output.close();
-
-			inputFile.delete();
-			outputTmpFile.renameTo(inputFile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * @param modPackName - the name of the pack 
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
 	 */
@@ -721,7 +660,7 @@ public class LaunchFrame extends JFrame {
 		} catch (MalformedURLException e) { e.printStackTrace(); 
 		} catch (IOException e) { e.printStackTrace(); }
 
-		extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
+		FileUtils.extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/mods").delete();
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
 	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
@@ -737,136 +676,21 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * extracts zip to the location of the zip
-	 * @param zipLocation - the location
-	 */
-	public void extractZip(String zipLocation) {
-		try {
-			byte[] buf = new byte[1024];
-			ZipInputStream zipinputstream = null;
-			ZipEntry zipentry;
-			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
-
-			zipentry = zipinputstream.getNextEntry();
-			while (zipentry != null) {
-				// for each entry to be extracted
-				String entryName = zipentry.getName();
-				System.out.println("entryname " + entryName);
-				int n;
-				FileOutputStream fileoutputstream;
-				File newFile = new File(entryName);
-				String directory = newFile.getParent();
-
-				if (directory == null) {
-					if (newFile.isDirectory()) {
-						break;
-					}
-				}
-
-				fileoutputstream = new FileOutputStream(zipLocation);
-
-				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-					fileoutputstream.write(buf, 0, n);
-				}
-
-				fileoutputstream.close();
-				zipinputstream.closeEntry();
-				zipentry = zipinputstream.getNextEntry();
-			}
-			zipinputstream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * @param src - the folder to be moved
-	 * @param dest - where to move to
-	 * @throws IOException
-	 */
-	public static void copyFolder(File src, File dest) throws IOException {
-		if (src.isDirectory()) {
-			// if directory not exists, create it
-			if (!dest.exists()) {
-				dest.mkdir();
-				System.out.println("Directory copied from " + src + "  to " + dest);
-			}
-
-			// list all the directory contents
-			String files[] = src.list();
-
-			for (String file : files) {
-				// construct the src and dest file structure
-				File srcFile = new File(src, file);
-				File destFile = new File(dest, file);
-				// recursive copy
-				copyFolder(srcFile, destFile);
-			}
-		} else {
-			copyFile(src, dest);
-		}
-	}
-
-	/**
-	 * @param sourceFile - the file to be moved
-	 * @param destinationFile - where to move to
-	 * @throws IOException
-	 */
-	public static void copyFile(File sourceFile, File destinationFile) throws IOException {
-		if (sourceFile.exists()) {
-			if(!destinationFile.exists()){
-				destinationFile.createNewFile();
-			}
-
-			FileChannel sourceStream = null, destinationStream = null;
-
-			try{
-				sourceStream = new FileInputStream(sourceFile).getChannel();
-				destinationStream = new FileOutputStream(destinationFile).getChannel();
-				destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
-			}finally{
-				if(sourceStream != null){
-					sourceStream.close();
-				}
-				if(destinationStream != null){
-					destinationStream.close();
-				}
-			}
-			System.out.println("File copied from " + sourceFile + " to " + destinationFile);
-		}
-	}
-
-	/**
-	 * @param resource - the resource to delete
-	 * @return - the deleted resource
-	 * @throws IOException
-	 */
-	public static boolean delete(File resource) throws IOException {
-		if (resource.isDirectory()) {
-			File[] childFiles = resource.listFiles();
-			for (File child : childFiles) {
-				delete(child);
-			}
-		}
-		return resource.delete();
-	}
-
-	/**
 	 * @param modPackName - The pack to install (should already be downloaded)
 	 * @throws IOException
 	 */
 	protected void installMods(String modPackName) throws IOException {
 		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft").mkdirs();
 		System.out.println("dirs mk'd");
-		copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/" 
+		FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/" 
 				+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir()+ "/.minecraft/bin"));
 		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
 		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		copyFile(minecraft, mcbackup);
-		copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
+		FileUtils.copyFile(minecraft, mcbackup);
+		FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
 				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
-	 	copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/minecraftforge-universal-6.0.1.353.zip"), 
-	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/minecraftforge-universal-6.0.1.353.zip"));
+		FileUtils.copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/" + FORGENAME), 
+	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/" + FORGENAME));
 	}
 
 	/**
@@ -883,10 +707,8 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void saveSettings() {
 		Settings settings = Settings.getSettings();
-		
 		settings.setLastUser((String)users.getSelectedItem());
 		instance.optionsPane.saveSettingsInto(settings);
-
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
@@ -897,29 +719,29 @@ public class LaunchFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
+	/**
+	 * @param user - user added/edited
+	 */
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
 		} catch (IOException e) { e.printStackTrace(); }
-
-		String[] usernames = UserManager.getNames().toArray(new String[] {});
-
+		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));;
 		users.removeAllItems();
-		for (String s : dropdown_) {
-			users.addItem(s);
-		}
-
-		int counter = 1;
-		for(String name : usernames) {
-			counter++;
-			users.addItem(name);
-			if(name.equals(user)){
-				users.setSelectedIndex(counter);
+		for(int i = 0; i < usernames.length; i++){
+			users.addItem(usernames[i]);
+			if(usernames[i].equals(user)){
+				users.setSelectedIndex(i);
 			}
 		}
 	}
-
+	
+	/**
+	 * @param A - First string array
+	 * @param B - Second string array
+	 * @return - Outputs resulting merged string array from the passed arrays
+	 */
 	public static String[] merge(String[] A, String[] B) {
 		String[] merged = new String[A.length+B.length];
 		System.arraycopy(A, 0, merged, 0, A.length);
@@ -927,23 +749,30 @@ public class LaunchFrame extends JFrame {
 		return merged;
 	}
 	
+	/**
+	 * @return - Outputs selected modpack index
+	 */
 	public static int getSelectedModIndex() {
 		return instance.modPacksPane.getSelectedModIndex();
 	} 
 
+	/**
+	 * @return - Outputs LaunchFrame instance
+	 */
 	public static LaunchFrame getInstance() {
 		return instance;
 	}
 
+	/**
+	 * Enables all items that are disabled upon launching
+	 */
 	private void enableObjects(){
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		launch.setEnabled(true);
-		if(users.getSelectedIndex() > 1){
-			edit.setEnabled(true);
-		}
+		edit.setEnabled(users.getSelectedIndex() > 1);
 		users.setEnabled(true);
 	}
 

@@ -134,8 +134,6 @@ public class ModPack {
 				out.flush();
 				out.close();
 				result = false;
-			} else {
-				result = true;
 			}
 			in.close();
 		} catch (IOException e) { e.printStackTrace(); }
