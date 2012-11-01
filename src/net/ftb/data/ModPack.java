@@ -22,24 +22,24 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name;
-	private String author;
-	private String version;
+	private final String name;
+	private final String author;
+	private final String version;
 	private Image logo;
-	private String url;
+	private final String url;
 	private Image image;
-	private String dir;
-	private String mcVersion;
-	private String info = "This is the info until there is an actual info thingy";
+	private final String dir;
+	private final String mcVersion;
+	private final String info = "This is the info until there is an actual info thingy";
 	private int size;
-	private String serverUrl;
+	private final String serverUrl;
 
-	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
+	private static final ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
 	/*
 	 * List of Listeners that will be informed if a modpack was added
 	 */
-	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
+	private static final List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 
 	/*
 	 * Invoking async Load of Modpacks

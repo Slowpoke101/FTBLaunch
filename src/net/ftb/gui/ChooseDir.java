@@ -15,10 +15,8 @@ import net.ftb.gui.panes.OptionsPane;
 public class ChooseDir extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	private OptionsPane optionsPane;
+	private final OptionsPane optionsPane;
 	private JButton go;
-
-	private JFileChooser chooser;
 	private String choosertitle;
 
 	public ChooseDir(OptionsPane optionsPane) {
@@ -26,8 +24,9 @@ public class ChooseDir extends JFrame implements ActionListener {
 		this.optionsPane = optionsPane;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
-		chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File(optionsPane.getInstallFolderText()));
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -42,6 +41,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 		}
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(200, 200);
 	}
@@ -50,6 +50,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 		JFrame frame = new JFrame("");
 		ChooseDir panel = new ChooseDir(new OptionsPane());
 		frame.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}

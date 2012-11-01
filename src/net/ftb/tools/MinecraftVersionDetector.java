@@ -12,8 +12,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class MinecraftVersionDetector {
-	private URLClassLoader cl;
-
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
@@ -33,7 +31,7 @@ public class MinecraftVersionDetector {
 			}
 		}
 
-		cl = new URLClassLoader(urls,this.getClass().getClassLoader());
+		URLClassLoader cl = new URLClassLoader(urls, this.getClass().getClassLoader());
 
 		JarFile file;
 		try {
@@ -45,8 +43,8 @@ public class MinecraftVersionDetector {
 		while (ent.hasMoreElements()) {
 			JarEntry entry = ent.nextElement();
 			if (entry.getName().endsWith(".class")) {
-				if (entry.getName().indexOf("/") == -1) { // it has to be in the root of the jar file
-					Class<?> cls = null;
+				if (!entry.getName().contains("/")) { // it has to be in the root of the jar file
+					Class<?> cls;
 					try {
 						cls = cl.loadClass(entry.getName().split("\\.")[0]);
 					} catch (ClassNotFoundException e1) { continue; } // not a bad error just skip over this entry

@@ -20,18 +20,18 @@ import net.ftb.gui.LaunchFrame;
 public class ProfileEditorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	JPanel panel = new JPanel();
+	final JPanel panel = new JPanel();
 
-	JTextField username = new JTextField(1);
-	JPasswordField password = new JPasswordField(1);
-	JTextField name = new JTextField(1);
+	final JTextField username = new JTextField(1);
+	final JPasswordField password = new JPasswordField(1);
+	final JTextField name = new JTextField(1);
 
-	JLabel userLabel = new JLabel("Username:");
-	JLabel passLabel = new JLabel("Password:");
-	JLabel nameLabel = new JLabel("Profile Name:");
+	final JLabel userLabel = new JLabel("Username:");
+	final JLabel passLabel = new JLabel("Password:");
+	final JLabel nameLabel = new JLabel("Profile Name:");
 
-	JButton updateButton = new JButton("Update");
-	JButton removeButton = new JButton("Remove");
+	final JButton updateButton = new JButton("Update");
+	final JButton removeButton = new JButton("Remove");
 
 	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
 		super(instance, modal);

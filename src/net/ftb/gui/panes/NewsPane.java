@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 public class NewsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
 
-	private JEditorPane news;
-	private JScrollPane newsPanel;
+	private final JEditorPane news;
+	private final JScrollPane newsPanel;
 
 	public NewsPane() {
 		super();

@@ -26,6 +26,7 @@ public class ModpackLoader extends Thread {
 
 	public ModpackLoader() { }
 
+	@Override
 	public void run() {
 		try {
 			System.out.println("loading modpack information...");
@@ -41,7 +42,7 @@ public class ModpackLoader extends Thread {
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-			Document doc = null;
+			Document doc;
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {

@@ -16,8 +16,7 @@ public class OSUtils {
 			CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
 			File jarFile;
 			jarFile = new File(codeSource.getLocation().toURI().getPath());
-			String jarDir = jarFile.getParentFile().getPath();
-			return jarDir;
+			return jarFile.getParentFile().getPath();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}

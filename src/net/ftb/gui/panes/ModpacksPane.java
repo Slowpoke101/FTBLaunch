@@ -28,11 +28,11 @@ import net.ftb.gui.LaunchFrame;
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel packs;
-	private ArrayList<JPanel> packPanels;
-	private JScrollPane packsScroll;
-	private JLabel splash;
-	private JButton serverLink;
+	private final JPanel packs;
+	private final ArrayList<JPanel> packPanels;
+	private final JScrollPane packsScroll;
+	private final JLabel splash;
+	private final JButton serverLink;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
 
@@ -61,7 +61,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		// stub for a real wait message
 		final JPanel p = new JPanel();
-		p.setBounds(0, 0 * 55, 420, 55);
+		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
 		JTextArea filler = new JTextArea("please wait while mods are beeing load...");
