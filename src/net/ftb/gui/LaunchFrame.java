@@ -648,7 +648,7 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
 	 */
 	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
-		System.out.println("DOWNLAODING!!!");
+		System.out.println("DOWNLOADING!!!");
 		URL website;
 		try {
 			System.out.println("STILL DOWNLOADING!!!");

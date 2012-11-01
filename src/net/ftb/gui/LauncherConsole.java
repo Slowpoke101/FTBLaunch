@@ -54,7 +54,7 @@ public class LauncherConsole extends JDialog {
 	public LauncherConsole() throws IOException {
 		setTitle("FTB Launcher Console");
 		this.setSize(new Dimension(451, 300));
-		setResizable(false);
+//		setResizable(false);
 		getContentPane().setLayout(new FlowLayout());
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		textArea = new JTextArea(10, 50);
