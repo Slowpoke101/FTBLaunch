@@ -258,7 +258,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() == 1) {
-					ProfileAdderDialog p = new ProfileAdderDialog();
+					ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
 					users.setSelectedIndex(0);
 					p.setVisible(true);
 				}
@@ -274,7 +274,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() > 1) {
-					ProfileEditorDialog p = new ProfileEditorDialog((String)users.getSelectedItem());
+					ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String)users.getSelectedItem(), true);
 					users.setSelectedIndex(0);
 					p.setVisible(true);
 				}

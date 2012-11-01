@@ -33,7 +33,8 @@ public class ProfileEditorDialog extends JDialog {
 	JButton updateButton = new JButton("Update");
 	JButton removeButton = new JButton("Remove");
 
-	public ProfileEditorDialog(final String editingName) {
+	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
+		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Editor");
 		setBounds(300, 300, 300, 200);

@@ -20,8 +20,8 @@ public class UpdateDialog  extends JDialog {
 	JButton yesButton = new JButton("Yes");
 	JButton noButton = new JButton("No");
 	
-	public UpdateDialog(LaunchFrame mainFrame, boolean modal) {
-		super(mainFrame, modal);
+	public UpdateDialog(LaunchFrame instance, boolean modal) {
+		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Mod Pack Update Found!");
 		setBounds(300, 300, 300, 90);
