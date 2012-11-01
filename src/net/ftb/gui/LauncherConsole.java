@@ -3,6 +3,10 @@ package net.ftb.gui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -54,9 +58,11 @@ public class LauncherConsole extends JDialog {
 	public LauncherConsole() throws IOException {
 		setTitle("FTB Launcher Console");
 		this.setSize(new Dimension(451, 300));
-//		setResizable(false);
+		setResizable(false);
 		getContentPane().setLayout(new FlowLayout());
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		// Set this dynamically based on window size
+		// So that we can resize
 		textArea = new JTextArea(10, 50);
 		//textArea.setBounds(10, 11, 425, 250);
 
