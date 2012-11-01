@@ -1,4 +1,4 @@
-package net.ftb.gui;
+package net.ftb.gui.dialogs;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -14,8 +14,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
+import net.ftb.gui.LaunchFrame;
 
-public class ProfileAdder extends JDialog {
+public class ProfileAdderDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	JPanel panel = new JPanel();
@@ -30,7 +31,7 @@ public class ProfileAdder extends JDialog {
 
 	JButton addButton = new JButton("Add");
 
-	public ProfileAdder() {
+	public ProfileAdderDialog() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Adder");
 		setBounds(300, 300, 300, 200);

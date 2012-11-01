@@ -56,6 +56,8 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.ProfileAdderDialog;
+import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.ILauncherPane;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -214,9 +216,7 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					Hlink(event, new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
+				} catch (URISyntaxException e) { e.printStackTrace(); }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -231,9 +231,7 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					Hlink(event, new URI("http://www.creeperhost.net/aff.php?aff=293"));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
+				} catch (URISyntaxException e) { e.printStackTrace(); }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -260,7 +258,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() == 1) {
-					ProfileAdder p = new ProfileAdder();
+					ProfileAdderDialog p = new ProfileAdderDialog();
 					users.setSelectedIndex(0);
 					p.setVisible(true);
 				}
@@ -276,7 +274,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(users.getSelectedIndex() > 1) {
-					ProfileEditor p = new ProfileEditor((String)users.getSelectedItem());
+					ProfileEditorDialog p = new ProfileEditorDialog((String)users.getSelectedItem());
 					users.setSelectedIndex(0);
 					p.setVisible(true);
 				}

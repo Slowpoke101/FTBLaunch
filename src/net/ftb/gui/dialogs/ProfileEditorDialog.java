@@ -1,4 +1,4 @@
-package net.ftb.gui;
+package net.ftb.gui.dialogs;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -15,8 +15,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
+import net.ftb.gui.LaunchFrame;
 
-public class ProfileEditor extends JDialog {
+public class ProfileEditorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	JPanel panel = new JPanel();
@@ -32,7 +33,7 @@ public class ProfileEditor extends JDialog {
 	JButton updateButton = new JButton("Update");
 	JButton removeButton = new JButton("Remove");
 
-	public ProfileEditor(final String editingName) {
+	public ProfileEditorDialog(final String editingName) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Editor");
 		setBounds(300, 300, 300, 200);
