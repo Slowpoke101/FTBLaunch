@@ -1,5 +1,6 @@
 *~
 bin/
 .metadata/
+*.jardesc
 ftblaunch.cfg
 target/
