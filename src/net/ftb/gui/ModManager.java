@@ -233,11 +233,6 @@ public class ModManager extends JDialog {
 			System.out.println("File not found.");
 			version.getParentFile().mkdirs();
 			version.createNewFile();
-			UpdateDialog p = new UpdateDialog(LaunchFrame.getInstance(), true);
-			p.setVisible(true);
-			if(!update){
-				return true;
-			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
 			out.flush();
