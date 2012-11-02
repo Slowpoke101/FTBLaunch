@@ -29,7 +29,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static final long serialVersionUID = 1L;
 
 	private JPanel packs;
-	private ArrayList<JPanel> packPanels;
+	public ArrayList<JPanel> packPanels;
 	private JScrollPane packsScroll;
 	private JLabel splash;
 	private JButton serverLink;

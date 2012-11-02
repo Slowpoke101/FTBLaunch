@@ -315,7 +315,7 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(users.getSelectedIndex() > 1) {
+				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
 					saveSettings();
 					doLogin(userManager.getUsername(users.getSelectedItem().toString()), userManager.getPassword(users.getSelectedItem().toString()));
 				}
