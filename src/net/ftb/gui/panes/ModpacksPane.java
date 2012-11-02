@@ -75,7 +75,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packs.add(p);
 
 		packsScroll = new JScrollPane();
-		packsScroll.setBounds(0, 0, 420, 300);
+		packsScroll.setBounds(0, 0, 420, 270);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
@@ -83,8 +83,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setViewportView(packs);
 		this.add(packsScroll);
 
-		serverLink = new JButton("Grab The Server Version Here!!");
-		serverLink.setBounds(420, 210, 410, 90);
+		serverLink = new JButton("Grab the server version here");
+		serverLink.setBounds(420, 270, 410, 30);
 		serverLink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
