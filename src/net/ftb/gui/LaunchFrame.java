@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -48,6 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.Painter;
 import javax.swing.ProgressMonitor;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -110,7 +112,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * things to go on the texture packs panel
 	 */
-	
+
 	/**
 	 * things to go on the maps panel
 	 */
@@ -135,7 +137,6 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
-				final Color tabColor = new Color(27, 27, 27);
 
 				UIManager.put("control", baseColor);
 				UIManager.put("text", new Color(222, 222, 222));
@@ -144,32 +145,6 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("nimbusBorder", baseColor);
 				UIManager.put("nimbusLightBackground", baseColor);
 				UIManager.put("info", new Color(55, 55, 55));
-				
-				UIManager.put("TabbedPane:TabbedPaneTab[Disabled].backgroundPainter", new Painter() {
-					@Override
-					public void paint(Graphics2D g, Object o, int width, int height) {
-						g.setColor(tabColor);
-						g.drawRect(0, 0, width, height);
-					}
-				});
-
-				UIManager.put("TabbedPane:TabbedPaneTab[Enabled].backgroundPainter", new Painter() {
-					@Override
-					public void paint(Graphics2D g, Object o, int width, int height) {
-						g.setColor(tabColor);
-						g.drawRect(0, 0, width, height);
-					}
-				});
-
-				UIManager.put("TabbedPane:TabbedPaneTab[Selected].backgroundPainter", new Painter() {
-					@Override
-					public void paint(Graphics2D g, Object object, int width, int height) {
-						g.setColor(tabColor.darker());
-						g.drawRect(0, 0, width, height);
-					}
-				});
-
-				
 
 				try {
 					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -253,7 +228,7 @@ public class LaunchFrame extends JFrame {
 			@Override public void mouseExited(MouseEvent arg0) { }
 			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
-		
+
 		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
@@ -320,13 +295,13 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
 		footer.add(launch);
-		
+
 		newsPane = new NewsPane();
 		modPacksPane = new ModpacksPane();
 		mapsPane = new MapsPane();
@@ -338,6 +313,37 @@ public class LaunchFrame extends JFrame {
 		loadSettings();
 
 		//Adding tabs to the panel
+		UIDefaults overrides = new UIDefaults();
+		final Color tabColor = new Color(27, 27, 27);
+		overrides.put("TabbedPane:TabbedPaneTab[Disabled].backgroundPainter", new Painter() {
+			@Override
+			public void paint(Graphics2D g, Object o, int width, int height) {
+				g.setColor(tabColor);
+				g.drawRect(0, 0, width, height);
+			}
+		});
+
+		overrides.put("TabbedPane:TabbedPaneTab[Enabled].backgroundPainter", new Painter() {
+			@Override
+			public void paint(Graphics2D g, Object o, int width, int height) {
+				g.setColor(tabColor);
+				g.drawRect(0, 0, width, height);
+			}
+		});
+
+		overrides.put("TabbedPane:TabbedPaneTab[Selected].backgroundPainter", new Painter() {
+			@Override
+			public void paint(Graphics2D g, Object object, int width, int height) {
+				g.setColor(Color.white);
+                                // You want to have the area filled more than likely instead of a thin outline
+                                g.fill(new Rectangle2D.Double(0,0,width,height));
+//				g.drawRect(0, 0, width, height);
+			}
+		});
+                
+		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
+                // If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
+		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 
@@ -354,9 +360,9 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 		tabbedPane.setEnabledAt(4, false);
-		
+
 		tabbedPane.setSelectedIndex(tab);
-		
+
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent event){
@@ -448,9 +454,9 @@ public class LaunchFrame extends JFrame {
 								System.err.println("No Modpack selected!");
 								return;
 							}
-							
+
 							System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-							
+
 							FileUtils.killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
@@ -498,7 +504,7 @@ public class LaunchFrame extends JFrame {
 				System.err.println("No Modpack selected!");
 				return;
 			}
-			
+
 			System.out.println(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			FileUtils.killMetaInf();
 			ModManager man = new ModManager(new JFrame(), true);
@@ -685,7 +691,7 @@ public class LaunchFrame extends JFrame {
 		FileUtils.extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/mods").delete();
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
-	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
+		File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
 		for(File content : contents) {
 			if(content.isFile()) {
@@ -712,7 +718,7 @@ public class LaunchFrame extends JFrame {
 		FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
 				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
 		FileUtils.copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/" + FORGENAME), 
-	 			new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/" + FORGENAME));
+				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/" + FORGENAME));
 	}
 
 	/**
@@ -741,7 +747,7 @@ public class LaunchFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	/**
 	 * @param user - user added/edited
 	 */
@@ -758,7 +764,7 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param A - First string array
 	 * @param B - Second string array
@@ -770,7 +776,7 @@ public class LaunchFrame extends JFrame {
 		System.arraycopy(B, 0, merged, A.length, B.length);
 		return merged;
 	}
-	
+
 	/**
 	 * @return - Outputs selected modpack index
 	 */
