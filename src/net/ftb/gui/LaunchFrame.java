@@ -51,6 +51,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -117,7 +118,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static final int version = 012;
+	private static final int version = 12;
 	private URLClassLoader cl;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
@@ -128,7 +129,7 @@ public class LaunchFrame extends JFrame {
 
 	/**
 	 * Launch the application.
-	 * @param args
+	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -202,10 +203,10 @@ public class LaunchFrame extends JFrame {
 
 				userManager = new UserManager(new File(installDir, "logindata"));
 
-				try {
-					LauncherConsole con = new LauncherConsole();
-					con.setVisible(true);
-				} catch (IOException e) { e.printStackTrace(); }
+
+				LauncherConsole con = new LauncherConsole();
+				con.setVisible(true);
+
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
 				frame.setVisible(true);
@@ -225,7 +226,7 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher Beta v0.1.2");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
@@ -268,9 +269,7 @@ public class LaunchFrame extends JFrame {
 			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
-		try {
-			userManager.read();
-		} catch (IOException e1) { e1.printStackTrace(); }
+		userManager.read();
 
 		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users = new JComboBox(dropdown);
@@ -437,10 +436,11 @@ public class LaunchFrame extends JFrame {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", 
 					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+				@Override
 				public void done() {
 					progMonitor.close();
 					try {
-						if (get() == true) {
+						if (get()) {
 							// Success
 							System.out.println("Game update complete.");
 
@@ -470,7 +470,6 @@ public class LaunchFrame extends JFrame {
 					} catch (ExecutionException e) {
 						e.printStackTrace();
 						System.out.println("Failed to download game: " + e.getCause().getMessage());
-						return;
 					}
 				}
 			};
@@ -559,10 +558,9 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * @param filename - what to save it as on the system
 	 * @param urlString - the url to download
-	 * @throws MalformedURLException - for URL
 	 * @throws IOException - various
 	 */
-	public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+	public void downloadUrl(String filename, String urlString) throws IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 		try {
@@ -590,7 +588,6 @@ public class LaunchFrame extends JFrame {
 	 * @param workingDir - install path
 	 * @param username - the MC username
 	 * @param password - the MC password
-	 * @throws IOException
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
 		try {
@@ -623,13 +620,12 @@ public class LaunchFrame extends JFrame {
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 			Field[] fields = mc.getDeclaredFields();
 
-			for (int i = 0; i < fields.length; i++) {
-				Field f = fields[i];
-				if (f.getType() != File.class) {
+			for(Field f : fields) {
+				if(f.getType() != File.class) {
 					// Has to be File
 					continue;
 				}
-				if (f.getModifiers() != (Modifier.PRIVATE + Modifier.STATIC)) {
+				if(0 == (f.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC))){
 					// And Private Static.
 					continue;
 				}
@@ -691,13 +687,13 @@ public class LaunchFrame extends JFrame {
 		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
 	 	File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
 		String files;
-		for (int i = 0; i < contents.length; i++) {             
-			if (contents[i].isFile()) {
-				files = contents[i].getName();
-				if (files.endsWith(".zip") || files.endsWith(".ZIP")) {
-					contents[i].delete();
+		for(File content : contents) {
+			if(content.isFile()) {
+				files = content.getName();
+				if(files.toLowerCase().endsWith(".zip")) {
+					content.delete();
 				}
-			}	
+			}
 		}
 	}
 

@@ -18,7 +18,6 @@ public class ChooseDir extends JFrame implements ActionListener {
 	private OptionsPane optionsPane;
 	private JButton go;
 
-	private JFileChooser chooser;
 	private String choosertitle;
 
 	public ChooseDir(OptionsPane optionsPane) {
@@ -27,7 +26,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File(optionsPane.getInstallFolderText()));
 		chooser.setDialogTitle(choosertitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

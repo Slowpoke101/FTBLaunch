@@ -49,7 +49,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 	}
 
 	@Override
-	protected Boolean doInBackground() throws Exception {
+	protected Boolean doInBackground() {
 		setStatus("Determining packages to load...");
 		if (!loadJarURLs()) {
 			return false;
@@ -90,7 +90,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		// TODO Fix comparison - version format is currently undecided, so this just checks if it has changed.
 		// This could result in a downgrade if the version had gone down - although maybe that's intended?
 		// TODO Ask user if they want to update
-		return !versionFile.exists() || latestVersion == "-1" || latestVersion != readVersionFile();
+		return !versionFile.exists() || latestVersion.equals("-1") || !latestVersion.equals(readVersionFile());
 	}
 
 
@@ -111,7 +111,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			return false;
 		}
 
-		String nativesFilename = "";
+		String nativesFilename;
 		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
 			nativesFilename = "windows_natives.jar";
 		} else if (OSUtils.getCurrentOS() == OS.MACOSX) {
@@ -141,38 +141,31 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			md5s.load(inputStream);
 			inputStream.close();
 		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 
 		int totalDownloadSize = 0;
 		int[] fileSizes = new int[jarURLs.length];
 		boolean[] skip = new boolean[jarURLs.length];
-		URLConnection connection = null;
+		URLConnection connection;
 
 		// Compare MD5s and skip ones that match.
 		for (int i = 0; i < jarURLs.length; i++) {
 			try {
 				connection = jarURLs[i].openConnection();
-
 				connection.setDefaultUseCaches(false);
 				skip[i] = false;
-
 				if (connection instanceof HttpURLConnection) {
 					((HttpURLConnection) connection).setRequestMethod("HEAD");
 
 					String localMD5 = "\"" + md5s.getProperty(getFilename(jarURLs[i])) + "\"";
-
 					if (!forceUpdate) {
 						connection.setRequestProperty("If-None-Match", localMD5);
 					}
-
 					int response = ((HttpURLConnection) connection).getResponseCode();
 					if (response == 300) {
 						skip[i] = true;
 					}
 				}
-
 				fileSizes[i] = connection.getContentLength();
 				totalDownloadSize += fileSizes[i];
 			} catch (IOException e) {
@@ -188,10 +181,9 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		int totalDownloadedSize = 0;
 		for (int i = 0; i < jarURLs.length; i++) {
 			if (skip[i]) {
-				setProgress(initialProgress + fileSizes[i] * 45 / totalDownloadSize);
+				setProgress(initialProgress + ((fileSizes[i] * 45) / totalDownloadSize));
 				continue;
 			}
-
 			try	{
 				FileOutputStream out = new FileOutputStream(md5sFile);
 				md5s.remove(getFilename(jarURLs[i]));
@@ -200,17 +192,13 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			} catch (IOException e)	{
 				e.printStackTrace();
 			}
-
 			int triesLeft = 0;
 			boolean downloadSuccess = false;
-			while (!downloadSuccess && triesLeft < 5) {
+			while (!downloadSuccess && (triesLeft < 5)) {
 				try {
 					triesLeft++;
-
 					System.out.println("Connecting.. Try " + triesLeft + " of 5");
-
 					String etag = "";
-
 
 					URLConnection dlConnection = jarURLs[i].openConnection();
 					if (dlConnection instanceof HttpURLConnection) {
@@ -229,7 +217,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 					MessageDigest msgDigest = MessageDigest.getInstance("MD5");
 					byte[] buffer = new byte[24000];
-					int readLen = 0;
+					int readLen;
 					int currentDLSize = 0;
 					while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {						
 						outStream.write(buffer, 0, readLen);
@@ -238,7 +226,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 						currentDLSize += readLen;
 						totalDownloadedSize += readLen;
 
-						int prog = i + totalDownloadedSize * 45 / totalDownloadSize;
+						int prog = i + ((totalDownloadedSize * 45) / totalDownloadSize);
 						if (prog > 100) {
 							prog = 100;
 						} else if (prog < 0){
@@ -261,7 +249,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					}
 
 					if (dlConnection instanceof HttpURLConnection) {
-						if (md5Matches && (currentDLSize == fileSizes[i] || fileSizes[i] <= 0))	{
+						if (md5Matches && ((currentDLSize == fileSizes[i]) || (fileSizes[i] <= 0)))	{
 							downloadSuccess = true;
 							try	{
 								md5s.setProperty(getFilename(jarURLs[i]), etag);

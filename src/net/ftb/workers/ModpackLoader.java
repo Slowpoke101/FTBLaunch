@@ -30,18 +30,11 @@ public class ModpackLoader extends Thread {
 		try {
 			System.out.println("loading modpack information...");
 
-//			// Lets emulate heavy server load ;)
-//			try {
-//				Thread.sleep(2000);
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
-
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-			Document doc = null;
+			Document doc;
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {

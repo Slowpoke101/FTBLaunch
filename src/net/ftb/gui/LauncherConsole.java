@@ -26,7 +26,7 @@ public class LauncherConsole extends JDialog {
 	private static Boolean logToConsole = true;
 
 	private class OutputOverride extends PrintStream {
-		public OutputOverride(OutputStream str) throws FileNotFoundException {
+		public OutputOverride(OutputStream str) {
 			super(str);
 		}
 
@@ -57,7 +57,7 @@ public class LauncherConsole extends JDialog {
 		}
 	}
 
-	public LauncherConsole() throws IOException {
+	public LauncherConsole() {
 		setTitle("FTB Launcher Console");
 		this.setSize(new Dimension(451, 300));
 		setResizable(false);

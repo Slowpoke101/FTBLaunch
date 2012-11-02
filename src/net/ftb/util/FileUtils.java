@@ -89,7 +89,7 @@ public class FileUtils {
 	public static void extractZip(String zipLocation) {
 		try {
 			byte[] buf = new byte[1024];
-			ZipInputStream zipinputstream = null;
+			ZipInputStream zipinputstream;
 			ZipEntry zipentry;
 			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
 
@@ -127,20 +127,18 @@ public class FileUtils {
 	 * Extracts given zip to given location
 	 * @param zipLocation - the location of the zip to be extracted
 	 * @param outputLocation - location to extract to
-	 * @throws IOException
 	 */
-	public static void extractZipTo(String zipLocation, String outputLocation) throws IOException {
+	public static void extractZipTo(String zipLocation, String outputLocation) {
 		try {
 			System.out.println("Entracting");
 			File fSourceZip = new File(zipLocation);
-			String zipPath = outputLocation;
-			File temp = new File(zipPath);
+			File temp = new File(outputLocation);
 			temp.mkdir();
 			ZipFile zipFile = new ZipFile(fSourceZip);
 			Enumeration<?> e = zipFile.entries();
 			while (e.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry) e.nextElement();
-				File destinationFilePath = new File(zipPath, entry.getName());
+				File destinationFilePath = new File(outputLocation, entry.getName());
 				destinationFilePath.getParentFile().mkdirs();
 				if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
 					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
@@ -176,7 +174,7 @@ public class FileUtils {
 				}
 				output.putNextEntry(entry);
 				byte buffer[] = new byte[1024];
-				int amo = 0;
+				int amo;
 				while ((amo = input.read(buffer, 0, 1024)) != -1) {
 					output.write(buffer, 0, amo);
 				}

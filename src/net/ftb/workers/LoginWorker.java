@@ -1,5 +1,6 @@
 package net.ftb.workers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -22,7 +23,7 @@ public class LoginWorker extends SwingWorker<String, Void> {
 	}
 
 	@Override
-	protected String doInBackground() throws Exception {
+	protected String doInBackground() throws IOException {
 		StringBuilder requestBuilder = new StringBuilder();
 		requestBuilder.append("https://login.minecraft.net/?user=").append(URLEncoder.encode(username, "UTF-8")).append("&password=")
 		.append(URLEncoder.encode(password, "UTF-8")).append("&version=13");

@@ -38,8 +38,7 @@ public class FocusTraversalOnArray extends FocusTraversalPolicy {
 	////////////////////////////////////////////////////////////////////////////
 	private int indexCycle(int index, int delta) {
 		int size = m_Components.length;
-		int next = (index + delta + size) % size;
-		return next;
+		return (index + delta + size) % size;
 	}
 	private Component cycle(Component currentComponent, int delta) {
 		int index = -1;

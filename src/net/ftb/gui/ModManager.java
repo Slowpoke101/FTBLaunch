@@ -39,20 +39,15 @@ import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
-
 	public static boolean update = false;
-	
 	private JPanel contentPane;
-
 	private double downloadedPerc;
-	private Settings settings = new Settings();	
-
 	private final JProgressBar progressBar;
 	private final JLabel label;
 
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
-		protected Boolean doInBackground() throws Exception {
+		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
 			if(!upToDate()){
 				System.out.println("Not up to date!");
 				String installPath = Settings.getSettings().getInstallPath();
@@ -61,7 +56,7 @@ public class ModManager extends JDialog {
 				if(!modPackZip.exists()) {
 					System.out.println("Pack not found, downloading!");
 					try {
-						new File(installPath + "/temp/" + pack.getDir() +  "/").mkdir();
+						new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
 						downloadModPack(pack.getUrl(), pack.getDir());
 					} catch (MalformedURLException e) { e.printStackTrace();
 					} catch (NoSuchAlgorithmException e) { e.printStackTrace();
@@ -74,13 +69,12 @@ public class ModManager extends JDialog {
 			return false;
 		}
 
-		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+		public void downloadUrl(String filename, String urlString) throws IOException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
 				in = new BufferedInputStream(new URL(urlString).openStream());
 				fout = new FileOutputStream(filename);
-
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
@@ -89,28 +83,28 @@ public class ModManager extends JDialog {
 				int steps = 0;
 				while ((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
-					downloadedPerc += (count*1.0/modPackSize)*100;
+					downloadedPerc += (count * 1.0 / modPackSize) * 100;
 					amount += count;
 					steps++;
 					if (steps > 100) {
 						steps = 0;
-						progressBar.setValue((int)downloadedPerc*100);
-						label.setText(String.valueOf(amount / 1024) + "Kb / " + String.valueOf(modPackSize / 1024) + "Kb");
+						progressBar.setValue((int)downloadedPerc * 100);
+						label.setText((amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb");
 					}
 				}
-			} finally {			
+			} finally {
 				in.close();
-				fout.flush();	
+				fout.flush();
 				fout.close();
 			}
 		}
 
-		public void downloadPack(String dest, String file) throws MalformedURLException, NoSuchAlgorithmException, IOException {
+		public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException {
 			DateFormat sdf = new SimpleDateFormat("ddMMyy");
 			TimeZone zone = TimeZone.getTimeZone("GMT");
 			sdf.setTimeZone(zone);
 			String date = sdf.format(new Date());
-			downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ( "mcepoch1" + date ) + "/" + file);
+			downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + date) + "/" + file);
 		}
 
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
@@ -126,30 +120,30 @@ public class ModManager extends JDialog {
 			installMods(modPackName, dir);
 		}
 
-		protected void installMods(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
+		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
 			new File(installPath + "/"+ dir + "/.minecraft").mkdirs();
-			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/"+ dir+ "/.minecraft/bin"));
+			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/" + dir + "/.minecraft/bin"));
 			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
 			try {
 				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");
 				DataInputStream in1 = new DataInputStream(fstream);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in1));
 				String strLine;
-				int i=0;
+				int i = 0;
 				while ((strLine = br.readLine()) != null) {
 					// Print the content on the console
 					LaunchFrame.jarMods[i] = strLine;
-					i++;		
+					i++;
 				}
 				//Close the input stream
 				in1.close();
 			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
 			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
-			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir +"/.minecraft/bin/"));
-			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir +"/.minecraft/"));
+			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/.minecraft/bin/"));
+			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir + "/.minecraft/"));
 			// Test cleaning up files
 		}
 
@@ -169,13 +163,12 @@ public class ModManager extends JDialog {
 
 		protected String[] reverse(String[] x) {
 			String buffer[] = new String[x.length];
-			for(int i = 0; i<x.length;i++) {
-				buffer[i] = x[x.length-i-1];
+			for(int i = 0; i < x.length; i++) {
+				buffer[i] = x[x.length - i - 1];
 			}
 			return buffer;
 		}
 	}
-
 
 	/**
 	 * Create the frame.
@@ -225,11 +218,11 @@ public class ModManager extends JDialog {
 			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
-	
+
 	private boolean upToDate() throws IOException {
 		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 		File version = new File(Settings.getSettings().getInstallPath() + File.separator + pack.getDir() + File.separator + "version");
-		if(!version.exists()){
+		if(!version.exists()) {
 			System.out.println("File not found.");
 			version.getParentFile().mkdirs();
 			version.createNewFile();
@@ -246,14 +239,14 @@ public class ModManager extends JDialog {
 			UpdateDialog p = new UpdateDialog(LaunchFrame.getInstance(), true);
 			p.setVisible(true);
 			in.close();
-			if(!update){
+			if(!update) {
 				return true;
 			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
 			out.flush();
 			out.close();
-			
+
 			return false;
 		} else {
 			System.out.println("File found, up to date.");
@@ -261,11 +254,11 @@ public class ModManager extends JDialog {
 			return true;
 		}
 	}
-	
+
 	public static void cleanUp() {
 		File tempFolder = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator);
-		for(String file : tempFolder.list()){
-			if(!file.equals("logo_ftb.png") && !file.equals("splash_FTB.png") && !file.equals("version")){
+		for(String file : tempFolder.list()) {
+			if(!file.equals("logo_ftb.png") && !file.equals("splash_FTB.png") && !file.equals("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
 				} catch (IOException e) { e.printStackTrace(); }

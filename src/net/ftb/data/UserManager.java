@@ -22,9 +22,7 @@ public class UserManager {
 	public UserManager(File filename) {
 		_filename = filename;
 		if (_filename.exists()) {
-			try {
-				read();
-			} catch (IOException e) { }
+			read();
 		}
 	}
 
@@ -86,9 +84,8 @@ public class UserManager {
 		wri.close();
  	}
  	
- 	public void read() throws IOException {
+ 	public void read() {
  		_users.clear();
- 		
  		if(_filename.exists()) {
  			try {
  				BufferedReader read = new BufferedReader(new FileReader(_filename));
@@ -99,7 +96,6 @@ public class UserManager {
 				}
 				read.close();
 			} catch (Exception ex) {
-				System.out.println("The following error is normal on first startup!!");
 				ex.printStackTrace();
 				System.out.println("Error loading login data");
  			}
@@ -107,7 +103,7 @@ public class UserManager {
  	}
 
 	
-	public static byte[] getFileMD5(URL string) throws Exception {
+	public static byte[] getFileMD5(URL string) throws IOException {
 		MessageDigest dgest = null;
 		try {
 			dgest = MessageDigest.getInstance("md5");
@@ -117,7 +113,7 @@ public class UserManager {
 		InputStream str = string.openStream();
 
 		byte[] buffer = new byte[65536];
-		int readLen = 0;
+		int readLen;
 		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
@@ -155,7 +151,7 @@ public class UserManager {
 
 	public static String getUsername(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getUsername();
 			}
 		}
@@ -164,7 +160,7 @@ public class UserManager {
 
 	public static String getPassword(String name) {
 		for (User user : _users) {
-			if (user.getName() == name) {
+			if (user.getName().equals(name)) {
 				return user.getPassword();
 			}
 		}

@@ -38,12 +38,12 @@ public class Settings extends Properties {
 
 	public Settings() { }
 
-	public Settings(File file) throws FileNotFoundException, IOException {
+	public Settings(File file) throws IOException {
 		configPath = file;
 		load(new FileInputStream(file));
 	}
 
-	public void save() throws FileNotFoundException, IOException {
+	public void save() throws IOException {
 		store(new FileOutputStream(configPath), "FTBLaunch Config File");
 	}
 

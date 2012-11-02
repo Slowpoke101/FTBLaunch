@@ -61,7 +61,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		// stub for a real wait message
 		final JPanel p = new JPanel();
-		p.setBounds(0, 0 * 55, 420, 55);
+		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
 		JTextArea filler = new JTextArea("please wait while mods are beeing load...");
