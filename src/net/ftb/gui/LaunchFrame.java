@@ -75,6 +75,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
+import net.ftb.workers.MincraftLauncher;
 
 public class LaunchFrame extends JFrame {
 	/**
@@ -651,85 +652,8 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		try {
-			Logger.logInfo("Loading jars...");
-			String[] jarFiles = new String[] { FORGENAME,"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
-			URL[] urls = new URL[jarFiles.length];
-
-			for (int i = 0; i < urls.length; i++) {
-				try {
-					File f;
-					if(i == 0) {
-						f = new File(new File(workingDir).getParentFile(), "/instMods/" + jarFiles[i]);
-					} else {
-						f = new File(new File(workingDir, "bin"), jarFiles[i]);
-					}
-					urls[i] = f.toURI().toURL();
-					Logger.logInfo("Loading URL: " + urls[i].toString());
-				} catch (MalformedURLException e) {
-					Logger.logError("Malformed URL Exception occured",e);
-					System.exit(5);
-				}
-			}
-
-			Logger.logInfo("Loading natives...");
-			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
-
-			System.setProperty("org.lwjgl.librarypath", nativesDir);
-			System.setProperty("net.java.games.input.librarypath", nativesDir);
-
-			System.setProperty("user.home", new File(workingDir).getParent());
-
-			cl = new URLClassLoader(urls, LaunchFrame.class.getClassLoader());
-
-			// Get the Minecraft Class.
-			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-			Field[] fields = mc.getDeclaredFields();
-
-			for(Field f : fields) {
-				if(f.getType() != File.class) {
-					// Has to be File
-					continue;
-				}
-				if(0 == (f.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC))){
-					// And Private Static.
-					continue;
-				}
-				f.setAccessible(true);
-				f.set(null, new File(workingDir));
-				// And set it.
-				Logger.logInfo("Fixed Minecraft Path: Field was " + f.toString());
-			}
-
-			String[] mcArgs = new String[2];
-			mcArgs[0] = username;
-			mcArgs[1] = password;
-
-			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
-
-			Logger.logInfo("MCDIR: " + mcDir);
-
-			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
-			this.setVisible(false);
-		} catch (ClassNotFoundException e) {
-			this.setVisible(true);
-			Logger.logError("Launch failed",e);
-		} catch (IllegalArgumentException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(2);
-		} catch (IllegalAccessException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(2);
-		} catch (InvocationTargetException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(3);
-		} catch (NoSuchMethodException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(3);
-		} catch (SecurityException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(4);
-		}
+		int status = MincraftLauncher.launchMinecraft (workingDir, username, password, FORGENAME, Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
+		Logger.logInfo("MC Startup was "+status);
 	}
 
 	/**
