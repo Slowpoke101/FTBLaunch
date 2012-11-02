@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,7 +47,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.Painter;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -110,7 +108,7 @@ public class LaunchFrame extends JFrame {
 	private JCheckBox savePassword = new JCheckBox();
 	private JButton launch = new JButton("Launch");
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
-	private static JComboBox<String> users;
+	private static JComboBox users;
 	private JButton edit;
 
 	/**
@@ -275,7 +273,7 @@ public class LaunchFrame extends JFrame {
 		userManager.read();
 
 		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
-		users = new JComboBox<String>(dropdown);
+		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
 			for(int i = 0; i < dropdown.length; i++) {
 				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
@@ -351,34 +349,6 @@ public class LaunchFrame extends JFrame {
 
 		//Adding tabs to the panel
 		UIDefaults overrides = new UIDefaults();
-		final Color tabColor = new Color(27, 27, 27);
-		overrides.put("TabbedPane:TabbedPaneTab[Disabled].backgroundPainter", new Painter() {
-			@Override
-			public void paint(Graphics2D g, Object o, int width, int height) {
-				g.setColor(tabColor);
-				g.fill(new Rectangle2D.Double(0,0,width,height));
-				//				g.drawRect(0, 0, width, height);
-			}
-		});
-
-		overrides.put("TabbedPane:TabbedPaneTab[Enabled].backgroundPainter", new Painter() {
-			@Override
-			public void paint(Graphics2D g, Object o, int width, int height) {
-				g.setColor(tabColor);
-				g.fill(new Rectangle2D.Double(0,0,width,height));
-				//				g.drawRect(0, 0, width, height);
-			}
-		});
-
-		overrides.put("TabbedPane:TabbedPaneTab[Selected].backgroundPainter", new Painter() {
-			@Override
-			public void paint(Graphics2D g, Object object, int width, int height) {
-				g.setColor(tabColor.darker());
-				// You want to have the area filled more than likely instead of a thin outline
-				g.fill(new Rectangle2D.Double(0,0,width,height));
-				//				g.drawRect(0, 0, width, height);
-			}
-		});
 
 		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
 		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
