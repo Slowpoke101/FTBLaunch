@@ -161,6 +161,10 @@ public class LaunchFrame extends JFrame {
 				System.getProperty("os.version"));
 		Logger.logInfo("Working directory: "+
 				System.getProperty("user.dir"));
+		Logger.logInfo("Used Memory:"  + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576);
+		Logger.logInfo("Free Memory:"  + Runtime.getRuntime().freeMemory() / 1048576);
+		Logger.logInfo("Total Memory:" + Runtime.getRuntime().totalMemory() / 1048576);
+		Logger.logInfo("Max Memory:" + Runtime.getRuntime().maxMemory() / 1048576);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
