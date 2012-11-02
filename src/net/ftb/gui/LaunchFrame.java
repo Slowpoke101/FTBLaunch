@@ -5,6 +5,7 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +46,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.Painter;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -132,6 +134,7 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
+				final Color tabColor = new Color(27, 27, 27);
 
 				UIManager.put("control", baseColor);
 				UIManager.put("text", new Color(222, 222, 222));
@@ -140,6 +143,32 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("nimbusBorder", baseColor);
 				UIManager.put("nimbusLightBackground", baseColor);
 				UIManager.put("info", new Color(55, 55, 55));
+				
+				UIManager.put("TabbedPane:TabbedPaneTab[Disabled].backgroundPainter", new Painter() {
+					@Override
+					public void paint(Graphics2D g, Object o, int width, int height) {
+						g.setColor(tabColor);
+						g.drawRect(0, 0, width, height);
+					}
+				});
+
+				UIManager.put("TabbedPane:TabbedPaneTab[Enabled].backgroundPainter", new Painter() {
+					@Override
+					public void paint(Graphics2D g, Object o, int width, int height) {
+						g.setColor(tabColor);
+						g.drawRect(0, 0, width, height);
+					}
+				});
+
+				UIManager.put("TabbedPane:TabbedPaneTab[Selected].backgroundPainter", new Painter() {
+					@Override
+					public void paint(Graphics2D g, Object object, int width, int height) {
+						g.setColor(tabColor.darker());
+						g.drawRect(0, 0, width, height);
+					}
+				});
+
+				
 
 				try {
 					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
