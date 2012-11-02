@@ -304,7 +304,9 @@ public class LaunchFrame extends JFrame {
 		savePassword.setToolTipText("Save Password");
 		savePassword.setBounds(701, 20, 16, 30);
 
-		savePassword.setSelected(!Settings.getSettings().getLastUser().isEmpty() && !userManager.getPassword(Settings.getSettings().getLastUser()).isEmpty());
+		if(Settings.getSettings().getLastUser() != null) {
+			savePassword.setSelected(!Settings.getSettings().getLastUser().isEmpty() && !userManager.getPassword(Settings.getSettings().getLastUser()).isEmpty());
+		}
 		savepass = savePassword.isSelected();
 
 		footer.add(edit);
@@ -393,7 +395,6 @@ public class LaunchFrame extends JFrame {
 	public void doLogin(String username, String password) {
 		savepass = savePassword.isSelected();
 		if(password.isEmpty()) {
-			// Passwords will be nothing if they opted to not save password
 			// Prompt user to input password
 			PasswordDialog p = new PasswordDialog(this, true);
 			p.setVisible(true);
@@ -634,7 +635,12 @@ public class LaunchFrame extends JFrame {
 
 			for (int i = 0; i < urls.length; i++) {
 				try {
-					File f = new File(new File(workingDir, "bin"), jarFiles[i]);
+					File f;
+					if(i == 0) {
+						f = new File(new File(workingDir).getParentFile(), "/instMods/" + jarFiles[i]);
+					} else {
+						f = new File(new File(workingDir, "bin"), jarFiles[i]);
+					}
 					urls[i] = f.toURI().toURL();
 					System.out.println("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e) {
@@ -739,17 +745,15 @@ public class LaunchFrame extends JFrame {
 	 * @throws IOException
 	 */
 	protected void installMods(String modPackName) throws IOException {
-		new File(Settings.getSettings().getInstallPath() + "/"+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft").mkdirs();
+		String installpath = Settings.getSettings().getInstallPath();
+		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+		new File(installpath + "/" + pack.getDir() + "/.minecraft").mkdirs();
+		new File(installpath + "/" + pack.getDir() + "/instMods/").mkdirs();
 		System.out.println("dirs mk'd");
-		FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/"), new File(Settings.getSettings().getInstallPath() + "/" 
-				+ ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir()+ "/.minecraft/bin"));
-		File minecraft = new File(Settings.getSettings().getInstallPath()+ "/.minecraft/bin/minecraft.jar");
-		File mcbackup = new File(Settings.getSettings().getInstallPath() + "/"+ modPackName + "/.minecraft/bin/mcbackup.jar");
-		FileUtils.copyFile(minecraft, mcbackup);
-		FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"), 
-				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft"));
-		FileUtils.copyFile(new File(Settings.getSettings().getInstallPath() + "/temp/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/instMods/" + FORGENAME), 
-				new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/" + FORGENAME));
+		FileUtils.copyFolder(new File(installpath + "/.minecraft/bin/"), new File(installpath + "/" + pack.getDir()+ "/.minecraft/bin"));
+		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/.minecraft"), new File(installpath + "/" + pack.getDir() + "/.minecraft"));
+		FileUtils.copyFile(new File(installpath + "/temp/" + pack.getDir() + "/instMods/" + FORGENAME), 
+				new File(installpath + "/" + pack.getDir() + "/instMods/" + FORGENAME));
 	}
 
 	/**
