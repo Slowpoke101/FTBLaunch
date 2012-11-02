@@ -2,16 +2,12 @@ package net.ftb.workers;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ftb.gui.LaunchFrame;
+
 import net.ftb.log.Logger;
 
 public class MincraftLauncher {
@@ -84,7 +80,7 @@ public class MincraftLauncher {
 			arguments.add("net.minecraft.client.Minecraft");
 			arguments.add(username);
 			arguments.add(password);
-
+			
 			String cmdline = "";
 
 			for (String cmd : arguments)
@@ -93,12 +89,15 @@ public class MincraftLauncher {
 
 			// Lets go
 			ProcessBuilder processBuilder = new ProcessBuilder(arguments);
-
+			
+			// Windows Version
+			if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0)
+				processBuilder.environment().put("APPDATA", new File(workingDir).getParentFile().getAbsolutePath());
+			
+			
+			
 			try {
-
-				Process p = processBuilder.start();
-
-				System.out.println("Launcher started");
+				processBuilder.start();
 				success = 1;
 			} catch (IOException e) {
 				Logger.logError("Error during Minecraft launch", e);
