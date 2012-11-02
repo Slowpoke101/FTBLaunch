@@ -34,7 +34,7 @@ public class ModPack {
 	private int size;
 	private String serverUrl;
 
-	private static ArrayList<ModPack> packs = new ArrayList<ModPack>();
+	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
 	/*
 	 * List of Listeners that will be informed if a modpack was added
@@ -44,7 +44,7 @@ public class ModPack {
 	/*
 	 * Invoking async Load of Modpacks
 	 */
-	public static void LoadAll() {
+	public static void loadAll() {
 		ModpackLoader loader = new ModpackLoader();
 		loader.start();
 	}
@@ -81,7 +81,7 @@ public class ModPack {
 	 * Test Function, no use in production
 	 */
 	public static void main(String[] args) {
-		LoadAll();
+		loadAll();
 	}
 
 	// class stuff

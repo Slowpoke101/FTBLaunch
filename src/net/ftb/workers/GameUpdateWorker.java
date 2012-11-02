@@ -304,7 +304,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				setStatus("Extracting " + currentEntry + "...");
 				FileOutputStream outStream = new FileOutputStream(new File(nativesDir, currentEntry.getName()));
 
-				int readLen = 0;
+				int readLen;
 				byte[] buffer = new byte[1024];
 				while ((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
 					outStream.write(buffer, 0, readLen);

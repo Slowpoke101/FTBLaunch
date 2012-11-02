@@ -212,7 +212,7 @@ public class LaunchFrame extends JFrame {
 				frame.setVisible(true);
 
 				ModPack.addListener(frame.modPacksPane);
-				ModPack.LoadAll();
+				ModPack.loadAll();
 			}
 		});
 	}

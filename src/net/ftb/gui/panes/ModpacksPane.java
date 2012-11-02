@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -88,7 +89,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					Hlink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+					hLink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				} catch (NoSuchAlgorithmException e) {
@@ -167,15 +168,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public int getSelectedModIndex() {
 		return modPacksAdded ? selectedPack : -1;
 	}
-	
-	public void Hlink(ActionEvent ae, URI uri) {
+
+	public void hLink(ActionEvent ae, URI uri) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
 				desktop.browse(uri);
-			} catch(Exception exc) {
-				System.out.println(exc);
-			}
+			} catch (IOException e) { e.printStackTrace(); }
 		} else {
 			System.out.println("else working");
 		}
