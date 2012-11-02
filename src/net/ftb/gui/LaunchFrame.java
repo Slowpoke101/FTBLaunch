@@ -41,6 +41,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -61,6 +62,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.ILauncherPane;
@@ -104,6 +106,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JCheckBox savePassword = new JCheckBox();
 	private JButton launch = new JButton("Launch");
 	private static String[] dropdown_ = {"Select Username", "Create Username"};
 	private static JComboBox users;
@@ -128,6 +131,8 @@ public class LaunchFrame extends JFrame {
 	private static final String FORGENAME = "minecraftforge-universal-6.0.1.353.zip";
 	public static UserManager userManager;
 	private LoginResponse RESPONSE;
+	public static boolean savepass = true;
+	public static String tempPass = "";
 
 	/**
 	 * Launch the application.
@@ -285,7 +290,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		launch.setBounds(711, 20, 100, 30);
+		launch.setBounds(722, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -296,10 +301,17 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+		savePassword.setToolTipText("Save Password");
+		savePassword.setBounds(701, 20, 16, 30);
+
+		savePassword.setSelected(!Settings.getSettings().getLastUser().isEmpty() && !userManager.getPassword(Settings.getSettings().getLastUser()).isEmpty());
+		savepass = savePassword.isSelected();
+
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
+		footer.add(savePassword);
 		footer.add(launch);
 
 		newsPane = new NewsPane();
@@ -320,7 +332,7 @@ public class LaunchFrame extends JFrame {
 			public void paint(Graphics2D g, Object o, int width, int height) {
 				g.setColor(tabColor);
 				g.fill(new Rectangle2D.Double(0,0,width,height));
-//				g.drawRect(0, 0, width, height);
+				//				g.drawRect(0, 0, width, height);
 			}
 		});
 
@@ -329,7 +341,7 @@ public class LaunchFrame extends JFrame {
 			public void paint(Graphics2D g, Object o, int width, int height) {
 				g.setColor(tabColor);
 				g.fill(new Rectangle2D.Double(0,0,width,height));
-//				g.drawRect(0, 0, width, height);
+				//				g.drawRect(0, 0, width, height);
 			}
 		});
 
@@ -339,12 +351,12 @@ public class LaunchFrame extends JFrame {
 				g.setColor(tabColor.darker());
 				// You want to have the area filled more than likely instead of a thin outline
 				g.fill(new Rectangle2D.Double(0,0,width,height));
-//				g.drawRect(0, 0, width, height);
+				//				g.drawRect(0, 0, width, height);
 			}
 		});
-                
+
 		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
-                // If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
+		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
 		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
@@ -379,12 +391,23 @@ public class LaunchFrame extends JFrame {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
+		savepass = savePassword.isSelected();
 		if(password.isEmpty()) {
 			// Passwords will be nothing if they opted to not save password
 			// Prompt user to input password
-			
+			PasswordDialog p = new PasswordDialog(this, true);
+			p.setVisible(true);
+			if(tempPass.isEmpty()){
+				enableObjects();
+				return;
+			}
+			password = tempPass;
 		}
-		
+		if(!savepass){
+			userManager.removePass(username);
+		}
+		writeUsers(username);
+
 		System.out.println("Logging in...");
 
 		tabbedPane.setEnabledAt(0, false);

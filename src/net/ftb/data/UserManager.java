@@ -71,7 +71,7 @@ public class UserManager {
 		}
 		return String.format("%040x", str2);
 	}
-	
+
 	public void write() throws IOException {
 		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
 		for (int i = 0; i < _users.size(); i++) {
@@ -82,15 +82,15 @@ public class UserManager {
 			}
 		}
 		wri.close();
- 	}
- 	
- 	public void read() {
- 		_users.clear();
- 		if(_filename.exists()) {
- 			try {
- 				BufferedReader read = new BufferedReader(new FileReader(_filename));
- 				String str;
- 				while((str = read.readLine()) != null) {
+	}
+
+	public void read() {
+		_users.clear();
+		if(_filename.exists()) {
+			try {
+				BufferedReader read = new BufferedReader(new FileReader(_filename));
+				String str;
+				while((str = read.readLine()) != null) {
 					str = fromHexThing(str);
 					_users.add(new User(str));
 				}
@@ -98,11 +98,11 @@ public class UserManager {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				System.out.println("Error loading login data");
- 			}
- 		}
- 	}
+			}
+		}
+	}
 
-	
+
 	public static byte[] getFileMD5(URL string) throws IOException {
 		MessageDigest dgest = null;
 		try {
@@ -174,6 +174,15 @@ public class UserManager {
 			}
 		}
 		return null;
+	}
+
+	public static void removePass(String username) {
+		for(User user : _users) {
+			if(user.getUsername().equals(username)) {
+				user.setPassword("");
+				return;
+			}
+		}
 	}
 
 	public static void removeUser(String name) {

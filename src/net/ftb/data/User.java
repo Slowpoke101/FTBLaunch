@@ -1,5 +1,7 @@
 package net.ftb.data;
 
+import net.ftb.gui.LaunchFrame;
+
 public class User {
 	private String _username = "";
 	private String _password = "";
@@ -13,9 +15,15 @@ public class User {
 	
 	public User(String input) {
 		String[] tokens = input.split(":");
-		_name = tokens[0];
-		_username = tokens[1];
-		_password = tokens[2];
+		if(tokens.length == 3) {
+			_name = tokens[0];
+			_username = tokens[1];
+			_password = tokens[2];
+		} else if(tokens.length == 2) {
+			_name = tokens[0];
+			_username = tokens[1];
+			_password = "";
+		}
 	}
 	
 	public String getUsername() {
