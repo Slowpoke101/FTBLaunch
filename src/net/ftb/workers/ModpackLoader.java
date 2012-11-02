@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -28,28 +29,28 @@ public class ModpackLoader extends Thread {
 
 	public void run() {
 		try {
-			System.out.println("loading modpack information...");
+			Logger.logInfo("loading modpack information...");
 
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
-
+			
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
 			Document doc;
 			try {
 				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
 			} catch (SAXException e) {
-				e.printStackTrace();
+				Logger.logError("Exception during reading modpackfile",e);
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.logError("Exception during reading modpackfile",e);
 				return;
 			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
+				Logger.logError("Exception during reading modpackfile",e);
 				return;
 			}
 
 			if (doc == null) {
-				System.out.println("Error: could not load modpackdata!");
+				Logger.logError("Error: could not load modpackdata!");
 				return;
 			}
 
@@ -65,13 +66,13 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent()));
 				} catch (DOMException e) {
-					e.printStackTrace();
+					Logger.logError("Exception during reading modpackfile",e);
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.logError("Exception during reading modpackfile",e);
 				}
 			}
 		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
+			Logger.logError("Exception during reading modpackfile",e1);
 		}
 	}
 }
