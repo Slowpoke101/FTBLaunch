@@ -7,7 +7,7 @@
   <version>0.1.2-Beta</version>
   <packaging>jar</packaging>
   <properties>
-    <buildNumber>012</buildNumber>
+    <buildNumber>0</buildNumber>
     <mainClass>net.ftb.gui.LaunchFrame</mainClass>
     <minimumJreVersion>1.6</minimumJreVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -57,10 +57,13 @@ public class FileUtils {
 				destinationStream = new FileOutputStream(destinationFile).getChannel();
 				destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
 			} finally {
-				sourceStream.close();
-				destinationStream.close();
+				if(sourceStream != null) {
+					sourceStream.close();
+				}
+				if(destinationStream != null){
+					destinationStream.close();
+				}
 			}
-//			System.out.println("File copied from " + sourceFile + " to " + destinationFile);
 		}
 	}
 	
@@ -92,9 +95,7 @@ public class FileUtils {
 
 			zipentry = zipinputstream.getNextEntry();
 			while (zipentry != null) {
-				// for each entry to be extracted
 				String entryName = zipentry.getName();
-//				System.out.println("entryname " + entryName);
 				int n;
 				FileOutputStream fileoutputstream;
 				File newFile = new File(entryName);
