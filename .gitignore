@@ -4,3 +4,8 @@ bin/
 *.jardesc
 ftblaunch.cfg
 target/
+/logindata
+/temp
+/.classpath
+/.project
+/.settings

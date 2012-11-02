@@ -34,6 +34,7 @@ public class LauncherConsole extends JDialog {
 		public void write(byte[] b) throws IOException {
 			if (logToConsole) {
 				textArea.append(new String(b));
+				textArea.setCaretPosition(textArea.getDocument().getLength());
 			}
 			// write it to the console
 			super.write(b);
@@ -43,6 +44,7 @@ public class LauncherConsole extends JDialog {
 		public void write(byte[] buf, int off, int len) {
 			if (logToConsole) {
 				textArea.append(new String(buf, off, len));
+				textArea.setCaretPosition(textArea.getDocument().getLength());
 			}
 			// write it to the console
 			super.write(buf, off, len);

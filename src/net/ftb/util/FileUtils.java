@@ -58,7 +58,7 @@ public class FileUtils {
 				destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
 			} finally {
 				sourceStream.close();
-				destinationStream.close();
+				//destinationStream.close();
 			}
 //			System.out.println("File copied from " + sourceFile + " to " + destinationFile);
 		}
