@@ -319,7 +319,8 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void paint(Graphics2D g, Object o, int width, int height) {
 				g.setColor(tabColor);
-				g.drawRect(0, 0, width, height);
+				g.fill(new Rectangle2D.Double(0,0,width,height));
+//				g.drawRect(0, 0, width, height);
 			}
 		});
 
@@ -327,16 +328,17 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void paint(Graphics2D g, Object o, int width, int height) {
 				g.setColor(tabColor);
-				g.drawRect(0, 0, width, height);
+				g.fill(new Rectangle2D.Double(0,0,width,height));
+//				g.drawRect(0, 0, width, height);
 			}
 		});
 
 		overrides.put("TabbedPane:TabbedPaneTab[Selected].backgroundPainter", new Painter() {
 			@Override
 			public void paint(Graphics2D g, Object object, int width, int height) {
-				g.setColor(Color.white);
-                                // You want to have the area filled more than likely instead of a thin outline
-                                g.fill(new Rectangle2D.Double(0,0,width,height));
+				g.setColor(tabColor.darker());
+				// You want to have the area filled more than likely instead of a thin outline
+				g.fill(new Rectangle2D.Double(0,0,width,height));
 //				g.drawRect(0, 0, width, height);
 			}
 		});
@@ -377,6 +379,12 @@ public class LaunchFrame extends JFrame {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
+		if(password.isEmpty()) {
+			// Passwords will be nothing if they opted to not save password
+			// Prompt user to input password
+			
+		}
+		
 		System.out.println("Logging in...");
 
 		tabbedPane.setEnabledAt(0, false);
