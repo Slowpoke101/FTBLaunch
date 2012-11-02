@@ -6,4 +6,6 @@ ftblaunch.cfg
 target/
 /logindata
 /temp
-
+/.classpath
+/.project
+/.settings
