@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,6 +24,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 
@@ -34,6 +36,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private JScrollPane packsScroll;
 	private JLabel splash;
 	private JButton serverLink;
+	private JButton modsFolder;
+	private JButton donate;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
 
@@ -84,7 +88,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		this.add(packsScroll);
 
 		serverLink = new JButton("Grab The Server Version Here!!");
-		serverLink.setBounds(420, 210, 410, 90);
+		serverLink.setBounds(420, 210, 250, 90);
 		serverLink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,6 +102,35 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		});
 		this.add(serverLink);
+		
+		donate = new JButton("Donate to this Pack!");
+		donate.setBounds(670, 255, 170, 45);
+		donate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		this.add(donate);
+		
+		modsFolder = new JButton("Open the Jar mods folder");
+		modsFolder.setBounds(670, 210, 170, 45);
+		modsFolder.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Desktop.isDesktopSupported()) {
+					Desktop desktop = Desktop.getDesktop();
+					try {
+						desktop.open(new File(Settings.getSettings().getInstallPath() + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "instMods"));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		this.add(modsFolder);
 	}
 
 	@Override public void onVisible() { }
