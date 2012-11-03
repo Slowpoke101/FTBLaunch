@@ -3,8 +3,11 @@ package net.ftb.gui.panes;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,9 +16,11 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -103,6 +108,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(installBrowseBtn, gbc_installBrowseBtn);
 		
 		tglbtnForceUpdate = new JToggleButton("Force update?");
+		tglbtnForceUpdate.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tglbtnForceUpdate.setEnabled(false);
+				removeVersionFiles();
+			}
+		});
 		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
 		gbc_tglbtnForceUpdate.gridwidth = 5;
@@ -149,7 +161,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		LaunchFrame.getInstance().saveSettings();
 	}
 
-
+	private void removeVersionFiles() {
+		for(ModPack pack : ModPack.getPackArray()) {
+			File temp = new File(new File(Settings.getSettings().getInstallPath(), pack.getDir()), "version");
+			if(temp.exists()) {
+				temp.delete();
+			}
+		}
+	}
+	
 	public void saveSettingsInto(Settings settings) {
 		settings.setInstallPath(installFolderTextField.getText());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
