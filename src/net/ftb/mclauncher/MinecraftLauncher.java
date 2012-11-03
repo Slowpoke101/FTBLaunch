@@ -97,11 +97,20 @@ public class MinecraftLauncher {
 			if (rmax != null && Integer.parseInt(rmax) > 0) {
 				max = Integer.parseInt(rmax);
 				if (min > 0 && max > 0) {
-					arguments.add("-Xms" + rmin + "M");
-					Logger.logInfo("Setting MinMemory to " + rmin);
-					arguments.add("-Xmx" + rmax + "M");
-					Logger.logInfo("Setting MaxMemory to " + rmax);
-					memorySet = true;
+					if(min < max) {
+						arguments.add("-Xms" + rmin + "M");
+						Logger.logInfo("Setting MinMemory to " + rmin);
+						arguments.add("-Xmx" + rmax + "M");
+						Logger.logInfo("Setting MaxMemory to " + rmax);
+						memorySet = true;
+					} else {
+						Logger.logInfo("Min memory bigger than Max, swapping values.");
+						arguments.add("-Xms" + rmax + "M");
+						Logger.logInfo("Setting MinMemory to " + rmin);
+						arguments.add("-Xmx" + rmin + "M");
+						Logger.logInfo("Setting MaxMemory to " + rmax);
+						memorySet = true;
+					}
 				}
 			}
 		} catch (Exception e) {
