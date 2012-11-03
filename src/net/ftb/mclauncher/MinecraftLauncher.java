@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 
 /**
@@ -32,7 +33,7 @@ public class MinecraftLauncher {
 				for(String name : tempDir.list()) {
 					if(!name.equalsIgnoreCase(forgename)) {
 						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							cpb.append(";");
+							cpb.append(OSUtils.getJavaDelimiter());
 							cpb.append(new File(tempDir, name).getAbsolutePath());
 						}
 					}
@@ -41,11 +42,11 @@ public class MinecraftLauncher {
 				Logger.logInfo("Not a directory.");
 			}
 			// Load forge LAASSSSSST
-			cpb.append(";");
+			cpb.append(OSUtils.getJavaDelimiter());
 			cpb.append(new File(tempDir, forgename).getAbsolutePath());
 			
 			for(int i = 0; i < jarFiles.length; i++) {
-				cpb.append(";");
+				cpb.append(OSUtils.getJavaDelimiter());
 				cpb.append(new File(new File(workingDir, "bin"), jarFiles[i]).getAbsolutePath());
 			}
 
