@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.ftb.log.Logger;
@@ -21,34 +20,30 @@ import net.ftb.log.Logger;
  *
  */
 public class MinecraftLauncher {
-	public static int launchMinecraft(String workingDir, String username, String password, String forgename, String rmin, String rmax) {
+	public static int launchMinecraft(String workingDir, String username,
+			String password, String forgename, String rmin, String rmax) {
+
 		int success = -1;
 		try {
-			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+
+			String[] jarFiles = new String[] { forgename, "minecraft.jar",
+					"lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			StringBuffer cpb = new StringBuffer("");
-			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
-			// Load Forge First
-			cpb.append(";");
-			cpb.append(new File(tempDir, forgename).getAbsolutePath());
-			// Go through all remaining items in instmods folder
-			if(tempDir.isDirectory()) {
-				for(String name : tempDir.list()) {
-					if(!name.equalsIgnoreCase(forgename)) {
-						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							cpb.append(";");
-							cpb.append(new File(tempDir, name).getAbsolutePath());
-						}
-					}
+
+			for (int i = 0; i < jarFiles.length; i++) {
+				File f;
+				if (i == 0) {
+					f = new File(new File(workingDir).getParentFile(),
+							"/instMods/" + jarFiles[i]);
+				} else {
+					f = new File(new File(workingDir, "bin"), jarFiles[i]);
 				}
-			} else {
-				Logger.logInfo("Not a directory.");
-			}
-			
-			for(int i = 0; i < jarFiles.length; i++) {
+
 				cpb.append(";");
-				cpb.append(new File(new File(workingDir, "bin"), jarFiles[i]).getAbsolutePath());
+				cpb.append(f.getAbsolutePath());
+
 			}
-			
+
 			// Holder for the Arguments
 			List<String> arguments = new ArrayList<String>();
 
@@ -131,42 +126,34 @@ public class MinecraftLauncher {
 	}
 
 	public static void main(String[] args) {
-		String basepath = "C:\\Users\\Sean\\Documents\\GitHub\\FTBLaunch\\target\\FTBBETAA\\.minecraft";
-		String forgename = "minecraftforge-universal-6.0.1.353.zip";
-		String username = "unv_annihilator";
-		String password = "Raid_110200";
+		String basepath = args[0];
+		String forgename = args[1];
+		String username = args[2];
+		String password = args[3];
 
 		try {
 			System.out.println("Loading jars...");
-			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			HashMap<Integer, File> map = new HashMap<Integer, File>();
-			int counter = 1;
-			File tempDir = new File(new File(basepath).getParentFile(), "/instMods/");
-			if(tempDir.isDirectory()) {
-				for(String name : tempDir.list()) {
-					if(name.equalsIgnoreCase(forgename)) {
-						map.put(0, new File(tempDir, forgename));
-					} else {
-						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							map.put(counter, new File(tempDir, name));
-							counter++;
-						}
-					}
-				}
-			}
-			for(String jarFile : jarFiles) {
-				map.put(counter, new File(new File(basepath, "bin"), jarFile));
-				counter++;
-			}	
-			
-			URL[] urls = new URL[map.size()];
-			for(int i = 0; i < counter; i++) {
+			String[] jarFiles = new String[] { forgename, "minecraft.jar",
+					"lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+			URL[] urls = new URL[jarFiles.length];
+
+			for (int i = 0; i < urls.length; i++) {
 				try {
-					urls[i] = map.get(i).toURI().toURL();
+					File f;
+					if (i == 0) {
+						f = new File(new File(basepath).getParentFile(),
+								"/instMods/" + jarFiles[i]);
+					} else {
+						f = new File(new File(basepath, "bin"), jarFiles[i]);
+					}
+					urls[i] = f.toURI().toURL();
+
+					System.out.println("Loading URL: " + urls[i].toString());
 				} catch (MalformedURLException e) {
+					System.out.println("Malformed URL Exception occured");
 					e.printStackTrace();
+					System.exit(5);
 				}
-				System.out.println("Loading URL: " + urls[i].toString());
 			}
 
 			System.out.println("Loading natives...");
@@ -233,5 +220,6 @@ public class MinecraftLauncher {
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
+
 	}
 }
