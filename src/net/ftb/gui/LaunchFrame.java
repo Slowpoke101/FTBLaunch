@@ -156,6 +156,7 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				// Check for version update
+                            Logger.logInfo("path is " + ClassLoader.getSystemResource("net/ftb/gui/LaunchFrame.class").toString());
 				if(!isUpToDate()){
 					// launcher isn't up to date, download new version
 				}
