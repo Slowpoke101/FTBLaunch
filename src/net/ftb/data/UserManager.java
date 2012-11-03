@@ -26,30 +26,6 @@ public class UserManager {
 		}
 	}
 
-	public void flush() throws IOException {
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		wri.write("");
-		wri.close();
-	}
-
-	public String getHex(String str) {
-		try {
-			return String.format("%040x", new BigInteger(str.getBytes("utf8")));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
-
-	public String fromHex(String str) {
-		try {
-			return new String(new BigInteger(str, 16).toByteArray(), "utf8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
-
 	public String fromHexThing(String str) {
 		BigInteger in;
 		in = new BigInteger(str, 16).xor(new BigInteger(1, getSelfMD5()));
