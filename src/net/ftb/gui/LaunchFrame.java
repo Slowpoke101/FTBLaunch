@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -23,13 +22,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -119,7 +118,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static final int version = 12;
+	private static final int version = 20;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -127,6 +126,7 @@ public class LaunchFrame extends JFrame {
 	public static UserManager userManager;
 	private LoginResponse RESPONSE;
 	public static String tempPass = "";
+	private boolean uptodate = true;
 
 	/**
 	 * Launch the application.
@@ -157,6 +157,10 @@ public class LaunchFrame extends JFrame {
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				// Check for version update
+				if(!isUpToDate()){
+					// launcher isn't up to date, download new version
+				}
 				Color baseColor = new Color(40, 40, 40);
 
 				UIManager.put("control", baseColor);
@@ -219,7 +223,7 @@ public class LaunchFrame extends JFrame {
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v0.1.2");
+		setTitle("Feed the Beast Launcher Beta v0.2.0");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -241,7 +245,7 @@ public class LaunchFrame extends JFrame {
 			@Override 
 			public void mouseClicked(MouseEvent event) {
 				try {
-					Hlink(event, new URI("http://www.feed-the-beast.com"));
+					hLink(event, new URI("http://www.feed-the-beast.com"));
 				} catch (URISyntaxException e) {Logger.logWarn("Exception occured",e); }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
@@ -256,7 +260,7 @@ public class LaunchFrame extends JFrame {
 			@Override 
 			public void mouseClicked(MouseEvent event) {
 				try {
-					Hlink(event, new URI("http://www.creeperhost.net/aff.php?aff=293"));
+					hLink(event, new URI("http://www.creeperhost.net/aff.php?aff=293"));
 				} catch (URISyntaxException e) { Logger.logWarn("Exception occured",e); }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
@@ -306,7 +310,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		launch.setBounds(722, 20, 100, 30);
+		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -595,8 +599,9 @@ public class LaunchFrame extends JFrame {
 		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME,
 				Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
 		Logger.logInfo("MinecraftLauncher said: "+result);
-		if (result > 0)
+		if (result > 0) {
 			System.exit(0);
+		}
 	}
 
 	/**
@@ -698,7 +703,7 @@ public class LaunchFrame extends JFrame {
 		users.setEnabled(true);
 	}
 
-	public void Hlink(MouseEvent me, URI uri) {
+	public void hLink(MouseEvent me, URI uri) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
@@ -708,6 +713,36 @@ public class LaunchFrame extends JFrame {
 			}
 		} else {
 			Logger.logInfo("else working");
+		}
+	}
+	
+	private static boolean isUpToDate() {
+		System.out.println("Checking for updates ...");
+		String content;
+		Scanner scanner = null;
+		URLConnection connection;
+		try {
+			connection = new URL("").openConnection();
+			scanner = new Scanner(connection.getInputStream());
+			scanner.useDelimiter("\\Z");
+			content = scanner.next();
+		} catch (MalformedURLException e) { 
+			e.printStackTrace();
+			return true;
+		} catch (IOException e) { 
+			e.printStackTrace();
+			return true;
+		} finally {
+			if (scanner != null) {
+				scanner.close();
+			}
+		}
+		if(Integer.parseInt(content.trim()) > version) {
+			System.out.println("Out of date.");
+			return false;
+		} else {
+			System.out.println("Up to date.");
+			return true;
 		}
 	}
 }

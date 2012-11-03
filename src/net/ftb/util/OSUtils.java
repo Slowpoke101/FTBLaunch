@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 public class OSUtils {
 	/**
