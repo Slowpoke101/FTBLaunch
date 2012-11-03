@@ -171,12 +171,12 @@ public class MinecraftLauncher {
 			// Get the Minecraft Class.
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 
-			try {
-				cl.close();
-			} catch (IOException e) {
-				System.err.println("Exception during closing classloader");
-				e.printStackTrace();
-			}
+//			try {
+//				cl.close();
+//			} catch (IOException e) {
+//				System.err.println("Exception during closing classloader");
+//				e.printStackTrace();
+//			}
 
 			Field[] fields = mc.getDeclaredFields();
 

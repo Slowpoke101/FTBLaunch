@@ -22,13 +22,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -338,11 +336,11 @@ public class LaunchFrame extends JFrame {
 		loadSettings();
 
 		//Adding tabs to the panel
-		UIDefaults overrides = new UIDefaults();
-
-		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
-		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
-		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
+//		UIDefaults overrides = new UIDefaults();
+//
+//		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
+//		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
+//		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 
@@ -717,32 +715,34 @@ public class LaunchFrame extends JFrame {
 	}
 	
 	private static boolean isUpToDate() {
-		System.out.println("Checking for updates ...");
-		String content;
-		Scanner scanner = null;
-		URLConnection connection;
-		try {
-			connection = new URL("").openConnection();
-			scanner = new Scanner(connection.getInputStream());
-			scanner.useDelimiter("\\Z");
-			content = scanner.next();
-		} catch (MalformedURLException e) { 
-			e.printStackTrace();
-			return true;
-		} catch (IOException e) { 
-			e.printStackTrace();
-			return true;
-		} finally {
-			if (scanner != null) {
-				scanner.close();
-			}
-		}
-		if(Integer.parseInt(content.trim()) > version) {
-			System.out.println("Out of date.");
-			return false;
-		} else {
-			System.out.println("Up to date.");
-			return true;
-		}
+		// Debug stuff
+		Logger.logInfo("Checking for updates ...");
+//		String content;
+//		Scanner scanner = null;
+//		URLConnection connection;
+//		try {
+//			connection = new URL("").openConnection();
+//			scanner = new Scanner(connection.getInputStream());
+//			scanner.useDelimiter("\\Z");
+//			content = scanner.next();
+//		} catch (MalformedURLException e) { 
+//			e.printStackTrace();
+//			return true;
+//		} catch (IOException e) { 
+//			e.printStackTrace();
+//			return true;
+//		} finally {
+//			if (scanner != null) {
+//				scanner.close();
+//			}
+//		}
+//		if(Integer.parseInt(content.trim()) > version) {
+//			Logger.logInfo("Out of date.");
+//			return false;
+//		} else {
+//			Logger.logInfo("Up to date.");
+//			return true;
+//		}
+		return true;
 	}
 }
