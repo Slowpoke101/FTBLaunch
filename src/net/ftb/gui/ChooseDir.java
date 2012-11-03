@@ -16,9 +16,8 @@ public class ChooseDir extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private OptionsPane optionsPane;
-	private JButton go;
 
-	private String choosertitle;
+	private String choosertitle = "Please select an install folder";
 
 	public ChooseDir(OptionsPane optionsPane) {
 		super();
@@ -43,18 +42,5 @@ public class ChooseDir extends JFrame implements ActionListener {
 
 	public Dimension getPreferredSize() {
 		return new Dimension(200, 200);
-	}
-
-	public static void main(String s[]) {
-		JFrame frame = new JFrame("");
-		ChooseDir panel = new ChooseDir(new OptionsPane());
-		frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-		frame.getContentPane().add(panel, "Center");
-		frame.setSize(panel.getPreferredSize());
-		frame.setVisible(true);
 	}
 }

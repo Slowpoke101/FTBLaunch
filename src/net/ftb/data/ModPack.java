@@ -77,13 +77,6 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	/*
-	 * Test Function, no use in production
-	 */
-	public static void main(String[] args) {
-		loadAll();
-	}
-
 	// class stuff
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl) throws IOException, NoSuchAlgorithmException {
 		// Always get this information

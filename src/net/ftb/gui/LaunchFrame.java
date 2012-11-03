@@ -584,16 +584,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * @param dest - the destination to be saved
-	 * @param file - the file as on the repo
-	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
-	 * @throws IOException - see downloadUrl
-	 */
-	public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException {
-		downloadUrl(dest, getCreeperhostLink(file));
-	}
-
-	/**
 	 * @param input - String to hash
 	 * @return - hashed string
 	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
@@ -652,40 +642,6 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("MinecraftLauncher said: "+result);
 		if (result > 0)
 			System.exit(0);
-	}
-
-	/**
-	 * @param modPackName - the name of the pack 
-	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
-	 */
-	protected void downloadModPack(String modPackName) throws NoSuchAlgorithmException {
-		Logger.logInfo("DOWNLOADING!!!");
-		URL website;
-		try {
-			Logger.logInfo("STILL DOWNLOADING!!!");
-			website = new URL(getCreeperhostLink(modPackName));
-			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			fos = new FileOutputStream(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
-			fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-		} catch (MalformedURLException e) { 
-			Logger.logError("Download failed",e);
-		} catch (IOException e) {
-			Logger.logError("Download failed",e);
-		}
-
-		FileUtils.extractZip(Settings.getSettings().getInstallPath() + "/temp/" + modPackName);
-		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/mods").delete();
-		new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/coremods").delete();
-		File[] contents = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() + "/.minecraft/bin/").listFiles();
-		String files;
-		for(File content : contents) {
-			if(content.isFile()) {
-				files = content.getName();
-				if(files.toLowerCase().endsWith(".zip")) {
-					content.delete();
-				}
-			}
-		}
 	}
 
 	/**
