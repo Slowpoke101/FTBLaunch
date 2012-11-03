@@ -27,9 +27,6 @@ public class MinecraftLauncher {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			StringBuffer cpb = new StringBuffer("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
-			// Load Forge First
-			cpb.append(";");
-			cpb.append(new File(tempDir, forgename).getAbsolutePath());
 			// Go through all remaining items in instmods folder
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
@@ -43,6 +40,9 @@ public class MinecraftLauncher {
 			} else {
 				Logger.logInfo("Not a directory.");
 			}
+			// Load forge LAASSSSSST
+			cpb.append(";");
+			cpb.append(new File(tempDir, forgename).getAbsolutePath());
 			
 			for(int i = 0; i < jarFiles.length; i++) {
 				cpb.append(";");
@@ -140,13 +140,11 @@ public class MinecraftLauncher {
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
-			int counter = 1;
+			int counter = 0;
 			File tempDir = new File(new File(basepath).getParentFile(), "/instMods/");
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
-					if(name.equalsIgnoreCase(forgename)) {
-						map.put(0, new File(tempDir, forgename));
-					} else {
+					if(!name.equalsIgnoreCase(forgename)) {
 						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
 							map.put(counter, new File(tempDir, name));
 							counter++;
@@ -154,6 +152,9 @@ public class MinecraftLauncher {
 					}
 				}
 			}
+			// Load forge LAST
+			map.put(counter, new File(tempDir, forgename));
+			counter++;
 			for(String jarFile : jarFiles) {
 				map.put(counter, new File(new File(basepath, "bin"), jarFile));
 				counter++;
@@ -207,6 +208,7 @@ public class MinecraftLauncher {
 				// And set it.
 				System.out.println("Fixed Minecraft Path: Field was "
 						+ f.toString());
+				break;
 			}
 
 			String[] mcArgs = new String[2];
