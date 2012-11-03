@@ -116,7 +116,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static final int version = 20;
+	private static final int version = 21;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -221,7 +221,7 @@ public class LaunchFrame extends JFrame {
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v0.2.0");
+		setTitle("Feed the Beast Launcher Beta v0.2.1");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
