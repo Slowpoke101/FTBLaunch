@@ -123,7 +123,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				if(Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					try {
-						desktop.open(new File(Settings.getSettings().getInstallPath() + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "instMods"));
+						desktop.open(new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/instMods"));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
