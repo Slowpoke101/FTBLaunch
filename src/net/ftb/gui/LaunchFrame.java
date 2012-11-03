@@ -126,7 +126,6 @@ public class LaunchFrame extends JFrame {
 	private static final String FORGENAME = "minecraftforge-universal-6.0.1.353.zip";
 	public static UserManager userManager;
 	private LoginResponse RESPONSE;
-	public static boolean savepass = true;
 	public static String tempPass = "";
 
 	/**
@@ -318,19 +317,10 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		savePassword.setToolTipText("Save Password");
-		savePassword.setBounds(701, 20, 16, 30);
-
-		if(Settings.getSettings().getLastUser() != null) {
-			savePassword.setSelected(!Settings.getSettings().getLastUser().isEmpty() && !UserManager.getPassword(Settings.getSettings().getLastUser()).isEmpty());
-		}
-		savepass = savePassword.isSelected();
-
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
-		footer.add(savePassword);
 		footer.add(launch);
 
 		newsPane = new NewsPane();
@@ -382,7 +372,6 @@ public class LaunchFrame extends JFrame {
 	 * call this to login
 	 */
 	public void doLogin(String username, String password) {
-		savepass = savePassword.isSelected();
 		if(password.isEmpty()) {
 			// Prompt user to input password
 			PasswordDialog p = new PasswordDialog(this, true);
@@ -393,10 +382,6 @@ public class LaunchFrame extends JFrame {
 			}
 			password = tempPass;
 		}
-		if(!savepass){
-			UserManager.removePass(username);
-		}
-		writeUsers(username);
 
 		Logger.logInfo("Logging in...");
 

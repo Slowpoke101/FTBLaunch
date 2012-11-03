@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,28 +20,29 @@ import net.ftb.gui.LaunchFrame;
 public class ProfileAdderDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	JPanel panel = new JPanel();
+	private JPanel panel = new JPanel();
 
-	JTextField username = new JTextField(1);
-	JPasswordField password = new JPasswordField(1);
-	JTextField name = new JTextField(1);
+	private JTextField username = new JTextField(1);
+	private JPasswordField password = new JPasswordField(1);
+	private JTextField name = new JTextField(1);
 
-	JLabel userLabel = new JLabel("Username:");
-	JLabel passLabel = new JLabel("Password:");
-	JLabel nameLabel = new JLabel("Profile Name:");
-
-	JButton addButton = new JButton("Add");
+	private JLabel userLabel = new JLabel("Username:");
+	private JLabel passLabel = new JLabel("Password:");
+	private JLabel nameLabel = new JLabel("Profile Name:");
+	private JCheckBox savePassword = new JCheckBox("Remember Password");
+	
+	private JButton addButton = new JButton("Add");
 
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("FTB Launcher Profile Adder");
-		setBounds(300, 300, 300, 200);
+		setBounds(300, 300, 300, 240);
 		setResizable(false);
 
 		getRootPane().setDefaultButton(addButton);
 
-		panel.setBounds(0, 0, 300, 200);
+		panel.setBounds(0, 0, 300, 240);
 		setContentPane(panel);
 		panel.setLayout(null);
 
@@ -80,14 +82,27 @@ public class ProfileAdderDialog extends JDialog {
 		name.setVisible(true);
 		panel.add(name);
 
-		addButton.setBounds(125, 130, 50, 25);
+		savePassword.setBounds(100, 130, 170, 30);
+		savePassword.setSelected(true);
+		savePassword.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				password.setEnabled(savePassword.isSelected());
+			}
+		});
+		panel.add(savePassword);
+
+		addButton.setBounds(125, 170, 50, 25);
 		addButton.setVisible(true);
 		addButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent event) {
 				if(validate(name.getText(), username.getText(), password.getPassword())) {
-					UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-					LaunchFrame.savepass = true;
+					if(savePassword.isSelected()) {
+						UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
+					} else {
+						UserManager.addUser(username.getText(), "", name.getText());
+					}
 					LaunchFrame.writeUsers(name.getText());
 					setVisible(false);
 				}
