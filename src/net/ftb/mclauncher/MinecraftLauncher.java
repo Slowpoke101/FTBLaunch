@@ -28,14 +28,14 @@ public class MinecraftLauncher {
 			StringBuffer cpb = new StringBuffer("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
 			// Load Forge First
-			cpb.append(";");
+			cpb.append(":");
 			cpb.append(new File(tempDir, forgename).getAbsolutePath());
 			// Go through all remaining items in instmods folder
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
 					if(!name.equalsIgnoreCase(forgename)) {
 						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							cpb.append(";");
+							cpb.append(":");
 							cpb.append(new File(tempDir, name).getAbsolutePath());
 						}
 					}
@@ -45,7 +45,7 @@ public class MinecraftLauncher {
 			}
 			
 			for(int i = 0; i < jarFiles.length; i++) {
-				cpb.append(";");
+				cpb.append(":");
 				cpb.append(new File(new File(workingDir, "bin"), jarFiles[i]).getAbsolutePath());
 			}
 
@@ -140,12 +140,15 @@ public class MinecraftLauncher {
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
-			int counter = 1;
+			int counter = 0;
+			boolean forge = false;
 			File tempDir = new File(new File(basepath).getParentFile(), "/instMods/");
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
 					if(name.equalsIgnoreCase(forgename)) {
 						map.put(0, new File(tempDir, forgename));
+						forge = true;
+						counter++;
 					} else {
 						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
 							map.put(counter, new File(tempDir, name));
@@ -154,6 +157,11 @@ public class MinecraftLauncher {
 					}
 				}
 			}
+			
+			if(!forge){
+				Logger.logInfo("Forge was not loaded. Something probably is wrong");
+			}
+
 			for(String jarFile : jarFiles) {
 				map.put(counter, new File(new File(basepath, "bin"), jarFile));
 				counter++;
