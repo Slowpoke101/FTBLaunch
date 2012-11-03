@@ -5,13 +5,11 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -19,9 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -48,9 +43,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.Painter;
 import javax.swing.ProgressMonitor;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -72,6 +65,7 @@ import net.ftb.gui.panes.NewsPane;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
+import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
@@ -125,7 +119,6 @@ public class LaunchFrame extends JFrame {
 	 * random crap
 	 */
 	private static final int version = 12;
-	private URLClassLoader cl;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -349,9 +342,12 @@ public class LaunchFrame extends JFrame {
 
 		loadSettings();
 
+		
+		// removed temp for 1.6 compat
 		//Adding tabs to the panel
-		UIDefaults overrides = new UIDefaults();
-		final Color tabColor = new Color(27, 27, 27);
+		//UIDefaults overrides = new UIDefaults();
+		//final Color tabColor = new Color(27, 27, 27);
+		/*
 		overrides.put("TabbedPane:TabbedPaneTab[Disabled].backgroundPainter", new Painter() {
 			@Override
 			public void paint(Graphics2D g, Object o, int width, int height) {
@@ -380,7 +376,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
+		tabbedPane.putClientProperty("Nimbus.Overrides", overrides); */
 		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
 		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 		tabbedPane.add(newsPane, 0);
@@ -651,87 +647,13 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		try {
-			Logger.logInfo("Loading jars...");
-			String[] jarFiles = new String[] { FORGENAME,"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar","jinput.jar" };
-			URL[] urls = new URL[jarFiles.length];
-
-			for (int i = 0; i < urls.length; i++) {
-				try {
-					File f;
-					if(i == 0) {
-						f = new File(new File(workingDir).getParentFile(), "/instMods/" + jarFiles[i]);
-					} else {
-						f = new File(new File(workingDir, "bin"), jarFiles[i]);
-					}
-					urls[i] = f.toURI().toURL();
-					Logger.logInfo("Loading URL: " + urls[i].toString());
-				} catch (MalformedURLException e) {
-					Logger.logError("Malformed URL Exception occured",e);
-					System.exit(5);
-				}
-			}
-
-			Logger.logInfo("Loading natives...");
-			String nativesDir = new File(new File(workingDir, "bin"), "natives").toString();
-
-			System.setProperty("org.lwjgl.librarypath", nativesDir);
-			System.setProperty("net.java.games.input.librarypath", nativesDir);
-
-			System.setProperty("user.home", new File(workingDir).getParent());
-
-			cl = new URLClassLoader(urls, LaunchFrame.class.getClassLoader());
-
-			// Get the Minecraft Class.
-			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-			Field[] fields = mc.getDeclaredFields();
-
-			for(Field f : fields) {
-				if(f.getType() != File.class) {
-					// Has to be File
-					continue;
-				}
-				if(0 == (f.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC))){
-					// And Private Static.
-					continue;
-				}
-				f.setAccessible(true);
-				f.set(null, new File(workingDir));
-				// And set it.
-				Logger.logInfo("Fixed Minecraft Path: Field was " + f.toString());
-			}
-
-			String[] mcArgs = new String[2];
-			mcArgs[0] = username;
-			mcArgs[1] = password;
-
-			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
-
-			Logger.logInfo("MCDIR: " + mcDir);
-
-			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
-			this.setVisible(false);
-		} catch (ClassNotFoundException e) {
-			this.setVisible(true);
-			Logger.logError("Launch failed",e);
-		} catch (IllegalArgumentException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(2);
-		} catch (IllegalAccessException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(2);
-		} catch (InvocationTargetException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(3);
-		} catch (NoSuchMethodException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(3);
-		} catch (SecurityException e) {
-			Logger.logError("Launch failed",e);
-			System.exit(4);
-		}
+		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME,
+				Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
+		Logger.logInfo("MinecraftLauncher said: "+result);
+		if (result > 0)
+			System.exit(0);
 	}
-
+       
 	/**
 	 * @param modPackName - the name of the pack 
 	 * @throws NoSuchAlgorithmException - see getCreeperHostLink
