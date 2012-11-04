@@ -34,7 +34,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.dialogs.UpdateDialog;
+import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
@@ -236,7 +236,7 @@ public class ModManager extends JDialog {
 		String line;
 		if((line = in.readLine()) == null || Integer.parseInt(pack.getVersion()) > Integer.parseInt(line)) {
 			System.out.println("File found, out of date.");
-			UpdateDialog p = new UpdateDialog(LaunchFrame.getInstance(), true);
+			ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
 			p.setVisible(true);
 			in.close();
 			if(!update) {

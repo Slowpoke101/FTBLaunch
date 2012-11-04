@@ -41,7 +41,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -53,6 +52,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
@@ -64,6 +64,7 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
+import net.ftb.updater.UpdateChecker;
 import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
@@ -116,7 +117,8 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static final int version = 22;
+	private static String version = "";
+	private static int buildNumber = 0;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -124,14 +126,20 @@ public class LaunchFrame extends JFrame {
 	public static UserManager userManager;
 	private LoginResponse RESPONSE;
 	public static String tempPass = "";
-	private boolean uptodate = true;
 
 	/**
 	 * Launch the application.
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		Logger.logInfo("FTBLaunch starting up (version "+version+")");
+		try{
+			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
+			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
+		} catch(Exception e) {
+			version = "unknown";
+			buildNumber = -1;
+		}
+		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		{
 			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -155,10 +163,6 @@ public class LaunchFrame extends JFrame {
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				// Check for version update
-				if(!isUpToDate()){
-					// launcher isn't up to date, download new version
-				}
 				Color baseColor = new Color(40, 40, 40);
 
 				UIManager.put("control", baseColor);
@@ -211,6 +215,15 @@ public class LaunchFrame extends JFrame {
 
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
+
+				if(version != "unknown"){
+					UpdateChecker updateChecker = new UpdateChecker(Settings.getSettings().getChannel(), buildNumber);
+
+					if(updateChecker.shouldUpdate()){
+						LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
+						p.setVisible(true);
+					}
+				}
 			}
 		});
 	}
@@ -221,7 +234,7 @@ public class LaunchFrame extends JFrame {
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v0.2.2");
+		setTitle("Feed the Beast Launcher Beta v" + version);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -652,7 +665,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			userManager.write();
 		} catch (IOException e) { Logger.logError("Exception occured",e); }
-		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));;
+		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));;
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++){
 			users.addItem(usernames[i]);
@@ -712,37 +725,5 @@ public class LaunchFrame extends JFrame {
 		} else {
 			Logger.logInfo("else working");
 		}
-	}
-	
-	private static boolean isUpToDate() {
-		// Debug stuff
-		Logger.logInfo("Checking for updates ...");
-//		String content;
-//		Scanner scanner = null;
-//		URLConnection connection;
-//		try {
-//			connection = new URL("").openConnection();
-//			scanner = new Scanner(connection.getInputStream());
-//			scanner.useDelimiter("\\Z");
-//			content = scanner.next();
-//		} catch (MalformedURLException e) { 
-//			e.printStackTrace();
-//			return true;
-//		} catch (IOException e) { 
-//			e.printStackTrace();
-//			return true;
-//		} finally {
-//			if (scanner != null) {
-//				scanner.close();
-//			}
-//		}
-//		if(Integer.parseInt(content.trim()) > version) {
-//			Logger.logInfo("Out of date.");
-//			return false;
-//		} else {
-//			Logger.logInfo("Up to date.");
-//			return true;
-//		}
-		return true;
 	}
 }
