@@ -6,3 +6,4 @@ ftblaunch.cfg
 target/
 *.iml
 .idea/
+/target;FTBBETAA;instMods/

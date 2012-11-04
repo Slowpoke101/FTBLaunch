@@ -90,12 +90,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		serverLink.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					hLink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
+				if(packPanels.size() > 0) {
+					try {
+						hLink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					} catch (NoSuchAlgorithmException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -106,6 +108,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		donate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(packPanels.size() > 0) {
+				}
 			}
 		});
 		donate.setEnabled(false);
@@ -117,11 +121,18 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		modsFolder.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Desktop.isDesktopSupported()) {
-					Desktop desktop = Desktop.getDesktop();
-					try {
-						desktop.open(new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/instMods"));
-					} catch (IOException e1) { e1.printStackTrace(); }
+				if(packPanels.size() > 0) {
+					if(Desktop.isDesktopSupported()) {
+						File instMods = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() 
+								+ File.separator + "instMods");
+						if(!instMods.exists()) {
+							instMods.mkdirs();
+						}
+						Desktop desktop = Desktop.getDesktop();
+						try {
+							desktop.open(instMods);
+						} catch (IOException e1) { e1.printStackTrace(); }
+					}
 				}
 			}
 		});
