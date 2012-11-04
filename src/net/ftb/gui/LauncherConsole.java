@@ -146,6 +146,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		panel.add(ircButton);
 		
 		displayArea = new JEditorPane("text/html","test");
+		displayArea.setEditable(false);
 		kit = new HTMLEditorKit();
 		doc = new HTMLDocument();
 		displayArea.setEditorKit(kit);
@@ -219,6 +220,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
 		} catch (BadLocationException e) {
 		} catch (IOException e) { }
+                displayArea.setCaretPosition(displayArea.getDocument().getLength());
 	}
 
 	@Override
