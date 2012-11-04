@@ -1,6 +1,7 @@
 package net.ftb.workers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -9,7 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
-
+import net.ftb.util.AppUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -32,19 +33,14 @@ public class ModpackLoader extends Thread {
 			Logger.logInfo("loading modpack information...");
 
 			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
-			
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
 			Document doc;
 			try {
-				doc = docFactory.newDocumentBuilder().parse(MODPACKSFILE);
+				doc = AppUtils.downloadXML(new URL(MODPACKSFILE));
 			} catch (SAXException e) {
 				Logger.logError("Exception during reading modpackfile",e);
 				return;
 			} catch (IOException e) {
-				Logger.logError("Exception during reading modpackfile",e);
-				return;
-			} catch (ParserConfigurationException e) {
 				Logger.logError("Exception during reading modpackfile",e);
 				return;
 			}
