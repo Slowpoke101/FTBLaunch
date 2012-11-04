@@ -26,9 +26,8 @@ public class LoginWorker extends SwingWorker<String, Void> {
 	protected String doInBackground() throws IOException {
 		StringBuilder requestBuilder = new StringBuilder();
 		requestBuilder.append("https://login.minecraft.net/?user=").append(URLEncoder.encode(username, "UTF-8")).append("&password=")
-		.append(URLEncoder.encode(password, "UTF-8")).append("&version=13");
+			.append(URLEncoder.encode(password, "UTF-8")).append("&version=13");
 
-		URL url = new URL(requestBuilder.toString());
-		return AppUtils.downloadString(url);
+		return AppUtils.downloadString(new URL(requestBuilder.toString()));
 	}
 }

@@ -11,6 +11,7 @@ public enum Channel {
 	RELEASE("release.xml", "Standard Testing Channel"),
 	DEVELOPMENT("http://nallar.me/ftb/b/updateinfo.xml", "Unstable Development Channel"),
 	NONE(null, "Disable automatic updates");
+	
 	private static Channel defaultChannel = NONE;
 	private final String title;
 	public final URL updateURL;
@@ -19,7 +20,6 @@ public enum Channel {
 	 * Unless this is being used for people to test dev builds (which I don't think is needed)
 	 * then I don't think we'll require a Channel.java
 	 */
-	
 	private Channel(String updateAddress) {
 		this(updateAddress, null);
 	}

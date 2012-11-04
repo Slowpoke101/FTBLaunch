@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.log.Logger;
 
 public class OSUtils {
 	/**
@@ -23,17 +22,14 @@ public class OSUtils {
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
-	public static String getJavaDelimiter(){
-		if(getCurrentOS() == OS.WINDOWS){
+	public static String getJavaDelimiter() {
+		if(getCurrentOS() == OS.WINDOWS) {
 			return ";";
-		}
-		else if(getCurrentOS() == OS.UNIX){
+		} else if(getCurrentOS() == OS.UNIX) {
 			return ":";
-		}
-		else if(getCurrentOS() == OS.MACOSX){
+		} else if(getCurrentOS() == OS.MACOSX) {
 			return ":";
-		}
-		else{
+		} else {
 			return ";";
 		}
 	}

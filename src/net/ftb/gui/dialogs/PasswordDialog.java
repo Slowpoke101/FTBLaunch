@@ -24,8 +24,7 @@ public class PasswordDialog extends JDialog {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Please Enter Password");
-		setSize(300, 120);
-		//		setBounds(300, 300, 300, 200);
+		setBounds(300, 300, 300, 120);
 		setResizable(false);
 
 		getRootPane().setDefaultButton(submitButton);

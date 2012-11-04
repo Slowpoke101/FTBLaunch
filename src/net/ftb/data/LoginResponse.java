@@ -1,11 +1,7 @@
 package net.ftb.data;
 
-
 public class LoginResponse {
-	private String latestVersion;
-	private String downloadTicket;
-	private String username;
-	private String sessionID;
+	private String latestVersion, downloadTicket, username, sessionID;
 
 	public LoginResponse() { }
 
@@ -18,7 +14,6 @@ public class LoginResponse {
 
 	public LoginResponse(String responseString) {
 		String[] responseValues = responseString.split(":");
-
 		if (responseValues.length < 4) {
 			throw new IllegalArgumentException("Invalid response string.");
 		} else {

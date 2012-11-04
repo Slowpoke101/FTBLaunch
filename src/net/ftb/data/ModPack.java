@@ -22,17 +22,10 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name;
-	private String author;
-	private String version;
-	private Image logo;
-	private String url;
-	private Image image;
-	private String dir;
-	private String mcVersion;
+	private String name, author, version, url, dir, mcVersion, serverUrl;
+	private Image logo, image;
 	private String info = "This is the info until there is an actual info thingy";
 	private int size;
-	private String serverUrl;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
@@ -77,9 +70,7 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	// class stuff
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl) throws IOException, NoSuchAlgorithmException {
-		// Always get this information
 		this.name = name;
 		this.author = author;
 		this.version = version;
@@ -87,13 +78,13 @@ public class ModPack {
 		this.mcVersion = mcVersion;
 		this.url = url;
 		this.serverUrl = serverUrl;
-		// Check version files
-		File verFile = new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir + File.separator + "version");
-		if(!upToDate(verFile)){
+		String installPath = Settings.getSettings().getInstallPath();
+		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
+		if(!upToDate(verFile)) {
 			URL url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir + File.separator + logo));
+			ImageIO.write(tempImg, "png", new File(installPath, "temp" + File.separator + dir + File.separator + logo));
 			tempImg.flush();
 			url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 			URLConnection c = url_.openConnection();
@@ -101,20 +92,20 @@ public class ModPack {
 			url_ =  new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir + File.separator + image));
+			ImageIO.write(tempImg, "png", new File(installPath, "temp" + File.separator + dir + File.separator + image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + dir + File.separator + logo);
+			this.logo = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + logo);
 			URL url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 			this.size = url_.openConnection().getContentLength();
-			this.image = Toolkit.getDefaultToolkit().createImage(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + dir + File.separator + image);
+			this.image = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + image);
 		}
 	}
 
-	private boolean upToDate(File verFile){
+	private boolean upToDate(File verFile) {
 		boolean result = false;
 		try {
-			if(!verFile.exists()){
+			if(!verFile.exists()) {
 				new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir).mkdirs();
 				verFile.createNewFile();
 				result = false;
@@ -172,7 +163,7 @@ public class ModPack {
 	public int getSize() {
 		return size;
 	}
-	
+
 	public String getServerUrl() {
 		return serverUrl;
 	}

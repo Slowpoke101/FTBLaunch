@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class UserManager {
 	public static ArrayList<User> _users = new ArrayList<User>();
-
 	private File _filename;
 
 	public UserManager(File filename) {
@@ -27,8 +26,7 @@ public class UserManager {
 	}
 
 	public String fromHexThing(String str) {
-		BigInteger in;
-		in = new BigInteger(str, 16).xor(new BigInteger(1, getSelfMD5()));
+		BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, getSelfMD5()));
 		try {
 			return new String(in.toByteArray(), "utf8");
 		} catch (UnsupportedEncodingException e) {
@@ -66,42 +64,36 @@ public class UserManager {
 			try {
 				BufferedReader read = new BufferedReader(new FileReader(_filename));
 				String str;
-				while((str = read.readLine()) != null) {
+				while(!(str = read.readLine()).isEmpty()) {
 					str = fromHexThing(str);
 					_users.add(new User(str));
 				}
 				read.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Error loading login data");
 			}
 		}
 	}
-
 
 	public static byte[] getFileMD5(URL string) throws IOException {
 		MessageDigest dgest = null;
 		try {
 			dgest = MessageDigest.getInstance("md5");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		InputStream str = string.openStream();
+		} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
 
+		InputStream str = string.openStream();
 		byte[] buffer = new byte[65536];
 		int readLen;
 		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
 		str.close();
-
 		return dgest.digest();
 	}
 
 	public static byte[] getSelfMD5() {
 		try {
-			return getFileMD5(ClassLoader.getSystemClassLoader().getResource(
-					"net/ftb/gui/LauncherFrame.class"));
+			return getFileMD5(ClassLoader.getSystemClassLoader().getResource("net/ftb/gui/LauncherFrame.class"));
 		} catch (Exception e) {	return new byte[] {}; }
 	}
 

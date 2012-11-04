@@ -22,7 +22,6 @@ import java.util.zip.ZipInputStream;
 import net.ftb.data.Settings;
 
 public class FileUtils {
-	
 	/**
 	 * @param sourceFolder - the folder to be moved
 	 * @param destinationFolder - where to move to
@@ -43,7 +42,7 @@ public class FileUtils {
 			copyFile(sourceFolder, destinationFolder);
 		}
 	}
-	
+
 	/**
 	 * @param sourceFile - the file to be moved
 	 * @param destinationFile - where to move to
@@ -63,13 +62,13 @@ public class FileUtils {
 				if(sourceStream != null) {
 					sourceStream.close();
 				}
-				if(destinationStream != null){
+				if(destinationStream != null) {
 					destinationStream.close();
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * @param resource - the resource to delete
 	 * @return - the deleted resource
@@ -84,7 +83,7 @@ public class FileUtils {
 		}
 		return resource.delete();
 	}
-	
+
 	/**
 	 * extracts zip to the location of the zip
 	 * @param zipLocation - the location
@@ -121,11 +120,9 @@ public class FileUtils {
 				zipentry = zipinputstream.getNextEntry();
 			}
 			zipinputstream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) { e.printStackTrace(); }
 	}
-	
+
 	/**
 	 * Extracts given zip to given location
 	 * @param zipLocation - the location of the zip to be extracted
@@ -159,7 +156,7 @@ public class FileUtils {
 			}
 		} catch (IOException ioe) {	ioe.printStackTrace(); }
 	}
-	
+
 	/**
 	 * deletes the META-INF
 	 */
@@ -189,11 +186,8 @@ public class FileUtils {
 
 			inputFile.delete();
 			outputTmpFile.renameTo(inputFile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (FileNotFoundException e) {	e.printStackTrace();
+		} catch (IOException e) { e.printStackTrace(); }
 	}
 
 	/**

@@ -31,10 +31,7 @@ import net.ftb.util.OSUtils.OS;
  * it will likely change in the future.
  */
 public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
-	protected String status;
-
-	protected String latestVersion;
-	protected String mainGameURL;
+	protected String status, latestVersion, mainGameURL;
 	protected File binDir;
 	protected boolean forceUpdate;
 
@@ -177,7 +174,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		int initialProgress = 10;
 		setProgress(initialProgress);
 
-		// Download jars
 		int totalDownloadedSize = 0;
 		for (int i = 0; i < jarURLs.length; i++) {
 			if (skip[i]) {
@@ -256,9 +252,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 								FileOutputStream out = new FileOutputStream(md5sFile);
 								md5s.store(out, "md5 hashes for downloaded files");
 								out.close();
-							} catch (IOException e)	{
-								e.printStackTrace();
-							}
+							} catch (IOException e)	{ e.printStackTrace(); }
 						}
 					}
 				} catch (Exception e) {
@@ -267,7 +261,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					e.printStackTrace();
 				}
 			}
-			// If download was not successful
 			if (!downloadSuccess) {
 				return false;
 			}
@@ -319,16 +312,12 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		} finally {
 			try {
 				zipIn.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 
 		try {
 			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 
 		nativesJar.delete();
 		return true;
@@ -341,9 +330,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			inputStream.close();
 			return retVal;
 		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 		return "";
 	}
 
@@ -352,9 +339,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(binDir, "version")));
 			outputStream.writeUTF(versionString);
 			outputStream.close();
-		} catch (IOException e)	{
-			e.printStackTrace();
-		}
+		} catch (IOException e)	{ e.printStackTrace(); }
 	}
 
 	protected String getFilename(URL url) {

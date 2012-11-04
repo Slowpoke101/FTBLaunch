@@ -41,7 +41,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
 
-
 	public ModpacksPane () {
 		super();
 
@@ -58,7 +57,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packPanels = new ArrayList<JPanel>();
 
 		// I suggest some loading animation here until first mod gets added
-
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
@@ -102,20 +100,18 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		});
 		this.add(serverLink);
-		
+
 		donate = new JButton("Donate to this Pack!");
 		donate.setBounds(670, 255, 170, 45);
 		donate.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
 			}
 		});
 		donate.setEnabled(false);
 		donate.setToolTipText("Coming Soon...");
 		this.add(donate);
-		
+
 		modsFolder = new JButton("Open the Jar mods folder");
 		modsFolder.setBounds(670, 210, 170, 45);
 		modsFolder.addActionListener(new ActionListener() {
@@ -125,9 +121,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					Desktop desktop = Desktop.getDesktop();
 					try {
 						desktop.open(new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/instMods"));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					} catch (IOException e1) { e1.printStackTrace(); }
 				}
 			}
 		});
@@ -184,7 +178,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		updatePacks();
 	}
 
-
 	private void updatePacks() {
 		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
@@ -197,7 +190,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		}
 	}
-
 
 	public int getSelectedModIndex() {
 		return modPacksAdded ? selectedPack : -1;

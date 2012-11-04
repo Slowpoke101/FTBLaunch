@@ -15,7 +15,6 @@ public class Settings extends Properties {
 	private static final long serialVersionUID = 1L;
 	private static Settings settings;
 	private File configPath;
-	// This doesn't get saved to a config.
 	private boolean forceUpdate;
 
 	public static void initSettings() throws IOException {
@@ -24,7 +23,6 @@ public class Settings extends Properties {
 			LoadSettings(cfgFile);
 			return;
 		}
-		// None found, load blank config 
 		settings = new Settings();
 		settings.setConfigFile(cfgFile);
 	}

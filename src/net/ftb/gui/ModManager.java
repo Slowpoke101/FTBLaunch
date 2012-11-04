@@ -35,6 +35,7 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
+import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
@@ -48,13 +49,13 @@ public class ModManager extends JDialog {
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
-			if(!upToDate()){
-				System.out.println("Not up to date!");
+			if(!upToDate()) {
+				Logger.logInfo("Not up to date!");
 				String installPath = Settings.getSettings().getInstallPath();
 				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 				File modPackZip = new File(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl());
 				if(!modPackZip.exists()) {
-					System.out.println("Pack not found, downloading!");
+					Logger.logInfo("Pack not found, downloading!");
 					try {
 						new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
 						downloadModPack(pack.getUrl(), pack.getDir());
@@ -62,7 +63,7 @@ public class ModManager extends JDialog {
 					} catch (NoSuchAlgorithmException e) { e.printStackTrace();
 					} catch (IOException e) { e.printStackTrace(); }
 				} else {
-					System.out.println("Pack found!");
+					Logger.logInfo("Pack found!");
 					installMods(pack.getUrl(), pack.getDir());
 				}
 			}
@@ -144,12 +145,11 @@ public class ModManager extends JDialog {
 			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
 			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/.minecraft/bin/"));
 			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir + "/.minecraft/"));
-			// Test cleaning up files
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
 			String result = input;
-			if(input != null) {
+			if(!input.isEmpty()) {
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				md.update(input.getBytes());
 				BigInteger hash = new BigInteger(1, md.digest());

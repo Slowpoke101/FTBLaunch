@@ -49,7 +49,7 @@ public class UpdateChecker {
 			String downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 			if (downloadAddress.indexOf("http") != 0) {
 				// TODO: Make this link work, aka upload the newest launcher onto creeperhost. 
-				// Will be named FTB_Launher.exe or FTB_Launcher.jar
+				// Will be named FTB_Launcher.exe or FTB_Launcher.jar
 				downloadAddress = LaunchFrame.getCreeperhostLink(downloadAddress);
 			}
 			downloadUrl = new URL(downloadAddress);
@@ -67,9 +67,7 @@ public class UpdateChecker {
 		String path = null;
 		try {
 			path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
-		} catch (IOException e) {
-			Logger.logError("Couldn't get path to current launcher jar/exe", e);
-		}
+		} catch (IOException e) { Logger.logError("Couldn't get path to current launcher jar/exe", e); }
 		String temporaryUpdatePath = Settings.getSettings().getInstallPath() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
 		String extension = path.substring(path.lastIndexOf('.') + 1);
 		extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
@@ -80,10 +78,7 @@ public class UpdateChecker {
 			temporaryUpdate.getParentFile().mkdir();
 			FileUtils.downloadToFile(updateURL, temporaryUpdate);
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
-		} catch (MalformedURLException e) {
-			Logger.logError("Malformed download URL for launcher update", e);
-		} catch (IOException e) {
-			Logger.logError("Failed to download launcher update", e);
-		}
+		} catch (MalformedURLException e) { Logger.logError("Malformed download URL for launcher update", e);
+		} catch (IOException e) { Logger.logError("Failed to download launcher update", e); }
 	}
 }

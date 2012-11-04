@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.ModManager;
 import net.ftb.updater.UpdateChecker;
 
 public class LauncherUpdateDialog extends JDialog {

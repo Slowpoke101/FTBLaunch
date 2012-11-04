@@ -1,7 +1,5 @@
 package net.ftb.util;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +7,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -65,9 +66,7 @@ public class AppUtils {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
 			return docFactory.newDocumentBuilder().parse(url.openStream());
-		} catch (ParserConfigurationException ignored) {
-			//This will never be thrown, no idea why newDocumentBuilder with no args is defined as throwing it. :/
-		}
+		} catch (ParserConfigurationException ignored) { }
 		return null;
 	}
 }

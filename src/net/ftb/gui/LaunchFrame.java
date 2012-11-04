@@ -76,8 +76,7 @@ public class LaunchFrame extends JFrame {
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
-	private JPanel mapsPane;
-	private JPanel tpPane;
+	private JPanel mapsPane, tpPane;
 
 	/**
 	 * an array of all mods to be added to classpath
@@ -107,14 +106,6 @@ public class LaunchFrame extends JFrame {
 	private JButton edit;
 
 	/**
-	 * things to go on the texture packs panel
-	 */
-
-	/**
-	 * things to go on the maps panel
-	 */
-
-	/**
 	 * random crap
 	 */
 	private static String version = "0.2.2";
@@ -133,12 +124,10 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
-		{
-			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-			String now = dateFormatGmt.format(new Date());
-			Logger.logInfo("Now is: "+now);
-		}
+		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+		String now = dateFormatGmt.format(new Date());
+		Logger.logInfo("Now is: "+now);
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
 		Logger.logInfo("Java home: "+System.getProperty("java.home"));
@@ -203,12 +192,10 @@ public class LaunchFrame extends JFrame {
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
 
-				if(!version.equalsIgnoreCase("unknown")){
-					UpdateChecker updateChecker = new UpdateChecker(buildNumber);
-					if(updateChecker.shouldUpdate()){
-						LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
-						p.setVisible(true);
-					}
+				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
+				if(updateChecker.shouldUpdate()){
+					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
+					p.setVisible(true);
 				}
 			}
 		});
@@ -368,7 +355,6 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void doLogin(String username, String password) {
 		if(password.isEmpty()) {
-			// Prompt user to input password
 			PasswordDialog p = new PasswordDialog(this, true);
 			p.setVisible(true);
 			if(tempPass.isEmpty()){
@@ -468,11 +454,8 @@ public class LaunchFrame extends JFrame {
 					} catch (CancellationException e) { 
 						Logger.logInfo("Game update canceled",e);
 						enableObjects();
-					} catch (InterruptedException e) { 
-						Logger.logWarn("Game update interrupted",e);
-					} catch (ExecutionException e) {
-						Logger.logError("Failed to download game",e);
-					}
+					} catch (InterruptedException e) { Logger.logWarn("Game update interrupted",e);
+					} catch (ExecutionException e) { Logger.logError("Failed to download game",e); }
 				}
 			};
 
@@ -644,9 +627,9 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e) { Logger.logError("Exception occured",e); }
 		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));;
 		users.removeAllItems();
-		for(int i = 0; i < usernames.length; i++){
+		for(int i = 0; i < usernames.length; i++) {
 			users.addItem(usernames[i]);
-			if(usernames[i].equals(user)){
+			if(usernames[i].equals(user)) {
 				users.setSelectedIndex(i);
 			}
 		}
@@ -696,9 +679,7 @@ public class LaunchFrame extends JFrame {
 			Desktop desktop = Desktop.getDesktop();
 			try {
 				desktop.browse(uri);
-			} catch(Exception exc) {
-				Logger.logError("Exception occured durring opening Link",exc);
-			}
+			} catch(Exception exc) { Logger.logError("Exception occured durring opening Link",exc); }
 		} else {
 			Logger.logInfo("else working");
 		}

@@ -26,12 +26,10 @@ public class ProfileEditorDialog extends JDialog {
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);
-
 	private JLabel userLabel = new JLabel("Username:");
 	private JLabel passLabel = new JLabel("Password:");
 	private JLabel nameLabel = new JLabel("Profile Name:");
 	private JCheckBox savePassword = new JCheckBox("Remember Password");
-
 	private JButton updateButton = new JButton("Update");
 	private JButton removeButton = new JButton("Remove");
 
@@ -58,7 +56,6 @@ public class ProfileEditorDialog extends JDialog {
 			public void removeUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
 			}
-
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
@@ -78,7 +75,7 @@ public class ProfileEditorDialog extends JDialog {
 				password.setEnabled(savePassword.isSelected());
 			}
 		});
-		
+
 		password.setBounds(100, 50, 170, 30);
 		password.setVisible(true);
 		if(UserManager.getPassword(editingName).isEmpty()){
@@ -105,8 +102,8 @@ public class ProfileEditorDialog extends JDialog {
 		updateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))){
-					if(savePassword.isSelected()){
+				if(editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))) {
+					if(savePassword.isSelected()) {
 						UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
 					} else {
 						UserManager.updateUser(editingName, username.getText(), "", name.getText());

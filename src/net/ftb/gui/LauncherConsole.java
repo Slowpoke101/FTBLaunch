@@ -32,15 +32,13 @@ import net.ftb.log.Logger;
 
 public class LauncherConsole extends JDialog implements ILogListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	final JEditorPane displayArea;
 	private HTMLEditorKit kit;
 	private HTMLDocument doc;
-	
 	private JScrollPane scrollPane;
 	private final JButton switchToExtendedBtn;
 	private JButton ircButton;
-	
 	private boolean extendedLog = false;
 
 	private class OutputOverride extends PrintStream {
@@ -49,7 +47,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super(str);
 			this.type = type;
 		}
-		
+
 		@Override
 		public void write(byte[] b) throws IOException {
 			super.write(b);
@@ -58,7 +56,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				Logger.log("From Console: "+text,type,null);
 			}
 		}
-		
+
 		@Override
 		public void write(byte[] buf, int off, int len) {
 			super.write(buf, off, len);
@@ -67,25 +65,25 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				Logger.log("From Console: "+text,type,null);
 			}
 		}
-		
+
 		@Override
 		public void write(int b) {
 			Logger.logWarn("Someone tried to use write(int b), that is not supported!");
 		}
 	}
-	
+
 	public LauncherConsole() {
 		setTitle("FTB Launcher Console");
 		this.setSize(new Dimension(800, 400));
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel = new JPanel();
-		
+
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		
+
 		JButton btnNewButton = new JButton("Paste my log to pastebin.com for support requests");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -131,7 +129,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		ircButton = new JButton("Join support webchat");
 		ircButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		    	if(Desktop.isDesktopSupported()) {
+				if(Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					try {
 						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
@@ -144,22 +142,22 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			}
 		});
 		panel.add(ircButton);
-		
+
 		displayArea = new JEditorPane("text/html","test");
 		displayArea.setEditable(false);
 		kit = new HTMLEditorKit();
 		doc = new HTMLDocument();
 		displayArea.setEditorKit(kit);
 		displayArea.setDocument(doc);
-		
+
 		scrollPane = new JScrollPane(displayArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		getContentPane().add(scrollPane);
 
 		replay();
 		Logger.addListener(this);
-		
+
 		try {
 			System.setOut(new OutputOverride(System.out,"INFO"));
 			System.setErr(new OutputOverride(System.err,"ERROR"));
@@ -168,7 +166,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void switchToExtendedLog() {
 		synchronized (doc) {
 			extendedLog = true;
@@ -191,7 +189,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			} catch (IOException e) { }
 		}
 	}
-	
+
 	private void replay() {
 		synchronized (doc) {
 			doc = new HTMLDocument();
@@ -213,7 +211,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			} catch (IOException e) { }
 		}
 	}
-	
+
 	private void addText(String text, String color) {
 		text = text.replace("<", "&lt;").replace(">","&gt;");
 		String msg = "<font color=\""+color+"\">"+text+"</font><br/>";
@@ -221,7 +219,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
 		} catch (BadLocationException e) {
 		} catch (IOException e) { }
-                displayArea.setCaretPosition(displayArea.getDocument().getLength());
+		displayArea.setCaretPosition(displayArea.getDocument().getLength());
 	}
 
 	@Override
@@ -239,6 +237,6 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				addText("["+level+"] "+msg,color);
 			}
 		}
-		
+
 	}
 }

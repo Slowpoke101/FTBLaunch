@@ -16,22 +16,6 @@ import java.util.TimeZone;
 import net.ftb.util.OSUtils;
 import net.ftb.util.PathUtils;
 
-/**
- * Logger for FTB Launcher Project
- * 
- * flexible Logger
- * 
- * for logging use following functions:
- * 
- * Logger.logInfo(String msg)
- * Logger.logError(String msg)
- * Logger.logWarn(String msg)
- * 
- * if you want to log Exceptions you can add it behind the msg argument like
- * Logger.logInfo(String msg, Throwable t);
- * 
- *
- */
 public class Logger {
 	/**
 	 * The Singleton instance of this Logger
@@ -106,9 +90,7 @@ public class Logger {
 		try {
 			fstream = new FileWriter(new File(PathUtils.combine(OSUtils.getDefInstallPath(),Logfile)));
 			fileoutwrite = new BufferedWriter(fstream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { e.printStackTrace(); }
 	}
 
 	/**
@@ -118,7 +100,7 @@ public class Logger {
 	private String getDate() {
 		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("HH:mm:ss");
 		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-		return  dateFormatGmt.format(new Date());
+		return dateFormatGmt.format(new Date());
 	}
 
 	/**
@@ -129,7 +111,7 @@ public class Logger {
 		String source = "Unknown";
 		Throwable t = new Throwable();
 		for (StackTraceElement ste : t.getStackTrace()) {
-			if (!ste.getClassName().equals(Logger.class.getName())  ) {
+			if (!ste.getClassName().equals(Logger.class.getName())) {
 				source = ste.getClassName()+"."+ste.getMethodName()+":"+ste.getLineNumber();
 				break;
 			}
@@ -163,9 +145,7 @@ public class Logger {
 		try {
 			fileoutwrite.write(longVersion+"\r\n");
 			fileoutwrite.flush();
-		} catch (IOException e) {
-			// for now disabled, will get stackoverlfow as long system.err is redirected by launchlog
-		}
+		} catch (IOException e) { }
 
 		logbuffer.append(shortVersion+"\n");
 		logbufferExtensive.append(longVersion+"\n");
@@ -177,8 +157,9 @@ public class Logger {
 			logbufferExtensive.append(trace.toString()+"\n");
 		}
 
-		for (ILogListener listener : listeners)
+		for (ILogListener listener : listeners) {
 			listener.onLogEvent(date, source, level, message);
+		}
 	}
 
 	/*
@@ -191,9 +172,11 @@ public class Logger {
 	public static void logInfo(String message) {
 		log(message,Logger.StringInfo,null);
 	}
+
 	public static  void logWarn(String message) {
 		log(message,Logger.StringWarn,null);
 	}
+
 	public static  void logError(String message) {
 		log(message,Logger.StringError,null);
 	}
@@ -201,9 +184,11 @@ public class Logger {
 	public static void logInfo(String message, Throwable t) {
 		log(message,Logger.StringInfo,t);
 	}
+
 	public static  void logWarn(String message, Throwable t) {
 		log(message,Logger.StringWarn,t);
 	}
+
 	public static  void logError(String message, Throwable t) {
 		log(message,Logger.StringError,t);
 	}
@@ -211,13 +196,15 @@ public class Logger {
 	public static void addListener(ILogListener listener) {
 		getInstance().listeners.add(listener);
 	}
+
 	public static void removeListener(ILogListener listener) {		
 		getInstance().listeners.remove(listener);
 	}
 
 	public static Logger getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new Logger();
+		}
 		return instance;
 	}
 

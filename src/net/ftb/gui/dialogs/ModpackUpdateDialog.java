@@ -15,7 +15,7 @@ import net.ftb.gui.ModManager;
 
 public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
-	
+
 	private JPanel panel = new JPanel();
 	private JLabel textOne = new JLabel("A new mod pack version is available.");
 	private JLabel textTwo = new JLabel("Do you wish to update?");

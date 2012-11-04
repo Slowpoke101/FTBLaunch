@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 public class JRoundTextField extends JTextField {
 	private static final long serialVersionUID = 1L;
 	private Shape shape;
-	
+
 	public JRoundTextField(int size) {
 		super(size);
 		setOpaque(false);

@@ -43,15 +43,15 @@ public class MinecraftVersionDetector {
 		while (ent.hasMoreElements()) {
 			JarEntry entry = ent.nextElement();
 			if (entry.getName().endsWith(".class")) {
-				if (!entry.getName().contains("/")) { // it has to be in the root of the jar file 
+				if (!entry.getName().contains("/")) { 
 					Class<?> cls;
 					try {
 						cls = cl.loadClass(entry.getName().split("\\.")[0]);
-					} catch (ClassNotFoundException e1) { continue; } // not a bad error just skip over this entry
+					} catch (ClassNotFoundException e1) { continue; } 
 					if (cls.getConstructors().length > 0 && cls.getConstructors()[0].getParameterTypes().length == 2) {
 						Boolean string = false;
 						Boolean thr = false;
-						for (Class<?> item : cls.getConstructors()[0].getParameterTypes()) { // it needs to be roughly CrashReport(String arg1, Throwable arg2)
+						for (Class<?> item : cls.getConstructors()[0].getParameterTypes()) { 
 							if (item == String.class) {
 								string = true;
 							} else if (item == Throwable.class) {
@@ -64,18 +64,16 @@ public class MinecraftVersionDetector {
 								for (Method meth : cls.getMethods()) {
 									if (meth.getParameterTypes().length > 0 && meth.getParameterTypes()[0] == StringBuilder.class) {
 										StringBuilder testing = new StringBuilder();
-										meth.invoke(obj, testing); // invoke the getSectionsInStringBuilder method
+										meth.invoke(obj, testing);
 										String search = "Minecraft Version: ";
 										return testing.toString().substring(testing.indexOf(search) + search.length(), testing.indexOf("\n"));
-										// Finally return the cut out version from the report
 									}
 								}
 							} catch (IllegalArgumentException e) { return "unknown";
 							} catch (SecurityException e) { return "unknown";
 							} catch (InstantiationException e) { return "unknown";
 							} catch (IllegalAccessException e) { return "unknown";
-							} catch (InvocationTargetException e) { return "unknown";
-							}
+							} catch (InvocationTargetException e) { return "unknown"; }
 						}
 					}
 				}

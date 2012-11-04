@@ -1,12 +1,5 @@
 package net.ftb.log;
 
-
-
-/**
- * This interfaces enables classes to receive log events 
- * 
- */
-
 public interface ILogListener {
 	/**
 	 * Notifies once a Log entry has been added

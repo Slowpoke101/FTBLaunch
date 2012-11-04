@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -18,11 +16,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/*
- * Async ModPack loader
- * 
- * 
- */
 public class ModpackLoader extends Thread {
 	private static String MODPACKSFILE;
 
@@ -61,14 +54,9 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent()));
-				} catch (DOMException e) {
-					Logger.logError("Exception during reading modpackfile",e);
-				} catch (IOException e) {
-					Logger.logError("Exception during reading modpackfile",e);
-				}
+				} catch (DOMException e) { Logger.logError("Exception during reading modpackfile",e);
+				} catch (IOException e) { Logger.logError("Exception during reading modpackfile",e); }
 			}
-		} catch (NoSuchAlgorithmException e1) {
-			Logger.logError("Exception during reading modpackfile",e1);
-		}
+		} catch (NoSuchAlgorithmException e1) { Logger.logError("Exception during reading modpackfile",e1); }
 	}
 }

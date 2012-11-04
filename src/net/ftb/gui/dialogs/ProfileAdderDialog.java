@@ -25,12 +25,10 @@ public class ProfileAdderDialog extends JDialog {
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);
-
 	private JLabel userLabel = new JLabel("Username:");
 	private JLabel passLabel = new JLabel("Password:");
 	private JLabel nameLabel = new JLabel("Profile Name:");
 	private JCheckBox savePassword = new JCheckBox("Remember Password");
-	
 	private JButton addButton = new JButton("Add");
 
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
@@ -112,7 +110,7 @@ public class ProfileAdderDialog extends JDialog {
 	}
 
 	private boolean validate(String name, String user, char[] pass) {
-		if(name != null && !name.equals("") && user != null && !user.equals("") && pass.length > 1) {
+		if(!name.isEmpty() && !user.isEmpty() && pass.length > 1) {
 			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
 				return true;
 			}
