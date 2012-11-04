@@ -25,10 +25,10 @@ public class SelfUpdate {
 				+ separator + "java";
 		arguments.add(path);
 		arguments.add("-cp");
-		arguments.add(System.getProperty("java.class.path"));
-		arguments.add(SelfUpdate.class.getCanonicalName());
 		arguments.add(temporaryUpdatePath);
+		arguments.add(SelfUpdate.class.getCanonicalName());
 		arguments.add(currentPath);
+		arguments.add(temporaryUpdatePath);
 
 		Logger.logInfo("Would update with: " + arguments);
 		Logger.logInfo("c: " + currentPath);
