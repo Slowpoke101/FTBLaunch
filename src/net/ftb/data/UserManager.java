@@ -64,7 +64,7 @@ public class UserManager {
 			try {
 				BufferedReader read = new BufferedReader(new FileReader(_filename));
 				String str;
-				while(!(str = read.readLine()).isEmpty()) {
+				while((str = read.readLine()) != null) {
 					str = fromHexThing(str);
 					_users.add(new User(str));
 				}
