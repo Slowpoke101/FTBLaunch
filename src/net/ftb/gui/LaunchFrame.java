@@ -119,7 +119,6 @@ public class LaunchFrame extends JFrame {
 	 */
 	private static String version = "0.2.2";
 	private static int buildNumber = 22;
-	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private static final String FORGENAME = "MinecraftForge.zip";
@@ -147,7 +146,7 @@ public class LaunchFrame extends JFrame {
 			String now = dateFormatGmt.format(new Date());
 			Logger.logInfo("Now is: "+now);
 		}
-		Logger.logInfo("Java version: "+System.getProperty("java.version"));
+		Logger.logInfo("Java version: " + System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
 		Logger.logInfo("Java home: "+System.getProperty("java.home"));
 		Logger.logInfo("Java specification: "+System.getProperty("java.vm.specification.name")+" version: "+
@@ -562,34 +561,6 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * @param filename - what to save it as on the system
-	 * @param urlString - the url to download
-	 * @throws IOException - various
-	 */
-	public void downloadUrl(String filename, String urlString) throws IOException {
-		BufferedInputStream in = null;
-		FileOutputStream fout = null;
-		try {
-			in = new BufferedInputStream(new URL(urlString).openStream());
-			fout = new FileOutputStream(filename);
-
-			byte data[] = new byte[1024];
-			int count;
-			while ((count = in.read(data, 0, 1024)) != -1) {
-				fout.write(data, 0, count);
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (fout != null) {
-				fout.flush();
-			}
-			fout.close();
-		}
 	}
 
 	/**
