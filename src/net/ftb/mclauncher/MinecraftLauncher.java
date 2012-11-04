@@ -26,7 +26,7 @@ public class MinecraftLauncher {
 		int success = -1;
 		try {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			StringBuffer cpb = new StringBuffer("");
+			StringBuilder cpb = new StringBuilder("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
 			// Rename old forge version with the new name
 			File oldForge = new File(tempDir, "minecraftforge-universal-6.0.1.353.zip");
@@ -50,9 +50,9 @@ public class MinecraftLauncher {
 			cpb.append(OSUtils.getJavaDelimiter());
 			cpb.append(new File(tempDir, forgename).getAbsolutePath());
 			
-			for(int i = 0; i < jarFiles.length; i++) {
+			for(String jarFile : jarFiles) {
 				cpb.append(OSUtils.getJavaDelimiter());
-				cpb.append(new File(new File(workingDir, "bin"), jarFiles[i]).getAbsolutePath());
+				cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
 			}
 
 			// Holder for the Arguments

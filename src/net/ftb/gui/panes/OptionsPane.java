@@ -9,9 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 
-import java.util.Arrays;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -23,7 +21,6 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
-import net.ftb.updater.Channel;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +29,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
-	private JComboBox updateChannel;
+//	private JComboBox updateChannel;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -44,8 +41,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//optionsPane.add(backgroundImage2);
-		//optionsPane.setBackground(back);
 
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 };
@@ -54,22 +49,22 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		this.setLayout(gbl_contentPanel);
 
-		ramMaximum = new JTextField();
+		ramMaximum = new JTextField(Settings.getSettings().getRamMax());
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
-		ramMaximum.setText(Settings.getSettings().getRamMax());
+//		ramMaximum.setText(Settings.getSettings().getRamMax());
 		ramMaximum.addFocusListener(settingsChangeListener);
 				
-		ramMinimum = new JTextField();
+		ramMinimum = new JTextField(Settings.getSettings().getRamMin());
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
-		ramMinimum.setText(Settings.getSettings().getRamMin());
+//		ramMinimum.setText(Settings.getSettings().getRamMin());
 		ramMinimum.addFocusListener(settingsChangeListener);
 		
 		JButton installBrowseBtn = new JButton("...");
@@ -108,6 +103,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				removeVersionFiles();
 			}
 		});
+		
 		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
 		gbc_tglbtnForceUpdate.gridwidth = 5;
@@ -136,23 +132,23 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
 
-		JLabel lblUpdateChannel = new JLabel("Update Channel:");
-		GridBagConstraints gbc_lblUpdateChannel = new GridBagConstraints();
-		gbc_lblUpdateChannel.anchor = GridBagConstraints.EAST;
-		gbc_lblUpdateChannel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUpdateChannel.gridx = 1;
-		gbc_lblUpdateChannel.gridy = 9;
-		this.add(lblUpdateChannel, gbc_lblUpdateChannel);
-
-		updateChannel = new JComboBox(Channel.values());
-		GridBagConstraints gbc_channel = new GridBagConstraints();
-		gbc_channel.gridwidth = 4;
-		gbc_channel.insets = new Insets(0, 0, 4, 4);
-		gbc_channel.fill = GridBagConstraints.BOTH;
-		gbc_channel.gridx = 2;
-		gbc_channel.gridy = 9;
-		updateChannel.addFocusListener(settingsChangeListener);
-		this.add(updateChannel, gbc_channel);
+//		JLabel lblUpdateChannel = new JLabel("Update Channel:");
+//		GridBagConstraints gbc_lblUpdateChannel = new GridBagConstraints();
+//		gbc_lblUpdateChannel.anchor = GridBagConstraints.EAST;
+//		gbc_lblUpdateChannel.insets = new Insets(0, 0, 5, 5);
+//		gbc_lblUpdateChannel.gridx = 1;
+//		gbc_lblUpdateChannel.gridy = 9;
+//		this.add(lblUpdateChannel, gbc_lblUpdateChannel);
+//
+//		updateChannel = new JComboBox(Channel.values());
+//		GridBagConstraints gbc_channel = new GridBagConstraints();
+//		gbc_channel.gridwidth = 4;
+//		gbc_channel.insets = new Insets(0, 0, 4, 4);
+//		gbc_channel.fill = GridBagConstraints.BOTH;
+//		gbc_channel.gridx = 2;
+//		gbc_channel.gridy = 9;
+//		updateChannel.addFocusListener(settingsChangeListener);
+//		this.add(updateChannel, gbc_channel);
 	}
 	
 	@Override public void onVisible() { }
@@ -161,9 +157,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		installFolderTextField.setText(settings.getInstallPath());
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 		Logger.logInfo(settings.getChannel().name());
-		updateChannel.setSelectedIndex(Arrays.binarySearch(Channel.values(), settings.getChannel()));
+//		updateChannel.setSelectedIndex(Arrays.binarySearch(Channel.values(), settings.getChannel()));
 	}
-
 
 	public String getInstallFolderText() {
 		return installFolderTextField.getText();
@@ -188,6 +183,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
-		settings.setChannel((Channel) updateChannel.getSelectedItem());
+//		settings.setChannel((Channel) updateChannel.getSelectedItem());
 	}
 }

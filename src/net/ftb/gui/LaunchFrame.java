@@ -132,14 +132,6 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		// Why would we dynamically check for what version this is? If we've updated the launcher then we should just edit the version on here
-		//		try{
-		//			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
-		//			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
-		//		} catch(Exception e) {
-		//			version = "unknown";
-		//			buildNumber = -1;
-		//		}
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		{
 			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -150,17 +142,12 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
 		Logger.logInfo("Java home: "+System.getProperty("java.home"));
-		Logger.logInfo("Java specification: "+System.getProperty("java.vm.specification.name")+" version: "+
-				System.getProperty("java.vm.specification.version")+" by "+
-				System.getProperty("java.vm.specification.vendor"));
-		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name")+" version: "+
-				System.getProperty("java.vm.version")+" by "+
-				System.getProperty("java.vm.vendor"));
-		Logger.logInfo("OS: "+System.getProperty("os.arch")+" "+
-				System.getProperty("os.name")+" "+
-				System.getProperty("os.version"));
-		Logger.logInfo("Working directory: "+
-				System.getProperty("user.dir"));
+		Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " +
+				System.getProperty("java.vm.specification.version") + " by " + System.getProperty("java.vm.specification.vendor"));
+		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") 
+				+ " by " + System.getProperty("java.vm.vendor"));
+		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -184,10 +171,10 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occured",e1); }
-					catch (InstantiationException e1) { Logger.logWarn("Exception occured",e1); }
-					catch (IllegalAccessException e1) { Logger.logWarn("Exception occured",e1); }
-					catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occured",e1); }
+					} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occured",e1); 
+					} catch (InstantiationException e1) { Logger.logWarn("Exception occured",e1); 
+					} catch (IllegalAccessException e1) { Logger.logWarn("Exception occured",e1); 
+					} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occured",e1); }
 				}
 
 				// Load settings
@@ -206,7 +193,6 @@ public class LaunchFrame extends JFrame {
 
 				userManager = new UserManager(new File(installDir, "logindata"));
 
-
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
@@ -219,7 +205,6 @@ public class LaunchFrame extends JFrame {
 
 				if(!version.equalsIgnoreCase("unknown")){
 					UpdateChecker updateChecker = new UpdateChecker(buildNumber);
-
 					if(updateChecker.shouldUpdate()){
 						LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 						p.setVisible(true);
