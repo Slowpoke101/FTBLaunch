@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Scrollbar;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,9 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
@@ -76,7 +79,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 	
 	public LauncherConsole() {
 		setTitle("FTB Launcher Console");
-		this.setSize(new Dimension(800, 400));
+		this.setSize(new Dimension(800, 300));
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -150,6 +153,8 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		doc = new HTMLDocument();
 		displayArea.setEditorKit(kit);
 		displayArea.setDocument(doc);
+		displayArea.setEditable(false);
+		
 		
 		scrollPane = new JScrollPane(displayArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -213,14 +218,27 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		}
 	}
 	
-	private void addText(String text, String color) {
+	private  void addText(String text, String color) {
 		String msg = "<font color=\""+color+"\">"+text+"</font><br/>";
 		try {
-			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
+			synchronized (doc) {
+				kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
+			}
 		} catch (BadLocationException e) {
 		} catch (IOException e) { }
+		scrollDown();
 	}
 
+	private void scrollDown() {
+		 SwingUtilities.invokeLater(new Runnable() {
+		      public void run() {
+		        JScrollBar bar = scrollPane.getVerticalScrollBar();
+		        bar.setValue(bar.getMaximum());
+		      }
+		    });
+	}
+	
+	
 	@Override
 	public void onLogEvent(String date, String source, String level, String msg) {
 		synchronized (doc) {
@@ -229,6 +247,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				color = "yellow";
 			} else if (level.equals("ERROR")) {
 				color = "red";
+				this.requestFocus();
 			}
 			if (extendedLog) {
 				addText(date+" "+source+" ["+level+"] "+msg,color);
