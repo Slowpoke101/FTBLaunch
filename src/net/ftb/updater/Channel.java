@@ -8,10 +8,10 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public enum Channel {
-	RELEASE("release.xml", "Standard Testing Channel"),
+	RELEASE("http://launcher.feed-the-beast.com/version.xml", "Beta Channel"),// TODO: Maybe swap this over to being hosted on creeper host
 	DEVELOPMENT("http://nallar.me/ftb/b/updateinfo.xml", "Unstable Development Channel"),
 	NONE(null, "Disable automatic updates");
-	private static Channel defaultChannel = NONE;
+	private static Channel defaultChannel = RELEASE;
 	private final String title;
 	public final URL updateURL;
 
