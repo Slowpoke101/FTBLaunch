@@ -1,5 +1,7 @@
 package net.ftb.util;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,6 +9,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Scanner;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class AppUtils {
 	/**
@@ -48,5 +53,21 @@ public class AppUtils {
 	 */
 	public static String downloadString(URL url) throws IOException {
 		return readString(url.openStream());
+	}
+
+	/**
+	 * Downloads data from the given URL and returns it as a Document
+	 * @param url the URL to fetch
+	 * @return The document
+	 * @throws IOException, SAXException if an error occurs when reading from the stream
+	 */
+	public static Document downloadXML(URL url) throws IOException, SAXException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		try {
+			return docFactory.newDocumentBuilder().parse(url.openStream());
+		} catch (ParserConfigurationException ignored) {
+			//This will never be thrown, no idea why newDocumentBuilder with no args is defined as throwing it. :/
+		}
+		return null;
 	}
 }

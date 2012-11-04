@@ -7,7 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -191,5 +194,25 @@ public class FileUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Downloads data from the given URL and saves it to the given file
+	 * @param url The url to download from
+	 * @param file The file to save to.
+	 */
+	public static void downloadToFile(URL url, File file) throws IOException {
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+	}
+
+	/**
+	 * Downloads data from the given URL and saves it to the given file
+	 * @param url The url to download from
+	 * @param file The file to save to.
+	 */
+	public static void downloadToFile(URL url, String file) throws IOException {
+		downloadToFile(url, new File(file));
 	}
 }

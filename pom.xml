@@ -47,7 +47,13 @@
           <archive>
             <manifest>
               <mainClass>${mainClass}</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
+            <manifestEntries>
+              <Implementation-Title>${version}</Implementation-Title>
+              <Implementation-Version>${buildNumber}</Implementation-Version>
+            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

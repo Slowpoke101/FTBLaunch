@@ -9,7 +9,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 
+import java.util.Arrays;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,6 +23,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.updater.Channel;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +32,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
-	
+	private JComboBox updateChannel;
+
+	private FocusListener settingsChangeListener = new FocusListener() {
+		@Override
+		public void focusLost(FocusEvent e) {
+			LaunchFrame.getInstance().saveSettings();
+		}
+		@Override public void focusGained(FocusEvent e) { }
+	};
 	
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,13 +61,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_textField_2.gridx = 2;
 		gbc_textField_2.gridy = 7;
 		ramMaximum.setText(Settings.getSettings().getRamMax());
-		ramMaximum.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				LaunchFrame.getInstance().saveSettings();
-			}
-			@Override public void focusGained(FocusEvent e) { }
-		});
+		ramMaximum.addFocusListener(settingsChangeListener);
 				
 		ramMinimum = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
@@ -65,13 +70,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 6;
 		ramMinimum.setText(Settings.getSettings().getRamMin());
-		ramMinimum.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				LaunchFrame.getInstance().saveSettings();
-			}
-			@Override public void focusGained(FocusEvent e) { }
-		});
+		ramMinimum.addFocusListener(settingsChangeListener);
 		
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir(this));
@@ -91,13 +90,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
 		gbc_installFolderTextField.gridx = 1;
 		gbc_installFolderTextField.gridy = 3;
-		installFolderTextField.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				LaunchFrame.getInstance().saveSettings();
-			}
-			@Override public void focusGained(FocusEvent arg0) { }
-		});
+		installFolderTextField.addFocusListener(settingsChangeListener);
 		this.add(installFolderTextField, gbc_installFolderTextField);
 		installFolderTextField.setColumns(10);
 		
@@ -142,6 +135,24 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(lblRamMaximum, gbc_lblRamMaximum);
 		this.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
+
+		JLabel lblUpdateChannel = new JLabel("Update Channel:");
+		GridBagConstraints gbc_lblUpdateChannel = new GridBagConstraints();
+		gbc_lblUpdateChannel.anchor = GridBagConstraints.EAST;
+		gbc_lblUpdateChannel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUpdateChannel.gridx = 1;
+		gbc_lblUpdateChannel.gridy = 9;
+		this.add(lblUpdateChannel, gbc_lblUpdateChannel);
+
+		updateChannel = new JComboBox(Channel.values());
+		GridBagConstraints gbc_channel = new GridBagConstraints();
+		gbc_channel.gridwidth = 4;
+		gbc_channel.insets = new Insets(0, 0, 4, 4);
+		gbc_channel.fill = GridBagConstraints.BOTH;
+		gbc_channel.gridx = 2;
+		gbc_channel.gridy = 9;
+		updateChannel.addFocusListener(settingsChangeListener);
+		this.add(updateChannel, gbc_channel);
 	}
 	
 	@Override public void onVisible() { }
@@ -149,6 +160,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public void loadSettings(Settings settings) {
 		installFolderTextField.setText(settings.getInstallPath());
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+		Logger.logInfo(settings.getChannel().name());
+		updateChannel.setSelectedIndex(Arrays.binarySearch(Channel.values(), settings.getChannel()));
 	}
 
 
@@ -175,5 +188,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
+		settings.setChannel((Channel) updateChannel.getSelectedItem());
 	}
 }

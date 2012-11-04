@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import net.ftb.updater.Channel;
 import net.ftb.util.OSUtils;
 import net.ftb.util.PathUtils;
 
@@ -89,6 +90,14 @@ public class Settings extends Properties {
 
 	public void setConfigFile(File path) {
 		configPath = path;
+	}
+
+	public Channel getChannel() {
+		return Channel.fromName(getProperty("channel"));
+	}
+
+	public void setChannel(Channel channel) {
+		setProperty("channel", channel.name());
 	}
 
 	public File getConfigFile() {
