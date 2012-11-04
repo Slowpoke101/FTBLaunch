@@ -133,13 +133,14 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		// Why would we dynamically check for what version this is? If we've updated the launcher then we should just edit the version on here
-		//		try{
-		//			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
-		//			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
-		//		} catch(Exception e) {
-		//			version = "unknown";
-		//			buildNumber = -1;
-		//		}
+		// Because then you still set it both here and in the pom.
+		try{
+			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
+			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
+		} catch(Exception e) {
+			version = "unknown";
+			buildNumber = -1;
+		}
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		{
 			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -218,7 +219,7 @@ public class LaunchFrame extends JFrame {
 				ModPack.loadAll();
 
 				if(!version.equalsIgnoreCase("unknown")){
-					UpdateChecker updateChecker = new UpdateChecker(buildNumber);
+					UpdateChecker updateChecker = new UpdateChecker(Settings.getSettings().getChannel(), buildNumber);
 
 					if(updateChecker.shouldUpdate()){
 						LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);

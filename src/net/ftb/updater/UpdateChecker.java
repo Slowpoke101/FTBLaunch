@@ -22,14 +22,6 @@ public class UpdateChecker {
 	private int latest;
 	private URL downloadUrl;
 
-	public UpdateChecker(int version) {
-		this.version = version;
-		loadInfo();
-		try {
-			FileUtils.delete(new File(Settings.getSettings().getInstallPath() + File.separator + "updatetemp"));
-		} catch (Exception ignored) { }
-	}
-
 	public UpdateChecker(Channel channel, int version) {
 		this.channel = channel;
 		this.version = version;
@@ -41,15 +33,11 @@ public class UpdateChecker {
 
 	private void loadInfo() {
 		try {
-			Document doc;
-			// TODO: Maybe swap this over to being hosted on creeper host
-			doc = AppUtils.downloadXML(new URL("http://launcher.feed-the-beast.com/version.xml"));
+			Document doc = AppUtils.downloadXML(channel.updateURL);
 			NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
 			latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
 			String downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 			if (downloadAddress.indexOf("http") != 0) {
-				// TODO: Make this link work, aka upload the newest launcher onto creeperhost. 
-				// Will be named FTB_Launher.exe or FTB_Launcher.jar
 				downloadAddress = LaunchFrame.getCreeperhostLink(downloadAddress);
 			}
 			downloadUrl = new URL(downloadAddress);
