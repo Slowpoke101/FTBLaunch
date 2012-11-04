@@ -57,15 +57,17 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		public void write(byte[] b) throws IOException {
 			super.write(b);
 			String text = new String(b).trim();
-			if (!text.equals("") && !text.equals("\n"))
+			if (!text.equals("") && !text.equals("\n")) {
 				Logger.log("From Console: "+text,type,null);
+			}
 		}
 		@Override
 		public void write(byte[] buf, int off, int len) {
 			super.write(buf, off, len);
 			String text = new String(buf,off,len).trim();
-			if (!text.equals("") && !text.equals("\n"))
+			if (!text.equals("") && !text.equals("\n")) {
 				Logger.log("From Console: "+text,type,null);
+			}
 				
 		}
 		
@@ -83,12 +85,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		this.setSize(new Dimension(800, 400));
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		
 		JPanel panel = new JPanel();
-		
 		
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -153,22 +152,17 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		});
 		panel.add(ircButton);
 		
-		
 		displayArea = new JEditorPane("text/html","test");
 		kit = new HTMLEditorKit();
 		doc = new HTMLDocument();
 		displayArea.setEditorKit(kit);
 		displayArea.setDocument(doc);
 		
-		
-		
 		scrollPane = new JScrollPane(displayArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		getContentPane().add(scrollPane);
-		
-		
-		//pack();
+
 		replay();
 		Logger.addListener(this);
 		
@@ -181,7 +175,6 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			e.printStackTrace();
 		}
 	}
-
 	
 	public void switchToExtendedLog() {
 		synchronized (doc) {
@@ -201,11 +194,10 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					addText(line, color);
 				}
 					
-			} catch (IOException e) {
-				// dont happen in string
-			}
+			} catch (IOException e) { }
 		}
 	}
+	
 	private void replay() {
 		synchronized (doc) {
 			doc = new HTMLDocument();
@@ -223,39 +215,32 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					addText(line, color);
 				}
 					
-			} catch (IOException e) {
-				// dont happen in string
-			}
+			} catch (IOException e) { }
 		}
 	}
-	
 	
 	private void addText(String text, String color) {
 		String msg = "<font color=\""+color+"\">"+text+"</font><br/>";
 		try {
 			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
-			
 		} catch (BadLocationException e) {
-			// Ignore or stackoverflow!
-		} catch (IOException e) {
-			// Ignore or stackoverflow!
-		}
+		} catch (IOException e) { }
 	}
-	
 
 	@Override
 	public void onLogEvent(String date, String source, String level, String msg) {
 		synchronized (doc) {
 			String color = "white";
-			if (level.equals("WARN"))
+			if (level.equals("WARN")) {
 				color = "yellow";
-			else if (level.equals("ERROR"))
+			} else if (level.equals("ERROR")) {
 				color = "red";
-			
-			if (extendedLog)
+			}
+			if (extendedLog) {
 				addText(date+" "+source+" ["+level+"] "+msg,color);
-			else
+			} else {
 				addText("["+level+"] "+msg,color);
+			}
 		}
 		
 	}
