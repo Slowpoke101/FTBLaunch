@@ -28,6 +28,11 @@ public class MinecraftLauncher {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			StringBuffer cpb = new StringBuffer("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
+			// Rename old forge version with the new name
+			File oldForge = new File(tempDir, "minecraftforge-universal-6.0.1.353.zip");
+			if(oldForge.exists()) {
+				oldForge.renameTo(new File(tempDir, "MinecraftForge.zip"));
+			}
 			// Go through all remaining items in instmods folder
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {

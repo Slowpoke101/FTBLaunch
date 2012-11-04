@@ -1,9 +1,13 @@
 package net.ftb.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,24 +16,19 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.URI;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JEditorPane;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.JButton;
+import javax.swing.JScrollPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import net.ftb.log.ILogListener;
 import net.ftb.log.Logger;
-
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class LauncherConsole extends JDialog implements ILogListener {
 	private static final long serialVersionUID = 1L;
@@ -210,7 +209,6 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					}
 					addText(line, color);
 				}
-					
 			} catch (IOException e) { }
 		}
 	}
