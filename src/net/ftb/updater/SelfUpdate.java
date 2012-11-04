@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 /*
  Why is this necessary? You can't overwrite the currently running
@@ -50,6 +51,15 @@ public class SelfUpdate {
 		runUpdate() calls it, because the runUpdate() calling this
 		will be old!
 		 */
+		try {
+			if (OSUtils.getCurrentOS() != OSUtils.OS.UNIX) {
+				Thread.sleep(4000); //Necessary as the updater may try to
+				// run while the previous instance is still closing
+				// preventing it from replacing the open launcher
+				// Not necessary with linux, as you can replace currently
+				// running files
+			}
+		} catch (InterruptedException ignored) { }
 		String launcherPath = args[0];
 		String temporaryUpdatePath = args[1];
 		File launcher = new File(launcherPath);
