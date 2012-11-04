@@ -122,7 +122,7 @@ public class LaunchFrame extends JFrame {
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
-	private static final String FORGENAME = "minecraftforge-universal-6.0.1.353.zip";
+	private static final String FORGENAME = "MinecrafForge.zip";
 	public static UserManager userManager;
 	private LoginResponse RESPONSE;
 	public static String tempPass = "";
@@ -133,13 +133,13 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		// Why would we dynamically check for what version this is? If we've updated the launcher then we should just edit the version on here
-//		try{
-//			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
-//			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
-//		} catch(Exception e) {
-//			version = "unknown";
-//			buildNumber = -1;
-//		}
+		//		try{
+		//			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
+		//			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
+		//		} catch(Exception e) {
+		//			version = "unknown";
+		//			buildNumber = -1;
+		//		}
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		{
 			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -161,7 +161,7 @@ public class LaunchFrame extends JFrame {
 				System.getProperty("os.version"));
 		Logger.logInfo("Working directory: "+
 				System.getProperty("user.dir"));
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
@@ -463,14 +463,11 @@ public class LaunchFrame extends JFrame {
 						if (get()) {
 							// Success
 							Logger.logInfo("Game update complete");
-
 							if(modPacksPane.getSelectedModIndex() < 0) {
 								Logger.logWarn("No Modpack selected");
 								return;
 							}
-
 							Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-
 							FileUtils.killMetaInf();
 							ModManager man = new ModManager(new JFrame(), true);
 							man.setVisible(true);
