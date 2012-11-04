@@ -109,10 +109,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				//TODO
 			}
 		});
+		donate.setEnabled(false);
+		donate.setToolTipText("Coming Soon...");
 		this.add(donate);
 		
 		modsFolder = new JButton("Open the Jar mods folder");
