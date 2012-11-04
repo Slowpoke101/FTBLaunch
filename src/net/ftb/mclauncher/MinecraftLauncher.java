@@ -26,7 +26,7 @@ public class MinecraftLauncher {
 		int success = -1;
 		try {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			StringBuffer cpb = new StringBuffer("");
+			StringBuilder cpb = new StringBuilder("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
 			// Go through all remaining items in instmods folder
 			if(tempDir.isDirectory()) {
@@ -44,10 +44,10 @@ public class MinecraftLauncher {
 			// Load forge LAASSSSSST
 			cpb.append(OSUtils.getJavaDelimiter());
 			cpb.append(new File(tempDir, forgename).getAbsolutePath());
-			
-			for(int i = 0; i < jarFiles.length; i++) {
+
+			for (String jarFile : jarFiles) {
 				cpb.append(OSUtils.getJavaDelimiter());
-				cpb.append(new File(new File(workingDir, "bin"), jarFiles[i]).getAbsolutePath());
+				cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
 			}
 
 			// Holder for the Arguments
