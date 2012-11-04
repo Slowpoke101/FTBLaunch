@@ -57,7 +57,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		packPanels = new ArrayList<JPanel>();
 
-		// i suggest some loading animation here until first mod gets added
+		// I suggest some loading animation here until first mod gets added
 
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
@@ -69,7 +69,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		JTextArea filler = new JTextArea("please wait while mods are beeing load...");
+		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
@@ -146,7 +146,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 
 		final int packIndex = packPanels.size();
-		System.out.println("adding pack "+packIndex);
+		System.out.println("Adding pack "+packIndex);
 		final JPanel p = new JPanel();
 		p.setBounds(0, packIndex * 55, 420, 55);
 		p.setLayout(null);
