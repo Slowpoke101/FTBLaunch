@@ -79,7 +79,7 @@ public class SelfUpdate {
 				+ separator + "java";
 		arguments.add(path);
 		arguments.add("-jar");
-		arguments.add(temporaryUpdatePath);
+		arguments.add(launcherPath);
 
 		ProcessBuilder processBuilder = new ProcessBuilder();
 		processBuilder.command(arguments);

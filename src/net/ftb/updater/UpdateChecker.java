@@ -11,56 +11,54 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.FileUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 public class UpdateChecker {
-	private class UpdateInfo {
-		public int currentBuild = -1;
-		public URL downloadURL = null;
-	}
-
 	private Channel channel;
 	private int version;
-	private UpdateInfo updateInfo;
+	private int latest;
+	private URL downloadUrl;
+
+	public UpdateChecker(int version) {
+		this.version = version;
+		loadInfo();
+		try {
+			FileUtils.delete(new File(Settings.getSettings().getInstallPath() + File.separator + "updatetemp"));
+		} catch (Exception ignored) { }
+	}
 
 	public UpdateChecker(Channel channel, int version) {
 		this.channel = channel;
 		this.version = version;
-		this.updateInfo = loadInfo();
+		loadInfo();
 		try {
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath() + File.separator + "updatetemp"));
-		} catch (Exception ignored) {
-		}
+		} catch (Exception ignored) { }
 	}
 
-	private UpdateInfo loadInfo() {
-		UpdateInfo updateInfo = new UpdateInfo();
-		if (channel.updateURL == null) {
-			return updateInfo;
-		}
+	private void loadInfo() {
 		try {
-			Document d = AppUtils.downloadXML(channel.updateURL);
-			NamedNodeMap updateInfoAttributes = d.getDocumentElement().getAttributes();
-			updateInfo.currentBuild = Integer.parseInt(updateInfoAttributes.getNamedItem("currentBuild").getTextContent());
-			String downloadAddress = updateInfoAttributes.getNamedItem("downloadURL").getTextContent();
+			Document doc;
+			// replace with actual link once closer to launch
+			doc = AppUtils.downloadXML(new URL("https://dl.dropbox.com/u/2405919/Update.xml"));
+			NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
+			latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
+			String downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 			if (downloadAddress.indexOf("http") != 0) {
 				downloadAddress = LaunchFrame.getCreeperhostLink(downloadAddress);
 			}
-			updateInfo.downloadURL = new URL(downloadAddress);
-		} catch (IOException e) {
-			Logger.logError("Failed to load update information", e);
-		} catch (SAXException e) {
-			Logger.logError("Failed to load update information", e);
-		} catch (NoSuchAlgorithmException e) {
-			Logger.logError("Failed to build creeperhost link for download", e);
-		}
-		return updateInfo;
+			downloadUrl = new URL(downloadAddress);
+		} catch (MalformedURLException e) { e.printStackTrace();
+		} catch (IOException e) { e.printStackTrace();
+		} catch (SAXException e) { e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
 	}
 
 	public boolean shouldUpdate() {
-		return version < updateInfo.currentBuild;
+		return version < latest;
 	}
 
 	public void update() {
@@ -75,7 +73,7 @@ public class UpdateChecker {
 		extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
 
 		try {
-			URL updateURL = new URL(updateInfo.downloadURL.toString() + "." + extension);
+			URL updateURL = new URL(downloadUrl.toString() + "." + extension);
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
 			FileUtils.downloadToFile(updateURL, temporaryUpdate);

@@ -15,6 +15,11 @@ public enum Channel {
 	private final String title;
 	public final URL updateURL;
 
+	/*
+	 * Unless this is being used for people to test dev builds (which I don't think is needed)
+	 * then I don't think we'll require a Channel.java
+	 */
+	
 	private Channel(String updateAddress) {
 		this(updateAddress, null);
 	}

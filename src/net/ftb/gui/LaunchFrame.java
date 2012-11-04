@@ -102,7 +102,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JCheckBox savePassword = new JCheckBox();
 	private JButton launch = new JButton("Launch");
-	private static String[] dropdown_ = {"Select Username", "Create Username"};
+	private static String[] dropdown_ = {"Select Username", "Create Username" };
 	private static JComboBox users;
 	private JButton edit;
 
@@ -117,8 +117,8 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static String version = "";
-	private static int buildNumber = 0;
+	private static String version = "0.2.2";
+	private static int buildNumber = 22;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -132,13 +132,14 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		try{
-			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
-			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
-		} catch(Exception e) {
-			version = "unknown";
-			buildNumber = -1;
-		}
+		// Why would we dynamically check for what version this is? If we've updated the launcher then we should just edit the version on here
+//		try{
+//			buildNumber = Integer.parseInt(LaunchFrame.class.getPackage().getImplementationVersion());
+//			version = LaunchFrame.class.getPackage().getImplementationTitle() + "-b" + buildNumber;
+//		} catch(Exception e) {
+//			version = "unknown";
+//			buildNumber = -1;
+//		}
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		{
 			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -216,8 +217,8 @@ public class LaunchFrame extends JFrame {
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
 
-				if(version != "unknown"){
-					UpdateChecker updateChecker = new UpdateChecker(Settings.getSettings().getChannel(), buildNumber);
+				if(!version.equalsIgnoreCase("unknown")){
+					UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 
 					if(updateChecker.shouldUpdate()){
 						LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
@@ -348,12 +349,6 @@ public class LaunchFrame extends JFrame {
 
 		loadSettings();
 
-		//Adding tabs to the panel
-//		UIDefaults overrides = new UIDefaults();
-//
-//		tabbedPane.putClientProperty("Nimbus.Overrides", overrides);
-//		// If you uncomment this you'll see the Selected look changes a lot, not sure if intended.
-//		tabbedPane.putClientProperty("Nimbus.Overrides.InheritDefaults", false);
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 
