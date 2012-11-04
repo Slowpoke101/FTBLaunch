@@ -23,6 +23,21 @@ public class OSUtils {
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
+	public static String getJavaDelimiter(){
+		if(getCurrentOS() == OS.WINDOWS){
+			return ";";
+		}
+		else if(getCurrentOS() == OS.UNIX){
+			return ":";
+		}
+		else if(getCurrentOS() == OS.MACOSX){
+			return ":";
+		}
+		else{
+			return ";";
+		}
+	}
+
 	public static OS getCurrentOS() {
 		String osString = System.getProperty("os.name").toLowerCase();
 		if (osString.contains("win")) {
