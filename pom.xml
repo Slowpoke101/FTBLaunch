@@ -6,15 +6,31 @@
   <artifactId>FTB_Launcher</artifactId>
   <version>0.2.3-Beta</version>
   <packaging>jar</packaging>
+  <inceptionYear>2012</inceptionYear>
   <properties>
     <buildNumber>0</buildNumber>
     <mainClass>net.ftb.gui.LaunchFrame</mainClass>
     <minimumJreVersion>1.6</minimumJreVersion>
+    <currentYear>2012</currentYear>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <name>FTB Launcher</name>
   <url>https://github.com/Slowpoke101/FTBLaunch</url>
+
+  <organization>
+    <name>FTB Launcher Contributors</name>
+    <url>https://github.com/Slowpoke101/FTBLaunch</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+      <comments>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</comments>
+    </license>
+  </licenses>
 
   <build>
     <defaultGoal>clean install package</defaultGoal>
@@ -92,6 +108,40 @@
             <phase>package</phase>
             <goals>
               <goal>launch4j</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.10.b1</version>
+        <executions>
+          <execution>
+            <configuration>
+              <properties>
+                <name>${project.name}</name>
+                <url>${project.url}</url>
+                <copyright>Copyright © ${project.inceptionYear}-${currentYear}, ${project.organization.name}</copyright>
+              </properties>
+              <quiet>true</quiet>
+              <encoding>UTF-8</encoding>
+              <strictCheck>true</strictCheck>
+              <header>${basedir}/licenseheader.txt</header>
+              <mapping>
+                <java>SLASHSTAR_STYLE</java>
+              </mapping>
+              <keywords>
+                <keyword>${project.name}</keyword>
+                <keyword>license</keyword>
+              </keywords>
+              <includes>
+                <include>src/net/ftb/**</include>
+              </includes>
+            </configuration>
+            <phase>clean</phase>
+            <goals>
+              <goal>format</goal>
             </goals>
           </execution>
         </executions>
