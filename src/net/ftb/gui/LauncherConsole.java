@@ -215,6 +215,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 	}
 	
 	private void addText(String text, String color) {
+		text = text.replace("<", "&lt;").replace(">","&gt;");
 		String msg = "<font color=\""+color+"\">"+text+"</font><br/>";
 		try {
 			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
