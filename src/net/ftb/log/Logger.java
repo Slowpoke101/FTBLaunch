@@ -86,7 +86,7 @@ public class Logger {
 		logbufferExtensive = new StringBuffer();
 		listeners = new ArrayList<ILogListener>();
 
-		FileWriter fstream = null;
+		FileWriter fstream;
 		try {
 			fstream = new FileWriter(new File(PathUtils.combine(OSUtils.getDefInstallPath(),Logfile)));
 			fileoutwrite = new BufferedWriter(fstream);

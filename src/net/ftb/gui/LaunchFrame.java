@@ -108,13 +108,13 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static String version = "0.3";
+	private static String version = "0.3.0";
 	private static int buildNumber = 30;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private static final String FORGENAME = "MinecraftForge.zip";
-	public static UserManager userManager;
+	protected static UserManager userManager;
 	private LoginResponse RESPONSE;
 	public static String tempPass = "";
 
@@ -139,6 +139,7 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
 
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
 
@@ -555,8 +556,8 @@ public class LaunchFrame extends JFrame {
 			}
 			if (fout != null) {
 				fout.flush();
-			}
-			fout.close();
+				fout.close();
+			}	
 		}
 	}
 
@@ -587,8 +588,8 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("dirs mk'd");
 		FileUtils.copyFolder(new File(installpath + "/.minecraft/bin/"), new File(installpath + "/" + pack.getDir()+ "/.minecraft/bin"));
 		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/.minecraft"), new File(installpath + "/" + pack.getDir() + "/.minecraft"));
-		FileUtils.copyFile(new File(installpath + "/temp/" + pack.getDir() + "/instMods/" + FORGENAME), 
-				new File(installpath + "/" + pack.getDir() + "/instMods/" + FORGENAME));
+		// Just copy full instMods folder
+		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
 	}
 
 	/**
@@ -625,7 +626,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			userManager.write();
 		} catch (IOException e) { Logger.logError("Exception occured",e); }
-		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));;
+		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
 			users.addItem(usernames[i]);

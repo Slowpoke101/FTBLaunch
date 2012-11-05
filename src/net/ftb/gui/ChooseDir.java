@@ -20,6 +20,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 		this.optionsPane = optionsPane;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File(optionsPane.getInstallFolderText()));
@@ -36,6 +37,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 		}
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(200, 200);
 	}

@@ -86,6 +86,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 
 		JButton btnNewButton = new JButton("Paste my log to pastebin.com for support requests");
 		btnNewButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane pane = new JOptionPane("The log will be copied to your clipboard and pastebin.com will be opened now");
 				Object[] options = new String[] { "Yes do it", "Cancel" };
@@ -119,6 +120,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 
 		switchToExtendedBtn = new JButton("Show extended Log");
 		switchToExtendedBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				switchToExtendedBtn.setEnabled(false);
 				switchToExtendedLog();
@@ -128,6 +130,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 
 		ircButton = new JButton("Join support webchat");
 		ircButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();

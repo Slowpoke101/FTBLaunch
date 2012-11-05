@@ -312,12 +312,9 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		} finally {
 			try {
 				zipIn.close();
+				input.close();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
-
-		try {
-			input.close();
-		} catch (IOException e) { e.printStackTrace(); }
 
 		nativesJar.delete();
 		return true;

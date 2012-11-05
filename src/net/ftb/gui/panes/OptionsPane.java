@@ -25,7 +25,7 @@ import net.ftb.log.Logger;
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
 
-	public static JTextField installFolderTextField;
+	protected static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;

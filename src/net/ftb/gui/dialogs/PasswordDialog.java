@@ -47,7 +47,7 @@ public class PasswordDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(!new String(password.getPassword()).isEmpty()){
-					LaunchFrame.getInstance().tempPass = new String(password.getPassword());
+					LaunchFrame.tempPass = new String(password.getPassword());
 					setVisible(false);
 				}
 			}

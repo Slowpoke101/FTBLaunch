@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class UserManager {
-	public static ArrayList<User> _users = new ArrayList<User>();
+	public final static ArrayList<User> _users = new ArrayList<User>();
 	private File _filename;
 
 	public UserManager(File filename) {

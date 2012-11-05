@@ -21,6 +21,7 @@ public class ModpackLoader extends Thread {
 
 	public ModpackLoader() { }
 
+	@Override
 	public void run() {
 		try {
 			Logger.logInfo("loading modpack information...");

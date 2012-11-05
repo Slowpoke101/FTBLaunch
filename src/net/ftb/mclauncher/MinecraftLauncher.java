@@ -30,15 +30,26 @@ public class MinecraftLauncher {
 			// TODO: Remove this after grace period has been given/check folder for existing forges and remove them.
 			File oldForge = new File(tempDir, "minecraftforge-universal-6.0.1.353.zip");
 			if(oldForge.exists()) {
-				if(new File(tempDir, "MinecraftForge.zip").exists()) {
+				if(new File(tempDir, forgename).exists()) {
 					oldForge.delete();
 				} else {
-					oldForge.renameTo(new File(tempDir, "MinecraftForge.zip"));
+					oldForge.renameTo(new File(tempDir, forgename));
 				}
 			}
-			
+
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
+					// Check for existing forge versions
+					if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
+						// If forge version is not our currently named forge
+						if(!name.toLowerCase().equalsIgnoreCase(forgename)) {
+							// And our version exists
+							if(new File(tempDir, forgename).exists()) {
+								// Delete theirs
+								new File(tempDir, name).delete();
+							}
+						}
+					}
 					if(!name.equalsIgnoreCase(forgename)) {
 						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
 							cpb.append(OSUtils.getJavaDelimiter());
@@ -49,10 +60,10 @@ public class MinecraftLauncher {
 			} else {
 				Logger.logInfo("Not a directory.");
 			}
-			
+
 			cpb.append(OSUtils.getJavaDelimiter());
 			cpb.append(new File(tempDir, forgename).getAbsolutePath());
-			
+
 			for(String jarFile : jarFiles) {
 				cpb.append(OSUtils.getJavaDelimiter());
 				cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
@@ -75,7 +86,7 @@ public class MinecraftLauncher {
 			arguments.add(forgename);
 			arguments.add(username);
 			arguments.add(password);
-			
+
 			ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 			try {
 				processBuilder.start();
@@ -149,7 +160,7 @@ public class MinecraftLauncher {
 				map.put(counter, new File(new File(basepath, "bin"), jarFile));
 				counter++;
 			}	
-			
+
 			URL[] urls = new URL[map.size()];
 			for(int i = 0; i < counter; i++) {
 				try {
@@ -160,7 +171,7 @@ public class MinecraftLauncher {
 
 			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(basepath, "bin"), "natives")
-					.toString();
+			.toString();
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
