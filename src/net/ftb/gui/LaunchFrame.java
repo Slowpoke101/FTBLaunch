@@ -109,8 +109,8 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static String version = "0.3.0";
-	private static int buildNumber = 30;
+	private static String version = "0.3.1";
+	private static int buildNumber = 31;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
@@ -446,6 +446,7 @@ public class LaunchFrame extends JFrame {
 						if (get()) {
 							Logger.logInfo("Game update complete");
 							initializeMods();
+							FileUtils.killMetaInf();
 							launchMinecraft(installPath + "/" + modpack.getDir() + "/.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							Logger.logError("Error occured during downloading the game");
@@ -663,7 +664,6 @@ public class LaunchFrame extends JFrame {
 	 */
 	private void initializeMods() {
 		Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-		FileUtils.killMetaInf();
 		ModManager man = new ModManager(new JFrame(), true);
 		man.setVisible(true);
 		try {

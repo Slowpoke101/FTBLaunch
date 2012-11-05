@@ -4,7 +4,7 @@
 
   <groupId>net.ftb</groupId>
   <artifactId>FTB_Launcher</artifactId>
-  <version>0.3.0-Beta</version>
+  <version>0.3.1-Beta</version>
   <packaging>jar</packaging>
   <properties>
     <buildNumber>0</buildNumber>

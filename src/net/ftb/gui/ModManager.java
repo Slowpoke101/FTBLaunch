@@ -54,18 +54,15 @@ public class ModManager extends JDialog {
 				String installPath = Settings.getSettings().getInstallPath();
 				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 				File modPackZip = new File(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl());
-				if(!modPackZip.exists()) {
-					Logger.logInfo("Pack not found, downloading!");
-					try {
-						new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
-						downloadModPack(pack.getUrl(), pack.getDir());
-					} catch (MalformedURLException e) { e.printStackTrace();
-					} catch (NoSuchAlgorithmException e) { e.printStackTrace();
-					} catch (IOException e) { e.printStackTrace(); }
-				} else {
-					Logger.logInfo("Pack found!");
-					installMods(pack.getUrl(), pack.getDir());
+				if(modPackZip.exists()) {
+					modPackZip.delete();
 				}
+				try {
+					new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
+					downloadModPack(pack.getUrl(), pack.getDir());
+				} catch (MalformedURLException e) { e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) { e.printStackTrace();
+				} catch (IOException e) { e.printStackTrace(); }
 			}
 			return false;
 		}
@@ -142,6 +139,16 @@ public class ModManager extends JDialog {
 				in1.close();
 			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
+			// Delete old /mod/,/coremods/,/instMods/
+			if(new File(installPath, dir + "/instMods/").exists()) {
+				new File(installPath, dir + "/instMods/").delete();
+			}
+			if(new File(installPath, dir + "/.minecraft/mods/").exists()) {
+				new File(installPath, dir + "/.minecraft/mods/").delete();
+			}
+			if(new File(installPath, dir + "/.minecraft/coremods/").exists()) {
+				new File(installPath, dir + "/.minecraft/coremods/").delete();
+			}
 			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
 			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/intsMods/"));
 			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir + "/.minecraft/"));
