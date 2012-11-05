@@ -47,7 +47,7 @@ public class Settings extends Properties {
 	}
 
 	public String getRamMin() {
-		return getProperty("ramMin", Integer.toString(265));
+		return getProperty("ramMin", Integer.toString(256));
 	}
 
 	public void setRamMin(String min) {
