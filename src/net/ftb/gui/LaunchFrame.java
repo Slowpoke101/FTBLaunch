@@ -109,8 +109,8 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * random crap
 	 */
-	private static String version = "0.3.1";
-	private static int buildNumber = 31;
+	private static String version = "0.3.2";
+	private static int buildNumber = 32;
 	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
