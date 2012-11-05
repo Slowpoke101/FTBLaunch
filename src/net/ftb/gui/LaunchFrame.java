@@ -102,7 +102,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JCheckBox savePassword = new JCheckBox();
 	private JButton launch = new JButton("Launch");
-	private static String[] dropdown_ = {"Select Username", "Create Username" };
+	private static String[] dropdown_ = {"Select Username", "Create Profile" };
 	private static JComboBox users;
 	private JButton edit;
 
@@ -409,6 +409,7 @@ public class LaunchFrame extends JFrame {
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
 				} catch (IllegalArgumentException e) {
+					// TODO: Add in error dialogs to represent login errors.
 					if (responseStr.contains(":")) {
 						Logger.logError("Received invalid response from server.");
 					} else {
@@ -435,6 +436,7 @@ public class LaunchFrame extends JFrame {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
+		// TODO: If minecraft updates to the newest minecraft required by the mod pack, but they have an older version... What do?
 		if(!new File(installPath + "/" + modpack.getDir() + "/.minecraft/bin/minecraft.jar").exists() 
 				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/.minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
@@ -490,6 +492,7 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
+		// TODO: Don't use system time, grab time elsewhere.
 		DateFormat sdf = new SimpleDateFormat("ddMMyy");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String date = sdf.format(new Date());
@@ -552,8 +555,8 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME,
-				Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
+		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMin(),
+				Settings.getSettings().getRamMax());
 		Logger.logInfo("MinecraftLauncher said: "+result);
 		if (result > 0) {
 			System.exit(0);
@@ -567,12 +570,9 @@ public class LaunchFrame extends JFrame {
 	protected void installMods(String modPackName) throws IOException {
 		String installpath = Settings.getSettings().getInstallPath();
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
-		new File(installpath + "/" + pack.getDir() + "/.minecraft").mkdirs();
 		new File(installpath + "/" + pack.getDir() + "/instMods/").mkdirs();
 		Logger.logInfo("dirs mk'd");
-		FileUtils.copyFolder(new File(installpath + "/.minecraft/bin/"), new File(installpath + "/" + pack.getDir()+ "/.minecraft/bin"));
 		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/.minecraft"), new File(installpath + "/" + pack.getDir() + "/.minecraft"));
-		// Just copy full instMods folder
 		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
 	}
 

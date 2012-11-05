@@ -153,6 +153,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			}
 		}
 
+		// TODO: Fix progress bar when updating minecraft
 		int initialProgress = 10;
 		setProgress(initialProgress);
 
