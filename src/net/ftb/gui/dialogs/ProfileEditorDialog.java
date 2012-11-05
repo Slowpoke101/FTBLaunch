@@ -39,6 +39,8 @@ public class ProfileEditorDialog extends JDialog {
 		setBounds(300, 300, 300, 240);
 		setResizable(false);
 
+		getRootPane().setDefaultButton(updateButton);
+
 		panel.setBounds(0, 0, 300, 240);
 		setContentPane(panel);
 		panel.setLayout(null);

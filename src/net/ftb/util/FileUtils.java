@@ -19,7 +19,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 public class FileUtils {
 	/**
@@ -161,8 +164,8 @@ public class FileUtils {
 	 * deletes the META-INF
 	 */
 	public static void killMetaInf() {
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin", "minecraft.jar.tmp");
+		File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/.minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/.minecraft/bin", "minecraft.jar.tmp");
 		try {
 			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
 			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
@@ -184,7 +187,10 @@ public class FileUtils {
 			input.close();
 			output.close();
 
-			inputFile.delete();
+			if(!inputFile.delete()) {
+				Logger.logError("Failed to delete Minecraft.jar.");
+				return;
+			}
 			outputTmpFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) {	e.printStackTrace();
 		} catch (IOException e) { e.printStackTrace(); }

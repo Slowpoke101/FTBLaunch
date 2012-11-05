@@ -124,8 +124,8 @@ public class ModManager extends JDialog {
 		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
-			new File(installPath + "/"+ dir + "/.minecraft").mkdirs();
-			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/" + dir + "/.minecraft/bin"));
+			//			new File(installPath + "/"+ dir + "/.minecraft").mkdirs();
+			//			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/" + dir + "/.minecraft/bin"));
 			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
 			try {
 				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");
@@ -143,7 +143,7 @@ public class ModManager extends JDialog {
 			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
 			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
-			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/.minecraft/bin/"));
+			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/intsMods/"));
 			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir + "/.minecraft/"));
 		}
 

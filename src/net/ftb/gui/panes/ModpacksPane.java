@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,25 +34,23 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private JPanel packs;
 	public ArrayList<JPanel> packPanels;
+	public ArrayList<JPanel> unfilteredPackPanels;
 	private JScrollPane packsScroll;
-	private JLabel splash;
-	private JButton serverLink;
-	private JButton modsFolder;
-	private JButton donate;
+	private JLabel splash, typeLbl;
+	private JButton serverLink, modsFolder, donate;
+	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
+	public static int typeFilter = 0;
 
 	public ModpacksPane () {
 		super();
 
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
-		//modPacksPane.add(backgroundImage3);
-		//modPacksPane.setBackground(back);
 
 		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
-		//		splash.setIcon(new ImageIcon(ModPack.getPack(0).getImage()));
 		this.add(splash);
 
 		packPanels = new ArrayList<JPanel>();
@@ -66,6 +65,26 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		final JPanel p = new JPanel();
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
+
+		// Drop down menus to filter results.
+		//		typeLbl = new JLabel("Mod Pack Type: ");
+		//		typeLbl.setBounds(5, 0, 90, 30);
+		//		typeLbl.setVisible(true);
+		//		add(typeLbl);
+
+		//		packType = new JComboBox(new String[]{"Client", "Server"});
+		//		packType.setBounds(90, 0, 80, 30);
+		//		packType.addActionListener(new ActionListener() {
+		//			@Override
+		//			public void actionPerformed(ActionEvent arg0) {
+		//				if(packType.getSelectedItem().equals("Client")) {
+		//					typeFilter = 0;
+		//				} else {
+		//					typeFilter = 1;
+		//				}
+		//			}
+		//		});
+		//		add(packType);
 
 		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
 		filler.setBorder(null);
@@ -85,6 +104,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setViewportView(packs);
 		this.add(packsScroll);
 
+		// TODO: Remove this and replace with filters
 		serverLink = new JButton("Grab The Server Version Here!!");
 		serverLink.setBounds(420, 210, 250, 90);
 		serverLink.addActionListener(new ActionListener() {
@@ -186,6 +206,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	@Override
 	public void onModPackAdded(ModPack pack) {
 		addPack(pack);
+		updatePacks();
+	}
+
+	private void updateSortedPacks() {
+		unfilteredPackPanels = packPanels;
+		// Based on the typeFilter we now need to change up the look and feel
+		// Apply base gui, client/server
+		// Apply secondary filter (all, ftb, 3rd party)
 		updatePacks();
 	}
 

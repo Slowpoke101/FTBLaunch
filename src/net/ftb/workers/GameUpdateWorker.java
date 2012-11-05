@@ -1,7 +1,5 @@
 package net.ftb.workers;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +18,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.SwingWorker;
 
+import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 
@@ -31,14 +30,14 @@ import net.ftb.util.OSUtils.OS;
  * it will likely change in the future.
  */
 public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
-	protected String status, latestVersion, mainGameURL;
+	protected String status, reqVersion, mainGameURL;
 	protected File binDir;
 	protected boolean forceUpdate;
 
 	protected URL[] jarURLs;
 
-	public GameUpdateWorker(String latestVersion, String mainGameURL, String binDir, boolean forceUpdate) {
-		this.latestVersion = latestVersion;
+	public GameUpdateWorker(String packVersion, String mainGameURL, String binDir, boolean forceUpdate) {
+		reqVersion = packVersion;
 		this.mainGameURL = mainGameURL;
 		this.binDir = new File(binDir);
 		this.forceUpdate = forceUpdate;
@@ -57,49 +56,32 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			binDir.mkdirs();
 		}
 
-		if (shouldUpdate()) {
-			setProgress(90);
-			writeVersionFile(latestVersion);
-			setStatus("Downloading jars...");
-			System.out.println("Downloading Jars");
-			if (!downloadJars()) {
-				System.out.println("Download Failed :(");
-				return false;
-			}
-			setStatus("Extracting files...");
-			System.out.println("Extracting Files");
-			if (!extractNatives()) {
-				System.out.println("Extraction Failed :(");
-				return false;
-			}
+		setProgress(90);
+		setStatus("Downloading jars...");
+		Logger.logInfo("Downloading Jars");
+		if (!downloadJars()) {
+			Logger.logError("Download Failed :(");
+			return false;
+		}
+		setStatus("Extracting files...");
+		Logger.logInfo("Extracting Files");
+		if (!extractNatives()) {
+			Logger.logError("Extraction Failed :(");
+			return false;
 		}
 		return true;
 	}
 
-	protected boolean shouldUpdate() {
-		if(forceUpdate) {
-			return true;
-		}
-		if(latestVersion.isEmpty()) {
-			return false;
-		}
-		File versionFile = new File(binDir, "version");
-		// TODO Fix comparison - version format is currently undecided, so this just checks if it has changed.
-		// This could result in a downgrade if the version had gone down - although maybe that's intended?
-		// TODO Ask user if they want to update
-		return !versionFile.exists() || latestVersion.equals("-1") || !latestVersion.equals(readVersionFile());
-	}
-
-
 	protected boolean loadJarURLs() {
-		System.out.println("Loading Jar URLs");
+		Logger.logInfo("Loading Jar URLs");
 
 		String[] jarList = { mainGameURL, "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 
 		jarURLs = new URL[jarList.length + 1];
 		try	{
-			//changed int i = 0 to 1, and set minecraft download link manually;
-			jarURLs[0] = new URL("http://assets.minecraft.net/1_4_2/minecraft.jar");
+			// Set the version to the required version of minecraft for the Mod Pack
+			String ver = reqVersion.replace(".", "_");
+			jarURLs[0] = new URL("http://assets.minecraft.net/" + ver + "/minecraft.jar");
 			for (int i = 1; i < jarList.length; i++) {
 				jarURLs[i] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + jarList[i]);
 			}
@@ -193,7 +175,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			while (!downloadSuccess && (triesLeft < 5)) {
 				try {
 					triesLeft++;
-					System.out.println("Connecting.. Try " + triesLeft + " of 5");
+					Logger.logInfo("Connecting.. Try " + triesLeft + " of 5");
 					String etag = "";
 
 					URLConnection dlConnection = jarURLs[i].openConnection();
@@ -207,6 +189,9 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 					String jarFileName = getFilename(jarURLs[i]);
 					InputStream dlStream = dlConnection.getInputStream();
+					if(new File(binDir, jarFileName).exists()) {
+						new File(binDir, jarFileName).delete();
+					}
 					FileOutputStream outStream = new FileOutputStream(new File(binDir, jarFileName));
 
 					setStatus("Downloading " + jarFileName + "...");
@@ -257,7 +242,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					}
 				} catch (Exception e) {
 					downloadSuccess = false;
-					System.out.println("Connection failed, trying again");
+					Logger.logWarn("Connection failed, trying again");
 					e.printStackTrace();
 				}
 			}
@@ -318,25 +303,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 		nativesJar.delete();
 		return true;
-	}
-
-	protected String readVersionFile() {
-		try	{
-			DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(binDir, "version")));
-			String retVal = inputStream.readUTF();
-			inputStream.close();
-			return retVal;
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) { e.printStackTrace(); }
-		return "";
-	}
-
-	protected void writeVersionFile(String versionString) {
-		try {
-			DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(binDir, "version")));
-			outputStream.writeUTF(versionString);
-			outputStream.close();
-		} catch (IOException e)	{ e.printStackTrace(); }
 	}
 
 	protected String getFilename(URL url) {

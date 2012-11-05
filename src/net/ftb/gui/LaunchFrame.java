@@ -64,6 +64,7 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
+import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
@@ -137,6 +138,8 @@ public class LaunchFrame extends JFrame {
 				+ " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
+		// Bytes
+		Logger.logInfo("Max Memory: " + Runtime.getRuntime().maxMemory());
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -285,7 +288,7 @@ public class LaunchFrame extends JFrame {
 		edit.setEnabled(users.getSelectedIndex() > 1);
 		edit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				if(users.getSelectedIndex() > 1) {
 					ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String)users.getSelectedItem(), true);
 					users.setSelectedIndex(0);
@@ -299,9 +302,15 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-					saveSettings();
-					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+				if(modPacksPane.typeFilter == 0) {
+					if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+						saveSettings();
+						doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+					}
+				} else {
+					if(modPacksPane.packPanels.size() > 0) {
+						// Change to download the server pack? Or just disable
+					}
 				}
 			}
 		});
@@ -380,7 +389,6 @@ public class LaunchFrame extends JFrame {
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
-
 				String responseStr;
 				try {
 					responseStr = get();
@@ -424,31 +432,21 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void runGameUpdater(final LoginResponse response) {
-		if (!new File(Settings.getSettings().getInstallPath() + "/.minecraft/bin/minecraft.jar").exists()) {
+		final String installPath = Settings.getSettings().getInstallPath();
+		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
+		if(!new File(installPath + "/" + modpack.getDir() + "/.minecraft/bin/minecraft.jar").exists() 
+				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/.minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(RESPONSE.getLatestVersion(), "minecraft.jar", 
-					new File(Settings.getSettings().getInstallPath(), ".minecraft//bin").getPath(), false) {
+			final GameUpdateWorker updater = new GameUpdateWorker(modpack.getMcVersion(), "minecraft.jar", new File(new File(installPath, modpack.getDir()), ".minecraft/bin").getPath(), false) {
 				@Override
 				public void done() {
 					progMonitor.close();
 					try {
 						if (get()) {
-							// Success
 							Logger.logInfo("Game update complete");
-							if(modPacksPane.getSelectedModIndex() < 0) {
-								Logger.logWarn("No Modpack selected");
-								return;
-							}
-							Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-							FileUtils.killMetaInf();
-							ModManager man = new ModManager(new JFrame(), true);
-							man.setVisible(true);
-							try {
-								installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-								ModManager.cleanUp();
-							} catch (IOException e) { Logger.logWarn("Exception occured",e); }
-							launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
-									+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+							initializeMods();
+							launchMinecraft(installPath + "/" + modpack.getDir() + "/.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							Logger.logError("Error occured during downloading the game");
 						}
@@ -480,23 +478,8 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			if(modPacksPane.getSelectedModIndex() < 0) {
-				Logger.logInfo("No Modpack selected!");
-				return;
-			}
-
-			Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-			FileUtils.killMetaInf();
-			ModManager man = new ModManager(new JFrame(), true);
-			man.setVisible(true);
-			try {
-				installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-				ModManager.cleanUp();
-			} catch (IOException e) { 
-				Logger.logError("Exception ocured",e);
-			}
-			launchMinecraft(new File(Settings.getSettings().getInstallPath()).getPath()+ "/" + ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir() 
-					+ "/.minecraft",RESPONSE.getUsername(), RESPONSE.getSessionID());
+			initializeMods();
+			launchMinecraft(installPath + "/" + modpack.getDir() + "/.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
@@ -674,6 +657,23 @@ public class LaunchFrame extends JFrame {
 		edit.setEnabled(users.getSelectedIndex() > 1);
 		users.setEnabled(true);
 	}
+
+	/**
+	 * Install mods
+	 */
+	private void initializeMods() {
+		Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+		FileUtils.killMetaInf();
+		ModManager man = new ModManager(new JFrame(), true);
+		man.setVisible(true);
+		try {
+			installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+			ModManager.cleanUp();
+		} catch (IOException e) { 
+			Logger.logError("Exception ocured",e);
+		}
+	}
+
 
 	public void hLink(MouseEvent me, URI uri) {
 		if(Desktop.isDesktopSupported()) {

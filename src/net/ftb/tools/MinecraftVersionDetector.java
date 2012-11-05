@@ -11,14 +11,32 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import net.ftb.util.FileUtils;
+
 public class MinecraftVersionDetector {
+	public MinecraftVersionDetector() { }
+
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
 	 * @return The version of the jar file
 	 */
-	public String getMinecraftVersion(String jarFilePath) {
-		String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar" };
+	private String getMinecraftVersion(String jarFilePath) {
+		String[] jarFiles = new String[] { "bckminecraft.jar", "bcklwjgl.jar" };
+
+		if(new File(jarFilePath + "/bin/bckminecraft.jar").exists()) {
+			new File(jarFilePath + "/bin/bckminecraft.jar").delete();
+		}
+		try {
+			FileUtils.copyFile(new File(jarFilePath + "/bin/minecraft.jar"), new File(jarFilePath + "/bin/bckminecraft.jar"));
+		} catch (IOException e2) { e2.printStackTrace(); }
+
+		if(new File(jarFilePath + "/bin/bcklwjgl.jar").exists()) {
+			new File(jarFilePath + "/bin/bcklwjgl.jar").delete();
+		}
+		try {
+			FileUtils.copyFile(new File(jarFilePath + "/bin/lwjgl.jar"), new File(jarFilePath + "/bin/bcklwjgl.jar"));
+		} catch (IOException e2) { e2.printStackTrace(); }
 
 		URL[] urls = new URL[jarFiles.length];
 
@@ -30,7 +48,6 @@ public class MinecraftVersionDetector {
 				return "unknown";
 			}
 		}
-
 		URLClassLoader cl = new URLClassLoader(urls,this.getClass().getClassLoader());
 
 		JarFile file;
@@ -80,5 +97,9 @@ public class MinecraftVersionDetector {
 			}
 		}
 		return "unknown";
+	}
+
+	public boolean shouldUpdate(String requiredVersion, String jarFilePath) {
+		return !getMinecraftVersion(jarFilePath).equals(requiredVersion);
 	}
 }
