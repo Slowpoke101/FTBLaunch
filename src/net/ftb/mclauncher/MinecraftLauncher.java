@@ -27,15 +27,6 @@ public class MinecraftLauncher {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			StringBuilder cpb = new StringBuilder("");
 			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
-			// TODO: Remove this after grace period has been given/check folder for existing forges and remove them.
-			File oldForge = new File(tempDir, "minecraftforge-universal-6.0.1.353.zip");
-			if(oldForge.exists()) {
-				if(new File(tempDir, forgename).exists()) {
-					oldForge.delete();
-				} else {
-					oldForge.renameTo(new File(tempDir, forgename));
-				}
-			}
 
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
@@ -47,6 +38,10 @@ public class MinecraftLauncher {
 							if(new File(tempDir, forgename).exists()) {
 								// Delete theirs
 								new File(tempDir, name).delete();
+							} else {
+								// Our version doesn't exist, lets name it as our forge version
+								new File(tempDir, name).renameTo(new File(tempDir, forgename));
+								// Do nothing because we will add forge in last
 							}
 						}
 					}
