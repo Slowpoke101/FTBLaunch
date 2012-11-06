@@ -22,11 +22,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -102,7 +104,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JCheckBox savePassword = new JCheckBox();
 	private JButton launch = new JButton("Launch");
-	private static String[] dropdown_ = {"Select Username", "Create Profile" };
+	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
 	private JButton edit;
 
@@ -138,7 +140,7 @@ public class LaunchFrame extends JFrame {
 				+ " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
-		// Bytes
+		// TODO: Format this to MB or GB?
 		Logger.logInfo("Max Memory: " + Runtime.getRuntime().maxMemory());
 
 		EventQueue.invokeLater(new Runnable() {
@@ -189,7 +191,7 @@ public class LaunchFrame extends JFrame {
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
-				LaunchFrame frame = new LaunchFrame(2);
+				LaunchFrame frame = new LaunchFrame(0);
 				instance = frame;
 				frame.setVisible(true);
 
@@ -309,7 +311,6 @@ public class LaunchFrame extends JFrame {
 					}
 				} else {
 					if(modPacksPane.packPanels.size() > 0) {
-						// Change to download the server pack? Or just disable
 					}
 				}
 			}
@@ -424,7 +425,6 @@ public class LaunchFrame extends JFrame {
 					enableObjects();
 					return;
 				}
-
 				Logger.logInfo("Login complete.");
 				runGameUpdater(response);
 			}
@@ -492,11 +492,7 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		// TODO: Don't use system time, grab time elsewhere.
-		DateFormat sdf = new SimpleDateFormat("ddMMyy");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-		String date = sdf.format(new Date());
-		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + date) + "/" + file;
+		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + getTime()) + "/" + file;
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
@@ -609,7 +605,7 @@ public class LaunchFrame extends JFrame {
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) { Logger.logError("Exception occured",e); }
+		} catch (IOException e) { Logger.logError("Exception occured", e); }
 		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
@@ -669,9 +665,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			ModManager.cleanUp();
-		} catch (IOException e) { 
-			Logger.logError("Exception ocured",e);
-		}
+		} catch (IOException e) { Logger.logError("Exception ocured", e); }
 	}
 
 
@@ -682,7 +676,25 @@ public class LaunchFrame extends JFrame {
 				desktop.browse(uri);
 			} catch(Exception exc) { Logger.logError("Exception occured durring opening Link",exc); }
 		} else {
-			Logger.logInfo("else working");
+			Logger.logWarn("Desktop not supported.");
 		}
+	}
+	
+	private static String getTime() {
+		String content = null;
+		Scanner scanner = null;
+		try {
+			URLConnection connection = new URL("http://repo.creeperhost.net/getdate").openConnection();
+			scanner = new Scanner( connection.getInputStream() );
+			scanner.useDelimiter( "\\Z" );
+			content = scanner.next();
+		} catch (java.net.UnknownHostException uhe) {
+		} catch (Exception ex) { ex.printStackTrace(); 
+		} finally {
+			if (scanner != null) {
+				scanner.close();
+			}
+		}
+		return content;
 	}
 }

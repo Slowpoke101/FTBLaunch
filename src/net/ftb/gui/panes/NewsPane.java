@@ -31,6 +31,6 @@ public class NewsPane extends JPanel implements ILauncherPane {
 	public void onVisible() {
 		try {
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
-		} catch (IOException e1) { e1.printStackTrace(); }
+		} catch (IOException e1) { }
 	}
 }

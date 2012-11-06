@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,7 +67,8 @@ public class AppUtils {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
 			return docFactory.newDocumentBuilder().parse(url.openStream());
-		} catch (ParserConfigurationException ignored) { }
+		} catch (ParserConfigurationException ignored) { 
+		} catch (UnknownHostException e) { }
 		return null;
 	}
 }

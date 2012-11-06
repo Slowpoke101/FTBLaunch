@@ -28,6 +28,8 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.EditModPackDialog;
+import net.ftb.gui.dialogs.FilterDialog;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public ArrayList<JPanel> unfilteredPackPanels;
 	private JScrollPane packsScroll;
 	private JLabel splash, typeLbl;
-	private JButton serverLink, modsFolder, donate;
+	private JButton serverLink, modsFolder, donate, filter;
 	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
@@ -55,7 +57,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		packPanels = new ArrayList<JPanel>();
 
-		// I suggest some loading animation here until first mod gets added
+		// TODO: Set loading animation while we wait
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
@@ -66,31 +68,23 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		// Drop down menus to filter results.
-		//		typeLbl = new JLabel("Mod Pack Type: ");
-		//		typeLbl.setBounds(5, 0, 90, 30);
-		//		typeLbl.setVisible(true);
-		//		add(typeLbl);
-
-		//		packType = new JComboBox(new String[]{"Client", "Server"});
-		//		packType.setBounds(90, 0, 80, 30);
-		//		packType.addActionListener(new ActionListener() {
-		//			@Override
-		//			public void actionPerformed(ActionEvent arg0) {
-		//				if(packType.getSelectedItem().equals("Client")) {
-		//					typeFilter = 0;
-		//				} else {
-		//					typeFilter = 1;
-		//				}
-		//			}
-		//		});
-		//		add(packType);
+		// TODO: Change from drop down to filter button
+		filter = new JButton("Filter");
+		filter.setBounds(5, 5, 60, 25);
+		filter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FilterDialog filterDia = new FilterDialog(LaunchFrame.getInstance());
+				filterDia.setVisible(true);
+			}
+		});
+		add(filter);
 
 		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+		filler.setBounds(6 + 42 + 10, 36, 420 - (6 + 42 - 6), 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		p.add(filler);
 		packs.add(p);
@@ -136,23 +130,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		donate.setToolTipText("Coming Soon...");
 		this.add(donate);
 
-		modsFolder = new JButton("Open the Jar mods folder");
+		modsFolder = new JButton("Edit Mod Pack!");
 		modsFolder.setBounds(670, 210, 170, 45);
 		modsFolder.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(packPanels.size() > 0) {
-					if(Desktop.isDesktopSupported()) {
-						File instMods = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() 
-								+ File.separator + "instMods");
-						if(!instMods.exists()) {
-							instMods.mkdirs();
-						}
-						Desktop desktop = Desktop.getDesktop();
-						try {
-							desktop.open(instMods);
-						} catch (IOException e1) { e1.printStackTrace(); }
-					}
+					EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance());
+					empd.setVisible(true);
 				}
 			}
 		});
@@ -173,7 +158,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		final int packIndex = packPanels.size();
 		System.out.println("Adding pack "+packIndex);
 		final JPanel p = new JPanel();
-		p.setBounds(0, packIndex * 55, 420, 55);
+		p.setBounds(0, (packIndex * 55) + 30, 420, 55);
 		p.setLayout(null);
 		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);

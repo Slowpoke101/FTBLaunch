@@ -44,6 +44,9 @@ public class UpdateChecker {
 			Document doc;
 			// TODO: Maybe swap this over to being hosted on creeper host
 			doc = AppUtils.downloadXML(new URL("http://launcher.feed-the-beast.com/version.xml"));
+                        if(doc == null) {
+                            return;
+                        }
 			NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
 			latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
 			String downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
