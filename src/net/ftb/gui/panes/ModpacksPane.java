@@ -2,16 +2,10 @@ package net.ftb.gui.panes;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -25,7 +19,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
@@ -38,16 +31,19 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public ArrayList<JPanel> packPanels;
 	public ArrayList<JPanel> unfilteredPackPanels;
 	private JScrollPane packsScroll;
-	private JLabel splash, typeLbl;
-	private JButton serverLink, modsFolder, donate, filter;
+	private JLabel splash;
+
+	private static JLabel typeLbl, originLbl;
+	private JButton modsFolder, filter;
 	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private boolean modPacksAdded = false;
+	public static String type = "Client", origin = "All";
 	public static int typeFilter = 0;
+	private final ModpacksPane instance = this;
 
 	public ModpacksPane () {
 		super();
-
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
 
@@ -69,16 +65,24 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setLayout(null);
 
 		// TODO: Change from drop down to filter button
-		filter = new JButton("Filter");
-		filter.setBounds(5, 5, 60, 25);
+		filter = new JButton("Filter Settings");
+		filter.setBounds(5, 5, 110, 25);
 		filter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FilterDialog filterDia = new FilterDialog(LaunchFrame.getInstance());
+				FilterDialog filterDia = new FilterDialog(instance);
 				filterDia.setVisible(true);
 			}
 		});
 		add(filter);
+
+		typeLbl = new JLabel("<html><body><strong>Pack Type:</strong> " + type + "</body></html>");
+		typeLbl.setBounds(140, 1, 100, 30);
+		add(typeLbl);
+
+		originLbl = new JLabel("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
+		originLbl.setBounds(280, 1, 100, 30);
+		add(originLbl);
 
 		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
 		filler.setBorder(null);
@@ -98,38 +102,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setViewportView(packs);
 		this.add(packsScroll);
 
-		// TODO: Remove this and replace with filters
-		serverLink = new JButton("Grab The Server Version Here!!");
-		serverLink.setBounds(420, 210, 250, 90);
-		serverLink.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(packPanels.size() > 0) {
-					try {
-						hLink(arg0, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
-					} catch (NoSuchAlgorithmException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		this.add(serverLink);
-
-		donate = new JButton("Donate to this Pack!");
-		donate.setBounds(670, 255, 170, 45);
-		donate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(packPanels.size() > 0) {
-				}
-			}
-		});
-		donate.setEnabled(false);
-		donate.setToolTipText("Coming Soon...");
-		this.add(donate);
-
+		// TODO: Move this button... to footer? 
 		modsFolder = new JButton("Edit Mod Pack!");
 		modsFolder.setBounds(670, 210, 170, 45);
 		modsFolder.addActionListener(new ActionListener() {
@@ -219,14 +192,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		return modPacksAdded ? selectedPack : -1;
 	}
 
-	public void hLink(ActionEvent ae, URI uri) {
-		if(Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				desktop.browse(uri);
-			} catch (IOException e) { e.printStackTrace(); }
-		} else {
-			System.out.println("else working");
-		}
+	public static void updateFilter() {
+		typeLbl.setText("<html><body><strong>Pack Type:</strong> " + type + "</body></html>");
+		originLbl.setText("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
+		LaunchFrame.getInstance().updateButtons();
 	}
 }

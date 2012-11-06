@@ -25,7 +25,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -35,7 +34,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -102,18 +100,15 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JCheckBox savePassword = new JCheckBox();
-	private JButton launch = new JButton("Launch");
+	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
-	private JButton edit;
 
 	/**
 	 * random crap
 	 */
 	private static String version = "0.3.2";
 	private static int buildNumber = 32;
-	private FileOutputStream fos;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private static final String FORGENAME = "MinecraftForge.zip";
@@ -191,7 +186,7 @@ public class LaunchFrame extends JFrame {
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
-				LaunchFrame frame = new LaunchFrame(2);
+				LaunchFrame frame = new LaunchFrame(0);
 				instance = frame;
 				frame.setVisible(true);
 
@@ -271,6 +266,16 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 
+		donate = new JButton("Donate");
+		donate.setBounds(390, 20, 80, 30);
+		donate.setEnabled(false);
+		donate.setToolTipText("Coming Soon...");
+		donate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+
 		users.setBounds(550, 20, 150, 30);
 		users.addActionListener(new ActionListener() {
 			@Override
@@ -316,11 +321,29 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+		serverbutton.setBounds(480, 20, 330, 30);
+		serverbutton.setText("Grab The Server Version Here");
+		serverbutton.setEnabled(false);
+		serverbutton.setVisible(false);
+		serverbutton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if(getSelectedModIndex() > 0) {
+					try {
+						hLink(event, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+					} catch (URISyntaxException e) { e.printStackTrace();
+					} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+				}
+			}
+		});
+
 		footer.add(edit);
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
 		footer.add(launch);
+		footer.add(donate);
+		footer.add(serverbutton);
 
 		newsPane = new NewsPane();
 		modPacksPane = new ModpacksPane();
@@ -679,7 +702,18 @@ public class LaunchFrame extends JFrame {
 			Logger.logWarn("Desktop not supported.");
 		}
 	}
-	
+
+	public void hLink(ActionEvent ae, URI uri) {
+		if(Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch (IOException e) { e.printStackTrace(); }
+		} else {
+			Logger.logWarn("Desktop not supported.");
+		}
+	}
+
 	private static String getTime() {
 		String content = null;
 		Scanner scanner = null;
@@ -696,5 +730,17 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 		return content;
+	}
+
+	public void updateButtons() {
+		boolean result = modPacksPane.type.equals("Server");
+		launch.setEnabled(!result);
+		launch.setVisible(!result);
+		edit.setEnabled(!result);
+		edit.setVisible(!result);
+		users.setEnabled(!result);
+		users.setVisible(!result);
+		serverbutton.setEnabled(result);
+		serverbutton.setVisible(result);
 	}
 }
