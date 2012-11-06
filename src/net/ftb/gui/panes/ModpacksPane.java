@@ -21,25 +21,23 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel packs;
-	public ArrayList<JPanel> packPanels;
+	private static JPanel packs;
+	public static ArrayList<JPanel> packPanels;
 	public ArrayList<JPanel> unfilteredPackPanels;
 	private JScrollPane packsScroll;
-	private JLabel splash;
+	private static JLabel splash;
 
 	private static JLabel typeLbl, originLbl;
-	private JButton modsFolder, filter;
+	private JButton filter;
 	private static JComboBox packType;
 	private static int selectedPack = 0;
-	private boolean modPacksAdded = false;
+	private static boolean modPacksAdded = false;
 	public static String type = "Client", origin = "All";
-	public static int typeFilter = 0;
 	private final ModpacksPane instance = this;
 
 	public ModpacksPane () {
@@ -64,7 +62,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		// TODO: Change from drop down to filter button
 		filter = new JButton("Filter Settings");
 		filter.setBounds(5, 5, 110, 25);
 		filter.addActionListener(new ActionListener() {
@@ -101,20 +98,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
 		this.add(packsScroll);
-
-		// TODO: Move this button... to footer? 
-		modsFolder = new JButton("Edit Mod Pack!");
-		modsFolder.setBounds(670, 210, 170, 45);
-		modsFolder.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(packPanels.size() > 0) {
-					EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance());
-					empd.setVisible(true);
-				}
-			}
-		});
-		this.add(modsFolder);
 	}
 
 	@Override public void onVisible() { }
@@ -122,7 +105,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	/*
 	 * GUI Code to add a modpack to the selection
 	 */
-	public void addPack(ModPack pack) {
+	public static void addPack(ModPack pack) {
 		if (!modPacksAdded) {
 			modPacksAdded = true;
 			packs.removeAll();
@@ -167,15 +150,33 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		updatePacks();
 	}
 
-	private void updateSortedPacks() {
-		unfilteredPackPanels = packPanels;
-		// Based on the typeFilter we now need to change up the look and feel
-		// Apply base gui, client/server
-		// Apply secondary filter (all, ftb, 3rd party)
+	private static void sortPacks() {
+		packPanels.clear();
+		packs.removeAll();
+		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
+		packs.setLayout(null);
+		packs.setOpaque(false);
+		if(origin.equalsIgnoreCase("all")) {
+			for(ModPack pack : ModPack.getPackArray()) {
+				addPack(pack);
+			}
+		} else if(origin.equalsIgnoreCase("ftb")) {
+			for(ModPack pack : ModPack.getPackArray()) {
+				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
+					addPack(pack);
+				}
+			}
+		} else {
+			for(ModPack pack : ModPack.getPackArray()) {
+				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
+					addPack(pack);
+				}
+			}
+		}
 		updatePacks();
 	}
 
-	private void updatePacks() {
+	private static void updatePacks() {
 		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
@@ -195,6 +196,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong>Pack Type:</strong> " + type + "</body></html>");
 		originLbl.setText("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
+		sortPacks();
 		LaunchFrame.getInstance().updateButtons();
 	}
 }

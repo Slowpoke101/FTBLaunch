@@ -43,7 +43,6 @@ public class FilterDialog extends JDialog {
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// Apply filter options
 				String type = "", origin = "";
 				switch(typeBox.getSelectedIndex()) {
 				case 0:
@@ -70,6 +69,8 @@ public class FilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+
+		getRootPane().setDefaultButton(applyButton);
 
 		cancelButton.setBounds(120, 80, 100, 25);
 		cancelButton.addActionListener(new ActionListener() {

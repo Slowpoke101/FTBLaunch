@@ -52,6 +52,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
@@ -100,7 +101,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton();
+	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), editModPack = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
 
@@ -231,7 +232,7 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					hLink(event, new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) {Logger.logWarn("Exception occured",e); }
+				} catch (URISyntaxException e) { }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -246,7 +247,7 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					hLink(event, new URI("http://www.creeperhost.net/aff.php?aff=293"));
-				} catch (URISyntaxException e) { Logger.logWarn("Exception occured",e); }
+				} catch (URISyntaxException e) { }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -266,8 +267,22 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 
+		editModPack = new JButton("Edit Mod Pack");
+		editModPack.setBounds(350, 20, 120, 30);
+		editModPack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(modPacksPane.packPanels.size() > 0) {
+					if(getSelectedModIndex() >= 0) {
+						EditModPackDialog empd = new EditModPackDialog(getInstance());
+						empd.setVisible(true);
+					}
+				}
+			}
+		});
+
 		donate = new JButton("Donate");
-		donate.setBounds(390, 20, 80, 30);
+		donate.setBounds(260, 20, 80, 30);
 		donate.setEnabled(false);
 		donate.setToolTipText("Coming Soon...");
 		donate.addActionListener(new ActionListener() {
@@ -309,30 +324,25 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(modPacksPane.typeFilter == 0) {
-					if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-						saveSettings();
-						doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-					}
-				} else {
-					if(modPacksPane.packPanels.size() > 0) {
-					}
+				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+					saveSettings();
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				}
 			}
 		});
 
-		serverbutton.setBounds(480, 20, 330, 30);
+		serverbutton.setBounds(350, 20, 460, 30);
 		serverbutton.setText("Grab The Server Version Here");
 		serverbutton.setEnabled(false);
 		serverbutton.setVisible(false);
 		serverbutton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(getSelectedModIndex() > 0) {
+				if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 					try {
 						hLink(event, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
-					} catch (URISyntaxException e) { e.printStackTrace();
-					} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+					} catch (URISyntaxException e) { 
+					} catch (NoSuchAlgorithmException e) { }
 				}
 			}
 		});
@@ -343,6 +353,7 @@ public class LaunchFrame extends JFrame {
 		footer.add(footerCreeper);
 		footer.add(launch);
 		footer.add(donate);
+		footer.add(editModPack);
 		footer.add(serverbutton);
 
 		newsPane = new NewsPane();
@@ -740,6 +751,8 @@ public class LaunchFrame extends JFrame {
 		edit.setVisible(!result);
 		users.setEnabled(!result);
 		users.setVisible(!result);
+		editModPack.setEnabled(!result);
+		editModPack.setVisible(!result);
 		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
 	}
