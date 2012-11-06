@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -39,6 +40,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static boolean modPacksAdded = false;
 	public static String type = "Client", origin = "All";
 	private final ModpacksPane instance = this;
+	
+	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 
 	public ModpacksPane () {
 		super();
@@ -153,23 +156,32 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static void sortPacks() {
 		packPanels.clear();
 		packs.removeAll();
+		currentPacks.clear();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
 		packs.setOpaque(false);
+		int counter = 0;
+		selectedPack = 0;
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				addPack(pack);
+				currentPacks.put(0, pack);
+				counter++;
 			}
 		} else if(origin.equalsIgnoreCase("ftb")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					addPack(pack);
+					currentPacks.put(0, pack);
+					counter++;
 				}
 			}
 		} else {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					addPack(pack);
+					currentPacks.put(0, pack);
+					counter++;
 				}
 			}
 		}
@@ -180,7 +192,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(ModPack.getPack(i).getImage()));
+				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
@@ -190,7 +202,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 
 	public int getSelectedModIndex() {
-		return modPacksAdded ? selectedPack : -1;
+		return modPacksAdded ? getIndex() : -1;
 	}
 
 	public static void updateFilter() {
@@ -198,5 +210,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		originLbl.setText("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
 		sortPacks();
 		LaunchFrame.getInstance().updateButtons();
+	}
+	
+	private static int getIndex() {
+		if(currentPacks.size() > 0) {
+			if(!origin.equalsIgnoreCase("all")) {
+				return currentPacks.get(selectedPack).getIndex();
+			}
+		}
+		return selectedPack;
 	}
 }

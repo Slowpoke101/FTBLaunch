@@ -26,6 +26,7 @@ public class ModPack {
 	private Image logo, image;
 	private String info = "This is the info until there is an actual info thingy";
 	private int size;
+	private static int index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
@@ -124,6 +125,14 @@ public class ModPack {
 		return result;
 	}
 
+	public static void setIndex(int idx) {
+		index = idx;
+	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
 	public String getName() {
 		return name;
 	}
