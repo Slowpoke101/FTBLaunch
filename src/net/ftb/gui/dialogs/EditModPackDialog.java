@@ -44,11 +44,12 @@ public class EditModPackDialog extends JDialog {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Mod Pack Editor");
-		setBounds(300, 300, 440, 580);
+		setBounds(instance.getBounds());
 		setResizable(false);
 		getContentPane().setLayout(null);
 
-		tabbedPane.setBounds(0, 0, 440, 580);
+		tabbedPane.setLocation(0, 0);
+		tabbedPane.setSize(getSize());
 		JPanel modsFolderPane = new JPanel();
 		modsFolderPane.setLayout(null);
 		JPanel jarCoreMods = new JPanel();

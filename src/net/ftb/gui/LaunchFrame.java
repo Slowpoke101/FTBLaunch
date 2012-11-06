@@ -187,7 +187,7 @@ public class LaunchFrame extends JFrame {
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
-				LaunchFrame frame = new LaunchFrame(0);
+				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
 				frame.setVisible(true);
 
