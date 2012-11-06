@@ -54,10 +54,13 @@ public class EditModPackDialog extends JDialog {
 		JPanel jarCoreMods = new JPanel();
 		jarCoreMods.setLayout(null);
 		getContentPane().add(tabbedPane);
-		tabbedPane.add(modsFolderPane, 0);
-		tabbedPane.add(jarCoreMods, 1);
-		tabbedPane.setIconAt(0, new ImageIcon(instance.getClass().getResource("/image/tabs/news.png")));
-		tabbedPane.setIconAt(1, new ImageIcon(instance.getClass().getResource("/image/tabs/maps.png")));
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", modsFolderPane);
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", jarCoreMods);
+		
+//		tabbedPane.add(modsFolderPane, 0);
+//		tabbedPane.add(jarCoreMods, 1);
+//		tabbedPane.setIconAt(0, new ImageIcon(instance.getClass().getResource("/image/tabs/news.png")));
+//		tabbedPane.setIconAt(1, new ImageIcon(instance.getClass().getResource("/image/tabs/maps.png")));
 		
 		tabbedPane.setSelectedIndex(0);
 		
@@ -142,7 +145,6 @@ public class EditModPackDialog extends JDialog {
 		enableMods.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
 			}
 		});
 		modsFolderPane.add(enableMods);
