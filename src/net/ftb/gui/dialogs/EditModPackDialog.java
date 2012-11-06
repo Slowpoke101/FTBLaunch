@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -102,17 +103,29 @@ public class EditModPackDialog extends JDialog {
 		
 		File modsFolder = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + ".minecraft" + File.separator + "mods");
 		
-		String[] enabledModsList = modsFolder.list();
-		ArrayList enabledModsList_ = null;
+		List<String> enabledModsList_ = new ArrayList<String>();
+		List<String> disabledModsList_ = new ArrayList<String>();
 		
-		for(int i = 0; i < enabledModsList.length; i++) {
-			if(new File(enabledModsList[i]).isFile()) {
-				enabledModsList_.add(enabledModsList[i]);
+		for(String name : modsFolder.list()) {
+			if(name.toLowerCase().endsWith(".zip")) {
+				enabledModsList_.add(name.replace(".zip", ""));
+			} else if(name.toLowerCase().endsWith(".jar")) {
+				enabledModsList_.add(name.replace(".jar", ""));
+			} else if(name.toLowerCase().endsWith(".zip.disabled")) {
+				disabledModsList_.add(name.replace(".zip.disabled", ""));
+			} else if(name.toLowerCase().endsWith(".jar.disabled")) {
+				disabledModsList_.add(name.replace(".jar.disabled", ""));
 			}
 		}
 		
-		if(enabledModsList_ != null) {
-			enabledModsList = (String[]) enabledModsList_.toArray();
+		String[] enabledModsList = new String[enabledModsList_.size()];
+		for(int i = 0; i < enabledModsList_.size(); i++) {
+			enabledModsList[i] = enabledModsList_.get(i);
+		}
+		
+		String[] disabledModsList = new String[disabledModsList_.size()];
+		for(int i = 0; i < disabledModsList_.size(); i++) {
+			disabledModsList[i] = disabledModsList_.get(i);
 		}
 		
 		enabledMods = new JList(enabledModsList);
