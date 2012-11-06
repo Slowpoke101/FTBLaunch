@@ -115,7 +115,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 
 		final int packIndex = packPanels.size();
-		System.out.println("Adding pack "+packIndex);
+		System.out.println("Adding pack "+getIndex());
 		final JPanel p = new JPanel();
 		p.setBounds(0, (packIndex * 55) + 30, 420, 55);
 		p.setLayout(null);
@@ -165,14 +165,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				addPack(pack);
-				currentPacks.put(0, pack);
+				currentPacks.put(counter, pack);
 				counter++;
 			}
 		} else if(origin.equalsIgnoreCase("ftb")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					addPack(pack);
-					currentPacks.put(0, pack);
+					currentPacks.put(counter, pack);
 					counter++;
 				}
 			}
@@ -180,7 +180,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					addPack(pack);
-					currentPacks.put(0, pack);
+					currentPacks.put(counter, pack);
 					counter++;
 				}
 			}
@@ -214,8 +214,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	
 	private static int getIndex() {
 		if(currentPacks.size() > 0) {
-			if(!origin.equalsIgnoreCase("all")) {
-				return currentPacks.get(selectedPack).getIndex();
+			if(currentPacks.size() != ModPack.getPackArray().size()) {
+				if(!origin.equalsIgnoreCase("all")) {
+					return currentPacks.get(selectedPack).getIndex();
+				}
 			}
 		}
 		return selectedPack;

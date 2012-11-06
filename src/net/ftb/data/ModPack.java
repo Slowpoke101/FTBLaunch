@@ -26,7 +26,7 @@ public class ModPack {
 	private Image logo, image;
 	private String info = "This is the info until there is an actual info thingy";
 	private int size;
-	private static int index;
+	private int index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
@@ -71,7 +71,8 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, int idx) throws IOException, NoSuchAlgorithmException {
+		index = idx;
 		this.name = name;
 		this.author = author;
 		this.version = version;
@@ -123,10 +124,6 @@ public class ModPack {
 			in.close();
 		} catch (IOException e) { e.printStackTrace(); }
 		return result;
-	}
-
-	public static void setIndex(int idx) {
-		index = idx;
 	}
 	
 	public int getIndex() {

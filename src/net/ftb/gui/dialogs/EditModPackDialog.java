@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -52,7 +53,6 @@ public class EditModPackDialog extends JDialog {
 		modsFolderPane.setLayout(null);
 		JPanel jarCoreMods = new JPanel();
 		jarCoreMods.setLayout(null);
-//		test.setName("TEST");
 		getContentPane().add(tabbedPane);
 		tabbedPane.add(modsFolderPane, 0);
 		tabbedPane.add(jarCoreMods, 1);
@@ -103,6 +103,10 @@ public class EditModPackDialog extends JDialog {
 		
 		File modsFolder = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + ".minecraft" + File.separator + "mods");
 		
+		if(!modsFolder.exists()) {
+			modsFolder.mkdirs();
+		}
+		
 		List<String> enabledModsList_ = new ArrayList<String>();
 		List<String> disabledModsList_ = new ArrayList<String>();
 		
@@ -129,6 +133,7 @@ public class EditModPackDialog extends JDialog {
 		}
 		
 		enabledMods = new JList(enabledModsList);
+		enabledMods.setBackground(UIManager.getColor("control").darker().darker());
 		JScrollPane enabledModsScroll = new JScrollPane(enabledMods);
 		enabledModsScroll.setBounds(10, 80, 150, 350);
 		modsFolderPane.add(enabledModsScroll);
