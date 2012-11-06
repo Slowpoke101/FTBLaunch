@@ -121,8 +121,6 @@ public class ModManager extends JDialog {
 		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
-			//			new File(installPath + "/"+ dir + "/.minecraft").mkdirs();
-			//			FileUtils.copyFolder(new File(installPath + "/.minecraft/bin/"), new File(installPath + "/" + dir + "/.minecraft/bin"));
 			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
 			try {
 				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");

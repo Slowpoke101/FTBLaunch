@@ -39,7 +39,3 @@ To do this, run these commands:
 
 The first command is only necessary the first time. If you have issues merging, you will need to get a merge tool such as [P4Merge]().
 Once it is set up, run `git mergetool`. Once all conflicts are fixed, run `git rebase --continue`, and `git push --force origin <branch_name>`.
-
-##Automated builds
-Automated builds are available [here](http://nallar.me/ftb/b/). This will likely change in the future to use Jenkins.
-These should only be used to test if a bug which is in the beta version has been fixed.

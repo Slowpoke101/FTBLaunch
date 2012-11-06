@@ -19,5 +19,7 @@ public class FilterDialog extends JDialog {
 		setResizable(false);
 		
 		setContentPane(panel);
+		
+		
 	}
 }
