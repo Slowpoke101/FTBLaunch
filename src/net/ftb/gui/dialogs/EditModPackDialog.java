@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -21,13 +22,12 @@ import net.ftb.gui.LaunchFrame;
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel = new JPanel();
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
 	private JButton jarButton = new JButton("Open Jar Mods Folder");
 	private JButton modsButton = new JButton("Open Mods Folder");
 
-	public EditModPackDialog(final LaunchFrame instance) {
+	public EditModPackDialog(LaunchFrame instance) {
 		super(instance, true);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
@@ -35,13 +35,10 @@ public class EditModPackDialog extends JDialog {
 		setBounds(300, 300, 440, 580);
 		setResizable(false);
 
-		panel.setBounds(0, 0, 440, 580);
-		setContentPane(panel);
-
 		tabbedPane.setBounds(0, 0, 440, 580);
 		JPanel test = new JPanel();
 //		test.setName("TEST");
-		panel.add(tabbedPane);
+		getContentPane().add(tabbedPane);
 		tabbedPane.add(test, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(instance.getClass().getResource("/image/tabs/news.png")));
 		tabbedPane.setSelectedIndex(0);
