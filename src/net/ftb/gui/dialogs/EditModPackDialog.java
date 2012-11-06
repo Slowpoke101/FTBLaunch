@@ -36,11 +36,15 @@ public class EditModPackDialog extends JDialog {
 		setResizable(false);
 
 		tabbedPane.setBounds(0, 0, 440, 580);
-		JPanel test = new JPanel();
+		JPanel modsFolder = new JPanel();
+		JPanel jarCoreMods = new JPanel();
 //		test.setName("TEST");
 		getContentPane().add(tabbedPane);
-		tabbedPane.add(test, 0);
+		tabbedPane.add(modsFolder, 0);
+		tabbedPane.add(jarCoreMods, 1);
 		tabbedPane.setIconAt(0, new ImageIcon(instance.getClass().getResource("/image/tabs/news.png")));
+		tabbedPane.setIconAt(1, new ImageIcon(instance.getClass().getResource("/image/tabs/maps.png")));
+		
 		tabbedPane.setSelectedIndex(0);
 		
 		jarButton.setVisible(true);
@@ -60,7 +64,7 @@ public class EditModPackDialog extends JDialog {
 				}
 			}
 		});
-//		panel.add(jarButton);
+		jarCoreMods.add(jarButton);
 
 		modsButton.setVisible(true);
 		modsButton.addActionListener(new ActionListener() {
@@ -79,6 +83,6 @@ public class EditModPackDialog extends JDialog {
 				}
 			}
 		});
-//		panel.add(modsButton);
+		modsFolder.add(modsButton);
 	}
 }
