@@ -9,13 +9,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import net.ftb.data.ModPack;
@@ -28,16 +29,22 @@ public class EditModPackDialog extends JDialog {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
 	private JButton jarButton = new JButton("Open Jar Mods Folder");
-	private JButton modsButton = new JButton("Open Mods Folder");
+	private JButton modsButton = new JButton("Open Folder");
+	private JButton disableMod = new JButton(">");
+	private JButton enableMod = new JButton("<");
+	private JButton enableCoreMods = new JButton(">");
+	private JButton disableCoreMods = new JButton("<");
 	
-	private JButton enableMods = new JButton(">");
-	private JButton disableMods = new JButton("<");
+	private JLabel enabledLabel = new JLabel("<html><body><h1>Enabled Mods</h1></html></body>");
+	private JLabel disabledLabel = new JLabel("<html><body><h1>Disabled Mods</h1></html></body>");
 	
 	private JList enabledMods;
 	private JList disabledMods;
 	
-	private JButton enableCoreMods = new JButton(">");
-	private JButton disableCoreMods = new JButton("<");
+	private List<String> enabledModsList_ = new ArrayList<String>();
+	private List<String> disabledModsList_ = new ArrayList<String>();
+	
+	private final File modsFolder = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + ".minecraft" + File.separator + "mods");
 
 	public EditModPackDialog(LaunchFrame instance) {
 		super(instance, true);
@@ -86,7 +93,7 @@ public class EditModPackDialog extends JDialog {
 		jarCoreMods.add(jarButton);
 
 		modsButton.setVisible(true);
-		modsButton.setBounds(50, 10, 200, 40);
+		modsButton.setBounds((instance.getWidth() - 210), (instance.getHeight() - 120), 200, 40);
 		modsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -105,49 +112,111 @@ public class EditModPackDialog extends JDialog {
 		});
 		modsFolderPane.add(modsButton);
 		
-		File modsFolder = new File(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + ".minecraft" + File.separator + "mods");
+		enabledLabel.setBounds(10, 10, 240, 30);
+		enabledLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		modsFolderPane.add(enabledLabel);
+		
+		disabledLabel.setBounds(380, 10, 240, 30);
+		disabledLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		modsFolderPane.add(disabledLabel);
 		
 		if(!modsFolder.exists()) {
 			modsFolder.mkdirs();
 		}
 		
-		List<String> enabledModsList_ = new ArrayList<String>();
-		List<String> disabledModsList_ = new ArrayList<String>();
-		
-		for(String name : modsFolder.list()) {
-			if(name.toLowerCase().endsWith(".zip")) {
-				enabledModsList_.add(name.replace(".zip", ""));
-			} else if(name.toLowerCase().endsWith(".jar")) {
-				enabledModsList_.add(name.replace(".jar", ""));
-			} else if(name.toLowerCase().endsWith(".zip.disabled")) {
-				disabledModsList_.add(name.replace(".zip.disabled", ""));
-			} else if(name.toLowerCase().endsWith(".jar.disabled")) {
-				disabledModsList_.add(name.replace(".jar.disabled", ""));
-			}
-		}
-		
-		String[] enabledModsList = new String[enabledModsList_.size()];
-		for(int i = 0; i < enabledModsList_.size(); i++) {
-			enabledModsList[i] = enabledModsList_.get(i);
-		}
-		
-		String[] disabledModsList = new String[disabledModsList_.size()];
-		for(int i = 0; i < disabledModsList_.size(); i++) {
-			disabledModsList[i] = disabledModsList_.get(i);
-		}
+		String[] enabledModsList = getEnabledMods();
+		String[] disabledModsList = getDisabledMods();
 		
 		enabledMods = new JList(enabledModsList);
 		enabledMods.setBackground(UIManager.getColor("control").darker().darker());
 		JScrollPane enabledModsScroll = new JScrollPane(enabledMods);
-		enabledModsScroll.setBounds(10, 80, 150, 350);
+		enabledModsScroll.setBounds(10, 40, 240, 360);
 		modsFolderPane.add(enabledModsScroll);
 		
-		enableMods.setVisible(true);
-		enableMods.addActionListener(new ActionListener() {
+		disabledMods = new JList(disabledModsList);
+		disabledMods.setBackground(UIManager.getColor("control").darker().darker());
+		JScrollPane disabledModsScroll = new JScrollPane(disabledMods);
+		disabledModsScroll.setBounds(380, 40, 240, 360);
+		modsFolderPane.add(disabledModsScroll);
+		
+		disableMod.setBounds(260, 80, 110, 30);
+		disableMod.setVisible(true);
+		disableMod.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(enabledMods.getSelectedIndices().length > 1) {
+					for(int i = 0; i < enabledMods.getSelectedIndices().length; i++) {
+						String name = enabledModsList_.get(enabledMods.getSelectedIndices()[i]);
+						new File(modsFolder, name).renameTo(new File(modsFolder, name + ".disabled"));
+					}
+				} else {
+					if(enabledMods.getSelectedIndex() > 0) {
+						String name = enabledModsList_.get(enabledMods.getSelectedIndex());
+						new File(modsFolder, name).renameTo(new File(modsFolder, name + ".disabled"));
+					}
+				}
+				updateLists();
 			}
 		});
-		modsFolderPane.add(enableMods);
+		modsFolderPane.add(disableMod);
+		
+		enableMod.setBounds(260, 120, 110, 30);
+		enableMod.setVisible(true);
+		enableMod.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(disabledMods.getSelectedIndices().length > 1) {
+					for(int i = 0; i < disabledMods.getSelectedIndices().length; i++) {
+						String name = disabledModsList_.get(disabledMods.getSelectedIndices()[i]);
+						new File(modsFolder, name).renameTo(new File(modsFolder, name.replace(".disabled", "")));
+					}
+					
+				} else {
+					if(disabledMods.getSelectedIndex() > 0) {
+						String name = disabledModsList_.get(disabledMods.getSelectedIndex());
+						new File(modsFolder, name).renameTo(new File(modsFolder, name.replace(".disabled", "")));
+					}
+				}
+				updateLists();
+			}
+		});
+		modsFolderPane.add(enableMod);
+	}
+	
+	private String[] getEnabledMods() {
+		enabledModsList_.clear();
+		for(String name : modsFolder.list()) {
+			if(name.toLowerCase().endsWith(".zip")) {
+				enabledModsList_.add(name);
+			} else if(name.toLowerCase().endsWith(".jar")) {
+				enabledModsList_.add(name);
+			}
+		}
+		String[] enabledModsList = new String[enabledModsList_.size()];
+		for(int i = 0; i < enabledModsList_.size(); i++) {
+			enabledModsList[i] = enabledModsList_.get(i).replace(".zip", "").replace(".jar", "");
+		}
+		return enabledModsList;
+	}
+	
+	private String[] getDisabledMods() {
+		disabledModsList_.clear();
+		for(String name : modsFolder.list()) {
+			if(name.toLowerCase().endsWith(".zip.disabled")) {
+				disabledModsList_.add(name);
+			} else if(name.toLowerCase().endsWith(".jar.disabled")) {
+				disabledModsList_.add(name);
+			}
+		}
+		String[] disabledModsList = new String[disabledModsList_.size()];
+		for(int i = 0; i < disabledModsList_.size(); i++) {
+			disabledModsList[i] = disabledModsList_.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "");
+		}
+		return disabledModsList;
+	}
+	
+	private void updateLists() {
+		enabledMods.setListData(getEnabledMods());
+		disabledMods.setListData(getDisabledMods());
 	}
 }
