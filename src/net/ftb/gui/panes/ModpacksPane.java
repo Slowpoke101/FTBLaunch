@@ -225,7 +225,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
-//		originLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Origin:</strong></font> " + origin + "</body></html>");
 		sortPacks();
 		LaunchFrame.getInstance().updateButtons();
 	}

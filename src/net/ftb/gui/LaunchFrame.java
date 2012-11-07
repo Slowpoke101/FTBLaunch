@@ -49,6 +49,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.ftb.data.LoginResponse;
+import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
@@ -78,7 +79,8 @@ public class LaunchFrame extends JFrame {
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
-	private JPanel mapsPane, tpPane;
+	private MapsPane mapsPane;
+	private JPanel tpPane;
 
 	/**
 	 * an array of all mods to be added to classpath
@@ -187,13 +189,16 @@ public class LaunchFrame extends JFrame {
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
-				LaunchFrame frame = new LaunchFrame(2);
+				LaunchFrame frame = new LaunchFrame(3);
 				instance = frame;
 				frame.setVisible(true);
 
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
-
+				
+				Map.addListener(frame.mapsPane);
+				Map.loadAll();
+				
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()){
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
@@ -362,7 +367,6 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));

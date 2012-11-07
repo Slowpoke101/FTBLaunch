@@ -57,7 +57,6 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent(), i));
-//					ModPack.getPack(i).setIndex(i);
 				} catch (DOMException e) { Logger.logError("Exception during reading modpackfile",e);
 				} catch (IOException e) { Logger.logError("Exception during reading modpackfile",e); }
 			}
