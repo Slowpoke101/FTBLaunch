@@ -19,15 +19,15 @@ import org.xml.sax.SAXException;
 
 public class MapLoader extends Thread {
 	private static String MAPFILE;
-	
+
 	public MapLoader() { }
-	
+
 	@Override
 	public void run() {
 		try {
 			Logger.logInfo("loading map information...");
 
-//			MAPFILE = LaunchFrame.getCreeperhostLink("maps.xml");
+			//			MAPFILE = LaunchFrame.getCreeperhostLink("maps.xml");
 			MAPFILE = "https://dl.dropbox.com/u/2405919/maps.xml";
 
 			Document doc = AppUtils.downloadXML(new URL(MAPFILE));
@@ -45,10 +45,10 @@ public class MapLoader extends Thread {
 						mapAttr.getNamedItem("mapname").getTextContent(), i));
 			}
 			MapsPane.loaded = true;
-		} catch (MalformedURLException e) { e.printStackTrace();
-		} catch (IOException e) { e.printStackTrace();
-		} catch (SAXException e) { e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) { e.printStackTrace();
-		} catch (DOMException e) { e.printStackTrace(); }
+		} catch (MalformedURLException e) { 
+		} catch (IOException e) { 
+		} catch (SAXException e) { 
+		} catch (NoSuchAlgorithmException e) { 
+		} catch (DOMException e) { }
 	}
 }

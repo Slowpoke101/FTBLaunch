@@ -53,7 +53,6 @@ import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
-import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
@@ -195,10 +194,10 @@ public class LaunchFrame extends JFrame {
 
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
-				
+
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
-				
+
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()){
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);

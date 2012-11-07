@@ -31,7 +31,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static JPanel packs;
 	public static ArrayList<JPanel> packPanels;
-	public ArrayList<JPanel> unfilteredPackPanels;
 	private JScrollPane packsScroll;
 	private static JLabel splash;
 
@@ -42,9 +41,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static boolean modPacksAdded = false;
 	public static String type = "Client", origin = "All";
 	private final ModpacksPane instance = this;
-	
+
 	public static boolean loaded = false;
-	
+
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 
 	public ModpacksPane () {
@@ -228,7 +227,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		sortPacks();
 		LaunchFrame.getInstance().updateButtons();
 	}
-	
+
 	private static int getIndex() {
 		if(currentPacks.size() > 0) {
 			if(currentPacks.size() != ModPack.getPackArray().size()) {

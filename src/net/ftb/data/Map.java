@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
@@ -24,23 +23,24 @@ import net.ftb.workers.MapLoader;
 
 public class Map {
 	private String name, author, version, url, mapname, mcversion;
+	private String info = "This is the info until there is an actual info thingy";
 	private Image logo, image;
 	private String[] packs;
 	private int size, index;
-	
+
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
-	
+
 	private static List<MapListener> listeners = new ArrayList<MapListener>();
-	
+
 	public static void addListener(MapListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	public static void loadAll() {
 		MapLoader loader = new MapLoader();
 		loader.start();
 	}
-	
+
 	public static void addMap(Map map) {
 		synchronized (maps) {
 			maps.add(map);
@@ -49,15 +49,15 @@ public class Map {
 			listener.onMapAdded(map);
 		}
 	}
-	
+
 	public static ArrayList<Map> getMapArray() {
 		return maps;
 	}
-	
+
 	public static Map getMap(int i) {
 		return maps.get(i);
 	}
-	
+
 	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
@@ -92,7 +92,7 @@ public class Map {
 			this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + image);
 		}
 	}
-	
+
 	private boolean upToDate(File verFile) {
 		boolean result = false;
 		try {
@@ -114,44 +114,48 @@ public class Map {
 		} catch (IOException e) { e.printStackTrace(); }
 		return result;
 	}
-	
+
 	public int getIndex() {
 		return index;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getAuthor() {
 		return author;
 	}
-	
+
 	public String getVersion() {
 		return version;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}
-	
+
 	public Image getLogo() {
 		return logo;
 	}
-	
+
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public String[] getCompatible() {
 		return packs;
 	}
-	
+
 	public String getMcVersion() {
 		return mcversion;
 	}
-	
+
 	public String getMapName() {
 		return mapname;
+	}
+
+	public String getInfo() {
+		return info;
 	}
 }
