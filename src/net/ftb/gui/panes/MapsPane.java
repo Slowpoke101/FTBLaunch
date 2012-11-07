@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
+import net.ftb.gui.dialogs.FilterDialog;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -72,8 +73,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(loaded) {
-					//					FilterDialog filterDia = new FilterDialog(instance);
-					//					filterDia.setVisible(true);
+					FilterDialog filterDia = new FilterDialog(instance);
+					filterDia.setVisible(true);
 				}
 			}
 		});
