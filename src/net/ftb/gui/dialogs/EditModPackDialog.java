@@ -30,8 +30,8 @@ public class EditModPackDialog extends JDialog {
 	
 	private JButton jarButton = new JButton("Open Jar Mods Folder");
 	private JButton modsButton = new JButton("Open Folder");
-	private JButton disableMod = new JButton(">");
-	private JButton enableMod = new JButton("<");
+	private JButton disableMod = new JButton("Disable Mod >>");
+	private JButton enableMod = new JButton("<< Enable Mod");
 	private JButton enableCoreMods = new JButton(">");
 	private JButton disableCoreMods = new JButton("<");
 	
@@ -139,7 +139,7 @@ public class EditModPackDialog extends JDialog {
 		disabledModsScroll.setBounds(380, 40, 240, 360);
 		modsFolderPane.add(disabledModsScroll);
 		
-		disableMod.setBounds(260, 80, 110, 30);
+		disableMod.setBounds(255, 80, 115, 30);
 		disableMod.setVisible(true);
 		disableMod.addActionListener(new ActionListener() {
 			@Override
@@ -149,18 +149,19 @@ public class EditModPackDialog extends JDialog {
 						String name = enabledModsList_.get(enabledMods.getSelectedIndices()[i]);
 						new File(modsFolder, name).renameTo(new File(modsFolder, name + ".disabled"));
 					}
+					updateLists();
 				} else {
 					if(enabledMods.getSelectedIndex() > 0) {
 						String name = enabledModsList_.get(enabledMods.getSelectedIndex());
 						new File(modsFolder, name).renameTo(new File(modsFolder, name + ".disabled"));
 					}
+					updateLists();
 				}
-				updateLists();
 			}
 		});
 		modsFolderPane.add(disableMod);
 		
-		enableMod.setBounds(260, 120, 110, 30);
+		enableMod.setBounds(255, 120, 115, 30);
 		enableMod.setVisible(true);
 		enableMod.addActionListener(new ActionListener() {
 			@Override
@@ -170,14 +171,14 @@ public class EditModPackDialog extends JDialog {
 						String name = disabledModsList_.get(disabledMods.getSelectedIndices()[i]);
 						new File(modsFolder, name).renameTo(new File(modsFolder, name.replace(".disabled", "")));
 					}
-					
+					updateLists();
 				} else {
 					if(disabledMods.getSelectedIndex() > 0) {
 						String name = disabledModsList_.get(disabledMods.getSelectedIndex());
 						new File(modsFolder, name).renameTo(new File(modsFolder, name.replace(".disabled", "")));
 					}
+					updateLists();
 				}
-				updateLists();
 			}
 		});
 		modsFolderPane.add(enableMod);

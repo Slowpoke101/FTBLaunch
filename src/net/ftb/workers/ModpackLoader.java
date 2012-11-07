@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 
@@ -60,6 +61,7 @@ public class ModpackLoader extends Thread {
 				} catch (DOMException e) { Logger.logError("Exception during reading modpackfile",e);
 				} catch (IOException e) { Logger.logError("Exception during reading modpackfile",e); }
 			}
+			ModpacksPane.loaded = true;
 		} catch (NoSuchAlgorithmException e1) { Logger.logError("Exception during reading modpackfile",e1); }
 	}
 }

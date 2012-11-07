@@ -16,12 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
@@ -33,13 +35,15 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private JScrollPane packsScroll;
 	private static JLabel splash;
 
-	private static JLabel typeLbl, originLbl;
-	private JButton filter;
+	private static JLabel typeLbl;
+	private JButton filter, editModPack;
 	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private static boolean modPacksAdded = false;
 	public static String type = "Client", origin = "All";
 	private final ModpacksPane instance = this;
+	
+	public static boolean loaded = false;
 	
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 
@@ -66,23 +70,37 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setLayout(null);
 
 		filter = new JButton("Filter Settings");
-		filter.setBounds(5, 5, 110, 25);
+		filter.setBounds(5, 5, 105, 25);
 		filter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FilterDialog filterDia = new FilterDialog(instance);
-				filterDia.setVisible(true);
+				if(loaded) {
+					FilterDialog filterDia = new FilterDialog(instance);
+					filterDia.setVisible(true);
+				}
 			}
 		});
 		add(filter);
 
-		typeLbl = new JLabel("<html><body><strong>Pack Type:</strong> " + type + "</body></html>");
-		typeLbl.setBounds(140, 1, 100, 30);
+		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		typeLbl.setBounds(115, 5, 160, 25);
+		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
-		originLbl = new JLabel("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
-		originLbl.setBounds(280, 1, 100, 30);
-		add(originLbl);
+		editModPack = new JButton("Edit Mod Pack");
+		editModPack.setBounds(285, 5, 110, 25);
+		editModPack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(packPanels.size() > 0) {
+					if(getSelectedModIndex() >= 0) {
+						EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance());
+						empd.setVisible(true);
+					}
+				}
+			}
+		});
+		add(editModPack);
 
 		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
 		filler.setBorder(null);
@@ -206,8 +224,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 
 	public static void updateFilter() {
-		typeLbl.setText("<html><body><strong>Pack Type:</strong> " + type + "</body></html>");
-		originLbl.setText("<html><body><strong>Origin:</strong> " + origin + "</body></html>");
+		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+//		originLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Origin:</strong></font> " + origin + "</body></html>");
 		sortPacks();
 		LaunchFrame.getInstance().updateButtons();
 	}

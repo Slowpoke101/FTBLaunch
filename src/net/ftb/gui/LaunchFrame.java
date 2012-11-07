@@ -101,7 +101,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), editModPack = new JButton();
+	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
 
@@ -267,22 +267,8 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 
-		editModPack = new JButton("Edit Mod Pack");
-		editModPack.setBounds(350, 20, 120, 30);
-		editModPack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(modPacksPane.packPanels.size() > 0) {
-					if(getSelectedModIndex() >= 0) {
-						EditModPackDialog empd = new EditModPackDialog(getInstance());
-						empd.setVisible(true);
-					}
-				}
-			}
-		});
-
 		donate = new JButton("Donate");
-		donate.setBounds(260, 20, 80, 30);
+		donate.setBounds(390, 20, 80, 30);
 		donate.setEnabled(false);
 		donate.setToolTipText("Coming Soon...");
 		donate.addActionListener(new ActionListener() {
@@ -331,7 +317,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		serverbutton.setBounds(350, 20, 460, 30);
+		serverbutton.setBounds(480, 20, 330, 30);
 		serverbutton.setText("Grab The Server Version Here");
 		serverbutton.setEnabled(false);
 		serverbutton.setVisible(false);
@@ -353,7 +339,6 @@ public class LaunchFrame extends JFrame {
 		footer.add(footerCreeper);
 		footer.add(launch);
 		footer.add(donate);
-		footer.add(editModPack);
 		footer.add(serverbutton);
 
 		newsPane = new NewsPane();
@@ -751,8 +736,6 @@ public class LaunchFrame extends JFrame {
 		edit.setVisible(!result);
 		users.setEnabled(!result);
 		users.setVisible(!result);
-		editModPack.setEnabled(!result);
-		editModPack.setVisible(!result);
 		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
 	}
