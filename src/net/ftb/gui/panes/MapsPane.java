@@ -117,7 +117,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 
 		final int mapIndex = mapPanels.size();
-		System.out.println("Adding pack " + getMapNum());
+		System.out.println("Adding map " + getMapNum());
 		final JPanel p = new JPanel();
 		p.setBounds(0, (mapIndex * 55) + 30, 420, 55);
 		p.setLayout(null);
