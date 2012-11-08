@@ -65,6 +65,7 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
+import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.updater.UpdateChecker;
@@ -346,7 +347,9 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-					
+					MapManager man = new MapManager(new JFrame(), true);
+					man.setVisible(true);
+					MapManager.cleanUp();
 				}
 			}
 		});

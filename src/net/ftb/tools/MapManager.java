@@ -24,7 +24,9 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.Map;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
+import net.ftb.util.FileUtils;
 
 public class MapManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
@@ -33,13 +35,25 @@ public class MapManager extends JDialog {
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
 	private final JLabel label;
+	public static boolean overwrite = false;
+	private static String sep = File.separator;
 	
 	private class MapManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			// Check if map exists
-			// Prompt user for overwrite/rename if folder is present
-			// Download/Install Map
+			String installPath = Settings.getSettings().getInstallPath();
+			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+			if(new File(installPath, map.getCompatible() + "/.minecraft/saves/" + map.getMapName()).exists()) {
+				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
+				dialog.setVisible(true);
+				if(overwrite) {
+					new File(installPath, map.getCompatible() + "/.minecraft/saves/" + map.getMapName()).delete();
+				} else {
+					Logger.logInfo("Canceled map installation.");
+					return false;
+				}
+			}
+			downloadMap(map.getUrl(), map.getMapName());
 			return false;
 		}
 		
@@ -78,7 +92,15 @@ public class MapManager extends JDialog {
 			new File(installPath + "/temp/maps/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/maps/" + dir + "/" + mapName).createNewFile();
 			downloadUrl(installPath + "/temp/maps/" + dir + "/" + mapName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + mapName);
-			
+			FileUtils.extractZipTo(installPath + "/temp/maps/" + dir + "/" + mapName, installPath + "/temp/maps/" + dir);
+			installMap(mapName, dir);
+		}
+		
+		protected void installMap(String mapName, String dir) throws IOException {
+			Logger.logInfo("Installing");
+			String installPath = Settings.getSettings().getInstallPath();
+			FileUtils.copyFolder(new File(installPath + "/temp/maps/" + dir + "/" + dir), new File(installPath + "/" 
+					+ Map.getMap(LaunchFrame.getSelectedMapIndex()).getCompatible() + "/.minecraft/saves/" + dir));
 		}
 		
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -93,14 +115,6 @@ public class MapManager extends JDialog {
 				}
 			}
 			return result;
-		}
-		
-		protected String[] reverse(String[] x) {
-			String buffer[] = new String[x.length];
-			for(int i = 0; i < x.length; i++) {
-				buffer[i] = x[x.length - i - 1];
-			}
-			return buffer;
 		}
 	}
 
@@ -148,5 +162,16 @@ public class MapManager extends JDialog {
 			@Override public void windowDeiconified(WindowEvent e) { }
 			@Override public void windowIconified(WindowEvent e) { }
 		});
+	}
+	
+	public static void cleanUp() {
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "maps" + sep + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + sep);
+		for(String file: tempFolder.list()) {
+			if(!file.equalsIgnoreCase("logo_ftb.png") && !file.equalsIgnoreCase("splash_ftb.png") && !file.equalsIgnoreCase("version")) {
+				try {
+					FileUtils.delete(new File(tempFolder, file));
+				} catch (IOException e) { }
+			}
+		}
 	}
 }

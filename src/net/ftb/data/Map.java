@@ -25,7 +25,7 @@ public class Map {
 	private String name, author, version, url, mapname, mcversion;
 	private String info = "This is the info until there is an actual info thingy";
 	private Image logo, image;
-	private String[] packs;
+	private String pack;
 	private int size, index;
 
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
@@ -64,7 +64,7 @@ public class Map {
 		this.author = author;
 		this.version = version;
 		this.url = url;
-		packs = compatible.split(":");
+		pack = compatible;
 		this.mcversion = mcversion;
 		this.mapname = mapname;
 		String installPath = Settings.getSettings().getInstallPath();
@@ -143,8 +143,8 @@ public class Map {
 		return image;
 	}
 
-	public String[] getCompatible() {
-		return packs;
+	public String getCompatible() {
+		return pack;
 	}
 
 	public String getMcVersion() {
