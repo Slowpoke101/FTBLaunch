@@ -130,10 +130,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		ramMaximum.setColumns(10);
 	}
 
-	@Override 
-	public void onVisible() { 
-		LaunchFrame.getInstance().updateFooter("options");
-	}
+	@Override public void onVisible() { }
 
 	public void loadSettings(Settings settings) {
 		installFolderTextField.setText(settings.getInstallPath());

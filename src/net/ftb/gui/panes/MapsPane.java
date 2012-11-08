@@ -25,7 +25,6 @@ import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
-import net.ftb.log.Logger;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -106,10 +105,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		this.add(mapsScroll);
 	}
 
-	@Override 
-	public void onVisible() { 
-		LaunchFrame.getInstance().updateFooter("map");
-	}
+	@Override public void onVisible() { }
 
 	/*
 	 * GUI Code to add a modpack to the selection

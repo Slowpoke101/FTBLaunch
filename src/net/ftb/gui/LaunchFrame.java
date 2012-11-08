@@ -74,51 +74,45 @@ import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
-	/**
-	 * the panels to appear in the tabs
-	 */
+
+	private static String version = "0.3.2";
+	private static int buildNumber = 32;
+	private static final String FORGENAME = "MinecraftForge.zip";
+
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
 	private MapsPane mapsPane;
 	private TexturepackPane tpPane;
 
-	/**
-	 * an array of all mods to be added to classpath
-	 */
-	public static String[] jarMods;
-
-	/**
-	 * the panel that contains the footer and the tabbed pane
-	 */
 	private JPanel panel = new JPanel();
-
-	/**
-	 * tabbedpane and footer
-	 */
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel footer = new JPanel();
 
-	/**
-	 * the things to go on the footer
-	 */
+	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
 
-	/**
-	 * random crap
-	 */
-	private static String version = "0.3.2";
-	private static int buildNumber = 32;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
-	private static final String FORGENAME = "MinecraftForge.zip";
-	protected static UserManager userManager;
 	private LoginResponse RESPONSE;
+
+	protected static UserManager userManager;
+
+	public static String[] jarMods;
 	public static String tempPass = "";
+	public static Panes currentPane = Panes.MODPACK;
+
+	public enum Panes {
+		NEWS,
+		OPTIONS,
+		MODPACK,
+		MAPS,
+		TEXTURE
+	}
 
 	/**
 	 * Launch the application.
@@ -413,6 +407,7 @@ public class LaunchFrame extends JFrame {
 			public void stateChanged(ChangeEvent event){
 				if(tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
 					((ILauncherPane)tabbedPane.getSelectedComponent()).onVisible();
+					currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
 				}
 			}
 		});
@@ -438,7 +433,6 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -721,9 +715,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(true);
 
 		// TODO: Call updateFooter, implement Enum for main panel tabs
-		launch.setEnabled(true);
-		edit.setEnabled(users.getSelectedIndex() > 1);
-		users.setEnabled(true);
+		updateFooter();
 	}
 
 	/**
@@ -784,12 +776,16 @@ public class LaunchFrame extends JFrame {
 		boolean result = modPacksPane.type.equals("Server");
 		launch.setEnabled(!result);
 		launch.setVisible(!result);
-		edit.setEnabled(!result);
+		edit.setEnabled(!result && users.getSelectedIndex() > 1);
 		edit.setVisible(!result);
 		users.setEnabled(!result);
 		users.setVisible(!result);
 		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
+		mapInstall.setEnabled(false);
+		mapInstall.setVisible(false);
+		serverMap.setEnabled(false);
+		serverMap.setVisible(false);
 	}
 
 	public void updateMapButtons() {
@@ -798,25 +794,24 @@ public class LaunchFrame extends JFrame {
 		mapInstall.setVisible(!result);
 		serverMap.setEnabled(result);
 		serverMap.setVisible(result);
+		serverbutton.setEnabled(false);
+		serverbutton.setVisible(false);
+		launch.setEnabled(false);
+		launch.setVisible(false);
+		edit.setEnabled(false);
+		edit.setVisible(false);
+		users.setEnabled(false);
+		users.setVisible(false);
 	}
 
-	public void updateFooter(String tab) {
-		if(tab.equalsIgnoreCase("map")) {
+	public void updateFooter() {
+		switch(currentPane) {
+		case MAPS:
 			updateMapButtons();
-			serverbutton.setEnabled(false);
-			serverbutton.setVisible(false);
-			launch.setEnabled(false);
-			launch.setVisible(false);
-			edit.setEnabled(false);
-			edit.setVisible(false);
-			users.setEnabled(false);
-			users.setVisible(false);
-		} else {
+			break;
+		default:
 			updatePackButtons();
-			mapInstall.setEnabled(false);
-			mapInstall.setVisible(false);
-			serverMap.setEnabled(false);
-			serverMap.setVisible(false);
+			break;
 		}
 	}
 }
