@@ -47,7 +47,7 @@ public class OSUtils {
 		}
 	}
 
-	public enum OS {
+	public static enum OS {
 		WINDOWS,
 		UNIX,
 		MACOSX,
