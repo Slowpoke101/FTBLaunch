@@ -36,7 +36,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static JLabel typeLbl;
 	private JButton filter, editModPack;
-	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private static boolean modPacksAdded = false;
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();

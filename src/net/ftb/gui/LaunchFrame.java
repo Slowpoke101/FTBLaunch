@@ -174,7 +174,7 @@ public class LaunchFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
-				// Create the install directory if it does not exist.
+
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists()) {
 					installDir.mkdirs();

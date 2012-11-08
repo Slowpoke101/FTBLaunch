@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.ftb.gui.LauncherConsole;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -133,6 +134,8 @@ public class MinecraftLauncher {
 		String password = args[3];
 
 		try {
+			LauncherConsole con = new LauncherConsole();
+			con.setVisible(true);
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
