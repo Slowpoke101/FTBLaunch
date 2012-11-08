@@ -155,8 +155,10 @@ public class FileUtils {
 					bos.flush();
 					bos.close();
 					bis.close();
+					fos.close();
 				}
 			}
+			zipFile.close();
 		} catch (IOException ioe) {	ioe.printStackTrace(); }
 	}
 

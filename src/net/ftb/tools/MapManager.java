@@ -99,9 +99,10 @@ public class MapManager extends JDialog {
 		protected void installMap(String mapName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
-			FileUtils.copyFolder(new File(installPath + "/temp/maps/" + dir + "/" + dir), new File(installPath + "/" 
-					+ Map.getMap(LaunchFrame.getSelectedMapIndex()).getCompatible() + "/.minecraft/saves/" + dir));
-			FileUtils.copyFile(new File(installPath + "/temp/maps/" + dir + "/" + "version"), new File(installPath, Map.getMap(LaunchFrame.getSelectedMapIndex()).getCompatible() + "/.minecraft/saves/" + dir + "/version"));
+			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+			new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir).mkdirs();
+			FileUtils.copyFolder(new File(installPath, "temp/maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir));
+			FileUtils.copyFile(new File(installPath, "temp/maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir + "/version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -166,9 +167,10 @@ public class MapManager extends JDialog {
 	}
 
 	public static void cleanUp() {
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "maps" + sep + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + sep);
+		Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "maps" + sep + map.getMapName() + sep);
 		for(String file: tempFolder.list()) {
-			if(!file.equalsIgnoreCase("logo_ftb.png") && !file.equalsIgnoreCase("splash_ftb.png") && !file.equalsIgnoreCase("version")) {
+			if(!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
 				} catch (IOException e) { }

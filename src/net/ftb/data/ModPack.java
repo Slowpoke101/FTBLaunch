@@ -22,7 +22,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name, author, version, url, dir, mcVersion, serverUrl;
+	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName;
 	private Image logo, image;
 	private String info = "This is the info until there is an actual info thingy";
 	private int size;
@@ -80,6 +80,8 @@ public class ModPack {
 		this.mcVersion = mcVersion;
 		this.url = url;
 		this.serverUrl = serverUrl;
+		logoName = logo;
+		imageName = image;
 		String installPath = Settings.getSettings().getInstallPath();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
 		if(!upToDate(verFile)) {
@@ -172,5 +174,13 @@ public class ModPack {
 
 	public String getServerUrl() {
 		return serverUrl;
+	}
+	
+	public String getLogoName() {
+		return logoName;
+	}
+	
+	public String getImageName() {
+		return imageName;
 	}
 }

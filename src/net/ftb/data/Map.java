@@ -22,7 +22,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.MapLoader;
 
 public class Map {
-	private String name, author, version, url, mapname, mcversion;
+	private String name, author, version, url, mapname, mcversion, logoName, imageName;
 	private String info = "This is the info until there is an actual info thingy";
 	private Image logo, image;
 	private String pack;
@@ -68,6 +68,8 @@ public class Map {
 		this.mcversion = mcversion;
 		this.mapname = mapname;
 		String installPath = Settings.getSettings().getInstallPath();
+		logoName = logo;
+		imageName = image;
 		// TODO: Figure out how to do version checking on maps.
 		File verFile = new File(installPath, "temp" + File.separator + "maps" + File.separator + mapname + File.separator + "version");
 		File dir = new File(installPath, "temp" + File.separator + "maps" + File.separator + mapname);
@@ -161,5 +163,13 @@ public class Map {
 
 	public int getSize() {
 		return size;
+	}
+	
+	public String getLogoName() {
+		return logoName;
+	}
+	
+	public String getImageName() {
+		return imageName;
 	}
 }

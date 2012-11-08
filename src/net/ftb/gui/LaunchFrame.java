@@ -409,6 +409,7 @@ public class LaunchFrame extends JFrame {
 				if(tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
 					((ILauncherPane)tabbedPane.getSelectedComponent()).onVisible();
 					currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
+					updateFooter();
 				}
 			}
 		});

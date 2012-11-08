@@ -250,12 +250,13 @@ public class ModManager extends JDialog {
 	}
 
 	public static void cleanUp() {
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator);
+		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + pack.getDir() + File.separator);
 		for(String file : tempFolder.list()) {
-			if(!file.equals("logo_ftb.png") && !file.equals("splash_FTB.png") && !file.equals("version")) {
+			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) { e.printStackTrace(); }
+				} catch (IOException e) { }
 			}
 		}
 	}
