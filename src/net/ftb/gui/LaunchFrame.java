@@ -81,7 +81,7 @@ public class LaunchFrame extends JFrame {
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
 	private MapsPane mapsPane;
-	private JPanel tpPane;
+	private TexturepackPane tpPane;
 
 	/**
 	 * an array of all mods to be added to classpath
@@ -437,12 +437,16 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
+		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
 		users.setEnabled(false);
 		edit.setEnabled(false);
+		serverbutton.setEnabled(false);
+		mapInstall.setEnabled(false);
+		serverMap.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
@@ -713,7 +717,10 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.setEnabledAt(3, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
+
+		// TODO: Call updateFooter, implement Enum for main panel tabs
 		launch.setEnabled(true);
 		edit.setEnabled(users.getSelectedIndex() > 1);
 		users.setEnabled(true);
