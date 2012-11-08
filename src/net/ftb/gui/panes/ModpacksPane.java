@@ -39,12 +39,14 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JComboBox packType;
 	private static int selectedPack = 0;
 	private static boolean modPacksAdded = false;
-	public static String type = "Client", origin = "All";
+	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 	private final ModpacksPane instance = this;
 
+//	private JLabel loadingImage;
+	public static String type = "Client", origin = "All";
 	public static boolean loaded = false;
 
-	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
+	
 
 	public ModpacksPane () {
 		super();
@@ -58,6 +60,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packPanels = new ArrayList<JPanel>();
 
 		// TODO: Set loading animation while we wait
+//		try {
+//			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
+//		} catch (MalformedURLException e1) { e1.printStackTrace(); }
+//		loadingImage.setLocation(58, 36);
+		
 		packs = new JPanel();
 		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
@@ -107,9 +114,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setForeground(Color.white);
 		filler.setBounds(6 + 42 + 10, 36, 420 - (6 + 42 - 6), 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
+//		p.add(loadingImage);
 		p.add(filler);
 		packs.add(p);
-
+		
 		packsScroll = new JScrollPane();
 		packsScroll.setBounds(0, 0, 420, 300);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
