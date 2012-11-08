@@ -70,6 +70,7 @@ import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -738,6 +739,19 @@ public class LaunchFrame extends JFrame {
 			try {
 				desktop.browse(uri);
 			} catch(Exception exc) { Logger.logError("Exception occured durring opening Link",exc); }
+		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+			// check if system is *NIX, if true, try to use xdg-open
+			File xdg = new File("/usr/bin/xdg-open");
+			if (xdg.exists()) {
+				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
+				try {
+					pb.start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Logger.logWarn("Desktop not supported.");
+			}
 		} else {
 			Logger.logWarn("Desktop not supported.");
 		}
@@ -749,6 +763,19 @@ public class LaunchFrame extends JFrame {
 			try {
 				desktop.browse(uri);
 			} catch (IOException e) { e.printStackTrace(); }
+		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+			// check if system is *NIX, if true, try to use xdg-open
+			File xdg = new File("/usr/bin/xdg-open");
+			if (xdg.exists()) {
+				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
+				try {
+					pb.start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Logger.logWarn("Desktop not supported.");
+			}
 		} else {
 			Logger.logWarn("Desktop not supported.");
 		}
