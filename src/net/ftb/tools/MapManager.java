@@ -30,14 +30,14 @@ import net.ftb.util.FileUtils;
 
 public class MapManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
-	
+
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
 	private final JLabel label;
 	public static boolean overwrite = false;
 	private static String sep = File.separator;
-	
+
 	private class MapManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
@@ -56,7 +56,7 @@ public class MapManager extends JDialog {
 			downloadMap(map.getUrl(), map.getMapName());
 			return false;
 		}
-		
+
 		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
@@ -84,7 +84,7 @@ public class MapManager extends JDialog {
 				fout.close();
 			}
 		}
-		
+
 		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
@@ -95,14 +95,15 @@ public class MapManager extends JDialog {
 			FileUtils.extractZipTo(installPath + "/temp/maps/" + dir + "/" + mapName, installPath + "/temp/maps/" + dir);
 			installMap(mapName, dir);
 		}
-		
+
 		protected void installMap(String mapName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
 			FileUtils.copyFolder(new File(installPath + "/temp/maps/" + dir + "/" + dir), new File(installPath + "/" 
 					+ Map.getMap(LaunchFrame.getSelectedMapIndex()).getCompatible() + "/.minecraft/saves/" + dir));
+			FileUtils.copyFile(new File(installPath + "/temp/maps/" + dir + "/" + "version"), new File(installPath, Map.getMap(LaunchFrame.getSelectedMapIndex()).getCompatible() + "/.minecraft/saves/" + dir + "/version"));
 		}
-		
+
 		public String md5(String input) throws NoSuchAlgorithmException {
 			String result = input;
 			if(!input.isEmpty()) {
@@ -128,21 +129,21 @@ public class MapManager extends JDialog {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		progressBar = new JProgressBar();
 		progressBar.setBounds(10, 63, 278, 22);
 		contentPane.add(progressBar);
-		
+
 		JLabel lblDownloadingMap = new JLabel("Downloading map...\nPlease Wait");
 		lblDownloadingMap.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDownloadingMap.setBounds(10, 11, 278, 14);
 		contentPane.add(lblDownloadingMap);
-		
+
 		label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setBounds(10, 36, 278, 14);
 		contentPane.add(label);
-		
+
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
@@ -163,7 +164,7 @@ public class MapManager extends JDialog {
 			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
-	
+
 	public static void cleanUp() {
 		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "maps" + sep + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + sep);
 		for(String file: tempFolder.list()) {

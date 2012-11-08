@@ -338,7 +338,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		mapInstall.setBounds(480, 20, 330, 30);
 		mapInstall.setText("Install Map");
 		mapInstall.setEnabled(false);
@@ -353,7 +353,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		serverMap.setBounds(480, 20, 330, 30);
 		serverMap.setText("Download Server Map");
 		serverMap.setEnabled(false);
@@ -691,7 +691,7 @@ public class LaunchFrame extends JFrame {
 	public static int getSelectedModIndex() {
 		return instance.modPacksPane.getSelectedModIndex();
 	} 
-	
+
 	/**
 	 * @return - Outputs selected modpack index
 	 */
@@ -784,7 +784,7 @@ public class LaunchFrame extends JFrame {
 		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
 	}
-	
+
 	public void updateMapButtons() {
 		boolean result = mapsPane.type.equals("Server");
 		mapInstall.setEnabled(!result);
@@ -792,7 +792,7 @@ public class LaunchFrame extends JFrame {
 		serverMap.setEnabled(result);
 		serverMap.setVisible(result);
 	}
-	
+
 	public void updateFooter(String tab) {
 		if(tab.equalsIgnoreCase("map")) {
 			updateMapButtons();

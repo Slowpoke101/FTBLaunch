@@ -18,10 +18,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -97,7 +93,7 @@ public class ModManager extends JDialog {
 				fout.close();
 			}
 		}
-		
+
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
