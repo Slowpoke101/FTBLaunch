@@ -25,6 +25,7 @@ import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.log.Logger;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -120,7 +121,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		this.add(packsScroll);
 	}
 
-	@Override public void onVisible() { }
+	@Override 
+	public void onVisible() { 
+		LaunchFrame.getInstance().updateFooter("modpacks");
+	}
 
 	/*
 	 * GUI Code to add a modpack to the selection
@@ -225,7 +229,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
 		sortPacks();
-		LaunchFrame.getInstance().updateButtons();
+		LaunchFrame.getInstance().updatePackButtons();
 	}
 
 	private static int getIndex() {

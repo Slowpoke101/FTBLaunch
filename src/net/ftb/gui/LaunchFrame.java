@@ -66,6 +66,7 @@ import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MinecraftVersionDetector;
+import net.ftb.tools.ModManager;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.FileUtils;
 import net.ftb.workers.GameUpdateWorker;
@@ -84,7 +85,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * an array of all mods to be added to classpath
 	 */
-	static String[] jarMods;
+	public static String[] jarMods;
 
 	/**
 	 * the panel that contains the footer and the tabbed pane
@@ -102,7 +103,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton();
+	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
 
@@ -188,7 +189,7 @@ public class LaunchFrame extends JFrame {
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
 
-				LaunchFrame frame = new LaunchFrame(3);
+				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
 				frame.setVisible(true);
 
@@ -336,6 +337,35 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
+		
+		mapInstall.setBounds(480, 20, 330, 30);
+		mapInstall.setText("Install Map");
+		mapInstall.setEnabled(false);
+		mapInstall.setVisible(false);
+		mapInstall.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+					
+				}
+			}
+		});
+		
+		serverMap.setBounds(480, 20, 330, 30);
+		serverMap.setText("Download Server Map");
+		serverMap.setEnabled(false);
+		serverMap.setVisible(false);
+		serverMap.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+					try {
+						hLink(event, new URI(LaunchFrame.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl())));
+					} catch (URISyntaxException e) { 
+					} catch (NoSuchAlgorithmException e) { }
+				}
+			}
+		});
 
 		footer.add(edit);
 		footer.add(users);
@@ -344,6 +374,8 @@ public class LaunchFrame extends JFrame {
 		footer.add(launch);
 		footer.add(donate);
 		footer.add(serverbutton);
+		footer.add(mapInstall);
+		footer.add(serverMap);
 
 		newsPane = new NewsPane();
 		modPacksPane = new ModpacksPane();
@@ -656,6 +688,13 @@ public class LaunchFrame extends JFrame {
 	public static int getSelectedModIndex() {
 		return instance.modPacksPane.getSelectedModIndex();
 	} 
+	
+	/**
+	 * @return - Outputs selected modpack index
+	 */
+	public static int getSelectedMapIndex() {
+		return instance.mapsPane.getSelectedMapIndex();
+	} 
 
 	/**
 	 * @return - Outputs LaunchFrame instance
@@ -713,7 +752,7 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
-	private static String getTime() {
+	public static String getTime() {
 		String content = null;
 		Scanner scanner = null;
 		try {
@@ -731,7 +770,7 @@ public class LaunchFrame extends JFrame {
 		return content;
 	}
 
-	public void updateButtons() {
+	public void updatePackButtons() {
 		boolean result = modPacksPane.type.equals("Server");
 		launch.setEnabled(!result);
 		launch.setVisible(!result);
@@ -741,5 +780,33 @@ public class LaunchFrame extends JFrame {
 		users.setVisible(!result);
 		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
+	}
+	
+	public void updateMapButtons() {
+		boolean result = mapsPane.type.equals("Server");
+		mapInstall.setEnabled(!result);
+		mapInstall.setVisible(!result);
+		serverMap.setEnabled(result);
+		serverMap.setVisible(result);
+	}
+	
+	public void updateFooter(String tab) {
+		if(tab.equalsIgnoreCase("map")) {
+			updateMapButtons();
+			serverbutton.setEnabled(false);
+			serverbutton.setVisible(false);
+			launch.setEnabled(false);
+			launch.setVisible(false);
+			edit.setEnabled(false);
+			edit.setVisible(false);
+			users.setEnabled(false);
+			users.setVisible(false);
+		} else {
+			updatePackButtons();
+			mapInstall.setEnabled(false);
+			mapInstall.setVisible(false);
+			serverMap.setEnabled(false);
+			serverMap.setVisible(false);
+		}
 	}
 }

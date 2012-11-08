@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.gui.LaunchFrame;
+
 public class NewsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
 
@@ -29,6 +31,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
 
 	@Override
 	public void onVisible() {
+		LaunchFrame.getInstance().updateFooter("news");
 		try {
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
 		} catch (IOException e1) { }

@@ -29,7 +29,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
-	//	private JComboBox updateChannel;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -129,33 +128,17 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(lblRamMaximum, gbc_lblRamMaximum);
 		this.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
-
-		//		JLabel lblUpdateChannel = new JLabel("Update Channel:");
-		//		GridBagConstraints gbc_lblUpdateChannel = new GridBagConstraints();
-		//		gbc_lblUpdateChannel.anchor = GridBagConstraints.EAST;
-		//		gbc_lblUpdateChannel.insets = new Insets(0, 0, 5, 5);
-		//		gbc_lblUpdateChannel.gridx = 1;
-		//		gbc_lblUpdateChannel.gridy = 9;
-		//		this.add(lblUpdateChannel, gbc_lblUpdateChannel);
-		//
-		//		updateChannel = new JComboBox(Channel.values());
-		//		GridBagConstraints gbc_channel = new GridBagConstraints();
-		//		gbc_channel.gridwidth = 4;
-		//		gbc_channel.insets = new Insets(0, 0, 4, 4);
-		//		gbc_channel.fill = GridBagConstraints.BOTH;
-		//		gbc_channel.gridx = 2;
-		//		gbc_channel.gridy = 9;
-		//		updateChannel.addFocusListener(settingsChangeListener);
-		//		this.add(updateChannel, gbc_channel);
 	}
 
-	@Override public void onVisible() { }
+	@Override 
+	public void onVisible() { 
+		LaunchFrame.getInstance().updateFooter("options");
+	}
 
 	public void loadSettings(Settings settings) {
 		installFolderTextField.setText(settings.getInstallPath());
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 		Logger.logInfo(settings.getChannel().name());
-		//		updateChannel.setSelectedIndex(Arrays.binarySearch(Channel.values(), settings.getChannel()));
 	}
 
 	public String getInstallFolderText() {
@@ -181,6 +164,5 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
-		//		settings.setChannel((Channel) updateChannel.getSelectedItem());
 	}
 }

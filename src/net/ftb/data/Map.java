@@ -158,4 +158,8 @@ public class Map {
 	public String getInfo() {
 		return info;
 	}
+	
+	public int getSize() {
+		return size;
+	}
 }

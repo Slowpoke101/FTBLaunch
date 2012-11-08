@@ -23,7 +23,9 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.log.Logger;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -104,7 +106,10 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		this.add(mapsScroll);
 	}
 
-	@Override public void onVisible() { }
+	@Override 
+	public void onVisible() { 
+		LaunchFrame.getInstance().updateFooter("map");
+	}
 
 	/*
 	 * GUI Code to add a modpack to the selection
@@ -202,13 +207,14 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 	}
 
-	public int getSelectedModIndex() {
+	public int getSelectedMapIndex() {
 		return mapsAdded ? getIndex() : -1;
 	}
 
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
 		sortMaps();
+		LaunchFrame.getInstance().updateMapButtons();
 	}
 
 	private static int getIndex() {

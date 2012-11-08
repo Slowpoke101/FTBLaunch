@@ -151,7 +151,7 @@ public class EditModPackDialog extends JDialog {
 					}
 					updateLists();
 				} else {
-					if(enabledMods.getSelectedIndex() > 0) {
+					if(enabledMods.getSelectedIndex() >= 0) {
 						String name = enabledModsList_.get(enabledMods.getSelectedIndex());
 						new File(modsFolder, name).renameTo(new File(modsFolder, name + ".disabled"));
 					}
@@ -173,7 +173,7 @@ public class EditModPackDialog extends JDialog {
 					}
 					updateLists();
 				} else {
-					if(disabledMods.getSelectedIndex() > 0) {
+					if(disabledMods.getSelectedIndex() >= 0) {
 						String name = disabledModsList_.get(disabledMods.getSelectedIndex());
 						new File(modsFolder, name).renameTo(new File(modsFolder, name.replace(".disabled", "")));
 					}

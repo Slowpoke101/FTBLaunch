@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.ModManager;
+import net.ftb.tools.ModManager;
 
 public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

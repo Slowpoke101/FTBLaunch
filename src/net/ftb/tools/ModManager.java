@@ -1,4 +1,4 @@
-package net.ftb.gui;
+package net.ftb.tools;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -34,6 +34,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
@@ -96,22 +97,14 @@ public class ModManager extends JDialog {
 				fout.close();
 			}
 		}
-
-		public void downloadPack(String dest, String file) throws NoSuchAlgorithmException, IOException {
-			DateFormat sdf = new SimpleDateFormat("ddMMyy");
-			TimeZone zone = TimeZone.getTimeZone("GMT");
-			sdf.setTimeZone(zone);
-			String date = sdf.format(new Date());
-			downloadUrl(dest, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + date) + "/" + file);
-		}
-
+		
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 			new File(installPath + "/temp/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/" + dir + "/" + modPackName).createNewFile();
-			downloadPack(installPath + "/temp/" + dir + "/" + modPackName, modPackName);
+			downloadUrl(installPath + "/temp/" + dir + "/" + modPackName, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + LaunchFrame.getTime()) + "/" + modPackName);
 			new File(installPath + "/temp/" + dir + "/instMods").mkdirs();
 			new File(installPath + "/temp/" + dir + "/.minecraft").mkdirs();
 			FileUtils.extractZipTo(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/temp/" + pack.getDir());
