@@ -88,7 +88,6 @@ public class MapManager extends JDialog {
 		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
 			new File(installPath + "/temp/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/Maps/" + dir + "/" + mapName).createNewFile();
 			downloadUrl(installPath + "/temp/Maps/" + dir + "/" + mapName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + mapName);

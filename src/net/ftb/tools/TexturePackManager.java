@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
 import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
@@ -41,7 +42,7 @@ public class TexturePackManager extends JDialog {
 		@Override
 		protected Boolean doInBackground() throws Exception {
 			String installPath = Settings.getSettings().getInstallPath();
-//			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
 //			if(new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
 //				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
 //				dialog.setVisible(true);
@@ -87,7 +88,6 @@ public class TexturePackManager extends JDialog {
 		protected void downloadTexturePack(String texturePackName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
-//			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
 			new File(installPath + "/temp/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
 			downloadUrl(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
@@ -98,10 +98,10 @@ public class TexturePackManager extends JDialog {
 		protected void installTexturePack(String texturePackName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
-//			TexturePack map = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-//			new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
-//			FileUtils.copyFolder(new File(installPath, "temp/TexturePacks/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
-//			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
+			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+//			new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
+//			FileUtils.copyFolder(new File(installPath, "temp/TexturePacks/" + dir + "/" + dir), new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir));
+//			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir + "/version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {

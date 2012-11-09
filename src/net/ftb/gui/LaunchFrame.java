@@ -706,14 +706,21 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static int getSelectedModIndex() {
 		return instance.modPacksPane.getSelectedModIndex();
-	} 
+	}
 
 	/**
-	 * @return - Outputs selected modpack index
+	 * @return - Outputs selected map index
 	 */
 	public static int getSelectedMapIndex() {
 		return instance.mapsPane.getSelectedMapIndex();
-	} 
+	}
+
+	/**
+	 * @return - Outputs selected texturepack index
+	 */
+	public static int getSelectedTexturePackIndex() {
+		return instance.tpPane.getSelectedTexturePackIndex();
+	}
 
 	/**
 	 * @return - Outputs LaunchFrame instance
