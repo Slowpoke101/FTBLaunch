@@ -38,6 +38,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
 
+	public static boolean loaded = false;
+
 	public TexturepackPane() {
 		super();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
