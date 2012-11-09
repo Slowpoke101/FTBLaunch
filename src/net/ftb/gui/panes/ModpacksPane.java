@@ -149,7 +149,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(58, 36, 378, 42);
+		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		MouseListener lin = new MouseListener() {
 			@Override public void mouseClicked(MouseEvent e) {

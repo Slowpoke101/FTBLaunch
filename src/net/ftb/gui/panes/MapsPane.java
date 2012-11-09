@@ -127,7 +127,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(6 + 42 + 10, 6, 420 - (6 + 42 - 6), 42);
+		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		MouseListener lin = new MouseListener() {
 			@Override public void mouseClicked(MouseEvent e) {
