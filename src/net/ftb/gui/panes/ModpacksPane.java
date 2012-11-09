@@ -31,7 +31,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static JPanel packs;
 	public static ArrayList<JPanel> packPanels;
-	private JScrollPane packsScroll;
+	private static JScrollPane packsScroll;
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
@@ -170,6 +170,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packs.add(p);
 		packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
 		packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+		packsScroll.revalidate();
 	}
 
 	@Override
