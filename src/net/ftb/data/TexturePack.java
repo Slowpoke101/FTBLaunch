@@ -16,61 +16,58 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import net.ftb.data.events.MapListener;
+import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.workers.MapLoader;
 
-public class Map {
-	private String name, author, version, url, mapname, mcversion, logoName, imageName, pack;
+public class TexturePack {
+	private String name, author, version, url, mcversion, logoName, imageName;
 	private String info = "This is the info until there is an actual info thingy";
 	private Image logo, image;
 	private int size, index;
+	private String sep = File.separator;
 
-	private final static ArrayList<Map> maps = new ArrayList<Map>();
+	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
 
-	private static List<MapListener> listeners = new ArrayList<MapListener>();
+	private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
 
-	public static void addListener(MapListener listener) {
+	public static void addListener(TexturePackListener listener) {
 		listeners.add(listener);
 	}
 
 	public static void loadAll() {
-		MapLoader loader = new MapLoader();
-		loader.start();
+		// TexturePackLoader loader = new TexturePackLoader();
+		// loader.start();
 	}
 
-	public static void addMap(Map map) {
-		synchronized (maps) {
-			maps.add(map);
+	public static void addTexturePack(TexturePack texturePack) {
+		synchronized (texturePacks) {
+			texturePacks.add(texturePack);
 		}
-		for (MapListener listener : listeners) {
-			listener.onMapAdded(map);
+		for (TexturePackListener listener : listeners) {
+			listener.onTexturePackAdded(texturePack);
 		}
 	}
 
-	public static ArrayList<Map> getMapArray() {
-		return maps;
+	public static ArrayList<TexturePack> getTexturePackArray() {
+		return texturePacks;
 	}
 
-	public static Map getMap(int i) {
-		return maps.get(i);
+	public static TexturePack getTexturePack(int i) {
+		return texturePacks.get(i);
 	}
 
-	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, int idx) throws NoSuchAlgorithmException, IOException {
+	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
 		this.author = author;
 		this.version = version;
 		this.url = url;
-		pack = compatible;
-		this.mcversion = mcversion;
-		this.mapname = mapname;
+		this.version = version;
 		String installPath = Settings.getSettings().getInstallPath();
 		logoName = logo;
 		imageName = image;
-		// TODO: Figure out how to do version checking on maps.
-		File verFile = new File(installPath, "temp" + File.separator + "Maps" + File.separator + mapname + File.separator + "version");
-		File dir = new File(installPath, "temp" + File.separator + "Maps" + File.separator + mapname);
+		File verFile = new File(installPath, "temp" + sep + "TexturePacks" + sep + name + sep + "version");
+		File dir = new File(installPath, "temp" + sep + "TexturePacks" + sep + name);
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
@@ -84,8 +81,8 @@ public class Map {
 			ImageIO.write(tempImg, "png", new File(dir, image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + logo);
-			this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + image);
+			this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + sep + logo);
+			this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + sep + image);
 		}
 		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 		size = url_.openConnection().getContentLength();
@@ -95,7 +92,7 @@ public class Map {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + "Maps" + File.separator + mapname + File.separator).mkdirs();
+				verFile.mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
@@ -109,7 +106,7 @@ public class Map {
 				result = false;
 			}
 			in.close();
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { }
 		return result;
 	}
 
@@ -141,16 +138,8 @@ public class Map {
 		return image;
 	}
 
-	public String getCompatible() {
-		return pack;
-	}
-
 	public String getMcVersion() {
 		return mcversion;
-	}
-
-	public String getMapName() {
-		return mapname;
 	}
 
 	public String getInfo() {

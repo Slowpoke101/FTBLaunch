@@ -21,7 +21,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -59,7 +58,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 		// TODO: Set loading animation while we wait
 		maps = new JPanel();
-		maps.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
+		maps.setBounds(0, 0, 420, (Map.getMapArray().size()) * 55);
 		maps.setLayout(null);
 		maps.setOpaque(false);
 
@@ -90,7 +89,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(6 + 42 + 10, 36, 420 - (6 + 42 - 6), 42);
+		filler.setBounds(58, 36, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		p.add(filler);
 		maps.add(p);
@@ -102,13 +101,13 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapsScroll.setWheelScrollingEnabled(true);
 		mapsScroll.setOpaque(false);
 		mapsScroll.setViewportView(maps);
-		this.add(mapsScroll);
+		add(mapsScroll);
 	}
 
 	@Override public void onVisible() { }
 
 	/*
-	 * GUI Code to add a modpack to the selection
+	 * GUI Code to add a map to the selection
 	 */
 	public static void addMap(Map map) {
 		if (!mapsAdded) {
@@ -194,7 +193,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		for (int i = 0; i < mapPanels.size(); i++) {
 			if(selectedMap == i) {
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
+				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));

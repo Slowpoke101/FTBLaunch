@@ -31,18 +31,12 @@ public class MinecraftLauncher {
 
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
-					// Check for existing forge versions
 					if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
-						// If forge version is not our currently named forge
 						if(!name.toLowerCase().equalsIgnoreCase(forgename)) {
-							// And our version exists
 							if(new File(tempDir, forgename).exists()) {
-								// Delete theirs
 								new File(tempDir, name).delete();
 							} else {
-								// Our version doesn't exist, lets name it as our forge version
 								new File(tempDir, name).renameTo(new File(tempDir, forgename));
-								// Do nothing because we will add forge in last
 							}
 						}
 					}

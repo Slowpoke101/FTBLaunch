@@ -399,7 +399,6 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
-		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.setSelectedIndex(tab);
 
@@ -435,6 +434,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -730,9 +730,8 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
+		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
-
-		// TODO: Call updateFooter, implement Enum for main panel tabs
 		updateFooter();
 	}
 
@@ -757,7 +756,6 @@ public class LaunchFrame extends JFrame {
 				desktop.browse(uri);
 			} catch(Exception exc) { Logger.logError("Exception occured durring opening Link",exc); }
 		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
-			// check if system is *NIX, if true, try to use xdg-open
 			File xdg = new File("/usr/bin/xdg-open");
 			if (xdg.exists()) {
 				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
@@ -781,7 +779,6 @@ public class LaunchFrame extends JFrame {
 				desktop.browse(uri);
 			} catch (IOException e) { e.printStackTrace(); }
 		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
-			// check if system is *NIX, if true, try to use xdg-open
 			File xdg = new File("/usr/bin/xdg-open");
 			if (xdg.exists()) {
 				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
@@ -858,7 +855,7 @@ public class LaunchFrame extends JFrame {
 			break;
 		}
 	}
-	
+
 	private void updateFolderStructure() {
 		File temp = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(getSelectedModIndex()).getDir() + "/.minecraft");
 		if(temp.exists()) {

@@ -25,8 +25,7 @@ public class ModPack {
 	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName;
 	private Image logo, image;
 	private String info = "This is the info until there is an actual info thingy";
-	private int size;
-	private int index;
+	private int size, index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 
@@ -84,15 +83,13 @@ public class ModPack {
 		imageName = image;
 		String installPath = Settings.getSettings().getInstallPath();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
+		URL url_;
 		if(!upToDate(verFile)) {
-			URL url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png", new File(installPath, "temp" + File.separator + dir + File.separator + logo));
 			tempImg.flush();
-			url_ = new URL(LaunchFrame.getCreeperhostLink(url));
-			URLConnection c = url_.openConnection();
-			this.size = c.getContentLength();
 			url_ =  new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
@@ -100,10 +97,10 @@ public class ModPack {
 			tempImg.flush();
 		} else {
 			this.logo = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + logo);
-			URL url_ = new URL(LaunchFrame.getCreeperhostLink(url));
-			this.size = url_.openConnection().getContentLength();
 			this.image = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + image);
 		}
+		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
+		size = url_.openConnection().getContentLength();
 	}
 
 	private boolean upToDate(File verFile) {
