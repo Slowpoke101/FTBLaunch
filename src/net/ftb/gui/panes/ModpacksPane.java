@@ -2,6 +2,7 @@ package net.ftb.gui.panes;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -64,7 +65,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		//		loadingImage.setLocation(58, 36);
 
 		packs = new JPanel();
-		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
 		packs.setLayout(null);
 		packs.setOpaque(false);
 
@@ -168,6 +168,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.add(logo);
 		packPanels.add(p);
 		packs.add(p);
+		packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+		packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
 	}
 
 	@Override
