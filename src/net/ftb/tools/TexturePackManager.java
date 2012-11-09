@@ -24,11 +24,10 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.Map;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 
-public class MapManager extends JDialog {
+public class TexturePackManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 
 	private JPanel contentPane;
@@ -37,23 +36,23 @@ public class MapManager extends JDialog {
 	private final JLabel label;
 	public static boolean overwrite = false;
 	private static String sep = File.separator;
-
-	private class MapManagerWorker extends SwingWorker<Boolean, Void> {
+	
+	private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
 			String installPath = Settings.getSettings().getInstallPath();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-			if(new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
-				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
-				dialog.setVisible(true);
-				if(overwrite) {
-					new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).delete();
-				} else {
-					Logger.logInfo("Canceled map installation.");
-					return false;
-				}
-			}
-			downloadMap(map.getUrl(), map.getMapName());
+//			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+//			if(new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
+//				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
+//				dialog.setVisible(true);
+//				if(overwrite) {
+//					new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).delete();
+//				} else {
+//					Logger.logInfo("Canceled map installation.");
+//					return false;
+//				}
+//			}
+//			downloadMap(texturePack.getUrl(), texturePack.getMapName());
 			return false;
 		}
 
@@ -85,24 +84,24 @@ public class MapManager extends JDialog {
 			}
 		}
 
-		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
+		protected void downloadTexturePack(String texturePackName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
 			String installPath = Settings.getSettings().getInstallPath();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-			new File(installPath + "/temp/Maps/" + dir + "/").mkdirs();
-			new File(installPath + "/temp/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/temp/Maps/" + dir + "/" + mapName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + mapName);
-			FileUtils.extractZipTo(installPath + "/temp/Maps/" + dir + "/" + mapName, installPath + "/temp/Maps/" + dir);
-			installMap(mapName, dir);
+//			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+			new File(installPath + "/temp/TexturePacks/" + dir + "/").mkdirs();
+			new File(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
+			downloadUrl(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
+			FileUtils.extractZipTo(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, installPath + "/temp/TexturePacks/" + dir);
+			installTexturePack(texturePackName, dir);
 		}
 
-		protected void installMap(String mapName, String dir) throws IOException {
+		protected void installTexturePack(String texturePackName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-			new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
-			FileUtils.copyFolder(new File(installPath, "temp/Maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
-			FileUtils.copyFile(new File(installPath, "temp/Maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
+//			TexturePack map = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+//			new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
+//			FileUtils.copyFolder(new File(installPath, "temp/TexturePacks/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
+//			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -119,8 +118,8 @@ public class MapManager extends JDialog {
 			return result;
 		}
 	}
-
-	public MapManager(JFrame owner, Boolean model) {
+	
+	public TexturePackManager(JFrame owner, Boolean model) {
 		super(owner, model);
 		setResizable(false);
 		setTitle("Downloading...");
@@ -135,7 +134,7 @@ public class MapManager extends JDialog {
 		progressBar.setBounds(10, 63, 278, 22);
 		contentPane.add(progressBar);
 
-		JLabel lblDownloadingMap = new JLabel("Downloading map...\nPlease Wait");
+		JLabel lblDownloadingMap = new JLabel("Downloading texture pack...\nPlease Wait");
 		lblDownloadingMap.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDownloadingMap.setBounds(10, 11, 278, 14);
 		contentPane.add(lblDownloadingMap);
@@ -148,7 +147,7 @@ public class MapManager extends JDialog {
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				MapManagerWorker worker = new MapManagerWorker() {
+				TexturePackManagerWorker worker = new TexturePackManagerWorker() {
 					@Override
 					protected void done() {
 						setVisible(false);
@@ -167,14 +166,14 @@ public class MapManager extends JDialog {
 	}
 
 	public static void cleanUp() {
-		Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "Maps" + sep + map.getMapName() + sep);
-		for(String file: tempFolder.list()) {
-			if(!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
-				try {
-					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) { }
-			}
-		}
+//		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+//		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
+//		for(String file: tempFolder.list()) {
+//			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
+//				try {
+//					FileUtils.delete(new File(tempFolder, file));
+//				} catch (IOException e) { }
+//			}
+//		}
 	}
 }
