@@ -493,11 +493,12 @@ public class LaunchFrame extends JFrame {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
+		updateFolderStructure();
 		// TODO: If minecraft updates to the newest minecraft required by the mod pack, but they have an older version... What do?
-		if(!new File(installPath + "/" + modpack.getDir() + "/.minecraft/bin/minecraft.jar").exists() 
-				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/.minecraft")) {
+		if(!new File(installPath + "/" + modpack.getDir() + "/minecraft/bin/minecraft.jar").exists() 
+				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(modpack.getMcVersion(), "minecraft.jar", new File(new File(installPath, modpack.getDir()), ".minecraft/bin").getPath(), false) {
+			final GameUpdateWorker updater = new GameUpdateWorker(modpack.getMcVersion(), "minecraft.jar", new File(new File(installPath, modpack.getDir()), "minecraft/bin").getPath(), false) {
 				@Override
 				public void done() {
 					progMonitor.close();
@@ -506,7 +507,7 @@ public class LaunchFrame extends JFrame {
 							Logger.logInfo("Game update complete");
 							initializeMods();
 							FileUtils.killMetaInf();
-							launchMinecraft(installPath + "/" + modpack.getDir() + "/.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+							launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							Logger.logError("Error occured during downloading the game");
 						}
@@ -539,7 +540,7 @@ public class LaunchFrame extends JFrame {
 			updater.execute();
 		} else {
 			initializeMods();
-			launchMinecraft(installPath + "/" + modpack.getDir() + "/.minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+			launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
@@ -625,7 +626,22 @@ public class LaunchFrame extends JFrame {
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		new File(installpath + "/" + pack.getDir() + "/instMods/").mkdirs();
 		Logger.logInfo("dirs mk'd");
-		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/.minecraft"), new File(installpath + "/" + pack.getDir() + "/.minecraft"));
+		if(new File(installpath, pack.getDir() + "/instMods/").exists()) {
+			new File(installpath, pack.getDir() + "/instMods/").delete();
+		}
+		if(new File(installpath, pack.getDir() + "/minecraft/mods/").exists()) {
+			new File(installpath, pack.getDir() + "/minecraft/mods/").delete();
+		}
+		if(new File(installpath, pack.getDir() + "/minecraft/coremods/").exists()) {
+			new File(installpath, pack.getDir() + "/minecraft/coremods/").delete();
+		}
+		File source = new File(installpath, "temp/" + pack.getDir() + "/.minecraft");
+		if(!source.exists()) {
+			source = new File(installpath, "temp/" + pack.getDir() + "/minecraft");
+		}
+		FileUtils.copyFolder(new File(source, "mods"), new File(installpath + "/" + pack.getDir() + "/minecraft/mods/"));
+		FileUtils.copyFolder(new File(source, "coremods"), new File(installpath + "/" + pack.getDir() + "/minecraft/coremods/"));
+		FileUtils.copyFolder(new File(source, "config"), new File(installpath + "/" + pack.getDir() + "/minecraft/config/"));
 		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
 	}
 
@@ -840,6 +856,13 @@ public class LaunchFrame extends JFrame {
 		default:
 			updatePackButtons();
 			break;
+		}
+	}
+	
+	private void updateFolderStructure() {
+		File temp = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(getSelectedModIndex()).getDir() + "/.minecraft");
+		if(temp.exists()) {
+			temp.renameTo(new File(Settings.getSettings().getInstallPath(), ModPack.getPack(getSelectedModIndex()).getDir() + "/minecraft"));
 		}
 	}
 }

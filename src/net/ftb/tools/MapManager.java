@@ -43,11 +43,11 @@ public class MapManager extends JDialog {
 		protected Boolean doInBackground() throws Exception {
 			String installPath = Settings.getSettings().getInstallPath();
 			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-			if(new File(installPath, map.getCompatible() + "/.minecraft/saves/" + map.getMapName()).exists()) {
+			if(new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
 				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
 				dialog.setVisible(true);
 				if(overwrite) {
-					new File(installPath, map.getCompatible() + "/.minecraft/saves/" + map.getMapName()).delete();
+					new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).delete();
 				} else {
 					Logger.logInfo("Canceled map installation.");
 					return false;
@@ -100,9 +100,9 @@ public class MapManager extends JDialog {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
 			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-			new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir).mkdirs();
-			FileUtils.copyFolder(new File(installPath, "temp/maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir));
-			FileUtils.copyFile(new File(installPath, "temp/maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/.minecraft/saves/" + dir + "/version"));
+			new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
+			FileUtils.copyFolder(new File(installPath, "temp/maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
+			FileUtils.copyFile(new File(installPath, "temp/maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {

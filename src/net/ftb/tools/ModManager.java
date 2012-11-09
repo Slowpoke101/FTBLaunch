@@ -57,9 +57,9 @@ public class ModManager extends JDialog {
 				try {
 					new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
 					downloadModPack(pack.getUrl(), pack.getDir());
-				} catch (MalformedURLException e) { e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) { e.printStackTrace();
-				} catch (IOException e) { e.printStackTrace(); }
+				} catch (MalformedURLException e) { 
+				} catch (NoSuchAlgorithmException e) { 
+				} catch (IOException e) { }
 			}
 			return false;
 		}
@@ -101,8 +101,6 @@ public class ModManager extends JDialog {
 			new File(installPath + "/temp/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/" + dir + "/" + modPackName).createNewFile();
 			downloadUrl(installPath + "/temp/" + dir + "/" + modPackName, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + LaunchFrame.getTime()) + "/" + modPackName);
-			new File(installPath + "/temp/" + dir + "/instMods").mkdirs();
-			new File(installPath + "/temp/" + dir + "/.minecraft").mkdirs();
 			FileUtils.extractZipTo(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/temp/" + pack.getDir());
 			installMods(modPackName, dir);
 		}
@@ -111,6 +109,7 @@ public class ModManager extends JDialog {
 			System.out.println("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
 			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
+			// TODO: Check to see if this code even executes, I don't think it does.
 			try {
 				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");
 				DataInputStream in1 = new DataInputStream(fstream);
@@ -126,19 +125,6 @@ public class ModManager extends JDialog {
 				in1.close();
 			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
 			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
-			// Delete old /mod/,/coremods/,/instMods/
-			if(new File(installPath, dir + "/instMods/").exists()) {
-				new File(installPath, dir + "/instMods/").delete();
-			}
-			if(new File(installPath, dir + "/.minecraft/mods/").exists()) {
-				new File(installPath, dir + "/.minecraft/mods/").delete();
-			}
-			if(new File(installPath, dir + "/.minecraft/coremods/").exists()) {
-				new File(installPath, dir + "/.minecraft/coremods/").delete();
-			}
-			FileUtils.copyFile(new File(installPath + "/temp/" + dir + "/version"), new File(installPath + "/" + dir));
-			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/instMods"), new File(installPath + "/" + dir + "/intsMods/"));
-			FileUtils.copyFolder(new File(installPath + "/temp/" + dir + "/.minecraft"), new File(installPath + "/" + dir + "/.minecraft/"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
