@@ -1,0 +1,47 @@
+LOCALE_LOADED = Nederlands taalbestand geladen!
+
+# Footer #
+DONATE_BUTTON = Doneer
+
+# Main Tab
+EDIT_BUTTON = Bewerken
+LAUNCH_BUTTON = Starten
+PROFILE_CREATE = Maak Profiel
+PROFILE_SELECT = Kies Profiel
+DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
+
+# Map Tab
+INSTALL_MAP = Installeer Kaart
+DOWNLOAD_MAP_SERVER = Download Serverkaart
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Installeer TexturePack
+
+# Options pane
+INSTALL_FOLDER = Installatiemap...
+FORCE_UPDATE = Forceer update?
+RAM_MIN = Minimum RAM (M)
+RAM_MAX = Maximum RAM (M)
+LANGUAGE = Taal
+
+# Shared strings
+FILTER_SETTINGS = Filterinstellingen
+
+# Modpacks pane
+MODS_EDIT_PACK = Bewerk Mod Pack
+MODS_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de mods worden geladen...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Ingeschakelde Mods
+MODS_EDIT_DISABLED_LABEL = Uitgeschakelde Mods
+MODS_EDIT_OPEN_FOLDER = Open Map
+MODS_EDIT_ADD_MOD = Voeg Mod Toe
+MODS_EDIT_ENABLE_MOD = << Inschakelen
+MODS_EDIT_DISABLE_MOD = Uitschakelen >>
+MODS_EDIT_TITLE = Modpackbewerker
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de kaarten worden geladen...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de texture packs worden geladen...
