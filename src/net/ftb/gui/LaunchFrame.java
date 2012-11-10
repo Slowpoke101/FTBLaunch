@@ -79,8 +79,8 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "1.0.0";
-	private static int buildNumber = 100;
+	private static String version = "1.0.1";
+	private static int buildNumber = 101;
 	private static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
@@ -483,14 +483,16 @@ public class LaunchFrame extends JFrame {
 				try {
 					responseStr = get();
 				} catch (InterruptedException err) {
-					Logger.logWarn("Exception occurred",err); 
+					ErrorUtils.tossError("Exception occurred");
+					enableObjects();
 					return;
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
-						Logger.logWarn("Login failed due IOException",err);
+						ErrorUtils.tossError("Login failed due IOException");
 					} else if (err.getCause() instanceof MalformedURLException) {
-						Logger.logWarn("Login failed due malformed URL",err); 
+						ErrorUtils.tossError("Login failed due malformed URL"); 
 					}
+					enableObjects();
 					return;
 				}
 
