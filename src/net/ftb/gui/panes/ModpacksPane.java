@@ -26,6 +26,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
 import net.ftb.locale.I18N;
+import net.ftb.locale.I18N.Locale;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -267,5 +268,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 		editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
+		if(I18N.currentLocale == Locale.deDE) {
+			editModPack.setBounds(290, 5, 120, 25);
+			typeLbl.setBounds(115, 5, 165, 25);
+		} else {
+			editModPack.setBounds(300, 5, 110, 25);
+			typeLbl.setBounds(115, 5, 175, 25);
+		}
 	}
 }
