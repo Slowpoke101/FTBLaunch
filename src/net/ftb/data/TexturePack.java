@@ -93,7 +93,7 @@ public class TexturePack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				verFile.mkdirs();
+				verFile.getParentFile().mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}

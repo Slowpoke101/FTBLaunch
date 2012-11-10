@@ -69,6 +69,7 @@ import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
+import net.ftb.tools.TexturePackManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.updater.UpdateChecker;
@@ -377,7 +378,9 @@ public class LaunchFrame extends JFrame {
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				TexturePackManager man = new TexturePackManager(new JFrame(), true);
+				man.setVisible(true);
+				TexturePackManager.cleanUp();
 			}
 		});
 

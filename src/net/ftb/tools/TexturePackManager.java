@@ -37,24 +37,17 @@ public class TexturePackManager extends JDialog {
 	private final JLabel label;
 	public static boolean overwrite = false;
 	private static String sep = File.separator;
-	public static String installDir = "";
+	public static String installDir = "FTBBETAA";
 	
 	private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
 			String installPath = Settings.getSettings().getInstallPath();
 			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-//			if(new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
-//				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
-//				dialog.setVisible(true);
-//				if(overwrite) {
-//					new File(installPath, map.getCompatible() + "/minecraft/saves/" + map.getMapName()).delete();
-//				} else {
-//					Logger.logInfo("Canceled map installation.");
-//					return false;
-//				}
-//			}
-//			downloadMap(texturePack.getUrl(), texturePack.getMapName());
+			if(new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).exists()) {
+				new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).delete();
+			}
+			downloadTexturePack(texturePack.getUrl(), texturePack.getName());
 			return false;
 		}
 
@@ -66,7 +59,7 @@ public class TexturePackManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0;
-				int mapSize = Map.getMap(LaunchFrame.getSelectedMapIndex()).getSize();
+				int mapSize = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getSize();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
@@ -92,7 +85,6 @@ public class TexturePackManager extends JDialog {
 			new File(installPath + "/temp/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
 			downloadUrl(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
-			FileUtils.extractZipTo(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, installPath + "/temp/TexturePacks/" + dir);
 			installTexturePack(texturePackName, dir);
 		}
 
@@ -100,9 +92,9 @@ public class TexturePackManager extends JDialog {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
 			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-//			new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
-//			FileUtils.copyFolder(new File(installPath, "temp/TexturePacks/" + dir + "/" + dir), new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir));
-//			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, texturePack.getCompatible() + "/minecraft/saves/" + dir + "/version"));
+			new File(installPath, installDir + "/minecraft/texturepacks/").mkdirs();
+			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
+			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -167,14 +159,14 @@ public class TexturePackManager extends JDialog {
 	}
 
 	public static void cleanUp() {
-//		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-//		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
-//		for(String file: tempFolder.list()) {
-//			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
-//				try {
-//					FileUtils.delete(new File(tempFolder, file));
-//				} catch (IOException e) { }
-//			}
-//		}
+		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
+		for(String file: tempFolder.list()) {
+			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
+				try {
+					FileUtils.delete(new File(tempFolder, file));
+				} catch (IOException e) { }
+			}
+		}
 	}
 }
