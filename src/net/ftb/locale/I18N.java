@@ -1,6 +1,7 @@
 package net.ftb.locale;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -50,7 +51,7 @@ public class I18N {
 		}
 		try {
 			locales.clear();
-			locales.load(I18N.class.getResourceAsStream("/i18n/" + locale));
+			locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + locale).openStream(), "UTF8"));
 			Logger.logInfo("[i18n] " + locale + " " + locales.getProperty("LOCALE_LOADED", "loaded"));
 		} catch (IOException e) {
 			Logger.logError("[i18n] Could not load locale file", e);
