@@ -115,7 +115,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setForeground(Color.white);
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
-		//		p.add(loadingImage);
+//		p.add(loadingImage);
 		p.add(filler);
 		packs.add(p);
 
@@ -130,8 +130,20 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		packInfo = new JTextArea();
 		packInfo.setEditable(false);
+		packInfo.setWrapStyleWord(true);
+		packInfo.setLineWrap(true);
 		packInfo.setBounds(420, 210, 410, 90);
+		packInfo.setBackground(UIManager.getColor("control").darker().darker());
 		add(packInfo);
+		
+		JScrollPane infoScroll = new JScrollPane();
+		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		infoScroll.setWheelScrollingEnabled(true);
+		infoScroll.setViewportView(packInfo);
+		infoScroll.setOpaque(false);
+		add(infoScroll);
 	}
 
 	@Override public void onVisible() { }
