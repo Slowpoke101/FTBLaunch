@@ -82,7 +82,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(filter);
 
 		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
-		typeLbl.setBounds(115, 5, 174, 25);
+		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
