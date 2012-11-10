@@ -1,0 +1,41 @@
+LOCALE_LOADED = Deutsche Sprachdatei geladen!
+
+# LaunchFrame
+DOWNLOAD_SERVER_PACK = Serverpack downloaden
+INSTALL_MAP = Map installieren
+DOWNLOAD_MAP_SERVER = Server-Map downloaden
+
+# Footer
+DONATE_BUTTON = Spenden
+EDIT_BUTTON = Bearbeiten
+LAUNCH_BUTTON = Starten
+PROFILE_CREATE = Profil erstellen
+PROFILE_SELECT = Profil auswaehlen
+
+# Options pane
+INSTALL_FOLDER = Installationsverzeichnis
+FORCE_UPDATE = Update erzwingen?
+RAM_MIN = RAM Minimum (M)
+RAM_MAX = RAM Maximum (M)
+LANGUAGE = Sprache
+
+# Shared strings
+FILTER_SETTINGS = Filtereinstellungen
+
+# Modpacks pane
+MODS_EDIT_PACK = Modpack bearbeiten
+MODS_WAIT_WHILE_LOADING = Bitte warten waehrend Mods geladen werden...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
+MODS_EDIT_DISABLED_LABEL = Deaktivierte Mods
+MODS_EDIT_OPEN_FOLDER = Verzeichnis oeffnen
+MODS_EDIT_ADD_MOD = Mod hinzufuegen
+MODS_EDIT_ENABLE_MOD = aktivieren >>
+MODS_EDIT_DISABLE_MOD = << deaktivieren
+MODS_EDIT_TITLE = Modpack bearbeiten
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Bitte warten waehrend Maps geladen werden...
+
+# Texturepacks pane

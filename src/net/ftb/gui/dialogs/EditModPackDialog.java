@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -35,13 +36,13 @@ public class EditModPackDialog extends JDialog {
 	private JPanel coreModsFolderPane = new JPanel();
 	private JPanel jarModsFolderPane = new JPanel();
 
-	private JLabel enabledLabel = new JLabel("<html><body><h1>Enabled Mods</h1></html></body>");
-	private JLabel disabledLabel = new JLabel("<html><body><h1>Disabled Mods</h1></html></body>");
+	private JLabel enabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL") + "</h1></html></body>");
+	private JLabel disabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL") + "</h1></html></body>");
 
-	private JButton openFolderButton = new JButton("Open Folder");
-	private JButton addModButton = new JButton("Add Mod");
-	private JButton disableMod = new JButton("Disable Mod >>");
-	private JButton enableMod = new JButton("<< Enable Mod");
+	private JButton openFolderButton = new JButton(I18N.getLocaleString("MODS_EDIT_OPEN_FOLDER"));
+	private JButton addModButton = new JButton(I18N.getLocaleString("MODS_EDIT_ADD_MOD"));
+	private JButton disableMod = new JButton(I18N.getLocaleString("MODS_EDIT_DISABLE_MOD"));
+	private JButton enableMod = new JButton(I18N.getLocaleString("MODS_EDIT_ENABLE_MOD"));
 
 	private JList enabled = new JList();
 	private JList disabled = new JList();
@@ -73,7 +74,7 @@ public class EditModPackDialog extends JDialog {
 		jarModsFolder.mkdirs();
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Mod Pack Editor");
+		setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
 		setBounds(300, 300, 635, 525);
 		setResizable(false);
 		getContentPane().setLayout(null);
