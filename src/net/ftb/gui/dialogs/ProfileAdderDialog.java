@@ -16,6 +16,7 @@ import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.util.ErrorUtils;
 
 public class ProfileAdderDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -95,14 +96,22 @@ public class ProfileAdderDialog extends JDialog {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(validate(name.getText(), username.getText(), password.getPassword())) {
-					if(savePassword.isSelected()) {
+				if(savePassword.isSelected()) {
+					if(validate(name.getText(), username.getText(), password.getPassword())) {
 						UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
+						LaunchFrame.writeUsers(name.getText());
+						setVisible(false);
 					} else {
-						UserManager.addUser(username.getText(), "", name.getText());
+						ErrorUtils.tossError("Unable to create profile.");
 					}
-					LaunchFrame.writeUsers(name.getText());
-					setVisible(false);
+				} else {
+					if(validate(name.getText(), username.getText())) {
+						UserManager.addUser(username.getText(), "", name.getText());
+						LaunchFrame.writeUsers(name.getText());
+						setVisible(false);
+					} else {
+						ErrorUtils.tossError("Unable to create profile.");
+					}
 				}
 			}
 		});
@@ -111,6 +120,15 @@ public class ProfileAdderDialog extends JDialog {
 
 	private boolean validate(String name, String user, char[] pass) {
 		if(!name.isEmpty() && !user.isEmpty() && pass.length > 1) {
+			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean validate(String name, String user) {
+		if(!name.isEmpty() && !user.isEmpty()) {
 			if(!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
 				return true;
 			}

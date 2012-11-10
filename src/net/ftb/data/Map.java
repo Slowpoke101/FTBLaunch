@@ -21,8 +21,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.MapLoader;
 
 public class Map {
-	private String name, author, version, url, mapname, mcversion, logoName, imageName, pack;
-	private String info = "This is the info until there is an actual info thingy";
+	private String name, author, version, url, mapname, mcversion, logoName, imageName, pack, info;
 	private Image logo, image;
 	private int size, index;
 
@@ -56,7 +55,7 @@ public class Map {
 		return maps.get(i);
 	}
 
-	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, int idx) throws NoSuchAlgorithmException, IOException {
+	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -66,6 +65,7 @@ public class Map {
 		this.mcversion = mcversion;
 		this.mapname = mapname;
 		String installPath = Settings.getSettings().getInstallPath();
+		this.info = info;
 		logoName = logo;
 		imageName = image;
 		// TODO: Figure out how to do version checking on maps.

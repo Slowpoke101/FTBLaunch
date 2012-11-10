@@ -37,7 +37,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
@@ -52,7 +51,6 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
@@ -69,9 +67,9 @@ import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
-import net.ftb.tools.TexturePackManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
+import net.ftb.tools.TexturePackManager;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
@@ -94,10 +92,11 @@ public class LaunchFrame extends JFrame {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
 			tpInstall = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
-	private static JComboBox users;
+	private static JComboBox users, tpInstallLocation;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
@@ -161,19 +160,16 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occurred",e1); 
-					} catch (InstantiationException e1) { Logger.logWarn("Exception occurred",e1); 
-					} catch (IllegalAccessException e1) { Logger.logWarn("Exception occurred",e1); 
-					} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occurred",e1); }
+					} catch (ClassNotFoundException e1) { 
+					} catch (InstantiationException e1) { 
+					} catch (IllegalAccessException e1) { 
+					} catch (UnsupportedLookAndFeelException e1) { }
 				}
 
 				// Load settings
 				try {
 					Settings.initSettings();
-				} catch (IOException e) {
-					Logger.logWarn("Exception occurred",e); 
-					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				}
+				} catch (IOException e) { }
 
 				// Setup localizations
 				I18N.setLocale(Settings.getSettings().getLocale());
@@ -196,11 +192,11 @@ public class LaunchFrame extends JFrame {
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
 
-				Map.addListener(frame.mapsPane);
-				Map.loadAll();
+				//				Map.addListener(frame.mapsPane);
+				//				Map.loadAll();
 
-				TexturePack.addListener(frame.tpPane);
-				TexturePack.loadAll();
+				//				TexturePack.addListener(frame.tpPane);
+				//				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()){
@@ -372,17 +368,27 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		tpInstall.setBounds(480, 20, 330, 30);
+		tpInstall.setBounds(650, 20, 160, 30);
 		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
 		tpInstall.setVisible(false);
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				TexturePackManager.installDir = (String)tpInstallLocation.getSelectedItem();
 				TexturePackManager man = new TexturePackManager(new JFrame(), true);
 				man.setVisible(true);
 				TexturePackManager.cleanUp();
 			}
 		});
+
+		tpInstallLocation = new JComboBox();
+		tpInstallLocation.setBounds(480, 20, 160, 30);
+		tpInstallLocation.setToolTipText("Install to...");
+		tpInstallLocation.setVisible(false);
+
+		tpInstallLocLbl.setText("Install to...");
+		tpInstallLocLbl.setBounds(480, 20, 80, 30);
+		tpInstallLocLbl.setVisible(false);
 
 		footer.add(edit);
 		footer.add(users);
@@ -394,6 +400,7 @@ public class LaunchFrame extends JFrame {
 		footer.add(mapInstall);
 		footer.add(serverMap);
 		footer.add(tpInstall);
+		footer.add(tpInstallLocation);
 
 		newsPane = new NewsPane();
 		modPacksPane = new ModpacksPane();
@@ -417,9 +424,11 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.setSelectedIndex(tab);
 
@@ -454,8 +463,8 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
-		tabbedPane.setEnabledAt(3, false);
-		tabbedPane.setEnabledAt(4, false);
+		//		tabbedPane.setEnabledAt(3, false);
+		//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -464,6 +473,8 @@ public class LaunchFrame extends JFrame {
 		serverbutton.setEnabled(false);
 		mapInstall.setEnabled(false);
 		serverMap.setEnabled(false);
+		tpInstall.setEnabled(false);
+		tpInstallLocation.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
@@ -716,6 +727,13 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	public static void updateTpInstallLocs(String[] locations) {
+		tpInstallLocation.removeAllItems();
+		for(int i = 0; i < locations.length; i++) {
+			tpInstallLocation.addItem(locations[i]);
+		}
+	}
+
 	/**
 	 * @param A - First string array
 	 * @param B - Second string array
@@ -763,8 +781,8 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
-		tabbedPane.setEnabledAt(3, true);
-		tabbedPane.setEnabledAt(4, true);
+		//		tabbedPane.setEnabledAt(3, true);
+		//		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
@@ -773,6 +791,7 @@ public class LaunchFrame extends JFrame {
 		launch.setEnabled(true);
 		users.setEnabled(true);
 		serverbutton.setEnabled(true);
+		tpInstallLocation.setEnabled(true);
 	}
 
 	/**
@@ -863,6 +882,7 @@ public class LaunchFrame extends JFrame {
 
 	public void disableTextureButtons() {
 		tpInstall.setVisible(false);
+		tpInstallLocation.setVisible(false);
 	}
 
 	public void updateFooter() {
@@ -877,6 +897,7 @@ public class LaunchFrame extends JFrame {
 			break;
 		case TEXTURE:
 			tpInstall.setVisible(true);
+			tpInstallLocation.setVisible(true);
 			disableMainButtons();
 			disableMapButtons();
 			break;
@@ -899,11 +920,15 @@ public class LaunchFrame extends JFrame {
 			donate.setBounds(330, 20, 80, 30);
 			mapInstall.setBounds(420, 20, 390, 30);
 			serverbutton.setBounds(420, 20, 390, 30);
+			tpInstallLocation.setBounds(420, 20, 190, 30);
+			tpInstall.setBounds(620, 20, 190, 30);
 		} else {
 			edit.setBounds(480, 20, 60, 30);
 			donate.setBounds(390, 20, 80, 30);
 			mapInstall.setBounds(480, 20, 330, 30);
 			serverbutton.setBounds(480, 20, 330, 30);
+			tpInstallLocation.setBounds(480, 20, 160, 30);
+			tpInstall.setBounds(650, 20, 160, 30);
 		}
 		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
 		edit.setText(I18N.getLocaleString("EDIT_BUTTON"));

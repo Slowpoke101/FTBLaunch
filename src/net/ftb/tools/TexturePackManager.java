@@ -21,7 +21,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import net.ftb.data.Map;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
@@ -38,7 +37,7 @@ public class TexturePackManager extends JDialog {
 	public static boolean overwrite = false;
 	private static String sep = File.separator;
 	public static String installDir = "FTBBETAA";
-	
+
 	private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
@@ -111,7 +110,7 @@ public class TexturePackManager extends JDialog {
 			return result;
 		}
 	}
-	
+
 	public TexturePackManager(JFrame owner, Boolean model) {
 		super(owner, model);
 		setResizable(false);

@@ -27,8 +27,7 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 
-//			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
-			MODPACKSFILE = "https://dl.dropbox.com/u/2405919/modpack.xml";
+			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
 			Document doc;
 			try {
@@ -56,11 +55,12 @@ public class ModpackLoader extends Thread {
 					ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
 							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
 							modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image").getTextContent(),
-							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack").getTextContent(), i));
-				} catch (DOMException e) { Logger.logError("Exception during reading modpackfile",e);
-				} catch (IOException e) { Logger.logError("Exception during reading modpackfile",e); }
+							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), 
+							modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(), i));
+				} catch (DOMException e) { 
+				} catch (IOException e) { }
 			}
 			ModpacksPane.loaded = true;
-		} catch (NoSuchAlgorithmException e1) { Logger.logError("Exception during reading modpackfile",e1); }
+		} catch (NoSuchAlgorithmException e1) { }
 	}
 }

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.Map;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -27,8 +28,7 @@ public class MapLoader extends Thread {
 		try {
 			Logger.logInfo("loading map information...");
 
-//			MAPFILE = LaunchFrame.getCreeperhostLink("maps.xml");
-			MAPFILE = "https://dl.dropbox.com/u/2405919/maps.xml";
+			MAPFILE = LaunchFrame.getCreeperhostLink("maps.xml");
 
 			Document doc = AppUtils.downloadXML(new URL(MAPFILE));
 			if(doc == null) {
@@ -42,7 +42,7 @@ public class MapLoader extends Thread {
 						mapAttr.getNamedItem("version").getTextContent(), mapAttr.getNamedItem("url").getTextContent(),
 						mapAttr.getNamedItem("logo").getTextContent(), mapAttr.getNamedItem("image").getTextContent(),
 						mapAttr.getNamedItem("compatible").getTextContent(), mapAttr.getNamedItem("mcversion").getTextContent(), 
-						mapAttr.getNamedItem("mapname").getTextContent(), i));
+						mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description").getTextContent(), i));
 			}
 			MapsPane.loaded = true;
 		} catch (MalformedURLException e) { 

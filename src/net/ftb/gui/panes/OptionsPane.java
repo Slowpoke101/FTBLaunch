@@ -201,7 +201,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setRamMin(ramMinimum.getText());
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 	}
-	
+
 	public void updateLocale() {
 		lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
 		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));

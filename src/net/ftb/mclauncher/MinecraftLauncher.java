@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import net.ftb.gui.LauncherConsole;
 import net.ftb.log.Logger;

@@ -21,7 +21,7 @@ public class I18N {
 		enUS,
 		deDE
 	}
-	
+
 	/**
 	 * Set available locales and load fallback locale
 	 */

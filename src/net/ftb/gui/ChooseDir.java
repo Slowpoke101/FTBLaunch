@@ -19,7 +19,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 
 	private OptionsPane optionsPane;
 	private EditModPackDialog editMPD;
-	private String choosertitle = "Please select an install FTB Testingfolder";
+	private String choosertitle = "Please select an install location";
 
 	public ChooseDir(OptionsPane optionsPane) {
 		super();

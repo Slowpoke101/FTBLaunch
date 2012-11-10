@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName;
+	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info;
 	private Image logo, image;
-	private String info = "This is the info until there is an actual info thingy";
 	private int size, index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
@@ -70,7 +68,7 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, int idx) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, int idx) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -81,6 +79,7 @@ public class ModPack {
 		this.serverUrl = serverUrl;
 		logoName = logo;
 		imageName = image;
+		this.info = info;
 		String installPath = Settings.getSettings().getInstallPath();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
 		URL url_;
@@ -124,11 +123,11 @@ public class ModPack {
 		} catch (IOException e) { e.printStackTrace(); }
 		return result;
 	}
-	
+
 	public int getIndex() {
 		return index;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -172,11 +171,11 @@ public class ModPack {
 	public String getServerUrl() {
 		return serverUrl;
 	}
-	
+
 	public String getLogoName() {
 		return logoName;
 	}
-	
+
 	public String getImageName() {
 		return imageName;
 	}

@@ -21,9 +21,9 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
-	private String name, author, version, url, mcversion, logoName, imageName;
-	private String info = "This is the info until there is an actual info thingy";
+	private String name, author, version, url, mcversion, logoName, imageName, info;
 	private Image logo, image;
+	private String[] compatible;
 	private int size, index;
 	private String sep = File.separator;
 
@@ -57,7 +57,7 @@ public class TexturePack {
 		return texturePacks.get(i);
 	}
 
-	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, int idx) throws NoSuchAlgorithmException, IOException {
+	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -67,6 +67,8 @@ public class TexturePack {
 		String installPath = Settings.getSettings().getInstallPath();
 		logoName = logo;
 		imageName = image;
+		this.compatible = compatible.split(",");
+		this.info = info;
 		File verFile = new File(installPath, "temp" + sep + "TexturePacks" + sep + name + sep + "version");
 		File dir = new File(installPath, "temp" + sep + "TexturePacks" + sep + name);
 		URL url_;
@@ -157,5 +159,9 @@ public class TexturePack {
 
 	public String getImageName() {
 		return imageName;
+	}
+
+	public String[] getCompatible() {
+		return compatible;
 	}
 }

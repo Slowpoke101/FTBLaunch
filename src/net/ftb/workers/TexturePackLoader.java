@@ -6,6 +6,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.TexturePack;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -19,17 +20,16 @@ import org.xml.sax.SAXException;
 
 public class TexturePackLoader extends Thread {
 	private static String TEXTUREPACKFILE;
-	
+
 	public TexturePackLoader() { }
-	
+
 	@Override
 	public void run() {
 		try {
 			Logger.logInfo("loading texture pack information...");
-			
-//			TEXTUREPACKFILE = LaunchFrame.getCreeperhostLink("texturepack.xml");
-			TEXTUREPACKFILE = "https://dl.dropbox.com/u/2405919/texturepack.xml";
-			
+
+			TEXTUREPACKFILE = LaunchFrame.getCreeperhostLink("texturepack.xml");
+
 			Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
 			if(doc == null) {
 				Logger.logError("Error: Could not load texture pack data!");
@@ -37,11 +37,12 @@ public class TexturePackLoader extends Thread {
 			NodeList texturePacks = doc.getElementsByTagName("texturepack");
 			for(int i = 0; i < texturePacks.getLength(); i++) {
 				Node texturePack = texturePacks.item(i);
-				NamedNodeMap mapAttr = texturePack.getAttributes();
-				TexturePack.addTexturePack(new TexturePack(mapAttr.getNamedItem("name").getTextContent(), mapAttr.getNamedItem("author").getTextContent(),
-						mapAttr.getNamedItem("version").getTextContent(), mapAttr.getNamedItem("url").getTextContent(),
-						mapAttr.getNamedItem("logo").getTextContent(), mapAttr.getNamedItem("image").getTextContent(),
-						mapAttr.getNamedItem("mcversion").getTextContent(), i));
+				NamedNodeMap textureAttr = texturePack.getAttributes();
+				TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(),
+						textureAttr.getNamedItem("version").getTextContent(), textureAttr.getNamedItem("url").getTextContent(),
+						textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
+						textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), 
+						textureAttr.getNamedItem("description").getTextContent(), i));
 			}
 			TexturepackPane.loaded = true;
 		} catch (MalformedURLException e) { 

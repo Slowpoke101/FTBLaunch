@@ -42,6 +42,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static boolean modPacksAdded = false;
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 	private final ModpacksPane instance = this;
+	private static JTextArea packInfo;
 
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
@@ -126,6 +127,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
 		add(packsScroll);
+
+		packInfo = new JTextArea();
+		packInfo.setEditable(false);
+		packInfo.setBounds(420, 210, 410, 90);
+		add(packInfo);
 	}
 
 	@Override public void onVisible() { }
@@ -147,7 +153,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
 		logo.setVisible(true);
-		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + pack.getInfo());
+		String info = "";
+		if(pack.getInfo().length() > 60) {
+			info = pack.getInfo().substring(0, 59) + "...";
+		} else {
+			info = pack.getInfo();
+		}
+		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + info);
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
@@ -228,6 +240,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				packInfo.setText(ModPack.getPack(getIndex()).getInfo());
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -264,7 +277,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 		return packPanels.size();
 	}
-	
+
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 		editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));

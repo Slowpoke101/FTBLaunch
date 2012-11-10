@@ -22,7 +22,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -125,7 +124,13 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		JLabel logo = new JLabel(new ImageIcon(map.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
 		logo.setVisible(true);
-		JTextArea filler = new JTextArea(map.getName() + " : " + map.getAuthor() + "\n" + map.getInfo());
+		String info = "";
+		if(map.getInfo().length() > 60) {
+			info = map.getInfo().substring(0, 59) + "...";
+		} else {
+			info = map.getInfo();
+		}
+		JTextArea filler = new JTextArea(map.getName() + " : " + map.getAuthor() + "\n" + info);
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
@@ -242,7 +247,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 		return mapPanels.size();
 	}
-	
+
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}

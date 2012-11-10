@@ -100,7 +100,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	@Override public void onVisible() { }
 
 	/*
-	 * GUI Code to add a map to the selection
+	 * GUI Code to add a texture pack to the selection
 	 */
 	public static void addTexturePack(TexturePack texturePack) {
 		if (!texturePacksAdded) {
@@ -116,7 +116,13 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		JLabel logo = new JLabel(new ImageIcon(texturePack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
 		logo.setVisible(true);
-		JTextArea filler = new JTextArea(texturePack.getName() + " : " + texturePack.getAuthor() + "\n" + texturePack.getInfo());
+		String info = "";
+		if(texturePack.getInfo().length() > 60) {
+			info = texturePack.getInfo().substring(0, 59) + "...";
+		} else {
+			info = texturePack.getInfo();
+		}
+		JTextArea filler = new JTextArea(texturePack.getName() + " : " + texturePack.getAuthor() + "\n" + info);
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
@@ -197,6 +203,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(TexturePack.getTexturePack(getIndex()).getImage()));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
 			} else {
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control"));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -233,7 +240,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		}
 		return texturePackPanels.size();
 	}
-	
+
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}
