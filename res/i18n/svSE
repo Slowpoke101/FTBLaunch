@@ -1,0 +1,47 @@
+LOCALE_LOADED = Svensk språkfil laddad!
+
+# Footer #
+DONATE_BUTTON = Donera
+
+# Main Tab
+EDIT_BUTTON = Ändra
+LAUNCH_BUTTON = Starta
+PROFILE_CREATE = Skapa Profil
+PROFILE_SELECT = Välj Profil
+DOWNLOAD_SERVER_PACK = Skaffa Serverversionen Här
+
+# Map Tab
+INSTALL_MAP = Installera Värld
+DOWNLOAD_MAP_SERVER = Ladda Ner Servervärld
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Installera Texturpaket
+
+# Options pane
+INSTALL_FOLDER = Installera mapp...
+FORCE_UPDATE = Tvinga uppdatering?
+RAM_MIN = RAM Minimum (M)
+RAM_MAX = RAM Maximum (M)
+LANGUAGE = Språk
+
+# Shared strings
+FILTER_SETTINGS = Filtreringsinställningar
+
+# Modpacks pane
+MODS_EDIT_PACK = Ändra Moddpaket
+MODS_WAIT_WHILE_LOADING = Var vänlig vänta medans moddarna laddas...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Aktivera Moddar
+MODS_EDIT_DISABLED_LABEL = Inaktivera Moddar
+MODS_EDIT_OPEN_FOLDER = Öppna Mapp
+MODS_EDIT_ADD_MOD = Lägg Till Modd
+MODS_EDIT_ENABLE_MOD = << Aktivera
+MODS_EDIT_DISABLE_MOD = Inaktivera >>
+MODS_EDIT_TITLE = Moddpaketsredigerare
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Var vänlig vänta medans världarna laddas...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Var vänlig vänta medans texturpaketen laddas...
