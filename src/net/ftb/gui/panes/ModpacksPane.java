@@ -20,12 +20,12 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.locale.I18N;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -262,5 +262,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		}
 		return packPanels.size();
+	}
+	
+	public void updateLocale() {
+		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
+		editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
 	}
 }

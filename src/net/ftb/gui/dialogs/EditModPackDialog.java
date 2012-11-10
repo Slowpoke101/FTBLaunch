@@ -21,11 +21,11 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

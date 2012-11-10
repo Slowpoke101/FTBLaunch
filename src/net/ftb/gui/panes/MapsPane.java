@@ -21,12 +21,12 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import net.ftb.data.I18N;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.locale.I18N;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -91,7 +91,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(58, 36, 378, 42);
+		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		p.add(filler);
 		maps.add(p);
@@ -241,5 +241,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			}
 		}
 		return mapPanels.size();
+	}
+	
+	public void updateLocale() {
+		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}
 }

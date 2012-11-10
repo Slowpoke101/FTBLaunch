@@ -19,11 +19,11 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
-import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -31,8 +31,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	protected static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	private JTextField ramMinimum;
-	private JTextField ramMaximum;
+	private JLabel lblInstallFolder, lblRamMinimum, lblRamMaximum, lblLocale;
+	private JTextField ramMinimum, ramMaximum;
 	private JComboBox locale;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
@@ -72,7 +72,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir(this));
 
-		JLabel lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
+		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
 		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
 		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
 		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
@@ -114,7 +114,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_tglbtnForceUpdate.gridy = 4;
 		this.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
 
-		JLabel lblRamMinimum = new JLabel(I18N.getLocaleString("RAM_MIN"));
+		lblRamMinimum = new JLabel(I18N.getLocaleString("RAM_MIN"));
 		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
 		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
@@ -124,7 +124,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(ramMinimum, gbc_textField_1);
 		ramMinimum.setColumns(10);
 
-		JLabel lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
+		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
 		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
@@ -146,10 +146,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_locale.fill = GridBagConstraints.HORIZONTAL;
 		gbc_locale.gridx = 2;
 		gbc_locale.gridy = 8;
+		locale.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				I18N.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
+				if(LaunchFrame.getInstance() != null) {
+					LaunchFrame.getInstance().updateLocale();
+				}
+			}
+		});
 		locale.addFocusListener(settingsChangeListener);
 		locale.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
 
-		JLabel lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
+		lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
 		GridBagConstraints gbc_lblLocale = new GridBagConstraints();
 		gbc_lblLocale.anchor = GridBagConstraints.EAST;
 		gbc_lblLocale.insets = new Insets(0, 0, 5, 5);
@@ -191,5 +200,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
+	}
+	
+	public void updateLocale() {
+		lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
+		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));
+		lblRamMinimum.setText(I18N.getLocaleString("RAM_MIN"));
+		lblRamMaximum.setText(I18N.getLocaleString("RAM_MAX"));
+		lblLocale.setText(I18N.getLocaleString("LANGUAGE"));
 	}
 }

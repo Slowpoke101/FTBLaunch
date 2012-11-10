@@ -20,9 +20,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +63,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		filter = new JButton("Filter Settings");
+		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);
 		filter.addActionListener(new ActionListener() {
 			@Override
@@ -77,11 +78,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
-		JTextArea filler = new JTextArea("Please wait while texture packs are being loaded...");
+		JTextArea filler = new JTextArea(I18N.getLocaleString("TEXTURE_WAIT_WHILE_LOADING"));
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(58, 36, 378, 42);
+		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		p.add(filler);
 		texturePacks.add(p);
@@ -210,7 +211,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
 		sortTexturePacks();
-		//		LaunchFrame.getInstance().updateTexturePackButtons();
+		LaunchFrame.getInstance().updateTexturePackButtons();
 	}
 
 	private static int getIndex() {
@@ -231,5 +232,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 			}
 		}
 		return texturePackPanels.size();
+	}
+	
+	public void updateLocale() {
+		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}
 }

@@ -48,7 +48,6 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.ftb.data.I18N;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
@@ -64,6 +63,8 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.NewsPane;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.locale.I18N;
+import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
@@ -94,7 +95,7 @@ public class LaunchFrame extends JFrame {
 
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
 			tpInstall = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" }; // TODO: i18n
 	private static JComboBox users;
@@ -162,17 +163,17 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occured",e1); 
-					} catch (InstantiationException e1) { Logger.logWarn("Exception occured",e1); 
-					} catch (IllegalAccessException e1) { Logger.logWarn("Exception occured",e1); 
-					} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occured",e1); }
+					} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occurred",e1); 
+					} catch (InstantiationException e1) { Logger.logWarn("Exception occurred",e1); 
+					} catch (IllegalAccessException e1) { Logger.logWarn("Exception occurred",e1); 
+					} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occurred",e1); }
 				}
 
 				// Load settings
 				try {
 					Settings.initSettings();
 				} catch (IOException e) {
-					Logger.logWarn("Exception occured",e); 
+					Logger.logWarn("Exception occurred",e); 
 					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
@@ -262,7 +263,9 @@ public class LaunchFrame extends JFrame {
 		});
 
 		userManager.read();
-
+		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
+		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
+		
 		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
@@ -312,6 +315,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
 		launch.setBounds(711, 20, 100, 30);
 		launch.addActionListener(new ActionListener() {
 			@Override
@@ -325,7 +329,6 @@ public class LaunchFrame extends JFrame {
 
 		serverbutton.setBounds(480, 20, 330, 30);
 		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
-		serverbutton.setEnabled(false);
 		serverbutton.setVisible(false);
 		serverbutton.addActionListener(new ActionListener() {
 			@Override
@@ -341,7 +344,6 @@ public class LaunchFrame extends JFrame {
 
 		mapInstall.setBounds(480, 20, 330, 30);
 		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
-		mapInstall.setEnabled(false);
 		mapInstall.setVisible(false);
 		mapInstall.addActionListener(new ActionListener() {
 			@Override
@@ -356,7 +358,6 @@ public class LaunchFrame extends JFrame {
 
 		serverMap.setBounds(480, 20, 330, 30);
 		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
-		serverMap.setEnabled(false);
 		serverMap.setVisible(false);
 		serverMap.addActionListener(new ActionListener() {
 			@Override
@@ -369,6 +370,16 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
+		
+		tpInstall.setBounds(480, 20, 330, 30);
+		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
+		tpInstall.setVisible(false);
+		tpInstall.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 
 		footer.add(edit);
 		footer.add(users);
@@ -379,6 +390,7 @@ public class LaunchFrame extends JFrame {
 		footer.add(serverbutton);
 		footer.add(mapInstall);
 		footer.add(serverMap);
+		footer.add(tpInstall);
 
 		newsPane = new NewsPane();
 		modPacksPane = new ModpacksPane();
@@ -389,6 +401,7 @@ public class LaunchFrame extends JFrame {
 		getRootPane().setDefaultButton(launch);
 
 		loadSettings();
+		updateLocale();
 
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
@@ -456,7 +469,7 @@ public class LaunchFrame extends JFrame {
 				try {
 					responseStr = get();
 				} catch (InterruptedException err) {
-					Logger.logWarn("Exception occured",err); 
+					Logger.logWarn("Exception occurred",err); 
 					return;
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
@@ -514,7 +527,7 @@ public class LaunchFrame extends JFrame {
 							FileUtils.killMetaInf();
 							launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
-							Logger.logError("Error occured during downloading the game");
+							Logger.logError("Error occurred during downloading the game");
 						}
 					} catch (CancellationException e) { 
 						Logger.logInfo("Game update canceled",e);
@@ -669,10 +682,10 @@ public class LaunchFrame extends JFrame {
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
-			Logger.logError("Exception occured",e);
+			Logger.logError("Exception occurred",e);
 			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
-			Logger.logError("Exception occured",e);
+			Logger.logError("Exception occurred",e);
 			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -683,7 +696,7 @@ public class LaunchFrame extends JFrame {
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) { Logger.logError("Exception occured", e); }
+		} catch (IOException e) { Logger.logError("Exception occurred", e); }
 		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
@@ -757,7 +770,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			ModManager.cleanUp();
-		} catch (IOException e) { Logger.logError("Exception ocured", e); }
+		} catch (IOException e) { Logger.logError("Exception occurred", e); }
 	}
 
 
@@ -766,7 +779,7 @@ public class LaunchFrame extends JFrame {
 			Desktop desktop = Desktop.getDesktop();
 			try {
 				desktop.browse(uri);
-			} catch(Exception exc) { Logger.logError("Exception occured durring opening Link",exc); }
+			} catch(Exception exc) { Logger.logError("Exception occurred durring opening Link",exc); }
 		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
 			File xdg = new File("/usr/bin/xdg-open");
 			if (xdg.exists()) {
@@ -827,38 +840,57 @@ public class LaunchFrame extends JFrame {
 
 	public void updateModPackButtons() {
 		boolean result = modPacksPane.type.equals("Server");
-		launch.setEnabled(!result);
 		launch.setVisible(!result);
-		edit.setEnabled(!result && users.getSelectedIndex() > 1);
+		edit.setEnabled(users.getSelectedIndex() > 1);
 		edit.setVisible(!result);
-		users.setEnabled(!result);
 		users.setVisible(!result);
-		serverbutton.setEnabled(result);
 		serverbutton.setVisible(result);
-		mapInstall.setEnabled(false);
 		mapInstall.setVisible(false);
-		serverMap.setEnabled(false);
 		serverMap.setVisible(false);
-		tpInstall.setEnabled(false);
 		tpInstall.setVisible(false);
 	}
 
 	public void updateMapButtons() {
 		boolean result = mapsPane.type.equals("Server");
-		mapInstall.setEnabled(!result);
 		mapInstall.setVisible(!result);
-		serverMap.setEnabled(result);
 		serverMap.setVisible(result);
-		serverbutton.setEnabled(false);
 		serverbutton.setVisible(false);
-		launch.setEnabled(false);
 		launch.setVisible(false);
-		edit.setEnabled(false);
 		edit.setVisible(false);
-		users.setEnabled(false);
 		users.setVisible(false);
-		tpInstall.setEnabled(false);
 		tpInstall.setVisible(false);
+	}
+	
+	public void updateTexturePackButtons() {
+		
+	}
+	
+	public void updateLocale() {
+		if(I18N.currentLocale == Locale.deDE) {
+			edit.setBounds(420, 20, 120, 30);
+			donate.setBounds(330, 20, 80, 30);
+			mapInstall.setBounds(420, 20, 390, 30);
+			serverbutton.setBounds(420, 20, 390, 30);
+		} else {
+			edit.setBounds(480, 20, 60, 30);
+			donate.setBounds(390, 20, 80, 30);
+			mapInstall.setBounds(480, 20, 330, 30);
+			serverbutton.setBounds(480, 20, 330, 30);
+		}
+		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+		edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
+		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
+		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
+		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
+		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
+		donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
+		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
+		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
+		writeUsers((String)users.getSelectedItem());
+		optionsPane.updateLocale();
+		modPacksPane.updateLocale();
+		mapsPane.updateLocale();
+		tpPane.updateLocale();
 	}
 
 	public void updateFooter() {

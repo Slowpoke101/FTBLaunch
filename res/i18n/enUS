@@ -1,16 +1,21 @@
 LOCALE_LOADED = English language file loaded!
 
-# LaunchFrame
-DOWNLOAD_SERVER_PACK = Grab The Server Version Here
-INSTALL_MAP = Install Map
-DOWNLOAD_MAP_SERVER = Download Server Map
-
-# Footer
+# Footer #
 DONATE_BUTTON = Donate
+
+# Main Tab
 EDIT_BUTTON = Edit
 LAUNCH_BUTTON = Launch
 PROFILE_CREATE = Create Profile
 PROFILE_SELECT = Select Profile
+DOWNLOAD_SERVER_PACK = Grab The Server Version Here
+
+# Map Tab
+INSTALL_MAP = Install Map
+DOWNLOAD_MAP_SERVER = Download Server Map
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Install TexturePack
 
 # Options pane
 INSTALL_FOLDER = Install folder...
@@ -38,4 +43,5 @@ MODS_EDIT_TITLE = Mod Pack Editor
 # Maps pane
 MAPS_WAIT_WHILE_LOADING = Please wait while maps are being loaded...
 
-# Texturepacks pane
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Please wait while texture packs are being loaded...
