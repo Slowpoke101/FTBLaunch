@@ -2,6 +2,7 @@ package net.ftb.gui.panes;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -21,6 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -30,7 +32,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static JPanel maps;
 	public static ArrayList<JPanel> mapPanels;
-	private JScrollPane mapsScroll;
+	private static JScrollPane mapsScroll;
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
@@ -58,7 +60,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 		// TODO: Set loading animation while we wait
 		maps = new JPanel();
-		maps.setBounds(0, 0, 420, (Map.getMapArray().size()) * 55);
 		maps.setLayout(null);
 		maps.setOpaque(false);
 
@@ -81,7 +82,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(filter);
 
 		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
-		typeLbl.setBounds(115, 5, 160, 25);
+		typeLbl.setBounds(115, 5, 174, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
@@ -95,7 +96,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		maps.add(p);
 
 		mapsScroll = new JScrollPane();
-		mapsScroll.setBounds(0, 0, 420, 300);
+		mapsScroll.setBounds(0, 30, 420, 280);
 		mapsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		mapsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		mapsScroll.setWheelScrollingEnabled(true);
@@ -118,7 +119,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		final int mapIndex = mapPanels.size();
 		System.out.println("Adding map " + getMapNum());
 		final JPanel p = new JPanel();
-		p.setBounds(0, (mapIndex * 55) + 30, 420, 55);
+		p.setBounds(0, (mapIndex * 55), 420, 55);
 		p.setLayout(null);
 		JLabel logo = new JLabel(new ImageIcon(map.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
@@ -146,6 +147,14 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		p.add(logo);
 		mapPanels.add(p);
 		maps.add(p);
+		if(origin.equalsIgnoreCase("all")) {
+			maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size()) * 55));
+			maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size()) * 55));
+		} else {
+			maps.setMinimumSize(new Dimension(420, (currentMaps.size()) * 55));
+			maps.setPreferredSize(new Dimension(420, (currentMaps.size()) * 55));
+		}
+		mapsScroll.revalidate();
 	}
 
 	@Override
@@ -158,7 +167,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
-		maps.setBounds(0, 0, 420, (Map.getMapArray().size()) * 55);
+		maps.setMinimumSize(new Dimension(420, 0));
+		maps.setPreferredSize(new Dimension(420, 0));
 		maps.setLayout(null);
 		maps.setOpaque(false);
 		int counter = 0;

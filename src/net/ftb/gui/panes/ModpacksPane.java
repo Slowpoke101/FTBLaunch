@@ -87,12 +87,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		add(filter);
 
 		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
-		typeLbl.setBounds(115, 5, 160, 25);
+		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
 		editModPack = new JButton("Edit Mod Pack");
-		editModPack.setBounds(285, 5, 110, 25);
+		editModPack.setBounds(300, 5, 110, 25);
 		editModPack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -110,20 +110,20 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
-		filler.setBounds(58, 36, 378, 42);
+		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		//		p.add(loadingImage);
 		p.add(filler);
 		packs.add(p);
 
 		packsScroll = new JScrollPane();
-		packsScroll.setBounds(0, 0, 420, 300);
+		packsScroll.setBounds(0, 30, 420, 280);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
-		this.add(packsScroll);
+		add(packsScroll);
 	}
 
 	@Override public void onVisible() { }
@@ -140,7 +140,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		final int packIndex = packPanels.size();
 		System.out.println("Adding pack " + getModNum());
 		final JPanel p = new JPanel();
-		p.setBounds(0, (packIndex * 55) + 30, 420, 55);
+		p.setBounds(0, (packIndex * 55), 420, 55);
 		p.setLayout(null);
 		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
@@ -168,8 +168,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.add(logo);
 		packPanels.add(p);
 		packs.add(p);
-		packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
-		packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+		if(origin.equalsIgnoreCase("all")) {
+			packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+			packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+		} else {
+			packs.setMinimumSize(new Dimension(420, (currentPacks.size()) * 55));
+			packs.setPreferredSize(new Dimension(420, (currentPacks.size()) * 55));
+		}
 		packsScroll.revalidate();
 	}
 
@@ -183,7 +188,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packPanels.clear();
 		packs.removeAll();
 		currentPacks.clear();
-		packs.setBounds(0, 0, 420, (ModPack.getPackArray().size()) * 55);
+		packs.setMinimumSize(new Dimension(420, 0));
+		packs.setPreferredSize(new Dimension(420, 0));
 		packs.setLayout(null);
 		packs.setOpaque(false);
 		int counter = 0;

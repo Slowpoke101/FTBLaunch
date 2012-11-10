@@ -2,6 +2,7 @@ package net.ftb.gui.panes;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 
@@ -27,7 +29,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static JPanel texturePacks;
 	public static ArrayList<JPanel> texturePackPanels;
-	private JScrollPane texturePacksScroll;
+	private static JScrollPane texturePacksScroll;
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
@@ -53,7 +55,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 		// TODO: Set loading animation while we wait
 		texturePacks = new JPanel();
-		texturePacks.setBounds(0, 0, 420, (TexturePack.getTexturePackArray().size()) * 55);
 		texturePacks.setLayout(null);
 		texturePacks.setOpaque(false);
 
@@ -86,7 +87,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacks.add(p);
 
 		texturePacksScroll = new JScrollPane();
-		texturePacksScroll.setBounds(0, 0, 420, 300);
+		texturePacksScroll.setBounds(0, 30, 420, 280);
 		texturePacksScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		texturePacksScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		texturePacksScroll.setWheelScrollingEnabled(true);
@@ -109,7 +110,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		final int texturePackIndex = texturePackPanels.size();
 		System.out.println("Adding texture pack " + getTexturePackNum());
 		final JPanel p = new JPanel();
-		p.setBounds(0, (texturePackIndex * 55) + 30, 420, 55);
+		p.setBounds(0, (texturePackIndex * 55), 420, 55);
 		p.setLayout(null);
 		JLabel logo = new JLabel(new ImageIcon(texturePack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
@@ -137,6 +138,14 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		p.add(logo);
 		texturePackPanels.add(p);
 		texturePacks.add(p);
+		if(origin.equalsIgnoreCase("all")) {
+			texturePacks.setMinimumSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
+			texturePacks.setPreferredSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
+		} else {
+			texturePacks.setMinimumSize(new Dimension(420, (currentTexturePacks.size()) * 55));
+			texturePacks.setPreferredSize(new Dimension(420, (currentTexturePacks.size()) * 55));
+		}
+		texturePacksScroll.revalidate();
 	}
 
 	@Override
@@ -149,7 +158,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePackPanels.clear();
 		texturePacks.removeAll();
 		currentTexturePacks.clear();
-		texturePacks.setBounds(0, 0, 420, (TexturePack.getTexturePackArray().size()) * 55);
+		texturePacks.setMinimumSize(new Dimension(420, 0));
+		texturePacks.setPreferredSize(new Dimension(420, 0));
 		texturePacks.setLayout(null);
 		texturePacks.setOpaque(false);
 		int counter = 0;
