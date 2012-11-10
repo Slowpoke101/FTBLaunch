@@ -1,6 +1,9 @@
 package net.ftb.util;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 
@@ -31,6 +34,40 @@ public class OSUtils {
 			return ":";
 		} else {
 			return ";";
+		}
+	}
+
+	public static void browse(URI location) {
+		if (Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(location);
+			} catch (IOException e1) { }
+		} else if (getCurrentOS() == OS.UNIX) {
+			File xdg = new File("/usr/bin/xdg-open");
+			if (xdg.exists()) {
+				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", location.toString());
+				try {
+					pb.start();
+				} catch (IOException e) { }
+			}
+		}
+	}
+
+	public static void open(File location) {
+		if (Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.open(location);
+			} catch (IOException e1) { }
+		} else if (getCurrentOS() == OS.UNIX) {
+			File xdg = new File("/usr/bin/xdg-open");
+			if (xdg.exists()) {
+				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", location.toString());
+				try {
+					pb.start();
+				} catch (IOException e) { }
+			}
 		}
 	}
 

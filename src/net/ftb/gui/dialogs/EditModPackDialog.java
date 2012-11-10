@@ -1,11 +1,9 @@
 package net.ftb.gui.dialogs;
 
-import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +24,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.util.OSUtils;
 
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -131,12 +130,7 @@ public class EditModPackDialog extends JDialog {
 		openFolderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(Desktop.isDesktopSupported()) {
-					Desktop desktop = Desktop.getDesktop();
-					try {
-						desktop.open(folder);
-					} catch (IOException e1) { }
-				}
+				OSUtils.open(folder);
 			}
 		});
 		modsFolderPane.add(openFolderButton);
