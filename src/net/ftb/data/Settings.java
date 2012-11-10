@@ -98,6 +98,14 @@ public class Settings extends Properties {
 		setProperty("channel", channel.name());
 	}
 
+	public String getLocale() {
+		return getProperty("locale", "enUS");
+	}
+
+	public void setLocale(String locale) {
+		setProperty("locale", locale);
+	}
+
 	public File getConfigFile() {
 		return configPath;
 	}

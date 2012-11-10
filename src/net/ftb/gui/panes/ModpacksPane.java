@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
@@ -73,7 +74,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		filter = new JButton("Filter Settings");
+		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);
 		filter.addActionListener(new ActionListener() {
 			@Override
@@ -91,7 +92,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
-		editModPack = new JButton("Edit Mod Pack");
+		editModPack = new JButton(I18N.getLocaleString("MODS_EDIT_PACK"));
 		editModPack.setBounds(300, 5, 110, 25);
 		editModPack.addActionListener(new ActionListener() {
 			@Override
@@ -106,7 +107,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		});
 		add(editModPack);
 
-		JTextArea filler = new JTextArea("Please wait while mods are being loaded...");
+		JTextArea filler = new JTextArea(I18N.getLocaleString("MODS_WAIT_WHILE_LOADING"));
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);

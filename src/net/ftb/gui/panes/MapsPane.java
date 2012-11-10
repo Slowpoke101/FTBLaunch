@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.I18N;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
@@ -68,7 +69,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
 
-		filter = new JButton("Filter Settings");
+		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);
 		filter.addActionListener(new ActionListener() {
 			@Override
@@ -86,7 +87,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
-		JTextArea filler = new JTextArea("Please wait while maps are being loaded...");
+		JTextArea filler = new JTextArea(I18N.getLocaleString("MAPS_WAIT_WHILE_LOADING"));
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);

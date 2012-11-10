@@ -48,6 +48,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.ftb.data.I18N;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
@@ -94,7 +95,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton();
-	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
+	private static String[] dropdown_ = {"Select Profile", "Create Profile" }; // TODO: i18n
 	private static JComboBox users;
 
 	private static final long serialVersionUID = 1L;
@@ -174,6 +175,9 @@ public class LaunchFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "Failed to load config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
+				// Setup localizations
+				I18N.setLocale(Settings.getSettings().getLocale());
+				I18N.setupLocale();
 
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists()) {
@@ -268,7 +272,7 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 
-		donate = new JButton("Donate");
+		donate = new JButton(I18N.getLocaleString("DONATE_BUTTON"));
 		donate.setBounds(390, 20, 80, 30);
 		donate.setEnabled(false);
 		donate.setToolTipText("Coming Soon...");
@@ -291,7 +295,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		edit = new JButton("Edit");
+		edit = new JButton(I18N.getLocaleString("EDIT_BUTTON"));
 		edit.setBounds(480, 20, 60, 30);
 		edit.setVisible(true);
 		edit.setEnabled(users.getSelectedIndex() > 1);
@@ -319,7 +323,7 @@ public class LaunchFrame extends JFrame {
 		});
 
 		serverbutton.setBounds(480, 20, 330, 30);
-		serverbutton.setText("Grab The Server Version Here");
+		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
 		serverbutton.setEnabled(false);
 		serverbutton.setVisible(false);
 		serverbutton.addActionListener(new ActionListener() {
@@ -335,7 +339,7 @@ public class LaunchFrame extends JFrame {
 		});
 
 		mapInstall.setBounds(480, 20, 330, 30);
-		mapInstall.setText("Install Map");
+		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
 		mapInstall.setEnabled(false);
 		mapInstall.setVisible(false);
 		mapInstall.addActionListener(new ActionListener() {
@@ -350,7 +354,7 @@ public class LaunchFrame extends JFrame {
 		});
 
 		serverMap.setBounds(480, 20, 330, 30);
-		serverMap.setText("Download Server Map");
+		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
 		serverMap.setEnabled(false);
 		serverMap.setVisible(false);
 		serverMap.addActionListener(new ActionListener() {

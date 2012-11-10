@@ -8,14 +8,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.I18N;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -29,6 +33,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JTextField ramMinimum;
 	private JTextField ramMaximum;
+	private JComboBox locale;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -67,7 +72,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir(this));
 
-		JLabel lblInstallFolder = new JLabel("Install folder:");
+		JLabel lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
 		GridBagConstraints gbc_lblInstallFolder = new GridBagConstraints();
 		gbc_lblInstallFolder.anchor = GridBagConstraints.EAST;
 		gbc_lblInstallFolder.insets = new Insets(8, 8, 5, 5);
@@ -92,7 +97,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_installBrowseBtn.gridy = 3;
 		this.add(installBrowseBtn, gbc_installBrowseBtn);
 
-		tglbtnForceUpdate = new JToggleButton("Force update?");
+		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
 		tglbtnForceUpdate.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -109,7 +114,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_tglbtnForceUpdate.gridy = 4;
 		this.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
 
-		JLabel lblRamMinimum = new JLabel("RAM Minimum (M):");
+		JLabel lblRamMinimum = new JLabel(I18N.getLocaleString("RAM_MIN"));
 		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
 		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
 		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
@@ -119,7 +124,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(ramMinimum, gbc_textField_1);
 		ramMinimum.setColumns(10);
 
-		JLabel lblRamMaximum = new JLabel("RAM Maximum (M):");
+		JLabel lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
 		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
@@ -128,6 +133,30 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.add(lblRamMaximum, gbc_lblRamMaximum);
 		this.add(ramMaximum, gbc_textField_2);
 		ramMaximum.setColumns(10);
+
+		Vector locales = new Vector();
+		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
+			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
+			locales.add(entry.getKey(), I18N.localeFiles.get(entry.getValue()));
+		}
+
+		locale = new JComboBox(locales);
+		GridBagConstraints gbc_locale = new GridBagConstraints();
+		gbc_locale.insets = new Insets(0, 0, 5, 5);
+		gbc_locale.fill = GridBagConstraints.HORIZONTAL;
+		gbc_locale.gridx = 2;
+		gbc_locale.gridy = 8;
+		locale.addFocusListener(settingsChangeListener);
+		locale.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
+
+		JLabel lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
+		GridBagConstraints gbc_lblLocale = new GridBagConstraints();
+		gbc_lblLocale.anchor = GridBagConstraints.EAST;
+		gbc_lblLocale.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLocale.gridx = 1;
+		gbc_lblLocale.gridy = 8;
+		this.add(lblLocale, gbc_lblLocale);
+		this.add(locale, gbc_locale);
 	}
 
 	@Override public void onVisible() { }
@@ -161,5 +190,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
 		settings.setRamMax(ramMaximum.getText());
 		settings.setRamMin(ramMinimum.getText());
+		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 	}
 }
