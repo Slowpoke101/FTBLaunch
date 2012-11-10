@@ -7,7 +7,7 @@ DONATE_BUTTON = Spenden
 EDIT_BUTTON = Bearbeiten
 LAUNCH_BUTTON = Starten
 PROFILE_CREATE = Profil erstellen
-PROFILE_SELECT = Profil auswaehlen
+PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
 
 # Map Tab
@@ -20,8 +20,8 @@ INSTALL_TEXTUREPACK = Texture Pack Installieren
 # Options pane
 INSTALL_FOLDER = Installationsverzeichnis
 FORCE_UPDATE = Update erzwingen?
-RAM_MIN = RAM Minimum (M)
-RAM_MAX = RAM Maximum (M)
+RAM_MIN = RAM Minimum (MB)
+RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 
 # Shared strings
@@ -29,19 +29,19 @@ FILTER_SETTINGS = Filtern
 
 # Modpacks pane
 MODS_EDIT_PACK = Mod bearbeiten
-MODS_WAIT_WHILE_LOADING = Bitte warten waehrend Mods geladen werden...
+MODS_WAIT_WHILE_LOADING = Bitte warten während Mods geladen werden...
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
 MODS_EDIT_DISABLED_LABEL = Deaktivierte Mods
-MODS_EDIT_OPEN_FOLDER = Verzeichnis oeffnen
-MODS_EDIT_ADD_MOD = Mod hinzufuegen
+MODS_EDIT_OPEN_FOLDER = Verzeichnis öffnen
+MODS_EDIT_ADD_MOD = Mod hinzufügen
 MODS_EDIT_ENABLE_MOD = aktivieren >>
 MODS_EDIT_DISABLE_MOD = << deaktivieren
 MODS_EDIT_TITLE = Modpack bearbeiten
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Bitte warten waehrend Maps geladen werden...
+MAPS_WAIT_WHILE_LOADING = Bitte warten während Maps geladen werden...
 
 # Texturepacks pane
-TEXTURE_WAIT_WHILE_LOADING = Bitte warten waehrend Texture Packs geladen werden...
+TEXTURE_WAIT_WHILE_LOADING = Bitte warten während Texture Packs geladen werden...
