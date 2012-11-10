@@ -8,7 +8,6 @@ import net.ftb.log.Logger;
 
 /**
  * i18n class, hooray! \o/
- * @author blackevil90
  *
  */
 public class I18N {
