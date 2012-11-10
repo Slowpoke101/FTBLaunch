@@ -94,7 +94,8 @@ public class LaunchFrame extends JFrame {
 
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton();
+	private JButton launch = new JButton("Launch"), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+			tpInstall = new JButton();
 	private static String[] dropdown_ = {"Select Profile", "Create Profile" }; // TODO: i18n
 	private static JComboBox users;
 
@@ -824,7 +825,7 @@ public class LaunchFrame extends JFrame {
 		return content;
 	}
 
-	public void updatePackButtons() {
+	public void updateModPackButtons() {
 		boolean result = modPacksPane.type.equals("Server");
 		launch.setEnabled(!result);
 		launch.setVisible(!result);
@@ -838,6 +839,8 @@ public class LaunchFrame extends JFrame {
 		mapInstall.setVisible(false);
 		serverMap.setEnabled(false);
 		serverMap.setVisible(false);
+		tpInstall.setEnabled(false);
+		tpInstall.setVisible(false);
 	}
 
 	public void updateMapButtons() {
@@ -854,6 +857,8 @@ public class LaunchFrame extends JFrame {
 		edit.setVisible(false);
 		users.setEnabled(false);
 		users.setVisible(false);
+		tpInstall.setEnabled(false);
+		tpInstall.setVisible(false);
 	}
 
 	public void updateFooter() {
@@ -862,7 +867,7 @@ public class LaunchFrame extends JFrame {
 			updateMapButtons();
 			break;
 		default:
-			updatePackButtons();
+			updateModPackButtons();
 			break;
 		}
 	}

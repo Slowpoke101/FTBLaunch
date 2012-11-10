@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
 	private String name, author, version, url, mcversion, logoName, imageName;
@@ -35,8 +36,8 @@ public class TexturePack {
 	}
 
 	public static void loadAll() {
-		// TexturePackLoader loader = new TexturePackLoader();
-		// loader.start();
+		TexturePackLoader loader = new TexturePackLoader();
+		loader.start();
 	}
 
 	public static void addTexturePack(TexturePack texturePack) {
