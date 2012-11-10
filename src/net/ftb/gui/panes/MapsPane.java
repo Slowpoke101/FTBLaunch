@@ -220,7 +220,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	public static void updateFilter() {
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
 		sortMaps();
-		LaunchFrame.getInstance().updateMapButtons();
+		LaunchFrame.getInstance().updateFooter();
 	}
 
 	private static int getIndex() {

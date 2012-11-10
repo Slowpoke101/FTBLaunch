@@ -1,5 +1,6 @@
 package net.ftb.mclauncher;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -11,6 +12,10 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.ftb.gui.LauncherConsole;
 import net.ftb.log.Logger;
@@ -128,6 +133,29 @@ public class MinecraftLauncher {
 		String password = args[3];
 
 		try {
+			Color baseColor = new Color(40, 40, 40);
+			UIManager.put("control", baseColor);
+			UIManager.put("text", new Color(222, 222, 222));
+			UIManager.put("nimbusBase", new Color(0, 0, 0));
+			UIManager.put("nimbusFocus", baseColor);
+			UIManager.put("nimbusBorder", baseColor);
+			UIManager.put("nimbusLightBackground", baseColor);
+			UIManager.put("info", new Color(55, 55, 55));
+			try {
+				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+					if ("Nimbus".equals(info.getName())) {
+						UIManager.setLookAndFeel(info.getClassName());
+						break;
+					}
+				}
+			} catch (Exception e) {
+				try {
+					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+				} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occurred",e1); 
+				} catch (InstantiationException e1) { Logger.logWarn("Exception occurred",e1); 
+				} catch (IllegalAccessException e1) { Logger.logWarn("Exception occurred",e1); 
+				} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occurred",e1); }
+			}
 			LauncherConsole con = new LauncherConsole();
 			con.setVisible(true);
 			System.out.println("Loading jars...");

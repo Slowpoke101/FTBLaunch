@@ -52,6 +52,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
@@ -71,6 +72,7 @@ import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.updater.UpdateChecker;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.GameUpdateWorker;
@@ -78,28 +80,23 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "0.3.2";
-	private static int buildNumber = 32;
+	private static String version = "1.0.0";
+	private static int buildNumber = 100;
 	private static final String FORGENAME = "MinecraftForge.zip";
-
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
 	private MapsPane mapsPane;
 	private TexturepackPane tpPane;
-
 	private JPanel panel = new JPanel();
 	private JPanel footer = new JPanel();
-
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
 			tpInstall = new JButton();
-	private static String[] dropdown_ = {"Select Profile", "Create Profile" }; // TODO: i18n
+	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
 	private static JComboBox users;
-
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
@@ -201,6 +198,9 @@ public class LaunchFrame extends JFrame {
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
+				TexturePack.addListener(frame.tpPane);
+				TexturePack.loadAll();
+
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()){
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
@@ -216,7 +216,7 @@ public class LaunchFrame extends JFrame {
 	public LaunchFrame(final int tab) {
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
-		setTitle("Feed the Beast Launcher Beta v" + version);
+		setTitle("Feed the Beast Launcher v" + version);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -265,7 +265,7 @@ public class LaunchFrame extends JFrame {
 		userManager.read();
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
-		
+
 		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
@@ -370,14 +370,14 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		tpInstall.setBounds(480, 20, 330, 30);
 		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
 		tpInstall.setVisible(false);
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 			}
 		});
 
@@ -491,10 +491,13 @@ public class LaunchFrame extends JFrame {
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
 							Logger.logWarn("Invalid username or password.");
+							ErrorUtils.tossError("Invalid username or password.");
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							Logger.logWarn("Outdated launcher.");
+							ErrorUtils.tossError("Outdated launcher.");
 						} else {
 							Logger.logWarn("Login failed: " + responseStr);
+							ErrorUtils.tossError("Login failed: " + responseStr);
 						}
 					}
 					enableObjects();
@@ -528,12 +531,16 @@ public class LaunchFrame extends JFrame {
 							launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							Logger.logError("Error occurred during downloading the game");
+							ErrorUtils.tossError("Error occurred during downloading the game");
 						}
 					} catch (CancellationException e) { 
-						Logger.logInfo("Game update canceled",e);
+						ErrorUtils.tossError("Game update canceled");
 						enableObjects();
-					} catch (InterruptedException e) { Logger.logWarn("Game update interrupted",e);
-					} catch (ExecutionException e) { Logger.logError("Failed to download game",e); }
+					} catch (InterruptedException e) { 
+						ErrorUtils.tossError("Game update interrupted");
+					} catch (ExecutionException e) { 
+						ErrorUtils.tossError("Failed to download game");
+					}
 				}
 			};
 
@@ -642,7 +649,6 @@ public class LaunchFrame extends JFrame {
 	protected void installMods(String modPackName) throws IOException {
 		String installpath = Settings.getSettings().getInstallPath();
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
-		new File(installpath + "/" + pack.getDir() + "/instMods/").mkdirs();
 		Logger.logInfo("dirs mk'd");
 		if(new File(installpath, pack.getDir() + "/instMods/").exists()) {
 			new File(installpath, pack.getDir() + "/instMods/").delete();
@@ -683,10 +689,10 @@ public class LaunchFrame extends JFrame {
 			settings.save();
 		} catch (FileNotFoundException e) {
 			Logger.logError("Exception occurred",e);
-			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
 		} catch (IOException e) {
 			Logger.logError("Exception occurred",e);
-			JOptionPane.showMessageDialog(this, "Failed to save config file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
 		}
 	}
 
@@ -758,6 +764,12 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
+		mapInstall.setEnabled(true);
+		serverMap.setEnabled(true);
+		tpInstall.setEnabled(true);
+		launch.setEnabled(true);
+		users.setEnabled(true);
+		serverbutton.setEnabled(true);
 	}
 
 	/**
@@ -786,9 +798,7 @@ public class LaunchFrame extends JFrame {
 				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
 				try {
 					pb.start();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				} catch (IOException e) { }
 			} else {
 				Logger.logWarn("Desktop not supported.");
 			}
@@ -809,9 +819,7 @@ public class LaunchFrame extends JFrame {
 				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
 				try {
 					pb.start();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				} catch (IOException e) { }
 			} else {
 				Logger.logWarn("Desktop not supported.");
 			}
@@ -829,7 +837,7 @@ public class LaunchFrame extends JFrame {
 			scanner.useDelimiter( "\\Z" );
 			content = scanner.next();
 		} catch (java.net.UnknownHostException uhe) {
-		} catch (Exception ex) { ex.printStackTrace(); 
+		} catch (Exception ex) {
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -838,33 +846,50 @@ public class LaunchFrame extends JFrame {
 		return content;
 	}
 
-	public void updateModPackButtons() {
-		boolean result = modPacksPane.type.equals("Server");
-		launch.setVisible(!result);
-		edit.setEnabled(users.getSelectedIndex() > 1);
-		edit.setVisible(!result);
-		users.setVisible(!result);
-		serverbutton.setVisible(result);
-		mapInstall.setVisible(false);
-		serverMap.setVisible(false);
-		tpInstall.setVisible(false);
-	}
-
-	public void updateMapButtons() {
-		boolean result = mapsPane.type.equals("Server");
-		mapInstall.setVisible(!result);
-		serverMap.setVisible(result);
+	public void disableMainButtons() {
 		serverbutton.setVisible(false);
 		launch.setVisible(false);
 		edit.setVisible(false);
 		users.setVisible(false);
+	}
+
+	public void disableMapButtons() {
+		mapInstall.setVisible(false);
+		serverMap.setVisible(false);
+	}
+
+	public void disableTextureButtons() {
 		tpInstall.setVisible(false);
 	}
-	
-	public void updateTexturePackButtons() {
-		
+
+	public void updateFooter() {
+		boolean result;
+		switch(currentPane) {
+		case MAPS:
+			result = mapsPane.type.equals("Server");
+			mapInstall.setVisible(!result);
+			serverMap.setVisible(result);
+			disableMainButtons();
+			disableTextureButtons();
+			break;
+		case TEXTURE:
+			tpInstall.setVisible(true);
+			disableMainButtons();
+			disableMapButtons();
+			break;
+		default:
+			result = modPacksPane.type.equals("Server");
+			launch.setVisible(!result);
+			edit.setEnabled(users.getSelectedIndex() > 1);
+			edit.setVisible(!result);
+			users.setVisible(!result);
+			serverbutton.setVisible(result);
+			disableMapButtons();
+			disableTextureButtons();
+			break;
+		}
 	}
-	
+
 	public void updateLocale() {
 		if(I18N.currentLocale == Locale.deDE) {
 			edit.setBounds(420, 20, 120, 30);
@@ -891,17 +916,6 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.updateLocale();
 		mapsPane.updateLocale();
 		tpPane.updateLocale();
-	}
-
-	public void updateFooter() {
-		switch(currentPane) {
-		case MAPS:
-			updateMapButtons();
-			break;
-		default:
-			updateModPackButtons();
-			break;
-		}
 	}
 
 	private void updateFolderStructure() {

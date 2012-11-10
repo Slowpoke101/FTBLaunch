@@ -53,7 +53,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(b);
 			String text = new String(b).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.log("From Console: "+text,type,null);
+				Logger.logInfo("From Console: " + text);
 			}
 		}
 
@@ -62,7 +62,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(buf, off, len);
 			String text = new String(buf,off,len).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.log("From Console: "+text,type,null);
+				Logger.logInfo("From Console: " + text);
 			}
 		}
 
