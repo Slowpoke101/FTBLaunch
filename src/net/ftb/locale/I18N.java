@@ -71,7 +71,7 @@ public class I18N {
 		}
 		try {
 			locales.clear();
-			locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + locale).openStream(), "UTF8");
+			locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + locale).openStream(), "UTF8"));
 			Logger.logInfo("[i18n] " + locale + " " + locales.getProperty("LOCALE_LOADED", "loaded"));
 		} catch (IOException e) {
 			Logger.logError("[i18n] Could not load locale file", e);
