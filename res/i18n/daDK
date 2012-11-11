@@ -1,0 +1,47 @@
+LOCALE_LOADED = Dansk sprogfil loadet!
+
+# Footer #
+DONATE_BUTTON = Doner
+
+# Main Tab
+EDIT_BUTTON = Rediger
+LAUNCH_BUTTON = Kør
+PROFILE_CREATE = Opret Profil
+PROFILE_SELECT = Vælg Profil
+DOWNLOAD_SERVER_PACK = Hent Serverversionen Her
+
+# Map Tab
+INSTALL_MAP = Installer Kort
+DOWNLOAD_MAP_SERVER = Hent Server Kort
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Installer TexturePack
+
+# Options pane
+INSTALL_FOLDER = Installationsmappe...
+FORCE_UPDATE = Gennemtving opdatering?
+RAM_MIN = RAM Minimum (M)
+RAM_MAX = RAM Maksimum (M)
+LANGUAGE = Sprog
+
+# Shared strings
+FILTER_SETTINGS = Filtreringsindstillinger
+
+# Modpacks pane
+MODS_EDIT_PACK = Rediger Modpakke
+MODS_WAIT_WHILE_LOADING = Vent venligst mens mods loades...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Aktivered Mods
+MODS_EDIT_DISABLED_LABEL = Deaktiverede Mods
+MODS_EDIT_OPEN_FOLDER = Åben Mappe
+MODS_EDIT_ADD_MOD = Tilføj Mod
+MODS_EDIT_ENABLE_MOD = << Aktiver
+MODS_EDIT_DISABLE_MOD = Deaktiver >>
+MODS_EDIT_TITLE = Modpakke Redigering
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Vent venligst mens kort loades...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Vent venligst mens texture packs loades...
