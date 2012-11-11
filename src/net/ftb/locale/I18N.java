@@ -19,8 +19,13 @@ public class I18N {
 	public static Locale currentLocale = Locale.enUS;
 
 	public enum Locale {
+		deDE,
 		enUS,
-		deDE
+		nlNL,
+		ruRU,
+		ptBR,
+		ptPT,
+		svSE
 	}
 
 	/**
@@ -30,6 +35,11 @@ public class I18N {
 		// TODO: Find a "nicer" way to do this :p
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
 		localeFiles.put("deDE", "Deutsch"); localeIndices.put(1, "deDE");
+		localeFiles.put("nlNL", "Nederlands"); localeIndices.put(1, "nlNL");
+		localeFiles.put("ptBR", "Português (Brasil)"); localeIndices.put(1, "ptBR");
+		localeFiles.put("ptPT", "Português (Europeu)"); localeIndices.put(1, "ptPT");
+		localeFiles.put("ruRU", "Русского (Russian)"); localeIndices.put(1, "ruRU");
+		localeFiles.put("svSE", "Svensk (Swedish)"); localeIndices.put(1, "svSE");
 		try {
 			fallback.clear();
 			fallback.load(I18N.class.getResourceAsStream("/i18n/enUS"));
@@ -46,6 +56,16 @@ public class I18N {
 	public static void setLocale(String locale) {
 		if(locale.equalsIgnoreCase("deDE")) {
 			currentLocale = Locale.deDE;
+		} else if(locale.equalsIgnoreCase("nlNL"))
+			currentLocale = Locale.nlNL;
+		} else if(locale.equalsIgnoreCase("ptBR"))
+			currentLocale = Locale.ptBR;
+		} else if(locale.equalsIgnoreCase("ptPT")) 
+			currentLocale = Locale.ptPT;
+		} else if(locale.equalsIgnoreCase("ruRU")) 
+			currentLocale = Locale.ruRU;
+		} else if(locale.equalsIgnoreCase("svSE")) 
+			currentLocale = Locale.svSE;
 		} else {
 			currentLocale = Locale.enUS;
 		}
