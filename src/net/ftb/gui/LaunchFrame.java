@@ -424,7 +424,7 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-		tabbedPane.setEnabledAt(3, false);
+//		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
@@ -463,8 +463,8 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
-		//		tabbedPane.setEnabledAt(3, false);
-		//		tabbedPane.setEnabledAt(4, false);
+		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -783,7 +783,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(0, true);
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
-		//		tabbedPane.setEnabledAt(3, true);
+		tabbedPane.setEnabledAt(3, true);
 		//		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();

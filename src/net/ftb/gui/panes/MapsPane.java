@@ -51,6 +51,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		super();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
+		
+		Map.loadAll();
+		Map.addListener(this);
 
 		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
