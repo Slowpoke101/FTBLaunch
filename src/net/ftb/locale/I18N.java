@@ -35,11 +35,11 @@ public class I18N {
 		// TODO: Find a "nicer" way to do this :p
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
 		localeFiles.put("deDE", "Deutsch"); localeIndices.put(1, "deDE");
-		localeFiles.put("nlNL", "Nederlands"); localeIndices.put(1, "nlNL");
-		localeFiles.put("ptBR", "Português (Brasil)"); localeIndices.put(1, "ptBR");
-		localeFiles.put("ptPT", "Português (Europeu)"); localeIndices.put(1, "ptPT");
-		localeFiles.put("ruRU", "Русского (Russian)"); localeIndices.put(1, "ruRU");
-		localeFiles.put("svSE", "Svensk (Swedish)"); localeIndices.put(1, "svSE");
+		localeFiles.put("nlNL", "Nederlands"); localeIndices.put(2, "nlNL");
+		localeFiles.put("ptBR", "PortuguÃªs (Brasil)"); localeIndices.put(3, "ptBR");
+		localeFiles.put("ptPT", "PortuguÃªs (Europeu)"); localeIndices.put(4, "ptPT");
+		localeFiles.put("ruRU", "Ð ÑƒÑ�Ñ�ÐºÐ¾Ð³Ð¾ (Russian)"); localeIndices.put(5, "ruRU");
+		localeFiles.put("svSE", "Svensk (Swedish)"); localeIndices.put(6, "svSE");
 		try {
 			fallback.clear();
 			fallback.load(I18N.class.getResourceAsStream("/i18n/enUS"));
@@ -56,15 +56,15 @@ public class I18N {
 	public static void setLocale(String locale) {
 		if(locale.equalsIgnoreCase("deDE")) {
 			currentLocale = Locale.deDE;
-		} else if(locale.equalsIgnoreCase("nlNL"))
+		} else if(locale.equalsIgnoreCase("nlNL")){
 			currentLocale = Locale.nlNL;
-		} else if(locale.equalsIgnoreCase("ptBR"))
+		} else if(locale.equalsIgnoreCase("ptBR")){
 			currentLocale = Locale.ptBR;
-		} else if(locale.equalsIgnoreCase("ptPT")) 
+		} else if(locale.equalsIgnoreCase("ptPT")){
 			currentLocale = Locale.ptPT;
-		} else if(locale.equalsIgnoreCase("ruRU")) 
+		} else if(locale.equalsIgnoreCase("ruRU")){
 			currentLocale = Locale.ruRU;
-		} else if(locale.equalsIgnoreCase("svSE")) 
+		} else if(locale.equalsIgnoreCase("svSE")){ 
 			currentLocale = Locale.svSE;
 		} else {
 			currentLocale = Locale.enUS;
