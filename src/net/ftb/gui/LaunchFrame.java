@@ -54,6 +54,7 @@ import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
+import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.ILauncherPane;
@@ -317,14 +318,16 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-					saveSettings();
-					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-				} else {
-					if(users.getSelectedIndex() <= 1) {
-						ErrorUtils.tossError("Please select a profile!");
-					}
-				}
+//				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+//					saveSettings();
+//					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+//				} else {
+//					if(users.getSelectedIndex() <= 1) {
+//						ErrorUtils.tossError("Please select a profile!");
+//					}
+//				}
+				PlayOfflineDialog d = new PlayOfflineDialog("mcDown");
+				d.setVisible(true);
 			}
 		});
 
@@ -492,6 +495,8 @@ public class LaunchFrame extends JFrame {
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
 						ErrorUtils.tossError("Login failed due IOException");
+						PlayOfflineDialog d = new PlayOfflineDialog("mcDown");
+						d.setVisible(true);
 					} else if (err.getCause() instanceof MalformedURLException) {
 						ErrorUtils.tossError("Login failed due malformed URL"); 
 					}
