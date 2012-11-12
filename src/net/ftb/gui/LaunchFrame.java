@@ -318,16 +318,14 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-//				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-//					saveSettings();
-//					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-//				} else {
-//					if(users.getSelectedIndex() <= 1) {
-//						ErrorUtils.tossError("Please select a profile!");
-//					}
-//				}
-				PlayOfflineDialog d = new PlayOfflineDialog("mcDown", UserManager.getUsername(users.getSelectedItem().toString()));
-				d.setVisible(true);
+				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+					saveSettings();
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+				} else {
+					if(users.getSelectedIndex() <= 1) {
+						ErrorUtils.tossError("Please select a profile!");
+					}
+				}
 			}
 		});
 
@@ -503,6 +501,8 @@ public class LaunchFrame extends JFrame {
 						d.setVisible(true);
 					} else if (err.getCause() instanceof MalformedURLException) {
 						ErrorUtils.tossError("Login failed due malformed URL"); 
+						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+						d.setVisible(true);
 					}
 					enableObjects();
 					return;
