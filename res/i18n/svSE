@@ -20,8 +20,8 @@ INSTALL_TEXTUREPACK = Installera Texturpaket
 # Options pane
 INSTALL_FOLDER = Installera mapp...
 FORCE_UPDATE = Tvinga uppdatering?
-RAM_MIN = RAM Minimum (M)
-RAM_MAX = RAM Maximum (M)
+RAM_MIN = RAM Minimum (MB)
+RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Språk
 
 # Shared strings
