@@ -1,3 +1,4 @@
+LOCALE_NAME = English
 LOCALE_LOADED = English language file loaded!
 
 # Footer #
@@ -20,8 +21,8 @@ INSTALL_TEXTUREPACK = Install TexturePack
 # Options pane
 INSTALL_FOLDER = Install folder...
 FORCE_UPDATE = Force update?
-RAM_MIN = RAM Minimum (M)
-RAM_MAX = RAM Maximum (M)
+RAM_MIN = RAM Minimum (MB)
+RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 
 # Shared strings
