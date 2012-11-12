@@ -192,8 +192,8 @@ public class LaunchFrame extends JFrame {
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
 
-				//				Map.addListener(frame.mapsPane);
-				//				Map.loadAll();
+				Map.addListener(frame.mapsPane);
+				Map.loadAll();
 
 				//				TexturePack.addListener(frame.tpPane);
 				//				TexturePack.loadAll();
@@ -428,7 +428,6 @@ public class LaunchFrame extends JFrame {
 
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-//		tabbedPane.setEnabledAt(3, false);
 
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
@@ -683,9 +682,7 @@ public class LaunchFrame extends JFrame {
 		if(!source.exists()) {
 			source = new File(installpath, "temp/" + pack.getDir() + "/minecraft");
 		}
-		FileUtils.copyFolder(new File(source, "mods"), new File(installpath + "/" + pack.getDir() + "/minecraft/mods/"));
-		FileUtils.copyFolder(new File(source, "coremods"), new File(installpath + "/" + pack.getDir() + "/minecraft/coremods/"));
-		FileUtils.copyFolder(new File(source, "config"), new File(installpath + "/" + pack.getDir() + "/minecraft/config/"));
+		FileUtils.copyFolder(source, new File(installpath + "/" + pack.getDir() + "/minecraft/"));
 		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
 	}
 

@@ -43,6 +43,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static boolean mapsAdded = false;
 	public static String type = "Client", origin = "All";
 	private final MapsPane instance = this;
+	private static JTextArea mapInfo;
 
 	public static boolean loaded = false;
 
@@ -52,9 +53,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		super();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
-		
-		Map.loadAll();
-		Map.addListener(this);
 
 		splash = new JLabel();
 		splash.setBounds(420, 0, 410, 200);
@@ -107,6 +105,23 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapsScroll.setOpaque(false);
 		mapsScroll.setViewportView(maps);
 		add(mapsScroll);
+
+		mapInfo = new JTextArea();
+		mapInfo.setEditable(false);
+		mapInfo.setWrapStyleWord(true);
+		mapInfo.setLineWrap(true);
+		mapInfo.setBounds(420, 210, 410, 90);
+		mapInfo.setBackground(UIManager.getColor("control").darker().darker());
+		add(mapInfo);
+
+		JScrollPane infoScroll = new JScrollPane();
+		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		infoScroll.setWheelScrollingEnabled(true);
+		infoScroll.setViewportView(mapInfo);
+		infoScroll.setOpaque(false);
+		add(infoScroll);
 	}
 
 	@Override public void onVisible() { }
@@ -236,6 +251,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				mapInfo.setText(Map.getMap(getIndex()).getInfo());
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

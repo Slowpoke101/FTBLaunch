@@ -100,6 +100,10 @@ public class MinecraftVersionDetector {
 	}
 
 	public boolean shouldUpdate(String requiredVersion, String jarFilePath) {
-		return !getMinecraftVersion(jarFilePath).equals(requiredVersion);
+		String version = getMinecraftVersion(jarFilePath);
+		if(version.equals("unknown")) {
+			return false;
+		}
+		return !version.equals(requiredVersion);
 	}
 }
