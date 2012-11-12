@@ -82,7 +82,7 @@ public class LaunchFrame extends JFrame {
 
 	private static String version = "1.0.2";
 	private static int buildNumber = 102;
-	private static final String FORGENAME = "MinecraftForge.zip";
+	public static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
 	private ModpacksPane modPacksPane;
