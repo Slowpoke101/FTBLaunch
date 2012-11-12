@@ -93,7 +93,7 @@ public class UserManager {
 
 	public static byte[] getSelfMD5() {
 		try {
-			return getFileMD5(ClassLoader.getSystemClassLoader().getResource("net/ftb/gui/LauncherFrame.class"));
+			return getFileMD5(ClassLoader.getSystemClassLoader().getResource("net/ftb/gui/LaunchFrame.class"));
 		} catch (Exception e) {	return new byte[] {}; }
 	}
 
