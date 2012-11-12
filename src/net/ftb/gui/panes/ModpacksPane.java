@@ -247,6 +247,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 	
 	public static void searchPacks(String search) {
+		System.out.println("Searching Packs for : " + search);
 		packPanels.clear();
 		packs.removeAll();
 		currentPacks.clear();

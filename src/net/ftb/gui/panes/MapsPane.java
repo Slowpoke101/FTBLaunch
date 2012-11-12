@@ -209,7 +209,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		updateMaps();
 	}
 	
-	public static void searchPacks(String search) {
+	public static void searchMaps(String search) {
+		System.out.println("Searching Maps for : " + search);
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
@@ -220,7 +221,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		int counter = 0;
 		selectedMap = 0;
 		for(Map map : Map.getMapArray()) {
-			if(map.getName().equalsIgnoreCase(search) || map.getAuthor().equalsIgnoreCase(search)) {
+			if(map.getName().contains(search) || map.getAuthor().equalsIgnoreCase(search)) {
 				addMap(map);
 				currentMaps.put(counter, map);
 				counter++;

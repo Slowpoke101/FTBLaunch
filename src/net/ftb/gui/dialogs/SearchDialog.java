@@ -35,11 +35,11 @@ public class SearchDialog extends JDialog {
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				instance.searchPacks(searchBar.getText());
+				instance.searchMaps(searchBar.getText());
 			}
 			
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				instance.searchPacks(searchBar.getText());
+				instance.searchMaps(searchBar.getText());
 			}
 			
 			@Override
