@@ -27,7 +27,7 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 
-			MODPACKSFILE = "https://dl.dropbox.com/u/2405919/modpack.xml";
+			MODPACKSFILE = "https://dl.dropbox.com/u/40374207/FTB_/modpacks.xml";
 
 			Document doc;
 			try {

@@ -121,9 +121,11 @@ public class FilterDialog extends JDialog {
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");
-		setBounds(300, 300, 230, 175);
+//		setBounds(300, 300, 230, 175);
+		setBounds(300, 300, 230, 140);
 		setResizable(false);
-		panel.setBounds(0, 0, 230, 175);
+//		panel.setBounds(0, 0, 230, 175);
+		panel.setBounds(0, 0, 230, 140);
 		panel.setLayout(null);
 		setContentPane(panel);
 		typeLbl.setBounds(10, 10, 100, 30);
@@ -140,6 +142,6 @@ public class FilterDialog extends JDialog {
 		panel.add(originBox);
 		panel.add(applyButton);
 		panel.add(cancelButton);
-		panel.add(searchButton);
+//		panel.add(searchButton);
 	}
 }

@@ -28,7 +28,7 @@ public class MapLoader extends Thread {
 		try {
 			Logger.logInfo("loading map information...");
 
-			MAPFILE = LaunchFrame.getCreeperhostLink("maps.xml");
+			MAPFILE = "https://dl.dropbox.com/u/40374207/FTB_/maps.xml";
 
 			Document doc = AppUtils.downloadXML(new URL(MAPFILE));
 			if(doc == null) {
