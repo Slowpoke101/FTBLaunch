@@ -79,8 +79,8 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "1.0.1";
-	private static int buildNumber = 101;
+	private static String version = "1.0.2";
+	private static int buildNumber = 102;
 	private static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
@@ -320,6 +320,10 @@ public class LaunchFrame extends JFrame {
 				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
 					saveSettings();
 					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+				} else {
+					if(users.getSelectedIndex() <= 1) {
+						ErrorUtils.tossError("Please select a profile!");
+					}
 				}
 			}
 		});

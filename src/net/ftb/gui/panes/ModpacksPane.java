@@ -62,10 +62,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packPanels = new ArrayList<JPanel>();
 
 		// TODO: Set loading animation while we wait
-		//		try {
-		//			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
-		//		} catch (MalformedURLException e1) { e1.printStackTrace(); }
-		//		loadingImage.setLocation(58, 36);
+//		try {
+//			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
+//		} catch (MalformedURLException e1) { e1.printStackTrace(); }
+//		loadingImage.setLocation(58, 36);
 
 		packs = new JPanel();
 		packs.setLayout(null);
