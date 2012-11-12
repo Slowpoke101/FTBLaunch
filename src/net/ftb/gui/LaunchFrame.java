@@ -337,11 +337,15 @@ public class LaunchFrame extends JFrame {
 		serverbutton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-					try {
-						hLink(event, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
-					} catch (URISyntaxException e) { 
-					} catch (NoSuchAlgorithmException e) { }
+				if(!ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl().isEmpty()) {
+					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
+						try {
+							hLink(event, new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+						} catch (URISyntaxException e) { 
+						} catch (NoSuchAlgorithmException e) { }
+					}
+				} else {
+					ErrorUtils.tossError("No server version available!");
 				}
 			}
 		});

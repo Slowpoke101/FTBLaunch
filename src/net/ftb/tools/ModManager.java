@@ -37,11 +37,12 @@ import net.ftb.util.FileUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
-	public static boolean update = false;
+	public static boolean update = false, backup = false;
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
 	private final JLabel label;
+	private static String sep = File.separator;
 
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
@@ -201,7 +202,7 @@ public class ModManager extends JDialog {
 
 	private boolean upToDate() throws IOException {
 		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-		File version = new File(Settings.getSettings().getInstallPath() + File.separator + pack.getDir() + File.separator + "version");
+		File version = new File(Settings.getSettings().getInstallPath() + sep + pack.getDir() + sep + "version");
 		if(!version.exists()) {
 			System.out.println("File not found.");
 			version.getParentFile().mkdirs();
@@ -222,6 +223,13 @@ public class ModManager extends JDialog {
 			if(!update) {
 				return true;
 			}
+			if(backup) {
+				File destination = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config_backup");
+				if(destination.exists()) {
+					FileUtils.delete(destination);
+				}
+				FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
+			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
 			out.flush();
@@ -237,7 +245,7 @@ public class ModManager extends JDialog {
 
 	public static void cleanUp() {
 		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + pack.getDir() + File.separator);
+		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + pack.getDir() + sep);
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
 				try {
