@@ -1,7 +1,6 @@
 package net.ftb.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -15,6 +14,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -29,6 +29,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import net.ftb.log.ILogListener;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class LauncherConsole extends JDialog implements ILogListener {
 	private static final long serialVersionUID = 1L;
@@ -103,16 +104,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				if (result == 0) {
 					StringSelection content = new StringSelection(Logger.getInstance().getLogbufferExtensive().toString());
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(content, null);
-					if(Desktop.isDesktopSupported()) {
-						Desktop desktop = Desktop.getDesktop();
-						try {
-							desktop.browse(new URI("http://www.pastebin.com/"));
-						} catch(Exception exc) {
-							Logger.logError("could not open url: "+exc.getMessage());
-						}
-					} else {
-						Logger.logWarn("could not open url, not supported");
-					}
+					try {
+						OSUtils.browse(new URI("http://www.pastebin.com/"));
+					} catch (URISyntaxException e) { }
 				}
 			}
 		});
@@ -132,16 +126,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		ircButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(Desktop.isDesktopSupported()) {
-					Desktop desktop = Desktop.getDesktop();
-					try {
-						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
-					} catch(Exception exc) {
-						Logger.logError("could not open url: "+exc.getMessage());
-					}
-				} else {
-					Logger.logWarn("could not open url, not supported");
-				}
+				try {
+					OSUtils.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
+				} catch(Exception e) { }
 			}
 		});
 		panel.add(ircButton);

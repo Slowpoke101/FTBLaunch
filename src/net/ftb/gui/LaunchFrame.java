@@ -2,7 +2,6 @@ package net.ftb.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -815,45 +814,11 @@ public class LaunchFrame extends JFrame {
 
 
 	public void hLink(MouseEvent me, URI uri) {
-		if(Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				desktop.browse(uri);
-			} catch(Exception exc) { Logger.logError("Exception occurred durring opening Link",exc); }
-		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
-			File xdg = new File("/usr/bin/xdg-open");
-			if (xdg.exists()) {
-				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
-				try {
-					pb.start();
-				} catch (IOException e) { }
-			} else {
-				Logger.logWarn("Desktop not supported.");
-			}
-		} else {
-			Logger.logWarn("Desktop not supported.");
-		}
+		OSUtils.browse(uri);
 	}
 
 	public void hLink(ActionEvent ae, URI uri) {
-		if(Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				desktop.browse(uri);
-			} catch (IOException e) { e.printStackTrace(); }
-		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
-			File xdg = new File("/usr/bin/xdg-open");
-			if (xdg.exists()) {
-				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
-				try {
-					pb.start();
-				} catch (IOException e) { }
-			} else {
-				Logger.logWarn("Desktop not supported.");
-			}
-		} else {
-			Logger.logWarn("Desktop not supported.");
-		}
+		OSUtils.browse(uri);
 	}
 
 	public static String getTime() {
