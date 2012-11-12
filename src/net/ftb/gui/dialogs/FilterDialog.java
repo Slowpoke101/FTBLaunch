@@ -18,8 +18,8 @@ public class FilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:");
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"});
-	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel");
-
+	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
+	
 	public FilterDialog(final ModpacksPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setupGui();
@@ -58,6 +58,13 @@ public class FilterDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+			}
+		});
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SearchDialog sd = new SearchDialog(instance);
+				sd.setVisible(true);
 			}
 		});
 	}
@@ -102,14 +109,21 @@ public class FilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SearchDialog sd = new SearchDialog(instance);
+				sd.setVisible(true);
+			}
+		});
 	}
 
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");
-		setBounds(300, 300, 230, 140);
+		setBounds(300, 300, 230, 175);
 		setResizable(false);
-		panel.setBounds(0, 0, 230, 140);
+		panel.setBounds(0, 0, 230, 175);
 		panel.setLayout(null);
 		setContentPane(panel);
 		typeLbl.setBounds(10, 10, 100, 30);
@@ -117,6 +131,7 @@ public class FilterDialog extends JDialog {
 		originLbl.setBounds(10, 40, 100, 30);
 		originBox.setBounds(120, 40, 100, 30);
 		applyButton.setBounds(10, 80, 100, 25);
+		searchButton.setBounds(10, 105, 210, 25);
 		getRootPane().setDefaultButton(applyButton);
 		cancelButton.setBounds(120, 80, 100, 25);
 		panel.add(typeLbl);
@@ -125,5 +140,6 @@ public class FilterDialog extends JDialog {
 		panel.add(originBox);
 		panel.add(applyButton);
 		panel.add(cancelButton);
+		panel.add(searchButton);
 	}
 }

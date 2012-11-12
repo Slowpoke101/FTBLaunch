@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -203,6 +204,26 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 					currentMaps.put(counter, map);
 					counter++;
 				}
+			}
+		}
+		updateMaps();
+	}
+	
+	public static void searchPacks(String search) {
+		mapPanels.clear();
+		maps.removeAll();
+		currentMaps.clear();
+		maps.setMinimumSize(new Dimension(420, 0));
+		maps.setPreferredSize(new Dimension(420, 0));
+		maps.setLayout(null);
+		maps.setOpaque(false);
+		int counter = 0;
+		selectedMap = 0;
+		for(Map map : Map.getMapArray()) {
+			if(map.getName().equalsIgnoreCase(search) || map.getAuthor().equalsIgnoreCase(search)) {
+				addMap(map);
+				currentMaps.put(counter, map);
+				counter++;
 			}
 		}
 		updateMaps();

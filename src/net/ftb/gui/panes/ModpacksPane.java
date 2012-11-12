@@ -245,6 +245,26 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 		updatePacks();
 	}
+	
+	public static void searchPacks(String search) {
+		packPanels.clear();
+		packs.removeAll();
+		currentPacks.clear();
+		packs.setMinimumSize(new Dimension(420, 0));
+		packs.setPreferredSize(new Dimension(420, 0));
+		packs.setLayout(null);
+		packs.setOpaque(false);
+		int counter = 0;
+		selectedPack = 0;
+		for(ModPack pack : ModPack.getPackArray()) {
+			if(pack.getName().equalsIgnoreCase(search) || pack.getAuthor().equalsIgnoreCase(search)) {
+				addPack(pack);
+				currentPacks.put(counter, pack);
+				counter++;
+			}
+		}
+		updatePacks();
+	}
 
 	private static void updatePacks() {
 		for (int i = 0; i < packPanels.size(); i++) {
