@@ -326,7 +326,7 @@ public class LaunchFrame extends JFrame {
 //						ErrorUtils.tossError("Please select a profile!");
 //					}
 //				}
-				PlayOfflineDialog d = new PlayOfflineDialog("mcDown");
+				PlayOfflineDialog d = new PlayOfflineDialog("mcDown", UserManager.getUsername(users.getSelectedItem().toString()));
 				d.setVisible(true);
 			}
 		});
@@ -457,7 +457,7 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * call this to login
 	 */
-	public void doLogin(String username, String password) {
+	public void doLogin(final String username, String password) {
 		if(password.isEmpty()) {
 			PasswordDialog p = new PasswordDialog(this, true);
 			p.setVisible(true);
@@ -499,7 +499,7 @@ public class LaunchFrame extends JFrame {
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
 						ErrorUtils.tossError("Login failed due IOException");
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown");
+						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
 					} else if (err.getCause() instanceof MalformedURLException) {
 						ErrorUtils.tossError("Login failed due malformed URL"); 

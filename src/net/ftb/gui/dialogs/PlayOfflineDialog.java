@@ -2,14 +2,17 @@ package net.ftb.gui.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 import net.ftb.mclauncher.MinecraftLauncher;
 
 public class PlayOfflineDialog extends JDialog {
@@ -18,7 +21,7 @@ public class PlayOfflineDialog extends JDialog {
 	private JTextArea text;
 	private JButton yes, no;
 	
-	public PlayOfflineDialog(String cause) {
+	public PlayOfflineDialog(String cause, final String username) {
 		if(cause.equals("mcDown")) {
 			text = new JTextArea("Minecraft Servers are down..\nWould you like to Play Offline?");
 		} else if (cause.equals("other")) {
@@ -29,9 +32,11 @@ public class PlayOfflineDialog extends JDialog {
 		yes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				MinecraftLauncher l = new MinecraftLauncher();
-				l.launchMinecraft(Settings.getSettings().getInstallPath(), "", "", LaunchFrame.FORGENAME, Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
-				setVisible(false);
+				int result = MinecraftLauncher.launchMinecraft(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + "minecraft", username, "offlinemods", LaunchFrame.FORGENAME, Settings.getSettings().getRamMin(), Settings.getSettings().getRamMax());
+				Logger.logInfo("MinecraftLauncher said: "+result);
+				if (result > 0) {
+					System.exit(0);
+				}
 			}
 		});
 		no = new JButton("No");
