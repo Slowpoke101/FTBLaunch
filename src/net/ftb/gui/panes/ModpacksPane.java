@@ -7,11 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,6 +22,8 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.events.ModPackListener;
@@ -42,7 +47,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static boolean modPacksAdded = false;
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 	private final ModpacksPane instance = this;
-	private static JTextArea packInfo;
+	private static JEditorPane packInfo;
 
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
@@ -128,11 +133,21 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setViewportView(packs);
 		add(packsScroll);
 
-		packInfo = new JTextArea();
+		packInfo = new JEditorPane();
 		packInfo.setEditable(false);
-		packInfo.setWrapStyleWord(true);
-		packInfo.setLineWrap(true);
+		packInfo.setContentType("text/html");
+		packInfo.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent event) {
+				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					try {
+						LaunchFrame.getInstance().hLink(event.getURL().toURI());
+					} catch (URISyntaxException e) { }
+				}
+			}
+		});
 		packInfo.setBounds(420, 210, 410, 90);
+		// TODO: Fix darker background for text area? Or is it better blending in?
 		packInfo.setBackground(UIManager.getColor("control").darker().darker());
 		add(packInfo);
 		
@@ -273,7 +288,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				packInfo.setText(ModPack.getPack(getIndex()).getInfo());
+				packInfo.setText(ModPack.getPack(getIndex()).getInfo().replace("%%AS%%", "<a href=\"").replace("%%AUC%%", "\">").replace("%%AC%%", "</a>"));
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
