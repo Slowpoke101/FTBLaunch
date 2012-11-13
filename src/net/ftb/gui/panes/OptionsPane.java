@@ -39,7 +39,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	protected static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
+	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, lblWhyMaxRam;
 	private JSlider ramMaximum;
 	private JComboBox locale;
 
@@ -132,7 +132,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_lblCurrentRam.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCurrentRam.gridx = 3;
 		gbc_lblCurrentRam.gridy = 6;
-
+                
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
@@ -194,7 +194,18 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(lblRamMaximum, gbc_lblRamMaximum);
 		add(ramMaximum, gbc_textField_2);
 		add(currentRam, gbc_lblCurrentRam);
-
+                
+                if(vmType.equals("32")){
+                    lblWhyMaxRam = new JLabel(I18N.getLocaleString("WHY_MAX_RAM"));
+                    lblWhyMaxRam.setToolTipText(I18N.getLocaleString("WHY_MAX_RAM_TOOLTIP"));
+                    GridBagConstraints gbc_lblWhyMaxRam = new GridBagConstraints();
+                    gbc_lblWhyMaxRam.anchor = GridBagConstraints.WEST;
+                    gbc_lblWhyMaxRam.insets = new Insets(0, 0, 5, 5);
+                    gbc_lblWhyMaxRam.gridx = 4;
+                    gbc_lblWhyMaxRam.gridy = 6;
+                    add(lblWhyMaxRam, gbc_lblWhyMaxRam);
+                }
+                
 		Vector locales = new Vector();
 		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
 			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
