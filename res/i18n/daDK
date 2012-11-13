@@ -1,3 +1,4 @@
+LOCALE_NAME = Dansk
 LOCALE_LOADED = Dansk sprogfil loadet!
 
 # Footer #
@@ -20,8 +21,8 @@ INSTALL_TEXTUREPACK = Installer TexturePack
 # Options pane
 INSTALL_FOLDER = Installationsmappe...
 FORCE_UPDATE = Gennemtving opdatering?
-RAM_MIN = RAM Minimum (M)
-RAM_MAX = RAM Maksimum (M)
+RAM_MIN = RAM Minimum (MB)
+RAM_MAX = RAM Maksimum (MB)
 LANGUAGE = Sprog
 
 # Shared strings

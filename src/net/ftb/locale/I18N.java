@@ -1,10 +1,13 @@
 package net.ftb.locale;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
 /**
@@ -14,35 +17,69 @@ import net.ftb.log.Logger;
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();
+	private static File dir = new File(Settings.getSettings().getInstallPath() + File.separator + "i18n");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
 	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;
 
 	public enum Locale {
+		daDK,
 		deDE,
 		enUS,
 		nlNL,
-		ruRU,
 		ptBR,
 		ptPT,
+		ruRU,
 		svSE
+	}
+
+	/**
+	 * Gets the locale properties and stores loads it to locales
+	 * @param file The locale file
+	 */
+	private static void getLocaleProperties(String file) {
+		locales.clear();
+		if (file.equalsIgnoreCase("enUS")) {
+			try {
+				locales.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
+			} catch (IOException e) {
+				Logger.logError("[i18n] Could not load language file", e);
+			}
+		} else {
+			try {
+				locales.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
+			} catch (IOException e) {
+				Logger.logError("[i18n] Could not load language file", e);
+			}
+		}
 	}
 
 	/**
 	 * Set available locales and load fallback locale
 	 */
 	public static void setupLocale() {
-		// TODO: Find a "nicer" way to do this :p
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
-		localeFiles.put("deDE", "Deutsch"); localeIndices.put(1, "deDE");
-		localeFiles.put("nlNL", "Nederlands"); localeIndices.put(2, "nlNL");
-		localeFiles.put("ptBR", "Português (Brasil)"); localeIndices.put(3, "ptBR");
-		localeFiles.put("ptPT", "Português (Europeu)"); localeIndices.put(4, "ptPT");
-		localeFiles.put("ruRU", "Русского (Russian)"); localeIndices.put(5, "ruRU");
-		localeFiles.put("svSE", "Svensk (Swedish)"); localeIndices.put(6, "svSE");
+		LocaleUpdater.checkForUpdates();
+		// Add files from i18n directory
+		int i = 1;
+		Properties tmp = new Properties();
+		String[] list = dir.list();
+		for (String file : list) {
+			if (file.matches("^\\w{4}$")) {
+				try {
+					tmp.clear();
+					tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
+					localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
+					localeIndices.put(i, file);
+					i++;
+				} catch (IOException e) {
+					Logger.logError("[i18n] Could not load language file", e);
+				}
+			}
+		}
 		try {
 			fallback.clear();
-			fallback.load(I18N.class.getResourceAsStream("/i18n/enUS"));
+			fallback.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
 			Logger.logInfo("[i18n] Fallback enUS loaded");
 		} catch (IOException e) {
 			Logger.logError("[i18n] Could not load fallback file", e);
@@ -54,7 +91,9 @@ public class I18N {
 	 * @param locale the language file to be loaded
 	 */
 	public static void setLocale(String locale) {
-		if(locale.equalsIgnoreCase("deDE")) {
+		if (locale.equalsIgnoreCase("daDK")) {
+			currentLocale = Locale.daDK;
+		} else if (locale.equalsIgnoreCase("deDE")) {
 			currentLocale = Locale.deDE;
 		} else if(locale.equalsIgnoreCase("nlNL")){
 			currentLocale = Locale.nlNL;
@@ -64,18 +103,13 @@ public class I18N {
 			currentLocale = Locale.ptPT;
 		} else if(locale.equalsIgnoreCase("ruRU")){
 			currentLocale = Locale.ruRU;
-		} else if(locale.equalsIgnoreCase("svSE")){ 
+		} else if(locale.equalsIgnoreCase("svSE")){
 			currentLocale = Locale.svSE;
 		} else {
 			currentLocale = Locale.enUS;
 		}
-		try {
-			locales.clear();
-			locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + locale).openStream(), "UTF8"));
-			Logger.logInfo("[i18n] " + locale + " " + locales.getProperty("LOCALE_LOADED", "loaded"));
-		} catch (IOException e) {
-			Logger.logError("[i18n] Could not load locale file", e);
-		}
+		getLocaleProperties(locale);
+		Logger.logInfo("[i18n] " + locale + " " + locales.getProperty("LOCALE_LOADED", "loaded"));
 	}
 
 	/**
