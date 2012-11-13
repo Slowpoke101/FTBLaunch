@@ -15,9 +15,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -31,8 +34,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	protected static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	private JLabel lblInstallFolder, lblRamMinimum, lblRamMaximum, lblLocale;
-	private JTextField ramMinimum, ramMaximum;
+	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
+	private JSlider ramMaximum;
 	private JComboBox locale;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
@@ -51,23 +54,48 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
 		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 };
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		this.setLayout(gbl_contentPanel);
+		setLayout(gbl_contentPanel);
 
-		ramMaximum = new JTextField(Settings.getSettings().getRamMax());
+		currentRam = new JLabel();
+
+		ramMaximum = new JSlider();
+		ramMaximum.setSnapToTicks(true);
+		ramMaximum.setMajorTickSpacing(256);
+		ramMaximum.setMinorTickSpacing(256);
+		ramMaximum.setMinimum(256);
+		ramMaximum.setMaximum(1536);
+		String vmType = System.getProperty("sun.arch.data.model");
+		if(vmType != null && vmType.equals("64")) {
+			// TODO: Dynamically set to max ram on computer
+			ramMaximum.setMaximum(16384);
+		}
+		int ramMax = Integer.parseInt(Settings.getSettings().getRamMax());
+		if(ramMax > ramMaximum.getMaximum()) {
+			ramMaximum.setValue(ramMaximum.getMaximum());
+		} else {
+			ramMaximum.setValue(ramMax);
+		}
+		currentRam.setText(getAmount());
+		ramMaximum.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				currentRam.setText(getAmount());
+			}
+		});
+		ramMaximum.addFocusListener(settingsChangeListener);
+
+		GridBagConstraints gbc_lblCurrentRam = new GridBagConstraints();
+		gbc_lblCurrentRam.anchor = GridBagConstraints.WEST;
+		gbc_lblCurrentRam.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCurrentRam.gridx = 3;
+		gbc_lblCurrentRam.gridy = 6;
+
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 2;
-		gbc_textField_2.gridy = 7;
+		gbc_textField_2.gridy = 6;
 		ramMaximum.addFocusListener(settingsChangeListener);
-
-		ramMinimum = new JTextField(Settings.getSettings().getRamMin());
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 6;
-		ramMinimum.addFocusListener(settingsChangeListener);
 
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.addActionListener(new ChooseDir(this));
@@ -88,7 +116,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_installFolderTextField.gridx = 1;
 		gbc_installFolderTextField.gridy = 3;
 		installFolderTextField.addFocusListener(settingsChangeListener);
-		this.add(installFolderTextField, gbc_installFolderTextField);
+		add(installFolderTextField, gbc_installFolderTextField);
 		installFolderTextField.setColumns(10);
 
 		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
@@ -112,27 +140,17 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tglbtnForceUpdate.gridx = 1;
 		gbc_tglbtnForceUpdate.gridy = 4;
-		this.add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
-
-		lblRamMinimum = new JLabel(I18N.getLocaleString("RAM_MIN"));
-		GridBagConstraints gbc_lblRamMinimum = new GridBagConstraints();
-		gbc_lblRamMinimum.anchor = GridBagConstraints.EAST;
-		gbc_lblRamMinimum.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRamMinimum.gridx = 1;
-		gbc_lblRamMinimum.gridy = 6;
-		this.add(lblRamMinimum, gbc_lblRamMinimum);
-		this.add(ramMinimum, gbc_textField_1);
-		ramMinimum.setColumns(10);
+		add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
 		gbc_lblRamMaximum.anchor = GridBagConstraints.EAST;
 		gbc_lblRamMaximum.insets = new Insets(0, 0, 5, 5);
 		gbc_lblRamMaximum.gridx = 1;
-		gbc_lblRamMaximum.gridy = 7;
-		this.add(lblRamMaximum, gbc_lblRamMaximum);
-		this.add(ramMaximum, gbc_textField_2);
-		ramMaximum.setColumns(10);
+		gbc_lblRamMaximum.gridy = 6;
+		add(lblRamMaximum, gbc_lblRamMaximum);
+		add(ramMaximum, gbc_textField_2);
+		add(currentRam, gbc_lblCurrentRam);
 
 		Vector locales = new Vector();
 		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
@@ -145,7 +163,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_locale.insets = new Insets(0, 0, 5, 5);
 		gbc_locale.fill = GridBagConstraints.HORIZONTAL;
 		gbc_locale.gridx = 2;
-		gbc_locale.gridy = 8;
+		gbc_locale.gridy = 7;
 		locale.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -163,9 +181,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_lblLocale.anchor = GridBagConstraints.EAST;
 		gbc_lblLocale.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLocale.gridx = 1;
-		gbc_lblLocale.gridy = 8;
-		this.add(lblLocale, gbc_lblLocale);
-		this.add(locale, gbc_locale);
+		gbc_lblLocale.gridy = 7;
+		add(lblLocale, gbc_lblLocale);
+		add(locale, gbc_locale);
 	}
 
 	@Override public void onVisible() { }
@@ -197,16 +215,25 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public void saveSettingsInto(Settings settings) {
 		settings.setInstallPath(installFolderTextField.getText());
 		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
-		settings.setRamMax(ramMaximum.getText());
-		settings.setRamMin(ramMinimum.getText());
+		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 	}
 
 	public void updateLocale() {
 		lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
-		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));
-		lblRamMinimum.setText(I18N.getLocaleString("RAM_MIN"));
+		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));;
 		lblRamMaximum.setText(I18N.getLocaleString("RAM_MAX"));
 		lblLocale.setText(I18N.getLocaleString("LANGUAGE"));
+	}
+
+	private String getAmount() {
+		String result = "";
+		if(ramMaximum.getValue() >= 1024) {
+			int quaters = ramMaximum.getValue() / 256;
+			result = Math.round(quaters / 4) + "." + ((quaters % 4) * 25) + " GB";
+		} else {
+			result = ramMaximum.getValue() + " MB";
+		}
+		return result;
 	}
 }

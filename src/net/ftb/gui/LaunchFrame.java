@@ -75,7 +75,6 @@ import net.ftb.updater.UpdateChecker;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -677,8 +676,7 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	protected void launchMinecraft(String workingDir, String username, String password) {
-		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMin(),
-				Settings.getSettings().getRamMax());
+		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 		Logger.logInfo("MinecraftLauncher said: "+result);
 		if (result > 0) {
 			System.exit(0);

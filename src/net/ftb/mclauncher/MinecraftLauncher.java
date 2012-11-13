@@ -27,7 +27,7 @@ import net.ftb.util.OSUtils;
  *
  */
 public class MinecraftLauncher {
-	public static int launchMinecraft(String workingDir, String username, String password, String forgename, String rmin, String rmax) {
+	public static int launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) {
 		int success = -1;
 		try {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
@@ -71,7 +71,7 @@ public class MinecraftLauncher {
 			arguments.add(path);
 
 			// TODO: Find a way to check if we can allocate this memory.
-			setMemory(arguments, rmin, rmax);
+			setMemory(arguments, rmax);
 
 			arguments.add("-cp");
 			arguments.add(System.getProperty("java.class.path") + cpb.toString());
@@ -91,31 +91,17 @@ public class MinecraftLauncher {
 		return success;
 	}
 
-	private static void setMemory(List<String> arguments, String rmin, String rmax) {
+	private static void setMemory(List<String> arguments, String rmax) {
 		boolean memorySet = false;
 		try {
-			int min = -1, max = -1;
-			if (rmin != null && Integer.parseInt(rmin) > 0) {
-				min = Integer.parseInt(rmin);
-			}
+			int min = 256, max = -1;
 			if (rmax != null && Integer.parseInt(rmax) > 0) {
 				max = Integer.parseInt(rmax);
-				if (min > 0 && max > 0) {
-					if(min < max) {
-						arguments.add("-Xms" + rmin + "M");
-						Logger.logInfo("Setting MinMemory to " + rmin);
-						arguments.add("-Xmx" + rmax + "M");
-						Logger.logInfo("Setting MaxMemory to " + rmax);
-						memorySet = true;
-					} else {
-						Logger.logInfo("Min memory bigger than Max, swapping values.");
-						arguments.add("-Xms" + rmax + "M");
-						Logger.logInfo("Setting MinMemory to " + rmin);
-						arguments.add("-Xmx" + rmin + "M");
-						Logger.logInfo("Setting MaxMemory to " + rmax);
-						memorySet = true;
-					}
-				}
+				arguments.add("-Xms" + min + "M");
+				Logger.logInfo("Setting MinMemory to " + min);
+				arguments.add("-Xmx" + rmax + "M");
+				Logger.logInfo("Setting MaxMemory to " + rmax);
+				memorySet = true;
 			}
 		} catch (Exception e) { Logger.logError("Error parsing memory settings", e); }
 		if (!memorySet) {
