@@ -23,6 +23,8 @@ INSTALL_FOLDER = Install folder...
 FORCE_UPDATE = Force update?
 RAM_MIN = RAM Minimum (MB)
 RAM_MAX = RAM Maximum (MB)
+WHY_MAX_RAM = Why is my max 1.5G?
+WHY_MAX_RAM_TOOLTIP = <html>You are running 32 BIT Java,<br /> this limits you to a max of 1.5 gigs,<br /> to be able to use more you need to have a 64 bit OS and 64 bit Java.<html>
 LANGUAGE = Language
 
 # Shared strings
