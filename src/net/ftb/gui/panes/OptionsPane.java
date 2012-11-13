@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.Map;
 import java.util.Vector;
 
@@ -21,6 +22,8 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.sun.management.OperatingSystemMXBean;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -58,16 +61,29 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		currentRam = new JLabel();
 
+		OperatingSystemMXBean mxbean = (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+		long ram = mxbean.getTotalPhysicalMemorySize()/1024/1024;
+		
 		ramMaximum = new JSlider();
 		ramMaximum.setSnapToTicks(true);
 		ramMaximum.setMajorTickSpacing(256);
 		ramMaximum.setMinorTickSpacing(256);
 		ramMaximum.setMinimum(256);
-		ramMaximum.setMaximum(1536);
 		String vmType = System.getProperty("sun.arch.data.model");
-		if(vmType != null && vmType.equals("64")) {
-			// TODO: Dynamically set to max ram on computer
-			ramMaximum.setMaximum(16384);
+		if(vmType != null){
+			if(vmType.equals("64")) {
+				if(ram < 16384) {
+					ramMaximum.setMaximum((int)ram);
+				} else {
+				ramMaximum.setMaximum(16384);
+				}
+			} else if(vmType.equals("32")) {
+				if(ram < 1536) {
+					ramMaximum.setMaximum((int)ram);
+				} else {
+				ramMaximum.setMaximum(1536);
+				}
+			}
 		}
 		int ramMax = Integer.parseInt(Settings.getSettings().getRamMax());
 		if(ramMax > ramMaximum.getMaximum()) {
