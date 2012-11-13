@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.Settings;
@@ -77,6 +78,7 @@ public class UpdateChecker {
 		String path = null;
 		try {
 			path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
+			path = URLDecoder.decode(path, "UTF-8");
 		} catch (IOException e) { Logger.logError("Couldn't get path to current launcher jar/exe", e); }
 		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
 		String extension = path.substring(path.lastIndexOf('.') + 1);
