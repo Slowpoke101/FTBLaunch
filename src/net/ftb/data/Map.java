@@ -84,8 +84,24 @@ public class Map {
 			ImageIO.write(tempImg, "png", new File(dir, image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + logo);
-			this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + image);
+			if(new File(dir, logo).exists()) {
+				this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + logo);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(dir, logo));
+				tempImg.flush();
+			}
+			if(new File(dir, image).exists()) {
+				this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + image);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(image));
+				this.image = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(dir, image));
+				tempImg.flush();
+			}
 		}
 		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 		size = url_.openConnection().getContentLength();
