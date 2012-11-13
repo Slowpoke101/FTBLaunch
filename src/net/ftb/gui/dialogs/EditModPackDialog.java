@@ -213,6 +213,8 @@ public class EditModPackDialog extends JDialog {
 				enabledList_.add(name);
 			} else if(name.toLowerCase().endsWith(".jar")) {
 				enabledList_.add(name);
+			} else if(name.toLowerCase().endsWith(".litemod")) {
+				enabledList_.add(name);
 			}
 		}
 		String[] enabledList = new String[enabledList_.size()];

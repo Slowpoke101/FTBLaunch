@@ -214,24 +214,24 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		selectedMap = 0;
 
 		for(Map map : Map.getMapArray()) {
-		if(map.getCompatible().equals(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir())) {
-			if(origin.equalsIgnoreCase("all")) {
+			if(map.getCompatible().equals(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir())) {
+				if(origin.equalsIgnoreCase("all")) {
 					addMap(map);
 					currentMaps.put(counter, map);
 					counter++;
-				}
-			} else if(origin.equalsIgnoreCase("ftb")) {
+				} else if(origin.equalsIgnoreCase("ftb")) {
 					if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
 						addMap(map);
 						currentMaps.put(counter, map);
 						counter++;
 					}
-			} else {
+				} else {
 					if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
 						addMap(map);
 						currentMaps.put(counter, map);
 						counter++;
 					}
+				}
 			}
 		}
 		updateMaps();
