@@ -40,7 +40,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
-	public static String type = "Client", origin = "All";
+	public static String origin = "All";
 	private JButton filter;
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
@@ -80,7 +80,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		});
 		add(filter);
 
-		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + origin +"</body></html>");
 		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
@@ -271,7 +271,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	public static void updateFilter() {
-		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + origin +"</body></html>");
 		sortTexturePacks();
 		LaunchFrame.getInstance().updateFooter();
 	}

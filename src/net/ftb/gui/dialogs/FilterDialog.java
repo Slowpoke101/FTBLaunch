@@ -126,15 +126,7 @@ public class FilterDialog extends JDialog {
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String type = "", origin = "";
-				switch(typeBox.getSelectedIndex()) {
-				case 0:
-					type = "Client";
-					break;
-				case 1:
-					type = "Server";
-					break;
-				}
+				String origin = "";
 				switch(originBox.getSelectedIndex()) {
 				case 0:
 					origin = "All";
@@ -146,7 +138,6 @@ public class FilterDialog extends JDialog {
 					origin = "3rd Party";
 					break;
 				}
-				instance.type = type;
 				instance.origin = origin;
 				instance.updateFilter();
 				setVisible(false);
@@ -170,10 +161,8 @@ public class FilterDialog extends JDialog {
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");
-//		setBounds(300, 300, 230, 175);
 		setBounds(300, 300, 230, 140);
 		setResizable(false);
-//		panel.setBounds(0, 0, 230, 175);
 		panel.setBounds(0, 0, 230, 140);
 		panel.setLayout(null);
 		setContentPane(panel);

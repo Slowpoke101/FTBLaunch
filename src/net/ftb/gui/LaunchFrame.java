@@ -75,6 +75,7 @@ import net.ftb.updater.UpdateChecker;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -135,6 +136,20 @@ public class LaunchFrame extends JFrame {
 				+ " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
+		switch(OSUtils.getCurrentOS()) {
+		case WINDOWS:
+			Logger.logInfo(System.getenv("APPDATA"));
+			break;
+		case MACOSX:
+			Logger.logInfo(System.getProperty("user.home") + "/Library/Application Support");
+			break;
+		case UNIX:
+			Logger.logInfo(System.getProperty("user.home"));
+			break;
+		default:
+			Logger.logInfo(System.getProperty("user.dir"));
+			break;
+		}
 		// TODO: Format this to MB or GB?
 		Logger.logInfo("Max Memory: " + Runtime.getRuntime().maxMemory());
 
