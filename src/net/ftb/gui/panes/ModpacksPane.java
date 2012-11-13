@@ -196,6 +196,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			@Override public void mouseClicked(MouseEvent e) {
 				selectedPack = packIndex;
 				updatePacks();
+				MapsPane.sortMaps();
 			}
 			@Override public void mouseReleased(MouseEvent e) { }
 			@Override public void mousePressed(MouseEvent e) { }
