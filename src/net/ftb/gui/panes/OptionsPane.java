@@ -23,7 +23,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -61,8 +63,37 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		currentRam = new JLabel();
 
-		OperatingSystemMXBean mxbean = (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
-		long ram = mxbean.getTotalPhysicalMemorySize()/1024/1024;
+		long ram = 0;
+		
+		OperatingSystemMXBean operatingSystemMXBean = 
+				ManagementFactory.getOperatingSystemMXBean();
+
+		Method m;
+		try {
+			m = operatingSystemMXBean.getClass().
+					getDeclaredMethod("getTotalPhysicalMemorySize");
+			
+			m.setAccessible(true);
+
+			Object value = m.invoke(operatingSystemMXBean);
+
+			if (value != null) {
+				ram = Long.valueOf(value.toString()) / 1024 / 1024;
+			} else {
+				System.out.println("Could not get RAM Value");
+				ram = 8192;
+			}
+		} catch (SecurityException e1) {
+			e1.printStackTrace();
+		} catch (NoSuchMethodException e1) {
+			e1.printStackTrace();
+		} catch (IllegalArgumentException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+		}
 		
 		ramMaximum = new JSlider();
 		ramMaximum.setSnapToTicks(true);
