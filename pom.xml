@@ -110,12 +110,13 @@
                 </copy>
                 <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/${project.artifactId}.app/Contents/Resources/FTB_Launcher.jar" />
                 <replace file="${project.build.directory}/${project.artifactId}.app/Contents/Info.plist" token="##VERSION##" value="${version}" />
+                <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" includes="FTB_Launcher" eol="unix" />
+                <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" eol="unix" />
                 <chmod file="${project.build.directory}/${project.artifactId}.app/Contents/MacOS/FTB_Launcher" perm="+x" />
                 <zip destfile="${project.build.directory}/${project.artifactId}.app.zip">
 		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" prefix="${project.artifactId}.app/Contents/MacOS/" filemode="755" />
 		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/Resources" prefix="${project.artifactId}.app/Contents/Resources/" />
-		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/" prefix="${project.artifactId}.app/Contents/" />
-		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/" includes="Info.plist" fullpath="${project.artifactId}.app/Contents/Info.plist" />
+		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" fullpath="${project.artifactId}.app/Contents/Info.plist" />
                 </zip>
 		<delete dir="${project.build.directory}/${project.artifactId}.app" />
               </target>
