@@ -34,6 +34,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
@@ -49,7 +50,7 @@ public class ModManager extends JDialog {
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
 			if(!upToDate()) {
 				Logger.logInfo("Not up to date!");
-				String installPath = Settings.getSettings().getInstallPath();
+				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 				File modPackZip = new File(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl());
 				if(modPackZip.exists()) {
@@ -97,7 +98,7 @@ public class ModManager extends JDialog {
 
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
-			String installPath = Settings.getSettings().getInstallPath();
+			String installPath = OSUtils.getDynamicStorageLocation();
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 			new File(installPath + "/temp/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/" + dir + "/" + modPackName).createNewFile();
@@ -108,7 +109,7 @@ public class ModManager extends JDialog {
 
 		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
-			String installPath = Settings.getSettings().getInstallPath();
+			String installPath = OSUtils.getDynamicStorageLocation();
 			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
 			// TODO: Check to see if this code even executes, I don't think it does.
 			try {
@@ -245,7 +246,7 @@ public class ModManager extends JDialog {
 
 	public static void cleanUp() {
 		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + pack.getDir() + sep);
+		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "temp" + sep + pack.getDir() + sep);
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
 				try {

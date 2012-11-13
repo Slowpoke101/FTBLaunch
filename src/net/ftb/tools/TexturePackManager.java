@@ -26,6 +26,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 public class TexturePackManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
@@ -41,7 +42,7 @@ public class TexturePackManager extends JDialog {
 	private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			String installPath = Settings.getSettings().getInstallPath();
+			String installPath = OSUtils.getDynamicStorageLocation();
 			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
 			if(new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).exists()) {
 				new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).delete();
@@ -80,7 +81,7 @@ public class TexturePackManager extends JDialog {
 
 		protected void downloadTexturePack(String texturePackName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
-			String installPath = Settings.getSettings().getInstallPath();
+			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/temp/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
 			downloadUrl(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
@@ -90,10 +91,11 @@ public class TexturePackManager extends JDialog {
 		protected void installTexturePack(String texturePackName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
+			String tempPath = OSUtils.getDynamicStorageLocation();
 			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
 			new File(installPath, installDir + "/minecraft/texturepacks/").mkdirs();
-			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
-			FileUtils.copyFile(new File(installPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
+			FileUtils.copyFile(new File(tempPath, "temp/TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
+			FileUtils.copyFile(new File(tempPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -159,7 +161,7 @@ public class TexturePackManager extends JDialog {
 
 	public static void cleanUp() {
 		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
+		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
 		for(String file: tempFolder.list()) {
 			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {

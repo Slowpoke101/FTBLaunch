@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
@@ -80,7 +81,7 @@ public class ModPack {
 		logoName = logo;
 		imageName = image;
 		this.info = info;
-		String installPath = Settings.getSettings().getInstallPath();
+		String installPath = OSUtils.getDynamicStorageLocation();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
 		URL url_;
 		if(!upToDate(verFile)) {
@@ -106,7 +107,7 @@ public class ModPack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + dir).mkdirs();
+				new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + dir).mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}

@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.util.OSUtils;
 import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
@@ -64,7 +65,7 @@ public class TexturePack {
 		this.version = version;
 		this.url = url;
 		this.version = version;
-		String installPath = Settings.getSettings().getInstallPath();
+		String installPath = OSUtils.getDynamicStorageLocation();
 		logoName = logo;
 		imageName = image;
 		this.compatible = compatible.split(",");

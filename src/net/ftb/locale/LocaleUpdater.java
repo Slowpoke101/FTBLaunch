@@ -10,10 +10,11 @@ import java.util.Scanner;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 public class LocaleUpdater {
 	private static final String host = "https://dl.dropbox.com/u/9031641/ftb-test/"; // TODO: update host :P
-	private static final String root = Settings.getSettings().getInstallPath();
+	private static final String root = OSUtils.getDynamicStorageLocation();
 	private static File local = new File(root + File.separator + "temp" + File.separator + "i18n" + File.separator + "version");
 	private static File remote = new File(root + File.separator + "temp" + File.separator + "i18n-version");
 	private static File archive = new File(root + File.separator + "temp" + File.separator + "i18n-files.zip");

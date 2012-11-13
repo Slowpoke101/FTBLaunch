@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.util.OSUtils;
 import net.ftb.workers.MapLoader;
 
 public class Map {
@@ -64,7 +65,7 @@ public class Map {
 		pack = compatible;
 		this.mcversion = mcversion;
 		this.mapname = mapname;
-		String installPath = Settings.getSettings().getInstallPath();
+		String installPath = OSUtils.getDynamicStorageLocation();
 		this.info = info;
 		logoName = logo;
 		imageName = image;
@@ -111,7 +112,7 @@ public class Map {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(Settings.getSettings().getInstallPath(), "temp" + File.separator + "Maps" + File.separator + mapname + File.separator).mkdirs();
+				new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + "Maps" + File.separator + mapname + File.separator).mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}

@@ -149,8 +149,6 @@ public class LaunchFrame extends JFrame {
 			Logger.logInfo(System.getProperty("user.dir"));
 			break;
 		}
-		// TODO: Format this to MB or GB?
-		Logger.logInfo("Max Memory: " + Runtime.getRuntime().maxMemory());
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -194,8 +192,12 @@ public class LaunchFrame extends JFrame {
 				if (!installDir.exists()) {
 					installDir.mkdirs();
 				}
+				File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
+				if(!dynamicDir.exists()) {
+					dynamicDir.mkdirs();
+				}
 
-				userManager = new UserManager(new File(installDir, "logindata"));
+				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
 				LauncherConsole con = new LauncherConsole();
 				con.setVisible(true);
@@ -689,6 +691,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	protected void installMods(String modPackName) throws IOException {
 		String installpath = Settings.getSettings().getInstallPath();
+		String temppath = OSUtils.getDynamicStorageLocation();
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		Logger.logInfo("dirs mk'd");
 		if(new File(installpath, pack.getDir() + "/instMods/").exists()) {
@@ -700,12 +703,12 @@ public class LaunchFrame extends JFrame {
 		if(new File(installpath, pack.getDir() + "/minecraft/coremods/").exists()) {
 			new File(installpath, pack.getDir() + "/minecraft/coremods/").delete();
 		}
-		File source = new File(installpath, "temp/" + pack.getDir() + "/.minecraft");
+		File source = new File(temppath, "temp/" + pack.getDir() + "/.minecraft");
 		if(!source.exists()) {
-			source = new File(installpath, "temp/" + pack.getDir() + "/minecraft");
+			source = new File(temppath, "temp/" + pack.getDir() + "/minecraft");
 		}
 		FileUtils.copyFolder(source, new File(installpath + "/" + pack.getDir() + "/minecraft/"));
-		FileUtils.copyFolder(new File(installpath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
+		FileUtils.copyFolder(new File(temppath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
 	}
 
 	/**

@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 /**
  * i18n class, hooray! \o/
@@ -17,7 +18,7 @@ import net.ftb.log.Logger;
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();
-	private static File dir = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + "i18n");
+	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + "i18n");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
 	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;

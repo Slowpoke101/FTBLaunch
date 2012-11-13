@@ -21,6 +21,25 @@ public class OSUtils {
 		System.out.println("Failed to get path for current directory - falling back to user's home directory.");
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
+	
+	public static String getDynamicStorageLocation() {
+		String output = "";
+		switch(getCurrentOS()) {
+		case WINDOWS:
+			output = System.getenv("APPDATA") + "/ftblauncher/";
+			break;
+		case MACOSX:
+			output = System.getProperty("user.home") + "/Library/Application Support/ftblauncher/";
+			break;
+		case UNIX:
+			output = System.getProperty("user.home") + "/.ftblauncher/";
+			break;
+		default:
+			output = System.getProperty("user.dir");
+			break;
+		}
+		return output;
+	}
 
 	public static String getJavaDelimiter() {
 		if(getCurrentOS() == OS.WINDOWS) {

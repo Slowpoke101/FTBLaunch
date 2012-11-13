@@ -11,6 +11,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -27,7 +28,7 @@ public class UpdateChecker {
 		this.version = version;
 		loadInfo();
 		try {
-			FileUtils.delete(new File(Settings.getSettings().getInstallPath() + File.separator + "updatetemp"));
+			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
 		} catch (Exception ignored) { }
 	}
 
@@ -36,7 +37,7 @@ public class UpdateChecker {
 		this.version = version;
 		loadInfo();
 		try {
-			FileUtils.delete(new File(Settings.getSettings().getInstallPath() + File.separator + "updatetemp"));
+			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
 		} catch (Exception ignored) { }
 	}
 
@@ -77,7 +78,7 @@ public class UpdateChecker {
 		try {
 			path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
 		} catch (IOException e) { Logger.logError("Couldn't get path to current launcher jar/exe", e); }
-		String temporaryUpdatePath = Settings.getSettings().getInstallPath() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
+		String temporaryUpdatePath = OSUtils.getDynamicStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
 		String extension = path.substring(path.lastIndexOf('.') + 1);
 		extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
 

@@ -27,6 +27,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 public class MapManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
@@ -87,7 +88,7 @@ public class MapManager extends JDialog {
 
 		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
-			String installPath = Settings.getSettings().getInstallPath();
+			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/temp/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/temp/Maps/" + dir + "/" + mapName).createNewFile();
 			downloadUrl(installPath + "/temp/Maps/" + dir + "/" + mapName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + mapName);
@@ -98,10 +99,11 @@ public class MapManager extends JDialog {
 		protected void installMap(String mapName, String dir) throws IOException {
 			Logger.logInfo("Installing");
 			String installPath = Settings.getSettings().getInstallPath();
+			String tempPath = OSUtils.getDynamicStorageLocation();
 			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
 			new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir).mkdirs();
-			FileUtils.copyFolder(new File(installPath, "temp/Maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
-			FileUtils.copyFile(new File(installPath, "temp/Maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
+			FileUtils.copyFolder(new File(tempPath, "temp/Maps/" + dir + "/" + dir), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir));
+			FileUtils.copyFile(new File(tempPath, "temp/Maps/" + dir + "/" + "version"), new File(installPath, map.getCompatible() + "/minecraft/saves/" + dir + "/version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -167,7 +169,7 @@ public class MapManager extends JDialog {
 
 	public static void cleanUp() {
 		Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-		File tempFolder = new File(Settings.getSettings().getInstallPath() + sep + "temp" + sep + "Maps" + sep + map.getMapName() + sep);
+		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "temp" + sep + "Maps" + sep + map.getMapName() + sep);
 		for(String file: tempFolder.list()) {
 			if(!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {
