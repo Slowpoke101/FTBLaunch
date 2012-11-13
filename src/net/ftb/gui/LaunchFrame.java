@@ -173,8 +173,8 @@ public class LaunchFrame extends JFrame {
 				} catch (IOException e) { }
 
 				// Setup localizations
-				I18N.setLocale(Settings.getSettings().getLocale());
 				I18N.setupLocale();
+				I18N.setLocale(Settings.getSettings().getLocale());
 
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists()) {

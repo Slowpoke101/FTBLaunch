@@ -1,4 +1,5 @@
-LOCALE_LOADED = TraduÁıes em PortuguÍs (Brasil) carregadas!
+LOCALE_NAME = Portugu√™s (Brasil)
+LOCALE_LOADED = Tradu√ß√µes em Portugu√™s (Brasil) carregadas!
 
 # Footer #
 DONATE_BUTTON = Doar
@@ -8,7 +9,7 @@ EDIT_BUTTON = Editar
 LAUNCH_BUTTON = Iniciar
 PROFILE_CREATE = Criar Perfil
 PROFILE_SELECT = Selecionar Prefil
-DOWNLOAD_SERVER_PACK = Arranje a vers„o para servidores aqui
+DOWNLOAD_SERVER_PACK = Arranje a vers√£o para servidores aqui
 
 # Map Tab
 INSTALL_MAP = Instalar Mapa
@@ -18,18 +19,18 @@ DOWNLOAD_MAP_SERVER = Download Mapa para Servidor
 INSTALL_TEXTUREPACK = Instalar Pacote de Texturas
 
 # Options pane
-INSTALL_FOLDER = Pasta de instalaÁ„o...
-FORCE_UPDATE = ForÁar atualizaÁ„o?
-RAM_MIN = RAM MÌnima (MB)
-RAM_MAX = RAM M·xima (MB)
+INSTALL_FOLDER = Pasta de instala√ß√£o...
+FORCE_UPDATE = For√ßar atualiza√ß√£o?
+RAM_MIN = RAM M√≠nima (MB)
+RAM_MAX = RAM M√°xima (MB)
 LANGUAGE = Linguagem
 
 # Shared strings
-FILTER_SETTINGS = DefiniÁ„os do Filtro
+FILTER_SETTINGS = Defini√ß√£os do Filtro
 
 # Modpacks pane
 MODS_EDIT_PACK = Editar Pacote de Mods
-MODS_WAIT_WHILE_LOADING = Aguarde enquanto os mods est„o sendo carregados...
+MODS_WAIT_WHILE_LOADING = Aguarde enquanto os mods est√£o sendo carregados...
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Mods Habilitados
@@ -41,7 +42,7 @@ MODS_EDIT_DISABLE_MOD = Desabilitar >>
 MODS_EDIT_TITLE = Editor do Pacote de Mods
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Aguarde enquanto os mapas est„o sendo carregados...
+MAPS_WAIT_WHILE_LOADING = Aguarde enquanto os mapas est√£o sendo carregados...
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Aguarde enquanto os pacotes de texturas est„o sendo carregados...
+TEXTURE_WAIT_WHILE_LOADING = Aguarde enquanto os pacotes de texturas est√£o sendo carregados...
