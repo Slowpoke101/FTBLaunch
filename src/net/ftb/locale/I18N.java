@@ -17,7 +17,7 @@ import net.ftb.log.Logger;
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();
-	private static File dir = new File(Settings.getSettings().getInstallPath() + File.separator + "i18n");
+	private static File dir = new File(Settings.getSettings().getInstallPath() + File.separator + "temp" + File.separator + "i18n");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
 	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;

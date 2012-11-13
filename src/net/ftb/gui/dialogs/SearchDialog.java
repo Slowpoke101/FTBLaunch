@@ -7,6 +7,7 @@ import javax.swing.event.DocumentListener;
 
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.panes.TexturepackPane;
 
 public class SearchDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +41,23 @@ public class SearchDialog extends JDialog {
 			
 			@Override public void insertUpdate(DocumentEvent arg0) {
 				instance.searchMaps(searchBar.getText());
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {}
+		});
+	}
+	
+	public SearchDialog(final TexturepackPane instance) {
+		setUpGui();
+		searchBar.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override public void removeUpdate(DocumentEvent arg0) {
+				instance.searchTexturePacks(searchBar.getText());
+			}
+			
+			@Override public void insertUpdate(DocumentEvent arg0) {
+				instance.searchTexturePacks(searchBar.getText());
 			}
 			
 			@Override

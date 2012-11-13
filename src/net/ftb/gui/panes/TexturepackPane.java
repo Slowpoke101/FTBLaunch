@@ -25,6 +25,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -229,6 +230,27 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		updateTexturePacks();
 	}
 
+	public static void searchTexturePacks(String search) {
+		System.out.println("Searching Texture Packs for : " + search);
+		texturePackPanels.clear();
+		texturePacks.removeAll();
+		currentTexturePacks.clear();
+		texturePacks.setMinimumSize(new Dimension(420, 0));
+		texturePacks.setPreferredSize(new Dimension(420, 0));
+		texturePacks.setLayout(null);
+		texturePacks.setOpaque(false);
+		int counter = 0;
+		selectedTexturePack = 0;
+		for(TexturePack texture : TexturePack.getTexturePackArray()) {
+			if(texture.getName().equalsIgnoreCase(search) || texture.getAuthor().equalsIgnoreCase(search)) {
+				addTexturePack(texture);
+				currentTexturePacks.put(counter, texture);
+				counter++;
+			}
+		}
+		updateTexturePacks();
+	}
+	
 	private static void updateTexturePacks() {
 		for (int i = 0; i < texturePackPanels.size(); i++) {
 			if(selectedTexturePack == i) {
