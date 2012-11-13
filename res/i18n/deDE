@@ -37,8 +37,8 @@ MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
 MODS_EDIT_DISABLED_LABEL = Deaktivierte Mods
 MODS_EDIT_OPEN_FOLDER = Verzeichnis öffnen
 MODS_EDIT_ADD_MOD = Mod hinzufügen
-MODS_EDIT_ENABLE_MOD = aktivieren >>
-MODS_EDIT_DISABLE_MOD = << deaktivieren
+MODS_EDIT_ENABLE_MOD = << aktivieren
+MODS_EDIT_DISABLE_MOD = deaktivieren >>
 MODS_EDIT_TITLE = Modpack bearbeiten
 
 # Maps pane
