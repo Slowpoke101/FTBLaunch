@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,7 +149,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		// TODO: Fix darker background for text area? Or is it better blending in?
 		packInfo.setBackground(UIManager.getColor("control").darker().darker());
 		add(packInfo);
-		
+
 		JScrollPane infoScroll = new JScrollPane();
 		infoScroll.setBounds(420, 210, 410, 90);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -261,7 +260,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 		updatePacks();
 	}
-	
+
 	public static void searchPacks(String search) {
 		System.out.println("Searching Packs for : " + search);
 		packPanels.clear();
@@ -286,10 +285,18 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static void updatePacks() {
 		for (int i = 0; i < packPanels.size(); i++) {
 			if(selectedPack == i) {
+				String mods = "";
+				if (ModPack.getPack(getIndex()).getMods() != null) {
+					mods += "<p>This pack contains the following mods by default:</p><ul>";
+					for (String name : ModPack.getPack(getIndex()).getMods()) {
+						mods += "<li>" + name + "</li>";
+					}
+					mods += "</ul>";
+				}
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				packInfo.setText(ModPack.getPack(getIndex()).getInfo());
+				packInfo.setText(ModPack.getPack(getIndex()).getInfo() + mods);
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
