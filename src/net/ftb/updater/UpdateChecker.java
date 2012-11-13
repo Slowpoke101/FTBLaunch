@@ -20,6 +20,7 @@ public class UpdateChecker {
 	private Channel channel;
 	private int version;
 	private int latest;
+	public static String verString = "";
 	private URL downloadUrl;
 
 	public UpdateChecker(int version) {
@@ -49,6 +50,11 @@ public class UpdateChecker {
 			}
 			NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
 			latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
+			char[] temp = String.valueOf(latest).toCharArray();
+			for(int i = 0; i < (temp.length - 1); i++) {
+				verString += temp[i] + ".";
+			}
+			verString += temp[temp.length - 1];
 			String downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 			if (downloadAddress.indexOf("http") != 0) {
 				// TODO: Make this link work, aka upload the newest launcher onto creeperhost. 

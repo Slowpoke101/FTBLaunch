@@ -3,6 +3,8 @@ package net.ftb.gui.dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,8 +19,9 @@ public class LauncherUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("A new launcher version is available.");
+	private JLabel textOne = new JLabel("Version " + UpdateChecker.verString + " of the launcher is available.");
 	private JLabel textTwo = new JLabel("Do you wish to update?");
+	private JButton changelog = new JButton("View Changelog");
 	private JButton yesButton = new JButton("Yes");
 	private JButton noButton = new JButton("No");
 
@@ -27,21 +30,34 @@ public class LauncherUpdateDialog extends JDialog {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Launcher Update Available");
-		setBounds(300, 300, 300, 90);
+		setBounds(300, 300, 300, 150);
 		setResizable(false);
 
-		panel.setBounds(0, 0, 300, 90);
+		panel.setLayout(null);
+		panel.setBounds(0, 0, 300, 150);
 		setContentPane(panel);
 
-		textOne.setLocation(10, 50);
+		textOne.setBounds(0, 0, 300, 30);
 		textOne.setHorizontalAlignment(SwingConstants.CENTER);
-		textOne.setVisible(true);
 		panel.add(textOne);
-		textTwo.setLocation(10, 80);
+
+		textTwo.setBounds(0, 20, 300, 30);
 		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(textTwo);
 
-		yesButton.setVisible(true);
+		changelog.setBounds(65, 55, 170, 25);
+		changelog.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Call new frame containing html page?
+				try {
+					LaunchFrame.getInstance().hLink(new URI("https://dl.dropbox.com/u/2405919/Changelog.html"));
+				} catch (URISyntaxException e) { }
+			}
+		});
+		panel.add(changelog);
+
+		yesButton.setBounds(65, 90, 80, 25);
 		yesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -51,7 +67,7 @@ public class LauncherUpdateDialog extends JDialog {
 		});
 		panel.add(yesButton);
 
-		noButton.setVisible(true);
+		noButton.setBounds(155, 90, 80, 25);
 		noButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
