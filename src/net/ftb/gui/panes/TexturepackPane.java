@@ -7,11 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,7 +21,10 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
+import net.ftb.data.Map;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -38,7 +43,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private JButton filter;
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
-
+	private static JEditorPane textureInfo;
+	
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
 
 	public static boolean loaded = false;
@@ -95,6 +101,32 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacksScroll.setOpaque(false);
 		texturePacksScroll.setViewportView(texturePacks);
 		add(texturePacksScroll);
+		
+		textureInfo = new JEditorPane();
+		textureInfo.setEditable(false);
+		textureInfo.setContentType("text/html");
+		textureInfo.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent event) {
+				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					try {
+						LaunchFrame.getInstance().hLink(event.getURL().toURI());
+					} catch (URISyntaxException e) { }
+				}
+			}
+		});
+		textureInfo.setBounds(420, 210, 410, 90);
+		textureInfo.setBackground(UIManager.getColor("control").darker().darker());
+		add(textureInfo);
+
+		JScrollPane infoScroll = new JScrollPane();
+		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		infoScroll.setWheelScrollingEnabled(true);
+		infoScroll.setViewportView(textureInfo);
+		infoScroll.setOpaque(false);
+		add(infoScroll);
 	}
 
 	@Override public void onVisible() { }
@@ -204,6 +236,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				splash.setIcon(new ImageIcon(TexturePack.getTexturePack(getIndex()).getImage()));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
+				textureInfo.setText(TexturePack.getTexturePack(getIndex()).getInfo());
 			} else {
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control"));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
