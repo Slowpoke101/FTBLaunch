@@ -6,12 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class UserManager {
@@ -26,7 +26,7 @@ public class UserManager {
 	}
 
 	public String fromHexThing(String str) {
-		BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, getSelfMD5()));
+		BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, getMacAddress()));
 		try {
 			return new String(in.toByteArray(), "utf8");
 		} catch (UnsupportedEncodingException e) {
@@ -38,7 +38,7 @@ public class UserManager {
 	public String getHexThing(String str) {
 		BigInteger str2;
 		try {
-			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getSelfMD5()));
+			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getMacAddress()));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return "";
@@ -73,28 +73,6 @@ public class UserManager {
 				ex.printStackTrace();
 			}
 		}
-	}
-
-	public static byte[] getFileMD5(URL string) throws IOException {
-		MessageDigest dgest = null;
-		try {
-			dgest = MessageDigest.getInstance("md5");
-		} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
-
-		InputStream str = string.openStream();
-		byte[] buffer = new byte[65536];
-		int readLen;
-		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
-			dgest.update(buffer, 0, readLen);
-		}
-		str.close();
-		return dgest.digest();
-	}
-
-	public static byte[] getSelfMD5() {
-		try {
-			return getFileMD5(ClassLoader.getSystemClassLoader().getResource("net/ftb/gui/LaunchFrame.class"));
-		} catch (Exception e) {	return new byte[] {}; }
 	}
 
 	public static void addUser(String username, String password, String name) {
@@ -167,5 +145,18 @@ public class UserManager {
 			_users.get(_users.indexOf(temp)).setPassword(password);
 			_users.get(_users.indexOf(temp)).setName(name);
 		}
+	}
+
+	private static byte[] getMacAddress() {
+		byte[] mac = null;
+		try {
+			mac = NetworkInterface.getByInetAddress(InetAddress.getLocalHost()).getHardwareAddress();
+		} catch (SocketException e) {
+		} catch (UnknownHostException e) { }
+		byte[] out = new byte[mac.length * 10];
+		for(int i = 0; i < out.length; i++) {
+			out[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
+		}
+		return out;
 	}
 }
