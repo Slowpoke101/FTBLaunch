@@ -41,7 +41,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
-	private JComboBox locale;
+	private JComboBox<String> locale;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -195,13 +195,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(ramMaximum, gbc_textField_2);
 		add(currentRam, gbc_lblCurrentRam);
 
-		Vector locales = new Vector();
+		Vector<String> locales = new Vector<String>();
 		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
 			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
 			locales.add(entry.getKey(), I18N.localeFiles.get(entry.getValue()));
 		}
 
-		locale = new JComboBox(locales);
+		locale = new JComboBox<String>(locales);
 		GridBagConstraints gbc_locale = new GridBagConstraints();
 		gbc_locale.insets = new Insets(0, 0, 5, 5);
 		gbc_locale.fill = GridBagConstraints.HORIZONTAL;
