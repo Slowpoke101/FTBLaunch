@@ -19,7 +19,7 @@ DOWNLOAD_MAP_SERVER = Ladda Ner Servervärld
 INSTALL_TEXTUREPACK = Installera Texturpaket
 
 # Options pane
-INSTALL_FOLDER = Installera mapp...
+INSTALL_FOLDER = Installationsmapp:
 FORCE_UPDATE = Tvinga uppdatering?
 RAM_MIN = RAM Minimum (MB)
 RAM_MAX = RAM Maximum (MB)
