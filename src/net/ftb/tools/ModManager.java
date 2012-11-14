@@ -57,6 +57,15 @@ public class ModManager extends JDialog {
 					modPackZip.delete();
 				}
 				try {
+					File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
+					File coreModsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods");
+					File configsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/config");
+					deleteFolderContents(modsFolder);
+					Logger.logInfo("Deleted mods folder");
+					deleteFolderContents(coreModsFolder);
+					Logger.logInfo("Deleted coremods folder");
+					deleteFolderContents(configsFolder);
+					Logger.logInfo("Deleted configs folder");
 					new File(installPath + "/ModPacks/" + pack.getDir() + "/").mkdir();
 					downloadModPack(pack.getUrl(), pack.getDir());
 				} catch (MalformedURLException e) { 
@@ -255,5 +264,14 @@ public class ModManager extends JDialog {
 				} catch (IOException e) { }
 			}
 		}
+	}
+	public void deleteFolderContents(File file){
+		File[] folderFiles = file.listFiles();
+		for(File f : folderFiles){
+			if(f.isDirectory()){
+				deleteFolderContents(f);
+			}
+			f.delete();
+		}			
 	}
 }
