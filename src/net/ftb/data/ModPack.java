@@ -123,7 +123,7 @@ public class ModPack {
 	}
 
 	private boolean upToDate(File verFile) {
-		boolean result = false;
+		boolean result = true;
 		try {
 			if(!verFile.exists()) {
 				verFile.getParentFile().mkdirs();
