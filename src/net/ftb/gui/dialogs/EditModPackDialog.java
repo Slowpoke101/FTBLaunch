@@ -219,7 +219,7 @@ public class EditModPackDialog extends JDialog {
 		}
 		String[] enabledList = new String[enabledList_.size()];
 		for(int i = 0; i < enabledList_.size(); i++) {
-			enabledList[i] = enabledList_.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
+			enabledList[i] = enabledList_.get(i).replace(".zip", "").replace(".jar", "");
 		}
 		return enabledList;
 	}
@@ -231,13 +231,11 @@ public class EditModPackDialog extends JDialog {
 				disabledList_.add(name);
 			} else if(name.toLowerCase().endsWith(".jar.disabled")) {
 				disabledList_.add(name);
-			} else if(name.toLowerCase().endsWith(".litemod.disabled")) {
-				disabledList_.add(name);
 			}
 		}
 		String[] enabledList = new String[disabledList_.size()];
 		for(int i = 0; i < disabledList_.size(); i++) {
-			enabledList[i] = disabledList_.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
+			enabledList[i] = disabledList_.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "");
 		}
 		return enabledList;
 	}
