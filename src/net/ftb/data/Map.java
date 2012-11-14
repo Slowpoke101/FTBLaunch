@@ -25,7 +25,7 @@ public class Map {
 	private String name, author, version, url, mapname, mcversion, logoName, imageName, info;
 	private String[] compatible;
 	private Image logo, image;
-	private int size, index;
+	private int index;
 
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
 	private static List<MapListener> listeners = new ArrayList<MapListener>();
@@ -104,8 +104,6 @@ public class Map {
 				tempImg.flush();
 			}
 		}
-		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
-		size = url_.openConnection().getContentLength();
 	}
 
 	private boolean upToDate(File verFile) {
@@ -172,10 +170,6 @@ public class Map {
 
 	public String getInfo() {
 		return info;
-	}
-
-	public int getSize() {
-		return size;
 	}
 
 	public String getLogoName() {

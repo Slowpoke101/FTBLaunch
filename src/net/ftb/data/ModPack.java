@@ -25,7 +25,7 @@ public class ModPack {
 	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info;
 	private String[] mods;
 	private Image logo, image;
-	private int size, index;
+	private int index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
@@ -118,8 +118,6 @@ public class ModPack {
 				tempImg.flush();
 			}
 		}
-		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
-		size = url_.openConnection().getContentLength();
 	}
 
 	private boolean upToDate(File verFile) {
@@ -186,10 +184,6 @@ public class ModPack {
 
 	public String[] getMods() {
 		return mods;
-	}
-
-	public int getSize() {
-		return size;
 	}
 
 	public String getServerUrl() {

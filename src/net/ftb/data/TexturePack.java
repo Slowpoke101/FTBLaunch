@@ -25,7 +25,7 @@ public class TexturePack {
 	private String name, author, version, url, mcversion, logoName, imageName, info;
 	private Image logo, image;
 	private String[] compatible;
-	private int size, index;
+	private int index;
 	private String sep = File.separator;
 
 	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
@@ -103,8 +103,6 @@ public class TexturePack {
 				tempImg.flush();
 			}
 		}
-		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
-		size = url_.openConnection().getContentLength();
 	}
 
 	private boolean upToDate(File verFile) {
@@ -163,10 +161,6 @@ public class TexturePack {
 
 	public String getInfo() {
 		return info;
-	}
-
-	public int getSize() {
-		return size;
 	}
 
 	public String getLogoName() {

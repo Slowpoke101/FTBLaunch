@@ -66,7 +66,7 @@ public class ModManager extends JDialog {
 			return false;
 		}
 
-		public void downloadUrl(String filename, String urlString) throws IOException {
+		public void downloadUrl(String filename, String urlString) throws IOException, NoSuchAlgorithmException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
@@ -75,7 +75,8 @@ public class ModManager extends JDialog {
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
-				int modPackSize = ModPack.getPack(LaunchFrame.getSelectedModIndex()).getSize();
+				URL url_ = new URL(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
+				int modPackSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				int steps = 0;
 				while ((count = in.read(data, 0, 1024)) != -1) {

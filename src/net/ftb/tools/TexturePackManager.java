@@ -59,7 +59,8 @@ public class TexturePackManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0;
-				int mapSize = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getSize();
+				URL url_ = new URL(TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getUrl());
+				int mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
