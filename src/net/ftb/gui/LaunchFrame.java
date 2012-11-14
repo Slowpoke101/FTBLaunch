@@ -711,15 +711,6 @@ public class LaunchFrame extends JFrame {
 		String temppath = OSUtils.getDynamicStorageLocation();
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		Logger.logInfo("dirs mk'd");
-		if(new File(installpath, pack.getDir() + "/instMods/").exists()) {
-			new File(installpath, pack.getDir() + "/instMods/").delete();
-		}
-		if(new File(installpath, pack.getDir() + "/minecraft/mods/").exists()) {
-			new File(installpath, pack.getDir() + "/minecraft/mods/").delete();
-		}
-		if(new File(installpath, pack.getDir() + "/minecraft/coremods/").exists()) {
-			new File(installpath, pack.getDir() + "/minecraft/coremods/").delete();
-		}
 		File source = new File(temppath, "ModPacks/" + pack.getDir() + "/.minecraft");
 		if(!source.exists()) {
 			source = new File(temppath, "ModPacks/" + pack.getDir() + "/minecraft");
