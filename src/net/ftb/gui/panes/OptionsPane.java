@@ -9,6 +9,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Vector;
 
@@ -22,10 +25,6 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -64,7 +63,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		currentRam = new JLabel();
 
 		long ram = 0;
-		
+
 		OperatingSystemMXBean operatingSystemMXBean = 
 				ManagementFactory.getOperatingSystemMXBean();
 
@@ -72,7 +71,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		try {
 			m = operatingSystemMXBean.getClass().
 					getDeclaredMethod("getTotalPhysicalMemorySize");
-			
+
 			m.setAccessible(true);
 
 			Object value = m.invoke(operatingSystemMXBean);
@@ -94,7 +93,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		} catch (InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		ramMaximum = new JSlider();
 		ramMaximum.setSnapToTicks(true);
 		ramMaximum.setMajorTickSpacing(256);
@@ -234,7 +233,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public void loadSettings(Settings settings) {
 		installFolderTextField.setText(settings.getInstallPath());
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
-		Logger.logInfo(settings.getChannel().name());
 	}
 
 	public String getInstallFolderText() {

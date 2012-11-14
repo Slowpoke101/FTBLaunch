@@ -20,7 +20,6 @@ import javax.swing.SwingWorker;
 
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it

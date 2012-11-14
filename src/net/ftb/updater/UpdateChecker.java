@@ -7,7 +7,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 
-import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -19,22 +18,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 public class UpdateChecker {
-	private Channel channel;
 	private int version;
 	private int latest;
 	public static String verString = "";
 	private URL downloadUrl;
 
 	public UpdateChecker(int version) {
-		this.version = version;
-		loadInfo();
-		try {
-			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
-		} catch (Exception ignored) { }
-	}
-
-	public UpdateChecker(Channel channel, int version) {
-		this.channel = channel;
 		this.version = version;
 		loadInfo();
 		try {

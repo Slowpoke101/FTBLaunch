@@ -1,6 +1,5 @@
 package net.ftb.data;
 
-
 public class User {
 	private String _username = "", _password = "", _name = "";
 

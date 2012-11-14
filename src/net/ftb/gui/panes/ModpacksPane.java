@@ -48,7 +48,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 	private final ModpacksPane instance = this;
 	private static JEditorPane packInfo;
-	
+
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
 	public static boolean loaded = false;
@@ -65,10 +65,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packPanels = new ArrayList<JPanel>();
 
 		// TODO: Set loading animation while we wait
-//		try {
-//			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
-//		} catch (MalformedURLException e1) { e1.printStackTrace(); }
-//		loadingImage.setLocation(58, 36);
+		//		try {
+		//			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
+		//		} catch (MalformedURLException e1) { e1.printStackTrace(); }
+		//		loadingImage.setLocation(58, 36);
 
 		packs = new JPanel();
 		packs.setLayout(null);
@@ -118,7 +118,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setForeground(Color.white);
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
-//		p.add(loadingImage);
+		//		p.add(loadingImage);
 		p.add(filler);
 		packs.add(p);
 

@@ -27,7 +27,7 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 
-			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
+			MODPACKSFILE = LaunchFrame.getStaticCreeperhostLink("modpacks.xml");
 
 			Document doc;
 			try {

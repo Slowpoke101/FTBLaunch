@@ -24,8 +24,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -45,7 +43,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
 	private static JEditorPane textureInfo;
-	
+
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
 
 	public static boolean loaded = false;
@@ -102,7 +100,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacksScroll.setOpaque(false);
 		texturePacksScroll.setViewportView(texturePacks);
 		add(texturePacksScroll);
-		
+
 		textureInfo = new JEditorPane();
 		textureInfo.setEditable(false);
 		textureInfo.setContentType("text/html");
@@ -247,7 +245,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		}
 		updateTexturePacks();
 	}
-	
+
 	private static void updateTexturePacks() {
 		for (int i = 0; i < texturePackPanels.size(); i++) {
 			if(selectedTexturePack == i) {

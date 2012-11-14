@@ -74,12 +74,12 @@ public class Map {
 		File verFile = new File(tempDir, "version");
 		URL url_;
 		if(!upToDate(verFile)) {
-			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+			url_ = new URL(LaunchFrame.getStaticCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png", new File(tempDir, logo));
 			tempImg.flush();
-			url_ = new URL(LaunchFrame.getCreeperhostLink(image));
+			url_ = new URL(LaunchFrame.getStaticCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png", new File(tempDir, image));
@@ -88,7 +88,7 @@ public class Map {
 			if(new File(tempDir, logo).exists()) {
 				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + logo);
 			} else {
-				url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+				url_ = new URL(LaunchFrame.getStaticCreeperhostLink(logo));
 				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 				BufferedImage tempImg = ImageIO.read(url_);
 				ImageIO.write(tempImg, "png", new File(tempDir, logo));
@@ -97,7 +97,7 @@ public class Map {
 			if(new File(tempDir, image).exists()) {
 				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + image);
 			} else {
-				url_ = new URL(LaunchFrame.getCreeperhostLink(image));
+				url_ = new URL(LaunchFrame.getStaticCreeperhostLink(image));
 				this.image = Toolkit.getDefaultToolkit().createImage(url_);
 				BufferedImage tempImg = ImageIO.read(url_);
 				ImageIO.write(tempImg, "png", new File(tempDir, image));
@@ -179,7 +179,7 @@ public class Map {
 	public String getImageName() {
 		return imageName;
 	}
-	
+
 	public boolean isCompatible(String dir) {
 		for(int i = 0; i < compatible.length; i++) {
 			if(compatible[i].equalsIgnoreCase(dir)) {

@@ -634,6 +634,14 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
+	 * @param file - the name of the file, as saved to the repo (including extension)
+	 * @return - the direct link
+	 */
+	public static String getStaticCreeperhostLink(String file) {
+		return "http://repo.creeperhost.net/static/FTB2/" + file; 
+	}
+
+	/**
 	 * @param input - String to hash
 	 * @return - hashed string
 	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
@@ -810,14 +818,14 @@ public class LaunchFrame extends JFrame {
 	public static int getSelectedTexturePackIndex() {
 		return instance.tpPane.getSelectedTexturePackIndex();
 	}
-	
+
 	/**
 	 * @return - Outputs selected map install index
 	 */
 	public static int getSelectedMapInstallIndex() {
 		return instance.mapInstallLocation.getSelectedIndex();
 	}
-	
+
 	/**
 	 * @return - Outputs selected texturepack install index
 	 */

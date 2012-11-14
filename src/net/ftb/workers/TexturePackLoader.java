@@ -28,7 +28,7 @@ public class TexturePackLoader extends Thread {
 		try {
 			Logger.logInfo("loading texture pack information...");
 
-			TEXTUREPACKFILE = LaunchFrame.getCreeperhostLink("texturepack.xml");
+			TEXTUREPACKFILE = LaunchFrame.getStaticCreeperhostLink("texturepack.xml");
 
 			Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
 			if(doc == null) {

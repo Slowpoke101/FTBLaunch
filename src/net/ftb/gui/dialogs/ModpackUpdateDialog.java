@@ -39,7 +39,7 @@ public class ModpackUpdateDialog extends JDialog {
 		textOne.setBounds(0, 0, 300, 30);
 		textOne.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(textOne);
-		
+
 		textTwo.setBounds(0, 20, 300, 30);
 		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(textTwo);
@@ -64,7 +64,7 @@ public class ModpackUpdateDialog extends JDialog {
 			}
 		});
 		panel.add(noButton);
-		
+
 		backup.setBounds(0, 45, 300, 30);
 		backup.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(backup);

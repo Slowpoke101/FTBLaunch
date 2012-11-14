@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Properties;
 
-import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -18,7 +18,7 @@ import net.ftb.util.OSUtils;
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();
-	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "i18n");
+	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "locale");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
 	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;
@@ -60,7 +60,9 @@ public class I18N {
 	 */
 	public static void setupLocale() {
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
-		LocaleUpdater.checkForUpdates();
+		try {
+			LocaleUpdater.checkForUpdates();
+		} catch (NoSuchAlgorithmException e1) { }
 		// Add files from i18n directory
 		int i = 1;
 		Properties tmp = new Properties();

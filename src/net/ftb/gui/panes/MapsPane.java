@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -243,7 +242,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 		updateMaps();
 	}
-	
+
 	public static void searchMaps(String search) {
 		System.out.println("Searching Maps for : " + search);
 		mapPanels.clear();

@@ -58,7 +58,7 @@ public class MapManager extends JDialog {
 			return false;
 		}
 
-		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException {
+		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException, NoSuchAlgorithmException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
@@ -66,7 +66,7 @@ public class MapManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0;
-				URL url_ = new URL(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl());
+				URL url_ = new URL(LaunchFrame.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 				int mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
