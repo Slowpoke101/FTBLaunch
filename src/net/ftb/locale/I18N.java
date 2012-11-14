@@ -31,7 +31,8 @@ public class I18N {
 		ptBR,
 		ptPT,
 		ruRU,
-		svSE
+		svSE,
+		esES
 	}
 
 	/**
@@ -108,7 +109,9 @@ public class I18N {
 			currentLocale = Locale.ruRU;
 		} else if(locale.equalsIgnoreCase("svSE")){
 			currentLocale = Locale.svSE;
-		} else {
+		} else if(locale.equalsIgnoreCase("esES")){
+			currentLocale = Locale.esES;
+		} else{
 			currentLocale = Locale.enUS;
 		}
 		getLocaleProperties(locale);
