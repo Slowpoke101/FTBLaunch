@@ -70,23 +70,39 @@ public class TexturePack {
 		imageName = image;
 		this.compatible = compatible.split(",");
 		this.info = info;
-		File verFile = new File(installPath, "TexturePacks" + sep + name + sep + "version");
-		File dir = new File(installPath, "TexturePacks" + sep + name);
+		File tempDir = new File(installPath, "TexturePacks" + sep + name);
+		File verFile = new File(tempDir, "version");
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(dir, logo));
+			ImageIO.write(tempImg, "png", new File(tempDir, logo));
 			tempImg.flush();
 			url_ = new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(dir, image));
+			ImageIO.write(tempImg, "png", new File(tempDir, image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + sep + logo);
-			this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + sep + image);
+			if(new File(tempDir, logo).exists()) {
+				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(tempDir, logo));
+				tempImg.flush();
+			}
+			if(new File(tempDir, image).exists()) {
+				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(image));
+				this.image = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(tempDir, image));
+				tempImg.flush();
+			}
 		}
 		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 		size = url_.openConnection().getContentLength();

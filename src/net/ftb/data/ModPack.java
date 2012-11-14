@@ -84,22 +84,39 @@ public class ModPack {
 			this.mods = mods.split("; ");
 		}
 		String installPath = OSUtils.getDynamicStorageLocation();
-		File verFile = new File(installPath, "ModPacks" + File.separator + dir + File.separator + "version");
+		File tempDir = new File(installPath, "ModPacks" + File.separator + dir);
+		File verFile = new File(tempDir, "version");
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(installPath, "ModPacks" + File.separator + dir + File.separator + logo));
+			ImageIO.write(tempImg, "png", new File(tempDir, logo));
 			tempImg.flush();
 			url_ =  new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(installPath, "ModPacks" + File.separator + dir + File.separator + image));
+			ImageIO.write(tempImg, "png", new File(tempDir, image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "ModPacks" + File.separator + dir + File.separator + logo);
-			this.image = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "ModPacks" + File.separator + dir + File.separator + image);
+			if(new File(tempDir, logo).exists()) {
+				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + logo);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
+				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(tempDir, logo));
+				tempImg.flush();
+			}
+			if(new File(tempDir, image).exists()) {
+				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + image);
+			} else {
+				url_ = new URL(LaunchFrame.getCreeperhostLink(image));
+				this.image = Toolkit.getDefaultToolkit().createImage(url_);
+				BufferedImage tempImg = ImageIO.read(url_);
+				ImageIO.write(tempImg, "png", new File(tempDir, image));
+				tempImg.flush();
+			}
 		}
 		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 		size = url_.openConnection().getContentLength();
@@ -109,7 +126,7 @@ public class ModPack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + dir).mkdirs();
+				verFile.getParentFile().mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}

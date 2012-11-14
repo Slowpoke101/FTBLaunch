@@ -70,37 +70,37 @@ public class Map {
 		logoName = logo;
 		imageName = image;
 		// TODO: Figure out how to do version checking on maps.
-		File verFile = new File(installPath, "Maps" + File.separator + mapname + File.separator + "version");
-		File dir = new File(installPath, "Maps" + File.separator + mapname);
+		File tempDir = new File(installPath, "Maps" + File.separator + mapname);
+		File verFile = new File(tempDir, "version");
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(dir, logo));
+			ImageIO.write(tempImg, "png", new File(tempDir, logo));
 			tempImg.flush();
 			url_ = new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(dir, image));
+			ImageIO.write(tempImg, "png", new File(tempDir, image));
 			tempImg.flush();
 		} else {
-			if(new File(dir, logo).exists()) {
-				this.logo = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + logo);
+			if(new File(tempDir, logo).exists()) {
+				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + logo);
 			} else {
 				url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 				BufferedImage tempImg = ImageIO.read(url_);
-				ImageIO.write(tempImg, "png", new File(dir, logo));
+				ImageIO.write(tempImg, "png", new File(tempDir, logo));
 				tempImg.flush();
 			}
-			if(new File(dir, image).exists()) {
-				this.image = Toolkit.getDefaultToolkit().createImage(dir.getPath() + File.separator + image);
+			if(new File(tempDir, image).exists()) {
+				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + image);
 			} else {
 				url_ = new URL(LaunchFrame.getCreeperhostLink(image));
 				this.image = Toolkit.getDefaultToolkit().createImage(url_);
 				BufferedImage tempImg = ImageIO.read(url_);
-				ImageIO.write(tempImg, "png", new File(dir, image));
+				ImageIO.write(tempImg, "png", new File(tempDir, image));
 				tempImg.flush();
 			}
 		}
@@ -112,7 +112,7 @@ public class Map {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + mapname + File.separator).mkdirs();
+				verFile.getParentFile().mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
@@ -126,7 +126,7 @@ public class Map {
 				result = false;
 			}
 			in.close();
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { }
 		return result;
 	}
 
