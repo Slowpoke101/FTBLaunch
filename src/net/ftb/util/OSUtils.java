@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 public class OSUtils {
 	/**
@@ -17,38 +18,33 @@ public class OSUtils {
 			File jarFile;
 			jarFile = new File(codeSource.getLocation().toURI().getPath());
 			return jarFile.getParentFile().getPath();
-		} catch (URISyntaxException e) { e.printStackTrace(); }
-		System.out.println("Failed to get path for current directory - falling back to user's home directory.");
+		} catch (URISyntaxException e) { }
+		Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
-	
+
 	public static String getDynamicStorageLocation() {
-		String output = "";
 		switch(getCurrentOS()) {
 		case WINDOWS:
-			output = System.getenv("APPDATA") + "/ftblauncher/";
-			break;
+			return System.getenv("APPDATA") + "/ftblauncher/";
 		case MACOSX:
-			output = System.getProperty("user.home") + "/Library/Application Support/ftblauncher/";
-			break;
+			return System.getProperty("user.home") + "/Library/Application Support/ftblauncher/";
 		case UNIX:
-			output = System.getProperty("user.home") + "/.ftblauncher/";
-			break;
+			return System.getProperty("user.home") + "/.ftblauncher/";
 		default:
-			output = System.getProperty("user.dir");
-			break;
+			return getDefInstallPath() + "/temp/";
 		}
-		return output;
 	}
 
 	public static String getJavaDelimiter() {
-		if(getCurrentOS() == OS.WINDOWS) {
+		switch(getCurrentOS()) {
+		case WINDOWS:
 			return ";";
-		} else if(getCurrentOS() == OS.UNIX) {
+		case UNIX:
 			return ":";
-		} else if(getCurrentOS() == OS.MACOSX) {
+		case MACOSX:
 			return ":";
-		} else {
+		default:
 			return ";";
 		}
 	}
