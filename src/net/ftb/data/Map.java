@@ -27,7 +27,6 @@ public class Map {
 	private int size, index;
 
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
-
 	private static List<MapListener> listeners = new ArrayList<MapListener>();
 
 	public static void addListener(MapListener listener) {

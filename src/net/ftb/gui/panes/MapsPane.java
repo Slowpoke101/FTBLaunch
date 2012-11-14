@@ -26,7 +26,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -135,7 +134,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		infoScroll.setViewportView(mapInfo);
 		infoScroll.setOpaque(false);
 		add(infoScroll);
-		sortMaps();
 	}
 
 	@Override public void onVisible() { }
@@ -202,7 +200,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		updateMaps();
 	}
 
-	public static void sortMaps() {
+	private static void sortMaps() {
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
@@ -212,25 +210,26 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		maps.setOpaque(false);
 		int counter = 0;
 		selectedMap = 0;
-
-		for(Map map : Map.getMapArray()) {
-			if(map.getCompatible().equals(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir())) {
-				if(origin.equalsIgnoreCase("all")) {
+		if(origin.equalsIgnoreCase("all")) {
+			for(Map map : Map.getMapArray()) {
+				addMap(map);
+				currentMaps.put(counter, map);
+				counter++;
+			}
+		} else if(origin.equalsIgnoreCase("ftb")) {
+			for(Map map : Map.getMapArray()) {
+				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					addMap(map);
 					currentMaps.put(counter, map);
 					counter++;
-				} else if(origin.equalsIgnoreCase("ftb")) {
-					if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
-						addMap(map);
-						currentMaps.put(counter, map);
-						counter++;
-					}
-				} else {
-					if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
-						addMap(map);
-						currentMaps.put(counter, map);
-						counter++;
-					}
+				}
+			}
+		} else {
+			for(Map map : Map.getMapArray()) {
+				if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
+					addMap(map);
+					currentMaps.put(counter, map);
+					counter++;
 				}
 			}
 		}
@@ -258,7 +257,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		updateMaps();
 	}
 
-	public static void updateMaps() {
+	private static void updateMaps() {
 		for (int i = 0; i < mapPanels.size(); i++) {
 			if(selectedMap == i) {
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());

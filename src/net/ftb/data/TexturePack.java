@@ -29,7 +29,6 @@ public class TexturePack {
 	private String sep = File.separator;
 
 	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
-
 	private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
 
 	public static void addListener(TexturePackListener listener) {
