@@ -31,6 +31,7 @@ import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialog;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
+import net.ftb.log.Logger;
 
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
 	private static final long serialVersionUID = 1L;
@@ -170,7 +171,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 
 		final int packIndex = packPanels.size();
-		System.out.println("Adding pack " + getModNum());
+		Logger.logInfo("Adding pack " + getModNum());
 		final JPanel p = new JPanel();
 		p.setBounds(0, (packIndex * 55), 420, 55);
 		p.setLayout(null);
@@ -227,11 +228,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static void sortPacks() {
 		packPanels.clear();
+		packs.removeAll();
 		currentPacks.clear();
 		int counter = 0;
 		selectedPack = 0;
 		packInfo.setText("");
-		modPacksAdded = false;
 		LaunchFrame.getInstance().modPacksPane.repaint();
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {

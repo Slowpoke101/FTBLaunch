@@ -81,7 +81,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(filter);
 
 		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + origin +"</body></html>");
-		typeLbl.setBounds(115, 5, 175, 25);
+		typeLbl.setBounds(115, 5, 295, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
@@ -196,11 +196,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static void sortTexturePacks() {
 		texturePackPanels.clear();
+		texturePacks.removeAll();
 		currentTexturePacks.clear();
 		int counter = 0;
 		selectedTexturePack = 0;
 		LaunchFrame.getInstance().tpPane.repaint();
-		texturePacksAdded = false;
 		if(origin.equalsIgnoreCase("all")) {
 			for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
 				addTexturePack(texturePack);

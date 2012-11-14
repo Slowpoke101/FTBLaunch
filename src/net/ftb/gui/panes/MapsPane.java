@@ -30,6 +30,7 @@ import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +42,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static JLabel typeLbl;
 	private JButton filter;
-	private static JComboBox mapType;
 	private static int selectedMap = 0;
 	private static boolean mapsAdded = false;
 	public static String type = "Client", origin = "All", compatible = "All";
@@ -87,7 +87,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(filter);
 
 		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin + "<font color=rgb\"(243,119,31)\"> / </font>" + compatible + "</body></html>");
-		typeLbl.setBounds(115, 5, 175, 25);
+		typeLbl.setBounds(115, 5, 295, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
 
@@ -148,7 +148,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 
 		final int mapIndex = mapPanels.size();
-		System.out.println("Adding map " + getMapNum());
+		Logger.logInfo("Adding map " + getMapNum());
 		final JPanel p = new JPanel();
 		p.setBounds(0, (mapIndex * 55), 420, 55);
 		p.setLayout(null);
@@ -173,7 +173,10 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				updateMaps();
 			}
 			@Override public void mouseReleased(MouseEvent e) { }
-			@Override public void mousePressed(MouseEvent e) { }
+			@Override public void mousePressed(MouseEvent e) { 
+				selectedMap = mapIndex;
+				updateMaps();
+			}
 			@Override public void mouseExited(MouseEvent e) { }
 			@Override public void mouseEntered(MouseEvent e) { }
 		};
@@ -185,11 +188,11 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapPanels.add(p);
 		maps.add(p);
 		if(origin.equalsIgnoreCase("all")) {
-			maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size()) * 55));
-			maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size()) * 55));
+			maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
+			maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
 		} else {
-			maps.setMinimumSize(new Dimension(420, (currentMaps.size()) * 55));
-			maps.setPreferredSize(new Dimension(420, (currentMaps.size()) * 55));
+			maps.setMinimumSize(new Dimension(420, (currentMaps.size() * 55)));
+			maps.setPreferredSize(new Dimension(420, (currentMaps.size() * 55)));
 		}
 		mapsScroll.revalidate();
 	}
@@ -202,13 +205,13 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static void sortMaps() {
 		mapPanels.clear();
+		maps.removeAll();
 		currentMaps.clear();
 		int counter = 0;
 		selectedMap = 0;
 		LaunchFrame.getInstance().mapsPane.repaint();
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
-		mapsAdded = false;
 		if(origin.equals("All")) {
 			for(Map map : Map.getMapArray()) {
 				if(compatible.equals("All") || map.isCompatible(compatible)) {
