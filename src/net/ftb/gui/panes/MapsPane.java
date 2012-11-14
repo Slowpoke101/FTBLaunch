@@ -44,8 +44,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JComboBox mapType;
 	private static int selectedMap = 0;
 	private static boolean mapsAdded = false;
-	public static String type = "Client", origin = "All";
+	public static String type = "Client", origin = "All", compatible = "All";
 	private final MapsPane instance = this;
+
 	private static JEditorPane mapInfo;
 
 	public static boolean loaded = false;
@@ -210,26 +211,34 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		maps.setOpaque(false);
 		int counter = 0;
 		selectedMap = 0;
+		LaunchFrame.updateMapInstallLocs(new String[]{""});
+		mapInfo.setText("");
 		if(origin.equalsIgnoreCase("all")) {
 			for(Map map : Map.getMapArray()) {
-				addMap(map);
-				currentMaps.put(counter, map);
-				counter++;
-			}
-		} else if(origin.equalsIgnoreCase("ftb")) {
-			for(Map map : Map.getMapArray()) {
-				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
+				if(compatible.equals("All") || map.isCompatible(compatible)) {
 					addMap(map);
 					currentMaps.put(counter, map);
 					counter++;
 				}
 			}
+		} else if(origin.equalsIgnoreCase("ftb")) {
+			for(Map map : Map.getMapArray()) {
+				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
+					if(compatible.equals("All") || map.isCompatible(compatible)) {
+						addMap(map);
+						currentMaps.put(counter, map);
+						counter++;
+					}
+				}
+			}
 		} else {
 			for(Map map : Map.getMapArray()) {
 				if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
-					addMap(map);
-					currentMaps.put(counter, map);
-					counter++;
+					if(compatible.equals("All") || map.isCompatible(compatible)) {
+						addMap(map);
+						currentMaps.put(counter, map);
+						counter++;
+					}
 				}
 			}
 		}
@@ -277,6 +286,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	public static void updateFilter() {
+		// TODO: Show Modpack specific filtering
 		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
 		sortMaps();
 		LaunchFrame.getInstance().updateFooter();

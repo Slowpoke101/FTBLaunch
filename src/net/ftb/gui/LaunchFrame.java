@@ -378,7 +378,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		mapInstallLocation = new JComboBox();
 		mapInstallLocation.setBounds(480, 20, 160, 30);
 		mapInstallLocation.setToolTipText("Install to...");
@@ -495,7 +495,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-//		tabbedPane.setEnabledAt(4, false);
+		//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -770,7 +770,7 @@ public class LaunchFrame extends JFrame {
 			tpInstallLocation.addItem(locations[i]);
 		}
 	}
-	
+
 	public static void updateMapInstallLocs(String[] locations) {
 		mapInstallLocation.removeAllItems();
 		for(int i = 0; i < locations.length; i++) {

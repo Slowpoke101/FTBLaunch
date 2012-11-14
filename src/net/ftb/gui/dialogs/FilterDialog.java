@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -17,8 +18,9 @@ import net.ftb.gui.panes.TexturepackPane;
 
 public class FilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:");
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"});
+	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
+	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}),
+			compatibleBox;
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
 	
 	public FilterDialog(final ModpacksPane instance) {
@@ -73,33 +75,34 @@ public class FilterDialog extends JDialog {
 	public FilterDialog(final MapsPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setupGui();
+		
+		setBounds(300, 300, 230, 170);
+		panel.setBounds(0, 0, 230, 170);
+		applyButton.setBounds(10, 110, 100, 25);
+		cancelButton.setBounds(120, 110, 100, 25);
+		
 		typeBox.setSelectedItem(instance.type);
 		originBox.setSelectedItem(instance.origin);
+		
+		packLbl.setBounds(10, 70, 100, 30);
+		panel.add(packLbl);
+		
+		String[] packs = new String[ModPack.getPackArray().size() + 1];
+		packs[0] = "All";
+		for(int i = 1; i < packs.length; i++) {
+			packs[i] = ModPack.getPack(i - 1).getDir();
+		}
+		compatibleBox = new JComboBox(packs);
+		compatibleBox.setBounds(120, 70, 100, 30);
+		compatibleBox.setSelectedItem(instance.compatible);
+		panel.add(compatibleBox);
+		
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String type = "", origin = "";
-				switch(typeBox.getSelectedIndex()) {
-				case 0:
-					type = "Client";
-					break;
-				case 1:
-					type = "Server";
-					break;
-				}
-				switch(originBox.getSelectedIndex()) {
-				case 0:
-					origin = "All";
-					break;
-				case 1:
-					origin = "FTB";
-					break;
-				case 2:
-					origin = "3rd Party";
-					break;
-				}
-				instance.type = type;
-				instance.origin = origin;
+				instance.compatible = (String)compatibleBox.getSelectedItem();
+				instance.type = (String)typeBox.getSelectedItem();
+				instance.origin = (String)originBox.getSelectedItem();
 				instance.updateFilter();
 				setVisible(false);
 			}

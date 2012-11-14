@@ -91,13 +91,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		}
 
 		String nativesFilename;
-		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
+		switch(OSUtils.getCurrentOS()) {
+		case WINDOWS:
 			nativesFilename = "windows_natives.jar";
-		} else if (OSUtils.getCurrentOS() == OS.MACOSX) {
+			break;
+		case MACOSX:
 			nativesFilename = "macosx_natives.jar";
-		} else if (OSUtils.getCurrentOS() == OS.UNIX) {
+			break;
+		case UNIX:
 			nativesFilename = "linux_natives.jar";
-		} else {
+			break;
+		default:
 			return false;
 		}
 
