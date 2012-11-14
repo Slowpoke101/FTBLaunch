@@ -47,12 +47,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
 	private final ModpacksPane instance = this;
 	private static JEditorPane packInfo;
-
+	
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
 	public static boolean loaded = false;
-
-
 
 	public ModpacksPane () {
 		super();
@@ -197,7 +195,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				updatePacks();
 			}
 			@Override public void mouseReleased(MouseEvent e) { }
-			@Override public void mousePressed(MouseEvent e) { }
+			@Override public void mousePressed(MouseEvent e) { 
+				selectedPack = packIndex;
+				updatePacks();
+			}
 			@Override public void mouseExited(MouseEvent e) { }
 			@Override public void mouseEntered(MouseEvent e) { }
 		};
@@ -208,12 +209,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		p.add(logo);
 		packPanels.add(p);
 		packs.add(p);
-		if(origin.equalsIgnoreCase("all")) {
-			packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
-			packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size()) * 55));
+		if(origin.equals("All")) {
+			packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
+			packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
 		} else {
-			packs.setMinimumSize(new Dimension(420, (currentPacks.size()) * 55));
-			packs.setPreferredSize(new Dimension(420, (currentPacks.size()) * 55));
+			packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
+			packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
 		}
 		packsScroll.revalidate();
 	}
@@ -226,14 +227,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static void sortPacks() {
 		packPanels.clear();
-		packs.removeAll();
 		currentPacks.clear();
-		packs.setMinimumSize(new Dimension(420, 0));
-		packs.setPreferredSize(new Dimension(420, 0));
-		packs.setLayout(null);
-		packs.setOpaque(false);
 		int counter = 0;
 		selectedPack = 0;
+		packInfo.setText("");
+		modPacksAdded = false;
+		LaunchFrame.getInstance().modPacksPane.repaint();
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				addPack(pack);

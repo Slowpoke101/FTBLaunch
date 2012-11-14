@@ -202,16 +202,13 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static void sortMaps() {
 		mapPanels.clear();
-		maps.removeAll();
 		currentMaps.clear();
-		maps.setMinimumSize(new Dimension(420, 0));
-		maps.setPreferredSize(new Dimension(420, 0));
-		maps.setLayout(null);
-		maps.setOpaque(false);
 		int counter = 0;
 		selectedMap = 0;
+		LaunchFrame.getInstance().mapsPane.repaint();
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
+		mapsAdded = false;
 		if(origin.equals("All")) {
 			for(Map map : Map.getMapArray()) {
 				if(compatible.equals("All") || map.isCompatible(compatible)) {

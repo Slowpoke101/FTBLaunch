@@ -85,9 +85,9 @@ public class LaunchFrame extends JFrame {
 	public static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
-	private ModpacksPane modPacksPane;
-	private MapsPane mapsPane;
-	private TexturepackPane tpPane;
+	public ModpacksPane modPacksPane;
+	public MapsPane mapsPane;
+	public TexturepackPane tpPane;
 	private JPanel panel = new JPanel();
 	private JPanel footer = new JPanel();
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);

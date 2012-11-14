@@ -196,14 +196,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static void sortTexturePacks() {
 		texturePackPanels.clear();
-		texturePacks.removeAll();
 		currentTexturePacks.clear();
-		texturePacks.setMinimumSize(new Dimension(420, 0));
-		texturePacks.setPreferredSize(new Dimension(420, 0));
-		texturePacks.setLayout(null);
-		texturePacks.setOpaque(false);
 		int counter = 0;
 		selectedTexturePack = 0;
+		LaunchFrame.getInstance().tpPane.repaint();
+		texturePacksAdded = false;
 		if(origin.equalsIgnoreCase("all")) {
 			for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
 				addTexturePack(texturePack);
