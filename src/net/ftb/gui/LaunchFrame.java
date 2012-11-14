@@ -810,6 +810,20 @@ public class LaunchFrame extends JFrame {
 	public static int getSelectedTexturePackIndex() {
 		return instance.tpPane.getSelectedTexturePackIndex();
 	}
+	
+	/**
+	 * @return - Outputs selected map install index
+	 */
+	public static int getSelectedMapInstallIndex() {
+		return instance.mapInstallLocation.getSelectedIndex();
+	}
+	
+	/**
+	 * @return - Outputs selected texturepack install index
+	 */
+	public static int getSelectedTPInstallIndex() {
+		return instance.tpInstallLocation.getSelectedIndex();
+	}
 
 	/**
 	 * @return - Outputs LaunchFrame instance

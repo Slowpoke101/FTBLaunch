@@ -5,6 +5,7 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.ModPack;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -26,16 +27,16 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 
-			MODPACKSFILE = "https://dl.dropbox.com/u/2405919/modpacks.xml"; // LaunchFrame.getCreeperhostLink("modpacks.xml");
+			MODPACKSFILE = LaunchFrame.getCreeperhostLink("modpacks.xml");
 
 			Document doc;
 			try {
 				doc = AppUtils.downloadXML(new URL(MODPACKSFILE));
 			} catch (SAXException e) {
-				Logger.logError("Exception during reading modpackfile",e);
+				Logger.logError("Exception reading modpackfile", e);
 				return;
 			} catch (IOException e) {
-				Logger.logError("Exception during reading modpackfile",e);
+				Logger.logError("Exception reading modpackfile", e);
 				return;
 			}
 
