@@ -23,6 +23,7 @@ import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
 	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info;
+	private String[] mods;
 	private Image logo, image;
 	private int size, index;
 
@@ -69,7 +70,7 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, int idx) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, int idx) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -81,6 +82,7 @@ public class ModPack {
 		logoName = logo;
 		imageName = image;
 		this.info = info;
+		this.mods = mods.length() > 0 ? mods.split("; ") : null;
 		String installPath = OSUtils.getDynamicStorageLocation();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
 		URL url_;
@@ -163,6 +165,10 @@ public class ModPack {
 
 	public String getInfo() {
 		return info;
+	}
+
+	public String[] getMods() {
+		return mods;
 	}
 
 	public int getSize() {

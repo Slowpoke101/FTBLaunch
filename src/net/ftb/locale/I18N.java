@@ -50,7 +50,7 @@ public class I18N {
 			try {
 				locales.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
 			} catch (IOException e) {
-				Logger.logError("[i18n] Could not load language file", e);
+				Logger.logWarn("[i18n] Could not load language file", e);
 			}
 		}
 	}
@@ -74,7 +74,7 @@ public class I18N {
 					localeIndices.put(i, file);
 					i++;
 				} catch (IOException e) {
-					Logger.logError("[i18n] Could not load language file", e);
+					Logger.logWarn("[i18n] Could not load language file", e);
 				}
 			}
 		}
