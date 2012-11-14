@@ -70,8 +70,8 @@ public class Map {
 		logoName = logo;
 		imageName = image;
 		// TODO: Figure out how to do version checking on maps.
-		File verFile = new File(installPath, "temp" + File.separator + "Maps" + File.separator + mapname + File.separator + "version");
-		File dir = new File(installPath, "temp" + File.separator + "Maps" + File.separator + mapname);
+		File verFile = new File(installPath, "Maps" + File.separator + mapname + File.separator + "version");
+		File dir = new File(installPath, "Maps" + File.separator + mapname);
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
@@ -112,7 +112,7 @@ public class Map {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + "Maps" + File.separator + mapname + File.separator).mkdirs();
+				new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + mapname + File.separator).mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}

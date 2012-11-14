@@ -52,12 +52,12 @@ public class ModManager extends JDialog {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-				File modPackZip = new File(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl());
+				File modPackZip = new File(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl());
 				if(modPackZip.exists()) {
 					modPackZip.delete();
 				}
 				try {
-					new File(installPath + "/temp/" + pack.getDir() + "/").mkdir();
+					new File(installPath + "/ModPacks/" + pack.getDir() + "/").mkdir();
 					downloadModPack(pack.getUrl(), pack.getDir());
 				} catch (MalformedURLException e) { 
 				} catch (NoSuchAlgorithmException e) { 
@@ -100,20 +100,20 @@ public class ModManager extends JDialog {
 			System.out.println("Downloading");
 			String installPath = OSUtils.getDynamicStorageLocation();
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-			new File(installPath + "/temp/" + dir + "/").mkdirs();
-			new File(installPath + "/temp/" + dir + "/" + modPackName).createNewFile();
-			downloadUrl(installPath + "/temp/" + dir + "/" + modPackName, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + LaunchFrame.getTime()) + "/" + modPackName);
-			FileUtils.extractZipTo(installPath + "/temp/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/temp/" + pack.getDir());
+			new File(installPath + "/ModPacks/" + dir + "/").mkdirs();
+			new File(installPath + "/ModPacks/" + dir + "/" + modPackName).createNewFile();
+			downloadUrl(installPath + "/ModPacks/" + dir + "/" + modPackName, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + LaunchFrame.getTime()) + "/" + modPackName);
+			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			installMods(modPackName, dir);
 		}
 
 		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
 			String installPath = OSUtils.getDynamicStorageLocation();
-			LaunchFrame.jarMods = new String[new File(installPath + "/temp/" + modPackName + "/instMods").listFiles().length];
+			LaunchFrame.jarMods = new String[new File(installPath + "/ModPacks/" + modPackName + "/instMods").listFiles().length];
 			// TODO: Check to see if this code even executes, I don't think it does.
 			try {
-				FileInputStream fstream = new FileInputStream(installPath + "/temp/" + modPackName + "/modlist");
+				FileInputStream fstream = new FileInputStream(installPath + "/ModPacks/" + modPackName + "/modlist");
 				DataInputStream in1 = new DataInputStream(fstream);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in1));
 				String strLine;
@@ -246,7 +246,7 @@ public class ModManager extends JDialog {
 
 	public static void cleanUp() {
 		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "temp" + sep + pack.getDir() + sep);
+		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
 				try {

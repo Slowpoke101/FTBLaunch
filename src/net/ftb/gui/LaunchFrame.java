@@ -707,12 +707,12 @@ public class LaunchFrame extends JFrame {
 		if(new File(installpath, pack.getDir() + "/minecraft/coremods/").exists()) {
 			new File(installpath, pack.getDir() + "/minecraft/coremods/").delete();
 		}
-		File source = new File(temppath, "temp/" + pack.getDir() + "/.minecraft");
+		File source = new File(temppath, "ModPacks/" + pack.getDir() + "/.minecraft");
 		if(!source.exists()) {
-			source = new File(temppath, "temp/" + pack.getDir() + "/minecraft");
+			source = new File(temppath, "ModPacks/" + pack.getDir() + "/minecraft");
 		}
-		FileUtils.copyFolder(source, new File(installpath + "/" + pack.getDir() + "/minecraft/"));
-		FileUtils.copyFolder(new File(temppath + "/temp/" + pack.getDir() + "/instMods/"), new File(installpath + "/" + pack.getDir() + "/instMods/"));
+		FileUtils.copyFolder(source, new File(installpath, pack.getDir() + "/minecraft/"));
+		FileUtils.copyFolder(new File(temppath, "ModPacks/" + pack.getDir() + "/instMods/"), new File(installpath, pack.getDir() + "/instMods/"));
 	}
 
 	/**

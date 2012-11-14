@@ -18,7 +18,7 @@ import net.ftb.util.OSUtils;
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();
-	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + "i18n");
+	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "i18n");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
 	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;

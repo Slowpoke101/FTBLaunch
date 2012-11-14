@@ -70,8 +70,8 @@ public class TexturePack {
 		imageName = image;
 		this.compatible = compatible.split(",");
 		this.info = info;
-		File verFile = new File(installPath, "temp" + sep + "TexturePacks" + sep + name + sep + "version");
-		File dir = new File(installPath, "temp" + sep + "TexturePacks" + sep + name);
+		File verFile = new File(installPath, "TexturePacks" + sep + name + sep + "version");
+		File dir = new File(installPath, "TexturePacks" + sep + name);
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));

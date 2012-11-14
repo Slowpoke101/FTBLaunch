@@ -82,9 +82,9 @@ public class TexturePackManager extends JDialog {
 		protected void downloadTexturePack(String texturePackName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading");
 			String installPath = OSUtils.getDynamicStorageLocation();
-			new File(installPath + "/temp/TexturePacks/" + dir + "/").mkdirs();
-			new File(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/temp/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
+			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
+			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
+			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
 			installTexturePack(texturePackName, dir);
 		}
 
@@ -94,8 +94,8 @@ public class TexturePackManager extends JDialog {
 			String tempPath = OSUtils.getDynamicStorageLocation();
 			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
 			new File(installPath, installDir + "/minecraft/texturepacks/").mkdirs();
-			FileUtils.copyFile(new File(tempPath, "temp/TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
-			FileUtils.copyFile(new File(tempPath, "temp/TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
+			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
+			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {
@@ -161,7 +161,7 @@ public class TexturePackManager extends JDialog {
 
 	public static void cleanUp() {
 		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "temp" + sep + "TexturePacks" + sep + texturePack.getName() + sep);
+		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "TexturePacks" + sep + texturePack.getName() + sep);
 		for(String file: tempFolder.list()) {
 			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {

@@ -17,8 +17,8 @@ import net.ftb.util.OSUtils;
 public class LocaleUpdater {
 	private static final String host = "https://dl.dropbox.com/u/9031641/ftb-test/"; // TODO: update host :P
 	private static final String root = OSUtils.getDynamicStorageLocation();
-	private static File local = new File(root + File.separator + "temp" + File.separator + "i18n" + File.separator + "version");
-	private static File archive = new File(root + File.separator + "temp" + File.separator + "locales.zip");
+	private static File local = new File(root + File.separator + "i18n" + File.separator + "version");
+	private static File archive = new File(root + File.separator + "locales.zip");
 	private static int remoteVer;
 
 	private static void updateFiles() {
@@ -42,7 +42,7 @@ public class LocaleUpdater {
 
 	public static void checkForUpdates() {
 		Logger.logInfo("[i18n] Checking for updates ...");
-		File dir = new File(root + File.separator + "temp");
+		File dir = new File(root);
 		File tmp = new File(dir, "i18n");
 
 		if (!dir.exists() || !tmp.exists()) {

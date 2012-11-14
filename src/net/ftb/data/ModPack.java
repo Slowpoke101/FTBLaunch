@@ -28,10 +28,6 @@ public class ModPack {
 	private int size, index;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
-
-	/*
-	 * List of Listeners that will be informed if a modpack was added
-	 */
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 
 	/*
@@ -88,22 +84,22 @@ public class ModPack {
 			this.mods = mods.split("; ");
 		}
 		String installPath = OSUtils.getDynamicStorageLocation();
-		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
+		File verFile = new File(installPath, "ModPacks" + File.separator + dir + File.separator + "version");
 		URL url_;
 		if(!upToDate(verFile)) {
 			url_ = new URL(LaunchFrame.getCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(installPath, "temp" + File.separator + dir + File.separator + logo));
+			ImageIO.write(tempImg, "png", new File(installPath, "ModPacks" + File.separator + dir + File.separator + logo));
 			tempImg.flush();
 			url_ =  new URL(LaunchFrame.getCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(installPath, "temp" + File.separator + dir + File.separator + image));
+			ImageIO.write(tempImg, "png", new File(installPath, "ModPacks" + File.separator + dir + File.separator + image));
 			tempImg.flush();
 		} else {
-			this.logo = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + logo);
-			this.image = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "temp" + File.separator + dir + File.separator + image);
+			this.logo = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "ModPacks" + File.separator + dir + File.separator + logo);
+			this.image = Toolkit.getDefaultToolkit().createImage(installPath + File.separator + "ModPacks" + File.separator + dir + File.separator + image);
 		}
 		url_ = new URL(LaunchFrame.getCreeperhostLink(url));
 		size = url_.openConnection().getContentLength();
@@ -113,7 +109,7 @@ public class ModPack {
 		boolean result = false;
 		try {
 			if(!verFile.exists()) {
-				new File(OSUtils.getDynamicStorageLocation(), "temp" + File.separator + dir).mkdirs();
+				new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + dir).mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
