@@ -123,7 +123,7 @@ public class FileUtils {
 				zipentry = zipinputstream.getNextEntry();
 			}
 			zipinputstream.close();
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) { }
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class FileUtils {
 				}
 			}
 			zipFile.close();
-		} catch (IOException ioe) {	ioe.printStackTrace(); }
+		} catch (IOException ioe) { }
 	}
 
 	/**
@@ -194,8 +194,8 @@ public class FileUtils {
 				return;
 			}
 			outputTmpFile.renameTo(inputFile);
-		} catch (FileNotFoundException e) {	e.printStackTrace();
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (FileNotFoundException e) { 
+		} catch (IOException e) { }
 	}
 
 	/**

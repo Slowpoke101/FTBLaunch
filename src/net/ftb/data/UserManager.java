@@ -30,7 +30,6 @@ public class UserManager {
 		try {
 			return new String(in.toByteArray(), "utf8");
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -40,7 +39,6 @@ public class UserManager {
 		try {
 			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getMacAddress()));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			return "";
 		}
 		return String.format("%040x", str2);
@@ -69,9 +67,7 @@ public class UserManager {
 					_users.add(new User(str));
 				}
 				read.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			} catch (Exception ex) { }
 		}
 	}
 
@@ -151,12 +147,11 @@ public class UserManager {
 		if(key != null && key.length >= 10) {
 			return key;
 		}
-		byte[] mac = null;
 		try {
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 			while(networkInterfaces.hasMoreElements()) {
 				NetworkInterface network = networkInterfaces.nextElement();
-				mac = network.getHardwareAddress();
+				byte[] mac = network.getHardwareAddress();
 				if(mac != null && mac.length > 0) {
 					key = new byte[mac.length * 10];
 					for(int i = 0; i < key.length; i++) {

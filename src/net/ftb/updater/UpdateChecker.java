@@ -53,10 +53,10 @@ public class UpdateChecker {
 				downloadAddress = LaunchFrame.getCreeperhostLink(downloadAddress);
 			}
 			downloadUrl = new URL(downloadAddress);
-		} catch (MalformedURLException e) { e.printStackTrace();
-		} catch (IOException e) { e.printStackTrace();
-		} catch (SAXException e) { e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+		} catch (MalformedURLException e) { 
+		} catch (IOException e) { 
+		} catch (SAXException e) { 
+		} catch (NoSuchAlgorithmException e) { }
 	}
 
 	public boolean shouldUpdate() {

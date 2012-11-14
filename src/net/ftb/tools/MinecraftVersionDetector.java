@@ -29,14 +29,14 @@ public class MinecraftVersionDetector {
 		}
 		try {
 			FileUtils.copyFile(new File(jarFilePath + "/bin/minecraft.jar"), new File(jarFilePath + "/bin/bckminecraft.jar"));
-		} catch (IOException e2) { e2.printStackTrace(); }
+		} catch (IOException e2) { }
 
 		if(new File(jarFilePath + "/bin/bcklwjgl.jar").exists()) {
 			new File(jarFilePath + "/bin/bcklwjgl.jar").delete();
 		}
 		try {
 			FileUtils.copyFile(new File(jarFilePath + "/bin/lwjgl.jar"), new File(jarFilePath + "/bin/bcklwjgl.jar"));
-		} catch (IOException e2) { e2.printStackTrace(); }
+		} catch (IOException e2) { }
 
 		URL[] urls = new URL[jarFiles.length];
 

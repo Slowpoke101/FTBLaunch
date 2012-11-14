@@ -171,7 +171,7 @@ public class MinecraftLauncher {
 			for(int i = 0; i < counter; i++) {
 				try {
 					urls[i] = map.get(i).toURI().toURL();
-				} catch (MalformedURLException e) { e.printStackTrace(); }
+				} catch (MalformedURLException e) { }
 				System.out.println("Loading URL: " + urls[i].toString());
 			}
 
@@ -212,11 +212,11 @@ public class MinecraftLauncher {
 			System.out.println("MCDIR: " + mcDir);
 
 			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
-		} catch (ClassNotFoundException e) { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e) { e.printStackTrace();
-		} catch (InvocationTargetException e) { e.printStackTrace();
-		} catch (NoSuchMethodException e) { e.printStackTrace();
-		} catch (SecurityException e) { e.printStackTrace(); }
+		} catch (ClassNotFoundException e) { 
+		} catch (IllegalArgumentException e) { 
+		} catch (IllegalAccessException e) { 
+		} catch (InvocationTargetException e) { 
+		} catch (NoSuchMethodException e) { 
+		} catch (SecurityException e) { }
 	}
 }

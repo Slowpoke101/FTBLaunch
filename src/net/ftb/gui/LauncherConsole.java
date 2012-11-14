@@ -166,7 +166,6 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			System.setErr(new OutputOverride(System.err,"ERROR"));
 		} catch (IOException e) {
 			System.err.println("Error starting the Launcher Console: "+e.getMessage());
-			e.printStackTrace();
 		}
 	}
 

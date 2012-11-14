@@ -18,14 +18,14 @@ public class Settings extends Properties {
 	public static void initSettings() throws IOException {
 		File cfgFile = new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg");
 		if (cfgFile.exists()) {
-			LoadSettings(cfgFile);
+			loadSettings(cfgFile);
 			return;
 		}
 		settings = new Settings();
 		settings.setConfigFile(cfgFile);
 	}
 
-	public static void LoadSettings(File file) throws FileNotFoundException, IOException {
+	public static void loadSettings(File file) throws FileNotFoundException, IOException {
 		settings = new Settings(file);
 	}
 

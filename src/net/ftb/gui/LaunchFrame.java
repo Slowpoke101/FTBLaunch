@@ -109,7 +109,7 @@ public class LaunchFrame extends JFrame {
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
 
-	public enum Panes {
+	protected enum Panes {
 		NEWS,
 		OPTIONS,
 		MODPACK,

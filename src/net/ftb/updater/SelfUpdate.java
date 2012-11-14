@@ -48,7 +48,6 @@ public class SelfUpdate {
 			FileUtils.copyFile(temporaryUpdate, launcher);
 		} catch (IOException e) {
 			System.out.print("Auto updating failed!");
-			e.printStackTrace();
 		}
 
 		List<String> arguments = new ArrayList<String>();
@@ -65,7 +64,6 @@ public class SelfUpdate {
 			processBuilder.start();
 		} catch (IOException e) {
 			System.out.print("Failed to start launcher process after updating");
-			e.printStackTrace();
 		}
 	}
 }
