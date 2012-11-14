@@ -1,5 +1,6 @@
 package net.ftb.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -67,6 +68,14 @@ public class AppUtils {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
 			return docFactory.newDocumentBuilder().parse(url.openStream());
+		} catch (ParserConfigurationException ignored) { 
+		} catch (UnknownHostException e) { }
+		return null;
+	}
+	public static Document readOfflineXML(File file) throws IOException, SAXException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		try {
+			return docFactory.newDocumentBuilder().parse(file);
 		} catch (ParserConfigurationException ignored) { 
 		} catch (UnknownHostException e) { }
 		return null;
