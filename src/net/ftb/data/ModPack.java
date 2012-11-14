@@ -82,7 +82,7 @@ public class ModPack {
 		logoName = logo;
 		imageName = image;
 		this.info = info;
-		this.mods = mods.length() > 0 ? mods.split("; ") : null;
+//		this.mods = mods.length() > 0 ? mods.split("; ") : null;
 		String installPath = OSUtils.getDynamicStorageLocation();
 		File verFile = new File(installPath, "temp" + File.separator + dir + File.separator + "version");
 		URL url_;

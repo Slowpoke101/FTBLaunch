@@ -13,10 +13,12 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class UserManager {
 	public final static ArrayList<User> _users = new ArrayList<User>();
 	private File _filename;
+	private static byte[] key;
 
 	public UserManager(File filename) {
 		_filename = filename;
@@ -148,15 +150,24 @@ public class UserManager {
 	}
 
 	private static byte[] getMacAddress() {
+		if(key != null && key.length >= 10) {
+			return key;
+		}
 		byte[] mac = null;
 		try {
-			mac = NetworkInterface.getByInetAddress(InetAddress.getLocalHost()).getHardwareAddress();
-		} catch (SocketException e) {
-		} catch (UnknownHostException e) { }
-		byte[] out = new byte[mac.length * 10];
-		for(int i = 0; i < out.length; i++) {
-			out[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
-		}
-		return out;
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while(networkInterfaces.hasMoreElements()) {
+				NetworkInterface network = networkInterfaces.nextElement();
+				mac = network.getHardwareAddress();
+				if(mac != null && mac.length > 0) {
+					key = new byte[mac.length * 10];
+					for(int i = 0; i < key.length; i++) {
+						key[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
+					}
+					return key;
+				}
+			}
+		} catch (SocketException e) { }
+		return null;
 	}
 }

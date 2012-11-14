@@ -101,6 +101,7 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
+	private static String currentmd5 = "";
 
 	protected static UserManager userManager;
 
@@ -619,7 +620,10 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + getTime()) + "/" + file;
+		if(currentmd5.isEmpty()) {
+			currentmd5 = md5("mcepoch1" + getTime());
+		}
+		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
