@@ -69,7 +69,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		maps.setLayout(null);
 		maps.setOpaque(false);
 
-		// stub for a real wait message
 		final JPanel p = new JPanel();
 		p.setBounds(0, 0, 420, 55);
 		p.setLayout(null);
@@ -87,7 +86,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		});
 		add(filter);
 
-		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin + "<font color=rgb\"(243,119,31)\"> / </font>" + compatible + "</body></html>");
 		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
@@ -213,7 +212,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		selectedMap = 0;
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
-		if(origin.equalsIgnoreCase("all")) {
+		if(origin.equals("All")) {
 			for(Map map : Map.getMapArray()) {
 				if(compatible.equals("All") || map.isCompatible(compatible)) {
 					addMap(map);
@@ -221,7 +220,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 					counter++;
 				}
 			}
-		} else if(origin.equalsIgnoreCase("ftb")) {
+		} else if(origin.equals("FTB")) {
 			for(Map map : Map.getMapArray()) {
 				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(compatible.equals("All") || map.isCompatible(compatible)) {
@@ -287,7 +286,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	public static void updateFilter() {
 		// TODO: Show Modpack specific filtering
-		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin + "<font color=rgb\"(243,119,31)\"> / </font>" + compatible + "</body></html>");
 		sortMaps();
 		LaunchFrame.getInstance().updateFooter();
 	}
