@@ -263,6 +263,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
 				mapInfo.setText(Map.getMap(getIndex()).getInfo());
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));

@@ -96,8 +96,8 @@ public class LaunchFrame extends JFrame {
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
 			tpInstall = new JButton();
-	private static String[] dropdown_ = {"Select Profile", "Create Profile" };
-	private static JComboBox users, tpInstallLocation;
+	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
+	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
@@ -135,7 +135,7 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") 
 				+ " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
-		Logger.logInfo("Working directory: " + System.getProperty("user.dir"));
+		Logger.logInfo("Working directory: ");
 		switch(OSUtils.getCurrentOS()) {
 		case WINDOWS:
 			Logger.logInfo(System.getenv("APPDATA"));
@@ -365,7 +365,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
-		mapInstall.setBounds(480, 20, 330, 30);
+		mapInstall.setBounds(650, 20, 160, 30);
 		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
 		mapInstall.setVisible(false);
 		mapInstall.addActionListener(new ActionListener() {
@@ -378,6 +378,11 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
+		
+		mapInstallLocation = new JComboBox();
+		mapInstallLocation.setBounds(480, 20, 160, 30);
+		mapInstallLocation.setToolTipText("Install to...");
+		mapInstallLocation.setVisible(false);
 
 		serverMap.setBounds(480, 20, 330, 30);
 		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
@@ -424,6 +429,7 @@ public class LaunchFrame extends JFrame {
 		footer.add(donate);
 		footer.add(serverbutton);
 		footer.add(mapInstall);
+		footer.add(mapInstallLocation);
 		footer.add(serverMap);
 		footer.add(tpInstall);
 		footer.add(tpInstallLocation);
@@ -489,7 +495,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-		tabbedPane.setEnabledAt(4, false);
+//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -497,6 +503,7 @@ public class LaunchFrame extends JFrame {
 		edit.setEnabled(false);
 		serverbutton.setEnabled(false);
 		mapInstall.setEnabled(false);
+		mapInstallLocation.setEnabled(false);
 		serverMap.setEnabled(false);
 		tpInstall.setEnabled(false);
 		tpInstallLocation.setEnabled(false);
@@ -530,7 +537,6 @@ public class LaunchFrame extends JFrame {
 					response = new LoginResponse(responseStr);
 					RESPONSE = response;
 				} catch (IllegalArgumentException e) {
-					// TODO: Add in error dialogs to represent login errors.
 					if (responseStr.contains(":")) {
 						Logger.logError("Received invalid response from server.");
 					} else {
@@ -559,7 +565,6 @@ public class LaunchFrame extends JFrame {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-		updateFolderStructure();
 		// TODO: If minecraft updates to the newest minecraft required by the mod pack, but they have an older version... What do?
 		if(!new File(installPath + "/" + modpack.getDir() + "/minecraft/bin/minecraft.jar").exists() 
 				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/minecraft")) {
@@ -765,6 +770,13 @@ public class LaunchFrame extends JFrame {
 			tpInstallLocation.addItem(locations[i]);
 		}
 	}
+	
+	public static void updateMapInstallLocs(String[] locations) {
+		mapInstallLocation.removeAllItems();
+		for(int i = 0; i < locations.length; i++) {
+			mapInstallLocation.addItem(locations[i]);
+		}
+	}
 
 	/**
 	 * @param A - First string array
@@ -818,6 +830,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
+		mapInstallLocation.setEnabled(true);
 		serverMap.setEnabled(true);
 		tpInstall.setEnabled(true);
 		launch.setEnabled(true);
@@ -887,6 +900,7 @@ public class LaunchFrame extends JFrame {
 
 	public void disableMapButtons() {
 		mapInstall.setVisible(false);
+		mapInstallLocation.setVisible(false);
 		serverMap.setVisible(false);
 	}
 
@@ -901,6 +915,7 @@ public class LaunchFrame extends JFrame {
 		case MAPS:
 			result = mapsPane.type.equals("Server");
 			mapInstall.setVisible(!result);
+			mapInstallLocation.setVisible(!result);
 			serverMap.setVisible(result);
 			disableMainButtons();
 			disableTextureButtons();
@@ -924,18 +939,21 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	// TODO: Make buttons dynamically sized.
 	public void updateLocale() {
 		if(I18N.currentLocale == Locale.deDE) {
 			edit.setBounds(420, 20, 120, 30);
 			donate.setBounds(330, 20, 80, 30);
-			mapInstall.setBounds(420, 20, 390, 30);
+			mapInstall.setBounds(620, 20, 190, 30);
+			mapInstallLocation.setBounds(420, 20, 190, 30);
 			serverbutton.setBounds(420, 20, 390, 30);
 			tpInstallLocation.setBounds(420, 20, 190, 30);
 			tpInstall.setBounds(620, 20, 190, 30);
 		} else {
 			edit.setBounds(480, 20, 60, 30);
 			donate.setBounds(390, 20, 80, 30);
-			mapInstall.setBounds(480, 20, 330, 30);
+			mapInstall.setBounds(650, 20, 160, 30);
+			mapInstallLocation.setBounds(480, 20, 160, 30);
 			serverbutton.setBounds(480, 20, 330, 30);
 			tpInstallLocation.setBounds(480, 20, 160, 30);
 			tpInstall.setBounds(650, 20, 160, 30);
@@ -954,12 +972,5 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.updateLocale();
 		mapsPane.updateLocale();
 		tpPane.updateLocale();
-	}
-
-	private void updateFolderStructure() {
-		File temp = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(getSelectedModIndex()).getDir() + "/.minecraft");
-		if(temp.exists()) {
-			temp.renameTo(new File(Settings.getSettings().getInstallPath(), ModPack.getPack(getSelectedModIndex()).getDir() + "/minecraft"));
-		}
 	}
 }

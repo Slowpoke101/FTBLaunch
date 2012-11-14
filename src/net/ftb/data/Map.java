@@ -22,7 +22,8 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.MapLoader;
 
 public class Map {
-	private String name, author, version, url, mapname, mcversion, logoName, imageName, pack, info;
+	private String name, author, version, url, mapname, mcversion, logoName, imageName, info;
+	private String[] compatible;
 	private Image logo, image;
 	private int size, index;
 
@@ -61,7 +62,7 @@ public class Map {
 		this.author = author;
 		this.version = version;
 		this.url = url;
-		pack = compatible;
+		this.compatible = compatible.split(",");
 		this.mcversion = mcversion;
 		this.mapname = mapname;
 		String installPath = OSUtils.getDynamicStorageLocation();
@@ -157,8 +158,8 @@ public class Map {
 		return image;
 	}
 
-	public String getCompatible() {
-		return pack;
+	public String[] getCompatible() {
+		return compatible;
 	}
 
 	public String getMcVersion() {
