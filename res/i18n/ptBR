@@ -1,4 +1,4 @@
-LOCALE_NAME = Português (Brasil)
+﻿LOCALE_NAME = Portuguese (Português do Brasil)
 LOCALE_LOADED = Traduções em Português (Brasil) carregadas!
 
 # Footer #
@@ -26,7 +26,7 @@ RAM_MAX = RAM Máxima (MB)
 LANGUAGE = Linguagem
 
 # Shared strings
-FILTER_SETTINGS = Definiçãos do Filtro
+FILTER_SETTINGS = Definições do Filtro
 
 # Modpacks pane
 MODS_EDIT_PACK = Editar Pacote de Mods
