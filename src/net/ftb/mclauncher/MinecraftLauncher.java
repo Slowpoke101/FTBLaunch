@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import net.ftb.data.Settings;
 import net.ftb.gui.LauncherConsole;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
