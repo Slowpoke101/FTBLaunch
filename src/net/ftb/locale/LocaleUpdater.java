@@ -61,7 +61,8 @@ public class LocaleUpdater {
 			scanner.close();
 		} catch (MalformedURLException e1) {
 		} catch (IOException e1) {
-			Logger.logInfo("[i18n] Could not retrieve version info", e1);
+			Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
+			return;
 		}
 
 		if (local.exists()) {
@@ -69,7 +70,7 @@ public class LocaleUpdater {
 				int localVer;
 				Scanner scanner = new Scanner(local);
 				localVer = scanner.nextInt();
-				Logger.logInfo("[i18n] localVar = " + localVer);
+				Logger.logInfo("[i18n] localVer = " + localVer);
 				scanner.close();
 
 				if (localVer < remoteVer) {
