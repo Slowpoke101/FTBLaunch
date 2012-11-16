@@ -85,7 +85,7 @@ public class TextureManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, "http://repo.creeperhost.net/direct/FTB2/" + md5("mcepoch1" + LaunchFrame.getTime()) + "/" + texturePackName);
+			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, LaunchFrame.getCreeperhostLink(texturePackName));
 			installTexturePack(texturePackName, dir);
 		}
 

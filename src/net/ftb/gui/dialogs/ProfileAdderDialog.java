@@ -35,7 +35,7 @@ public class ProfileAdderDialog extends JDialog {
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("FTB Launcher Profile Adder");
+		setTitle("Profile Creator");
 		setBounds(300, 300, 300, 240);
 		setResizable(false);
 

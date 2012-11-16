@@ -109,7 +109,7 @@ public class ModManager extends JDialog {
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 			new File(installPath + "/ModPacks/" + dir + "/").mkdirs();
 			new File(installPath + "/ModPacks/" + dir + "/" + modPackName).createNewFile();
-			downloadUrl(installPath + "/ModPacks/" + dir + "/" + modPackName, "http://repo.creeperhost.net/direct/FTB2/" + md5 ("mcepoch1" + LaunchFrame.getTime()) + "/" + modPackName);
+			downloadUrl(installPath + "/ModPacks/" + dir + "/" + modPackName, LaunchFrame.getCreeperhostLink(modPackName));
 			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			installMods(modPackName, dir);
 		}

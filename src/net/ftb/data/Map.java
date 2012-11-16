@@ -159,6 +159,10 @@ public class Map {
 		return compatible;
 	}
 
+	public String getSelectedCompatible() {
+		return compatible[LaunchFrame.getSelectedMapInstallIndex()];
+	}
+
 	public String getMcVersion() {
 		return mcversion;
 	}
