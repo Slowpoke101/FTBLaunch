@@ -33,7 +33,7 @@ import net.ftb.log.Logger;
 public class LauncherConsole extends JDialog implements ILogListener {
 	private static final long serialVersionUID = 1L;
 
-	final JEditorPane displayArea;
+	private final JEditorPane displayArea;
 	private HTMLEditorKit kit;
 	private HTMLDocument doc;
 	private JScrollPane scrollPane;
@@ -42,7 +42,8 @@ public class LauncherConsole extends JDialog implements ILogListener {
 	private boolean extendedLog = false;
 
 	private class OutputOverride extends PrintStream {
-		String type;
+		private String type;
+
 		public OutputOverride(OutputStream str, String type) throws FileNotFoundException {
 			super(str);
 			this.type = type;
@@ -122,8 +123,13 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		switchToExtendedBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				switchToExtendedBtn.setEnabled(false);
-				switchToExtendedLog();
+				if(extendedLog) {
+					switchToExtendedBtn.setText("Show extended Log");
+					replay();
+				} else {
+					switchToExtendedBtn.setText("Show reduced Log");
+					switchToExtendedLog();
+				}
 			}
 		});
 		panel.add(switchToExtendedBtn);
@@ -193,6 +199,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 
 	private void replay() {
 		synchronized (doc) {
+			extendedLog = false;
 			doc = new HTMLDocument();
 			displayArea.setDocument(doc);
 			StringBuffer plogs = Logger.getInstance().getLogbuffer();
