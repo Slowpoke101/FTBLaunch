@@ -31,25 +31,15 @@ public class ModPack {
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 
-	/*
-	 * Invoking async Load of Modpacks
-	 */
 	public static void loadAll() {
 		ModpackLoader loader = new ModpackLoader();
 		loader.start();
 	}
 
-	/*
-	 * Add a Listener that will be informed if a pack has been added
-	 */
 	public static void addListener(ModPackListener listener) {
 		listeners.add(listener);
 	}
 
-	/*
-	 * Function to add a Modpack to the Model (used by the ModPackLoader)
-	 * this will also inform listeners.
-	 */
 	public static void addPack(ModPack pack) {
 		synchronized (packs) {
 			packs.add(pack);

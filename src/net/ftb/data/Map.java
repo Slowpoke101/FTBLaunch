@@ -69,7 +69,6 @@ public class Map {
 		this.info = info;
 		logoName = logo;
 		imageName = image;
-		// TODO: Figure out how to do version checking on maps.
 		File tempDir = new File(installPath, "Maps" + File.separator + mapname);
 		File verFile = new File(tempDir, "version");
 		URL url_;

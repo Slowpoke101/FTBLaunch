@@ -137,14 +137,14 @@ public class MapManager extends JDialog {
 		progressBar.setBounds(10, 63, 278, 22);
 		contentPane.add(progressBar);
 
-		JLabel lblDownloadingMap = new JLabel("Downloading map...\nPlease Wait");
+		JLabel lblDownloadingMap = new JLabel("<html><body><center>Downloading map...<br/>Please Wait</center></body></html>");
 		lblDownloadingMap.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDownloadingMap.setBounds(10, 11, 278, 14);
+		lblDownloadingMap.setBounds(0, 5, 313, 30);
 		contentPane.add(lblDownloadingMap);
 
 		label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(10, 36, 278, 14);
+		label.setBounds(0, 42, 313, 14);
 		contentPane.add(label);
 
 		addWindowListener(new WindowListener() {

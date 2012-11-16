@@ -177,14 +177,14 @@ public class ModManager extends JDialog {
 		progressBar.setBounds(10, 63, 278, 22);
 		contentPane.add(progressBar);
 
-		JLabel lblDownloadingModPack = new JLabel("Downloading mod pack...\nPlease Wait");
+		JLabel lblDownloadingModPack = new JLabel("<html><body><center>Downloading mod pack...<br/>Please Wait</center></body></html>");
 		lblDownloadingModPack.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDownloadingModPack.setBounds(10, 11, 278, 14);
+		lblDownloadingModPack.setBounds(0, 5, 313, 30);
 		contentPane.add(lblDownloadingModPack);
 
 		label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(10, 36, 278, 14);
+		label.setBounds(0, 42, 313, 14);
 		contentPane.add(label);
 
 		addWindowListener(new WindowListener() {

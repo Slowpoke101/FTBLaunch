@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
 import javax.swing.SwingWorker;
 
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
 /**
@@ -60,12 +61,14 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		Logger.logInfo("Downloading Jars");
 		if (!downloadJars()) {
 			Logger.logError("Download Failed :(");
+			ErrorUtils.tossError("Download Failed :(");
 			return false;
 		}
 		setStatus("Extracting files...");
 		Logger.logInfo("Extracting Files");
 		if (!extractNatives()) {
 			Logger.logError("Extraction Failed :(");
+			ErrorUtils.tossError("Extraction Failed :(");
 			return false;
 		}
 		return true;
@@ -78,7 +81,6 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 		jarURLs = new URL[jarList.length + 1];
 		try	{
-			// Set the version to the required version of minecraft for the Mod Pack
 			String ver = reqVersion.replace(".", "_");
 			jarURLs[0] = new URL("http://assets.minecraft.net/" + ver + "/minecraft.jar");
 			for (int i = 1; i < jarList.length; i++) {
@@ -164,11 +166,15 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				out.close();
 			} catch (IOException e)	{ }
 			int triesLeft = 0;
+			int lastfile = -1;
 			boolean downloadSuccess = false;
 			while (!downloadSuccess && (triesLeft < 5)) {
 				try {
 					triesLeft++;
-					Logger.logInfo("Connecting.. Try " + triesLeft + " of 5");
+					if(lastfile == i) {
+						Logger.logInfo("Connecting.. Try " + triesLeft + " of 5");
+					}
+					lastfile = i;
 					String etag = "";
 
 					URLConnection dlConnection = jarURLs[i].openConnection();

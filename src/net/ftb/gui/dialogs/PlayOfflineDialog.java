@@ -24,7 +24,7 @@ public class PlayOfflineDialog extends JDialog {
 	public PlayOfflineDialog(String cause, final String username) {
 		if(cause.equals("mcDown")) {
 			text = new JTextArea("Minecraft Servers are down..\nWould you like to Play Offline?");
-		} else if (cause.equals("other")) {
+		} else {
 			text = new JTextArea("Something went wrong..\nWould you like to Play Offline?");
 		}
 
@@ -32,7 +32,8 @@ public class PlayOfflineDialog extends JDialog {
 		yes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int result = MinecraftLauncher.launchMinecraft(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + "minecraft", username, "offlinemods", LaunchFrame.FORGENAME, Settings.getSettings().getRamMax());
+				int result = MinecraftLauncher.launchMinecraft(Settings.getSettings().getInstallPath() + File.separator + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() 
+						+ File.separator + "minecraft", username, "offlinemods", LaunchFrame.FORGENAME, Settings.getSettings().getRamMax());
 				Logger.logInfo("MinecraftLauncher said: "+result);
 				if (result > 0) {
 					System.exit(0);
