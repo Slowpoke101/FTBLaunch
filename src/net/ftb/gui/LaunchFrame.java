@@ -155,6 +155,9 @@ public class LaunchFrame extends JFrame {
 			Logger.logInfo(System.getProperty("user.dir"));
 			break;
 		}
+		Logger.logInfo("Testing this to see if this is bad code ERROR.");
+		Logger.logWarn("This is a test warning.");
+		Logger.logError("This is a test error.");
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override

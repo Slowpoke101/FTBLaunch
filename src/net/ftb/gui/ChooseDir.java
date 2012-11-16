@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 
 public class ChooseDir extends JFrame implements ActionListener {
@@ -62,6 +63,7 @@ public class ChooseDir extends JFrame implements ActionListener {
 					editMPD.updateLists();
 				} else {
 					Logger.logWarn("File already exists, cannot add mod!");
+					ErrorUtils.tossError("File already exists, cannot add mod!");
 				}
 			} else {
 				Logger.logInfo("No Selection.");

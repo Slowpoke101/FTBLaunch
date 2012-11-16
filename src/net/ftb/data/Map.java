@@ -22,7 +22,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.MapLoader;
 
 public class Map {
-	private String name, author, version, url, mapname, mcversion, logoName, imageName, info;
+	private String name, author, version, url, mapname, mcversion, logoName, imageName, info, sep = File.separator;
 	private String[] compatible;
 	private Image logo, image;
 	private int index;
@@ -69,7 +69,7 @@ public class Map {
 		this.info = info;
 		logoName = logo;
 		imageName = image;
-		File tempDir = new File(installPath, "Maps" + File.separator + mapname);
+		File tempDir = new File(installPath, "Maps" + sep + mapname);
 		File verFile = new File(tempDir, "version");
 		URL url_;
 		if(!upToDate(verFile)) {
@@ -85,7 +85,7 @@ public class Map {
 			tempImg.flush();
 		} else {
 			if(new File(tempDir, logo).exists()) {
-				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + logo);
+				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
 			} else {
 				url_ = new URL(LaunchFrame.getStaticCreeperhostLink(logo));
 				this.logo = Toolkit.getDefaultToolkit().createImage(url_);
@@ -94,7 +94,7 @@ public class Map {
 				tempImg.flush();
 			}
 			if(new File(tempDir, image).exists()) {
-				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + File.separator + image);
+				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
 			} else {
 				url_ = new URL(LaunchFrame.getStaticCreeperhostLink(image));
 				this.image = Toolkit.getDefaultToolkit().createImage(url_);

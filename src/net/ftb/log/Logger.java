@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import net.ftb.util.OSUtils;
-import net.ftb.util.PathUtils;
 
 public class Logger {
 	/**
@@ -88,7 +87,7 @@ public class Logger {
 
 		FileWriter fstream;
 		try {
-			fstream = new FileWriter(new File(PathUtils.combine(OSUtils.getDefInstallPath(),Logfile)));
+			fstream = new FileWriter(new File(OSUtils.getDefInstallPath(),Logfile));
 			fileoutwrite = new BufferedWriter(fstream);
 		} catch (IOException e) { e.printStackTrace(); }
 	}

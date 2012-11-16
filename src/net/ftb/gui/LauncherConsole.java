@@ -108,10 +108,10 @@ public class LauncherConsole extends JDialog implements ILogListener {
 						try {
 							desktop.browse(new URI("http://www.pastebin.com/"));
 						} catch(Exception exc) {
-							Logger.logError("could not open url: "+exc.getMessage());
+							Logger.logError("Could not open url: " + exc.getMessage());
 						}
 					} else {
-						Logger.logWarn("could not open url, not supported");
+						Logger.logWarn("Could not open url, not supported");
 					}
 				}
 			}
@@ -137,10 +137,10 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					try {
 						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
 					} catch(Exception exc) {
-						Logger.logError("could not open url: "+exc.getMessage());
+						Logger.logError("Could not open url: " + exc.getMessage());
 					}
 				} else {
-					Logger.logWarn("could not open url, not supported");
+					Logger.logWarn("Could not open url, not supported");
 				}
 			}
 		});
@@ -180,10 +180,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String color = "white";
-					if (line.contains("ERROR")) {
+					if (line.startsWith("[ERROR]")) {
 						color = "red";
-					}
-					if (line.contains("WARN")) {
+					} else if (line.startsWith("[WARN]")) {
 						color = "yellow";
 					}
 					addText(line, color);
@@ -202,10 +201,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String color = "white";
-					if (line.contains("ERROR")) {
+					if (line.startsWith("[ERROR]")) {
 						color = "red";
-					}
-					if (line.contains("WARN")) {
+					} else if (line.startsWith("[WARN]")) {
 						color = "yellow";
 					}
 					addText(line, color);

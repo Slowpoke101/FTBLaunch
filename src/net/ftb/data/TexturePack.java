@@ -22,11 +22,10 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
-	private String name, author, version, url, mcversion, logoName, imageName, info;
+	private String name, author, version, url, mcversion, logoName, imageName, info, sep = File.separator;
 	private Image logo, image;
 	private String[] compatible;
 	private int index;
-	private String sep = File.separator;
 
 	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
 	private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
