@@ -149,7 +149,7 @@ public class MinecraftLauncher {
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
 			int counter = 0;
-			File tempDir = new File(new File(basepath).getParentFile(), "/instMods/");
+			File tempDir = new File(new File(basepath).getParentFile(), "instMods/");
 			if(tempDir.isDirectory()) {
 				for(String name : tempDir.list()) {
 					if(!name.equalsIgnoreCase(forgename)) {

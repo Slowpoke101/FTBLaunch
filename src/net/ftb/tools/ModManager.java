@@ -117,23 +117,7 @@ public class ModManager extends JDialog {
 		protected void installMods(String modPackName, String dir) throws IOException {
 			System.out.println("Installing");
 			String installPath = OSUtils.getDynamicStorageLocation();
-			LaunchFrame.jarMods = new String[new File(installPath + "/ModPacks/" + modPackName + "/instMods").listFiles().length];
-			// TODO: Check to see if this code even executes, I don't think it does.
-			try {
-				FileInputStream fstream = new FileInputStream(installPath + "/ModPacks/" + modPackName + "/modlist");
-				DataInputStream in1 = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in1));
-				String strLine;
-				int i = 0;
-				while ((strLine = br.readLine()) != null) {
-					// Print the content on the console
-					LaunchFrame.jarMods[i] = strLine;
-					i++;
-				}
-				//Close the input stream
-				in1.close();
-			} catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
-			LaunchFrame.jarMods = reverse(LaunchFrame.jarMods);
+			LaunchFrame.jarMods = new String[new File(installPath, "ModPacks/" + modPackName + "/instMods").listFiles().length];
 		}
 
 		public String md5(String input) throws NoSuchAlgorithmException {

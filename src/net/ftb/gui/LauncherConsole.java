@@ -42,11 +42,8 @@ public class LauncherConsole extends JDialog implements ILogListener {
 	private boolean extendedLog = false;
 
 	private class OutputOverride extends PrintStream {
-		private String type;
-
 		public OutputOverride(OutputStream str, String type) throws FileNotFoundException {
 			super(str);
-			this.type = type;
 		}
 
 		@Override
@@ -54,7 +51,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(b);
 			String text = new String(b).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.logInfo("From Console: " + text);
+				Logger.logInfo(text);
 			}
 		}
 
@@ -63,7 +60,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(buf, off, len);
 			String text = new String(buf,off,len).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.logInfo("From Console: " + text);
+				Logger.logInfo(text);
 			}
 		}
 
@@ -85,7 +82,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-		JButton btnNewButton = new JButton("Paste my log to pastebin.com for support requests");
+		JButton btnNewButton = new JButton("Paste my log to pastebin.com");
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -96,9 +93,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				dialog.setVisible(true);
 				Object obj = pane.getValue(); 
 				int result = -1;
-				for (int k = 0; k < options.length; k++) {
-					if (options[k].equals(obj)) {
-						result = k;
+				for (int i = 0; i < options.length; i++) {
+					if (options[i].equals(obj)) {
+						result = i;
 					}
 				}
 				if (result == 0) {
@@ -119,15 +116,15 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		});
 		panel.add(btnNewButton);
 
-		switchToExtendedBtn = new JButton("Show extended Log");
+		switchToExtendedBtn = new JButton("Show Extended Log");
 		switchToExtendedBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(extendedLog) {
-					switchToExtendedBtn.setText("Show extended Log");
+					switchToExtendedBtn.setText("Show Extended Log");
 					replay();
 				} else {
-					switchToExtendedBtn.setText("Show reduced Log");
+					switchToExtendedBtn.setText("Show Reduced Log");
 					switchToExtendedLog();
 				}
 			}
@@ -152,7 +149,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		});
 		panel.add(ircButton);
 
-		displayArea = new JEditorPane("text/html","test");
+		displayArea = new JEditorPane("text/html", "");
 		displayArea.setEditable(false);
 		kit = new HTMLEditorKit();
 		doc = new HTMLDocument();
@@ -168,10 +165,10 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		Logger.addListener(this);
 
 		try {
-			System.setOut(new OutputOverride(System.out,"INFO"));
-			System.setErr(new OutputOverride(System.err,"ERROR"));
+			System.setOut(new OutputOverride(System.out, "INFO"));
+			System.setErr(new OutputOverride(System.err, "ERROR"));
 		} catch (IOException e) {
-			System.err.println("Error starting the Launcher Console: "+e.getMessage());
+			System.err.println("Error starting the Launcher Console: " + e.getMessage());
 		}
 	}
 
@@ -221,7 +218,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 
 	private void addText(String text, String color) {
 		text = text.replace("<", "&lt;").replace(">","&gt;");
-		String msg = "<font color=\""+color+"\">"+text+"</font><br/>";
+		String msg = "<font color=\"" + color + "\">" + text + "</font><br/>";
 		try {
 			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
 		} catch (BadLocationException e) {
@@ -239,9 +236,9 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				color = "red";
 			}
 			if (extendedLog) {
-				addText(date+" "+source+" ["+level+"] "+msg,color);
+				addText(date + " " + source + " [" + level + "] " + msg,color);
 			} else {
-				addText("["+level+"] "+msg,color);
+				addText("[" + level + "] " + msg, color);
 			}
 		}
 
