@@ -26,6 +26,7 @@ public class ModPack {
 	private String[] mods;
 	private Image logo, image;
 	private int index;
+	private boolean uptodate = true;
 
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
@@ -127,6 +128,7 @@ public class ModPack {
 				verFile.getParentFile().mkdirs();
 				verFile.createNewFile();
 				result = false;
+				uptodate = false;
 			}
 			BufferedReader in = new BufferedReader(new FileReader(verFile));
 			String line;
@@ -136,6 +138,7 @@ public class ModPack {
 				out.flush();
 				out.close();
 				result = false;
+				uptodate = false;
 			}
 			in.close();
 		} catch (IOException e) { }
@@ -196,5 +199,9 @@ public class ModPack {
 
 	public String getImageName() {
 		return imageName;
+	}
+	
+	public boolean isUpToDate() {
+		return uptodate;
 	}
 }

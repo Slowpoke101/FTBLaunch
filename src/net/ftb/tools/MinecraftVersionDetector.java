@@ -11,6 +11,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.util.FileUtils;
 
 public class MinecraftVersionDetector {
@@ -100,6 +103,12 @@ public class MinecraftVersionDetector {
 	}
 
 	public boolean shouldUpdate(String requiredVersion, String jarFilePath) {
+		if(Settings.getSettings().getForceUpdate()) {
+			return true;
+		}
+		if(!ModPack.getPack(LaunchFrame.getSelectedModIndex()).isUpToDate()){
+			return false;
+		}
 		String version = getMinecraftVersion(jarFilePath);
 		if(version.equals("unknown")) {
 			return false;

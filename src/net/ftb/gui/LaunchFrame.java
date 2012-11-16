@@ -70,7 +70,7 @@ import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
-import net.ftb.tools.TexturePackManager;
+import net.ftb.tools.TextureManager;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
@@ -410,10 +410,10 @@ public class LaunchFrame extends JFrame {
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TexturePackManager.installDir = (String)tpInstallLocation.getSelectedItem();
-				TexturePackManager man = new TexturePackManager(new JFrame(), true);
+				TextureManager.installDir = (String)tpInstallLocation.getSelectedItem();
+				TextureManager man = new TextureManager(new JFrame(), true);
 				man.setVisible(true);
-				TexturePackManager.cleanUp();
+				TextureManager.cleanUp();
 			}
 		});
 
@@ -569,8 +569,8 @@ public class LaunchFrame extends JFrame {
 	public void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+		initializeMods();
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-		// TODO: If minecraft updates to the newest minecraft required by the mod pack, but they have an older version... What do?
 		if(!new File(installPath + "/" + modpack.getDir() + "/minecraft/bin/minecraft.jar").exists() 
 				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
@@ -581,7 +581,6 @@ public class LaunchFrame extends JFrame {
 					try {
 						if (get()) {
 							Logger.logInfo("Game update complete");
-							initializeMods();
 							FileUtils.killMetaInf();
 							launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
@@ -619,7 +618,6 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			initializeMods();
 			launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}

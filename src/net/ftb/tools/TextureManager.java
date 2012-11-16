@@ -28,7 +28,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
-public class TexturePackManager extends JDialog {
+public class TextureManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 
 	private JPanel contentPane;
@@ -114,7 +114,7 @@ public class TexturePackManager extends JDialog {
 		}
 	}
 
-	public TexturePackManager(JFrame owner, Boolean model) {
+	public TextureManager(JFrame owner, Boolean model) {
 		super(owner, model);
 		setResizable(false);
 		setTitle("Downloading...");
