@@ -80,8 +80,8 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "1.0.6";
-	private static int buildNumber = 106;
+	private static String version = "1.0.7";
+	private static int buildNumber = 107;
 	public static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
@@ -122,11 +122,11 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		
+
 		for (String s: args) {
-            System.out.println(s);
-        }
-		
+			System.out.println(s);
+		}
+
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -155,9 +155,6 @@ public class LaunchFrame extends JFrame {
 			Logger.logInfo(System.getProperty("user.dir"));
 			break;
 		}
-		Logger.logInfo("Testing this to see if this is bad code ERROR.");
-		Logger.logWarn("This is a test warning.");
-		Logger.logError("This is a test error.");
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
