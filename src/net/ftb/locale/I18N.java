@@ -71,11 +71,13 @@ public class I18N {
 		for (String file : list) {
 			if (file.matches("^\\w{4}$")) {
 				try {
-					tmp.clear();
-					tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-					localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-					localeIndices.put(i, file);
-					i++;
+					if(!file.equalsIgnoreCase("enUS")) {
+						tmp.clear();
+						tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
+						localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
+						localeIndices.put(i, file);
+						i++;
+					}
 				} catch (IOException e) {
 					Logger.logWarn("[i18n] Could not load language file", e);
 				}
