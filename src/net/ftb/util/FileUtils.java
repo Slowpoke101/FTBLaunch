@@ -133,7 +133,7 @@ public class FileUtils {
 	 */
 	public static void extractZipTo(String zipLocation, String outputLocation) {
 		try {
-			System.out.println("Entracting");
+			System.out.println("Extracting");
 			File fSourceZip = new File(zipLocation);
 			File temp = new File(outputLocation);
 			temp.mkdir();
