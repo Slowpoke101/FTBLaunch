@@ -178,7 +178,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				tglbtnForceUpdate.setEnabled(false);
-				removeVersionFiles();
 			}
 		});
 
@@ -306,15 +305,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public void setInstallFolderText(String text) {
 		installFolderTextField.setText(text);
 		LaunchFrame.getInstance().saveSettings();
-	}
-
-	private void removeVersionFiles() {
-		for(ModPack pack : ModPack.getPackArray()) {
-			File temp = new File(new File(Settings.getSettings().getInstallPath(), pack.getDir()), "version");
-			if(temp.exists()) {
-				temp.delete();
-			}
-		}
 	}
 
 	public void saveSettingsInto(Settings settings) {

@@ -569,6 +569,10 @@ public class LaunchFrame extends JFrame {
 	public void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+		File temp = new File(new File(Settings.getSettings().getInstallPath(), modpack.getDir()), "version");
+		if(temp.exists()) {
+			temp.delete();
+		}
 		initializeMods();
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 		if(!new File(installPath + "/" + modpack.getDir() + "/minecraft/bin/minecraft.jar").exists() 
