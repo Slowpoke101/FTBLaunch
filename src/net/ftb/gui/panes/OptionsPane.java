@@ -235,10 +235,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (!proxyPort.getText().isEmpty() && Integer.parseInt(proxyPort.getText()) > 1) {
-					Settings.getSettings().setProxyPort(proxyPort.getText());
-				} else {
+				if (proxyPort.getText().isEmpty()) {
 					proxyPort.setText(Settings.getSettings().getProxyPort());
+				} else {
+					try {
+						int port = Integer.parseInt(proxyPort.getText());
+						if (port > 0 && port < 65536) {
+							Settings.getSettings().setProxyPort(String.valueOf(port));
+						} else {
+							proxyPort.setText(Settings.getSettings().getProxyPort());
+						}
+					} catch (NumberFormatException e1) {
+						proxyPort.setText(Settings.getSettings().getProxyPort());
+					}
 				}
 			}
 
