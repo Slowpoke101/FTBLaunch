@@ -190,6 +190,26 @@ public class LaunchFrame extends JFrame {
 					Settings.initSettings();
 				} catch (IOException e) { }
 
+				if (Settings.getSettings().getProxyType().equalsIgnoreCase("SOCKS")) {
+					String host = Settings.getSettings().getProxyHost();
+					String port = Settings.getSettings().getProxyPort();
+					Logger.logInfo("[Proxy] Host: " + host);
+					System.setProperty("socksProxyHost", host);
+					Logger.logInfo("[Proxy] Port: " + port);
+					System.setProperty("socksProxyPort", port);
+
+					// Check if proxy is working and isn't too slow
+					try {
+						URLConnection con = new URL("http://s3.amazonaws.com/").openConnection();
+						con.setReadTimeout(3000);
+						Logger.logInfo("[Proxy] Testing connection to Amazon Cloud ...");
+						con.getInputStream();
+					} catch (IOException e) {
+						Logger.logError("[Proxy] Unable to connect to the Amazon Cloud. Your proxy might be unable to connect to the internet. " +
+								"In that case, you should disable the proxy in the options pane and restart the Launcher.", e);
+					}
+				}
+
 				// Setup localizations
 				I18N.setupLocale();
 				I18N.setLocale(Settings.getSettings().getLocale());

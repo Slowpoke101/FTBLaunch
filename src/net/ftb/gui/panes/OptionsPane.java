@@ -40,13 +40,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	protected static JTextField installFolderTextField;
 	private JToggleButton tglbtnForceUpdate;
-	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
+	private JLabel lblInstallFolder, lblProxy, lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
-	private JComboBox locale;
+	private JComboBox proxyType, locale;
 //	private JLabel minecraftSize;
 //	private JTextField minecraftX;
 //	private JLabel lblX;
 //	private JTextField minecraftY;
+	private JTextField proxyHost, proxyPort;
+	private final String[] proxyTypes = {"disabled", "SOCKS"};
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -189,6 +191,78 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbc_tglbtnForceUpdate.gridx = 1;
 		gbc_tglbtnForceUpdate.gridy = 4;
 		add(tglbtnForceUpdate, gbc_tglbtnForceUpdate);
+
+		lblProxy = new JLabel("Proxy");
+		GridBagConstraints gbc_lblProxy = new GridBagConstraints();
+		gbc_lblProxy.anchor = GridBagConstraints.EAST;
+		gbc_lblProxy.insets = new Insets(0, 0, 5, 5);
+		gbc_lblProxy.gridx = 1;
+		gbc_lblProxy.gridy = 5;
+		add(lblProxy, gbc_lblProxy);
+
+		proxyHost = new JTextField(Settings.getSettings().getProxyHost());
+		proxyHost.setToolTipText("The host of the proxy");
+		GridBagConstraints gbc_proxyHost = new GridBagConstraints();
+		gbc_proxyHost.anchor = GridBagConstraints.WEST;
+		gbc_proxyHost.fill = GridBagConstraints.HORIZONTAL;
+		gbc_proxyHost.insets = new Insets(0, 0, 5, 5);
+		gbc_proxyHost.gridx = 2;
+		gbc_proxyHost.gridy = 5;
+		proxyHost.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!proxyHost.getText().isEmpty()) {
+					Settings.getSettings().setProxyHost(proxyHost.getText());
+				} else {
+					proxyHost.setText(Settings.getSettings().getProxyHost());
+				}
+			}
+
+			@Override public void focusGained(FocusEvent e) { }
+		});
+		add(proxyHost, gbc_proxyHost);
+
+		proxyPort = new JTextField(Settings.getSettings().getProxyPort());
+		proxyPort.setToolTipText("The port of the proxy");
+		GridBagConstraints gbc_proxyPort = new GridBagConstraints();
+		gbc_proxyPort.anchor = GridBagConstraints.EAST;
+		gbc_proxyPort.fill = GridBagConstraints.HORIZONTAL;
+		gbc_proxyPort.insets = new Insets(0, 0, 5, 5);
+		gbc_proxyPort.gridx = 3;
+		gbc_proxyPort.gridy = 5;
+		proxyPort.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!proxyPort.getText().isEmpty() && Integer.parseInt(proxyPort.getText()) > 1) {
+					Settings.getSettings().setProxyPort(proxyPort.getText());
+				} else {
+					proxyPort.setText(Settings.getSettings().getProxyPort());
+				}
+			}
+
+			@Override public void focusGained(FocusEvent e) { }
+		});
+		add(proxyPort, gbc_proxyPort);
+
+		proxyType = new JComboBox(proxyTypes);
+		GridBagConstraints gbc_proxyType = new GridBagConstraints();
+		gbc_proxyType.anchor = GridBagConstraints.WEST;
+		gbc_proxyType.insets = new Insets(0, 0, 5, 5);
+		gbc_proxyType.gridx = 4;
+		gbc_proxyType.gridy = 5;
+		proxyType.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				Settings.getSettings().setProxyType(String.valueOf(proxyType.getSelectedItem()));
+			}
+
+			@Override public void focusGained(FocusEvent e) { }
+		});
+		proxyType.setSelectedItem(Settings.getSettings().getProxyType());
+		add(proxyType, gbc_proxyType);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
 		GridBagConstraints gbc_lblRamMaximum = new GridBagConstraints();
