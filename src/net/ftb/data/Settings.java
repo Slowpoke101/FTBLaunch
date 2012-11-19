@@ -16,7 +16,7 @@ public class Settings extends Properties {
 	private boolean forceUpdate;
 
 	public static void initSettings() throws IOException {
-		File cfgFile = new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg");
+		File cfgFile = new File(Settings.getSettings().getInstallPath(), "ftblaunch.cfg");
 		if (cfgFile.exists()) {
 			loadSettings(cfgFile);
 			return;
