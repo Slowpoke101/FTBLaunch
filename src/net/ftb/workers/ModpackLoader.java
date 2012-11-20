@@ -27,7 +27,7 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 
-			MODPACKSFILE = "https://dl.dropbox.com/u/2405919/modpacks.xml"; // LaunchFrame.getStaticCreeperhostLink("modpacks.xml");
+			MODPACKSFILE = LaunchFrame.getStaticCreeperhostLink("modpacks.xml");
 
 			Document doc;
 			try {
