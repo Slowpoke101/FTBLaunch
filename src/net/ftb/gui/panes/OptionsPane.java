@@ -43,8 +43,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
 	private JComboBox locale;
-	private JLabel minecraftSize;
-	private JTextField minecraftX;
+//	private JLabel minecraftSize;
+//	private JTextField minecraftX;
+//	private JLabel lblX;
+//	private JTextField minecraftY;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -53,16 +55,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
-	private JLabel lblX;
-	private JTextField minecraftY;
+
 
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 86, 32, 14, 25, 37 };
+		gbl_contentPanel.columnWidths = new int[] { 87, 78, 117, 73, 97, 81, 38 }; // 87, 78, 117, 73, 86, 32, 14, 25, 37 };
 		gbl_contentPanel.rowHeights = new int[] { 0, 0, 20, 26, 0, 29, 31, 0,0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0 };
+		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 }; // 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0 };
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		setLayout(gbl_contentPanel);
 
@@ -158,7 +159,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		installFolderTextField = new JTextField();
 		GridBagConstraints gbc_installFolderTextField = new GridBagConstraints();
-		gbc_installFolderTextField.gridwidth = 7;
+		gbc_installFolderTextField.gridwidth = 5; // 7;
 		gbc_installFolderTextField.insets = new Insets(8, 8, 5, 8);
 		gbc_installFolderTextField.fill = GridBagConstraints.BOTH;
 		gbc_installFolderTextField.gridx = 1;
@@ -169,7 +170,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		GridBagConstraints gbc_installBrowseBtn = new GridBagConstraints();
 		gbc_installBrowseBtn.insets = new Insets(8, 0, 5, 8);
-		gbc_installBrowseBtn.gridx = 8;
+		gbc_installBrowseBtn.gridx = 6; // 8;
 		gbc_installBrowseBtn.gridy = 3;
 		this.add(installBrowseBtn, gbc_installBrowseBtn);
 
@@ -183,7 +184,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		GridBagConstraints gbc_tglbtnForceUpdate = new GridBagConstraints();
 		gbc_tglbtnForceUpdate.insets = new Insets(4, 8, 8, 8);
-		gbc_tglbtnForceUpdate.gridwidth = 7;
+		gbc_tglbtnForceUpdate.gridwidth = 5; // 7;
 		gbc_tglbtnForceUpdate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tglbtnForceUpdate.gridx = 1;
 		gbc_tglbtnForceUpdate.gridy = 4;
@@ -232,63 +233,63 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(lblLocale, gbc_lblLocale);
 		add(locale, gbc_locale);
 		
-		minecraftSize = new JLabel("Size for Minecraft Window");
-		GridBagConstraints gbc_lblmcsize = new GridBagConstraints();
-		gbc_lblmcsize.anchor = GridBagConstraints.WEST;
-		gbc_lblmcsize.fill = GridBagConstraints.VERTICAL;
-		gbc_lblmcsize.gridwidth = 4;
-		gbc_lblmcsize.insets = new Insets(0, 0, 5, 5);
-		gbc_lblmcsize.gridx = 4;
-		gbc_lblmcsize.weighty = 2;
-		gbc_lblmcsize.gridy = 6;
-		add(minecraftSize, gbc_lblmcsize);
-		
-		minecraftX = new JTextField();
-		GridBagConstraints gbc_mcx = new GridBagConstraints();
-		gbc_mcx.fill = GridBagConstraints.HORIZONTAL;
-		gbc_mcx.insets = new Insets(0, 0, 5, 5);
-		gbc_mcx.gridx = 4;
-		gbc_mcx.gridy = 7;
-		minecraftX.setText(Settings.getSettings().getMinecraftX());
-		minecraftX.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				Settings.getSettings().setMinecraftX(minecraftX.getText());
-			}
-			
-			@Override
-			public void focusGained(FocusEvent arg0) {}
-		});
-		add(minecraftX, gbc_mcx);
-		
-		lblX = new JLabel("x");
-		GridBagConstraints gbc_lblX = new GridBagConstraints();
-		gbc_lblX.fill = GridBagConstraints.VERTICAL;
-		gbc_lblX.insets = new Insets(0, 0, 5, 5);
-		gbc_lblX.gridx = 5;
-		gbc_lblX.gridy = 7;
-		add(lblX, gbc_lblX);
-		
-		minecraftY = new JTextField();
-		GridBagConstraints gbc_mcy = new GridBagConstraints();
-		gbc_mcy.insets = new Insets(0, 0, 5, 5);
-		gbc_mcy.fill = GridBagConstraints.BOTH;
-		gbc_mcy.gridx = 6;
-		gbc_mcy.gridy = 7;
-		minecraftY.setText(Settings.getSettings().getMinecraftY());
-		minecraftY.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				Settings.getSettings().setMinecraftY(minecraftY.getText());
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {}
-		});
-		add(minecraftY, gbc_mcy);
-		minecraftY.setColumns(5);
+//		minecraftSize = new JLabel("Size for Minecraft Window");
+//		GridBagConstraints gbc_lblmcsize = new GridBagConstraints();
+//		gbc_lblmcsize.anchor = GridBagConstraints.WEST;
+//		gbc_lblmcsize.fill = GridBagConstraints.VERTICAL;
+//		gbc_lblmcsize.gridwidth = 4;
+//		gbc_lblmcsize.insets = new Insets(0, 0, 5, 5);
+//		gbc_lblmcsize.gridx = 4;
+//		gbc_lblmcsize.weighty = 2;
+//		gbc_lblmcsize.gridy = 6;
+//		add(minecraftSize, gbc_lblmcsize);
+//		
+//		minecraftX = new JTextField();
+//		GridBagConstraints gbc_mcx = new GridBagConstraints();
+//		gbc_mcx.fill = GridBagConstraints.HORIZONTAL;
+//		gbc_mcx.insets = new Insets(0, 0, 5, 5);
+//		gbc_mcx.gridx = 4;
+//		gbc_mcx.gridy = 7;
+//		minecraftX.setText(Settings.getSettings().getMinecraftX());
+//		minecraftX.addFocusListener(new FocusListener() {
+//			
+//			@Override
+//			public void focusLost(FocusEvent arg0) {
+//				Settings.getSettings().setMinecraftX(minecraftX.getText());
+//			}
+//			
+//			@Override
+//			public void focusGained(FocusEvent arg0) {}
+//		});
+//		add(minecraftX, gbc_mcx);
+//		
+//		lblX = new JLabel("x");
+//		GridBagConstraints gbc_lblX = new GridBagConstraints();
+//		gbc_lblX.fill = GridBagConstraints.VERTICAL;
+//		gbc_lblX.insets = new Insets(0, 0, 5, 5);
+//		gbc_lblX.gridx = 5;
+//		gbc_lblX.gridy = 7;
+//		add(lblX, gbc_lblX);
+//		
+//		minecraftY = new JTextField();
+//		GridBagConstraints gbc_mcy = new GridBagConstraints();
+//		gbc_mcy.insets = new Insets(0, 0, 5, 5);
+//		gbc_mcy.fill = GridBagConstraints.BOTH;
+//		gbc_mcy.gridx = 6;
+//		gbc_mcy.gridy = 7;
+//		minecraftY.setText(Settings.getSettings().getMinecraftY());
+//		minecraftY.addFocusListener(new FocusListener() {
+//			
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//				Settings.getSettings().setMinecraftY(minecraftY.getText());
+//			}
+//			
+//			@Override
+//			public void focusGained(FocusEvent e) {}
+//		});
+//		add(minecraftY, gbc_mcy);
+//		minecraftY.setColumns(5);
 	}
 
 	@Override public void onVisible() { }

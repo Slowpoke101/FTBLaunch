@@ -123,9 +123,9 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-		for (String s: args) {
-			System.out.println(s);
-		}
+//		for (String s: args) {
+//			System.out.println(s);
+//		}
 
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

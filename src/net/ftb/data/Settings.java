@@ -92,19 +92,19 @@ public class Settings extends Properties {
 		return configPath;
 	}
 	
-	public void setMinecraftX(String x) {
-		setProperty("minecraftX", x);
-	}
-	
-	public String getMinecraftX() {
-		return getProperty("minecraftX", "800");
-	}
-
-	public void setMinecraftY(String y) {
-		setProperty("minecraftY", y);
-	}
-
-	public String getMinecraftY() {
-		return getProperty("minecraftY", "600");
-	}
+//	public void setMinecraftX(String x) {
+//		setProperty("minecraftX", x);
+//	}
+//	
+//	public String getMinecraftX() {
+//		return getProperty("minecraftX", "800");
+//	}
+//
+//	public void setMinecraftY(String y) {
+//		setProperty("minecraftY", y);
+//	}
+//
+//	public String getMinecraftY() {
+//		return getProperty("minecraftY", "600");
+//	}
 }
