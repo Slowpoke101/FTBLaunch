@@ -500,7 +500,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-		//		tabbedPane.setEnabledAt(4, false);
+//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -566,6 +566,10 @@ public class LaunchFrame extends JFrame {
 		loginWorker.execute();
 	}
 
+	/**
+	 * checks whether an update is needed, and then starts the update process off
+	 * @param response - the response from the minecraft servers
+	 */
 	public void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
@@ -771,14 +775,22 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 	}
-
+	
+	/**
+	 * updates the tpInstall to the available ones
+	 * @param locations - the available locations to install the tp to
+	 */
 	public static void updateTpInstallLocs(String[] locations) {
 		tpInstallLocation.removeAllItems();
 		for(int i = 0; i < locations.length; i++) {
 			tpInstallLocation.addItem(locations[i]);
 		}
 	}
-
+	
+	/**
+	 * updates the mapInstall to the available ones
+	 * @param locations - the available locations to install the map to
+	 */
 	public static void updateMapInstallLocs(String[] locations) {
 		mapInstallLocation.removeAllItems();
 		for(int i = 0; i < locations.length; i++) {
@@ -862,7 +874,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * Install mods
+	 * Downlaod and install mods
 	 */
 	private void initializeMods() {
 		Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
@@ -874,6 +886,10 @@ public class LaunchFrame extends JFrame {
 		} catch (IOException e) { Logger.logError("Exception occurred", e); }
 	}
 
+	/**
+	 * opens a URI in the default browser
+	 * @param uri - the URI to open
+	 */
 	public void hLink(URI uri) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
@@ -895,6 +911,10 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * gets the time from the creeperhost servers
+	 * @return - the time in the DDMMYY format
+	 */
 	public static String getTime() {
 		String content = null;
 		Scanner scanner = null;
@@ -913,6 +933,9 @@ public class LaunchFrame extends JFrame {
 		return content;
 	}
 
+	/**
+	 * disables the buttons that are usually active on the footer
+	 */
 	public void disableMainButtons() {
 		serverbutton.setVisible(false);
 		launch.setVisible(false);
@@ -920,17 +943,26 @@ public class LaunchFrame extends JFrame {
 		users.setVisible(false);
 	}
 
+	/**
+	 * disables the footer buttons active when the modpack tab is selected
+	 */
 	public void disableMapButtons() {
 		mapInstall.setVisible(false);
 		mapInstallLocation.setVisible(false);
 		serverMap.setVisible(false);
 	}
 
+	/**
+	 * disables the footer buttons active when the texture pack tab is selected
+	 */
 	public void disableTextureButtons() {
 		tpInstall.setVisible(false);
 		tpInstallLocation.setVisible(false);
 	}
 
+	/**
+	 * update the footer to the correct buttons for active tab
+	 */
 	public void updateFooter() {
 		boolean result;
 		switch(currentPane) {
@@ -962,6 +994,9 @@ public class LaunchFrame extends JFrame {
 	}
 
 	// TODO: Make buttons dynamically sized.
+	/**
+	 * updates the buttons/text to language specific
+	 */
 	public void updateLocale() {
 		if(I18N.currentLocale == Locale.deDE) {
 			edit.setBounds(420, 20, 120, 30);

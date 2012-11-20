@@ -30,15 +30,25 @@ public class Map {
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
 	private static List<MapListener> listeners = new ArrayList<MapListener>();
 
+	/**
+	 * @param listener - the MapListener to add
+	 */
 	public static void addListener(MapListener listener) {
 		listeners.add(listener);
 	}
 
+	/**
+	 * loads the map.xml and adds it to the maps array in this class
+	 */
 	public static void loadAll() {
 		MapLoader loader = new MapLoader();
 		loader.start();
 	}
 
+	/**
+	 * adds maps to the maps array
+	 * @param map - a Map instance
+	 */
 	public static void addMap(Map map) {
 		synchronized (maps) {
 			maps.add(map);
@@ -48,14 +58,34 @@ public class Map {
 		}
 	}
 
+	/**
+	 * @return - the array containing all the maps
+	 */
 	public static ArrayList<Map> getMapArray() {
 		return maps;
 	}
 
+	/**
+	 * @param i - the value in the array
+	 * @return - the Map based on the i value
+	 */
 	public static Map getMap(int i) {
 		return maps.get(i);
 	}
 
+	/**
+	 * @param name - the name of the map
+	 * @param author - the map name
+	 * @param version - the version of the map
+	 * @param url - the map's url
+	 * @param logo - the url of the maps logo
+	 * @param image - the url of the splash image
+	 * @param compatible - the pack(s) compatible with the map
+	 * @param mcversion - the minecraft version of the map
+	 * @param mapname - the map name, as put in the saves folder
+	 * @param info - info about the map
+	 * @param idx - the id with which it is displayed on the GUI
+	 */
 	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
@@ -105,6 +135,10 @@ public class Map {
 		}
 	}
 
+	/**
+	 * @param verFile - the version file to check
+	 * @return checks the version file against the current map version
+	 */
 	private boolean upToDate(File verFile) {
 		boolean result = true;
 		try {
@@ -127,62 +161,108 @@ public class Map {
 		return result;
 	}
 
+	/**
+	 * @return - the index of the map in the GUI
+	 */
 	public int getIndex() {
 		return index;
 	}
 
+	/**
+	 * @return - the name of the map
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @return - the map's author
+	 */
 	public String getAuthor() {
 		return author;
 	}
 
+	/**
+	 * @return - the maps version
+	 */
 	public String getVersion() {
 		return version;
 	}
 
+	/**
+	 * @return - the maps URL
+	 */
 	public String getUrl() {
 		return url;
 	}
 
+	/**
+	 * @return - the maps logo
+	 */
 	public Image getLogo() {
 		return logo;
 	}
 
+	/**
+	 * @return - the maps splash image
+	 */
 	public Image getImage() {
 		return image;
 	}
 
+	/**
+	 * @return - the compatible packs
+	 */
 	public String[] getCompatible() {
 		return compatible;
 	}
 
+	/**
+	 * @return - the compatible pack based on the selected map
+	 */
 	public String getSelectedCompatible() {
 		return compatible[LaunchFrame.getSelectedMapInstallIndex()];
 	}
 
+	/**
+	 * @return - the minecraft version
+	 */
 	public String getMcVersion() {
 		return mcversion;
 	}
 
+	/**
+	 * @return - the mapname
+	 */
 	public String getMapName() {
 		return mapname;
 	}
 
+	/**
+	 * @return - the info for the map
+	 */
 	public String getInfo() {
 		return info;
 	}
 
+	/**
+	 * @return - the logo name as saved on the repo
+	 */
 	public String getLogoName() {
 		return logoName;
 	}
 
+	/**
+	 * @return - the splash image name as saved on the repo
+	 */
 	public String getImageName() {
 		return imageName;
 	}
 
+	/**
+	 * @param dir the directory of the pack
+	 * @return true if the pack is compatible with a map
+	 */
 	public boolean isCompatible(String dir) {
 		for(int i = 0; i < compatible.length; i++) {
 			if(compatible[i].equalsIgnoreCase(dir)) {

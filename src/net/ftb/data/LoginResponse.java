@@ -3,15 +3,9 @@ package net.ftb.data;
 public class LoginResponse {
 	private String latestVersion, downloadTicket, username, sessionID;
 
-	public LoginResponse() { }
-
-	public LoginResponse(String latestVersion, String downloadTicket, String username, String sessionID) {
-		this.latestVersion = latestVersion;
-		this.downloadTicket = downloadTicket;
-		this.username = username;
-		this.sessionID = sessionID;
-	}
-
+	/**
+	 * @param responseString - the response from the minecraft server
+	 */
 	public LoginResponse(String responseString) {
 		String[] responseValues = responseString.split(":");
 		if (responseValues.length < 4) {
@@ -24,35 +18,32 @@ public class LoginResponse {
 		}
 	}
 
+	/**
+	 * @return - the latest version of minecraft
+	 */
 	public String getLatestVersion() {
 		return latestVersion;
 	}
 
-	public void setLatestVersion(String latestVersion) {
-		this.latestVersion = latestVersion;
-	}
-
+	/**
+	 * @return - the download ticket for minecraft
+	 */
 	public String getDownloadTicket() {
 		return downloadTicket;
 	}
 
-	public void setDownloadTicket(String downloadTicket) {
-		this.downloadTicket = downloadTicket;
-	}
-
+	/**
+	 * @return - the username of the user
+	 */
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	/**
+	 * @return - the session ID of the minecraft instance
+	 */
 	public String getSessionID() {
 		return sessionID;
 	}
 
-	public void setSessionID(String sessionID) {
-		this.sessionID = sessionID;
-	}
 }
