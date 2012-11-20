@@ -13,10 +13,10 @@ public class Settings extends Properties {
 	private static final long serialVersionUID = 1L;
 	private static Settings settings;
 	private File configPath;
-	private boolean forceUpdate;
+	private boolean forceUpdate = false;
 
 	public static void initSettings() throws IOException {
-		File cfgFile = new File(Settings.getSettings().getInstallPath(), "ftblaunch.cfg");
+		File cfgFile = new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg");
 		if (cfgFile.exists()) {
 			loadSettings(cfgFile);
 			return;

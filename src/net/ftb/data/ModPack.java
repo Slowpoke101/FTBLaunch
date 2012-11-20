@@ -191,6 +191,10 @@ public class ModPack {
 		return imageName;
 	}
 	
+	public void setUpToDate(boolean result) {
+		uptodate = result;
+	}
+	
 	public boolean isUpToDate() {
 		return uptodate;
 	}

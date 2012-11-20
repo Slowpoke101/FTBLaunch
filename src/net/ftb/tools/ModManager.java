@@ -215,6 +215,7 @@ public class ModManager extends JDialog {
 			if(!update) {
 				return true;
 			}
+			pack.setUpToDate(true);
 			if(backup) {
 				File destination = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config_backup");
 				if(destination.exists()) {
@@ -226,7 +227,6 @@ public class ModManager extends JDialog {
 			out.write(pack.getVersion());
 			out.flush();
 			out.close();
-
 			return false;
 		} else {
 			System.out.println("File found, up to date.");
