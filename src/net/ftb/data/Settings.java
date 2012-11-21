@@ -91,11 +91,11 @@ public class Settings extends Properties {
 	public File getConfigFile() {
 		return configPath;
 	}
-	
+
 //	public void setMinecraftX(String x) {
 //		setProperty("minecraftX", x);
 //	}
-//	
+//
 //	public String getMinecraftX() {
 //		return getProperty("minecraftX", "800");
 //	}
@@ -107,4 +107,28 @@ public class Settings extends Properties {
 //	public String getMinecraftY() {
 //		return getProperty("minecraftY", "600");
 //	}
+
+	public void setProxyType(String type) {
+		setProperty("proxyType", type);
+	}
+
+	public String getProxyType() {
+		return getProperty("proxyType", "disabled");
+	}
+
+	public void setProxyHost(String host) {
+		setProperty("proxyHost", host);
+	}
+
+	public String getProxyHost() {
+		return getProperty("proxyHost", "localhost");
+	}
+
+	public void setProxyPort(String port) {
+		setProperty("proxyPort", port);
+	}
+
+	public String getProxyPort() {
+		return getProperty("proxyPort", "1080");
+	}
 }

@@ -74,6 +74,11 @@ public class MinecraftLauncher {
 			// TODO: Find a way to check if we can allocate this memory.
 			setMemory(arguments, rmax);
 
+			if (Settings.getSettings().getProxyType().equalsIgnoreCase("SOCKS")) {
+				arguments.add("-DsocksProxyHost=" + Settings.getSettings().getProxyHost());
+				arguments.add("-DsocksProxyPort=" + Settings.getSettings().getProxyPort());
+			}
+
 			arguments.add("-cp");
 			arguments.add(System.getProperty("java.class.path") + cpb.toString());
 
