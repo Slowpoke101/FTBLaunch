@@ -177,8 +177,8 @@ public class MinecraftLauncher {
 			}
 
 			System.out.println("Loading natives...");
-			String nativesDir = new File(new File(basepath, "bin"), "natives")
-			.toString();
+			String nativesDir = new File(new File(basepath, "bin"), "natives").toString();
+			System.out.println("Natives loaded...");
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -187,9 +187,11 @@ public class MinecraftLauncher {
 
 			URLClassLoader cl = new URLClassLoader(urls, MinecraftLauncher.class.getClassLoader());
 
+			System.out.println("Loading minecraft class");
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-
+			System.out.println("mc = " + mc);
 			Field[] fields = mc.getDeclaredFields();
+			System.out.println("field amount: " + fields.length);
 
 			for (Field f : fields) {
 				if (f.getType() != File.class) {
