@@ -1,15 +1,20 @@
 package net.ftb.tools;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -18,13 +23,15 @@ import net.ftb.util.FileUtils;
 
 public class MinecraftVersionDetector {
 	public MinecraftVersionDetector() { }
-
+	
+	// The new design of this class is thanks to LexManos, you always think your right and sometimes your are completely right
+	
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
 	 * @return The version of the jar file
 	 */
-	private String getMinecraftVersion(String jarFilePath) {
+	public String getMinecraftVersion(String jarFilePath) {
 		String[] jarFiles = new String[] { "bckminecraft.jar", "bcklwjgl.jar" };
 
 		if(new File(jarFilePath + "/bin/bckminecraft.jar").exists()) {
@@ -51,56 +58,30 @@ public class MinecraftVersionDetector {
 				return "unknown";
 			}
 		}
-		URLClassLoader cl = new URLClassLoader(urls,this.getClass().getClassLoader());
 
-		JarFile file;
 		try {
-			file = new JarFile(new File(jarFilePath + "/bin", "minecraft.jar"));
-		} catch (IOException e1) { return "unknown"; }
-
-		Enumeration<JarEntry> ent = file.entries();
-
-		while (ent.hasMoreElements()) {
-			JarEntry entry = ent.nextElement();
-			if (entry.getName().endsWith(".class")) {
-				if (!entry.getName().contains("/")) { 
-					Class<?> cls;
-					try {
-						cls = cl.loadClass(entry.getName().split("\\.")[0]);
-					} catch (ClassNotFoundException e1) { continue; } 
-					if (cls.getConstructors().length > 0 && cls.getConstructors()[0].getParameterTypes().length == 2) {
-						Boolean string = false;
-						Boolean thr = false;
-						for (Class<?> item : cls.getConstructors()[0].getParameterTypes()) { 
-							if (item == String.class) {
-								string = true;
-							} else if (item == Throwable.class) {
-								thr = true;
-							}
-						}
-						if (string && thr) {
-							try {
-								Object obj = cls.getConstructors()[0].newInstance("", new Throwable("Not a Real Crash")); // create the report
-								for (Method meth : cls.getMethods()) {
-									if (meth.getParameterTypes().length > 0 && meth.getParameterTypes()[0] == StringBuilder.class) {
-										StringBuilder testing = new StringBuilder();
-										meth.invoke(obj, testing);
-										System.out.println(testing.toString());
-										String search = "Minecraft Version: ";
-										System.out.println(testing.indexOf(search) + search.length());
-										return testing.toString().substring(testing.indexOf(search) + search.length(), testing.indexOf("Operating") - 2);
-									}
-								}
-							} catch (IllegalArgumentException e) { return "unknown";
-							} catch (SecurityException e) { return "unknown";
-							} catch (InstantiationException e) { return "unknown";
-							} catch (IllegalAccessException e) { return "unknown";
-							} catch (InvocationTargetException e) { return "unknown"; }
-						}
+			ZipInputStream file = new ZipInputStream(new FileInputStream(new File(jarFilePath + "/bin", "minecraft.jar")));
+			ZipEntry ent;
+		
+			ent = file.getNextEntry();
+		
+			while (ent != null) {
+				if (ent.getName().contains("Minecraft.class")) {
+					StringBuilder sb = new StringBuilder();
+					for (int c = file.read(); c != -1; c = file.read()) {
+					    sb.append((char)c);
 					}
+					String data = sb.toString();
+					String search = "Minecraft 1";
+					file.closeEntry();
+					file.close();
+		            return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
 				}
+				file.closeEntry();
+				ent = file.getNextEntry();
 			}
-		}
+			file.close();
+		} catch (IOException e1) { return "unknown"; }
 		return "unknown";
 	}
 
