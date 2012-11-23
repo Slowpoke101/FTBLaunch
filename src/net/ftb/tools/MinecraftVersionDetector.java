@@ -24,7 +24,7 @@ import net.ftb.util.FileUtils;
 public class MinecraftVersionDetector {
 	public MinecraftVersionDetector() { }
 	
-	// The new design of this class is thanks to LexManos, you always think your right and sometimes your are completely right
+	// The new design of this class is thanks to LexManos, you always think your right and sometimes your completely right
 	
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
