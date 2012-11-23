@@ -85,8 +85,10 @@ public class MinecraftVersionDetector {
 									if (meth.getParameterTypes().length > 0 && meth.getParameterTypes()[0] == StringBuilder.class) {
 										StringBuilder testing = new StringBuilder();
 										meth.invoke(obj, testing);
+										System.out.println(testing.toString());
 										String search = "Minecraft Version: ";
-										return testing.toString().substring(testing.indexOf(search) + search.length(), testing.indexOf("\n"));
+										System.out.println(testing.indexOf(search) + search.length());
+										return testing.toString().substring(testing.indexOf(search) + search.length(), testing.indexOf("Operating") - 2);
 									}
 								}
 							} catch (IllegalArgumentException e) { return "unknown";
