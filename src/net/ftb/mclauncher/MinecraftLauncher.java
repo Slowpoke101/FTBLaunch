@@ -28,68 +28,62 @@ import net.ftb.util.OSUtils;
  *
  */
 public class MinecraftLauncher {
-	public static int launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) {
-		int success = -1;
-		try {
-			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-			StringBuilder cpb = new StringBuilder("");
-			File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
+	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
+		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
+		StringBuilder cpb = new StringBuilder("");
+		File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
 
-			if(tempDir.isDirectory()) {
-				for(String name : tempDir.list()) {
-					if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
-						if(!name.toLowerCase().equalsIgnoreCase(forgename)) {
-							if(new File(tempDir, forgename).exists()) {
-								new File(tempDir, name).delete();
-							} else {
-								new File(tempDir, name).renameTo(new File(tempDir, forgename));
-							}
-						}
-					}
-					if(!name.equalsIgnoreCase(forgename)) {
-						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							cpb.append(OSUtils.getJavaDelimiter());
-							cpb.append(new File(tempDir, name).getAbsolutePath());
+		if(tempDir.isDirectory()) {
+			for(String name : tempDir.list()) {
+				if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
+					if(!name.toLowerCase().equalsIgnoreCase(forgename)) {
+						if(new File(tempDir, forgename).exists()) {
+							new File(tempDir, name).delete();
+						} else {
+							new File(tempDir, name).renameTo(new File(tempDir, forgename));
 						}
 					}
 				}
-			} else {
-				Logger.logInfo("Not a directory.");
+				if(!name.equalsIgnoreCase(forgename)) {
+					if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
+						cpb.append(OSUtils.getJavaDelimiter());
+						cpb.append(new File(tempDir, name).getAbsolutePath());
+					}
+				}
 			}
+		} else {
+			Logger.logInfo("Not a directory.");
+		}
 
+		cpb.append(OSUtils.getJavaDelimiter());
+		cpb.append(new File(tempDir, forgename).getAbsolutePath());
+
+		for(String jarFile : jarFiles) {
 			cpb.append(OSUtils.getJavaDelimiter());
-			cpb.append(new File(tempDir, forgename).getAbsolutePath());
+			cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
+		}
 
-			for(String jarFile : jarFiles) {
-				cpb.append(OSUtils.getJavaDelimiter());
-				cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
-			}
+		List<String> arguments = new ArrayList<String>();
 
-			List<String> arguments = new ArrayList<String>();
+		String separator = System.getProperty("file.separator");
+		String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
+		arguments.add(path);
 
-			String separator = System.getProperty("file.separator");
-			String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
-			arguments.add(path);
+		// TODO: Find a way to check if we can allocate this memory.
+		setMemory(arguments, rmax);
 
-			// TODO: Find a way to check if we can allocate this memory.
-			setMemory(arguments, rmax);
+		arguments.add("-cp");
+		arguments.add(System.getProperty("java.class.path") + cpb.toString());
 
-			arguments.add("-cp");
-			arguments.add(System.getProperty("java.class.path") + cpb.toString());
+		arguments.add(MinecraftLauncher.class.getCanonicalName());
+		arguments.add(workingDir);
+		arguments.add(forgename);
+		arguments.add(username);
+		arguments.add(password);
 
-			arguments.add(MinecraftLauncher.class.getCanonicalName());
-			arguments.add(workingDir);
-			arguments.add(forgename);
-			arguments.add(username);
-			arguments.add(password);
-
-			ProcessBuilder processBuilder = new ProcessBuilder(arguments);
-			try {
-				processBuilder.start();
-				success = 1;
-			} catch (IOException e) { Logger.logError("Error during Minecraft launch", e); }
-		} catch (Exception e) { Logger.logError("Exception during launch of Minecraft", e);	}
-		return success;
+		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
+		processBuilder.redirectErrorStream(true);
+		return processBuilder.start();
 	}
 
 	private static void setMemory(List<String> arguments, String rmax) {
@@ -120,31 +114,6 @@ public class MinecraftLauncher {
 		String password = args[3];
 
 		try {
-			Color baseColor = new Color(40, 40, 40);
-			UIManager.put("control", baseColor);
-			UIManager.put("text", new Color(222, 222, 222));
-			UIManager.put("nimbusBase", new Color(0, 0, 0));
-			UIManager.put("nimbusFocus", baseColor);
-			UIManager.put("nimbusBorder", baseColor);
-			UIManager.put("nimbusLightBackground", baseColor);
-			UIManager.put("info", new Color(55, 55, 55));
-			try {
-				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-					if ("Nimbus".equals(info.getName())) {
-						UIManager.setLookAndFeel(info.getClassName());
-						break;
-					}
-				}
-			} catch (Exception e) {
-				try {
-					UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-				} catch (ClassNotFoundException e1) { Logger.logWarn("Exception occurred",e1); 
-				} catch (InstantiationException e1) { Logger.logWarn("Exception occurred",e1); 
-				} catch (IllegalAccessException e1) { Logger.logWarn("Exception occurred",e1); 
-				} catch (UnsupportedLookAndFeelException e1) { Logger.logWarn("Exception occurred",e1); }
-			}
-			LauncherConsole con = new LauncherConsole();
-			con.setVisible(true);
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
