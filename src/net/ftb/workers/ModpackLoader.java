@@ -2,10 +2,8 @@ package net.ftb.workers;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
@@ -14,10 +12,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.data.ModPack;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
-import net.ftb.util.AppUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.DOMException;
@@ -34,14 +30,14 @@ public class ModpackLoader extends Thread {
 
 	@Override
 	public void run() {
-		
+
 		try {
 			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "modpacks.xml", "https://dl.dropbox.com/u/40374207/modpacks.xml");
 		} catch (IOException e2) {
 			System.out.println("Failed to load modpacks, loading from backup");
 			e2.printStackTrace();
 		}
-		
+
 		try {
 			Logger.logInfo("loading modpack information...");
 
@@ -87,7 +83,7 @@ public class ModpackLoader extends Thread {
 			ModpacksPane.loaded = true;
 		} catch (NoSuchAlgorithmException e1) { }
 	}
-	
+
 	public void downloadUrl(String filename, String urlString) throws IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;

@@ -123,9 +123,9 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-//		for (String s: args) {
-//			System.out.println(s);
-//		}
+		//		for (String s: args) {
+		//			System.out.println(s);
+		//		}
 
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -341,7 +341,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-					Settings.getSettings().setLastPack(ModPack.getPack(users.getSelectedIndex()).getDir());
+					Settings.getSettings().setLastPack(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
 					saveSettings();
 					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				} else {
@@ -501,7 +501,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-//		tabbedPane.setEnabledAt(4, false);
+		//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -776,7 +776,7 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * updates the tpInstall to the available ones
 	 * @param locations - the available locations to install the tp to
@@ -787,7 +787,7 @@ public class LaunchFrame extends JFrame {
 			tpInstallLocation.addItem(locations[i]);
 		}
 	}
-	
+
 	/**
 	 * updates the mapInstall to the available ones
 	 * @param locations - the available locations to install the map to

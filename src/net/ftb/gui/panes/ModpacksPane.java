@@ -74,8 +74,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packs = new JPanel();
 		packs.setLayout(null);
 		packs.setOpaque(false);
-		
-		selectedPack = ModPack.getID(Settings.getSettings().getLastUser());
 
 		// stub for a real wait message
 		final JPanel p = new JPanel();
@@ -221,6 +219,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
 		}
 		packsScroll.revalidate();
+		if(pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastPack())) {
+			selectedPack = packIndex;
+		}
 	}
 
 	@Override
