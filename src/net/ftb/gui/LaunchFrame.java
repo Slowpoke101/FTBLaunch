@@ -65,11 +65,15 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
+import net.ftb.log.LogEntry;
+import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
+import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
+import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.ErrorUtils;
@@ -708,11 +712,28 @@ public class LaunchFrame extends JFrame {
 	 * @param username - the MC username
 	 * @param password - the MC password
 	 */
-	protected void launchMinecraft(String workingDir, String username, String password) {
-		int result = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
-		Logger.logInfo("MinecraftLauncher said: "+result);
-		if (result > 0) {
-			System.exit(0);
+	public void launchMinecraft(String workingDir, String username, String password) {
+		try{
+			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
+			this.setVisible(false);
+			try{
+				Thread.sleep(1500);
+			} catch (InterruptedException e) { }
+			try{
+				minecraftProcess.exitValue();
+			} catch (IllegalThreadStateException e) {
+				//Good! It's still running.
+				this.setVisible(false);
+				ProcessMonitor.create(minecraftProcess, new Runnable() {
+					@Override
+					public void run() {
+						System.exit(0);
+					}
+				});
+				StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+			}
+		} catch(Exception e) {
+			Logger.logError("Error during Minecraft launch", e);
 		}
 	}
 
