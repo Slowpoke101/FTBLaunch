@@ -8,15 +8,14 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.net.URI;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -28,22 +27,28 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import net.ftb.log.ILogListener;
+import net.ftb.log.LogEntry;
+import net.ftb.log.LogLevel;
+import net.ftb.log.LogSource;
+import net.ftb.log.LogType;
 import net.ftb.log.Logger;
 
-public class LauncherConsole extends JDialog implements ILogListener {
+public class LauncherConsole extends JFrame implements ILogListener {
 	private static final long serialVersionUID = 1L;
-
 	private final JEditorPane displayArea;
-	private HTMLEditorKit kit;
+	private final HTMLEditorKit kit;
 	private HTMLDocument doc;
-	private JScrollPane scrollPane;
-	private final JButton switchToExtendedBtn;
-	private JButton ircButton;
-	private boolean extendedLog = false;
+	private final JComboBox logTypeComboBox;
+	private LogType logType = LogType.MINIMAL;
+	private final JComboBox logSourceComboBox;
+	private LogSource logSource = LogSource.ALL;
 
 	private class OutputOverride extends PrintStream {
-		public OutputOverride(OutputStream str, String type) throws FileNotFoundException {
+		final LogLevel level;
+
+		public OutputOverride(OutputStream str, LogLevel type) {
 			super(str);
+			this.level = type;
 		}
 
 		@Override
@@ -51,22 +56,22 @@ public class LauncherConsole extends JDialog implements ILogListener {
 			super.write(b);
 			String text = new String(b).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.logInfo(text);
+				Logger.log("From Console: " + text, level, null);
 			}
 		}
 
 		@Override
 		public void write(byte[] buf, int off, int len) {
 			super.write(buf, off, len);
-			String text = new String(buf,off,len).trim();
+			String text = new String(buf, off, len).trim();
 			if (!text.equals("") && !text.equals("\n")) {
-				Logger.logInfo(text);
+				Logger.log("From Console: " + text, level, null);
 			}
 		}
 
 		@Override
 		public void write(int b) {
-			Logger.logWarn("Someone tried to use write(int b), that is not supported!");
+			throw new UnsupportedOperationException("write(int) is not supported by OutputOverride.");
 		}
 	}
 
@@ -91,7 +96,7 @@ public class LauncherConsole extends JDialog implements ILogListener {
 				pane.setOptions(options);
 				JDialog dialog = pane.createDialog(new JFrame(), "Paste to pastebin.com");
 				dialog.setVisible(true);
-				Object obj = pane.getValue(); 
+				Object obj = pane.getValue();
 				int result = -1;
 				for (int i = 0; i < options.length; i++) {
 					if (options[i].equals(obj)) {
@@ -99,13 +104,13 @@ public class LauncherConsole extends JDialog implements ILogListener {
 					}
 				}
 				if (result == 0) {
-					StringSelection content = new StringSelection(Logger.getInstance().getLogbufferExtensive().toString());
+					StringSelection content = new StringSelection(Logger.getLogs());
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(content, null);
-					if(Desktop.isDesktopSupported()) {
+					if (Desktop.isDesktopSupported()) {
 						Desktop desktop = Desktop.getDesktop();
 						try {
 							desktop.browse(new URI("http://www.pastebin.com/"));
-						} catch(Exception exc) {
+						} catch (Exception exc) {
 							Logger.logError("Could not open url: " + exc.getMessage());
 						}
 					} else {
@@ -116,30 +121,35 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		});
 		panel.add(btnNewButton);
 
-		switchToExtendedBtn = new JButton("Show Extended Log");
-		switchToExtendedBtn.addActionListener(new ActionListener() {
-			@Override
+		logTypeComboBox = new JComboBox(LogType.values());
+		logTypeComboBox.setSelectedItem(logType);
+		logTypeComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(extendedLog) {
-					switchToExtendedBtn.setText("Show Extended Log");
-					replay();
-				} else {
-					switchToExtendedBtn.setText("Show Reduced Log");
-					switchToExtendedLog();
-				}
+				logType = (LogType) logTypeComboBox.getSelectedItem();
+				refreshLogs();
 			}
 		});
-		panel.add(switchToExtendedBtn);
+		panel.add(logTypeComboBox);
 
-		ircButton = new JButton("Join support webchat");
+		logSourceComboBox = new JComboBox(LogSource.values());
+		logSourceComboBox.setSelectedItem(logSource);
+		logSourceComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				logSource = (LogSource) logSourceComboBox.getSelectedItem();
+				refreshLogs();
+			}
+		});
+		panel.add(logSourceComboBox);
+
+		JButton ircButton = new JButton("Join support webchat");
 		ircButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(Desktop.isDesktopSupported()) {
+				if (Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					try {
 						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
-					} catch(Exception exc) {
+					} catch (Exception exc) {
 						Logger.logError("Could not open url: " + exc.getMessage());
 					}
 				} else {
@@ -152,95 +162,58 @@ public class LauncherConsole extends JDialog implements ILogListener {
 		displayArea = new JEditorPane("text/html", "");
 		displayArea.setEditable(false);
 		kit = new HTMLEditorKit();
-		doc = new HTMLDocument();
 		displayArea.setEditorKit(kit);
-		displayArea.setDocument(doc);
 
-		scrollPane = new JScrollPane(displayArea);
+		JScrollPane scrollPane = new JScrollPane(displayArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		getContentPane().add(scrollPane);
 
-		replay();
+		refreshLogs();
 		Logger.addListener(this);
 
-		try {
-			System.setOut(new OutputOverride(System.out, "INFO"));
-			System.setErr(new OutputOverride(System.err, "ERROR"));
-		} catch (IOException e) {
-			System.err.println("Error starting the Launcher Console: " + e.getMessage());
-		}
+		System.setOut(new OutputOverride(System.out, LogLevel.INFO));
+		System.setErr(new OutputOverride(System.err, LogLevel.ERROR));
 	}
 
-	public void switchToExtendedLog() {
-		synchronized (doc) {
-			extendedLog = true;
-			doc = new HTMLDocument();
-			displayArea.setDocument(doc);
-			StringBuffer plogs = Logger.getInstance().getLogbufferExtensive();
-			BufferedReader br = new BufferedReader(new StringReader(plogs.toString()));
+	synchronized private void refreshLogs() {
+		doc = new HTMLDocument();
+		displayArea.setDocument(doc);
+		List<LogEntry> entries = Logger.getLogEntries();
+		StringBuilder logHTML = new StringBuilder();
+		for(LogEntry entry : entries) {
+			if(logSource == LogSource.ALL || entry.source == logSource) {
+				logHTML.append(getMessage(entry));
+			}
+		}
+		addHTML(logHTML.toString());
+	}
+
+	private void addHTML(String html) {
+		synchronized (kit) {
 			try {
-				String line;
-				while ((line = br.readLine()) != null) {
-					String color = "white";
-					if (line.startsWith("[ERROR]")) {
-						color = "red";
-					} else if (line.startsWith("[WARN]")) {
-						color = "yellow";
-					}
-					addText(line, color);
-				}	
-			} catch (IOException e) { }
+				kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
+			} catch (BadLocationException ignored) {
+			} catch (IOException ignored) {
+			}
+			displayArea.setCaretPosition(displayArea.getDocument().getLength());
 		}
 	}
 
-	private void replay() {
-		synchronized (doc) {
-			extendedLog = false;
-			doc = new HTMLDocument();
-			displayArea.setDocument(doc);
-			StringBuffer plogs = Logger.getInstance().getLogbuffer();
-			BufferedReader br = new BufferedReader(new StringReader(plogs.toString()));
-			try {
-				String line;
-				while ((line = br.readLine()) != null) {
-					String color = "white";
-					if (line.startsWith("[ERROR]")) {
-						color = "red";
-					} else if (line.startsWith("[WARN]")) {
-						color = "yellow";
-					}
-					addText(line, color);
-				}
-			} catch (IOException e) { }
+	private String getMessage(LogEntry entry) {
+		String color = "white";
+		switch(entry.level) {
+			case ERROR:
+				color = "#FF7070";
+				break;
+			case WARN:
+				color = "yellow";
 		}
-	}
-
-	private void addText(String text, String color) {
-		text = text.replace("<", "&lt;").replace(">","&gt;");
-		String msg = "<font color=\"" + color + "\">" + text + "</font><br/>";
-		try {
-			kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
-		} catch (BadLocationException e) {
-		} catch (IOException e) { }
-		displayArea.setCaretPosition(displayArea.getDocument().getLength());
+		return "<font color=\"" + color + "\">" + (entry.toString(logType).replace("<", "&lt;").replace(">", "&gt;").trim().replace("\r\n","\n").replace("\n","<br/>")) + "</font><br/>";
 	}
 
 	@Override
-	public void onLogEvent(String date, String source, String level, String msg) {
-		synchronized (doc) {
-			String color = "white";
-			if (level.equals("WARN")) {
-				color = "yellow";
-			} else if (level.equals("ERROR")) {
-				color = "red";
-			}
-			if (extendedLog) {
-				addText(date + " " + source + " [" + level + "] " + msg,color);
-			} else {
-				addText("[" + level + "] " + msg, color);
-			}
-		}
-
+	public void onLogEvent(LogEntry entry) {
+		addHTML(getMessage(entry));
 	}
 }

@@ -2,11 +2,9 @@ package net.ftb.log;
 
 public interface ILogListener {
 	/**
-	 * Notifies once a Log entry has been added
-	 * @param date the date of the log entry
-	 * @param source Source of the Log (class and function)
-	 * @param level	either INFO, WARN or ERROR
-	 * @param msg the message text
+	 * Called when a log entry is added.
+	 * May be called from any thread!
+	 * @param logEntry the date of the log entry
 	 */
-	public void onLogEvent(String date, String source, String level, String msg);
+	public void onLogEvent(LogEntry logEntry);
 }
