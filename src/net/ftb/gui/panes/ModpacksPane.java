@@ -25,6 +25,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
@@ -73,6 +74,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packs = new JPanel();
 		packs.setLayout(null);
 		packs.setOpaque(false);
+		
+		selectedPack = ModPack.getID(Settings.getSettings().getLastUser());
 
 		// stub for a real wait message
 		final JPanel p = new JPanel();

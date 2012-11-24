@@ -91,6 +91,14 @@ public class Settings extends Properties {
 	public File getConfigFile() {
 		return configPath;
 	}
+
+	public void setLastPack(String name) {
+		setProperty("lastPack", name);
+	}
+	
+	public String getLastPack() {
+		return getProperty("lastPack", ModPack.getPack(0).getDir());
+	}
 	
 //	public void setMinecraftX(String x) {
 //		setProperty("minecraftX", x);

@@ -341,6 +341,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+					Settings.getSettings().setLastPack(ModPack.getPack(users.getSelectedIndex()).getDir());
 					saveSettings();
 					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				} else {

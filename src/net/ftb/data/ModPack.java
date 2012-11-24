@@ -198,4 +198,13 @@ public class ModPack {
 	public boolean isUpToDate() {
 		return uptodate;
 	}
+	
+	public static int getID(String dir) {
+		for(int i = 0; i < packs.size(); i++) {
+			if(getPack(i).getDir().equalsIgnoreCase(dir)) {
+				return i;
+			}
+		}
+		return 0;
+	}
 }
