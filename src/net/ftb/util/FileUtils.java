@@ -33,7 +33,7 @@ public class FileUtils {
 	public static void copyFolder(File sourceFolder, File destinationFolder) throws IOException {
 		if (sourceFolder.isDirectory()) {
 			if (!destinationFolder.exists()) {
-				destinationFolder.mkdir();
+				destinationFolder.mkdirs();
 			}
 			String files[] = sourceFolder.list();
 			for (String file : files) {
