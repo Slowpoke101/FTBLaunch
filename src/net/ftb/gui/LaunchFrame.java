@@ -130,7 +130,12 @@ public class LaunchFrame extends JFrame {
 		//		for (String s: args) {
 		//			System.out.println(s);
 		//		}
-
+		
+		// Load settings
+		try {
+			Settings.initSettings();
+		} catch (IOException e) { }
+		
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -188,11 +193,6 @@ public class LaunchFrame extends JFrame {
 					} catch (IllegalAccessException e1) { 
 					} catch (UnsupportedLookAndFeelException e1) { }
 				}
-
-				// Load settings
-				try {
-					Settings.initSettings();
-				} catch (IOException e) { }
 
 				// Setup localizations
 				I18N.setupLocale();

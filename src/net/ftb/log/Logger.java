@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import net.ftb.data.Settings;
 import net.ftb.util.OSUtils;
 
 public class Logger {
@@ -35,8 +36,8 @@ public class Logger {
 		listeners = new ArrayList<ILogListener>();
 
 		try {
-			launcherLogWriter = new BufferedWriter(new FileWriter(new File(OSUtils.getDefInstallPath(), launcherLogFile)));
-			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(OSUtils.getDefInstallPath(), minecraftLogFile)));
+			launcherLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile)));
+			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

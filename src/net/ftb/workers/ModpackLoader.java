@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.data.ModPack;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -32,16 +33,16 @@ public class ModpackLoader extends Thread {
 	public void run() {
 
 		try {
-			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "modpacks.xml", "https://dl.dropbox.com/u/40374207/modpacks.xml");
+			new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator).mkdirs();
+			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", "https://dl.dropbox.com/u/2405919/modpacks.xml");
 		} catch (IOException e2) {
 			System.out.println("Failed to load modpacks, loading from backup");
-			e2.printStackTrace();
 		}
 
 		try {
 			Logger.logInfo("loading modpack information...");
 
-			MODPACKSFILE = OSUtils.getDynamicStorageLocation() + File.separator + "modpacks.xml";
+			MODPACKSFILE = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
 
 			Document doc = null;
 			try {
