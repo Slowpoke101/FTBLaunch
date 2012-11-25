@@ -84,8 +84,8 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "1.0.8";
-	private static int buildNumber = 108;
+	private static String version = "1.0.9";
+	private static int buildNumber = 109;
 	public static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
