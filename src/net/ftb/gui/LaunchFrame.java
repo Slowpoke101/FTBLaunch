@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -105,7 +106,7 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
-	private static String currentmd5 = "";
+	private static String currentmd5 = null;
 
 	protected static UserManager userManager;
 
@@ -643,12 +644,10 @@ public class LaunchFrame extends JFrame {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		if(currentmd5.isEmpty()) {
+		if(currentmd5 == null) {
 			currentmd5 = md5("mcepoch1" + getTime());
 		}
-		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
-		Logger.logInfo(resolved);
-		return resolved; 
+		return "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
 	}
 
 	/**
@@ -715,7 +714,6 @@ public class LaunchFrame extends JFrame {
 	public void launchMinecraft(String workingDir, String username, String password) {
 		try{
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
-			this.setVisible(false);
 			try{
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }
@@ -938,21 +936,24 @@ public class LaunchFrame extends JFrame {
 	 * @return - the time in the DDMMYY format
 	 */
 	public static String getTime() {
-		String content = null;
+		String time = null;
 		Scanner scanner = null;
 		try {
 			URLConnection connection = new URL("http://repo.creeperhost.net/getdate").openConnection();
 			scanner = new Scanner( connection.getInputStream() );
 			scanner.useDelimiter( "\\Z" );
-			content = scanner.next();
-		} catch (java.net.UnknownHostException uhe) {
+			time = scanner.next();
 		} catch (Exception ex) {
+			Logger.logError("Error getting time to resolve creeperhost link, falling back to system time.");
+			DateFormat sdf = new SimpleDateFormat("ddMMyy");
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+			time = sdf.format(new Date());
 		} finally {
 			if (scanner != null) {
 				scanner.close();
 			}
 		}
-		return content;
+		return time;
 	}
 
 	/**
