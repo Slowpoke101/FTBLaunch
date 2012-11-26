@@ -131,7 +131,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			Settings.initSettings();
 		} catch (IOException e) { }
-		
+
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
@@ -622,28 +622,24 @@ public class LaunchFrame extends JFrame {
 		if(currentmd5.isEmpty()) {
 			currentmd5 = md5("mcepoch1" + getTime());
 		}
-		int retries = 1;
 		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 		} catch (MalformedURLException e1) {
-		} catch (IOException e1) {
-		}
+		} catch (IOException e1) { }
 		try {
-			while(connection.getResponseCode() != 200 && retries <= 3) 
-			{
+			int retries = 1;
+			while(connection.getResponseCode() != 200 && retries <= 3) {
 				connection.disconnect();
+				resolved = "http://repo" + retries + ".creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
 				retries++;
-				resolved = "http://repo"+retries+".creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
 				try {
 					connection = (HttpURLConnection) new URL(resolved).openConnection();
 				} catch (MalformedURLException e) {
-				} catch (IOException e) {;
-				}
+				} catch (IOException e) { }
 			}
-		} catch (IOException e) {
-		}
+		} catch (IOException e) { }
 		connection.disconnect();
 		Logger.logInfo(resolved);
 		return resolved; 
@@ -653,29 +649,26 @@ public class LaunchFrame extends JFrame {
 	 * @return - the direct link
 	 */
 	public static String getStaticCreeperhostLink(String file) {
-		int retries = 1;
 		String resolved = "http://repo.creeperhost.net/static/FTB2/" + file;
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 		} catch (MalformedURLException e1) {
-		} catch (IOException e1) {
-		}
+		} catch (IOException e1) { }
 		try {
-			while(connection.getResponseCode() != 200 && retries <= 3) 
-			{
+			int retries = 1;
+			while(connection.getResponseCode() != 200 && retries <= 3) {
 				connection.disconnect();
+				resolved = "http://repo" + retries + ".creeperhost.net/static/FTB2/" + file;
 				retries++;
-				resolved = "http://repo"+retries+".creeperhost.net/static/FTB2/" + file;
 				try {
 					connection = (HttpURLConnection) new URL(resolved).openConnection();
 				} catch (MalformedURLException e) {
-				} catch (IOException e) {;
-				}
+				} catch (IOException e) { }
 			}
-		} catch (IOException e) {
-		}
+		} catch (IOException e) { }
 		connection.disconnect();
+		Logger.logInfo(resolved);
 		return resolved; 
 	}
 
@@ -959,18 +952,19 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static String getTime() {
 		String content = null;
-		int retries = 1;
 		Scanner scanner = null;
+		int retries = 1;
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL("http://repo.creeperhost.net/getdate").openConnection();
-			while(connection.getResponseCode() != 200 && retries <= 3) 
-			{
+			while(connection.getResponseCode() != 200 && retries <= 3) {
+				connection.disconnect();
+				connection = (HttpURLConnection) new URL("http://repo" + retries + ".creeperhost.net/getdate").openConnection();
 				retries++;
-				connection = (HttpURLConnection) new URL("http://repo"+retries+".creeperhost.net/getdate").openConnection();
 			}
-			scanner = new Scanner( connection.getInputStream() );
+			scanner = new Scanner(connection.getInputStream());
 			scanner.useDelimiter( "\\Z" );
 			content = scanner.next();
+			connection.disconnect();
 		} catch (java.net.UnknownHostException uhe) {
 		} catch (Exception ex) {
 		} finally {
