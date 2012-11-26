@@ -62,23 +62,16 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 1.0, 1.0,1.0, 1.0, 0.0 }; // 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0 };
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		setLayout(gbl_contentPanel);
-
+		
 		currentRam = new JLabel();
-
 		long ram = 0;
-
-		OperatingSystemMXBean operatingSystemMXBean = 
-				ManagementFactory.getOperatingSystemMXBean();
-
+		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		Method m;
 		try {
-			m = operatingSystemMXBean.getClass().
-					getDeclaredMethod("getTotalPhysicalMemorySize");
-
+			m = operatingSystemMXBean.getClass().getDeclaredMethod("getTotalPhysicalMemorySize");
 			m.setAccessible(true);
 
 			Object value = m.invoke(operatingSystemMXBean);
-
 			if (value != null) {
 				ram = Long.valueOf(value.toString()) / 1024 / 1024;
 			} else {
@@ -86,16 +79,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				ram = 8192;
 			}
 		} catch (SecurityException e1) {
-			e1.printStackTrace();
 		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
 		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
+		} catch (InvocationTargetException e1) { }
 
 		ramMaximum = new JSlider();
 		ramMaximum.setSnapToTicks(true);
