@@ -25,6 +25,7 @@ import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -59,7 +60,7 @@ public class TextureManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0;
-				URL url_ = new URL(LaunchFrame.getCreeperhostLink(TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getUrl()));
+				URL url_ = new URL(DownloadUtils.getCreeperhostLink(TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getUrl()));
 				int mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
@@ -85,7 +86,7 @@ public class TextureManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, LaunchFrame.getCreeperhostLink(texturePackName));
+			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink(texturePackName));
 			installTexturePack(texturePackName, dir);
 		}
 
@@ -97,20 +98,6 @@ public class TextureManager extends JDialog {
 			new File(installPath, installDir + "/minecraft/texturepacks/").mkdirs();
 			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
 			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
-		}
-
-		public String md5(String input) throws NoSuchAlgorithmException {
-			String result = input;
-			if(!input.isEmpty()) {
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				md.update(input.getBytes());
-				BigInteger hash = new BigInteger(1, md.digest());
-				result = hash.toString(16);
-				while(result.length() < 32) {
-					result = "0" + result;
-				}
-			}
-			return result;
 		}
 	}
 

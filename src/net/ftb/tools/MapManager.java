@@ -26,6 +26,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -66,7 +67,7 @@ public class MapManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0;
-				URL url_ = new URL(LaunchFrame.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
+				URL url_ = new URL(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 				int mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
@@ -92,7 +93,7 @@ public class MapManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, LaunchFrame.getCreeperhostLink(mapName));
+			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(mapName));
 			FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
 			installMap(mapName, dir);
 		}
@@ -105,20 +106,6 @@ public class MapManager extends JDialog {
 			new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
 			FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
 			FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
-		}
-
-		public String md5(String input) throws NoSuchAlgorithmException {
-			String result = input;
-			if(!input.isEmpty()) {
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				md.update(input.getBytes());
-				BigInteger hash = new BigInteger(1, md.digest());
-				result = hash.toString(16);
-				while(result.length() < 32) {
-					result = "0" + result;
-				}
-			}
-			return result;
 		}
 	}
 

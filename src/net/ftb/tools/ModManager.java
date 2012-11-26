@@ -27,6 +27,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -92,7 +93,7 @@ public class ModManager extends JDialog {
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
 			new File(installPath, "ModPacks/" + dir + sep).mkdirs();
 			new File(installPath, "ModPacks/" + dir + sep + modPackName).createNewFile();
-			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
+			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
 			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			clearModsFolder(pack);
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));

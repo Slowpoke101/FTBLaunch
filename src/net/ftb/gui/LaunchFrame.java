@@ -73,6 +73,7 @@ import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
 import net.ftb.updater.UpdateChecker;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
@@ -102,7 +103,6 @@ public class LaunchFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
 	private LoginResponse RESPONSE;
-	private static String currentmd5 = "";
 
 	protected static UserManager userManager;
 
@@ -341,7 +341,7 @@ public class LaunchFrame extends JFrame {
 				if(!ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl().isEmpty()) {
 					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 						try {
-							hLink(new URI(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+							hLink(new URI(DownloadUtils.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
 						} catch (URISyntaxException e) { 
 						} catch (NoSuchAlgorithmException e) { }
 					}
@@ -378,7 +378,7 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
 					try {
-						hLink(new URI(LaunchFrame.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl())));
+						hLink(new URI(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl())));
 					} catch (URISyntaxException e) { 
 					} catch (NoSuchAlgorithmException e) { }
 				}
@@ -611,84 +611,6 @@ public class LaunchFrame extends JFrame {
 		} else {
 			launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
-	}
-
-	/**
-	 * @param file - the name of the file, as saved to the repo (including extension)
-	 * @return - the direct link
-	 * @throws NoSuchAlgorithmException - see md5
-	 */
-	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		if(currentmd5.isEmpty()) {
-			currentmd5 = md5("mcepoch1" + getTime());
-		}
-		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-		} catch (MalformedURLException e1) {
-		} catch (IOException e1) { }
-		try {
-			int retries = 1;
-			while(connection.getResponseCode() != 200 && retries <= 3) {
-				connection.disconnect();
-				resolved = "http://repo" + retries + ".creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
-				retries++;
-				try {
-					connection = (HttpURLConnection) new URL(resolved).openConnection();
-				} catch (MalformedURLException e) {
-				} catch (IOException e) { }
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
-		Logger.logInfo(resolved);
-		return resolved; 
-	}
-	/**
-	 * @param file - the name of the file, as saved to the repo (including extension)
-	 * @return - the direct link
-	 */
-	public static String getStaticCreeperhostLink(String file) {
-		String resolved = "http://repo.creeperhost.net/static/FTB2/" + file;
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-		} catch (MalformedURLException e1) {
-		} catch (IOException e1) { }
-		try {
-			int retries = 1;
-			while(connection.getResponseCode() != 200 && retries <= 3) {
-				connection.disconnect();
-				resolved = "http://repo" + retries + ".creeperhost.net/static/FTB2/" + file;
-				retries++;
-				try {
-					connection = (HttpURLConnection) new URL(resolved).openConnection();
-				} catch (MalformedURLException e) {
-				} catch (IOException e) { }
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
-		Logger.logInfo(resolved);
-		return resolved; 
-	}
-
-	/**
-	 * @param input - String to hash
-	 * @return - hashed string
-	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
-	 */
-	public static String md5(String input) throws NoSuchAlgorithmException {
-		String result = input;
-		if (input != null) {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(input.getBytes());
-			BigInteger hash = new BigInteger(1, md.digest());
-			result = hash.toString(16);
-			while (result.length() < 32) {
-				result = "0" + result;
-			}
-		}
-		return result;
 	}
 
 	/**
@@ -944,35 +866,6 @@ public class LaunchFrame extends JFrame {
 		} else {
 			Logger.logWarn("Desktop not supported.");
 		}
-	}
-
-	/**
-	 * gets the time from the creeperhost servers
-	 * @return - the time in the DDMMYY format
-	 */
-	public static String getTime() {
-		String content = null;
-		Scanner scanner = null;
-		int retries = 1;
-		try {
-			HttpURLConnection connection = (HttpURLConnection) new URL("http://repo.creeperhost.net/getdate").openConnection();
-			while(connection.getResponseCode() != 200 && retries <= 3) {
-				connection.disconnect();
-				connection = (HttpURLConnection) new URL("http://repo" + retries + ".creeperhost.net/getdate").openConnection();
-				retries++;
-			}
-			scanner = new Scanner(connection.getInputStream());
-			scanner.useDelimiter( "\\Z" );
-			content = scanner.next();
-			connection.disconnect();
-		} catch (java.net.UnknownHostException uhe) {
-		} catch (Exception ex) {
-		} finally {
-			if (scanner != null) {
-				scanner.close();
-			}
-		}
-		return content;
 	}
 
 	/**

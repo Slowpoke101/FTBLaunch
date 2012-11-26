@@ -11,8 +11,8 @@ import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -25,7 +25,7 @@ public class LocaleUpdater {
 	private static void updateFiles() throws NoSuchAlgorithmException {
 		Logger.logInfo("[i18n] Downloading locale files ...");
 		try {
-			FileUtils.downloadToFile(new URL(LaunchFrame.getCreeperhostLink("locales.zip")), archive);
+			FileUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
 			Logger.logInfo("[i18n] Moving files into place ...");
 			if(local.getParentFile().exists()) {
 				FileUtils.delete(local.getParentFile());
@@ -54,7 +54,7 @@ public class LocaleUpdater {
 		cleanUpFiles();
 
 		try {
-			URLConnection connection = new URL(LaunchFrame.getStaticCreeperhostLink("locales")).openConnection();
+			URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
 			Scanner scanner = new Scanner(connection.getInputStream());
 			remoteVer = scanner.nextInt();
 			Logger.logInfo("[i18n] remoteVer = " + remoteVer);

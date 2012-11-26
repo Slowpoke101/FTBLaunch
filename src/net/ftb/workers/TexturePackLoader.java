@@ -6,10 +6,10 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.TexturePack;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+import net.ftb.util.DownloadUtils;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -28,7 +28,7 @@ public class TexturePackLoader extends Thread {
 		try {
 			Logger.logInfo("loading texture pack information...");
 
-			TEXTUREPACKFILE = LaunchFrame.getStaticCreeperhostLink("texturepack.xml");
+			TEXTUREPACKFILE = DownloadUtils.getStaticCreeperhostLink("texturepack.xml");
 
 			Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
 			if(doc == null) {

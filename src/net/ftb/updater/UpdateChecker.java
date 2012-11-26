@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -66,7 +67,7 @@ public class UpdateChecker {
 		String extension = path.substring(path.lastIndexOf('.') + 1);
 		extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
 		try {
-			URL updateURL = new URL(LaunchFrame.getCreeperhostLink(downloadAddress + "." + extension));
+			URL updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
 			FileUtils.downloadToFile(updateURL, temporaryUpdate);

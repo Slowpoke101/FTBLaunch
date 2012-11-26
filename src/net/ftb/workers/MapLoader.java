@@ -6,10 +6,10 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.Map;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+import net.ftb.util.DownloadUtils;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -28,7 +28,7 @@ public class MapLoader extends Thread {
 		try {
 			Logger.logInfo("loading map information...");
 
-			MAPFILE = LaunchFrame.getStaticCreeperhostLink("maps.xml");
+			MAPFILE = DownloadUtils.getStaticCreeperhostLink("maps.xml");
 
 			Document doc = AppUtils.downloadXML(new URL(MAPFILE));
 			if(doc == null) {

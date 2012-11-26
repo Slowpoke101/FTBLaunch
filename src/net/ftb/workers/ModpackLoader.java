@@ -12,9 +12,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.data.ModPack;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.DOMException;
@@ -34,14 +34,13 @@ public class ModpackLoader extends Thread {
 
 		try {
 			new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator).mkdirs();
-			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", LaunchFrame.getStaticCreeperhostLink("modpacks.xml"));
+			DownloadUtils.downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
 		} catch (IOException e2) {
 			System.out.println("Failed to load modpacks, loading from backup");
 		}
 
 		try {
 			Logger.logInfo("loading modpack information...");
-
 			MODPACKSFILE = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
 
 			Document doc = null;
@@ -59,7 +58,6 @@ public class ModpackLoader extends Thread {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
 			}
-
 			if (doc == null) {
 				Logger.logError("Error: could not load modpackdata!");
 				return;
@@ -70,7 +68,6 @@ public class ModpackLoader extends Thread {
 			for (int i = 0; i < modPacks.getLength(); i++) {
 				Node modPack = modPacks.item(i);
 				NamedNodeMap modPackAttr = modPack.getAttributes();
-
 				try {
 					ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
 							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
@@ -83,28 +80,5 @@ public class ModpackLoader extends Thread {
 			}
 			ModpacksPane.loaded = true;
 		} catch (NoSuchAlgorithmException e1) { }
-	}
-
-	public void downloadUrl(String filename, String urlString) throws IOException {
-		BufferedInputStream in = null;
-		FileOutputStream fout = null;
-		try {
-			in = new BufferedInputStream(new URL(urlString).openStream());
-			fout = new FileOutputStream(filename);
-
-			byte data[] = new byte[1024];
-			int count;
-			while ((count = in.read(data, 0, 1024)) != -1) {
-				fout.write(data, 0, count);
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (fout != null) {
-				fout.flush();
-				fout.close();
-			}	
-		}
 	}
 }
