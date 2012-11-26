@@ -10,10 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JDialog;
@@ -53,25 +50,7 @@ public class ModManager extends JDialog {
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
 				}
-				try {
-					File reisFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "mods" + sep + "rei_minimap" + sep);
-					File bckReis = new File(modPackZip.getParentFile(), "bck_minimap" + sep);
-					if(reisFolder.exists()) {
-						FileUtils.copyFolder(reisFolder, bckReis);
-					}
-					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods"));
-					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
-					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
-					new File(installPath, "ModPacks" + sep + pack.getDir() + sep).mkdir();
-					if(bckReis.exists()) {
-						reisFolder.mkdirs();
-						FileUtils.copyFolder(bckReis, reisFolder);
-						FileUtils.delete(bckReis);
-					}
-					downloadModPack(pack.getUrl(), pack.getDir());
-				} catch (MalformedURLException e) { 
-				} catch (NoSuchAlgorithmException e) { 
-				} catch (IOException e) { }
+				downloadModPack(pack.getUrl(), pack.getDir());
 			}
 			return false;
 		}
@@ -85,7 +64,7 @@ public class ModManager extends JDialog {
 				byte data[] = new byte[1024];
 				int count;
 				int amount = 0;
-				URL url_ = new URL(LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
+				URL url_ = new URL(urlString);
 				int modPackSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				int steps = 0;
@@ -111,10 +90,13 @@ public class ModManager extends JDialog {
 			System.out.println("Downloading");
 			String installPath = OSUtils.getDynamicStorageLocation();
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-			new File(installPath, "ModPacks/" + dir + "/").mkdirs();
-			new File(installPath, "ModPacks/" + dir + "/" + modPackName).createNewFile();
-			downloadUrl(installPath + "/ModPacks/" + dir + "/" + modPackName, LaunchFrame.getCreeperhostLink(modPackName));
-			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
+			new File(installPath, "ModPacks/" + dir + sep).mkdirs();
+			new File(installPath, "ModPacks/" + dir + sep + modPackName).createNewFile();
+			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, LaunchFrame.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
+			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
+			clearModsFolder(pack);
+			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
+			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
 			installMods(modPackName, dir);
 		}
 
@@ -122,28 +104,6 @@ public class ModManager extends JDialog {
 			System.out.println("Installing");
 			String installPath = OSUtils.getDynamicStorageLocation();
 			LaunchFrame.jarMods = new String[new File(installPath, "ModPacks/" + modPackName + "/instMods").listFiles().length];
-		}
-
-		public String md5(String input) throws NoSuchAlgorithmException {
-			String result = input;
-			if(!input.isEmpty()) {
-				MessageDigest md = MessageDigest.getInstance("MD5");
-				md.update(input.getBytes());
-				BigInteger hash = new BigInteger(1, md.digest());
-				result = hash.toString(16);
-				while(result.length() < 32) {
-					result = "0" + result;
-				}
-			}
-			return result;
-		}
-
-		protected String[] reverse(String[] x) {
-			String buffer[] = new String[x.length];
-			for(int i = 0; i < x.length; i++) {
-				buffer[i] = x[x.length - i - 1];
-			}
-			return buffer;
 		}
 	}
 
@@ -221,7 +181,7 @@ public class ModManager extends JDialog {
 			}
 			pack.setUpToDate(true);
 			if(backup) {
-				File destination = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config_backup");
+				File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
 				if(destination.exists()) {
 					FileUtils.delete(destination);
 				}
@@ -247,6 +207,15 @@ public class ModManager extends JDialog {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
 				} catch (IOException e) { }
+			}
+		}
+	}
+
+	public static void clearModsFolder(ModPack pack) throws IOException {
+		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
+		for(String file : modsFolder.list()) {
+			if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled")) {
+				FileUtils.delete(new File(modsFolder, file));
 			}
 		}
 	}
