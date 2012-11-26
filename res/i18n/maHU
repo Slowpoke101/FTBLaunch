@@ -1,0 +1,48 @@
+LOCALE_NAME = Magyar
+LOCALE_LOADED = Magyar nyelv fájl betöltés!
+
+# Footer #
+DONATE_BUTTON = Adományoz
+
+# Main Tab
+EDIT_BUTTON = Szerkeszt
+LAUNCH_BUTTON = Indítás
+PROFILE_CREATE = Profil létrehozás
+PROFILE_SELECT = Profil kiválasztás
+DOWNLOAD_SERVER_PACK = Töltsd le a szervert innen
+
+# Map Tab
+INSTALL_MAP = Térkép letöltés
+DOWNLOAD_MAP_SERVER = Szerver Térkép letöltés
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Textura csomag telepítés
+
+# Options pane
+INSTALL_FOLDER = Telepítési mappa
+FORCE_UPDATE = Teljes frissítés?
+RAM_MIN = Minimum RAM (MB)
+RAM_MAX = Maximum RAM (MB)
+LANGUAGE = Nyelv
+
+# Shared strings
+FILTER_SETTINGS = Keresési beállítások
+
+# Modpacks pane
+MODS_EDIT_PACK = Mod csomag szerkesztése
+MODS_WAIT_WHILE_LOADING = Kérem várjon amíg a mod csomagok betöltenek...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Aktivált modok
+MODS_EDIT_DISABLED_LABEL = Deaktivált modok
+MODS_EDIT_OPEN_FOLDER = Modok szerkesztése
+MODS_EDIT_ADD_MOD = Mod hozzáadása
+MODS_EDIT_ENABLE_MOD = << aktiválás
+MODS_EDIT_DISABLE_MOD = deaktiválás >>
+MODS_EDIT_TITLE = Mod csomag szerkeszto
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Kérjük várjon, amíg a térkép letöltodik...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Kérjük várjon, amíg a textúra csomag letöltodik...

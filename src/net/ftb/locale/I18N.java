@@ -32,7 +32,9 @@ public class I18N {
 		ptPT,
 		ruRU,
 		svSE,
-		esES
+		esES,
+		maHU,
+		itIT
 	}
 
 	/**
@@ -101,19 +103,23 @@ public class I18N {
 			currentLocale = Locale.daDK;
 		} else if (locale.equalsIgnoreCase("deDE")) {
 			currentLocale = Locale.deDE;
-		} else if(locale.equalsIgnoreCase("nlNL")){
+		} else if(locale.equalsIgnoreCase("nlNL")) {
 			currentLocale = Locale.nlNL;
-		} else if(locale.equalsIgnoreCase("ptBR")){
+		} else if(locale.equalsIgnoreCase("ptBR")) {
 			currentLocale = Locale.ptBR;
-		} else if(locale.equalsIgnoreCase("ptPT")){
+		} else if(locale.equalsIgnoreCase("ptPT")) {
 			currentLocale = Locale.ptPT;
-		} else if(locale.equalsIgnoreCase("ruRU")){
+		} else if(locale.equalsIgnoreCase("ruRU")) {
 			currentLocale = Locale.ruRU;
-		} else if(locale.equalsIgnoreCase("svSE")){
+		} else if(locale.equalsIgnoreCase("svSE")) {
 			currentLocale = Locale.svSE;
-		} else if(locale.equalsIgnoreCase("esES")){
+		} else if(locale.equalsIgnoreCase("esES")) {
 			currentLocale = Locale.esES;
-		} else{
+		} else if(locale.equalsIgnoreCase("itIT")) {
+			currentLocale = Locale.itIT;
+		} else if(locale.equalsIgnoreCase("maHU")) {
+			currentLocale = Locale.maHU;
+		} else {
 			currentLocale = Locale.enUS;
 		}
 		getLocaleProperties(locale);

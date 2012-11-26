@@ -1,0 +1,48 @@
+LOCALE_NAME = Italiano
+LOCALE_LOADED = La lingua italiana è stata attivata!
+
+# Footer #
+DONATE_BUTTON = Dona!
+
+# Main Tab
+EDIT_BUTTON = Modifica
+LAUNCH_BUTTON = Lancia
+PROFILE_CREATE = Crea Profilo
+PROFILE_SELECT = Seleziona Profilo
+DOWNLOAD_SERVER_PACK = Prendi La Versione Server Qui
+
+# Map Tab
+INSTALL_MAP = Installa Mappa
+DOWNLOAD_MAP_SERVER = Download Mappa Server
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Installa Pacchetto Texture
+
+# Options pane
+INSTALL_FOLDER = Cartella Di Destinazione 
+FORCE_UPDATE = Forza Aggiornamento?
+RAM_MIN = RAM Minima (MB)
+RAM_MAX = RAM Massima (MB)
+LANGUAGE = Lingua
+
+# Shared strings
+FILTER_SETTINGS = Filtro 
+
+# Modpacks pane
+MODS_EDIT_PACK = Modifica Mod Pack
+MODS_WAIT_WHILE_LOADING = Per favore attenti mentre stanno caricando le mods...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Attiva Mods
+MODS_EDIT_DISABLED_LABEL = Disabilita Mods
+MODS_EDIT_OPEN_FOLDER = Apri Cartella
+MODS_EDIT_ADD_MOD = Aggiungi Mod
+MODS_EDIT_ENABLE_MOD = << Abilita
+MODS_EDIT_DISABLE_MOD = Disabilita >>
+MODS_EDIT_TITLE = Editor Mod Pack
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre la mappa si sta caricando...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre il pacchetto texture si sta caricando...
