@@ -1,27 +1,10 @@
 package net.ftb.log;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import net.ftb.data.Settings;
-import net.ftb.util.OSUtils;
-
 public class Logger {
-	/**
-	 * File there all the logs to go to
-	 */
-	private final static String launcherLogFile = "FTBLauncherLog.txt";
-	private final static String minecraftLogFile = "MinecraftLog.txt";
-	/**
-	 * Writer for log
-	 */
-	private static BufferedWriter launcherLogWriter;
-	private static BufferedWriter minecraftLogWriter;
 	/**
 	 * Listeners that will be notified on new log entries
 	 */
@@ -34,33 +17,12 @@ public class Logger {
 	 */
 	static {
 		listeners = new ArrayList<ILogListener>();
-
-		try {
-			launcherLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile)));
-			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void log(LogEntry entry) {
 		logEntries.add(entry);
-
-		BufferedWriter logWriter = launcherLogWriter;
-
-		if (entry.source == LogSource.EXTERNAL) {
-			logWriter = minecraftLogWriter;
-		}
-
-		try {
-			logWriter.write(entry.toString(LogType.EXTENDED) + System.getProperty("line.separator"));
-			logWriter.flush();
-		} catch (IOException e) {
-		}
-
-		for (ILogListener listener : listeners) {
-			listener.onLogEvent(entry);
-		}
+		LogThread logThread = new LogThread(entry, listeners);
+		logThread.start();
 	}
 
 	public static void log(String message, LogLevel level, Throwable t) {

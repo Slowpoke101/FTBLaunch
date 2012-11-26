@@ -5,14 +5,11 @@ import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,12 +59,9 @@ public class ModManager extends JDialog {
 					if(reisFolder.exists()) {
 						FileUtils.copyFolder(reisFolder, bckReis);
 					}
-					File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
-					File coreModsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods");
-					File instModsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/");
-					FileUtils.delete(modsFolder);
-					FileUtils.delete(coreModsFolder);
-					FileUtils.delete(instModsFolder);
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods"));
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
 					new File(installPath, "ModPacks" + sep + pack.getDir() + sep).mkdir();
 					if(bckReis.exists()) {
 						reisFolder.mkdirs();
