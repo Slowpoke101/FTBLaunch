@@ -18,11 +18,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -646,17 +646,61 @@ public class LaunchFrame extends JFrame {
 		if(currentmd5.isEmpty()) {
 			currentmd5 = md5("mcepoch1" + getTime());
 		}
+		int retries = 1;
 		String resolved = "http://repo.creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) new URL(resolved).openConnection();
+		} catch (MalformedURLException e1) {
+		} catch (IOException e1) {
+		}
+		try {
+			while(connection.getResponseCode() != 200 && retries <= 3) 
+			{
+				connection.disconnect();
+				retries++;
+				resolved = "http://repo"+retries+".creeperhost.net/direct/FTB2/" + currentmd5 + "/" + file;
+				try {
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+				} catch (MalformedURLException e) {
+				} catch (IOException e) {;
+				}
+			}
+		} catch (IOException e) {
+		}
+		connection.disconnect();
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
-
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
 	 */
 	public static String getStaticCreeperhostLink(String file) {
-		return "http://repo.creeperhost.net/static/FTB2/" + file; 
+		int retries = 1;
+		String resolved = "http://repo.creeperhost.net/static/FTB2/" + file;
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) new URL(resolved).openConnection();
+		} catch (MalformedURLException e1) {
+		} catch (IOException e1) {
+		}
+		try {
+			while(connection.getResponseCode() != 200 && retries <= 3) 
+			{
+				connection.disconnect();
+				retries++;
+				resolved = "http://repo"+retries+".creeperhost.net/static/FTB2/" + file;
+				try {
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+				} catch (MalformedURLException e) {
+				} catch (IOException e) {;
+				}
+			}
+		} catch (IOException e) {
+		}
+		connection.disconnect();
+		return resolved; 
 	}
 
 	/**
@@ -939,9 +983,15 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static String getTime() {
 		String content = null;
+		int retries = 1;
 		Scanner scanner = null;
 		try {
-			URLConnection connection = new URL("http://repo.creeperhost.net/getdate").openConnection();
+			HttpURLConnection connection = (HttpURLConnection) new URL("http://repo.creeperhost.net/getdate").openConnection();
+			while(connection.getResponseCode() != 200 && retries <= 3) 
+			{
+				retries++;
+				connection = (HttpURLConnection) new URL("http://repo"+retries+".creeperhost.net/getdate").openConnection();
+			}
 			scanner = new Scanner( connection.getInputStream() );
 			scanner.useDelimiter( "\\Z" );
 			content = scanner.next();
