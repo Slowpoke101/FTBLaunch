@@ -7,13 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,10 +24,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
@@ -201,13 +197,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(ramMaximum, gbc_textField_2);
 		add(currentRam, gbc_lblCurrentRam);
 
-		Vector<String> locales = new Vector<String>();
+		ArrayList<String> locales = new ArrayList<String>();
 		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
 			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
 			locales.add(entry.getKey(), I18N.localeFiles.get(entry.getValue()));
 		}
 
-		locale = new JComboBox(locales);
+		locale = new JComboBox(locales.toArray());
 		GridBagConstraints gbc_locale = new GridBagConstraints();
 		gbc_locale.insets = new Insets(0, 0, 5, 5);
 		gbc_locale.fill = GridBagConstraints.HORIZONTAL;
