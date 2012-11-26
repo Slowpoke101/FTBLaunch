@@ -51,7 +51,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
 		public void focusLost(FocusEvent e) {
-			LaunchFrame.getInstance().saveSettings();
+			saveSettingsInto(Settings.getSettings());
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
@@ -179,6 +179,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				tglbtnForceUpdate.setEnabled(false);
+				saveSettingsInto(Settings.getSettings());
 			}
 		});
 
@@ -310,7 +311,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public void saveSettingsInto(Settings settings) {
 		settings.setInstallPath(installFolderTextField.getText());
-		settings.setForceUpdate(tglbtnForceUpdate.getModel().isPressed());
+		settings.setForceUpdate(!tglbtnForceUpdate.isEnabled());
 		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 	}

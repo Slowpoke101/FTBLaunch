@@ -34,7 +34,7 @@ public class ModpackLoader extends Thread {
 
 		try {
 			new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator).mkdirs();
-			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", "https://dl.dropbox.com/u/2405919/modpacks.xml");
+			downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", LaunchFrame.getStaticCreeperhostLink("modpacks.xml"));
 		} catch (IOException e2) {
 			System.out.println("Failed to load modpacks, loading from backup");
 		}

@@ -5,14 +5,11 @@ import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -52,18 +49,25 @@ public class ModManager extends JDialog {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-				File modPackZip = new File(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl());
+				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
 				if(modPackZip.exists()) {
-					modPackZip.delete();
+					FileUtils.delete(modPackZip);
 				}
 				try {
-					File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
-					File coreModsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods");
-					File instModsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/");
-					FileUtils.delete(modsFolder);
-					FileUtils.delete(coreModsFolder);
-					FileUtils.delete(instModsFolder);
-					new File(installPath + "/ModPacks/" + pack.getDir() + "/").mkdir();
+					File reisFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "mods" + sep + "rei_minimap" + sep);
+					File bckReis = new File(modPackZip.getParentFile(), "bck_minimap" + sep);
+					if(reisFolder.exists()) {
+						FileUtils.copyFolder(reisFolder, bckReis);
+					}
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods"));
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
+					FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
+					new File(installPath, "ModPacks" + sep + pack.getDir() + sep).mkdir();
+					if(bckReis.exists()) {
+						reisFolder.mkdirs();
+						FileUtils.copyFolder(bckReis, reisFolder);
+						FileUtils.delete(bckReis);
+					}
 					downloadModPack(pack.getUrl(), pack.getDir());
 				} catch (MalformedURLException e) { 
 				} catch (NoSuchAlgorithmException e) { 
@@ -107,8 +111,8 @@ public class ModManager extends JDialog {
 			System.out.println("Downloading");
 			String installPath = OSUtils.getDynamicStorageLocation();
 			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
-			new File(installPath + "/ModPacks/" + dir + "/").mkdirs();
-			new File(installPath + "/ModPacks/" + dir + "/" + modPackName).createNewFile();
+			new File(installPath, "ModPacks/" + dir + "/").mkdirs();
+			new File(installPath, "ModPacks/" + dir + "/" + modPackName).createNewFile();
 			downloadUrl(installPath + "/ModPacks/" + dir + "/" + modPackName, LaunchFrame.getCreeperhostLink(modPackName));
 			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + "/" + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			installMods(modPackName, dir);

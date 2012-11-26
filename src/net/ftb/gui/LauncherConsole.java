@@ -194,8 +194,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
 			try {
 				kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
 			} catch (BadLocationException ignored) {
-			} catch (IOException ignored) {
-			}
+			} catch (IOException ignored) { }
 			displayArea.setCaretPosition(displayArea.getDocument().getLength());
 		}
 	}
@@ -203,11 +202,11 @@ public class LauncherConsole extends JFrame implements ILogListener {
 	private String getMessage(LogEntry entry) {
 		String color = "white";
 		switch(entry.level) {
-			case ERROR:
-				color = "#FF7070";
-				break;
-			case WARN:
-				color = "yellow";
+		case ERROR:
+			color = "#FF7070";
+			break;
+		case WARN:
+			color = "yellow";
 		}
 		return "<font color=\"" + color + "\">" + (entry.toString(logType).replace("<", "&lt;").replace(">", "&gt;").trim().replace("\r\n","\n").replace("\n","<br/>")) + "</font><br/>";
 	}

@@ -25,10 +25,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.TimeZone;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -84,8 +81,8 @@ import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
 
-	private static String version = "1.0.9";
-	private static int buildNumber = 109;
+	private static String version = "1.1.0";
+	private static int buildNumber = 110;
 	public static final String FORGENAME = "MinecraftForge.zip";
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
@@ -130,17 +127,12 @@ public class LaunchFrame extends JFrame {
 		//		for (String s: args) {
 		//			System.out.println(s);
 		//		}
-		
-		// Load settings
+
 		try {
 			Settings.initSettings();
 		} catch (IOException e) { }
 		
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
-		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-		String now = dateFormatGmt.format(new Date());
-		Logger.logInfo("Now is: "+now);
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
 		Logger.logInfo("Java home: "+System.getProperty("java.home"));
@@ -149,21 +141,6 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") 
 				+ " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
-		Logger.logInfo("Working directory: ");
-		switch(OSUtils.getCurrentOS()) {
-		case WINDOWS:
-			Logger.logInfo(System.getenv("APPDATA"));
-			break;
-		case MACOSX:
-			Logger.logInfo(System.getProperty("user.home") + "/Library/Application Support");
-			break;
-		case UNIX:
-			Logger.logInfo(System.getProperty("user.home"));
-			break;
-		default:
-			Logger.logInfo(System.getProperty("user.dir"));
-			break;
-		}
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -194,7 +171,6 @@ public class LaunchFrame extends JFrame {
 					} catch (UnsupportedLookAndFeelException e1) { }
 				}
 
-				// Setup localizations
 				I18N.setupLocale();
 				I18N.setLocale(Settings.getSettings().getLocale());
 

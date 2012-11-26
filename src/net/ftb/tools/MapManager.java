@@ -48,7 +48,7 @@ public class MapManager extends JDialog {
 				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
 				dialog.setVisible(true);
 				if(overwrite) {
-					new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()).delete();
+					FileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
 				} else {
 					Logger.logInfo("Canceled map installation.");
 					return false;
