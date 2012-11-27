@@ -28,6 +28,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -98,7 +99,12 @@ public class ModManager extends JDialog {
 			clearModsFolder(pack);
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
-			installMods(modPackName, dir);
+			if(DownloadUtils.isValid(new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl()))) {
+				installMods(modPackName, dir);
+			} else {
+				ErrorUtils.tossError("Error downloading modpack!!!");
+				return;
+			}
 		}
 
 		protected void installMods(String modPackName, String dir) throws IOException {
