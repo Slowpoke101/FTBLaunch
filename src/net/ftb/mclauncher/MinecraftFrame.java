@@ -10,6 +10,7 @@ import java.net.URL;
 
 import javax.swing.JFrame;
 
+import net.ftb.gui.LaunchFrame;
 import net.minecraft.Launcher;
 
 public class MinecraftFrame extends JFrame implements WindowListener {
@@ -73,8 +74,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				System.out.println("FORCING EXIT!");
 				System.exit(0);
 			}
-		}
-		.start();
+		}.start();
 
 		if (appletWrap != null) {
 			appletWrap.stop();

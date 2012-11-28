@@ -100,19 +100,19 @@ public class Settings extends Properties {
 		return getProperty("lastPack", ModPack.getPack(0).getDir());
 	}
 	
-//	public void setMinecraftX(String x) {
-//		setProperty("minecraftX", x);
-//	}
-//	
-//	public String getMinecraftX() {
-//		return getProperty("minecraftX", "800");
-//	}
-//
-//	public void setMinecraftY(String y) {
-//		setProperty("minecraftY", y);
-//	}
-//
-//	public String getMinecraftY() {
-//		return getProperty("minecraftY", "600");
-//	}
+	public void setMinecraftX(String x) {
+		setProperty("minecraftX", x);
+	}
+	
+	public String getMinecraftX() {
+		return getProperty("minecraftX", "800");
+	}
+
+	public void setMinecraftY(String y) {
+		setProperty("minecraftY", y);
+	}
+
+	public String getMinecraftY() {
+		return getProperty("minecraftY", "600");
+	}
 }
