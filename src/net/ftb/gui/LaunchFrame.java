@@ -105,6 +105,8 @@ public class LaunchFrame extends JFrame {
 	private LoginResponse RESPONSE;
 
 	protected static UserManager userManager;
+	
+	public static LauncherConsole con;
 
 	public static String[] jarMods;
 	public static String tempPass = "";
@@ -185,7 +187,7 @@ public class LaunchFrame extends JFrame {
 
 				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
-				LauncherConsole con = new LauncherConsole();
+				con = new LauncherConsole();
 				con.setVisible(true);
 
 				LaunchFrame frame = new LaunchFrame(2);

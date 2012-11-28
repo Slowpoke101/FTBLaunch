@@ -317,7 +317,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		LaunchFrame.getInstance().updateFooter();
 	}
 
-	private static int getIndex() {
+	public static int getIndex() {
 		if(currentPacks.size() > 0) {
 			if(currentPacks.size() != ModPack.getPackArray().size()) {
 				if(!origin.equalsIgnoreCase("all")) {

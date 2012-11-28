@@ -1,5 +1,6 @@
 package net.ftb.mclauncher;
 
+import java.applet.Applet;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +18,11 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LauncherConsole;
+import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -28,6 +32,7 @@ import net.ftb.util.OSUtils;
  *
  */
 public class MinecraftLauncher {
+	
 	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
@@ -81,6 +86,13 @@ public class MinecraftLauncher {
 		arguments.add(username);
 		arguments.add(password);
 
+		main(new String[] {
+				workingDir,
+				forgename,
+				username,
+				password
+		});
+		
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
 		return processBuilder.start();
@@ -178,17 +190,44 @@ public class MinecraftLauncher {
 			String[] mcArgs = new String[2];
 			mcArgs[0] = username;
 			mcArgs[1] = password;
+			
+			LaunchFrame.con.setIconImage(ModPack.getPack(ModpacksPane.getIndex()).getLogo());
 
 			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
 
 			System.out.println("MCDIR: " + mcDir);
 
-			mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+			System.out.println("Launching with applet wrapper...");
+			try
+			{
+				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
+				Applet mcappl = (Applet) MCAppletClass.newInstance();
+				MinecraftFrame mcWindow = new MinecraftFrame(ModPack.getPack(ModpacksPane.getIndex()).getName(), ModPack.getPack(ModpacksPane.getIndex()).getLogo(), 800, 600);
+				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
+			} catch (InstantiationException e)
+			{
+				System.out.println("Applet wrapper failed! Falling back " +
+						"to compatibility mode.");
+				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
+			}
 		} catch (ClassNotFoundException e) { 
+			System.out.println("ClassNotFoundException");
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) { 
+			System.out.println("IllegalArgumentException");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) { 
+			System.out.println("IllegalAccessException");
+			e.printStackTrace();
 		} catch (InvocationTargetException e) { 
+			System.out.println("InvocationTargetException");
+			e.printStackTrace();
 		} catch (NoSuchMethodException e) { 
-		} catch (SecurityException e) { }
+			System.out.println("NoSuchMethodException");
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			System.out.println("SecurityException");
+			e.printStackTrace();
+		}
 	}
 }
