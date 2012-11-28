@@ -240,27 +240,52 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		LaunchFrame.getInstance().modPacksPane.repaint();
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {
-				addPack(pack);
-				currentPacks.put(counter, pack);
-				counter++;
+				if(type.equalsIgnoreCase("client")) {
+					addPack(pack);
+					currentPacks.put(counter, pack);
+					counter++;
+				} else if (type.equalsIgnoreCase("server")) {
+					if(!pack.getServerUrl().isEmpty()) {
+						addPack(pack);
+						currentPacks.put(counter, pack);
+						counter++;
+					}
+				}
 			}
 		} else if(origin.equalsIgnoreCase("ftb")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
-					addPack(pack);
-					currentPacks.put(counter, pack);
-					counter++;
+					if(type.equalsIgnoreCase("client")) {
+						addPack(pack);
+						currentPacks.put(counter, pack);
+						counter++;
+					} else if (type.equalsIgnoreCase("server")) {
+						if(!pack.getServerUrl().isEmpty()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
+					}
 				}
 			}
 		} else {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
-					addPack(pack);
-					currentPacks.put(counter, pack);
-					counter++;
+					if(type.equalsIgnoreCase("client")) {
+						addPack(pack);
+						currentPacks.put(counter, pack);
+						counter++;
+					} else if (type.equalsIgnoreCase("server")) {
+						if(!pack.getServerUrl().isEmpty()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
+					}
 				}
 			}
 		}
+		
 		updatePacks();
 	}
 
