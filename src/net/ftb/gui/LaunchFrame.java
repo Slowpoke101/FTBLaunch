@@ -150,12 +150,12 @@ public class LaunchFrame extends JFrame {
 				Color baseColor = new Color(40, 40, 40);
 
 				UIManager.put("control", baseColor);
-				UIManager.put("text", new Color(222, 222, 222));
+				UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
 				UIManager.put("nimbusFocus", baseColor);
 				UIManager.put("nimbusBorder", baseColor);
 				UIManager.put("nimbusLightBackground", baseColor);
-				UIManager.put("info", new Color(55, 55, 55));
+				UIManager.put("info", baseColor.brighter().brighter());
 				UIManager.put("nimbusSelectionBackground", baseColor.brighter().brighter());
 
 				try {
