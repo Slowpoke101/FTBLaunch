@@ -202,7 +202,7 @@ public class MinecraftLauncher {
 			{
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
-				MinecraftFrame mcWindow = new MinecraftFrame(ModPack.getPack(ModpacksPane.getIndex()).getName(), ModPack.getPack(ModpacksPane.getIndex()).getLogo(), Integer.parseInt(Settings.getSettings().getMinecraftX()), Integer.parseInt(Settings.getSettings().getMinecraftY()));
+				MinecraftFrame mcWindow = new MinecraftFrame(ModPack.getPack(ModpacksPane.getIndex()).getName(), ModPack.getPack(ModpacksPane.getIndex()).getLogo(), Integer.parseInt(Settings.getSettings().getMinecraftX()), Integer.parseInt(Settings.getSettings().getMinecraftY()), Integer.parseInt(Settings.getSettings().getMinecraftXPos()), Integer.parseInt(Settings.getSettings().getMinecraftYPos()));
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
 			} catch (InstantiationException e)
 			{

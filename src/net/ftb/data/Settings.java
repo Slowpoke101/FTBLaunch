@@ -115,4 +115,20 @@ public class Settings extends Properties {
 	public String getMinecraftY() {
 		return getProperty("minecraftY", "600");
 	}
+	
+	public void setMinecraftXPos(String x) {
+		setProperty("minecraftXPos", x);
+	}
+	
+	public String getMinecraftXPos() {
+		return getProperty("minecraftXPos", "300");
+	}
+
+	public void setMinecraftYPos(String y) {
+		setProperty("minecraftYPos", y);
+	}
+
+	public String getMinecraftYPos() {
+		return getProperty("minecraftYPos", "300");
+	}
 }

@@ -51,6 +51,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
+	private JTextField xPosField;
+	private JTextField yPosField;
 
 
 	public OptionsPane () {
@@ -171,25 +173,47 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(locale);
 		
 		minecraftSize = new JLabel("Size for Minecraft Window");
-		minecraftSize.setBounds(10, 194, 195, 23);
+		minecraftSize.setBounds(10, 182, 195, 23);
 		add(minecraftSize);
 		
 		minecraftX = new JTextField();
-		minecraftX.setBounds(215, 194, 85, 22);
+		minecraftX.setBounds(214, 182, 85, 22);
 		minecraftX.setText(Settings.getSettings().getMinecraftX());
 		minecraftX.addFocusListener(settingsChangeListener);
 		add(minecraftX);
 		
 		lblX = new JLabel("x");
-		lblX.setBounds(322, 195, 6, 20);
+		lblX.setBounds(322, 182, 6, 20);
 		add(lblX);
 		
 		minecraftY = new JTextField();
-		minecraftY.setBounds(352, 194, 85, 23);
+		minecraftY.setBounds(352, 182, 85, 23);
 		minecraftY.setText(Settings.getSettings().getMinecraftY());
 		minecraftY.addFocusListener(settingsChangeListener);
 		add(minecraftY);
 		minecraftY.setColumns(5);
+		
+		JLabel minecraftPos = new JLabel("Position of Minecraft Window");
+		minecraftPos.setBounds(10, 216, 195, 23);
+		add(minecraftPos);
+		
+		xPosField = new JTextField();
+		xPosField.setBounds(214, 217, 85, 22);
+		xPosField.setText(Settings.getSettings().getMinecraftXPos());
+		xPosField.addFocusListener(settingsChangeListener);
+		add(xPosField);
+		xPosField.setColumns(10);
+		
+		JLabel lblX_1 = new JLabel("x");
+		lblX_1.setBounds(322, 216, 6, 23);
+		add(lblX_1);
+		
+		yPosField = new JTextField();
+		yPosField.setBounds(352, 216, 85, 23);
+		yPosField.setText(Settings.getSettings().getMinecraftYPos());
+		yPosField.addFocusListener(settingsChangeListener);
+		add(yPosField);
+		yPosField.setColumns(10);
 	}
 
 	@Override public void onVisible() { }
@@ -215,6 +239,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setMinecraftX(minecraftX.getText());
 		settings.setMinecraftY(minecraftY.getText());
+		settings.setMinecraftXPos(xPosField.getText());
+		settings.setMinecraftYPos(yPosField.getText());
 	}
 
 	public void updateLocale() {

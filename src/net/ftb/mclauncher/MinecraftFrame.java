@@ -20,7 +20,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	
 	private Dimension size;
 
-	public MinecraftFrame(String title, Image icon, int x, int y) {
+	public MinecraftFrame(String title, Image icon, int x, int y, int xPos, int yPos) {
 		super(title);
 		setIconImage(icon);
 		super.setVisible(true);
@@ -28,7 +28,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		size = new Dimension(x, y);
 		
 		this.setSize(size);
-		this.setLocationRelativeTo(null);
+		this.setLocation(xPos, yPos);
 
 		this.setResizable(true);
 		this.addWindowListener(this);
@@ -48,7 +48,6 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		this.add(appletWrap);
 		appletWrap.setPreferredSize(size);
 		this.pack();
-		this.setLocationRelativeTo(null);
 		
 		validate();
 		appletWrap.init();
