@@ -25,7 +25,20 @@ public class LogEntry {
 	public LogEntry message(String message) {
 		this.message = message;
 		if (level == LogLevel.UNKNOWN) {
-
+			message = message.toLowerCase();
+			if (message.contains("[severe]") || message.contains("stderr")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("[info]")) {
+				level = LogLevel.INFO;
+			} else if (message.contains("[warning]")) {
+				level = LogLevel.WARN;
+			} else if (message.contains("error") || message.contains("severe")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("warn")) {
+				level = LogLevel.WARN;
+			} else {
+				level = LogLevel.INFO;
+			}
 		}
 		return this;
 	}
