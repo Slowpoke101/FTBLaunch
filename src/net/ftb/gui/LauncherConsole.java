@@ -213,6 +213,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
 	@Override
 	public void onLogEvent(LogEntry entry) {
-		addHTML(getMessage(entry));
+		if(logSource == LogSource.ALL || entry.source == logSource) {
+			addHTML(getMessage(entry));
+		}
 	}
 }
