@@ -66,8 +66,8 @@
             <configuration>
               <headerType>gui</headerType>
               <stayAlive>false</stayAlive>
-              <jar>${project.build.directory}/${project.artifactId}.jar</jar>
-              <outfile>${project.build.directory}/${project.artifactId}.exe</outfile>
+              <jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
+              <outfile>${project.build.directory}/${project.artifactId}-${project.version}.exe</outfile>
               <classPath>
                 <mainClass>${mainClass}</mainClass>
                 <addDependencies>false</addDependencies>
@@ -108,7 +108,7 @@
                 <copy todir="${project.build.directory}/${project.artifactId}.app">
                   <fileset dir="res/template/FTB_Launcher.app" />
                 </copy>
-                <copy file="${project.build.directory}/${project.artifactId}.jar" tofile="${project.build.directory}/${project.artifactId}.app/Contents/Resources/FTB_Launcher.jar" />
+                <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/${project.artifactId}.app/Contents/Resources/FTB_Launcher.jar" />
                 <replace file="${project.build.directory}/${project.artifactId}.app/Contents/Info.plist" token="##VERSION##" value="${version}" />
                 <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" includes="FTB_Launcher" eol="unix" />
                 <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" eol="unix" />

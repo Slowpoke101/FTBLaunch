@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,7 +35,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
 
 	protected static JTextField installFolderTextField;
-	private JCheckBox chckbxUseDevBuild;
 	private JToggleButton tglbtnForceUpdate;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
@@ -59,12 +57,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		chckbxUseDevBuild = new JCheckBox("Use development builds");
-		chckbxUseDevBuild.setBounds(6, 245, 195, 23);
-		chckbxUseDevBuild.addFocusListener(settingsChangeListener);
-		chckbxUseDevBuild.setSelected(Settings.getSettings().getUseDevBuild());
-		add(chckbxUseDevBuild);
 		
 		currentRam = new JLabel();
 		currentRam.setBounds(447, 114, 85, 23);
@@ -249,7 +241,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftY(minecraftY.getText());
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
-		settings.setUseDevBuild(chckbxUseDevBuild.isSelected());
 	}
 
 	public void updateLocale() {

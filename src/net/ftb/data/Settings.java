@@ -131,12 +131,4 @@ public class Settings extends Properties {
 	public String getMinecraftYPos() {
 		return getProperty("minecraftYPos", "300");
 	}
-	
-	public void setUseDevBuild(boolean x){
-		setProperty("useDev", new Boolean(x).toString());
-	}
-	
-	public boolean getUseDevBuild(){
-		return Boolean.valueOf(getProperty("useDev"));
-	}
 }
