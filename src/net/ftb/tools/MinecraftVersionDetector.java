@@ -15,9 +15,9 @@ import net.ftb.util.FileUtils;
 
 public class MinecraftVersionDetector {
 	public MinecraftVersionDetector() { }
-
-	// The new design of this class is thanks to LexManos. You always think you're right and sometimes you're completely right.
-
+	
+	// The new design of this class is thanks to LexManos, you always think your right and sometimes you're completely right
+	
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
 	 * @param jarFilePath The .minecraft directory
@@ -54,20 +54,20 @@ public class MinecraftVersionDetector {
 		try {
 			ZipInputStream file = new ZipInputStream(new FileInputStream(new File(jarFilePath + "/bin", "minecraft.jar")));
 			ZipEntry ent;
-
+		
 			ent = file.getNextEntry();
-
+		
 			while (ent != null) {
 				if (ent.getName().contains("Minecraft.class")) {
 					StringBuilder sb = new StringBuilder();
 					for (int c = file.read(); c != -1; c = file.read()) {
-						sb.append((char)c);
+					    sb.append((char)c);
 					}
 					String data = sb.toString();
 					String search = "Minecraft 1";
 					file.closeEntry();
 					file.close();
-					return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
+		            return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
 				}
 				file.closeEntry();
 				ent = file.getNextEntry();

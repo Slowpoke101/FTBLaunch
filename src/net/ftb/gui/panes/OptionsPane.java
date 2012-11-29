@@ -1,5 +1,8 @@
 package net.ftb.gui.panes;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -54,7 +57,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
 		currentRam = new JLabel();
 		currentRam.setBounds(447, 114, 85, 23);
 		long ram = 0;
@@ -168,43 +171,43 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		lblLocale.setBounds(10, 148, 195, 23);
 		add(lblLocale);
 		add(locale);
-
+		
 		minecraftSize = new JLabel("Size for Minecraft Window");
 		minecraftSize.setBounds(10, 182, 195, 23);
 		add(minecraftSize);
-
+		
 		minecraftX = new JTextField();
 		minecraftX.setBounds(214, 182, 85, 22);
 		minecraftX.setText(Settings.getSettings().getMinecraftX());
 		minecraftX.addFocusListener(settingsChangeListener);
 		add(minecraftX);
-
+		
 		lblX = new JLabel("x");
 		lblX.setBounds(322, 182, 6, 20);
 		add(lblX);
-
+		
 		minecraftY = new JTextField();
 		minecraftY.setBounds(352, 182, 85, 23);
 		minecraftY.setText(Settings.getSettings().getMinecraftY());
 		minecraftY.addFocusListener(settingsChangeListener);
 		add(minecraftY);
 		minecraftY.setColumns(5);
-
+		
 		JLabel minecraftPos = new JLabel("Position of Minecraft Window");
 		minecraftPos.setBounds(10, 216, 195, 23);
 		add(minecraftPos);
-
+		
 		xPosField = new JTextField();
 		xPosField.setBounds(214, 217, 85, 22);
 		xPosField.setText(Settings.getSettings().getMinecraftXPos());
 		xPosField.addFocusListener(settingsChangeListener);
 		add(xPosField);
 		xPosField.setColumns(10);
-
+		
 		JLabel lblX_1 = new JLabel("x");
 		lblX_1.setBounds(322, 216, 6, 23);
 		add(lblX_1);
-
+		
 		yPosField = new JTextField();
 		yPosField.setBounds(352, 216, 85, 23);
 		yPosField.setText(Settings.getSettings().getMinecraftYPos());

@@ -11,6 +11,10 @@ import java.util.Properties;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+/**
+ * i18n class, hooray! \o/
+ *
+ */
 public class I18N {
 	private static Properties locales = new Properties();
 	private static Properties fallback = new Properties();

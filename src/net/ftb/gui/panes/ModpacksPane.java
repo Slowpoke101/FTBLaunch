@@ -285,7 +285,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				}
 			}
 		}
-
+		
 		updatePacks();
 	}
 
