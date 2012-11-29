@@ -1,12 +1,19 @@
 package net.ftb.updater;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -20,7 +27,7 @@ import org.xml.sax.SAXException;
 
 public class UpdateChecker {
 	private int version;
-	private int latest;
+	private int latest, latestDev;
 	public static String verString = "";
 	private String downloadAddress = "";
 
@@ -41,6 +48,9 @@ public class UpdateChecker {
 				return;
 			}
 			NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					new URL("http://nallar.me/buildservice/job/FTB%20Launcher/lastStableBuild/buildNumber").openStream()));
+			latestDev = Integer.parseInt(in.readLine());
 			latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
 			char[] temp = String.valueOf(latest).toCharArray();
 			for(int i = 0; i < (temp.length - 1); i++) {
@@ -54,8 +64,25 @@ public class UpdateChecker {
 	}
 
 	public boolean shouldUpdate() {
-		return version < latest;
+		if(!Settings.getSettings().getUseDevBuild())
+			return version < latest;
+		else{
+			verString = "Dev-" + latestDev;
+			try {
+				Scanner scanner;
+				if(new File(Settings.getSettings().getInstallPath(), "devVersion").exists()){
+					scanner = new Scanner(new File(Settings.getSettings().getInstallPath(), "devVersion"));
+					if(scanner.hasNextInt())
+						return scanner.nextInt() < latestDev;
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			return true;
+		}
 	}
+
 
 	public void update() {
 		String path = null;
@@ -67,13 +94,26 @@ public class UpdateChecker {
 		String extension = path.substring(path.lastIndexOf('.') + 1);
 		extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
 		try {
-			URL updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
-			File temporaryUpdate = new File(temporaryUpdatePath);
+			File temporaryUpdate;
+			URL updateURL;
+			if(!Settings.getSettings().getUseDevBuild()){
+				updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
+				temporaryUpdate = new File(temporaryUpdatePath);
+			}else{
+				updateURL = new URL( "http://nallar.me/buildservice/job/FTB%20Launcher/lastSuccessfulBuild/artifact/target/FTB_Launcher-1.1.0." + extension);
+				File devVersion = new File(Settings.getSettings().getInstallPath(), "devVersion");
+				BufferedWriter out = new BufferedWriter(new FileWriter(devVersion));
+				out.write(Integer.toString(latestDev));
+				out.flush();
+				out.close();
+				temporaryUpdate = new File(temporaryUpdatePath);
+			}
 			temporaryUpdate.getParentFile().mkdir();
 			FileUtils.downloadToFile(updateURL, temporaryUpdate);
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
 		} catch (MalformedURLException e) { Logger.logError("Malformed download URL for launcher update", e);
 		} catch (IOException e) { Logger.logError("Failed to download launcher update", e); 
 		} catch (NoSuchAlgorithmException e) { }
+
 	}
 }

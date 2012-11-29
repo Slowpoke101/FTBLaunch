@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.updater.UpdateChecker;
 
@@ -52,7 +53,10 @@ public class LauncherUpdateDialog extends JDialog {
 				// TODO: Call new frame containing html page?
 				try {
 					// TODO: Change the url to somewhere else, for the love of my dropbox T_T
-					LaunchFrame.getInstance().hLink(new URI("https://dl.dropbox.com/u/2405919/Changelog.html"));
+					if(!Settings.getSettings().getUseDevBuild())
+						LaunchFrame.getInstance().hLink(new URI("https://dl.dropbox.com/u/2405919/Changelog.html"));
+					else
+						LaunchFrame.getInstance().hLink(new URI("http://nallar.me/buildservice/job/FTB%20Launcher/changes"));
 				} catch (URISyntaxException e) { }
 			}
 		});
