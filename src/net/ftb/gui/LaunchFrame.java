@@ -656,10 +656,10 @@ public class LaunchFrame extends JFrame {
 		try{
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-			try{
+			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }
-			try{
+			try {
 				minecraftProcess.exitValue();
 			} catch (IllegalThreadStateException e) {
 				this.setVisible(false);
