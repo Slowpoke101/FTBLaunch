@@ -23,8 +23,8 @@ public class LogThread extends Thread {
 
 	public void run() {
 		try {
-			launcherLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), true));
-			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), true));
+			launcherLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile)));
+			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile)));
 		} catch (IOException e1) { }
 
 		BufferedWriter logWriter = launcherLogWriter;

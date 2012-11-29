@@ -10,7 +10,7 @@ public class LogEntry {
 	public LogLevel level = LogLevel.INFO;
 	public LogSource source = LogSource.LAUNCHER;
 	private Throwable cause;
-	private final String location;
+	private String location;
 	private final String dateString;
 	private final Date date;
 	private final Map<LogType, String> messageCache = new HashMap<LogType, String>();
@@ -24,19 +24,21 @@ public class LogEntry {
 
 	public LogEntry message(String message) {
 		this.message = message;
-		message = message.toLowerCase();
-		if (message.contains("[severe]") || message.contains("[stderr]")) {
-			level = LogLevel.ERROR;
-		} else if (message.contains("[info]")) {
-			level = LogLevel.INFO;
-		} else if (message.contains("[warning]")) {
-			level = LogLevel.WARN;
-		} else if (message.contains("error") || message.contains("severe")) {
-			level = LogLevel.ERROR;
-		} else if (message.contains("warn")) {
-			level = LogLevel.WARN;
-		} else {
-			level = LogLevel.INFO;
+		if (level == LogLevel.UNKNOWN) {
+			message = message.toLowerCase();
+			if (message.contains("[severe]") || message.contains("stderr")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("[info]")) {
+				level = LogLevel.INFO;
+			} else if (message.contains("[warning]")) {
+				level = LogLevel.WARN;
+			} else if (message.contains("error") || message.contains("severe")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("warn")) {
+				level = LogLevel.WARN;
+			} else {
+				level = LogLevel.INFO;
+			}
 		}
 		return this;
 	}
@@ -52,6 +54,9 @@ public class LogEntry {
 	}
 
 	public LogEntry cause(Throwable cause) {
+		if (cause != this.cause) {
+			this.location = getLocation(cause);
+		}
 		this.cause = cause;
 		return this;
 	}
@@ -79,11 +84,14 @@ public class LogEntry {
 			if (type == LogType.DEBUG) {
 				entryMessage.append("in ").append(source).append(" ");
 			}
-			if (location != null && type == LogType.EXTENDED || type == LogType.DEBUG) {
+			if (location != null && (type == LogType.EXTENDED || type == LogType.DEBUG)) {
 				entryMessage.append(location).append(": ");
 			}
 		}
 		entryMessage.append(message);
+		if (cause != null) {
+			entryMessage.append(cause.toString());
+		}
 		String message = entryMessage.toString();
 		messageCache.put(type, message);
 		return message;

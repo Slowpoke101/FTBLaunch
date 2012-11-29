@@ -1,6 +1,11 @@
 package net.ftb.mclauncher;
 
 import java.applet.Applet;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -13,9 +18,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -26,7 +36,7 @@ import net.ftb.util.OSUtils;
  *
  */
 public class MinecraftLauncher {
-
+	
 	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
@@ -68,7 +78,6 @@ public class MinecraftLauncher {
 		String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
 		arguments.add(path);
 
-		// TODO: Find a way to check if we can allocate this memory.
 		setMemory(arguments, rmax);
 
 		arguments.add("-cp");
@@ -79,13 +88,14 @@ public class MinecraftLauncher {
 		arguments.add(forgename);
 		arguments.add(username);
 		arguments.add(password);
+		arguments.add(ModPack.getPack(ModpacksPane.getIndex()).getName());
+		arguments.add(OSUtils.getDynamicStorageLocation() + separator + "ModPacks" + separator + ModPack.getPack(ModpacksPane.getIndex()).getDir() + separator + ModPack.getPack(ModpacksPane.getIndex()).getLogoName());
+		arguments.add(Settings.getSettings().getMinecraftX());
+		arguments.add(Settings.getSettings().getMinecraftY());
+		arguments.add(Settings.getSettings().getMinecraftXPos());
+		arguments.add(Settings.getSettings().getMinecraftYPos());
 
-		main(new String[] {
-				workingDir,
-				forgename,
-				username,
-				password
-		});
+		LaunchFrame.con.setIconImage(ModPack.getPack(ModpacksPane.getIndex()).getLogo());
 
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
@@ -118,9 +128,15 @@ public class MinecraftLauncher {
 		String forgename = args[1];
 		String username = args[2];
 		String password = args[3];
+		String modPackName = args[4];
+		String modPackImageName = args[5];
+		String minecraftX = args[6];
+		String minecraftY = args[7];
+		String minecraftXPos = args[8];
+		String minecraftYPos = args[9];
 
 		try {
-			Logger.logInfo("Loading jars...");
+			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			HashMap<Integer, File> map = new HashMap<Integer, File>();
 			int counter = 0;
@@ -148,12 +164,12 @@ public class MinecraftLauncher {
 				try {
 					urls[i] = map.get(i).toURI().toURL();
 				} catch (MalformedURLException e) { }
-				Logger.logInfo("Loading URL: " + urls[i].toString());
+				System.out.println("Loading URL: " + urls[i].toString());
 			}
 
-			Logger.logInfo("Loading natives...");
+			System.out.println("Loading natives...");
 			String nativesDir = new File(new File(basepath, "bin"), "natives").toString();
-			Logger.logInfo("Natives loaded...");
+			System.out.println("Natives loaded...");
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
 			System.setProperty("net.java.games.input.librarypath", nativesDir);
@@ -162,11 +178,11 @@ public class MinecraftLauncher {
 
 			URLClassLoader cl = new URLClassLoader(urls, MinecraftLauncher.class.getClassLoader());
 
-			Logger.logInfo("Loading minecraft class");
+			System.out.println("Loading minecraft class");
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
-			Logger.logInfo("mc = " + mc);
+			System.out.println("mc = " + mc);
 			Field[] fields = mc.getDeclaredFields();
-			Logger.logInfo("field amount: " + fields.length);
+			System.out.println("field amount: " + fields.length);
 
 			for (Field f : fields) {
 				if (f.getType() != File.class) {
@@ -177,7 +193,7 @@ public class MinecraftLauncher {
 				}
 				f.setAccessible(true);
 				f.set(null, new File(basepath));
-				Logger.logInfo("Fixed Minecraft Path: Field was " + f.toString());
+				System.out.println("Fixed Minecraft Path: Field was " + f.toString());
 				break;
 			}
 
@@ -185,29 +201,41 @@ public class MinecraftLauncher {
 			mcArgs[0] = username;
 			mcArgs[1] = password;
 
-			LaunchFrame.con.setIconImage(ModPack.getPack(ModpacksPane.getIndex()).getLogo());
-
 			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
 
-			Logger.logInfo("MCDIR: " + mcDir);
+			System.out.println("MCDIR: " + mcDir);
 
-			Logger.logInfo("Launching with applet wrapper...");
-			try {
+			System.out.println("Launching with applet wrapper...");
+			try
+			{
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
-				MinecraftFrame mcWindow = new MinecraftFrame(ModPack.getPack(ModpacksPane.getIndex()).getName(), ModPack.getPack(ModpacksPane.getIndex()).getLogo(), 
-						Integer.parseInt(Settings.getSettings().getMinecraftX()), Integer.parseInt(Settings.getSettings().getMinecraftY()), 
-						Integer.parseInt(Settings.getSettings().getMinecraftXPos()), Integer.parseInt(Settings.getSettings().getMinecraftYPos()));
+				MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, Integer.parseInt(minecraftX), Integer.parseInt(minecraftY), Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos));
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
-			} catch (InstantiationException e) {
-				Logger.logWarn("Applet wrapper failed! Falling back to compatibility mode.");
+			} catch (Exception e)
+			{
+				System.out.println("Applet wrapper failed! Falling back " +
+						"to compatibility mode.");
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			}
 		} catch (ClassNotFoundException e) { 
+			System.out.println("ClassNotFoundException");
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) { 
+			System.out.println("IllegalArgumentException");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) { 
+			System.out.println("IllegalAccessException");
+			e.printStackTrace();
 		} catch (InvocationTargetException e) { 
+			System.out.println("InvocationTargetException");
+			e.printStackTrace();
 		} catch (NoSuchMethodException e) { 
-		} catch (SecurityException e) { }
+			System.out.println("NoSuchMethodException");
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			System.out.println("SecurityException");
+			e.printStackTrace();
+		}
 	}
 }

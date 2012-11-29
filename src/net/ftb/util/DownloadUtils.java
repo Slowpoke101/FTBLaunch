@@ -18,7 +18,7 @@ import net.ftb.log.Logger;
 
 public class DownloadUtils {
 	private static String currentmd5 = "";
-
+	
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
@@ -50,7 +50,7 @@ public class DownloadUtils {
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
-
+	
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
@@ -97,7 +97,7 @@ public class DownloadUtils {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * gets the time from the creeperhost servers
 	 * @return - the time in the DDMMYY format
@@ -126,7 +126,7 @@ public class DownloadUtils {
 		}
 		return content;
 	}
-
+	
 	/**
 	 * Downloads the file to the destination
 	 * @param filename - String of destination
@@ -186,7 +186,7 @@ public class DownloadUtils {
 		Logger.logInfo(result);
 		return content.equalsIgnoreCase(result);
 	}
-
+	
 	/**
 	 * Gets the md5 of the downloaded file
 	 * @param file - File to check
@@ -209,7 +209,7 @@ public class DownloadUtils {
 		str.close();
 		Formatter fmt = new Formatter();    
 		for (byte b : dgest.digest()) { 
-			fmt.format("%02X", b);    
+		  fmt.format("%02X", b);    
 		}
 		return fmt.toString();
 	}

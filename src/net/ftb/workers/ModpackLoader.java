@@ -1,7 +1,10 @@
 package net.ftb.workers;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import javax.xml.parsers.DocumentBuilder;

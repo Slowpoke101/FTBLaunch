@@ -95,17 +95,17 @@ public class Settings extends Properties {
 	public void setLastPack(String name) {
 		setProperty("lastPack", name);
 	}
-
+	
 	public String getLastPack() {
 		return getProperty("lastPack", ModPack.getPack(0).getDir());
 	}
-
+	
 	public void setMinecraftX(String x) {
 		setProperty("minecraftX", x);
 	}
-
+	
 	public String getMinecraftX() {
-		return getProperty("minecraftX", "854");
+		return getProperty("minecraftX", "800");
 	}
 
 	public void setMinecraftY(String y) {
@@ -113,13 +113,13 @@ public class Settings extends Properties {
 	}
 
 	public String getMinecraftY() {
-		return getProperty("minecraftY", "480");
+		return getProperty("minecraftY", "600");
 	}
-
+	
 	public void setMinecraftXPos(String x) {
 		setProperty("minecraftXPos", x);
 	}
-
+	
 	public String getMinecraftXPos() {
 		return getProperty("minecraftXPos", "300");
 	}
