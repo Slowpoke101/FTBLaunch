@@ -137,12 +137,5 @@
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.swinglabs</groupId>
-      <artifactId>swingx</artifactId>
-      <version>1.6.4</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/External Jars/swingx-all-1.6.4.jar</systemPath>
-    </dependency>
   </dependencies>
 </project>

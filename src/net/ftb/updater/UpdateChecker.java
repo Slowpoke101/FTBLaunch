@@ -100,7 +100,7 @@ public class UpdateChecker {
 				updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
 				temporaryUpdate = new File(temporaryUpdatePath);
 			}else{
-				updateURL = new URL( "http://nallar.me/buildservice/job/FTB%20Launcher/lastSuccessfulBuild/artifact/target/FTB_Launcher-1.1.0." + extension);
+				updateURL = new URL( "http://nallar.me/buildservice/job/FTB%20Launcher/lastSuccessfulBuild/artifact/target/FTB_Launcher." + extension);
 				File devVersion = new File(Settings.getSettings().getInstallPath(), "devVersion");
 				BufferedWriter out = new BufferedWriter(new FileWriter(devVersion));
 				out.write(Integer.toString(latestDev));
