@@ -653,7 +653,6 @@ public class LaunchFrame extends JFrame {
 	public void launchMinecraft(String workingDir, String username, String password) {
 		try{
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
-			this.setVisible(false);
 			try{
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }

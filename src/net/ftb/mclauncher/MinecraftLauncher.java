@@ -85,13 +85,6 @@ public class MinecraftLauncher {
 		arguments.add(forgename);
 		arguments.add(username);
 		arguments.add(password);
-
-		main(new String[] {
-				workingDir,
-				forgename,
-				username,
-				password
-		});
 		
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
