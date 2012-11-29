@@ -12,8 +12,6 @@ import javax.swing.JTextArea;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.log.Logger;
-import net.ftb.mclauncher.MinecraftLauncher;
 
 public class PlayOfflineDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

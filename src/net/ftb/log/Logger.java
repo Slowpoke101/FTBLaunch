@@ -26,7 +26,7 @@ public class Logger {
 	}
 
 	public static void log(String message, LogLevel level, Throwable t) {
-		log(new LogEntry().message(message).cause(t).level(level));
+		log(new LogEntry().message(message).cause(t));
 	}
 
 	public static void logInfo(String message) {

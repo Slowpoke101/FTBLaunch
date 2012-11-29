@@ -17,15 +17,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -62,10 +58,7 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
-import net.ftb.log.LogEntry;
-import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
-import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
@@ -105,7 +98,7 @@ public class LaunchFrame extends JFrame {
 	private LoginResponse RESPONSE;
 
 	protected static UserManager userManager;
-	
+
 	public static LauncherConsole con;
 
 	public static String[] jarMods;
@@ -133,6 +126,13 @@ public class LaunchFrame extends JFrame {
 		try {
 			Settings.initSettings();
 		} catch (IOException e) { }
+
+		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
+			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
+		}
+		if(new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
+			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
+		}
 
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
@@ -668,7 +668,6 @@ public class LaunchFrame extends JFrame {
 						System.exit(0);
 					}
 				});
-				StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
 			}
 		} catch(Exception e) {
 			Logger.logError("Error during Minecraft launch", e);

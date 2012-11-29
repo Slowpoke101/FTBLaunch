@@ -6,10 +6,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JDialog;

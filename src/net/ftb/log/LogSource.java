@@ -6,11 +6,11 @@ public enum LogSource {
 	EXTERNAL("Minecraft");
 	private String humanReadableName;
 
-	LogSource() {
+	private LogSource() {
 		this(null);
 	}
 
-	LogSource(String humanReadableName) {
+	private LogSource(String humanReadableName) {
 		this.humanReadableName = humanReadableName;
 	}
 
