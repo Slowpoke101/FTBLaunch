@@ -3,6 +3,7 @@ package net.ftb.mclauncher;
 import java.applet.Applet;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
@@ -10,7 +11,6 @@ import java.net.URL;
 
 import javax.swing.JFrame;
 
-import net.ftb.gui.LaunchFrame;
 import net.minecraft.Launcher;
 
 public class MinecraftFrame extends JFrame implements WindowListener {
@@ -20,11 +20,11 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	
 	private Dimension size;
 
-	public MinecraftFrame(String title, Image icon, int x, int y, int xPos, int yPos) {
+	public MinecraftFrame(String title, String imagePath, int x, int y, int xPos, int yPos) {
 		super(title);
-		setIconImage(icon);
 		super.setVisible(true);
-		
+		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
+
 		size = new Dimension(x, y);
 		
 		this.setSize(size);

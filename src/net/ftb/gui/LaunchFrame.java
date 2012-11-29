@@ -651,9 +651,9 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	public void launchMinecraft(String workingDir, String username, String password) {
+		Exception minecraftLaunchError = null;
 		try{
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
-			this.setVisible(false);
 			try{
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }
@@ -669,10 +669,12 @@ public class LaunchFrame extends JFrame {
 					}
 				});
 				StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+				return;
 			}
 		} catch(Exception e) {
-			Logger.logError("Error during Minecraft launch", e);
+			minecraftLaunchError = e;
 		}
+		Logger.logError("Error during Minecraft launch", minecraftLaunchError);
 	}
 
 	/**

@@ -2,6 +2,10 @@ package net.ftb.mclauncher;
 
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -74,7 +78,6 @@ public class MinecraftLauncher {
 		String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
 		arguments.add(path);
 
-		// TODO: Find a way to check if we can allocate this memory.
 		setMemory(arguments, rmax);
 
 		arguments.add("-cp");
@@ -85,14 +88,15 @@ public class MinecraftLauncher {
 		arguments.add(forgename);
 		arguments.add(username);
 		arguments.add(password);
+		arguments.add(ModPack.getPack(ModpacksPane.getIndex()).getName());
+		arguments.add(OSUtils.getDynamicStorageLocation() + separator + "ModPacks" + separator + ModPack.getPack(ModpacksPane.getIndex()).getDir() + separator + ModPack.getPack(ModpacksPane.getIndex()).getLogoName());
+		arguments.add(Settings.getSettings().getMinecraftX());
+		arguments.add(Settings.getSettings().getMinecraftY());
+		arguments.add(Settings.getSettings().getMinecraftXPos());
+		arguments.add(Settings.getSettings().getMinecraftYPos());
 
-		main(new String[] {
-				workingDir,
-				forgename,
-				username,
-				password
-		});
-		
+		LaunchFrame.con.setIconImage(ModPack.getPack(ModpacksPane.getIndex()).getLogo());
+
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
 		return processBuilder.start();
@@ -124,6 +128,12 @@ public class MinecraftLauncher {
 		String forgename = args[1];
 		String username = args[2];
 		String password = args[3];
+		String modPackName = args[4];
+		String modPackImageName = args[5];
+		String minecraftX = args[6];
+		String minecraftY = args[7];
+		String minecraftXPos = args[8];
+		String minecraftYPos = args[9];
 
 		try {
 			System.out.println("Loading jars...");
@@ -190,8 +200,6 @@ public class MinecraftLauncher {
 			String[] mcArgs = new String[2];
 			mcArgs[0] = username;
 			mcArgs[1] = password;
-			
-			LaunchFrame.con.setIconImage(ModPack.getPack(ModpacksPane.getIndex()).getLogo());
 
 			String mcDir = mc.getMethod("a", String.class).invoke(null, (Object) "minecraft").toString();
 
@@ -202,9 +210,9 @@ public class MinecraftLauncher {
 			{
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
-				MinecraftFrame mcWindow = new MinecraftFrame(ModPack.getPack(ModpacksPane.getIndex()).getName(), ModPack.getPack(ModpacksPane.getIndex()).getLogo(), Integer.parseInt(Settings.getSettings().getMinecraftX()), Integer.parseInt(Settings.getSettings().getMinecraftY()), Integer.parseInt(Settings.getSettings().getMinecraftXPos()), Integer.parseInt(Settings.getSettings().getMinecraftYPos()));
+				MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, Integer.parseInt(minecraftX), Integer.parseInt(minecraftY), Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos));
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
-			} catch (InstantiationException e)
+			} catch (Exception e)
 			{
 				System.out.println("Applet wrapper failed! Falling back " +
 						"to compatibility mode.");
