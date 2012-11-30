@@ -90,7 +90,12 @@ public class LogEntry {
 		}
 		entryMessage.append(message);
 		if (cause != null) {
-			entryMessage.append(cause.toString());
+			entryMessage.append(": ").append(cause.toString());
+			if (type == LogType.EXTENDED || type == LogType.DEBUG) {
+				for (StackTraceElement stackTraceElement : cause.getStackTrace()) {
+					entryMessage.append("\n").append(stackTraceElement.toString());
+				}
+			}
 		}
 		String message = entryMessage.toString();
 		messageCache.put(type, message);
