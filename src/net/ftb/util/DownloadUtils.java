@@ -1,6 +1,5 @@
 package net.ftb.util;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,6 +8,8 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
@@ -128,30 +129,23 @@ public class DownloadUtils {
 	}
 
 	/**
-	 * Downloads the file to the destination
+	 * Downloads data from the given URL and saves it to the given file
 	 * @param filename - String of destination
 	 * @param urlString - http location of file to download
 	 */
-	public static void downloadUrl(String filename, String urlString) throws IOException {
-		BufferedInputStream in = null;
-		FileOutputStream fout = null;
-		try {
-			in = new BufferedInputStream(new URL(urlString).openStream());
-			fout = new FileOutputStream(filename);
-			byte data[] = new byte[1024];
-			int count;
-			while ((count = in.read(data, 0, 1024)) != -1) {
-				fout.write(data, 0, count);
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (fout != null) {
-				fout.flush();
-				fout.close();
-			}	
-		}
+	public static void downloadToFile(String filename, String urlString) throws IOException {
+		downloadToFile(new URL(urlString), new File(filename));
+	}
+
+	/**
+	 * Downloads data from the given URL and saves it to the given file
+	 * @param url The url to download from
+	 * @param file The file to save to.
+	 */
+	public static void downloadToFile(URL url, File file) throws IOException {
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 	}
 
 	/**

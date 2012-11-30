@@ -7,10 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -74,7 +71,7 @@ public class FileUtils {
 
 	/**
 	 * @param resource - the resource to delete
-	 * @return - the deleted resource
+	 * @return whether deletion was successful
 	 * @throws IOException
 	 */
 	public static boolean delete(File resource) throws IOException {
@@ -85,45 +82,6 @@ public class FileUtils {
 			}
 		}
 		return resource.delete();
-	}
-
-	/**
-	 * extracts zip to the location of the zip
-	 * @param zipLocation - the location
-	 */
-	public static void extractZip(String zipLocation) {
-		try {
-			byte[] buf = new byte[1024];
-			ZipInputStream zipinputstream;
-			ZipEntry zipentry;
-			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
-
-			zipentry = zipinputstream.getNextEntry();
-			while (zipentry != null) {
-				String entryName = zipentry.getName();
-				int n;
-				FileOutputStream fileoutputstream;
-				File newFile = new File(entryName);
-				String directory = newFile.getParent();
-
-				if (directory == null) {
-					if (newFile.isDirectory()) {
-						break;
-					}
-				}
-
-				fileoutputstream = new FileOutputStream(zipLocation);
-
-				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-					fileoutputstream.write(buf, 0, n);
-				}
-
-				fileoutputstream.close();
-				zipinputstream.closeEntry();
-				zipentry = zipinputstream.getNextEntry();
-			}
-			zipinputstream.close();
-		} catch (Exception e) { }
 	}
 
 	/**
@@ -196,25 +154,5 @@ public class FileUtils {
 			outputTmpFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) { 
 		} catch (IOException e) { }
-	}
-
-	/**
-	 * Downloads data from the given URL and saves it to the given file
-	 * @param url The url to download from
-	 * @param file The file to save to.
-	 */
-	public static void downloadToFile(URL url, File file) throws IOException {
-		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-	}
-
-	/**
-	 * Downloads data from the given URL and saves it to the given file
-	 * @param url The url to download from
-	 * @param file The file to save to.
-	 */
-	public static void downloadToFile(URL url, String file) throws IOException {
-		downloadToFile(url, new File(file));
 	}
 }

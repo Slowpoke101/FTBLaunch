@@ -10,7 +10,6 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.AppUtils;
-import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.DOMException;
@@ -28,7 +27,7 @@ public class ModpackLoader extends Thread {
 
 		try {
 			modPackFile.getParentFile().mkdirs();
-			FileUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
+			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
 		} catch (IOException e) {
 			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
