@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -502,6 +503,14 @@ public class LaunchFrame extends JFrame {
 		LoginWorker loginWorker = new LoginWorker(username, password) {
 			@Override
 			public void done() {
+				
+				if(!isMinecraftOnline()) {
+					PlayOfflineDialog d = new PlayOfflineDialog(username);
+					d.setVisible(true);
+					enableObjects();
+					return;
+				}
+				
 				String responseStr;
 				try {
 					responseStr = get();
@@ -512,11 +521,11 @@ public class LaunchFrame extends JFrame {
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
 						ErrorUtils.tossError("Login failed due IOException");
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+						PlayOfflineDialog d = new PlayOfflineDialog(username);
 						d.setVisible(true);
 					} else if (err.getCause() instanceof MalformedURLException) {
 						ErrorUtils.tossError("Login failed due malformed URL"); 
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+						PlayOfflineDialog d = new PlayOfflineDialog(username);
 						d.setVisible(true);
 					}
 					enableObjects();
@@ -673,6 +682,26 @@ public class LaunchFrame extends JFrame {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return true if login.minecraft.net is online
+	 */
+	public boolean isMinecraftOnline() {
+			try {
+				HttpURLConnection connection = (HttpURLConnection) new URL("http://login.minecraft.net").openConnection();
+				connection.setConnectTimeout(3000);
+				connection.setReadTimeout(3000);
+				connection.setRequestMethod("HEAD");
+				int response = connection.getResponseCode();
+				if (response >= 200 && response <= 399) {
+					return true;
+				} else {
+					return false;
+				}
+			} catch (IOException e) {
+				return false;
+			}
 	}
 
 	/**
