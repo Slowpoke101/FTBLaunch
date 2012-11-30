@@ -78,20 +78,20 @@ public class LogEntry {
 		}
 		StringBuilder entryMessage = new StringBuilder();
 		if (source != LogSource.EXTERNAL) {
-			if (type == LogType.EXTENDED || type == LogType.DEBUG) {
+			if (type.includes(LogType.EXTENDED)) {
 				entryMessage.append("[").append(dateString).append("] ");
 			}
-			if (type == LogType.DEBUG) {
+			if (type.includes(LogType.DEBUG)) {
 				entryMessage.append("in ").append(source).append(" ");
 			}
-			if (location != null && (type == LogType.EXTENDED || type == LogType.DEBUG)) {
+			if (location != null && type.includes(LogType.EXTENDED)) {
 				entryMessage.append(location).append(": ");
 			}
 		}
 		entryMessage.append(message);
 		if (cause != null) {
 			entryMessage.append(": ").append(cause.toString());
-			if (type == LogType.EXTENDED || type == LogType.DEBUG) {
+			if (type.includes(LogType.EXTENDED)) {
 				for (StackTraceElement stackTraceElement : cause.getStackTrace()) {
 					entryMessage.append("\n").append(stackTraceElement.toString());
 				}
