@@ -1,5 +1,7 @@
 package net.ftb.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -40,10 +42,31 @@ public class AppUtils {
 	 * @throws IOException, SAXException if an error occurs when reading from the stream
 	 */
 	public static Document downloadXML(URL url) throws IOException, SAXException {
+		return getXML(url.openStream());
+	}
+
+	/**
+	 * Reads XML from a file
+	 * @param file the URL to fetch
+	 * @return The document
+	 * @throws IOException, SAXException if an error occurs when reading from the stream
+	 */
+	public static Document readXML(File file) throws IOException, SAXException {
+		return getXML(new FileInputStream(file));
+	}
+
+	/**
+	 * Reads XML from a stream
+	 * @param stream the stream to read the document from
+	 * @return The document
+	 * @return The document
+	 * @throws IOException, SAXException if an error occurs when reading from the stream
+	 */
+	public static Document getXML(InputStream stream) throws IOException, SAXException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		try {
-			return docFactory.newDocumentBuilder().parse(url.openStream());
-		} catch (ParserConfigurationException ignored) { 
+			return docFactory.newDocumentBuilder().parse(stream);
+		} catch (ParserConfigurationException ignored) {
 		} catch (UnknownHostException e) { }
 		return null;
 	}

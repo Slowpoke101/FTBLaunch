@@ -70,7 +70,7 @@ public class UpdateChecker {
 			URL updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
 			File temporaryUpdate = new File(temporaryUpdatePath);
 			temporaryUpdate.getParentFile().mkdir();
-			FileUtils.downloadToFile(updateURL, temporaryUpdate);
+			DownloadUtils.downloadToFile(updateURL, temporaryUpdate);
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
 		} catch (MalformedURLException e) { Logger.logError("Malformed download URL for launcher update", e);
 		} catch (IOException e) { Logger.logError("Failed to download launcher update", e); 

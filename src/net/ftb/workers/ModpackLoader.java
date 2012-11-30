@@ -2,16 +2,14 @@ package net.ftb.workers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.AppUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.DOMException;
@@ -22,47 +20,32 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ModpackLoader extends Thread {
-
-	public ModpackLoader() { }
-
 	@Override
 	public void run() {
-		
+
+		File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "Modpacks" + File.separator + "modpacks.xml");
+
 		try {
-			new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator).mkdirs();
-			DownloadUtils.downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
-		} catch (IOException e2) {
-			System.out.println("Failed to load modpacks, loading from backup");
+			modPackFile.getParentFile().mkdirs();
+			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
+		} catch (IOException e) {
+			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
-
 		
 		
 		try {
-			String modPack;
-			
 			Logger.logInfo("loading modpack information...");
-			modPack = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
-
-			File packXML;
-	
-			try {
-				packXML = new File(modPack);
-			} catch(Exception e) {
-				packXML = new File(DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
+			Document doc;
+			if(!modPackFile.exists()) {
+				modPackFile = new File(DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
 			}
 			
-			Document doc = null;
 			try {
-				DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-				DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-				doc = docBuilder.parse(packXML);
+				doc = AppUtils.readXML(modPackFile);
 			} catch (SAXException e) {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
 			} catch (IOException e) {
-				Logger.logError("Exception reading modpackfile", e);
-				return;
-			} catch (ParserConfigurationException e) {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
 			}
