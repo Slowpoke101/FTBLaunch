@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class LogEntry {
 	private String message = "";
-	public LogLevel level = LogLevel.INFO;
+	public LogLevel level = LogLevel.UNKNOWN;
 	public LogSource source = LogSource.LAUNCHER;
 	private Throwable cause;
 	private String location;
@@ -24,19 +24,21 @@ public class LogEntry {
 
 	public LogEntry message(String message) {
 		this.message = message;
-		message = message.toLowerCase();
-		if (message.contains("[severe]") || message.contains("[stderr]")) {
-			level = LogLevel.ERROR;
-		} else if (message.contains("[info]")) {
-			level = LogLevel.INFO;
-		} else if (message.contains("[warning]")) {
-			level = LogLevel.WARN;
-		} else if (message.contains("error") || message.contains("severe")) {
-			level = LogLevel.ERROR;
-		} else if (message.contains("warn")) {
-			level = LogLevel.WARN;
-		} else {
-			level = LogLevel.INFO;
+		if (level == LogLevel.UNKNOWN) {
+			message = message.toLowerCase();
+			if (message.contains("[severe]") || message.contains("[stderr]")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("[info]")) {
+				level = LogLevel.INFO;
+			} else if (message.contains("[warning]")) {
+				level = LogLevel.WARN;
+			} else if (message.contains("error") || message.contains("severe")) {
+				level = LogLevel.ERROR;
+			} else if (message.contains("warn")) {
+				level = LogLevel.WARN;
+			} else {
+				level = LogLevel.INFO;
+			}
 		}
 		return this;
 	}
@@ -76,19 +78,24 @@ public class LogEntry {
 		}
 		StringBuilder entryMessage = new StringBuilder();
 		if (source != LogSource.EXTERNAL) {
-			if (type == LogType.EXTENDED || type == LogType.DEBUG) {
+			if (type.includes(LogType.EXTENDED)) {
 				entryMessage.append("[").append(dateString).append("] ");
 			}
-			if (type == LogType.DEBUG) {
+			if (type.includes(LogType.DEBUG)) {
 				entryMessage.append("in ").append(source).append(" ");
 			}
-			if (location != null && (type == LogType.EXTENDED || type == LogType.DEBUG)) {
+			if (location != null && type.includes(LogType.EXTENDED)) {
 				entryMessage.append(location).append(": ");
 			}
 		}
 		entryMessage.append(message);
 		if (cause != null) {
-			entryMessage.append(cause.toString());
+			entryMessage.append(": ").append(cause.toString());
+			if (type.includes(LogType.EXTENDED)) {
+				for (StackTraceElement stackTraceElement : cause.getStackTrace()) {
+					entryMessage.append("\n").append(stackTraceElement.toString());
+				}
+			}
 		}
 		String message = entryMessage.toString();
 		messageCache.put(type, message);
