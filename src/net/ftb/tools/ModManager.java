@@ -47,7 +47,7 @@ public class ModManager extends JDialog {
 			if(!upToDate()) {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
-				ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+				ModPack pack = ModPack.getSelectedPack();
 				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
@@ -91,10 +91,10 @@ public class ModManager extends JDialog {
 		protected void downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
 			System.out.println("Downloading");
 			String installPath = OSUtils.getDynamicStorageLocation();
-			ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+			ModPack pack = ModPack.getSelectedPack();
 			new File(installPath, "ModPacks/" + dir + sep).mkdirs();
 			new File(installPath, "ModPacks/" + dir + sep + modPackName).createNewFile();
-			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getUrl()));
+			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getUrl()));
 			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			clearModsFolder(pack);
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
@@ -164,7 +164,7 @@ public class ModManager extends JDialog {
 	}
 
 	private boolean upToDate() throws IOException {
-		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+		ModPack pack = ModPack.getSelectedPack();
 		File version = new File(Settings.getSettings().getInstallPath() + sep + pack.getDir() + sep + "version");
 		if(!version.exists()) {
 			System.out.println("File not found.");
@@ -207,7 +207,7 @@ public class ModManager extends JDialog {
 	}
 
 	public static void cleanUp() {
-		ModPack pack = ModPack.getPack(LaunchFrame.getSelectedModIndex());
+		ModPack pack = ModPack.getSelectedPack();
 		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {

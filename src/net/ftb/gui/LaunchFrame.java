@@ -326,7 +326,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-					Settings.getSettings().setLastPack(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir());
+					Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
 					saveSettings();
 					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 				} else {
@@ -343,10 +343,10 @@ public class LaunchFrame extends JFrame {
 		serverbutton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(!ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl().isEmpty()) {
+				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
 					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 						try {
-							hLink(new URI(DownloadUtils.getCreeperhostLink(ModPack.getPack(LaunchFrame.getSelectedModIndex()).getServerUrl())));
+							hLink(new URI(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl())));
 						} catch (URISyntaxException e) { 
 						} catch (NoSuchAlgorithmException e) { }
 					}

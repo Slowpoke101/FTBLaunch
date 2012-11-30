@@ -166,8 +166,8 @@ public class FileUtils {
 	 * deletes the META-INF
 	 */
 	public static void killMetaInf() {
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + "/minecraft/bin", "minecraft.jar.tmp");
+		File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar");
+		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar.tmp");
 		try {
 			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
 			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));

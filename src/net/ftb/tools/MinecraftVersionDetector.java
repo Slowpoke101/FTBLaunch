@@ -81,7 +81,7 @@ public class MinecraftVersionDetector {
 		if(Settings.getSettings().getForceUpdate()) {
 			return true;
 		}
-		if(!ModPack.getPack(LaunchFrame.getSelectedModIndex()).isUpToDate()){
+		if(!ModPack.getSelectedPack().isUpToDate()){
 			return false;
 		}
 		String version = getMinecraftVersion(jarFilePath);
