@@ -25,7 +25,7 @@ public class LocaleUpdater {
 	private static void updateFiles() throws NoSuchAlgorithmException {
 		Logger.logInfo("[i18n] Downloading locale files ...");
 		try {
-			FileUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
+			DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
 			Logger.logInfo("[i18n] Moving files into place ...");
 			if(local.getParentFile().exists()) {
 				FileUtils.delete(local.getParentFile());
