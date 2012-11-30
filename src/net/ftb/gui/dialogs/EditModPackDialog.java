@@ -53,9 +53,9 @@ public class EditModPackDialog extends JDialog {
 	private JScrollPane enabledScroll = new JScrollPane(enabled);
 	private JScrollPane disabledScroll = new JScrollPane(disabled);
 
-	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + "minecraft" + File.separator + "mods");
-	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + "minecraft" + File.separator + "coremods");
-	private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getPack(LaunchFrame.getSelectedModIndex()).getDir() + File.separator + "instMods");
+	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
+	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
+	private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "instMods");
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
