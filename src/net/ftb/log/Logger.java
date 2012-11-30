@@ -10,6 +10,7 @@ public class Logger {
 	 */
 	private static final List<ILogListener> listeners;
 	private static final Vector<LogEntry> logEntries = new Vector<LogEntry>();
+	private static LogThread logThread;
 
 	/**
 	 * Default constructor
@@ -17,12 +18,13 @@ public class Logger {
 	 */
 	static {
 		listeners = new ArrayList<ILogListener>();
+		logThread = new LogThread(listeners);
+		logThread.start();
 	}
 
 	public static void log(LogEntry entry) {
 		logEntries.add(entry);
-		LogThread logThread = new LogThread(entry, listeners);
-		logThread.start();
+		logThread.handleLog(entry);
 	}
 
 	public static void log(String message, LogLevel level, Throwable t) {
