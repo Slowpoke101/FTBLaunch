@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ModpackLoader extends Thread {
-	private static String MODPACKSFILE;
+	private String modPack;
 
 	public ModpackLoader() { }
 
@@ -38,13 +38,21 @@ public class ModpackLoader extends Thread {
 
 		try {
 			Logger.logInfo("loading modpack information...");
-			MODPACKSFILE = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
+			modPack = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
 
+			File packXML;
+	
+			try {
+				packXML = new File(modPack);
+			} catch(Exception e) {
+				packXML = new File(DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
+			}
+			
 			Document doc = null;
 			try {
 				DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
 				DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-				doc = docBuilder.parse(MODPACKSFILE);
+				doc = docBuilder.parse(packXML);
 			} catch (SAXException e) {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
