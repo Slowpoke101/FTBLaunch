@@ -103,16 +103,20 @@ public class LogEntry {
 	}
 
 	private static String getLocation(Throwable t) {
-		String location = null;
-		if (t == null) {
-			t = new Throwable();
+		String location = "";
+		if (t != null) {
+			location += getLocation(t.getStackTrace()) + "->";
 		}
-		for (StackTraceElement ste : t.getStackTrace()) {
+		location += getLocation(new Throwable().getStackTrace());
+		return location;
+	}
+
+	private static String getLocation(StackTraceElement[] stackTraceElements) {
+		for (StackTraceElement ste : stackTraceElements) {
 			if (!ste.getClassName().equals(Logger.class.getName()) && !ste.getClassName().equals(LogEntry.class.getName())) {
-				location = ste.getClassName().substring(ste.getClassName().lastIndexOf('.') + 1) + "." + ste.getMethodName() + ":" + ste.getLineNumber();
-				break;
+				return ste.getClassName().substring(ste.getClassName().lastIndexOf('.') + 1) + "." + ste.getMethodName() + ":" + ste.getLineNumber();
 			}
 		}
-		return location;
+		return "unknown location";
 	}
 }
