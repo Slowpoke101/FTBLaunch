@@ -21,6 +21,10 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -175,6 +179,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		minecraftX = new JTextField();
 		minecraftX.setBounds(214, 182, 85, 22);
+		minecraftX.setDocument(new documentFilter("\\D++"));
 		minecraftX.setText(Settings.getSettings().getMinecraftX());
 		minecraftX.addFocusListener(settingsChangeListener);
 		add(minecraftX);
@@ -185,6 +190,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		minecraftY = new JTextField();
 		minecraftY.setBounds(352, 182, 85, 23);
+		minecraftY.setDocument(new documentFilter("\\D++"));
 		minecraftY.setText(Settings.getSettings().getMinecraftY());
 		minecraftY.addFocusListener(settingsChangeListener);
 		add(minecraftY);
@@ -196,6 +202,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		xPosField = new JTextField();
 		xPosField.setBounds(214, 217, 85, 22);
+		xPosField.setDocument(new documentFilter("\\D++"));
 		xPosField.setText(Settings.getSettings().getMinecraftXPos());
 		xPosField.addFocusListener(settingsChangeListener);
 		add(xPosField);
@@ -207,6 +214,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		yPosField = new JTextField();
 		yPosField.setBounds(352, 216, 85, 23);
+		yPosField.setDocument(new documentFilter("\\D++"));
 		yPosField.setText(Settings.getSettings().getMinecraftYPos());
 		yPosField.addFocusListener(settingsChangeListener);
 		add(yPosField);
@@ -214,6 +222,23 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	}
 
 	@Override public void onVisible() { }
+
+	private class documentFilter extends PlainDocument {
+		private static final long serialVersionUID = 1L;
+
+		public documentFilter(final String pattern) {
+			this.setDocumentFilter(new DocumentFilter() {
+				@Override
+				public void insertString(FilterBypass fb, int off, String str, AttributeSet attr) throws BadLocationException {
+					fb.insertString(off, str.replaceAll(pattern, ""), attr);
+				} 
+				@Override
+				public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) throws BadLocationException {
+					fb.replace(off, len, str.replaceAll(pattern, ""), attr);
+				}
+			});
+		}
+	}
 
 	public void loadSettings(Settings settings) {
 		installFolderTextField.setText(settings.getInstallPath());
