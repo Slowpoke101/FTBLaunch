@@ -19,7 +19,7 @@ public class PlayOfflineDialog extends JDialog {
 	private JTextArea text;
 	private JButton yes, no;
 
-	public PlayOfflineDialog(final String username) {
+	public PlayOfflineDialog(String cause, final String username) {
 
 		text = new JTextArea("Something went wrong..\nWould you like to Play Offline?");
 
