@@ -22,13 +22,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ModpackLoader extends Thread {
-	private static String MODPACKSFILE;
 
 	public ModpackLoader() { }
 
 	@Override
 	public void run() {
-
+		
 		try {
 			new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator).mkdirs();
 			DownloadUtils.downloadUrl(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml", DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
@@ -36,15 +35,27 @@ public class ModpackLoader extends Thread {
 			System.out.println("Failed to load modpacks, loading from backup");
 		}
 
+		
+		
 		try {
+			String modPack;
+			
 			Logger.logInfo("loading modpack information...");
-			MODPACKSFILE = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
+			modPack = OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + "modpacks.xml";
 
+			File packXML;
+	
+			try {
+				packXML = new File(modPack);
+			} catch(Exception e) {
+				packXML = new File(DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
+			}
+			
 			Document doc = null;
 			try {
 				DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
 				DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-				doc = docBuilder.parse(MODPACKSFILE);
+				doc = docBuilder.parse(packXML);
 			} catch (SAXException e) {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
@@ -63,8 +74,8 @@ public class ModpackLoader extends Thread {
 			NodeList modPacks = doc.getElementsByTagName("modpack");
 
 			for (int i = 0; i < modPacks.getLength(); i++) {
-				Node modPack = modPacks.item(i);
-				NamedNodeMap modPackAttr = modPack.getAttributes();
+				Node modPackNode = modPacks.item(i);
+				NamedNodeMap modPackAttr = modPackNode.getAttributes();
 				try {
 					ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
 							modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),
