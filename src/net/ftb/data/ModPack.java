@@ -17,6 +17,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.ftb.data.events.ModPackListener;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
@@ -55,6 +56,10 @@ public class ModPack {
 
 	public static ModPack getPack(int i) {
 		return packs.get(i);
+	}
+
+	public static ModPack getSelectedPack() {
+		return getPack(LaunchFrame.getSelectedModIndex());
 	}
 
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, int idx) throws IOException, NoSuchAlgorithmException {
