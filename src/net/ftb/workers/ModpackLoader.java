@@ -80,10 +80,15 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), 
 							modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 							modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", i));
-				} catch (DOMException e) { 
-				} catch (IOException e) { }
+				} catch (DOMException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			ModpacksPane.loaded = true;
-		} catch (NoSuchAlgorithmException e1) { }
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}
 	}
 }
