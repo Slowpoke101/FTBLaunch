@@ -1,7 +1,9 @@
 package net.ftb.workers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
@@ -36,12 +38,25 @@ public class ModpackLoader extends Thread {
 		try {
 			Logger.logInfo("loading modpack information...");
 			Document doc;
-			if(!modPackFile.exists()) {
-				modPackFile = new File(DownloadUtils.getStaticCreeperhostLink("modpacks.xml"));
+			InputStream modPackStream = null;
+
+			try {
+				modPackStream = new FileInputStream(modPackFile);
+			} catch(IOException e) {
+				Logger.logWarn("Failed to read modpackfile - falling back to direct download", e);
+			}
+
+			if (modPackStream == null) {
+				try {
+					modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")).openStream();
+				} catch(IOException e) {
+					Logger.logError("Completely unable to download the modpackfile - check your connection", e);
+					return;
+				}
 			}
 			
 			try {
-				doc = AppUtils.readXML(modPackFile);
+				doc = AppUtils.getXML(modPackStream);
 			} catch (SAXException e) {
 				Logger.logError("Exception reading modpackfile", e);
 				return;
