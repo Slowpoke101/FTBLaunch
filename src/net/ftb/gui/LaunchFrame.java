@@ -197,6 +197,13 @@ public class LaunchFrame extends JFrame {
 				instance = frame;
 				frame.setVisible(true);
 
+				Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+					@Override
+					public void uncaughtException(Thread t, Throwable e) {
+						Logger.logError("Unhandled exception in " + t.toString(), e);
+					}
+				});
+
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
 
