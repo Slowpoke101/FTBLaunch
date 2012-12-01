@@ -71,14 +71,13 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
 		@Override
 		public void write(int b) {
-			throw new UnsupportedOperationException("write(int) is not supported by OutputOverride.");
+			throw new UnsupportedOperationException("Write(int) is not supported by OutputOverride.");
 		}
 	}
 
 	public LauncherConsole() {
-		setTitle("FTB Launcher Console");
-		this.setSize(new Dimension(800, 400));
-		setResizable(false);
+		setTitle("Console");
+		setMinimumSize(new Dimension(800, 400));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(new BorderLayout(0, 0));
 

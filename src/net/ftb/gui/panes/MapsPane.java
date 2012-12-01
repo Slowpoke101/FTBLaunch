@@ -263,7 +263,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static void updateMaps() {
 		for (int i = 0; i < mapPanels.size(); i++) {
 			if(selectedMap == i) {
-				
 				String packs = "";
 				if (ModPack.getPack(getIndex()).getMods() != null) {
 					packs += "<p>This map works with the folowing packs:</p><ul>";
@@ -272,7 +271,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 					}
 					packs += "</ul>";
 				}
-				
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
