@@ -25,7 +25,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -264,7 +263,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		for (int i = 0; i < mapPanels.size(); i++) {
 			if(selectedMap == i) {
 				String packs = "";
-				if (ModPack.getPack(getIndex()).getMods() != null) {
+				if (Map.getMap(getIndex()).getCompatible() != null) {
 					packs += "<p>This map works with the folowing packs:</p><ul>";
 					for (String name : Map.getMap(getIndex()).getCompatible()) {
 						packs += "<li>" + name + "</li>";

@@ -47,7 +47,7 @@ public class ModpackLoader extends Thread {
 
 			if (modPackStream == null) {
 				try {
-					modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")).openStream();
+					modPackStream = new URL("https://dl.dropbox.com/u/40374207/modpacks.xml").openStream();
 				} catch(IOException e) {
 					Logger.logError("Completely unable to download the modpackfile - check your connection", e);
 					return;
