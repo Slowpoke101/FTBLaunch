@@ -25,6 +25,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
@@ -154,13 +155,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		JLabel logo = new JLabel(new ImageIcon(map.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
 		logo.setVisible(true);
-		String info = "";
-		if(map.getInfo().length() > 60) {
-			info = map.getInfo().substring(0, 59) + "...";
-		} else {
-			info = map.getInfo();
-		}
-		JTextArea filler = new JTextArea(map.getName() + " : " + map.getAuthor() + "\n" + info);
+
+		JTextArea filler = new JTextArea(map.getName() + " (v." + map.getVersion() + ")\n" + "By " + map.getAuthor());
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
@@ -267,11 +263,21 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static void updateMaps() {
 		for (int i = 0; i < mapPanels.size(); i++) {
 			if(selectedMap == i) {
+				
+				String packs = "";
+				if (ModPack.getPack(getIndex()).getMods() != null) {
+					packs += "<p>This map works with the folowing packs:</p><ul>";
+					for (String name : Map.getMap(getIndex()).getCompatible()) {
+						packs += "<li>" + name + "</li>";
+					}
+					packs += "</ul>";
+				}
+				
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
-				mapInfo.setText(Map.getMap(getIndex()).getInfo());
+				mapInfo.setText(Map.getMap(getIndex()).getInfo() + packs);
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

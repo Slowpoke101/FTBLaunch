@@ -179,13 +179,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
 		logo.setBounds(6, 6, 42, 42);
 		logo.setVisible(true);
-		String info = "";
-		if(pack.getInfo().length() > 60) {
-			info = pack.getInfo().substring(0, 59) + "...";
-		} else {
-			info = pack.getInfo();
-		}
-		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + " : " + pack.getMcVersion() + "\n" + info);
+		
+		JTextArea filler = new JTextArea(pack.getName() + " (v" + pack.getVersion() + ") Minecraft Version " + pack.getMcVersion() + "\n" + "By " + pack.getAuthor());
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
