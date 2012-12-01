@@ -49,8 +49,12 @@ public class UpdateChecker {
 			verString += temp[temp.length - 1];
 			downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 		} catch (MalformedURLException e) { 
-		} catch (IOException e) { 
-		} catch (SAXException e) { }
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean shouldUpdate() {
