@@ -29,11 +29,10 @@ public class ModpackLoader extends Thread {
 
 		try {
 			modPackFile.getParentFile().mkdirs();
-			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
+			DownloadUtils.downloadToFile(new URL("https://dl.dropbox.com/u/40374207/modpacks.xml"), modPackFile);
 		} catch (IOException e) {
 			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
-		
 		
 		try {
 			Logger.logInfo("loading modpack information...");
