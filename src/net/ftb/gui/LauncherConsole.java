@@ -78,7 +78,6 @@ public class LauncherConsole extends JFrame implements ILogListener {
 	public LauncherConsole() {
 		setTitle("FTB Launcher Console");
 		this.setSize(new Dimension(800, 400));
-		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
