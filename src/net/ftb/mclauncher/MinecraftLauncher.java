@@ -67,7 +67,6 @@ public class MinecraftLauncher {
 		String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
 		arguments.add(path);
 
-		// TODO: Find a way to check if we can allocate this memory.
 		setMemory(arguments, rmax);
 
 		arguments.add("-cp");
@@ -204,11 +203,8 @@ public class MinecraftLauncher {
 				System.out.println("Applet wrapper failed! Falling back to compatibility mode.");
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			}
-		} catch (ClassNotFoundException e) { 
-		} catch (IllegalArgumentException e) { 
-		} catch (IllegalAccessException e) { 
-		} catch (InvocationTargetException e) { 
-		} catch (NoSuchMethodException e) { 
-		} catch (SecurityException e) { }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
