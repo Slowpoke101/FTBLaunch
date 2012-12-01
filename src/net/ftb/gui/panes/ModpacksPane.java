@@ -185,7 +185,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		} else {
 			info = pack.getInfo();
 		}
-		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + "\n" + info);
+		JTextArea filler = new JTextArea(pack.getName() + " : " + pack.getAuthor() + " : " + pack.getMcVersion() + "\n" + info);
 		filler.setBorder(null);
 		filler.setEditable(false);
 		filler.setForeground(Color.white);
