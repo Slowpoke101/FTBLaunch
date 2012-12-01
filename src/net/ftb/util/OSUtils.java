@@ -1,13 +1,18 @@
 package net.ftb.util;
 
 import java.io.File;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
+import java.util.Enumeration;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public class OSUtils {
+	private static byte[] cachedMacAddress;
+
 	/**
 	 * Gets the default installation path for the current OS.
 	 * @return a string containing the default install path for the current OS.
@@ -69,5 +74,28 @@ public class OSUtils {
 		UNIX,
 		MACOSX,
 		OTHER,
+	}
+
+	public static byte[] getMacAddress() {
+		if(cachedMacAddress != null && cachedMacAddress.length >= 10) {
+			return cachedMacAddress;
+		}
+		try {
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while(networkInterfaces.hasMoreElements()) {
+				NetworkInterface network = networkInterfaces.nextElement();
+				byte[] mac = network.getHardwareAddress();
+				if(mac != null && mac.length > 0) {
+					cachedMacAddress = new byte[mac.length * 10];
+					for(int i = 0; i < cachedMacAddress.length; i++) {
+						cachedMacAddress[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
+					}
+					return cachedMacAddress;
+				}
+			}
+		} catch (SocketException e) {
+			Logger.logWarn("Failed to get MAC address, using default logindata key", e);
+		}
+		return new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 	}
 }
