@@ -29,7 +29,7 @@ public class ModpackLoader extends Thread {
 
 		try {
 			modPackFile.getParentFile().mkdirs();
-			DownloadUtils.downloadToFile(new URL("https://dl.dropbox.com/u/40374207/modpacks.xml"), modPackFile);
+			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
 		} catch (IOException e) {
 			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
@@ -47,7 +47,7 @@ public class ModpackLoader extends Thread {
 
 			if (modPackStream == null) {
 				try {
-					modPackStream = new URL("https://dl.dropbox.com/u/40374207/modpacks.xml").openStream();
+					modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")).openStream();
 				} catch(IOException e) {
 					Logger.logError("Completely unable to download the modpackfile - check your connection", e);
 					return;
