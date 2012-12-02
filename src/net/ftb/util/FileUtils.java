@@ -98,24 +98,61 @@ public class FileUtils {
 //			ZipFile zipFile = new ZipFile(fSourceZip);
 			ZipInputStream zip = new ZipInputStream(new FileInputStream(fSourceZip));
 
-			ZipEntry entry = zip.getNextEntry();
-			File destinationFilePath = new File(outputLocation, entry.getName());
-			destinationFilePath.getParentFile().mkdirs();
-			if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
-				BufferedInputStream bis = new BufferedInputStream(zip);
-				int b;
-				byte buffer[] = new byte[1024];
-				FileOutputStream fos = new FileOutputStream(destinationFilePath);
-				BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
-				while ((b = bis.read(buffer, 0, 1024)) != -1) {
-					bos.write(buffer, 0, b);
+			ZipEntry entry;
+			
+			while((entry = zip.getNextEntry()) != null) {
+				File destinationFilePath = new File(outputLocation, entry.getName());
+				destinationFilePath.getParentFile().mkdirs();
+				if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
+					BufferedInputStream bis = new BufferedInputStream(zip);
+					int b;
+					byte buffer[] = new byte[1024];
+					FileOutputStream fos = new FileOutputStream(destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+					while ((b = bis.read(buffer, 0, 1024)) != -1) {
+						bos.write(buffer, 0, b);
+					}
+					bos.flush();
+					bos.close();
+					bis.close();
+					fos.close();
 				}
-				bos.flush();
-				bos.close();
-				bis.close();
-				fos.close();
 			}
 			zip.close();
+		} catch (IOException ioe) {
+			Logger.logError(ioe.getMessage(), ioe);
+			doBackupExtract(zipLocation, outputLocation);
+		}
+	}
+	
+	public static void doBackupExtract(String zipLocation, String outputLocation) {
+		try {
+			System.out.println("Extracting (Backup way)");
+			File fSourceZip = new File(zipLocation);
+			File temp = new File(outputLocation);
+			temp.mkdir();
+			ZipFile zipFile = new ZipFile(fSourceZip);
+			Enumeration<?> e = zipFile.entries();
+			while (e.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) e.nextElement();
+				File destinationFilePath = new File(outputLocation, entry.getName());
+				destinationFilePath.getParentFile().mkdirs();
+				if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
+					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
+					int b;
+					byte buffer[] = new byte[1024];
+					FileOutputStream fos = new FileOutputStream(destinationFilePath);
+					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
+					while ((b = bis.read(buffer, 0, 1024)) != -1) {
+						bos.write(buffer, 0, b);
+					}
+					bos.flush();
+					bos.close();
+					bis.close();
+					fos.close();
+				}
+			}
+			zipFile.close();
 		} catch (IOException ioe) {
 			Logger.logError(ioe.getMessage(), ioe);
 		}
