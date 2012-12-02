@@ -76,10 +76,16 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				ram = 8192;
 			}
 		} catch (SecurityException e1) {
+			Logger.logError(e1.getMessage(), e1);
 		} catch (NoSuchMethodException e1) {
+			Logger.logError(e1.getMessage(), e1);
 		} catch (IllegalArgumentException e1) {
+			Logger.logError(e1.getMessage(), e1);
 		} catch (IllegalAccessException e1) {
-		} catch (InvocationTargetException e1) { }
+			Logger.logError(e1.getMessage(), e1);
+		} catch (InvocationTargetException e1) {
+			Logger.logError(e1.getMessage(), e1);
+		}
 
 		ramMaximum = new JSlider();
 		ramMaximum.setBounds(215, 114, 222, 23);

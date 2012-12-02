@@ -13,6 +13,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import net.ftb.log.Logger;
+
 public class UserManager {
 	public final static ArrayList<User> _users = new ArrayList<User>();
 	private File _filename;
@@ -30,6 +32,7 @@ public class UserManager {
 		try {
 			return new String(in.toByteArray(), "utf8");
 		} catch (UnsupportedEncodingException e) {
+			Logger.logError(e.getMessage(), e);
 			return "";
 		}
 	}
@@ -39,6 +42,7 @@ public class UserManager {
 		try {
 			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getMacAddress()));
 		} catch (UnsupportedEncodingException e) {
+			Logger.logError(e.getMessage(), e);
 			return "";
 		}
 		return String.format("%040x", str2);
@@ -67,7 +71,9 @@ public class UserManager {
 					_users.add(new User(str));
 				}
 				read.close();
-			} catch (Exception ex) { }
+			} catch (Exception ex) {
+				Logger.logError(ex.getMessage(), ex);
+			}
 		}
 	}
 
@@ -160,7 +166,9 @@ public class UserManager {
 					return key;
 				}
 			}
-		} catch (SocketException e) { }
+		} catch (SocketException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 		return null;
 	}
 }

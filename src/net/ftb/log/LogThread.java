@@ -28,7 +28,9 @@ public class LogThread extends Thread {
 		try {
 			launcherLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), true));
 			minecraftLogWriter = new BufferedWriter(new FileWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), true));
-		} catch (IOException e1) { }
+		} catch (IOException e1) {
+			Logger.logError(e1.getMessage(), e1);
+		}
 
 		LogEntry entry;
 		try {
@@ -37,17 +39,23 @@ public class LogThread extends Thread {
 				try {
 					logWriter.write(entry.toString(LogType.EXTENDED) + System.getProperty("line.separator"));
 					logWriter.flush();
-				} catch (IOException e) { }
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 				for (ILogListener listener : listeners) {
 					listener.onLogEvent(entry);
 				}
 			}
-		} catch (InterruptedException ignored) { }
+		} catch (InterruptedException ignored) {
+			Logger.logError(ignored.getMessage(), ignored);
+		}
 	}
 
 	public void handleLog(LogEntry logEntry) {
 		try {
 			logQueue.put(logEntry);
-		} catch (InterruptedException ignored) { }
+		} catch (InterruptedException ignored) {
+			Logger.logError(ignored.getMessage(), ignored);
+		}
 	}
 }

@@ -61,7 +61,9 @@ public class I18N {
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
 		try {
 			LocaleUpdater.checkForUpdates();
-		} catch (NoSuchAlgorithmException e1) { }
+		} catch (NoSuchAlgorithmException e1) {
+			Logger.logError(e1.getMessage(), e1);
+		}
 		// Add files from i18n directory
 		int i = 1;
 		Properties tmp = new Properties();

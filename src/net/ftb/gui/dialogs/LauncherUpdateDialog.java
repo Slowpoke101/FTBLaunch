@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 import net.ftb.updater.UpdateChecker;
 
 public class LauncherUpdateDialog extends JDialog {
@@ -53,7 +54,9 @@ public class LauncherUpdateDialog extends JDialog {
 				try {
 					// TODO: Change the url to somewhere else, for the love of my dropbox T_T
 					LaunchFrame.getInstance().hLink(new URI("https://dl.dropbox.com/u/2405919/Changelog.html"));
-				} catch (URISyntaxException e) { }
+				} catch (URISyntaxException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 		});
 		panel.add(changelog);

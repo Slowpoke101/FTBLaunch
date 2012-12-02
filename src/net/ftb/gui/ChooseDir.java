@@ -59,7 +59,9 @@ public class ChooseDir extends JFrame implements ActionListener {
 				if(!destination.exists()) {
 					try {
 						FileUtils.copyFile(chooser.getSelectedFile(), destination);
-					} catch (IOException e1) { }
+					} catch (IOException e1) {
+						Logger.logError(e1.getMessage(), e1);
+					}
 					editMPD.updateLists();
 				} else {
 					Logger.logWarn("File already exists, cannot add mod!");

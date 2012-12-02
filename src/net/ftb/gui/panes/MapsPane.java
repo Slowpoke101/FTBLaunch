@@ -117,7 +117,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					try {
 						LaunchFrame.getInstance().hLink(event.getURL().toURI());
-					} catch (URISyntaxException e) { }
+					} catch (URISyntaxException e) {
+						Logger.logError(e.getMessage(), e);
+					}
 				}
 			}
 		});

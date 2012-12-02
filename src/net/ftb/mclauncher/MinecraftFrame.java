@@ -37,7 +37,9 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		try {
 			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
 		}
-		catch (MalformedURLException ignored){ }
+		catch (MalformedURLException ignored){
+			ignored.printStackTrace();
+		}
 
 		appletWrap.setParameter("username", user);
 		appletWrap.setParameter("sessionid", session);
@@ -64,7 +66,9 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 			public void run() {
 				try {
 					Thread.sleep(30000L);
-				} catch (InterruptedException localInterruptedException) { }
+				} catch (InterruptedException localInterruptedException) {
+					localInterruptedException.printStackTrace();
+				}
 				System.out.println("FORCING EXIT!");
 				System.exit(0);
 			}

@@ -193,7 +193,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
 			try {
 				kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
 			} catch (BadLocationException ignored) {
-			} catch (IOException ignored) { }
+				Logger.logError(ignored.getMessage(), ignored);
+			} catch (IOException ignored) {
+				Logger.logError(ignored.getMessage(), ignored);
+			}
 			displayArea.setCaretPosition(displayArea.getDocument().getLength());
 		}
 	}

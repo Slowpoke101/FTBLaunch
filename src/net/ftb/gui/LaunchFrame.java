@@ -127,7 +127,9 @@ public class LaunchFrame extends JFrame {
 
 		try {
 			Settings.initSettings();
-		} catch (IOException e) { }
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
@@ -171,9 +173,14 @@ public class LaunchFrame extends JFrame {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 					} catch (ClassNotFoundException e1) { 
+						Logger.logError(e1.getMessage(), e1);
 					} catch (InstantiationException e1) { 
+						Logger.logError(e1.getMessage(), e1);
 					} catch (IllegalAccessException e1) { 
-					} catch (UnsupportedLookAndFeelException e1) { }
+						Logger.logError(e1.getMessage(), e1);
+					} catch (UnsupportedLookAndFeelException e1) {
+						Logger.logError(e1.getMessage(), e1);
+					}
 				}
 
 				I18N.setupLocale();
@@ -251,7 +258,9 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					hLink(new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) { }
+				} catch (URISyntaxException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -266,7 +275,9 @@ public class LaunchFrame extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				try {
 					hLink(new URI("http://www.creeperhost.net/aff.php?aff=293"));
-				} catch (URISyntaxException e) { }
+				} catch (URISyntaxException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -355,7 +366,10 @@ public class LaunchFrame extends JFrame {
 						try {
 							hLink(new URI(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl())));
 						} catch (URISyntaxException e) { 
-						} catch (NoSuchAlgorithmException e) { }
+							Logger.logError(e.getMessage(), e);
+						} catch (NoSuchAlgorithmException e) {
+							Logger.logError(e.getMessage(), e);
+						}
 					}
 				} else {
 					ErrorUtils.tossError("No server version available!");
@@ -392,7 +406,10 @@ public class LaunchFrame extends JFrame {
 					try {
 						hLink(new URI(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl())));
 					} catch (URISyntaxException e) { 
-					} catch (NoSuchAlgorithmException e) { }
+						Logger.logError(e.getMessage(), e);
+					} catch (NoSuchAlgorithmException e) {
+						Logger.logError(e.getMessage(), e);
+					}
 				}
 			}
 		});
@@ -513,16 +530,16 @@ public class LaunchFrame extends JFrame {
 				try {
 					responseStr = get();
 				} catch (InterruptedException err) {
-					ErrorUtils.tossError("Exception occurred");
+					Logger.logError(err.getMessage(), err);
 					enableObjects();
 					return;
 				} catch (ExecutionException err) {
 					if (err.getCause() instanceof IOException) {
-						ErrorUtils.tossError("Login failed due IOException");
+						Logger.logError(err.getMessage(), err);
 						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
 					} else if (err.getCause() instanceof MalformedURLException) {
-						ErrorUtils.tossError("Login failed due malformed URL"); 
+						Logger.logError(err.getMessage(), err);
 						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
 					}
@@ -665,7 +682,9 @@ public class LaunchFrame extends JFrame {
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
 			try {
 				Thread.sleep(1500);
-			} catch (InterruptedException e) { }
+			} catch (InterruptedException e) {
+				Logger.logError(e.getMessage(), e);
+			}
 			try {
 				minecraftProcess.exitValue();
 			} catch (IllegalThreadStateException e) {
@@ -678,7 +697,7 @@ public class LaunchFrame extends JFrame {
 				});
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 
@@ -718,10 +737,10 @@ public class LaunchFrame extends JFrame {
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
-			Logger.logError("Exception occurred",e);
+			Logger.logError(e.getMessage(), e);
 			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
 		} catch (IOException e) {
-			Logger.logError("Exception occurred",e);
+			Logger.logError(e.getMessage(), e);
 			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
 		}
 	}
@@ -732,7 +751,9 @@ public class LaunchFrame extends JFrame {
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) { Logger.logError("Exception occurred", e); }
+		} catch (IOException e) { 
+			Logger.logError(e.getMessage(), e);
+		}
 		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
@@ -850,7 +871,9 @@ public class LaunchFrame extends JFrame {
 		try {
 			installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
 			ModManager.cleanUp();
-		} catch (IOException e) { Logger.logError("Exception occurred", e); }
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -862,14 +885,18 @@ public class LaunchFrame extends JFrame {
 			Desktop desktop = Desktop.getDesktop();
 			try {
 				desktop.browse(uri);
-			} catch(Exception exc) { Logger.logError("Exception occurred durring opening Link",exc); }
+			} catch(Exception exc) {
+				Logger.logError("Exception occurred durring opening Link",exc);
+			}
 		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
 			File xdg = new File("/usr/bin/xdg-open");
 			if (xdg.exists()) {
 				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
 				try {
 					pb.start();
-				} catch (IOException e) { }
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			} else {
 				Logger.logWarn("Desktop not supported.");
 			}

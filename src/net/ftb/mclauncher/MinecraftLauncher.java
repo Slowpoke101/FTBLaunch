@@ -101,7 +101,9 @@ public class MinecraftLauncher {
 				Logger.logInfo("Setting MaxMemory to " + rmax);
 				memorySet = true;
 			}
-		} catch (Exception e) { Logger.logError("Error parsing memory settings", e); }
+		} catch (Exception e) {
+			Logger.logError("Error parsing memory settings", e);
+		}
 		if (!memorySet) {
 			arguments.add("-Xms" + 256 + "M");
 			Logger.logInfo("Defaulting MinMemory to " + 256);
@@ -150,7 +152,9 @@ public class MinecraftLauncher {
 			for(int i = 0; i < counter; i++) {
 				try {
 					urls[i] = map.get(i).toURI().toURL();
-				} catch (MalformedURLException e) { }
+				} catch (MalformedURLException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 				System.out.println("Loading URL: " + urls[i].toString());
 			}
 
@@ -200,7 +204,7 @@ public class MinecraftLauncher {
 						Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos));
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
 			} catch (InstantiationException e) {
-				System.out.println("Applet wrapper failed! Falling back to compatibility mode.");
+				Logger.log("Applet wrapper failed! Falling back to compatibility mode.");
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			}
 		} catch (Exception e) {

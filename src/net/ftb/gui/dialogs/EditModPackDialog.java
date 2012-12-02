@@ -26,6 +26,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -136,7 +137,9 @@ public class EditModPackDialog extends JDialog {
 					Desktop desktop = Desktop.getDesktop();
 					try {
 						desktop.open(folder);
-					} catch (IOException e1) { }
+					} catch (IOException e1) {
+						Logger.logError(e1.getMessage(), e1);
+					}
 				}
 			}
 		});

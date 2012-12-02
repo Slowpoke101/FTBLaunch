@@ -17,6 +17,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.ftb.data.events.TexturePackListener;
+import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.TexturePackLoader;
@@ -122,7 +123,9 @@ public class TexturePack {
 				result = false;
 			}
 			in.close();
-		} catch (IOException e) { }
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 		return result;
 	}
 

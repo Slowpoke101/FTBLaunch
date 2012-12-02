@@ -36,6 +36,7 @@ public class LocaleUpdater {
 			wr.close();
 			cleanUpFiles();
 		} catch (MalformedURLException e) {
+			Logger.logError(e.getMessage(), e);
 		} catch (IOException e) {
 			Logger.logWarn("[i18n] Update IOException", e);
 		}
@@ -60,6 +61,7 @@ public class LocaleUpdater {
 			Logger.logInfo("[i18n] remoteVer = " + remoteVer);
 			scanner.close();
 		} catch (MalformedURLException e1) {
+			Logger.logError(e1.getMessage(), e1);
 		} catch (IOException e1) {
 			Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
 			return;

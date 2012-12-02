@@ -28,6 +28,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
 	private static final long serialVersionUID = 1L;
@@ -110,7 +111,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					try {
 						LaunchFrame.getInstance().hLink(event.getURL().toURI());
-					} catch (URISyntaxException e) { }
+					} catch (URISyntaxException e) {
+						Logger.logError(e.getMessage(), e);
+					}
 				}
 			}
 		});

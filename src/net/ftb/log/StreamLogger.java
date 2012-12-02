@@ -33,7 +33,7 @@ public class StreamLogger extends Thread {
 				Arrays.fill(buffer, (byte) 0);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 

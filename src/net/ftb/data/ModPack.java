@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
@@ -136,7 +137,9 @@ public class ModPack {
 				uptodate = false;
 			}
 			in.close();
-		} catch (IOException e) { }
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 		return result;
 	}
 
