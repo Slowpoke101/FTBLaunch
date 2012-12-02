@@ -98,10 +98,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			if(vmType.equals("64")) {
 				ramMaximum.setMaximum((int)ram);
 			} else if(vmType.equals("32")) {
-				if(ram < 1536) {
+				if(ram < 1024) {
 					ramMaximum.setMaximum((int)ram);
 				} else {
-					ramMaximum.setMaximum(1536);
+					ramMaximum.setMaximum(1024);
 				}
 			}
 		}
