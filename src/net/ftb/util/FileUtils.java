@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -15,7 +14,6 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -90,51 +88,8 @@ public class FileUtils {
 	 * @param outputLocation - location to extract to
 	 */
 	public static void extractZipTo(String zipLocation, String outputLocation) {
-
-        byte[] buffer = new byte[2048];
-
-        InputStream theFile;
 		try {
-			theFile = new FileInputStream(zipLocation);
-
-			ZipInputStream stream = new ZipInputStream(theFile);
-			String outdir = outputLocation;
-			
-			try {
-				ZipEntry entry;
-				while((entry = stream.getNextEntry())!=null) {
-
-					String outpath = outdir + "/" + entry.getName();
-					FileOutputStream output = null;
-					try {
-						output = new FileOutputStream(outpath);
-						int len = 0;
-						while ((len = stream.read(buffer)) > 0) {
-							output.write(buffer, 0, len);
-						}
-					} finally {
-						// we must always close the output file
-						if(output!=null){
-							output.close();
-						}
-					}
-				}
-			} finally {
-				try {
-					stream.close();
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
-			}
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-			doBackupExtract(zipLocation, outputLocation);
-		}
-    }
-	
-	public static void doBackupExtract(String zipLocation, String outputLocation) {
-		try {
-			System.out.println("Extracting (Backup way)");
+			System.out.println("Extracting");
 			File fSourceZip = new File(zipLocation);
 			File temp = new File(outputLocation);
 			temp.mkdir();
