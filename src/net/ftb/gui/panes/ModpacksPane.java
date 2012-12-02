@@ -329,7 +329,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 	}
 
-	public int getSelectedModIndex() {
+	public static int getSelectedModIndex() {
 		return modPacksAdded ? getIndex() : -1;
 	}
 
@@ -342,7 +342,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public static int getIndex() {
 		if(currentPacks.size() > 0) {
 			if(currentPacks.size() != ModPack.getPackArray().size()) {
-				if(!origin.equalsIgnoreCase("all")) {
+				if(!origin.equalsIgnoreCase("all") || type.equalsIgnoreCase("server")) {
 					return currentPacks.get(selectedPack).getIndex();
 				}
 			}
