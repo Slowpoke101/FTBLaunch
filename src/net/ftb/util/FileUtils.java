@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -18,7 +19,6 @@ import java.util.zip.ZipInputStream;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public class FileUtils {
@@ -90,40 +90,47 @@ public class FileUtils {
 	 * @param outputLocation - location to extract to
 	 */
 	public static void extractZipTo(String zipLocation, String outputLocation) {
-		try {
-			System.out.println("Extracting");
-			File fSourceZip = new File(zipLocation);
-			File temp = new File(outputLocation);
-			temp.mkdir();
-//			ZipFile zipFile = new ZipFile(fSourceZip);
-			ZipInputStream zip = new ZipInputStream(new FileInputStream(fSourceZip));
 
-			ZipEntry entry;
+        byte[] buffer = new byte[2048];
+
+        InputStream theFile;
+		try {
+			theFile = new FileInputStream(zipLocation);
+
+			ZipInputStream stream = new ZipInputStream(theFile);
+			String outdir = outputLocation;
 			
-			while((entry = zip.getNextEntry()) != null) {
-				File destinationFilePath = new File(outputLocation, entry.getName());
-				destinationFilePath.getParentFile().mkdirs();
-				if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
-					BufferedInputStream bis = new BufferedInputStream(zip);
-					int b;
-					byte buffer[] = new byte[1024];
-					FileOutputStream fos = new FileOutputStream(destinationFilePath);
-					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
-					while ((b = bis.read(buffer, 0, 1024)) != -1) {
-						bos.write(buffer, 0, b);
+			try {
+				ZipEntry entry;
+				while((entry = stream.getNextEntry())!=null) {
+
+					String outpath = outdir + "/" + entry.getName();
+					FileOutputStream output = null;
+					try {
+						output = new FileOutputStream(outpath);
+						int len = 0;
+						while ((len = stream.read(buffer)) > 0) {
+							output.write(buffer, 0, len);
+						}
+					} finally {
+						// we must always close the output file
+						if(output!=null){
+							output.close();
+						}
 					}
-					bos.flush();
-					bos.close();
-					bis.close();
-					fos.close();
+				}
+			} finally {
+				try {
+					stream.close();
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
 				}
 			}
-			zip.close();
-		} catch (IOException ioe) {
-			Logger.logError(ioe.getMessage(), ioe);
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 			doBackupExtract(zipLocation, outputLocation);
 		}
-	}
+    }
 	
 	public static void doBackupExtract(String zipLocation, String outputLocation) {
 		try {

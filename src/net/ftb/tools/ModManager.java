@@ -50,7 +50,7 @@ public class ModManager extends JDialog {
 				ModPack pack = ModPack.getSelectedPack();
 				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
 				if(modPackZip.exists()) {
-					FileUtils.delete(modPackZip);
+//					FileUtils.delete(modPackZip);
 				}
 				downloadModPack(pack.getUrl(), pack.getDir());
 			}
@@ -97,8 +97,8 @@ public class ModManager extends JDialog {
 			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getUrl()));
 			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
 			clearModsFolder(pack);
-			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
-			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
+//			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
+//			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
 			if(DownloadUtils.isValid(new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl()))) {
 				installMods(modPackName, dir);
 			} else {
