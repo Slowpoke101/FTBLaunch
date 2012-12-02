@@ -46,9 +46,15 @@ public class MapLoader extends Thread {
 			}
 			MapsPane.loaded = true;
 		} catch (MalformedURLException e) { 
+			Logger.logError(e.getMessage(), e);
 		} catch (IOException e) { 
+			Logger.logError(e.getMessage(), e);
 		} catch (SAXException e) { 
+			Logger.logError(e.getMessage(), e);
 		} catch (NoSuchAlgorithmException e) { 
-		} catch (DOMException e) { }
+			Logger.logError(e.getMessage(), e);
+		} catch (DOMException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 	}
 }

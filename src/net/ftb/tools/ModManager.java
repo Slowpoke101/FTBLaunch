@@ -213,7 +213,9 @@ public class ModManager extends JDialog {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) { }
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 		}
 	}

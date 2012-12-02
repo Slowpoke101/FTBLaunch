@@ -1,5 +1,7 @@
 package net.ftb.tools;
 
+import net.ftb.log.Logger;
+
 public class ProcessMonitor implements Runnable {
 
 	private final Process proc;
@@ -15,7 +17,9 @@ public class ProcessMonitor implements Runnable {
 	public void run() {
 		try{
 			proc.waitFor();
-		} catch (InterruptedException e){ }
+		} catch (InterruptedException e){
+			Logger.logError(e.getMessage(), e);
+		}
 		complete = true;
 		onComplete.run();
 	}

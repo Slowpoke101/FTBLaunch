@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.ftb.log.Logger;
+
 public class Launcher extends Applet implements AppletStub {
 	private Applet wrappedApplet;
 	private URL documentBase;
@@ -50,7 +52,9 @@ public class Launcher extends Applet implements AppletStub {
 			return param;
 		try {
 			return super.getParameter(name);
-		} catch (Exception ignore){ }
+		} catch (Exception ignore){
+			Logger.logError(ignore.getMessage(), ignore);
+		}
 		return null;
 	}
 

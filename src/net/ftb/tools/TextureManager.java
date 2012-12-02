@@ -152,7 +152,9 @@ public class TextureManager extends JDialog {
 			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) { }
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 		}
 	}

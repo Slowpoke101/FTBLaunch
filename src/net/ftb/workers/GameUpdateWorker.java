@@ -86,7 +86,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			for (int i = 1; i < jarList.length; i++) {
 				jarURLs[i] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + jarList[i]);
 			}
-		} catch (MalformedURLException e) { return false; }
+		} catch (MalformedURLException e) {
+			Logger.logError(e.getMessage(), e);
+			return false;
+		}
 
 		String nativesFilename;
 		switch(OSUtils.getCurrentOS()) {
@@ -105,7 +108,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 		try {
 			jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + nativesFilename);
-		} catch (MalformedURLException e) { return false; }
+		} catch (MalformedURLException e) {
+			Logger.logError(e.getMessage(), e);
+			return false;
+		}
 
 		return true;
 	}
@@ -119,7 +125,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			md5s.load(inputStream);
 			inputStream.close();
 		} catch (FileNotFoundException e) {
-		} catch (IOException e) { }
+			Logger.logError(e.getMessage(), e);
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 
 		int totalDownloadSize = 0;
 		int[] fileSizes = new int[jarURLs.length];
@@ -146,7 +155,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				}
 				fileSizes[i] = connection.getContentLength();
 				totalDownloadSize += fileSizes[i];
-			} catch (IOException e) { return false; }
+			} catch (IOException e) {
+				Logger.logError(e.getMessage(), e);
+				return false; 
+			}
 		}
 
 		// TODO: Fix progress bar when updating minecraft
@@ -164,7 +176,9 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				md5s.remove(getFilename(jarURLs[i]));
 				md5s.store(out, "md5 hashes for downloaded files");
 				out.close();
-			} catch (IOException e)	{ }
+			} catch (IOException e)	{
+				Logger.logError(e.getMessage(), e);
+			}
 			int triesLeft = 0;
 			int lastfile = -1;
 			boolean downloadSuccess = false;
@@ -236,7 +250,9 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 								FileOutputStream out = new FileOutputStream(md5sFile);
 								md5s.store(out, "md5 hashes for downloaded files");
 								out.close();
-							} catch (IOException e)	{ e.printStackTrace(); }
+							} catch (IOException e)	{ 
+								Logger.logError(e.getMessage(), e);
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -263,7 +279,10 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		FileInputStream input;
 		try	{
 			input = new FileInputStream(nativesJar);
-		} catch (FileNotFoundException e) { return false; }
+		} catch (FileNotFoundException e) {
+			Logger.logError(e.getMessage(), e);
+			return false;
+		}
 
 		ZipInputStream zipIn = new ZipInputStream(input); 
 		try {
@@ -287,12 +306,15 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				currentEntry = zipIn.getNextEntry();
 			}
 		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
 			return false;
 		} finally {
 			try {
 				zipIn.close();
 				input.close();
-			} catch (IOException e) { }
+			} catch (IOException e) { 
+				Logger.logError(e.getMessage(), e);
+			}
 		}
 
 		nativesJar.delete();

@@ -81,14 +81,14 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 							modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", i));
 				} catch (DOMException e) {
-					e.printStackTrace();
+					Logger.logError(e.getMessage(), e);
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.logError(e.getMessage(), e);
 				}
 			}
 			ModpacksPane.loaded = true;
 		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
+			Logger.logError(e1.getMessage(), e1);
 		}
 	}
 }

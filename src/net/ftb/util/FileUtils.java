@@ -117,7 +117,9 @@ public class FileUtils {
 				}
 			}
 			zipFile.close();
-		} catch (IOException ioe) { }
+		} catch (IOException ioe) {
+			Logger.logError(ioe.getMessage(), ioe);
+		}
 	}
 
 	/**
@@ -153,6 +155,9 @@ public class FileUtils {
 			}
 			outputTmpFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) { 
-		} catch (IOException e) { }
+			Logger.logError(e.getMessage(), e);
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 	}
 }

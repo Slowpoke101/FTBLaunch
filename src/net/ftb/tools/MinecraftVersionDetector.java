@@ -11,6 +11,7 @@ import java.util.zip.ZipInputStream;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 
 public class MinecraftVersionDetector {
@@ -31,14 +32,18 @@ public class MinecraftVersionDetector {
 		}
 		try {
 			FileUtils.copyFile(new File(jarFilePath + "/bin/minecraft.jar"), new File(jarFilePath + "/bin/bckminecraft.jar"));
-		} catch (IOException e2) { }
+		} catch (IOException e2) {
+			Logger.logError(e2.getMessage(), e2);
+		}
 
 		if(new File(jarFilePath + "/bin/bcklwjgl.jar").exists()) {
 			new File(jarFilePath + "/bin/bcklwjgl.jar").delete();
 		}
 		try {
 			FileUtils.copyFile(new File(jarFilePath + "/bin/lwjgl.jar"), new File(jarFilePath + "/bin/bcklwjgl.jar"));
-		} catch (IOException e2) { }
+		} catch (IOException e2) {
+			Logger.logError(e2.getMessage(), e2);
+		}
 
 		URL[] urls = new URL[jarFiles.length];
 
@@ -47,6 +52,7 @@ public class MinecraftVersionDetector {
 				File f = new File(new File(jarFilePath, "bin"), jarFiles[i]);
 				urls[i] = f.toURI().toURL();
 			} catch (MalformedURLException e) {
+				Logger.logError(e.getMessage(), e);
 				return "unknown";
 			}
 		}
@@ -73,7 +79,10 @@ public class MinecraftVersionDetector {
 				ent = file.getNextEntry();
 			}
 			file.close();
-		} catch (IOException e1) { return "unknown"; }
+		} catch (IOException e1) {
+			Logger.logError(e1.getMessage(), e1);
+			return "unknown";
+		}
 		return "unknown";
 	}
 

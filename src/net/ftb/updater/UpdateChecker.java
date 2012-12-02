@@ -29,7 +29,9 @@ public class UpdateChecker {
 		loadInfo();
 		try {
 			FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
-		} catch (Exception ignored) { }
+		} catch (Exception ignored) {
+			Logger.logError(ignored.getMessage(), ignored);
+		}
 	}
 
 	private void loadInfo() {
@@ -49,11 +51,11 @@ public class UpdateChecker {
 			verString += temp[temp.length - 1];
 			downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
 		} catch (MalformedURLException e) { 
-			e.printStackTrace();
+			Logger.logError(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.logError(e.getMessage(), e);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			Logger.logError(e.getMessage(), e);
 		}
 	}
 
@@ -78,6 +80,8 @@ public class UpdateChecker {
 			SelfUpdate.runUpdate(path, temporaryUpdatePath);
 		} catch (MalformedURLException e) { Logger.logError("Malformed download URL for launcher update", e);
 		} catch (IOException e) { Logger.logError("Failed to download launcher update", e); 
-		} catch (NoSuchAlgorithmException e) { }
+		} catch (NoSuchAlgorithmException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 	}
 }

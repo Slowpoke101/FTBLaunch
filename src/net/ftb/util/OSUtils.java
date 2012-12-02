@@ -18,7 +18,9 @@ public class OSUtils {
 			File jarFile;
 			jarFile = new File(codeSource.getLocation().toURI().getPath());
 			return jarFile.getParentFile().getPath();
-		} catch (URISyntaxException e) { }
+		} catch (URISyntaxException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 		Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}

@@ -160,7 +160,9 @@ public class MapManager extends JDialog {
 			if(!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) { }
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
 			}
 		}
 	}

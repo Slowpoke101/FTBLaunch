@@ -11,6 +11,8 @@ import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.ftb.log.Logger;
+
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -67,7 +69,10 @@ public class AppUtils {
 		try {
 			return docFactory.newDocumentBuilder().parse(stream);
 		} catch (ParserConfigurationException ignored) {
-		} catch (UnknownHostException e) { }
+			Logger.logError(ignored.getMessage(), ignored);
+		} catch (UnknownHostException e) {
+			Logger.logError(e.getMessage(), e);
+		}
 		return null;
 	}
 }
