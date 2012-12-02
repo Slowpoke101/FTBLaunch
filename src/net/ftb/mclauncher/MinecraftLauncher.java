@@ -16,6 +16,8 @@ import java.util.List;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.log.LogEntry;
+import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -153,7 +155,7 @@ public class MinecraftLauncher {
 				try {
 					urls[i] = map.get(i).toURI().toURL();
 				} catch (MalformedURLException e) {
-					Logger.logError(e.getMessage(), e);
+					e.printStackTrace();
 				}
 				System.out.println("Loading URL: " + urls[i].toString());
 			}
@@ -204,7 +206,7 @@ public class MinecraftLauncher {
 						Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos));
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
 			} catch (InstantiationException e) {
-				Logger.log("Applet wrapper failed! Falling back to compatibility mode.");
+				Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			}
 		} catch (Exception e) {
