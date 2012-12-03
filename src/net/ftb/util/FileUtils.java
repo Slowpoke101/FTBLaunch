@@ -14,9 +14,12 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.log.LogEntry;
+import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 
 public class FileUtils {
@@ -117,8 +120,58 @@ public class FileUtils {
 			zipFile.close();
 		} catch (IOException ioe) {
 			Logger.logError(ioe.getMessage(), ioe);
+			backupExtract(zipLocation, outputLocation);
 		}
 	}
+	
+	public static void backupExtract(String zipLocation, String outputLocation){
+		 
+		Logger.log("Extracting (Backup way)", LogLevel.INFO, null);
+		
+		byte[] buffer = new byte[1024];
+	 
+		try{
+			
+			File folder = new File(outputLocation);
+			if(!folder.exists()){
+				folder.mkdir();
+			}
+			
+			ZipInputStream zis = new ZipInputStream(new FileInputStream(zipLocation));
+			
+			ZipEntry ze = zis.getNextEntry();
+			
+			while(ze != null){
+				
+				String fileName = ze.getName();
+				File newFile = new File(outputLocation + File.separator + fileName);
+				
+				if(ze.isDirectory()) {
+					new File(newFile.getParent()).mkdirs();
+				} else {
+					FileOutputStream fos = null;
+					
+					new File(newFile.getParent()).mkdirs();
+					
+					fos = new FileOutputStream(newFile);
+					
+					int len;
+					while ((len = zis.read(buffer)) > 0) {
+						fos.write(buffer, 0, len);
+					}
+					
+					fos.close();
+				}
+				ze = zis.getNextEntry();
+			}
+			
+			zis.closeEntry();
+			zis.close();
+	    	
+		} catch(IOException ex) {
+			Logger.logError(ex.getMessage(), ex);
+	    }
+	}    
 
 	/**
 	 * deletes the META-INF
