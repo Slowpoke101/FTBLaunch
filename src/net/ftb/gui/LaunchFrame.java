@@ -285,7 +285,6 @@ public class LaunchFrame extends JFrame {
 			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
-		userManager.read();
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 

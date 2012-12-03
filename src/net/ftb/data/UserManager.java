@@ -1,73 +1,72 @@
 package net.ftb.data;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 import net.ftb.log.Logger;
+import net.ftb.util.CryptoUtils;
+import net.ftb.util.OSUtils;
 
 public class UserManager {
 	public final static ArrayList<User> _users = new ArrayList<User>();
-	private File _filename;
-	private static byte[] key;
+	private File _file;
 
-	public UserManager(File filename) {
-		_filename = filename;
-		if (_filename.exists()) {
-			read();
-		}
-	}
-
-	public String fromHexThing(String str) {
-		BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, getMacAddress()));
-		try {
-			return new String(in.toByteArray(), "utf8");
-		} catch (UnsupportedEncodingException e) {
-			Logger.logError(e.getMessage(), e);
-			return "";
-		}
-	}
-
-	public String getHexThing(String str) {
-		BigInteger str2;
-		try {
-			str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, getMacAddress()));
-		} catch (UnsupportedEncodingException e) {
-			Logger.logError(e.getMessage(), e);
-			return "";
-		}
-		return String.format("%040x", str2);
+	public UserManager(File file) {
+		_file = file;
+		read();
 	}
 
 	public void write() throws IOException {
-		BufferedWriter wri = new BufferedWriter(new FileWriter(_filename));
-		for (int i = 0; i < _users.size(); i++) {
-			String str = _users.get(i).toString();
-			wri.write(getHexThing(str));
-			if((i+1) != _users.size()) {
-				wri.newLine();
+		FileOutputStream fileOutputStream = new FileOutputStream(_file);
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		try {
+			for (User user : _users) {
+				objectOutputStream.writeObject(user);
 			}
+		} finally {
+			objectOutputStream.close();
+			fileOutputStream.close();
 		}
-		wri.close();
 	}
 
 	public void read() {
+		if (!_file.exists()) {
+			return;
+		}
 		_users.clear();
-		if(_filename.exists()) {
+		try {
+			FileInputStream fileInputStream = new FileInputStream(_file);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			try {
-				BufferedReader read = new BufferedReader(new FileReader(_filename));
+				Object obj;
+				while ((obj = objectInputStream.readObject()) != null) {
+					if (obj instanceof User) {
+						_users.add((User) obj);
+					}
+				}
+			} catch (EOFException ignored) {
+			} finally {
+				objectInputStream.close();
+				fileInputStream.close();
+			}
+		} catch (Exception e) {
+			Logger.logError("Failed to decode logindata", e);
+		}
+		// TODO Remove this in a while once people are unlikely to have old format saved logindata
+		if (_users.isEmpty()) {
+			try {
+				BufferedReader read = new BufferedReader(new FileReader(_file));
 				String str;
 				while((str = read.readLine()) != null) {
-					str = fromHexThing(str);
+					str = CryptoUtils.decrypt(str, OSUtils.getMacAddress());
 					_users.add(new User(str));
 				}
 				read.close();
@@ -147,28 +146,5 @@ public class UserManager {
 			_users.get(_users.indexOf(temp)).setPassword(password);
 			_users.get(_users.indexOf(temp)).setName(name);
 		}
-	}
-
-	private static byte[] getMacAddress() {
-		if(key != null && key.length >= 10) {
-			return key;
-		}
-		try {
-			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-			while(networkInterfaces.hasMoreElements()) {
-				NetworkInterface network = networkInterfaces.nextElement();
-				byte[] mac = network.getHardwareAddress();
-				if(mac != null && mac.length > 0) {
-					key = new byte[mac.length * 10];
-					for(int i = 0; i < key.length; i++) {
-						key[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
-					}
-					return key;
-				}
-			}
-		} catch (SocketException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return null;
 	}
 }

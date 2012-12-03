@@ -1,7 +1,16 @@
 package net.ftb.data;
 
-public class User {
-	private String _username = "", _password = "", _name = "";
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
+import net.ftb.util.CryptoUtils;
+import net.ftb.util.OSUtils;
+
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String _username = "", _name = "", _encryptedPassword = "";
+	private transient String _password = "";
 
 	/**
 	 * @param username - the username of the profile
@@ -9,23 +18,21 @@ public class User {
 	 * @param name - the name of the profile
 	 */
 	public User(String username, String password, String name) {
-		_username = username;
-		_password = password;
-		_name = name;
+		setUsername(username);
+		setPassword(password);
+		setName(name);
 	}
 
 	/**
 	 * @param input - text with username, password, name
 	 */
+	@Deprecated
 	public User(String input) {
 		String[] tokens = input.split(":");
+		setName(tokens[0]);
+		setUsername(tokens[1]);
 		if(tokens.length == 3) {
-			_name = tokens[0];
-			_username = tokens[1];
-			_password = tokens[2];
-		} else if(tokens.length == 2) {
-			_name = tokens[0];
-			_username = tokens[1];
+			setPassword(tokens[2]);
 		}
 	}
 
@@ -55,6 +62,11 @@ public class User {
 	 */
 	public void setPassword(String password) {
 		_password = password;
+		if (_password.isEmpty()) {
+			_encryptedPassword = "";
+		} else {
+			_encryptedPassword = CryptoUtils.encrypt(_password, OSUtils.getMacAddress());
+		}
 	}
 
 	/**
@@ -71,11 +83,12 @@ public class User {
 		_name = name;
 	}
 
-	/**
-	 * @return - a string with username, password, name in
-	 */
-	@Override
-	public String toString() {
-		return _name + ":" + _username + ":" + _password; 
+	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		if (!_encryptedPassword.isEmpty()) {
+			_password = CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
+		} else {
+			_password = "";
+		}
 	}
 }
