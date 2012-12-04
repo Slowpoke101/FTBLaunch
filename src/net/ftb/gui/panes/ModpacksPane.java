@@ -309,6 +309,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		searched = true;
 		updatePacks();
 		seq = "";
+		packs.repaint();
 	}
 
 	private static void updatePacks() {
