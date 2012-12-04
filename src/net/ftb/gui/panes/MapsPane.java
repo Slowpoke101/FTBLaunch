@@ -24,9 +24,10 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.gui.dialogs.FilterDialogMaps;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -49,6 +50,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JEditorPane mapInfo;
 
 	public static boolean loaded = false;
+	public static boolean searched = false;
 
 	private static HashMap<Integer, Map> currentMaps = new HashMap<Integer, Map>();
 
@@ -78,7 +80,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(loaded) {
-					FilterDialog filterDia = new FilterDialog(instance);
+					FilterDialogMaps filterDia = new FilterDialogMaps(instance);
 					filterDia.setVisible(true);
 				}
 			}
@@ -234,10 +236,12 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			}
 		}
 		updateMaps();
+		searched = false;
 	}
 
 	public static void searchMaps(String search) {
-		System.out.println("Searching Maps for : " + search);
+		CharSequence seq = search;
+		System.out.println("Searching Packs for : " + search);
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
@@ -248,13 +252,18 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		int counter = 0;
 		selectedMap = 0;
 		for(Map map : Map.getMapArray()) {
-			if(map.getName().contains(search) || map.getAuthor().equalsIgnoreCase(search)) {
+			String name = map.getName().toLowerCase();
+			String author = map.getAuthor().toLowerCase();
+			if(map.getName().contains(seq) || map.getAuthor().contains(seq) || name.contains(seq) || author.contains(seq)) {
 				addMap(map);
 				currentMaps.put(counter, map);
 				counter++;
 			}
 		}
+		searched = true;
 		updateMaps();
+		seq = "";
+		maps.repaint();
 	}
 
 	private static void updateMaps() {

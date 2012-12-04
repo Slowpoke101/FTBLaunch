@@ -28,7 +28,7 @@ import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
-import net.ftb.gui.dialogs.FilterDialog;
+import net.ftb.gui.dialogs.FilterDialogPacks;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
@@ -51,7 +51,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JEditorPane packInfo;
 
 	//	private JLabel loadingImage;
-	public static String type = "Client", origin = "All";
+	public static String type = "Client", origin = "All", mcVersion = "All";
 	public static boolean loaded = false;
 	public static boolean searched;
 
@@ -89,7 +89,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(loaded) {
-					FilterDialog filterDia = new FilterDialog(instance);
+					FilterDialogPacks filterDia = new FilterDialogPacks(instance);
 					filterDia.setVisible(true);
 				}
 			}
@@ -237,14 +237,26 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		if(origin.equalsIgnoreCase("all")) {
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(type.equalsIgnoreCase("client")) {
-					addPack(pack);
-					currentPacks.put(counter, pack);
-					counter++;
-				} else if (type.equalsIgnoreCase("server")) {
-					if(!pack.getServerUrl().isEmpty()) {
+					if(mcVersion.equalsIgnoreCase("all")) {
 						addPack(pack);
 						currentPacks.put(counter, pack);
 						counter++;
+					} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+						addPack(pack);
+						currentPacks.put(counter, pack);
+						counter++;
+					}
+				} else if (type.equalsIgnoreCase("server")) {
+					if(!pack.getServerUrl().isEmpty()) {
+						if(mcVersion.equalsIgnoreCase("all")) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
 					}
 				}
 			}
@@ -252,14 +264,26 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(type.equalsIgnoreCase("client")) {
-						addPack(pack);
-						currentPacks.put(counter, pack);
-						counter++;
-					} else if (type.equalsIgnoreCase("server")) {
-						if(!pack.getServerUrl().isEmpty()) {
+						if(mcVersion.equalsIgnoreCase("all")) {
 							addPack(pack);
 							currentPacks.put(counter, pack);
 							counter++;
+						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
+					} else if (type.equalsIgnoreCase("server")) {
+						if(!pack.getServerUrl().isEmpty()) {
+							if(mcVersion.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						}
 					}
 				}
@@ -268,14 +292,26 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(type.equalsIgnoreCase("client")) {
-						addPack(pack);
-						currentPacks.put(counter, pack);
-						counter++;
-					} else if (type.equalsIgnoreCase("server")) {
-						if(!pack.getServerUrl().isEmpty()) {
+						if(mcVersion.equalsIgnoreCase("all")) {
 							addPack(pack);
 							currentPacks.put(counter, pack);
 							counter++;
+						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
+					} else if (type.equalsIgnoreCase("server")) {
+						if(!pack.getServerUrl().isEmpty()) {
+							if(mcVersion.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						}
 					}
 				}
