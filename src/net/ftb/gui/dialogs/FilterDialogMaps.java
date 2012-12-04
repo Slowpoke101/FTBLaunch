@@ -3,6 +3,7 @@ package net.ftb.gui.dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -10,6 +11,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import sun.security.krb5.internal.crypto.dk.ArcFourCrypto;
+
+import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
@@ -65,13 +69,20 @@ public class FilterDialogMaps extends JDialog {
 
 		packLbl.setBounds(10, 70, 100, 30);
 		panel.add(packLbl);
-
-		String[] packs = new String[ModPack.getPackArray().size() + 1];
-		packs[0] = "All";
-		for(int i = 1; i < packs.length; i++) {
-			packs[i] = ModPack.getPack(i - 1).getDir();
+		
+		ArrayList<String> packs = new ArrayList<String>();
+		packs.add("All");
+		for(int i = 0; i < Map.getMapArray().size(); i++) {
+			String[] compat = Map.getMap(i).getCompatible();
+			for(int j = 0; j < compat.length; j++) {
+				String compatable = compat[j];
+				if (!packs.contains(compatable)) {
+					packs.add(compatable);
+				}
+			}
 		}
-		compatibleBox = new JComboBox(packs);
+		
+		compatibleBox = new JComboBox(packs.toArray());
 		compatibleBox.setBounds(120, 70, 100, 30);
 		compatibleBox.setSelectedItem(pane.compatible);
 		panel.add(compatibleBox);
