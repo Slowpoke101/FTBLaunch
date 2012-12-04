@@ -229,19 +229,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		yPosField.addFocusListener(settingsChangeListener);
 		add(yPosField);
 		yPosField.setColumns(10);
-		
+
 		downloadServers = new JComboBox(getDownloadServerNames());
 		downloadServers.setBounds(652, 115, 183, 20);
 		downloadServers.addFocusListener(settingsChangeListener);
 		add(downloadServers);
-		
+
 		JLabel downloadLocation = new JLabel("Download Location");
 		downloadLocation.setBounds(550, 118, 100, 14);
 		add(downloadLocation);
 	}
-	
+
 	public String[] getDownloadServerNames() {
-		
+
 		String[] servers = {  };
 		return servers;
 	}

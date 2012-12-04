@@ -17,7 +17,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.ftb.data.events.ModPackListener;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;

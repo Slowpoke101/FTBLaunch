@@ -131,11 +131,11 @@ public class Settings extends Properties {
 	public String getMinecraftYPos() {
 		return getProperty("minecraftYPos", "300");
 	}
-	
+
 	public void setDownlaodServer(String server) {
 		setProperty("downloadServer", server);
 	}
-	
+
 	public String getDownloadServer() {
 		return getProperty("downloadServer", "0");
 	}

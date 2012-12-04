@@ -17,7 +17,6 @@ public class SearchDialog extends JDialog {
 	public SearchDialog(final ModpacksPane instance) {
 		setUpGui();
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override public void removeUpdate(DocumentEvent arg0) {
 				instance.searchPacks(searchBar.getText());
 			}
@@ -26,15 +25,13 @@ public class SearchDialog extends JDialog {
 				instance.searchPacks(searchBar.getText());
 			}
 
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {}
+			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
 	}
 
 	public SearchDialog(final MapsPane instance) {
 		setUpGui();
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override public void removeUpdate(DocumentEvent arg0) {
 				instance.searchMaps(searchBar.getText());
 			}
@@ -43,15 +40,13 @@ public class SearchDialog extends JDialog {
 				instance.searchMaps(searchBar.getText());
 			}
 
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {}
+			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
 	}
 
 	public SearchDialog(final TexturepackPane instance) {
 		setUpGui();
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override public void removeUpdate(DocumentEvent arg0) {
 				instance.searchTexturePacks(searchBar.getText());
 			}
@@ -60,8 +55,7 @@ public class SearchDialog extends JDialog {
 				instance.searchTexturePacks(searchBar.getText());
 			}
 
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {}
+			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
 	}
 

@@ -16,8 +16,8 @@ public enum LogType {
 		return name().substring(0, 1) + name().substring(1).toLowerCase();
 	}
 
-	/*
-	Workaround for limitations on usage of static variables in enum field initialisers.
+	/**
+	 * Workaround for limitations on usage of static variables in enum field initialisers.
 	 */
 	private int currentPrecedence() {
 		if (currentPrecedence == null) {

@@ -29,15 +29,15 @@ public class FilterDialog extends JDialog {
 		setupGui();
 		typeBox.setSelectedItem(instance.type);
 		originBox.setSelectedItem(instance.origin);
-		
+
 		searchButton.setBounds(10, 142, 210, 25);
-		
+
 		panel.add(searchButton);
 		lblMinecraftVersion.setBounds(10, 70, 100, 25);
-		
+
 		panel.add(lblMinecraftVersion);
 		comboBox.setBounds(120, 70, 100, 25);
-		
+
 		panel.add(comboBox);
 		applyButton.addActionListener(new ActionListener() {
 			@Override

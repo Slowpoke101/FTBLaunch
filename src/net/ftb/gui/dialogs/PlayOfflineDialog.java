@@ -20,10 +20,7 @@ public class PlayOfflineDialog extends JDialog {
 	private JButton yes, no;
 
 	public PlayOfflineDialog(String cause, final String username) {
-
 		text = new JTextArea("Something went wrong..\nWould you like to Play Offline?");
-
-
 		yes = new JButton("Yes");
 		yes.addActionListener(new ActionListener() {
 			@Override

@@ -10,8 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import net.ftb.data.ModPack;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
 import net.ftb.util.AppUtils;
+import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.DOMException;
@@ -33,7 +33,7 @@ public class ModpackLoader extends Thread {
 		} catch (IOException e) {
 			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
-		
+
 		try {
 			Logger.logInfo("loading modpack information...");
 			Document doc;
@@ -53,7 +53,7 @@ public class ModpackLoader extends Thread {
 					return;
 				}
 			}
-			
+
 			try {
 				doc = AppUtils.getXML(modPackStream);
 			} catch (SAXException e) {

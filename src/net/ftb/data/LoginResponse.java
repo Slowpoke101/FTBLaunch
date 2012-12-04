@@ -45,5 +45,4 @@ public class LoginResponse {
 	public String getSessionID() {
 		return sessionID;
 	}
-
 }
