@@ -55,6 +55,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
 	public static boolean loaded = false;
+	public static boolean searched;
 	
 	private static JScrollPane infoScroll;
 
@@ -286,11 +287,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				}
 			}
 		}
-
+		searched = false;
 		updatePacks();
 	}
 
 	public static void searchPacks(String search) {
+		CharSequence seq = search;
 		System.out.println("Searching Packs for : " + search);
 		packPanels.clear();
 		packs.removeAll();
@@ -302,13 +304,17 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		int counter = 0;
 		selectedPack = 0;
 		for(ModPack pack : ModPack.getPackArray()) {
-			if(pack.getName().equalsIgnoreCase(search) || pack.getAuthor().equalsIgnoreCase(search)) {
+			String name = pack.getName().toLowerCase();
+			String author = pack.getAuthor().toLowerCase();
+			if(pack.getName().contains(seq) || pack.getAuthor().contains(seq) || name.contains(seq) || author.contains(seq)) {
 				addPack(pack);
 				currentPacks.put(counter, pack);
 				counter++;
 			}
 		}
+		searched = true;
 		updatePacks();
+		seq = "";
 	}
 
 	private static void updatePacks() {
@@ -346,7 +352,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public static int getIndex() {
 		if(currentPacks.size() > 0) {
 			if(currentPacks.size() != ModPack.getPackArray().size()) {
-				if(!origin.equalsIgnoreCase("all") || type.equalsIgnoreCase("server")) {
+				if(!origin.equalsIgnoreCase("all") || type.equalsIgnoreCase("server") || searched) {
 					return currentPacks.get(selectedPack).getIndex();
 				}
 			}

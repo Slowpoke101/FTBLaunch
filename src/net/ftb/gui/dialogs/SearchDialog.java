@@ -69,6 +69,7 @@ public class SearchDialog extends JDialog {
 		this.setTitle("Searcher!");
 		this.setBounds(300, 300, 220, 90);
 		this.setResizable(false);
+		this.setAlwaysOnTop(true);
 		this.getContentPane().setLayout(null);
 		searchBar.setBounds(10, 10, 200, 30);
 		this.getContentPane().add(searchBar);
