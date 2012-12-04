@@ -26,11 +26,11 @@ public class LogEntry {
 		this.message = message;
 		if (level == LogLevel.UNKNOWN) {
 			message = message.toLowerCase();
-			if (message.contains("[severe]") || message.contains("[stderr]")) {
+			if (message.contains("[severe]") || message.contains("[stderr]") || message.contains("[error]")) {
 				level = LogLevel.ERROR;
 			} else if (message.contains("[info]")) {
 				level = LogLevel.INFO;
-			} else if (message.contains("[warning]")) {
+			} else if (message.contains("[warning]") || message.contains("[warn]")) {
 				level = LogLevel.WARN;
 			} else if (message.contains("error") || message.contains("severe")) {
 				level = LogLevel.ERROR;
@@ -80,6 +80,9 @@ public class LogEntry {
 		if (source != LogSource.EXTERNAL) {
 			if (type.includes(LogType.EXTENDED)) {
 				entryMessage.append("[").append(dateString).append("] ");
+			}
+			if (type.includes(LogType.EXTENDED)) {
+				entryMessage.append("[").append(level).append("] ");
 			}
 			if (type.includes(LogType.DEBUG)) {
 				entryMessage.append("in ").append(source).append(" ");
