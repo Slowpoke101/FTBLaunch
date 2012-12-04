@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import net.ftb.log.Logger;
@@ -16,13 +15,18 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
-public class LocaleUpdater {
-	private static final String root = OSUtils.getDynamicStorageLocation();
-	private static File local = new File(root + File.separator + "locale" + File.separator + "version");
-	private static File archive = new File(root + File.separator + "locales.zip");
-	private static int remoteVer;
+public class LocaleUpdater extends Thread {
+	private final String root = OSUtils.getDynamicStorageLocation();
+	private File local = new File(root + File.separator + "locale" + File.separator + "version");
+	private File archive = new File(root + File.separator + "locales.zip");
+	private int remoteVer;
 
-	private static void updateFiles() throws NoSuchAlgorithmException {
+	public LocaleUpdater() {
+		setName("Locale Updater");
+		setPriority(MIN_PRIORITY);
+	}
+
+	private void updateFiles() {
 		Logger.logInfo("[i18n] Downloading locale files ...");
 		try {
 			DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
@@ -35,14 +39,12 @@ public class LocaleUpdater {
 			wr.write(String.valueOf(remoteVer));
 			wr.close();
 			cleanUpFiles();
-		} catch (MalformedURLException e) {
-			Logger.logError(e.getMessage(), e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Logger.logWarn("[i18n] Update IOException", e);
 		}
 	}
 
-	public static void checkForUpdates() throws NoSuchAlgorithmException {
+	public void run() {
 		Logger.logInfo("[i18n] Checking for updates ...");
 		File dir = new File(root);
 		File tmp = new File(dir, "locale");
@@ -88,7 +90,7 @@ public class LocaleUpdater {
 		}
 	}
 
-	private static void cleanUpFiles() {
+	private void cleanUpFiles() {
 		if (archive.exists()) {
 			archive.delete();
 		}
