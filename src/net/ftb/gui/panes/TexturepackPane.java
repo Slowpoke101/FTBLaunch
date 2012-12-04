@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,7 +27,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
 	private static final long serialVersionUID = 1L;
@@ -109,11 +108,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					try {
-						LaunchFrame.getInstance().hLink(event.getURL().toURI());
-					} catch (URISyntaxException e) {
-						Logger.logError(e.getMessage(), e);
-					}
+					OSUtils.browse(event.getURL().toString());
 				}
 			}
 		});

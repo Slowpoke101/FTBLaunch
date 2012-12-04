@@ -1,6 +1,8 @@
 package net.ftb.util;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 
@@ -61,6 +63,47 @@ public class OSUtils {
 			return OS.MACOSX;
 		} else {
 			return OS.OTHER;
+		}
+	}
+
+	/**
+	 * Opens the given URL in the default browser
+	 * @param url The URL
+	 */
+	public static void browse(String url) {
+		try {
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().browse(new URI(url));
+			} else if (getCurrentOS() == OS.UNIX) {
+				// Work-around to support non-GNOME Linux desktop environments with xdg-open installed
+				if (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists()) {
+					new ProcessBuilder("xdg-open", url).start();
+				}
+			}
+		} catch (Exception e) {
+			Logger.logError("Could not open link", e);
+		}
+	}
+
+	/**
+	 * Opens the given path with the default application
+	 * @param path The path
+	 */
+	public static void open(File path) {
+		if (!path.exists()) {
+			return;
+		}
+		try {
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(path);
+			} else if (getCurrentOS() == OS.UNIX) {
+				// Work-around to support non-GNOME Linux desktop environments with xdg-open installed
+				if (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists()) {
+					new ProcessBuilder("xdg-open", path.toString()).start();
+				}
+			}
+		} catch (Exception e) {
+			Logger.logError("Could not open file", e);
 		}
 	}
 
