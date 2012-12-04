@@ -24,6 +24,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.sun.xml.internal.bind.unmarshaller.InfosetScanner;
+
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
@@ -53,6 +55,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	//	private JLabel loadingImage;
 	public static String type = "Client", origin = "All";
 	public static boolean loaded = false;
+	
+	private static JScrollPane infoScroll;
 
 	public ModpacksPane () {
 		super();
@@ -152,7 +156,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packInfo.setBackground(UIManager.getColor("control").darker().darker());
 		add(packInfo);
 
-		JScrollPane infoScroll = new JScrollPane();
+		infoScroll = new JScrollPane();
 		infoScroll.setBounds(420, 210, 410, 90);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

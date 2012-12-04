@@ -27,6 +27,7 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import javax.swing.JComboBox;
 
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +37,7 @@ public class EditModPackDialog extends JDialog {
 	private JPanel modsFolderPane = new JPanel();
 	private JPanel coreModsFolderPane = new JPanel();
 	private JPanel jarModsFolderPane = new JPanel();
+	private JPanel oldVersionsFolderPane = new JPanel();
 
 	private JLabel enabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL") + "</h1></html></body>");
 	private JLabel disabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL") + "</h1></html></body>");
@@ -60,11 +62,14 @@ public class EditModPackDialog extends JDialog {
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
+	private final JLabel lblTheOldVersions = new JLabel("The old versions currently avaliable are:");
+	private final JComboBox oldVersions;
 
 	public enum Tab {
 		MODS,
 		JARMODS,
-		COREMODS
+		COREMODS,
+		OLD_VERSIONS
 	}
 
 	public EditModPackDialog(LaunchFrame instance) {
@@ -91,6 +96,27 @@ public class EditModPackDialog extends JDialog {
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", modsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", jarModsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", coreModsFolderPane);
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Previous Versions</body></html>", oldVersionsFolderPane);
+		oldVersionsFolderPane.setLayout(null);
+		lblTheOldVersions.setBounds(89, 42, 236, 39);
+		
+		oldVersionsFolderPane.add(lblTheOldVersions);
+		
+		oldVersions = new JComboBox();
+		oldVersions.setBounds(335, 40, 199, 42);
+		
+		oldVersionsFolderPane.add(oldVersions);
+		
+		JButton backdate = new JButton("Backdate");
+		backdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				backDateClient(ModPack.getSelectedPack());
+			}
+		});
+		backdate.setBounds(89, 123, 445, 42);
+		oldVersionsFolderPane.add(backdate);
+		
+		
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
@@ -249,5 +275,9 @@ public class EditModPackDialog extends JDialog {
 	public void updateLists() {
 		enabled.setListData(getEnabled());
 		disabled.setListData(getDisabled());
+	}
+	
+	public void backDateClient(ModPack pack) {
+		
 	}
 }

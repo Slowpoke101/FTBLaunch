@@ -39,11 +39,14 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
+	@SuppressWarnings("rawtypes")
 	private JComboBox locale;
 	private JLabel minecraftSize;
 	private JTextField minecraftX;
 	private JLabel lblX;
 	private JTextField minecraftY;
+	@SuppressWarnings("rawtypes")
+	private JComboBox downloadServers;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -56,6 +59,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JTextField yPosField;
 
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -225,6 +229,21 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		yPosField.addFocusListener(settingsChangeListener);
 		add(yPosField);
 		yPosField.setColumns(10);
+		
+		downloadServers = new JComboBox(getDownloadServerNames());
+		downloadServers.setBounds(652, 115, 183, 20);
+		downloadServers.addFocusListener(settingsChangeListener);
+		add(downloadServers);
+		
+		JLabel downloadLocation = new JLabel("Download Location");
+		downloadLocation.setBounds(550, 118, 100, 14);
+		add(downloadLocation);
+	}
+	
+	public String[] getDownloadServerNames() {
+		
+		String[] servers = {  };
+		return servers;
 	}
 
 	@Override public void onVisible() { }
@@ -269,6 +288,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftY(minecraftY.getText());
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
+		settings.setDownlaodServer(Integer.toString(downloadServers.getSelectedIndex()));
 	}
 
 	public void updateLocale() {
