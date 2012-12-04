@@ -8,6 +8,9 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -26,14 +29,18 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.ftb.data.Settings;
 import net.ftb.log.ILogListener;
 import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
 import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
+import net.ftb.log.LogWriter;
 import net.ftb.log.Logger;
 
 public class LauncherConsole extends JFrame implements ILogListener {
+	private final static String launcherLogFile = "FTBLauncherLog.txt";
+	private final static String minecraftLogFile = "MinecraftLog.txt";
 	private static final long serialVersionUID = 1L;
 	private final JEditorPane displayArea;
 	private final HTMLEditorKit kit;
@@ -173,6 +180,12 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
 		System.setOut(new OutputOverride(System.out, LogLevel.INFO));
 		System.setErr(new OutputOverride(System.err, LogLevel.ERROR));
+		try {
+			Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
+			Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
+		} catch (IOException e1) {
+			Logger.logError(e1.getMessage(), e1);
+		}
 	}
 
 	synchronized private void refreshLogs() {
