@@ -328,6 +328,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				packInfo.setText(ModPack.getPack(getIndex()).getInfo() + mods);
+				packInfo.setCaretPosition(0);
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
