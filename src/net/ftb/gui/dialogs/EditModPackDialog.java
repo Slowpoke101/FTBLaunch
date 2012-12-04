@@ -1,15 +1,14 @@
 package net.ftb.gui.dialogs;
 
-import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,8 +25,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
-import javax.swing.JComboBox;
+import net.ftb.util.OSUtils;
 
 public class EditModPackDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -99,14 +97,14 @@ public class EditModPackDialog extends JDialog {
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Previous Versions</body></html>", oldVersionsFolderPane);
 		oldVersionsFolderPane.setLayout(null);
 		lblTheOldVersions.setBounds(89, 42, 236, 39);
-		
+
 		oldVersionsFolderPane.add(lblTheOldVersions);
-		
+
 		oldVersions = new JComboBox();
 		oldVersions.setBounds(335, 40, 199, 42);
-		
+
 		oldVersionsFolderPane.add(oldVersions);
-		
+
 		JButton backdate = new JButton("Backdate");
 		backdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -115,8 +113,8 @@ public class EditModPackDialog extends JDialog {
 		});
 		backdate.setBounds(89, 123, 445, 42);
 		oldVersionsFolderPane.add(backdate);
-		
-		
+
+
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
@@ -159,14 +157,7 @@ public class EditModPackDialog extends JDialog {
 		openFolderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(Desktop.isDesktopSupported()) {
-					Desktop desktop = Desktop.getDesktop();
-					try {
-						desktop.open(folder);
-					} catch (IOException e1) {
-						Logger.logError(e1.getMessage(), e1);
-					}
-				}
+				OSUtils.open(folder);
 			}
 		});
 		modsFolderPane.add(openFolderButton);
@@ -276,8 +267,8 @@ public class EditModPackDialog extends JDialog {
 		enabled.setListData(getEnabled());
 		disabled.setListData(getDisabled());
 	}
-	
+
 	public void backDateClient(ModPack pack) {
-		
+
 	}
 }
