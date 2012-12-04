@@ -2,7 +2,6 @@ package net.ftb.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -18,8 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CancellationException;
@@ -254,13 +251,9 @@ public class LaunchFrame extends JFrame {
 		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo.setBounds(20, 20, 42, 42);
 		footerLogo.addMouseListener(new MouseListener() {
-			@Override 
+			@Override
 			public void mouseClicked(MouseEvent event) {
-				try {
-					hLink(new URI("http://www.feed-the-beast.com"));
-				} catch (URISyntaxException e) {
-					Logger.logError(e.getMessage(), e);
-				}
+				OSUtils.browse("http://www.feed-the-beast.com");
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -271,13 +264,9 @@ public class LaunchFrame extends JFrame {
 		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper.setBounds(72, 20, 132, 42);
 		footerCreeper.addMouseListener(new MouseListener() {
-			@Override 
+			@Override
 			public void mouseClicked(MouseEvent event) {
-				try {
-					hLink(new URI("http://www.creeperhost.net/aff.php?aff=293"));
-				} catch (URISyntaxException e) {
-					Logger.logError(e.getMessage(), e);
-				}
+				OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
 			}
 			@Override public void mouseReleased(MouseEvent arg0) { }
 			@Override public void mousePressed(MouseEvent arg0) { }
@@ -364,9 +353,7 @@ public class LaunchFrame extends JFrame {
 				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
 					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 						try {
-							hLink(new URI(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl())));
-						} catch (URISyntaxException e) { 
-							Logger.logError(e.getMessage(), e);
+							OSUtils.browse(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl()));
 						} catch (NoSuchAlgorithmException e) {
 							Logger.logError(e.getMessage(), e);
 						}
@@ -404,9 +391,7 @@ public class LaunchFrame extends JFrame {
 			public void actionPerformed(ActionEvent event) {
 				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
 					try {
-						hLink(new URI(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl())));
-					} catch (URISyntaxException e) { 
-						Logger.logError(e.getMessage(), e);
+						OSUtils.browse(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 					} catch (NoSuchAlgorithmException e) {
 						Logger.logError(e.getMessage(), e);
 					}
@@ -873,35 +858,6 @@ public class LaunchFrame extends JFrame {
 			ModManager.cleanUp();
 		} catch (IOException e) {
 			Logger.logError(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * opens a URI in the default browser
-	 * @param uri - the URI to open
-	 */
-	public void hLink(URI uri) {
-		if(Desktop.isDesktopSupported()) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				desktop.browse(uri);
-			} catch(Exception exc) {
-				Logger.logError("Exception occurred durring opening Link",exc);
-			}
-		} else if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
-			File xdg = new File("/usr/bin/xdg-open");
-			if (xdg.exists()) {
-				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open", uri.toString());
-				try {
-					pb.start();
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
-			} else {
-				Logger.logWarn("Desktop not supported.");
-			}
-		} else {
-			Logger.logWarn("Desktop not supported.");
 		}
 	}
 

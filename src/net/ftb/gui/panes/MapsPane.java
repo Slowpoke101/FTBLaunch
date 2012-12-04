@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,6 +29,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static final long serialVersionUID = 1L;
@@ -115,11 +115,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					try {
-						LaunchFrame.getInstance().hLink(event.getURL().toURI());
-					} catch (URISyntaxException e) {
-						Logger.logError(e.getMessage(), e);
-					}
+					OSUtils.browse(event.getURL().toString());
 				}
 			}
 		});

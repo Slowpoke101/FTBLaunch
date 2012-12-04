@@ -3,8 +3,6 @@ package net.ftb.gui.dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.log.Logger;
 import net.ftb.updater.UpdateChecker;
+import net.ftb.util.OSUtils;
 
 public class LauncherUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -51,11 +49,7 @@ public class LauncherUpdateDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO: Call new frame containing html page?
-				try {
-					LaunchFrame.getInstance().hLink(new URI("http://launcher.feed-the-beast.com/changelog.html"));
-				} catch (URISyntaxException e) {
-					Logger.logError(e.getMessage(), e);
-				}
+				OSUtils.browse("http://launcher.feed-the-beast.com/changelog.html");
 			}
 		});
 		panel.add(changelog);
