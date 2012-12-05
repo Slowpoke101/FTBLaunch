@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -23,14 +22,14 @@ public class I18N {
 		daDK,
 		deDE,
 		enUS,
+		esES,
+		itIT,
 		nlNL,
+		maHU,
 		ptBR,
 		ptPT,
 		ruRU,
-		svSE,
-		esES,
-		maHU,
-		itIT
+		svSE
 	}
 
 	/**
@@ -60,9 +59,9 @@ public class I18N {
 	public static void setupLocale() {
 		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
 		try {
-			LocaleUpdater.checkForUpdates();
-		} catch (NoSuchAlgorithmException e1) {
-			Logger.logError(e1.getMessage(), e1);
+			new LocaleUpdater().start();
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 		}
 		// Add files from i18n directory
 		int i = 1;
