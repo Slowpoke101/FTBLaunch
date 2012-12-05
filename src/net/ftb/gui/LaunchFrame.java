@@ -195,7 +195,9 @@ public class LaunchFrame extends JFrame {
 				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
 				con = new LauncherConsole();
-				con.setVisible(true);
+				if(Boolean.parseBoolean(Settings.getSettings().getConsoleActive())) {
+					con.setVisible(true);
+				}
 
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;

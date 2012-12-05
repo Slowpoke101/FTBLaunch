@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
@@ -197,6 +198,7 @@ public class MinecraftLauncher {
 			System.out.println("MCDIR: " + mcDir);
 
 			System.out.println("Launching with applet wrapper...");
+			
 			try {
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();

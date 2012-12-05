@@ -139,4 +139,12 @@ public class Settings extends Properties {
 	public String getDownloadServer() {
 		return getProperty("downloadServer", "0");
 	}
+	
+	public void setConsoleActive(String console) {
+		setProperty("consoleActive", console);
+	}
+	
+	public String getConsoleActive() {
+		return getProperty("consoleActive", "true");
+	}
 }

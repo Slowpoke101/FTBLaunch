@@ -31,6 +31,7 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import javax.swing.JCheckBox;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +48,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JTextField minecraftY;
 	@SuppressWarnings("rawtypes")
 	private JComboBox downloadServers;
+	private JCheckBox chckbxShowConsole;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -238,6 +240,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		JLabel downloadLocation = new JLabel("Download Location");
 		downloadLocation.setBounds(550, 118, 100, 14);
 		add(downloadLocation);
+		
+		chckbxShowConsole = new JCheckBox("Show Console?");
+		chckbxShowConsole.addFocusListener(settingsChangeListener);
+		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
+		chckbxShowConsole.setBounds(550, 148, 183, 23);
+		add(chckbxShowConsole);
 	}
 
 	public String[] getDownloadServerNames() {
@@ -289,6 +297,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
 		settings.setDownlaodServer(Integer.toString(downloadServers.getSelectedIndex()));
+		settings.setConsoleActive(chckbxShowConsole.isSelected() ? "true" : "false");
 	}
 
 	public void updateLocale() {
