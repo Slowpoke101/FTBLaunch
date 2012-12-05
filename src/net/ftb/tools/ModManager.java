@@ -178,6 +178,7 @@ public class ModManager extends JDialog {
 		}
 		BufferedReader in = new BufferedReader(new FileReader(version));
 		String line;
+		// Check if there is a backdated version selected, if so grab version and compare.
 		if((line = in.readLine()) == null || Integer.parseInt(pack.getVersion()) > Integer.parseInt(line)) {
 			System.out.println("File found, out of date.");
 			ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
