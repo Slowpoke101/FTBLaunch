@@ -139,4 +139,12 @@ public class Settings extends Properties {
 	public String getDownloadServer() {
 		return getProperty("downloadServer", "0");
 	}
+
+	public void setAutoMaximise(boolean checked) {
+		setProperty("autoMaximise", Boolean.toString(checked));
+	}
+
+	public boolean getAutoMaximise() {
+		return Boolean.parseBoolean(getProperty("autoMaximise", Boolean.toString(false)));
+	}
 }

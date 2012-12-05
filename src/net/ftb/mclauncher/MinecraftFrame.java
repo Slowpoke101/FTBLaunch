@@ -24,6 +24,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
 
+		
 		size = new Dimension(x, y);
 
 		this.setSize(size);
@@ -33,7 +34,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		this.addWindowListener(this);
 	}
 
-	public void start(Applet mcApplet, String user, String session) {
+	public void start(Applet mcApplet, String user, String session, boolean autoMax) {
 		try {
 			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
 		}
@@ -54,6 +55,8 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		appletWrap.init();
 		appletWrap.start();
 		setVisible(true);
+		
+		if(autoMax) this.setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	@Override public void windowActivated(WindowEvent e) { }

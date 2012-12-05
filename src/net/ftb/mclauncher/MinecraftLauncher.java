@@ -83,6 +83,7 @@ public class MinecraftLauncher {
 		arguments.add(Settings.getSettings().getMinecraftY());
 		arguments.add(Settings.getSettings().getMinecraftXPos());
 		arguments.add(Settings.getSettings().getMinecraftYPos());
+		arguments.add(Boolean.toString(Settings.getSettings().getAutoMaximise()));
 
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
@@ -123,6 +124,7 @@ public class MinecraftLauncher {
 		String minecraftY = args[7];
 		String minecraftXPos = args[8];
 		String minecraftYPos = args[9];
+		String autoMaximise = args[10];
 
 		try {
 			System.out.println("Loading jars...");
@@ -202,7 +204,7 @@ public class MinecraftLauncher {
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
 				MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, Integer.parseInt(minecraftX), Integer.parseInt(minecraftY), 
 						Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos));
-				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
+				mcWindow.start(mcappl, mcArgs[0], mcArgs[1], Boolean.parseBoolean(autoMaximise));
 			} catch (InstantiationException e) {
 				Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);

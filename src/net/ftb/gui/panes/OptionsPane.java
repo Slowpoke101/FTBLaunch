@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,6 +58,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	};
 	private JTextField xPosField;
 	private JTextField yPosField;
+	private JCheckBox autoMaxCheck;
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -238,6 +240,16 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		JLabel downloadLocation = new JLabel("Download Location");
 		downloadLocation.setBounds(550, 118, 100, 14);
 		add(downloadLocation);
+		
+		autoMaxCheck = new JCheckBox();
+		autoMaxCheck.setBounds(652, 145, 183, 20);
+		autoMaxCheck.addFocusListener(settingsChangeListener);
+		autoMaxCheck.setSelected(Settings.getSettings().getAutoMaximise());
+		add(autoMaxCheck);
+
+		JLabel autoMaximise = new JLabel("Auto Maximise");
+		autoMaximise.setBounds(550, 148, 100, 14);
+		add(autoMaximise);
 	}
 
 	public String[] getDownloadServerNames() {
@@ -289,6 +301,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
 		settings.setDownlaodServer(Integer.toString(downloadServers.getSelectedIndex()));
+		settings.setAutoMaximise(autoMaxCheck.isSelected());
 	}
 
 	public void updateLocale() {
