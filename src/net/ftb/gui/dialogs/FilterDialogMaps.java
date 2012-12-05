@@ -11,14 +11,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import sun.security.krb5.internal.crypto.dk.ArcFourCrypto;
-
 import net.ftb.data.Map;
-import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
-import net.ftb.gui.panes.ModpacksPane;
-import net.ftb.gui.panes.TexturepackPane;
 
 public class FilterDialogMaps extends JDialog {
 	private JPanel panel = new JPanel();
@@ -69,7 +64,7 @@ public class FilterDialogMaps extends JDialog {
 
 		packLbl.setBounds(10, 70, 100, 30);
 		panel.add(packLbl);
-		
+
 		ArrayList<String> packs = new ArrayList<String>();
 		packs.add("All");
 		for(int i = 0; i < Map.getMapArray().size(); i++) {
@@ -81,7 +76,7 @@ public class FilterDialogMaps extends JDialog {
 				}
 			}
 		}
-		
+
 		compatibleBox = new JComboBox(packs.toArray());
 		compatibleBox.setBounds(120, 70, 100, 30);
 		compatibleBox.setSelectedItem(pane.compatible);

@@ -2,14 +2,26 @@ package net.ftb.util;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
+import java.util.Enumeration;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public class OSUtils {
+	private static byte[] cachedMacAddress;
+	
+	public static enum OS {
+		WINDOWS,
+		UNIX,
+		MACOSX,
+		OTHER,
+	}
+
 	/**
 	 * Gets the default installation path for the current OS.
 	 * @return a string containing the default install path for the current OS.
@@ -27,6 +39,10 @@ public class OSUtils {
 		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
+	/**
+	 * Used to get the dynamic storage location based off OS
+	 * @return string containing dynamic storage location
+	 */
 	public static String getDynamicStorageLocation() {
 		switch(getCurrentOS()) {
 		case WINDOWS:
@@ -40,6 +56,10 @@ public class OSUtils {
 		}
 	}
 
+	/**
+	 * Used to get the java delimiter for current OS
+	 * @return string containing java delimiter for current OS
+	 */
 	public static String getJavaDelimiter() {
 		switch(getCurrentOS()) {
 		case WINDOWS:
@@ -53,6 +73,10 @@ public class OSUtils {
 		}
 	}
 
+	/**
+	 * Used to get the current operating system
+	 * @return OS enum representing current operating system
+	 */
 	public static OS getCurrentOS() {
 		String osString = System.getProperty("os.name").toLowerCase();
 		if (osString.contains("win")) {
@@ -64,6 +88,33 @@ public class OSUtils {
 		} else {
 			return OS.OTHER;
 		}
+	}
+
+	/**
+	 * Grabs the mac address of computer and makes it 10 times longer
+	 * @return a byte array containing mac address
+	 */
+	public static byte[] getMacAddress() {
+		if(cachedMacAddress != null && cachedMacAddress.length >= 10) {
+			return cachedMacAddress;
+		}
+		try {
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while(networkInterfaces.hasMoreElements()) {
+				NetworkInterface network = networkInterfaces.nextElement();
+				byte[] mac = network.getHardwareAddress();
+				if(mac != null && mac.length > 0) {
+					cachedMacAddress = new byte[mac.length * 10];
+					for(int i = 0; i < cachedMacAddress.length; i++) {
+						cachedMacAddress[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
+					}
+					return cachedMacAddress;
+				}
+			}
+		} catch (SocketException e) {
+			Logger.logWarn("Failed to get MAC address, using default logindata key", e);
+		}
+		return new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 	}
 
 	/**
@@ -105,12 +156,5 @@ public class OSUtils {
 		} catch (Exception e) {
 			Logger.logError("Could not open file", e);
 		}
-	}
-
-	public static enum OS {
-		WINDOWS,
-		UNIX,
-		MACOSX,
-		OTHER,
 	}
 }

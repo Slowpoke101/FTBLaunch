@@ -10,10 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
-import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.TexturepackPane;
 
 public class FilterDialogTextures extends JDialog {
@@ -23,7 +20,7 @@ public class FilterDialogTextures extends JDialog {
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
 	private final JComboBox comboBox = new JComboBox();
-		
+
 	public FilterDialogTextures(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		// TODO: Overhaul Filter dialog towards texture packs

@@ -13,9 +13,7 @@ import javax.swing.JPanel;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
-import net.ftb.gui.panes.TexturepackPane;
 
 public class FilterDialogPacks extends JDialog {
 	private JPanel panel = new JPanel();
@@ -24,7 +22,7 @@ public class FilterDialogPacks extends JDialog {
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
 	private JComboBox comboBox;
-	
+
 	private ModpacksPane pane;
 
 	public FilterDialogPacks(ModpacksPane instance) {
@@ -55,20 +53,20 @@ public class FilterDialogPacks extends JDialog {
 		panel.add(originBox);
 		panel.add(applyButton);
 		panel.add(cancelButton);
-		
+
 		ArrayList<String> mcVersions = new ArrayList<String>();
-		
+
 		mcVersions.add("All");
-		
+
 		for(int i = 0; i < ModPack.getPackArray().size(); i++) {
 			String mcVersion = ModPack.getPack(i).getMcVersion();
 			if(!mcVersions.contains(mcVersion)) {
 				mcVersions.add(mcVersion);
 			}
 		}
-		
+
 		comboBox = new JComboBox(mcVersions.toArray());
-		
+
 		typeBox.setSelectedItem(pane.type);
 		originBox.setSelectedItem(pane.origin);
 
