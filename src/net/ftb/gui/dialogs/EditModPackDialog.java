@@ -101,7 +101,7 @@ public class EditModPackDialog extends JDialog {
 		lblTheOldVersions.setBounds(89, 42, 236, 39);
 		oldVersionsFolderPane.add(lblTheOldVersions);
 		ArrayList<String> items = new ArrayList<String>();
-		items.add("Newest");
+		items.add("Newest Version");
 		if(ModPack.getSelectedPack().getOldVersions() != null) {
 			items.addAll(Arrays.asList(ModPack.getSelectedPack().getOldVersions()));
 		}

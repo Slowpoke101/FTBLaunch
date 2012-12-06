@@ -169,6 +169,6 @@ public class Settings extends Properties {
 	}
 	
 	public String getPackVer() {
-		return getProperty(ModPack.getSelectedPack().getDir(), "newest");
+		return getProperty(ModPack.getSelectedPack().getDir(), "Newest Version");
 	}
 }
