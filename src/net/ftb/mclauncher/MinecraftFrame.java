@@ -49,11 +49,6 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	}
 
 	public void start(Applet mcApplet, String user, String session) {
-		try {
-			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
-		} catch (MalformedURLException ignored){
-			ignored.printStackTrace();
-		}
 		
 		Thread animation = new Thread();
 		animation.start();
@@ -68,6 +63,12 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 			e.printStackTrace();
 		}
 		animation.stop();
+		
+		try {
+			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
+		} catch (MalformedURLException ignored){
+			ignored.printStackTrace();
+		}
 
 		this.add(appletWrap);
 		this.remove(label);
