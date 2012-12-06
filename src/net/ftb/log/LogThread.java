@@ -17,10 +17,11 @@ public class LogThread extends Thread {
 		LogEntry entry;
 		try {
 			while((entry = logQueue.take()) != null) {
-				if (listeners.size() == 0) {
+				if (listeners.isEmpty()) {
 					(entry.level == LogLevel.ERROR ? System.err : System.out).println(entry.toString(LogType.EXTENDED));
 				} else {
-					for (ILogListener listener : listeners) {
+					List<ILogListener> tempListeners = listeners;
+					for (ILogListener listener : tempListeners) {
 						listener.onLogEvent(entry);
 					}
 				}

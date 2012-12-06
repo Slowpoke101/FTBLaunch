@@ -35,6 +35,8 @@ import net.ftb.util.OSUtils;
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 	public static boolean update = false, backup = false;
+	private static boolean backdated = false;
+	private static int backdatedVersion = 0;
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
@@ -48,11 +50,16 @@ public class ModManager extends JDialog {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();
-				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
+				String url = pack.getUrl();
+				if(backdated) {
+					// TODO: Assumes file ends in .zip, possibly remove assumptions in future
+					url.replace(".zip", "_v" + backdatedVersion + ".zip");
+				}
+				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + url);
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
 				}
-				downloadModPack(pack.getUrl(), pack.getDir());
+				downloadModPack(url, pack.getDir());
 			}
 			return false;
 		}
@@ -94,12 +101,12 @@ public class ModManager extends JDialog {
 			ModPack pack = ModPack.getSelectedPack();
 			new File(installPath, "ModPacks/" + dir + sep).mkdirs();
 			new File(installPath, "ModPacks/" + dir + sep + modPackName).createNewFile();
-			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getUrl()));
-			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + pack.getUrl(), installPath + "/ModPacks/" + pack.getDir());
+			downloadUrl(installPath + "/ModPacks/" + dir + sep + modPackName, DownloadUtils.getCreeperhostLink(modPackName));
+			FileUtils.extractZipTo(installPath + "/ModPacks/" + pack.getDir() + sep + modPackName, installPath + "/ModPacks/" + pack.getDir());
 			clearModsFolder(pack);
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/coremods"));
 			FileUtils.delete(new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/instMods/"));
-			if(DownloadUtils.isValid(new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl()))) {
+			if(DownloadUtils.isValid(new File(installPath, "ModPacks" + sep + pack.getDir() + sep + modPackName))) {
 				installMods(modPackName, dir);
 			} else {
 				ErrorUtils.tossError("Error downloading modpack!!!");
@@ -190,6 +197,8 @@ public class ModManager extends JDialog {
 				out.flush();
 				out.close();
 				System.out.println("Modpack is out of date.");
+				backdated = true;
+				backdatedVersion = requestedVersion;
 				return false;
 			} else {
 				System.out.println("Modpack is up to date.");
