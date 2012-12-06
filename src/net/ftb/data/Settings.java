@@ -163,4 +163,12 @@ public class Settings extends Properties {
 	public String getCenterWindow() {
 		return getProperty("centerWindow", "false");
 	}
+	
+	public void setPackVer(String string) {
+		setProperty(ModPack.getSelectedPack().getDir(), string);
+	}
+	
+	public String getPackVer() {
+		return getProperty(ModPack.getSelectedPack().getDir(), "newest");
+	}
 }

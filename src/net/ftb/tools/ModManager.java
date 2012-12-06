@@ -167,7 +167,6 @@ public class ModManager extends JDialog {
 		ModPack pack = ModPack.getSelectedPack();
 		File version = new File(Settings.getSettings().getInstallPath() + sep + pack.getDir() + sep + "version");
 		if(!version.exists()) {
-			System.out.println("File not found.");
 			version.getParentFile().mkdirs();
 			version.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
@@ -177,13 +176,29 @@ public class ModManager extends JDialog {
 			return false;
 		}
 		BufferedReader in = new BufferedReader(new FileReader(version));
-		String line;
-		// Check if there is a backdated version selected, if so grab version and compare.
-		if((line = in.readLine()) == null || Integer.parseInt(pack.getVersion()) > Integer.parseInt(line)) {
-			System.out.println("File found, out of date.");
+		String line = in.readLine();
+		in.close();
+		int currentVersion = 0, requestedVersion;
+		if(line != null) {
+			currentVersion = Integer.parseInt(line);
+		}
+		if(!Settings.getSettings().getPackVer().equals("newest")) {
+			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim());
+			if(requestedVersion != currentVersion) {
+				BufferedWriter out = new BufferedWriter(new FileWriter(version));
+				out.write(requestedVersion);
+				out.flush();
+				out.close();
+				System.out.println("Modpack is out of date.");
+				return false;
+			} else {
+				System.out.println("Modpack is up to date.");
+				return true;
+			}
+		} else if(Integer.parseInt(pack.getVersion()) > currentVersion) {
+			System.out.println("Modpack is out of date.");
 			ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
 			p.setVisible(true);
-			in.close();
 			if(!update) {
 				return true;
 			}
@@ -201,8 +216,7 @@ public class ModManager extends JDialog {
 			out.close();
 			return false;
 		} else {
-			System.out.println("File found, up to date.");
-			in.close();
+			System.out.println("Modpack is up to date.");
 			return true;
 		}
 	}
