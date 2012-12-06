@@ -74,6 +74,8 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		this.remove(label);
 		appletWrap.setPreferredSize(size);
 		this.pack();
+		
+		this.setExtendedState(windowState);
 
 		animation.stop();
 		validate();
