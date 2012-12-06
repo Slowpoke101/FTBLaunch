@@ -95,25 +95,19 @@ public class EditModPackDialog extends JDialog {
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", jarModsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", coreModsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Previous Versions</body></html>", oldVersionsFolderPane);
+		
 		oldVersionsFolderPane.setLayout(null);
 		lblTheOldVersions.setBounds(89, 42, 236, 39);
-
 		oldVersionsFolderPane.add(lblTheOldVersions);
-
 		oldVersions = new JComboBox();
 		oldVersions.setBounds(335, 40, 199, 42);
-
-		oldVersionsFolderPane.add(oldVersions);
-
-		JButton backdate = new JButton("Backdate");
-		backdate.addActionListener(new ActionListener() {
+		oldVersions.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				backDateClient(ModPack.getSelectedPack());
+				
 			}
 		});
-		backdate.setBounds(89, 123, 445, 42);
-		oldVersionsFolderPane.add(backdate);
-
+		oldVersionsFolderPane.add(oldVersions);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
@@ -266,9 +260,5 @@ public class EditModPackDialog extends JDialog {
 	public void updateLists() {
 		enabled.setListData(getEnabled());
 		disabled.setListData(getDisabled());
-	}
-
-	public void backDateClient(ModPack pack) {
-
 	}
 }
