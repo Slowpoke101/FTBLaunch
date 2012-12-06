@@ -99,12 +99,17 @@ public class EditModPackDialog extends JDialog {
 		oldVersionsFolderPane.setLayout(null);
 		lblTheOldVersions.setBounds(89, 42, 236, 39);
 		oldVersionsFolderPane.add(lblTheOldVersions);
-		oldVersions = new JComboBox();
+		ArrayList<String> items = new ArrayList<String>();
+		items.add("Newest");
+		for(String version : ModPack.getSelectedPack().getOldVersions()) {
+			items.add(version);
+		}
+		oldVersions = new JComboBox(items.toArray());
 		oldVersions.setBounds(335, 40, 199, 42);
 		oldVersions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Settings.getSettings().setPackVer(String.valueOf(oldVersions.getSelectedItem()));
 			}
 		});
 		oldVersionsFolderPane.add(oldVersions);
