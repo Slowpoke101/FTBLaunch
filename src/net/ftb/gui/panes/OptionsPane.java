@@ -49,6 +49,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	@SuppressWarnings("rawtypes")
 	private JComboBox downloadServers;
 	private JCheckBox chckbxShowConsole;
+	private JToggleButton tglbtnCenterScreen;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -59,6 +60,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	};
 	private JTextField xPosField;
 	private JTextField yPosField;
+	private JCheckBox autoMaxCheck;
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -231,6 +233,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		yPosField.addFocusListener(settingsChangeListener);
 		add(yPosField);
 		yPosField.setColumns(10);
+		
+		tglbtnCenterScreen = new JToggleButton("Center Window on Screen");
+		tglbtnCenterScreen.setBounds(215, 252, 222, 23);
+		tglbtnCenterScreen.setSelected(Boolean.parseBoolean(Settings.getSettings().getCenterWindow()));
+		tglbtnCenterScreen.addFocusListener(settingsChangeListener);
+		add(tglbtnCenterScreen);
 
 		downloadServers = new JComboBox(getDownloadServerNames());
 		downloadServers.setBounds(652, 115, 183, 20);
@@ -246,6 +254,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
 		chckbxShowConsole.setBounds(550, 148, 183, 23);
 		add(chckbxShowConsole);
+		
+		//autoMaxCheck
+		autoMaxCheck = new JCheckBox("Automaticly Maximize?");
+		autoMaxCheck.addFocusListener(settingsChangeListener);
+		autoMaxCheck.setSelected(Boolean.parseBoolean(Settings.getSettings().getAutoMaximize()));
+		autoMaxCheck.setBounds(550, 184, 183, 23);
+		add(autoMaxCheck);
 	}
 
 	public String[] getDownloadServerNames() {
@@ -296,8 +311,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftY(minecraftY.getText());
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
+		settings.setCenterWindow(tglbtnCenterScreen.isSelected() ? "true" : "false");
 		settings.setDownlaodServer(Integer.toString(downloadServers.getSelectedIndex()));
 		settings.setConsoleActive(chckbxShowConsole.isSelected() ? "true" : "false");
+		settings.setAutoMaximize(autoMaxCheck.isSelected() ? "true" : "false");
 	}
 
 	public void updateLocale() {

@@ -1,7 +1,12 @@
 package net.ftb.mclauncher;
 
 import java.applet.Applet;
+import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -18,17 +23,24 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	private Launcher appletWrap = null;
 
 	private Dimension size;
+	private int windowState;
 
-	public MinecraftFrame(String title, String imagePath, int x, int y, int xPos, int yPos) {
+	public MinecraftFrame(String title, String imagePath, int x, int y, int xPos, int yPos, boolean autoMax, boolean centerWindow) {
 		super(title);
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
-
+		
+		windowState = this.getExtendedState() | ((autoMax) ? JFrame.MAXIMIZED_BOTH : 0);
+		
 		size = new Dimension(x, y);
 
 		this.setSize(size);
-		this.setLocation(xPos, yPos);
-
+		
+		if(centerWindow) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			this.setLocation((screenSize.width - x) / 2, (screenSize.height - y) / 2);
+		} else this.setLocation(xPos, yPos);
+		
 		this.setResizable(true);
 		this.addWindowListener(this);
 	}
@@ -49,7 +61,9 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		this.add(appletWrap);
 		appletWrap.setPreferredSize(size);
 		this.pack();
-
+		
+		this.setExtendedState(windowState);
+		
 		validate();
 		appletWrap.init();
 		appletWrap.start();
