@@ -147,4 +147,20 @@ public class Settings extends Properties {
 	public String getConsoleActive() {
 		return getProperty("consoleActive", "true");
 	}
+	
+	public void setAutoMaximize(String autoMax) {
+		setProperty("autoMaximize", autoMax);
+	}
+	
+	public String getAutoMaximize() {
+		return getProperty("autoMaximize", "true");
+	}
+
+	public void setCenterWindow(String string) {
+		setProperty("centerWindow", string);
+	}
+
+	public String getCenterWindow() {
+		return getProperty("centerWindow", "false");
+	}
 }
