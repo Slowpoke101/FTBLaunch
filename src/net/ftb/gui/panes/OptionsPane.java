@@ -256,7 +256,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(chckbxShowConsole);
 		
 		//autoMaxCheck
-		autoMaxCheck = new JCheckBox("Automaticly Maximize?");
+		autoMaxCheck = new JCheckBox("Automatically Maximize?");
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		autoMaxCheck.setSelected(Boolean.parseBoolean(Settings.getSettings().getAutoMaximize()));
 		autoMaxCheck.setBounds(550, 184, 183, 23);
