@@ -25,7 +25,7 @@ import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
 	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, sep = File.separator;
-	private String[] mods;
+	private String[] mods, oldVersions;
 	private Image logo, image;
 	private int index;
 	private boolean uptodate = true;
@@ -63,7 +63,7 @@ public class ModPack {
 		return getPack(ModpacksPane.getIndex());
 	}
 
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, int idx) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, int idx) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -79,6 +79,11 @@ public class ModPack {
 			this.mods = null;
 		} else {
 			this.mods = mods.split("; ");
+		}
+		if(oldVersions.isEmpty()) {
+			this.oldVersions = null;
+		} else {
+			this.oldVersions = oldVersions.split(";");
 		}
 		String installPath = OSUtils.getDynamicStorageLocation();
 		File tempDir = new File(installPath, "ModPacks" + sep + dir);
@@ -205,5 +210,9 @@ public class ModPack {
 
 	public boolean isUpToDate() {
 		return uptodate;
+	}
+	
+	public String[] getOldVersions() {
+		return oldVersions;
 	}
 }
