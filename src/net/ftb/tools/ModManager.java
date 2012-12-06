@@ -189,7 +189,7 @@ public class ModManager extends JDialog {
 		if(line != null) {
 			currentVersion = Integer.parseInt(line);
 		}
-		if(!Settings.getSettings().getPackVer().equals("newest")) {
+		if(!Settings.getSettings().getPackVer().equals("Newest Version")) {
 			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim());
 			if(requestedVersion != currentVersion) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(version));
