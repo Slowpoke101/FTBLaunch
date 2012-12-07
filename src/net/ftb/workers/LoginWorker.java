@@ -12,8 +12,7 @@ import net.ftb.util.AppUtils;
  * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.
  */
 public class LoginWorker extends SwingWorker<String, Void> {
-	private String username;
-	private String password;
+	private String username, password;
 
 	public LoginWorker(String username, String password) {
 		super();
