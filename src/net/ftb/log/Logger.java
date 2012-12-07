@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Vector;
 
 public class Logger {
-	/**
-	 * Listeners that will be notified on new log entries
-	 */
 	private static final List<ILogListener> listeners;
 	private static final Vector<LogEntry> logEntries = new Vector<LogEntry>();
 	private static LogThread logThread;

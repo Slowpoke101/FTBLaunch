@@ -14,7 +14,7 @@ import net.ftb.log.Logger;
 
 public class OSUtils {
 	private static byte[] cachedMacAddress;
-	
+
 	public static enum OS {
 		WINDOWS,
 		UNIX,

@@ -106,6 +106,7 @@ public class EditModPackDialog extends JDialog {
 			items.addAll(Arrays.asList(ModPack.getSelectedPack().getOldVersions()));
 		}
 		oldVersions = new JComboBox(items.toArray());
+		oldVersions.setSelectedItem(Settings.getSettings().getPackVer());
 		oldVersions.setBounds(335, 40, 199, 42);
 		oldVersions.addActionListener(new ActionListener() {
 			@Override

@@ -60,7 +60,7 @@ public class UserManager {
 		} catch (Exception e) {
 			Logger.logError("Failed to decode logindata", e);
 		}
-		
+
 		// TODO: Remove this in a while once people are unlikely to have old format saved logindata
 		if (_users.isEmpty()) {
 			try {

@@ -9,8 +9,7 @@ import javax.swing.SwingWorker;
 import net.ftb.util.AppUtils;
 
 /**
- * SwingWorker that logs into minecraft.net. Returns a string containing the
- * response received from the server.
+ * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.
  */
 public class LoginWorker extends SwingWorker<String, Void> {
 	private String username;
@@ -24,10 +23,6 @@ public class LoginWorker extends SwingWorker<String, Void> {
 
 	@Override
 	protected String doInBackground() throws IOException {
-		StringBuilder requestBuilder = new StringBuilder();
-		requestBuilder.append("https://login.minecraft.net/?user=").append(URLEncoder.encode(username, "UTF-8")).append("&password=")
-		.append(URLEncoder.encode(password, "UTF-8")).append("&version=13");
-
-		return AppUtils.downloadString(new URL(requestBuilder.toString()));
+		return AppUtils.downloadString(new URL("https://login.minecraft.net/?user=" + URLEncoder.encode(username, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&version=13"));
 	}
 }

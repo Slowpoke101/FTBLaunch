@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +32,6 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import javax.swing.JCheckBox;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -233,7 +233,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		yPosField.addFocusListener(settingsChangeListener);
 		add(yPosField);
 		yPosField.setColumns(10);
-		
+
 		tglbtnCenterScreen = new JToggleButton("Center Window on Screen");
 		tglbtnCenterScreen.setBounds(190, 252, 222, 23);
 		tglbtnCenterScreen.setSelected(Boolean.parseBoolean(Settings.getSettings().getCenterWindow()));
@@ -248,13 +248,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		JLabel downloadLocation = new JLabel("Download Location");
 		downloadLocation.setBounds(490, 118, 110, 14);
 		add(downloadLocation);
-		
+
 		chckbxShowConsole = new JCheckBox("Show Console?");
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
 		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
 		chckbxShowConsole.setBounds(613, 148, 183, 23);
 		add(chckbxShowConsole);
-		
+
 		//autoMaxCheck
 		autoMaxCheck = new JCheckBox("Automatically Maximize?");
 		autoMaxCheck.addFocusListener(settingsChangeListener);

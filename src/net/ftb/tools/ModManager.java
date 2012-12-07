@@ -50,6 +50,7 @@ public class ModManager extends JDialog {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();
+				pack.setUpdated(true);
 				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
@@ -96,8 +97,8 @@ public class ModManager extends JDialog {
 			baseDynamic.mkdirs();
 			new File(baseDynamic, modPackName).createNewFile();
 			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
-			if(DownloadUtils.isValid(new File(baseDynamic, "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName))) {
-				FileUtils.extractZipTo(baseDynamic.getPath() + modPackName, baseDynamic.getPath());
+			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
+				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
 				clearModsFolder(pack);
 				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
 				FileUtils.delete(new File(installPath, dir + "/instMods/"));
@@ -179,7 +180,7 @@ public class ModManager extends JDialog {
 			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim());
 			if(requestedVersion != currentVersion) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write(requestedVersion);
+				out.write("" + requestedVersion);
 				out.flush();
 				out.close();
 				Logger.logInfo("Modpack is out of date.");
@@ -197,7 +198,6 @@ public class ModManager extends JDialog {
 			if(!update) {
 				return true;
 			}
-			pack.setUpToDate(true);
 			if(backup) {
 				File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
 				if(destination.exists()) {

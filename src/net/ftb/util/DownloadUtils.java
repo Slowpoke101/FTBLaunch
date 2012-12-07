@@ -174,10 +174,10 @@ public class DownloadUtils {
 	 * @return boolean representing if it is valid
 	 * @throws IOException 
 	 */
-	public static boolean isValid(File file) throws IOException {
+	public static boolean isValid(File file, String url) throws IOException {
 		String content = null;
 		Scanner scanner = null;
-		String resolved = "http://www.creeperrepo.net/md5/FTB2/" + file.getName();
+		String resolved = "http://www.creeperrepo.net/md5/FTB2/" + url;
 		HttpURLConnection connection = null;
 		try {
 			int retries = 0;
@@ -186,13 +186,13 @@ public class DownloadUtils {
 				connection.disconnect();
 				switch(retries) {
 				case 0:
-					resolved = "http://england1.creeperrepo.net/md5/FTB2/" + file.getName();
+					resolved = "http://england1.creeperrepo.net/md5/FTB2/" + url;
 					break;
 				case 1:
-					resolved = "http://chicago1.creeperrepo.net/md5/FTB2/" + file.getName();
+					resolved = "http://chicago1.creeperrepo.net/md5/FTB2/" + url;
 					break;
 				case 2:
-					resolved = "http://chicago2.creeperrepo.net/md5/FTB2/" + file.getName();
+					resolved = "http://chicago2.creeperrepo.net/md5/FTB2/" + url;
 					break;
 				}
 				connection = (HttpURLConnection) new URL(resolved).openConnection();

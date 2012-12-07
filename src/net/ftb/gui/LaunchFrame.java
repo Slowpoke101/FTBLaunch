@@ -32,7 +32,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -74,34 +73,36 @@ import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 public class LaunchFrame extends JFrame {
-
-	private static String version = "1.1.5";
-	private static int buildNumber = 115;
-	public static final String FORGENAME = "MinecraftForge.zip";
+	private LoginResponse RESPONSE;
 	private NewsPane newsPane;
 	private OptionsPane optionsPane;
-	public ModpacksPane modPacksPane;
-	public MapsPane mapsPane;
-	public TexturepackPane tpPane;
 	private JPanel panel = new JPanel();
 	private JPanel footer = new JPanel();
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel tpInstallLocLbl = new JLabel();
-	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
-			tpInstall = new JButton();
+	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
+
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
-	private static final long serialVersionUID = 1L;
 	private static LaunchFrame instance = null;
-	private LoginResponse RESPONSE;
+	private static String version = "1.1.5";
+	private static int buildNumber = 115;
+	private static final long serialVersionUID = 1L;
+
+	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
 
 	protected static UserManager userManager;
+
+	public ModpacksPane modPacksPane;
+	public MapsPane mapsPane;
+	public TexturepackPane tpPane;
 
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
+
+	public static final String FORGENAME = "MinecraftForge.zip";
 
 	protected enum Panes {
 		NEWS,
@@ -119,7 +120,6 @@ public class LaunchFrame extends JFrame {
 		try {
 			Settings.initSettings();
 		} catch (IOException e) { }
-
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
 		}
@@ -133,8 +133,7 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java home: "+System.getProperty("java.home"));
 		Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " +
 				System.getProperty("java.vm.specification.version") + " by " + System.getProperty("java.vm.specification.vendor"));
-		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") 
-				+ " by " + System.getProperty("java.vm.vendor"));
+		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 
 		EventQueue.invokeLater(new Runnable() {
@@ -192,7 +191,6 @@ public class LaunchFrame extends JFrame {
 
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadAll();
-
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
@@ -543,7 +541,8 @@ public class LaunchFrame extends JFrame {
 			return;
 		}
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(pack.getMcVersion(), installPath + "/" + pack.getDir() + "/minecraft")) {
+		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
+			cleanUpBin();
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), "minecraft.jar", new File(installPath, pack.getDir() + "/minecraft/bin").getPath(), false) {
 				@Override
@@ -803,6 +802,7 @@ public class LaunchFrame extends JFrame {
 
 	/**
 	 * Download and install mods
+	 * @return boolean - represents whether it was successful in initializing mods
 	 */
 	private boolean initializeMods() {
 		Logger.logInfo(ModPack.getSelectedPack().getDir());
@@ -816,6 +816,18 @@ public class LaunchFrame extends JFrame {
 			man.cleanUp();
 		} catch (IOException e) { }
 		return true;
+	}
+
+	/**
+	 * Cleans the minecraft bin folder of old files
+	 */
+	private void cleanUpBin() {
+		File baseDir = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + "/minecraft/bin/");
+		for(String file : baseDir.list()) {
+			if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s")) {
+				new File(baseDir, file).delete();
+			}
+		}
 	}
 
 	/**

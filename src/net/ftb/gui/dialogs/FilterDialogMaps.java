@@ -31,7 +31,6 @@ public class FilterDialogMaps extends JDialog {
 		this.pane = instance;
 	}
 
-
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");

@@ -14,24 +14,16 @@ import java.util.List;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-/**
- * 
- *  Support Class for starting Minecraft with custom Memory options
- *
- */
 public class MinecraftLauncher {
-
 	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
 		File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
-
 		if(tempDir.isDirectory()) {
 			for(String name : tempDir.list()) {
 				if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
@@ -202,7 +194,7 @@ public class MinecraftLauncher {
 			System.out.println("MCDIR: " + mcDir);
 
 			System.out.println("Launching with applet wrapper...");
-			
+
 			try {
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
@@ -213,8 +205,6 @@ public class MinecraftLauncher {
 				Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
 				mc.getMethod("main", String[].class).invoke(null, (Object) mcArgs);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) { }
 	}
 }

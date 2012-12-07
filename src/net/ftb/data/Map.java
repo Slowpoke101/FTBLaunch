@@ -28,11 +28,11 @@ public class Map {
 	private String[] compatible;
 	private Image logo, image;
 	private int index;
-
 	private final static ArrayList<Map> maps = new ArrayList<Map>();
 	private static List<MapListener> listeners = new ArrayList<MapListener>();
 
 	/**
+	 * Adds a listener to the listeners array
 	 * @param listener - the MapListener to add
 	 */
 	public static void addListener(MapListener listener) {
@@ -61,6 +61,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the List of maps
 	 * @return - the array containing all the maps
 	 */
 	public static ArrayList<Map> getMapArray() {
@@ -68,6 +69,7 @@ public class Map {
 	}
 
 	/**
+	 * Gets the map form the array and the given index
 	 * @param i - the value in the array
 	 * @return - the Map based on the i value
 	 */
@@ -76,6 +78,7 @@ public class Map {
 	}
 
 	/**
+	 * Constructor for Map class
 	 * @param name - the name of the map
 	 * @param author - the map name
 	 * @param version - the version of the map
@@ -87,6 +90,8 @@ public class Map {
 	 * @param mapname - the map name, as put in the saves folder
 	 * @param info - info about the map
 	 * @param idx - the id with which it is displayed on the GUI
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
 	 */
 	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
@@ -138,6 +143,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to check if the cached items are up to date
 	 * @param verFile - the version file to check
 	 * @return checks the version file against the current map version
 	 */
@@ -166,6 +172,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get index of map
 	 * @return - the index of the map in the GUI
 	 */
 	public int getIndex() {
@@ -173,6 +180,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get name of map
 	 * @return - the name of the map
 	 */
 	public String getName() {
@@ -180,6 +188,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get Author of map
 	 * @return - the map's author
 	 */
 	public String getAuthor() {
@@ -187,6 +196,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the version of the map
 	 * @return - the maps version
 	 */
 	public String getVersion() {
@@ -194,6 +204,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the URL or File name of the map
 	 * @return - the maps URL
 	 */
 	public String getUrl() {
@@ -201,6 +212,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get an Image variable of the map's logo
 	 * @return - the maps logo
 	 */
 	public Image getLogo() {
@@ -208,6 +220,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get an Image variable of the map's splash image
 	 * @return - the maps splash image
 	 */
 	public Image getImage() {
@@ -215,6 +228,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the array of compatible mod packs
 	 * @return - the compatible packs
 	 */
 	public String[] getCompatible() {
@@ -222,6 +236,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the selected mod pack
 	 * @return - the compatible pack based on the selected map
 	 */
 	public String getSelectedCompatible() {
@@ -229,6 +244,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the minecraft version required for the map
 	 * @return - the minecraft version
 	 */
 	public String getMcVersion() {
@@ -236,6 +252,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the name of the map
 	 * @return - the mapname
 	 */
 	public String getMapName() {
@@ -243,6 +260,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the info or description of the map
 	 * @return - the info for the map
 	 */
 	public String getInfo() {
@@ -250,6 +268,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the logo file name
 	 * @return - the logo name as saved on the repo
 	 */
 	public String getLogoName() {
@@ -257,6 +276,7 @@ public class Map {
 	}
 
 	/**
+	 * Used to get the splash file name
 	 * @return - the splash image name as saved on the repo
 	 */
 	public String getImageName() {
@@ -264,6 +284,7 @@ public class Map {
 	}
 
 	/**
+	 * Checks if the map is compatible with the passed modpack directory
 	 * @param dir the directory of the pack
 	 * @return true if the pack is compatible with a map
 	 */

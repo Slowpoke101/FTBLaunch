@@ -1,9 +1,6 @@
 package net.ftb.workers;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 
 import net.ftb.data.TexturePack;
 import net.ftb.gui.panes.TexturepackPane;
@@ -11,12 +8,10 @@ import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class TexturePackLoader extends Thread {
 	private static String TEXTUREPACKFILE;
@@ -45,15 +40,7 @@ public class TexturePackLoader extends Thread {
 						textureAttr.getNamedItem("description").getTextContent(), i));
 			}
 			TexturepackPane.loaded = true;
-		} catch (MalformedURLException e) { 
-			Logger.logError(e.getMessage(), e);
-		} catch (IOException e) { 
-			Logger.logError(e.getMessage(), e);
-		} catch (SAXException e) { 
-			Logger.logError(e.getMessage(), e);
-		} catch (NoSuchAlgorithmException e) { 
-			Logger.logError(e.getMessage(), e);
-		} catch (DOMException e) {
+		} catch (Exception e) { 
 			Logger.logError(e.getMessage(), e);
 		}
 	}

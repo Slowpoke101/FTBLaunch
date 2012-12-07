@@ -139,19 +139,19 @@ public class Settings extends Properties {
 	public String getDownloadServer() {
 		return getProperty("downloadServer", "0");
 	}
-	
+
 	public void setConsoleActive(String console) {
 		setProperty("consoleActive", console);
 	}
-	
+
 	public String getConsoleActive() {
 		return getProperty("consoleActive", "true");
 	}
-	
+
 	public void setAutoMaximize(String autoMax) {
 		setProperty("autoMaximize", autoMax);
 	}
-	
+
 	public String getAutoMaximize() {
 		return getProperty("autoMaximize", "true");
 	}
@@ -163,11 +163,11 @@ public class Settings extends Properties {
 	public String getCenterWindow() {
 		return getProperty("centerWindow", "false");
 	}
-	
+
 	public void setPackVer(String string) {
 		setProperty(ModPack.getSelectedPack().getDir(), string);
 	}
-	
+
 	public String getPackVer() {
 		return getProperty(ModPack.getSelectedPack().getDir(), "Newest Version");
 	}
