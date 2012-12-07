@@ -484,11 +484,7 @@ public class LaunchFrame extends JFrame {
 					enableObjects();
 					return;
 				} catch (ExecutionException err) {
-					if(err.getCause() instanceof IOException) {
-						Logger.logError(err.getMessage(), err);
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
-						d.setVisible(true);
-					} else if(err.getCause() instanceof MalformedURLException) {
+					if(err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
 						Logger.logError(err.getMessage(), err);
 						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
@@ -497,17 +493,15 @@ public class LaunchFrame extends JFrame {
 					return;
 				}
 
-				LoginResponse response;
 				try {
-					response = new LoginResponse(responseStr);
-					RESPONSE = response;
+					RESPONSE = new LoginResponse(responseStr);
 				} catch (IllegalArgumentException e) {
-					if (responseStr.contains(":")) {
+					if(responseStr.contains(":")) {
 						Logger.logError("Received invalid response from server.");
 					} else {
-						if (responseStr.equalsIgnoreCase("bad login")) {
+						if(responseStr.equalsIgnoreCase("bad login")) {
 							ErrorUtils.tossError("Invalid username or password.");
-						} else if (responseStr.equalsIgnoreCase("old version")) {
+						} else if(responseStr.equalsIgnoreCase("old version")) {
 							ErrorUtils.tossError("Outdated launcher.");
 						} else {
 							ErrorUtils.tossError("Login failed: " + responseStr);
@@ -517,7 +511,7 @@ public class LaunchFrame extends JFrame {
 					return;
 				}
 				Logger.logInfo("Login complete.");
-				runGameUpdater(response);
+				runGameUpdater(RESPONSE);
 			}
 		};
 		loginWorker.execute();
