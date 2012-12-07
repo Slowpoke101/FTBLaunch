@@ -34,10 +34,7 @@ public class DownloadUtils {
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 		} catch (MalformedURLException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (IOException e1) { 
-			Logger.logError(e1.getMessage(), e1);
-		}
+		} catch (IOException e1) { }
 		try {
 			int retries = 1;
 			while(connection.getResponseCode() != 200 && retries <= 3) {
@@ -47,14 +44,9 @@ public class DownloadUtils {
 				try {
 					connection = (HttpURLConnection) new URL(resolved).openConnection();
 				} catch (MalformedURLException e) {
-					Logger.logError(e.getMessage(), e);
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
+				} catch (IOException e) { }
 			}
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-		}
+		} catch (IOException e) { }
 		connection.disconnect();
 		Logger.logInfo(resolved);
 		return resolved; 
@@ -70,10 +62,7 @@ public class DownloadUtils {
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 		} catch (MalformedURLException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (IOException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		}
+		} catch (IOException e1) { }
 		try {
 			int retries = 1;
 			while(connection.getResponseCode() != 200 && retries <= 3) {
@@ -83,14 +72,9 @@ public class DownloadUtils {
 				try {
 					connection = (HttpURLConnection) new URL(resolved).openConnection();
 				} catch (MalformedURLException e) {
-					Logger.logError(e.getMessage(), e);
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
+				} catch (IOException e) { }
 			}
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-		}
+		} catch (IOException e) { }
 		connection.disconnect();
 		Logger.logInfo(resolved);
 		return resolved; 
@@ -135,9 +119,7 @@ public class DownloadUtils {
 			content = scanner.next();
 			connection.disconnect();
 		} catch (java.net.UnknownHostException uhe) {
-			Logger.logError(uhe.getMessage(), uhe);
 		} catch (Exception ex) {
-			Logger.logError(ex.getMessage(), ex);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -188,16 +170,15 @@ public class DownloadUtils {
 			content = scanner.next();
 			connection.disconnect();
 		} catch (java.net.UnknownHostException uhe) {
-			Logger.logError(uhe.getMessage(), uhe);
 		} catch (Exception ex) {
-			Logger.logError(ex.getMessage(), ex);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
 			}
 		}
 		String result = fileMD5(file);
-		Logger.logInfo(result);
+		Logger.logInfo(result.toLowerCase());
+		Logger.logInfo(content.toLowerCase());
 		return content.equalsIgnoreCase(result);
 	}
 
@@ -212,19 +193,16 @@ public class DownloadUtils {
 		MessageDigest dgest = null;
 		try {
 			dgest = MessageDigest.getInstance("md5");
-		} catch (NoSuchAlgorithmException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-
+		} catch (NoSuchAlgorithmException e) { }
 		InputStream str = fileUrl.openStream();
 		byte[] buffer = new byte[65536];
 		int readLen;
-		while ((readLen = str.read(buffer, 0, buffer.length)) != -1) {
+		while((readLen = str.read(buffer, 0, buffer.length)) != -1) {
 			dgest.update(buffer, 0, readLen);
 		}
 		str.close();
 		Formatter fmt = new Formatter();    
-		for (byte b : dgest.digest()) { 
+		for(byte b : dgest.digest()) { 
 			fmt.format("%02X", b);    
 		}
 		return fmt.toString();

@@ -100,7 +100,6 @@ public class LaunchFrame extends JFrame {
 	protected static UserManager userManager;
 
 	public static LauncherConsole con;
-	public static String[] jarMods;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
 
@@ -117,16 +116,9 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-
-		//		for (String s: args) {
-		//			System.out.println(s);
-		//		}
-
 		try {
 			Settings.initSettings();
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-		}
+		} catch (IOException e) { }
 
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
@@ -149,7 +141,6 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void run() {
 				Color baseColor = new Color(40, 40, 40);
-
 				UIManager.put("control", baseColor);
 				UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
 				UIManager.put("nimbusBase", new Color(0, 0, 0));
@@ -158,7 +149,6 @@ public class LaunchFrame extends JFrame {
 				UIManager.put("nimbusLightBackground", baseColor);
 				UIManager.put("info", baseColor.brighter().brighter());
 				UIManager.put("nimbusSelectionBackground", baseColor.brighter().brighter());
-
 				try {
 					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 						if ("Nimbus".equals(info.getName())) {
@@ -169,17 +159,8 @@ public class LaunchFrame extends JFrame {
 				} catch (Exception e) {
 					try {
 						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-					} catch (ClassNotFoundException e1) { 
-						Logger.logError(e1.getMessage(), e1);
-					} catch (InstantiationException e1) { 
-						Logger.logError(e1.getMessage(), e1);
-					} catch (IllegalAccessException e1) { 
-						Logger.logError(e1.getMessage(), e1);
-					} catch (UnsupportedLookAndFeelException e1) {
-						Logger.logError(e1.getMessage(), e1);
-					}
+					} catch (Exception e1) { }
 				}
-
 				I18N.setupLocale();
 				I18N.setLocale(Settings.getSettings().getLocale());
 
@@ -193,7 +174,6 @@ public class LaunchFrame extends JFrame {
 				}
 
 				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
-
 				con = new LauncherConsole();
 				if(Boolean.parseBoolean(Settings.getSettings().getConsoleActive())) {
 					con.setVisible(true);
@@ -337,10 +317,8 @@ public class LaunchFrame extends JFrame {
 					Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
 					saveSettings();
 					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-				} else {
-					if(users.getSelectedIndex() <= 1) {
-						ErrorUtils.tossError("Please select a profile!");
-					}
+				} else if(users.getSelectedIndex() <= 1) {
+					ErrorUtils.tossError("Please select a profile!");
 				}
 			}
 		});
@@ -355,12 +333,8 @@ public class LaunchFrame extends JFrame {
 					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 						try {
 							OSUtils.browse(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl()));
-						} catch (NoSuchAlgorithmException e) {
-							Logger.logError(e.getMessage(), e);
-						}
+						} catch (NoSuchAlgorithmException e) { }
 					}
-				} else {
-					ErrorUtils.tossError("No server version available!");
 				}
 			}
 		});
@@ -393,9 +367,7 @@ public class LaunchFrame extends JFrame {
 				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
 					try {
 						OSUtils.browse(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-					} catch (NoSuchAlgorithmException e) {
-						Logger.logError(e.getMessage(), e);
-					}
+					} catch (NoSuchAlgorithmException e) { }
 				}
 			}
 		});
@@ -442,31 +414,25 @@ public class LaunchFrame extends JFrame {
 		optionsPane = new OptionsPane();
 
 		getRootPane().setDefaultButton(launch);
-
 		loadSettings();
 		updateLocale();
 
 		tabbedPane.add(newsPane, 0);
 		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-
 		tabbedPane.add(optionsPane, 1);
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
-
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 		tabbedPane.setEnabledAt(4, false);
-
 		tabbedPane.setSelectedIndex(tab);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent event){
+			public void stateChanged(ChangeEvent event) {
 				if(tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
 					((ILauncherPane)tabbedPane.getSelectedComponent()).onVisible();
 					currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
@@ -520,11 +486,11 @@ public class LaunchFrame extends JFrame {
 					enableObjects();
 					return;
 				} catch (ExecutionException err) {
-					if (err.getCause() instanceof IOException) {
+					if(err.getCause() instanceof IOException) {
 						Logger.logError(err.getMessage(), err);
 						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
-					} else if (err.getCause() instanceof MalformedURLException) {
+					} else if(err.getCause() instanceof MalformedURLException) {
 						Logger.logError(err.getMessage(), err);
 						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
@@ -542,13 +508,10 @@ public class LaunchFrame extends JFrame {
 						Logger.logError("Received invalid response from server.");
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
-							Logger.logWarn("Invalid username or password.");
 							ErrorUtils.tossError("Invalid username or password.");
 						} else if (responseStr.equalsIgnoreCase("old version")) {
-							Logger.logWarn("Outdated launcher.");
 							ErrorUtils.tossError("Outdated launcher.");
 						} else {
-							Logger.logWarn("Login failed: " + responseStr);
 							ErrorUtils.tossError("Login failed: " + responseStr);
 						}
 					}
@@ -568,38 +531,41 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
-		final ModPack modpack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+		final ModPack pack = ModPack.getSelectedPack();
 		if(Settings.getSettings().getForceUpdate()) {
-			File temp = new File(new File(Settings.getSettings().getInstallPath(), modpack.getDir()), "version");
+			File temp = new File(new File(Settings.getSettings().getInstallPath(), pack.getDir()), "version");
 			if(temp.exists()) {
 				temp.delete();
 			}
 		}
-		initializeMods();
+		if(!initializeMods()) {
+			enableObjects();
+			return;
+		}
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-		if(!new File(installPath + "/" + modpack.getDir() + "/minecraft/bin/minecraft.jar").exists() 
-				|| mvd.shouldUpdate(modpack.getMcVersion(), installPath + "/" + modpack.getDir() + "/minecraft")) {
+		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(pack.getMcVersion(), installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(modpack.getMcVersion(), "minecraft.jar", new File(new File(installPath, modpack.getDir()), "minecraft/bin").getPath(), false) {
+			final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), "minecraft.jar", new File(installPath, pack.getDir() + "/minecraft/bin").getPath(), false) {
 				@Override
 				public void done() {
 					progMonitor.close();
 					try {
-						if (get()) {
+						if(get()) {
 							Logger.logInfo("Game update complete");
 							FileUtils.killMetaInf();
-							launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
 							Logger.logError("Error occurred during downloading the game");
 							ErrorUtils.tossError("Error occurred during downloading the game");
 						}
 					} catch (CancellationException e) { 
 						ErrorUtils.tossError("Game update canceled");
-						enableObjects();
 					} catch (InterruptedException e) { 
 						ErrorUtils.tossError("Game update interrupted");
 					} catch (ExecutionException e) { 
 						ErrorUtils.tossError("Failed to download game");
+					} finally {
+						enableObjects();
 					}
 				}
 			};
@@ -624,7 +590,7 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			launchMinecraft(installPath + "/" + modpack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
@@ -639,7 +605,6 @@ public class LaunchFrame extends JFrame {
 		try {
 			in = new BufferedInputStream(new URL(urlString).openStream());
 			fout = new FileOutputStream(filename);
-
 			byte data[] = new byte[1024];
 			int count;
 			while ((count = in.read(data, 0, 1024)) != -1) {
@@ -663,14 +628,12 @@ public class LaunchFrame extends JFrame {
 	 * @param password - the MC password
 	 */
 	public void launchMinecraft(String workingDir, String username, String password) {
-		try{
+		try {
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
 			try {
 				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-				Logger.logError(e.getMessage(), e);
-			}
+			} catch (InterruptedException e) { }
 			try {
 				minecraftProcess.exitValue();
 			} catch (IllegalThreadStateException e) {
@@ -682,9 +645,7 @@ public class LaunchFrame extends JFrame {
 					}
 				});
 			}
-		} catch(Exception e) {
-			Logger.logError(e.getMessage(), e);
-		}
+		} catch(Exception e) { }
 	}
 
 	/**
@@ -718,17 +679,12 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void saveSettings() {
 		Settings settings = Settings.getSettings();
-		settings.setLastUser((String)users.getSelectedItem());
+		settings.setLastUser(String.valueOf(users.getSelectedItem()));
 		instance.optionsPane.saveSettingsInto(settings);
 		try {
 			settings.save();
 		} catch (FileNotFoundException e) {
-			Logger.logError(e.getMessage(), e);
-			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-			ErrorUtils.tossError("Failed to save config file: " + e.getMessage());
-		}
+		} catch (IOException e) { }
 	}
 
 	/**
@@ -737,9 +693,7 @@ public class LaunchFrame extends JFrame {
 	public static void writeUsers(String user) {
 		try {
 			userManager.write();
-		} catch (IOException e) { 
-			Logger.logError(e.getMessage(), e);
-		}
+		} catch (IOException e) { }
 		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
@@ -848,18 +802,20 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * Downlaod and install mods
+	 * Download and install mods
 	 */
-	private void initializeMods() {
-		Logger.logInfo(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
+	private boolean initializeMods() {
+		Logger.logInfo(ModPack.getSelectedPack().getDir());
 		ModManager man = new ModManager(new JFrame(), true);
 		man.setVisible(true);
-		try {
-			installMods(ModPack.getPack(modPacksPane.getSelectedModIndex()).getDir());
-			ModManager.cleanUp();
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
+		if(man.erroneous) {
+			return false;
 		}
+		try {
+			installMods(ModPack.getSelectedPack().getDir());
+			man.cleanUp();
+		} catch (IOException e) { }
+		return true;
 	}
 
 	/**

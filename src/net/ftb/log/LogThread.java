@@ -1,5 +1,6 @@
 package net.ftb.log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,7 +21,8 @@ public class LogThread extends Thread {
 				if (listeners.isEmpty()) {
 					(entry.level == LogLevel.ERROR ? System.err : System.out).println(entry.toString(LogType.EXTENDED));
 				} else {
-					List<ILogListener> tempListeners = listeners;
+					List<ILogListener> tempListeners = new ArrayList<ILogListener>();
+					tempListeners.addAll(listeners);
 					for (ILogListener listener : tempListeners) {
 						listener.onLogEvent(entry);
 					}
