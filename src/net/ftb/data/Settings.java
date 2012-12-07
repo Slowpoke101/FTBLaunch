@@ -153,7 +153,7 @@ public class Settings extends Properties {
 	}
 
 	public String getAutoMaximize() {
-		return getProperty("autoMaximize", "true");
+		return getProperty("autoMaximize", "false");
 	}
 
 	public void setCenterWindow(String string) {

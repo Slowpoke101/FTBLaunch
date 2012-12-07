@@ -13,6 +13,8 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.minecraft.Launcher;
 
@@ -24,6 +26,30 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 
 	public MinecraftFrame(String title, String imagePath, int x, int y, int xPos, int yPos, boolean autoMax, boolean centerWindow) {
 		super(title);
+		
+		
+		Color baseColor = new Color(40, 40, 40);
+		UIManager.put("control", baseColor);
+		UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
+		UIManager.put("nimbusBase", new Color(0, 0, 0));
+		UIManager.put("nimbusFocus", baseColor);
+		UIManager.put("nimbusBorder", baseColor);
+		UIManager.put("nimbusLightBackground", baseColor);
+		UIManager.put("info", baseColor.brighter().brighter());
+		UIManager.put("nimbusSelectionBackground", baseColor.brighter().brighter());
+		try {
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (Exception e) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			} catch (Exception e1) { }
+		}
+		
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
 		windowState = getExtendedState() | ((autoMax) ? JFrame.MAXIMIZED_BOTH : 0);
