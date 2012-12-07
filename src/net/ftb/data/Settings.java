@@ -137,7 +137,7 @@ public class Settings extends Properties {
 	}
 
 	public String getDownloadServer() {
-		return getProperty("downloadServer", "0");
+		return getProperty("downloadServer", "Automatic");
 	}
 
 	public void setConsoleActive(String console) {

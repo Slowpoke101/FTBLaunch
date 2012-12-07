@@ -177,6 +177,8 @@ public class LaunchFrame extends JFrame {
 				if(Boolean.parseBoolean(Settings.getSettings().getConsoleActive())) {
 					con.setVisible(true);
 				}
+				
+				DownloadUtils.getDownloadSites();
 
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;

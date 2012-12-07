@@ -1,11 +1,15 @@
 package net.ftb.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -14,10 +18,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.Scanner;
 
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
 public class DownloadUtils {
 	private static String currentmd5 = "";
+	
+	private static String[] names = new String[3];
+	private static String[] sites = new String[3];
+	private static String[] readStrings = new String[3];
 
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
@@ -28,7 +37,9 @@ public class DownloadUtils {
 		if(currentmd5.isEmpty()) {
 			currentmd5 = md5("mcepoch1" + getTime());
 		}
-		String resolved = "http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
+		String resolved = "";
+		if(Settings.getSettings().getDownloadServer().equalsIgnoreCase("automatic")) {
+		resolved = "http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
 		HttpURLConnection connection = null;
 		try {
 			int retries = 0;
@@ -51,6 +62,9 @@ public class DownloadUtils {
 			}
 		} catch (IOException e) { }
 		connection.disconnect();
+		} else {
+			resolved = DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/direct/FTB2/" + currentmd5 + "/" + file;
+		}
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
@@ -60,31 +74,36 @@ public class DownloadUtils {
 	 * @return - the direct link
 	 */
 	public static String getStaticCreeperhostLink(String file) {
-		String resolved = "http://www.creeperrepo.net/static/FTB2/" + file;
-		HttpURLConnection connection = null;
-		try {
-			int retries = 0;
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			while(connection.getResponseCode() != 200 && retries < 3) {
-				connection.disconnect();
-				switch(retries) {
-				case 0:
-					resolved = "http://england1.creeperrepo.net/static/FTB2/" + file;
-					break;
-				case 1:
-					resolved = "http://chicago1.creeperrepo.net/static/FTB2/" + file;
-					break;
-				case 2:
-					resolved = "http://chicago2.creeperrepo.net/static/FTB2/" + file;
-					break;
-				}
+		String resolved = "";
+		if(Settings.getSettings().getDownloadServer().equalsIgnoreCase("automatic")) {
+			resolved = "http://www.creeperrepo.net/static/FTB2/" + file;
+			HttpURLConnection connection = null;
+			try {
+				int retries = 0;
 				connection = (HttpURLConnection) new URL(resolved).openConnection();
-				retries++;
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
+				while(connection.getResponseCode() != 200 && retries < 3) {
+					connection.disconnect();
+					switch(retries) {
+					case 0:
+						resolved = "http://england1.creeperrepo.net/static/FTB2/" + file;
+						break;
+					case 1:
+						resolved = "http://chicago1.creeperrepo.net/static/FTB2/" + file;
+						break;
+					case 2:
+						resolved = "http://chicago2.creeperrepo.net/static/FTB2/" + file;
+						break;
+					}
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+					retries++;
+				}
+			} catch (IOException e) { }
+			connection.disconnect();
+		} else {
+			resolved = DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/static/FTB2/";
+		}
 		Logger.logInfo(resolved);
-		return resolved; 
+		return resolved;
 	}
 
 	/**
@@ -113,37 +132,53 @@ public class DownloadUtils {
 	public static String getTime() {
 		String content = null;
 		Scanner scanner = null;
+		String resolved = "";
 		HttpURLConnection connection = null;
-		try {
-			int retries = 0;
-			String resolved = "http://www.creeperrepo.net/getdate";
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			while(connection.getResponseCode() != 200 && retries < 3) {
-				connection.disconnect();
-				switch(retries) {
-				case 0:
-					resolved = "http://england1.creeperrepo.net/getdate";
-					break;
-				case 1:
-					resolved = "http://chicago1.creeperrepo.net/getdate";
-					break;
-				case 2:
-					resolved = "http://chicago2.creeperrepo.net/getdate";
-					break;
-				}
+		if(Settings.getSettings().getDownloadServer().equalsIgnoreCase("automatic")) {
+			try {
+				int retries = 0;
+				resolved = "http://www.creeperrepo.net/getdate";
 				connection = (HttpURLConnection) new URL(resolved).openConnection();
-				retries++;
+				while(connection.getResponseCode() != 200 && retries < 3) {
+					connection.disconnect();
+					switch(retries) {
+					case 0:
+						resolved = "http://england1.creeperrepo.net/getdate";
+						break;
+					case 1:
+						resolved = "http://chicago1.creeperrepo.net/getdate";
+						break;
+					case 2:
+						resolved = "http://chicago2.creeperrepo.net/getdate";
+						break;
+					}
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+					retries++;
+				}
+				scanner = new Scanner(connection.getInputStream());
+				scanner.useDelimiter( "\\Z" );
+				content = scanner.next();
+				connection.disconnect();
+			} catch (java.net.UnknownHostException uhe) {
+			} catch (Exception ex) {
+			} finally {
+				if (scanner != null) {
+					scanner.close();
+				}
 			}
-			scanner = new Scanner(connection.getInputStream());
+		} else {
+			resolved = Settings.getSettings().getDownloadServer() + "/getdate";
+			try {
+				connection = (HttpURLConnection) new URL(resolved).openConnection();
+				scanner = new Scanner(connection.getInputStream());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			scanner.useDelimiter( "\\Z" );
 			content = scanner.next();
 			connection.disconnect();
-		} catch (java.net.UnknownHostException uhe) {
-		} catch (Exception ex) {
-		} finally {
-			if (scanner != null) {
-				scanner.close();
-			}
 		}
 		return content;
 	}
@@ -238,5 +273,52 @@ public class DownloadUtils {
 			fmt.format("%02X", b);    
 		}
 		return fmt.toString();
+	}
+	
+	/**
+	 * gets and stores all the servers that the downloads are hosted on
+	 */
+	public static void getDownloadSites() {
+		URL creeperhost = null;
+		BufferedReader creeperReader = null;
+		try {
+			creeperhost = new URL("http://www.creeperrepo.net/mirrors");
+			creeperReader = new BufferedReader(new InputStreamReader(creeperhost.openStream()));
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		
+		for(int i = 0; i < readStrings.length; i++) {
+			try {
+				readStrings[i] = creeperReader.readLine();
+			} catch (IOException e) {
+				Logger.logError(e.getMessage(), e);
+			}
+		}
+		
+		for(int i = 0; i < readStrings.length; i++) {
+			String[] temp = readStrings[i].split(",");
+			
+			names[i] = temp[0];
+			sites[i] = temp[1];
+		}
+	}
+	
+	public static String[] getServerNames() {
+		return names;
+	}
+	
+	public static String[] getServerSite() {
+		return sites;
+	}
+	
+	public static String getServerSite(String name) {
+		
+		for(int i = 0; i < names.length; i++) {
+			if(names[i].equalsIgnoreCase(name)) {
+				return sites[i];
+			}
+		}
+		return "";
 	}
 }

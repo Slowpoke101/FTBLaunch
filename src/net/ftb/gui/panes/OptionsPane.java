@@ -32,6 +32,7 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -263,10 +264,21 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(autoMaxCheck);
 	}
 
-	public String[] getDownloadServerNames() {
+	public Object[] getDownloadServerNames() {
 
-		String[] servers = {  };
-		return servers;
+		ArrayList<String> servers = new ArrayList<String>();
+		
+		if(!servers.contains("Automatic")) {
+			servers.add("Automatic");
+		}
+		
+		for(int i = 0; i < DownloadUtils.getServerNames().length; i++) {
+			if(!servers.contains(DownloadUtils.getServerNames()[i])) {
+				servers.add(DownloadUtils.getServerNames()[i]);
+			}
+		}
+		
+		return servers.toArray();
 	}
 
 	@Override public void onVisible() { }
@@ -312,7 +324,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
 		settings.setCenterWindow(tglbtnCenterScreen.isSelected() ? "true" : "false");
-		settings.setDownlaodServer(Integer.toString(downloadServers.getSelectedIndex()));
+		settings.setDownlaodServer(downloadServers.getItemAt(downloadServers.getSelectedIndex()).toString());
 		settings.setConsoleActive(chckbxShowConsole.isSelected() ? "true" : "false");
 		settings.setAutoMaximize(autoMaxCheck.isSelected() ? "true" : "false");
 	}
