@@ -63,7 +63,7 @@ public class DownloadUtils {
 		} catch (IOException e) { }
 		connection.disconnect();
 		} else {
-			resolved = DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/direct/FTB2/" + currentmd5 + "/" + file;
+			resolved = "http://" + DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/direct/FTB2/" + currentmd5 + "/" + file;
 		}
 		Logger.logInfo(resolved);
 		return resolved; 
@@ -100,7 +100,7 @@ public class DownloadUtils {
 			} catch (IOException e) { }
 			connection.disconnect();
 		} else {
-			resolved = DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/static/FTB2/";
+			resolved = "http://" + DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/static/FTB2/";
 		}
 		Logger.logInfo(resolved);
 		return resolved;
@@ -167,7 +167,7 @@ public class DownloadUtils {
 				}
 			}
 		} else {
-			resolved = Settings.getSettings().getDownloadServer() + "/getdate";
+			resolved = "http://" + Settings.getSettings().getDownloadServer() + "/getdate";
 			try {
 				connection = (HttpURLConnection) new URL(resolved).openConnection();
 				scanner = new Scanner(connection.getInputStream());
