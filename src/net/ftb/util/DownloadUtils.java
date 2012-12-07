@@ -39,31 +39,31 @@ public class DownloadUtils {
 		}
 		String resolved = "";
 		if(Settings.getSettings().getDownloadServer().equalsIgnoreCase("automatic")) {
-		resolved = "http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
-		HttpURLConnection connection = null;
-		try {
-			int retries = 0;
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			while(connection.getResponseCode() != 200 && retries < 3) {
-				connection.disconnect();
-				switch(retries) {
-				case 0:
-					resolved = "http://england1.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
-					break;
-				case 1:
-					resolved = "http://chicago1.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
-					break;
-				case 2:
-					resolved = "http://chicago2.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
-					break;
-				}
+			resolved = "http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
+			HttpURLConnection connection = null;
+			try {
+				int retries = 0;
 				connection = (HttpURLConnection) new URL(resolved).openConnection();
-				retries++;
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
+				while(connection.getResponseCode() != 200 && retries < 3) {
+					connection.disconnect();
+					switch(retries) {
+					case 0:
+						resolved = "http://england1.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
+						break;
+					case 1:
+						resolved = "http://chicago1.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
+						break;
+					case 2:
+						resolved = "http://chicago2.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file;
+						break;
+					}
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+					retries++;
+				}
+			} catch (IOException e) { }
+			connection.disconnect();
 		} else {
-			resolved = "http://" + DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/direct/FTB2/" + currentmd5 + "/" + file;
+			resolved = "http://" + getServerSite(Settings.getSettings().getDownloadServer()) + "/direct/FTB2/" + currentmd5 + "/" + file;
 		}
 		Logger.logInfo(resolved);
 		return resolved; 
@@ -100,7 +100,7 @@ public class DownloadUtils {
 			} catch (IOException e) { }
 			connection.disconnect();
 		} else {
-			resolved = "http://" + DownloadUtils.getServerSite(Settings.getSettings().getDownloadServer()) + "/static/FTB2/";
+			resolved = "http://" + getServerSite(Settings.getSettings().getDownloadServer()) + "/static/FTB2/" + file;
 		}
 		Logger.logInfo(resolved);
 		return resolved;

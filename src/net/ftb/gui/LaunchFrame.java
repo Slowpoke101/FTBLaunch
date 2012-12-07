@@ -126,6 +126,8 @@ public class LaunchFrame extends JFrame {
 		if(new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
 		}
+		
+		DownloadUtils.getDownloadSites();
 
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
@@ -177,8 +179,6 @@ public class LaunchFrame extends JFrame {
 				if(Boolean.parseBoolean(Settings.getSettings().getConsoleActive())) {
 					con.setVisible(true);
 				}
-				
-				DownloadUtils.getDownloadSites();
 
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
