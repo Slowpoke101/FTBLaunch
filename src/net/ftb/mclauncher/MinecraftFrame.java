@@ -69,6 +69,11 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		} catch (MalformedURLException ignored){
 			ignored.printStackTrace();
 		}
+		
+		appletWrap.setParameter("username", user);
+		appletWrap.setParameter("sessionid", session);
+		appletWrap.setParameter("stand-alone", "true");
+		mcApplet.setStub(appletWrap);
 
 		this.add(appletWrap);
 		this.remove(label);

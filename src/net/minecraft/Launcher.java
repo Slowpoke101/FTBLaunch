@@ -51,7 +51,8 @@ public class Launcher extends Applet implements AppletStub {
 		if (param != null)
 			return param;
 		try {
-			return super.getParameter(name);
+			if(super.getParameterInfo() != null)
+				return super.getParameter(name);
 		} catch (Exception ignore){
 			Logger.logError(ignore.getMessage(), ignore);
 		}
