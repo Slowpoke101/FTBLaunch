@@ -36,7 +36,7 @@ public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 	public static boolean update = false, backup = false, erroneous = false;
 	private static boolean backdated = false;
-	private static int backdatedVersion = 0;
+	private static int curVersion = 0;
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
@@ -50,13 +50,11 @@ public class ModManager extends JDialog {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();
-				// TODO: Assumes file ends in .zip, possibly remove assumptions in future
-				String url = backdated ? pack.getUrl().replace(".zip", "_v" + backdatedVersion + ".zip") : pack.getUrl();
-				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + url);
+				File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
 				}
-				erroneous = !downloadModPack(url, pack.getDir());
+				erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 			}
 			return true;
 		}
@@ -65,10 +63,10 @@ public class ModManager extends JDialog {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
-				in = new BufferedInputStream(new URL(urlString).openStream());
+				URL url_ = new URL(urlString);
+				in = new BufferedInputStream(url_.openStream());
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
-				URL url_ = new URL(urlString);
 				int count, amount = 0, modPackSize = url_.openConnection().getContentLength(), steps = 0;
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
@@ -90,19 +88,19 @@ public class ModManager extends JDialog {
 		}
 
 		protected boolean downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
-			Logger.logInfo("Downloading mod pack.");
+			Logger.logInfo("Downloading mod pack.");			
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
 			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 			baseDynamic.mkdirs();
 			new File(baseDynamic, modPackName).createNewFile();
-			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(modPackName));
-			if(DownloadUtils.isValid(new File(baseDynamic, modPackName))) {
+			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
+			if(DownloadUtils.isValid(new File(baseDynamic, "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName))) {
 				FileUtils.extractZipTo(baseDynamic.getPath() + modPackName, baseDynamic.getPath());
 				clearModsFolder(pack);
 				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-				FileUtils.delete(new File(installPath,dir + "/instMods/"));
+				FileUtils.delete(new File(installPath, dir + "/instMods/"));
 				return true;
 			} else {
 				ErrorUtils.tossError("Error downloading modpack!!!");
@@ -144,9 +142,6 @@ public class ModManager extends JDialog {
 				ModManagerWorker worker = new ModManagerWorker() {
 					@Override
 					protected void done() {
-//						try {
-//							erroneous = get();
-//						} catch (Exception e) { }
 						setVisible(false);
 						super.done();
 					}
@@ -170,6 +165,7 @@ public class ModManager extends JDialog {
 			version.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
+			curVersion = Integer.parseInt(pack.getVersion());
 			out.flush();
 			out.close();
 			return false;
@@ -188,7 +184,7 @@ public class ModManager extends JDialog {
 				out.close();
 				Logger.logInfo("Modpack is out of date.");
 				backdated = true;
-				backdatedVersion = requestedVersion;
+				curVersion = requestedVersion;
 				return false;
 			} else {
 				Logger.logInfo("Modpack is up to date.");
@@ -211,6 +207,7 @@ public class ModManager extends JDialog {
 			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
+			curVersion = Integer.parseInt(pack.getVersion());
 			out.flush();
 			out.close();
 			return false;
