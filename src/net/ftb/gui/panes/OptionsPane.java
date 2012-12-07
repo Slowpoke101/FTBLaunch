@@ -244,6 +244,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		downloadServers = new JComboBox(getDownloadServerNames());
 		downloadServers.setBounds(613, 115, 222, 23);
 		downloadServers.addFocusListener(settingsChangeListener);
+		downloadServers.setSelectedItem(Settings.getSettings().getDownloadServer());
 		add(downloadServers);
 
 		JLabel downloadLocation = new JLabel("Download Location");
