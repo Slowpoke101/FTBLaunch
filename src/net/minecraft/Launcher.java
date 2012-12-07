@@ -19,10 +19,9 @@ public class Launcher extends Applet implements AppletStub {
 
 	public Launcher(Applet applet, URL documentBase) {
 		params = new TreeMap<String, String>();
-
-		this.setLayout(new BorderLayout());
-		this.add(applet, "Center");
-		this.wrappedApplet = applet;	
+		setLayout(new BorderLayout());
+		add(applet, "Center");
+		wrappedApplet = applet;	
 		this.documentBase = documentBase;
 	}
 
@@ -31,14 +30,11 @@ public class Launcher extends Applet implements AppletStub {
 	}
 
 	public void replace(Applet applet) {
-		this.wrappedApplet = applet;
-
+		wrappedApplet = applet;
 		applet.setStub(this);
 		applet.setSize(getWidth(), getHeight());
-
-		this.setLayout(new BorderLayout());
-		this.add(applet, "Center");
-
+		setLayout(new BorderLayout());
+		add(applet, "Center");
 		applet.init();
 		active = true;
 		applet.start();
@@ -48,13 +44,14 @@ public class Launcher extends Applet implements AppletStub {
 	@Override
 	public String getParameter(String name) {
 		String param = params.get(name);
-		if (param != null)
+		if (param != null) {
 			return param;
-		try {
-			return super.getParameter(name);
-		} catch (Exception ignore){
-			Logger.logError(ignore.getMessage(), ignore);
 		}
+		try {
+			if(super.getParameterInfo() != null) {
+				return super.getParameter(name);
+			}
+		} catch (Exception ignore){ }
 		return null;
 	}
 
@@ -116,8 +113,5 @@ public class Launcher extends Applet implements AppletStub {
 		super.setVisible(b);
 		wrappedApplet.setVisible(b);
 	}
-
-	public void update(Graphics paramGraphics) { }
-	public void paint(Graphics paramGraphics) { }
 }
 
