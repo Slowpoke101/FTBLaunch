@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,22 +35,12 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
-	private static final long serialVersionUID = 1L;
-
-	protected static JTextField installFolderTextField;
-	private JToggleButton tglbtnForceUpdate;
-	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam;
+	private JToggleButton tglbtnForceUpdate, tglbtnCenterScreen;
+	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
-	@SuppressWarnings("rawtypes")
-	private JComboBox locale;
-	private JLabel minecraftSize;
-	private JTextField minecraftX;
-	private JLabel lblX;
-	private JTextField minecraftY;
-	@SuppressWarnings("rawtypes")
-	private JComboBox downloadServers;
-	private JCheckBox chckbxShowConsole;
-	private JToggleButton tglbtnCenterScreen;
+	private JComboBox locale, downloadServers;
+	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
+	private JCheckBox chckbxShowConsole, autoMaxCheck;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -59,15 +49,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
-	private JTextField xPosField;
-	private JTextField yPosField;
-	private JCheckBox autoMaxCheck;
 
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		currentRam = new JLabel();
 		currentRam.setBounds(427, 114, 85, 23);
 		long ram = 0;
@@ -76,24 +60,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		try {
 			m = operatingSystemMXBean.getClass().getDeclaredMethod("getTotalPhysicalMemorySize");
 			m.setAccessible(true);
-
 			Object value = m.invoke(operatingSystemMXBean);
 			if (value != null) {
 				ram = Long.valueOf(value.toString()) / 1024 / 1024;
 			} else {
-				System.out.println("Could not get RAM Value");
+				Logger.logWarn("Could not get RAM Value");
 				ram = 8192;
 			}
-		} catch (SecurityException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (NoSuchMethodException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (IllegalArgumentException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (IllegalAccessException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (InvocationTargetException e1) {
-			Logger.logError(e1.getMessage(), e1);
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 		}
 
 		ramMaximum = new JSlider();
@@ -114,12 +89,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				}
 			}
 		}
-		int ramMax = Integer.parseInt(Settings.getSettings().getRamMax());
-		if(ramMax > ramMaximum.getMaximum()) {
-			ramMaximum.setValue(ramMaximum.getMaximum());
-		} else {
-			ramMaximum.setValue(ramMax);
-		}
+		int ramMax = (Integer.parseInt(Settings.getSettings().getRamMax()) > ramMaximum.getMaximum()) ? ramMaximum.getMaximum() : Integer.parseInt(Settings.getSettings().getRamMax());
+		ramMaximum.setValue(ramMax);
 		currentRam.setText(getAmount());
 		ramMaximum.addChangeListener(new ChangeListener() {
 			@Override
@@ -128,23 +99,23 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			}
 		});
 		ramMaximum.addFocusListener(settingsChangeListener);
-		ramMaximum.addFocusListener(settingsChangeListener);
 
 		JButton installBrowseBtn = new JButton("...");
 		installBrowseBtn.setBounds(786, 11, 49, 23);
 		installBrowseBtn.addActionListener(new ChooseDir(this));
 		setLayout(null);
+		add(installBrowseBtn);
 
 		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
 		lblInstallFolder.setBounds(10, 11, 127, 23);
-		this.add(lblInstallFolder);
+		add(lblInstallFolder);
 
 		installFolderTextField = new JTextField();
 		installFolderTextField.setBounds(147, 11, 629, 23);
 		installFolderTextField.addFocusListener(settingsChangeListener);
-		add(installFolderTextField);
 		installFolderTextField.setColumns(10);
-		this.add(installBrowseBtn);
+		installFolderTextField.setText(Settings.getSettings().getInstallPath());
+		add(installFolderTextField);
 
 		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
 		tglbtnForceUpdate.setBounds(147, 45, 629, 29);
@@ -155,6 +126,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				saveSettingsInto(Settings.getSettings());
 			}
 		});
+		tglbtnForceUpdate.getModel().setPressed(Settings.getSettings().getForceUpdate());
 		add(tglbtnForceUpdate);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
@@ -244,7 +216,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		downloadServers = new JComboBox(getDownloadServerNames());
 		downloadServers.setBounds(613, 115, 222, 23);
 		downloadServers.addFocusListener(settingsChangeListener);
-		downloadServers.setSelectedItem(Settings.getSettings().getDownloadServer());
+		if(DownloadUtils.serversLoaded) {
+			if(DownloadUtils.downloadServers.containsKey(Settings.getSettings().getDownloadServer())) {
+				downloadServers.setSelectedItem(Settings.getSettings().getDownloadServer());
+			}
+		}
 		add(downloadServers);
 
 		JLabel downloadLocation = new JLabel("Download Location");
@@ -257,7 +233,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		chckbxShowConsole.setBounds(613, 148, 183, 23);
 		add(chckbxShowConsole);
 
-		//autoMaxCheck
 		autoMaxCheck = new JCheckBox("Automatically Maximize?");
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		autoMaxCheck.setSelected(Boolean.parseBoolean(Settings.getSettings().getAutoMaximize()));
@@ -265,28 +240,32 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(autoMaxCheck);
 	}
 
-	public Object[] getDownloadServerNames() {
-
-		ArrayList<String> servers = new ArrayList<String>();
-		
-		if(!servers.contains("Automatic")) {
-			servers.add("Automatic");
+	public void setDownloadServers() {
+		String downloadserver = Settings.getSettings().getDownloadServer();
+		downloadServers.removeAllItems();
+		for(String server : DownloadUtils.downloadServers.keySet()) {
+			downloadServers.addItem(server);
 		}
-		
-		for(int i = 0; i < DownloadUtils.getServerNames().length; i++) {
-			if(!servers.contains(DownloadUtils.getServerNames()[i])) {
-				servers.add(DownloadUtils.getServerNames()[i]);
-			}
+		if(DownloadUtils.downloadServers.containsKey(downloadserver)) {
+			downloadServers.setSelectedItem(downloadserver);
 		}
-		
-		return servers.toArray();
 	}
 
-	@Override public void onVisible() { }
+	public String[] getDownloadServerNames() {
+		if(!DownloadUtils.serversLoaded) {
+			Logger.logWarn("Servers not loaded yet.");
+			return new String[] { "Automatic" };
+		} else {
+			Logger.logInfo("Servers are loaded, inserting into combo box.");
+			String[] out = new String[DownloadUtils.downloadServers.size()];
+			for(int i = 0; i < out.length; i++) {
+				out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
+			}
+			return out;
+		}
+	}
 
 	private class documentFilter extends PlainDocument {
-		private static final long serialVersionUID = 1L;
-
 		public documentFilter(final String pattern) {
 			this.setDocumentFilter(new DocumentFilter() {
 				@Override
@@ -301,18 +280,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 	}
 
-	public void loadSettings(Settings settings) {
-		installFolderTextField.setText(settings.getInstallPath());
-		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
-	}
-
-	public String getInstallFolderText() {
-		return installFolderTextField.getText();
-	}
-
 	public void setInstallFolderText(String text) {
 		installFolderTextField.setText(text);
-		LaunchFrame.getInstance().saveSettings();
+		saveSettingsInto(Settings.getSettings());
 	}
 
 	public void saveSettingsInto(Settings settings) {
@@ -324,10 +294,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftY(minecraftY.getText());
 		settings.setMinecraftXPos(xPosField.getText());
 		settings.setMinecraftYPos(yPosField.getText());
-		settings.setCenterWindow(tglbtnCenterScreen.isSelected() ? "true" : "false");
-		settings.setDownlaodServer(downloadServers.getItemAt(downloadServers.getSelectedIndex()).toString());
-		settings.setConsoleActive(chckbxShowConsole.isSelected() ? "true" : "false");
-		settings.setAutoMaximize(autoMaxCheck.isSelected() ? "true" : "false");
+		settings.setCenterWindow(String.valueOf(tglbtnCenterScreen.isSelected()));
+		settings.setDownlaodServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
+		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
+		settings.setAutoMaximize(String.valueOf(autoMaxCheck.isSelected()));
+		try {
+			settings.save();
+		} catch (IOException e) { }
 	}
 
 	public void updateLocale() {
@@ -338,13 +311,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	}
 
 	private String getAmount() {
-		String result = "";
-		if(ramMaximum.getValue() >= 1024) {
-			int quaters = ramMaximum.getValue() / 256;
-			result = Math.round(quaters / 4) + "." + ((quaters % 4) * 25) + " GB";
-		} else {
-			result = ramMaximum.getValue() + " MB";
-		}
-		return result;
+		int ramMax = ramMaximum.getValue();
+		return (ramMax >= 1024) ? Math.round((ramMax / 256) / 4) + "." + (((ramMax / 256) % 4) * 25) + " GB" : ramMax + " MB";
 	}
+
+	@Override public void onVisible() { }
 }

@@ -75,7 +75,6 @@ import net.ftb.workers.LoginWorker;
 public class LaunchFrame extends JFrame {
 	private LoginResponse RESPONSE;
 	private NewsPane newsPane;
-	private OptionsPane optionsPane;
 	private JPanel panel = new JPanel();
 	private JPanel footer = new JPanel();
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
@@ -97,6 +96,7 @@ public class LaunchFrame extends JFrame {
 	public ModpacksPane modPacksPane;
 	public MapsPane mapsPane;
 	public TexturepackPane tpPane;
+	public OptionsPane optionsPane;
 
 	public static LauncherConsole con;
 	public static String tempPass = "";
@@ -127,7 +127,8 @@ public class LaunchFrame extends JFrame {
 			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
 		}
 		
-		DownloadUtils.getDownloadSites();
+		DownloadUtils thread = new DownloadUtils();
+		thread.start();
 
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
@@ -414,7 +415,6 @@ public class LaunchFrame extends JFrame {
 		optionsPane = new OptionsPane();
 
 		getRootPane().setDefaultButton(launch);
-		loadSettings();
 		updateLocale();
 
 		tabbedPane.add(newsPane, 0);
@@ -661,25 +661,11 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * "Loads" the settings from the settings class into their respective GUI
-	 * controls.
-	 */
-	private void loadSettings() {
-		Settings settings = Settings.getSettings();
-		optionsPane.loadSettings(settings);
-	}
-
-	/**
 	 * "Saves" the settings from the GUI controls into the settings class.
 	 */
 	public void saveSettings() {
-		Settings settings = Settings.getSettings();
-		settings.setLastUser(String.valueOf(users.getSelectedItem()));
-		instance.optionsPane.saveSettingsInto(settings);
-		try {
-			settings.save();
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) { }
+		Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
+		instance.optionsPane.saveSettingsInto(Settings.getSettings());
 	}
 
 	/**
@@ -818,9 +804,9 @@ public class LaunchFrame extends JFrame {
 	 * Cleans the minecraft bin folder of old files
 	 */
 	private void cleanUpBin() {
-		File baseDir = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + "/minecraft/bin/");
+		File baseDir = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "bin" + File.separator);
 		for(String file : baseDir.list()) {
-			if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s")) {
+			if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s") && new File(baseDir, file).exists()) {
 				new File(baseDir, file).delete();
 			}
 		}
