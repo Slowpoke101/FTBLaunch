@@ -5,7 +5,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,6 +34,7 @@ import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
 import net.ftb.log.LogWriter;
 import net.ftb.log.Logger;
+import net.ftb.tools.PastebinPoster;
 
 public class LauncherConsole extends JFrame implements ILogListener {
 	private final static String launcherLogFile = "FTBLauncherLog.txt";
@@ -91,8 +91,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-		JButton btnNewButton = new JButton("Paste my log to pastebin.com");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton pastebin = new JButton("Paste my log to pastebin.com");
+		pastebin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane pane = new JOptionPane("The log will be copied to your clipboard and pastebin.com will be opened now");
@@ -102,28 +102,18 @@ public class LauncherConsole extends JFrame implements ILogListener {
 				dialog.setVisible(true);
 				Object obj = pane.getValue();
 				int result = -1;
-				for (int i = 0; i < options.length; i++) {
+				for(int i = 0; i < options.length; i++) {
 					if (options[i].equals(obj)) {
 						result = i;
 					}
 				}
-				if (result == 0) {
-					StringSelection content = new StringSelection(Logger.getLogs());
-					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(content, null);
-					if (Desktop.isDesktopSupported()) {
-						Desktop desktop = Desktop.getDesktop();
-						try {
-							desktop.browse(new URI("http://www.pastebin.com/"));
-						} catch (Exception exc) {
-							Logger.logError("Could not open url: " + exc.getMessage());
-						}
-					} else {
-						Logger.logWarn("Could not open url, not supported");
-					}
+				if(result == 0) {
+					PastebinPoster thread = new PastebinPoster();
+					thread.start();
 				}
 			}
 		});
-		panel.add(btnNewButton);
+		panel.add(pastebin);
 
 		logTypeComboBox = new JComboBox(LogType.values());
 		logTypeComboBox.setSelectedItem(logType);

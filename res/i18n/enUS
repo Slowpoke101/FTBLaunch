@@ -9,7 +9,7 @@ EDIT_BUTTON = Edit
 LAUNCH_BUTTON = Launch
 PROFILE_CREATE = Create Profile
 PROFILE_SELECT = Select Profile
-DOWNLOAD_SERVER_PACK = Grab The Server Version Here
+DOWNLOAD_SERVER_PACK = Download Server ModPack
 
 # Map Tab
 INSTALL_MAP = Install Map
@@ -21,7 +21,6 @@ INSTALL_TEXTUREPACK = Install TexturePack
 # Options pane
 INSTALL_FOLDER = Install folder...
 FORCE_UPDATE = Force update?
-RAM_MIN = RAM Minimum (MB)
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 

@@ -21,7 +21,6 @@ INSTALL_TEXTUREPACK = Installeer TexturePack
 # Options pane
 INSTALL_FOLDER = Installatiemap...
 FORCE_UPDATE = Forceer update?
-RAM_MIN = Minimum RAM (MB)
 RAM_MAX = Maximum RAM (MB)
 LANGUAGE = Taal
 

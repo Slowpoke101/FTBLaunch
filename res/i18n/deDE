@@ -21,7 +21,6 @@ INSTALL_TEXTUREPACK = Texture Pack Installieren
 # Options pane
 INSTALL_FOLDER = Installationsverzeichnis
 FORCE_UPDATE = Update erzwingen?
-RAM_MIN = RAM Minimum (MB)
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 

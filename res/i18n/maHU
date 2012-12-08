@@ -21,7 +21,6 @@ INSTALL_TEXTUREPACK = Textura csomag telepítés
 # Options pane
 INSTALL_FOLDER = Telepítési mappa
 FORCE_UPDATE = Teljes frissítés?
-RAM_MIN = Minimum RAM (MB)
 RAM_MAX = Maximum RAM (MB)
 LANGUAGE = Nyelv
 

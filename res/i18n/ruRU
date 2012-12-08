@@ -21,7 +21,6 @@ INSTALL_TEXTUREPACK = Установить дополнительные текс
 # Options pane
 INSTALL_FOLDER = Установочный путь...
 FORCE_UPDATE = Принудительное обновление?
-RAM_MIN = Минимум ОЗУ (Мб)
 RAM_MAX = Максимум ОЗУ (Мб)
 LANGUAGE = Язык
 
