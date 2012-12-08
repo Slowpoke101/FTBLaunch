@@ -82,6 +82,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		appletWrap.setParameter("username", user);
 		appletWrap.setParameter("sessionid", session);
 		appletWrap.setParameter("stand-alone", "true");
+		mcApplet.setStub(appletWrap);
 		add(appletWrap);
 		remove(label);
 		appletWrap.setPreferredSize(size);
