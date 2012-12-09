@@ -139,6 +139,14 @@ public class Settings extends Properties {
 	public String getDownloadServer() {
 		return getProperty("downloadServer", "Automatic");
 	}
+        
+	public String getAdditionalJavaOptions() {
+		return getProperty("additionalJavaOptions", null);
+	}
+
+	public void setAdditionalJavaOptions(String options) {
+		setProperty("additionalJavaOptions", options);
+	}
 
 	public void setConsoleActive(String console) {
 		setProperty("consoleActive", console);

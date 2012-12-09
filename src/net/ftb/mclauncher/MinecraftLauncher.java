@@ -20,7 +20,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class MinecraftLauncher {
-	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
+	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax, String addOpt) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
 		File tempDir = new File(new File(workingDir).getParentFile(), "/instMods/");
@@ -61,6 +61,9 @@ public class MinecraftLauncher {
 		arguments.add(path);
 
 		setMemory(arguments, rmax);
+
+		// If given, add additional command line options (e.g. -Djava.net.preferIPv4Stack=true)
+		arguments.add(addOpt);
 
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());

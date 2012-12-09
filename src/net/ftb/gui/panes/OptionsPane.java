@@ -39,7 +39,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
 	private JComboBox locale, downloadServers;
-	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
+	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField, additionalJavaOptions;
 	private JCheckBox chckbxShowConsole, autoMaxCheck;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
@@ -72,7 +72,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 
 		ramMaximum = new JSlider();
-		ramMaximum.setBounds(190, 114, 222, 23);
+		ramMaximum.setBounds(190, 104, 222, 23);
 		ramMaximum.setSnapToTicks(true);
 		ramMaximum.setMajorTickSpacing(256);
 		ramMaximum.setMinorTickSpacing(256);
@@ -130,7 +130,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(tglbtnForceUpdate);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
-		lblRamMaximum.setBounds(10, 114, 195, 23);
+		lblRamMaximum.setBounds(10, 104, 195, 23);
 		add(lblRamMaximum);
 		add(ramMaximum);
 		add(currentRam);
@@ -142,7 +142,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 
 		locale = new JComboBox(locales.toArray());
-		locale.setBounds(190, 148, 222, 23);
+		locale.setBounds(190, 138, 222, 23);
 		locale.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,27 +156,27 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		locale.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
 
 		lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
-		lblLocale.setBounds(10, 148, 195, 23);
+		lblLocale.setBounds(10, 138, 195, 23);
 		add(lblLocale);
 		add(locale);
 
 		minecraftSize = new JLabel("Size for Minecraft Window");
-		minecraftSize.setBounds(10, 182, 195, 23);
+		minecraftSize.setBounds(10, 172, 195, 23);
 		add(minecraftSize);
 
 		minecraftX = new JTextField();
-		minecraftX.setBounds(190, 182, 85, 22);
+		minecraftX.setBounds(190, 172, 85, 22);
 		minecraftX.setDocument(new documentFilter("\\D++"));
 		minecraftX.setText(Settings.getSettings().getMinecraftX());
 		minecraftX.addFocusListener(settingsChangeListener);
 		add(minecraftX);
 
 		lblX = new JLabel("x");
-		lblX.setBounds(297, 182, 6, 20);
+		lblX.setBounds(297, 172, 6, 20);
 		add(lblX);
 
 		minecraftY = new JTextField();
-		minecraftY.setBounds(327, 182, 85, 23);
+		minecraftY.setBounds(327, 172, 85, 23);
 		minecraftY.setDocument(new documentFilter("\\D++"));
 		minecraftY.setText(Settings.getSettings().getMinecraftY());
 		minecraftY.addFocusListener(settingsChangeListener);
@@ -184,23 +184,23 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		minecraftY.setColumns(5);
 
 		JLabel minecraftPos = new JLabel("Position of Minecraft Window");
-		minecraftPos.setBounds(10, 216, 195, 23);
+		minecraftPos.setBounds(10, 206, 195, 23);
 		add(minecraftPos);
 
 		xPosField = new JTextField();
-		xPosField.setBounds(190, 217, 85, 22);
+		xPosField.setBounds(190, 207, 85, 22);
 		xPosField.setDocument(new documentFilter("\\D++"));
 		xPosField.setText(Settings.getSettings().getMinecraftXPos());
 		xPosField.addFocusListener(settingsChangeListener);
 		add(xPosField);
-		xPosField.setColumns(10);
+		xPosField.setColumns(20);
 
 		JLabel lblX_1 = new JLabel("x");
-		lblX_1.setBounds(297, 216, 6, 23);
+		lblX_1.setBounds(297, 206, 6, 23);
 		add(lblX_1);
 
 		yPosField = new JTextField();
-		yPosField.setBounds(327, 216, 85, 23);
+		yPosField.setBounds(327, 206, 85, 23);
 		yPosField.setDocument(new documentFilter("\\D++"));
 		yPosField.setText(Settings.getSettings().getMinecraftYPos());
 		yPosField.addFocusListener(settingsChangeListener);
@@ -208,13 +208,25 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		yPosField.setColumns(10);
 
 		tglbtnCenterScreen = new JToggleButton("Center Window on Screen");
-		tglbtnCenterScreen.setBounds(190, 252, 222, 23);
+		tglbtnCenterScreen.setBounds(190, 242, 222, 23);
 		tglbtnCenterScreen.setSelected(Boolean.parseBoolean(Settings.getSettings().getCenterWindow()));
 		tglbtnCenterScreen.addFocusListener(settingsChangeListener);
 		add(tglbtnCenterScreen);
 
+		JLabel lblAdditionalJavaOptions = new JLabel("Additional Java Options");
+		lblAdditionalJavaOptions.setBounds(10, 278, 200, 23);
+		add(lblAdditionalJavaOptions);
+
+		additionalJavaOptions = new JTextField();
+		additionalJavaOptions.setBounds(190, 278, 222, 23);
+		additionalJavaOptions.addFocusListener(settingsChangeListener);
+		additionalJavaOptions.setColumns(10);
+		additionalJavaOptions.setText(Settings.getSettings().getAdditionalJavaOptions());
+		add(additionalJavaOptions);
+		additionalJavaOptions.setColumns(10);
+
 		downloadServers = new JComboBox(getDownloadServerNames());
-		downloadServers.setBounds(613, 115, 222, 23);
+		downloadServers.setBounds(613, 105, 222, 23);
 		downloadServers.addFocusListener(settingsChangeListener);
 		if(DownloadUtils.serversLoaded) {
 			if(DownloadUtils.downloadServers.containsKey(Settings.getSettings().getDownloadServer())) {
@@ -224,19 +236,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(downloadServers);
 
 		JLabel downloadLocation = new JLabel("Download Location");
-		downloadLocation.setBounds(490, 118, 110, 14);
+		downloadLocation.setBounds(490, 108, 110, 14);
 		add(downloadLocation);
 
 		chckbxShowConsole = new JCheckBox("Show Console?");
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
 		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
-		chckbxShowConsole.setBounds(613, 148, 183, 23);
+		chckbxShowConsole.setBounds(613, 138, 183, 23);
 		add(chckbxShowConsole);
 
 		autoMaxCheck = new JCheckBox("Automatically Maximize?");
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		autoMaxCheck.setSelected(Boolean.parseBoolean(Settings.getSettings().getAutoMaximize()));
-		autoMaxCheck.setBounds(613, 184, 183, 23);
+		autoMaxCheck.setBounds(613, 174, 183, 23);
 		add(autoMaxCheck);
 	}
 
@@ -296,6 +308,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setMinecraftYPos(yPosField.getText());
 		settings.setCenterWindow(String.valueOf(tglbtnCenterScreen.isSelected()));
 		settings.setDownlaodServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
+		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
 		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
 		settings.setAutoMaximize(String.valueOf(autoMaxCheck.isSelected()));
 		try {
