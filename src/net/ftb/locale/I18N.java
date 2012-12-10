@@ -23,6 +23,7 @@ public class I18N {
 		deDE,
 		enUS,
 		esES,
+		frFR,
 		itIT,
 		nlNL,
 		maHU,
@@ -116,6 +117,8 @@ public class I18N {
 			currentLocale = Locale.itIT;
 		} else if(locale.equalsIgnoreCase("maHU")) {
 			currentLocale = Locale.maHU;
+		} else if(locale.equalsIgnoreCase("frFR")) {
+			currentLocale = Locale.frFR;
 		} else {
 			currentLocale = Locale.enUS;
 		}
