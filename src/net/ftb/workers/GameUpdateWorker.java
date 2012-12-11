@@ -119,15 +119,21 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 	protected boolean downloadJars() {
 		File md5sFile = new File(binDir, "md5s");
 		Properties md5s = new Properties();
-
+		FileInputStream inputStream = null;
 		try	{
-			FileInputStream inputStream = new FileInputStream(md5sFile);
+			inputStream = new FileInputStream(md5sFile);
 			md5s.load(inputStream);
 			inputStream.close();
 		} catch (FileNotFoundException e) {
 			Logger.logError(e.getMessage(), e);
 		} catch (IOException e) {
 			Logger.logError(e.getMessage(), e);
+		} finally {
+			if(inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) { }
+			}
 		}
 
 		int totalDownloadSize = 0;
