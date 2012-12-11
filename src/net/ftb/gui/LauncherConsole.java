@@ -135,14 +135,14 @@ public class LauncherConsole extends JFrame implements ILogListener {
 		});
 		panel.add(logSourceComboBox);
 
-		JButton ircButton = new JButton("Join support webchat");
+		JButton ircButton = new JButton("Need support? Click me!");
 		ircButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					try {
-						desktop.browse(new URI("http://webchat.esper.net/?channels=FTB%2CFTBLauncher&prompt=0"));
+						desktop.browse(new URI("http://support.feed-the-beast.com/?qa=hot"));
 					} catch (Exception exc) {
 						Logger.logError("Could not open url: " + exc.getMessage());
 					}
