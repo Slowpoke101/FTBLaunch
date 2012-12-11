@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.ftb.data.ModPack;
+import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.minecraft.Launcher;
 
@@ -70,16 +71,21 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 
 	@SuppressWarnings({ "static-access", "deprecation" })
 	public void start(Applet mcApplet, String user, String session) {
-		Thread animation = new Thread();
-		animation.start();
-		JLabel label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + ModPack.getSelectedPack().getDir() + File.separator + ModPack.getSelectedPack().getAnimation()));
-		label.setBounds(new Rectangle(size));
-		getContentPane().setBackground(Color.black);
-		add(label);
+		JLabel label = new JLabel();
 		try {
+			Thread animation = new Thread();
+			animation.start();
+			label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + ModPack.getSelectedPack().getDir() + File.separator + ModPack.getSelectedPack().getAnimation()));
+			label.setBounds(new Rectangle(size));
+			getContentPane().setBackground(Color.black);
+			add(label);
 			animation.sleep(3000);
-		} catch (InterruptedException e) { }
-		animation.stop();
+			animation.stop();
+		} catch (Exception e) { 
+			Logger.logError("Shiny Stuffs not found :(");
+			label.add(label);
+		}
+		
 		try {
 			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
 		} catch (MalformedURLException ignored){ }
