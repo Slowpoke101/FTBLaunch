@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -71,7 +72,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	public void start(Applet mcApplet, String user, String session) {
 		Thread animation = new Thread();
 		animation.start();
-		JLabel label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + "ModPacks" + ModPack.getSelectedPack().getDir() + ModPack.getSelectedPack().getAnimation()));
+		JLabel label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + ModPack.getSelectedPack().getDir() + File.separator + ModPack.getSelectedPack().getAnimation()));
 		label.setBounds(new Rectangle(size));
 		getContentPane().setBackground(Color.black);
 		add(label);
