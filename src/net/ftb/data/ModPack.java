@@ -24,7 +24,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, sep = File.separator;
+	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, sep = File.separator;
 	private String[] mods, oldVersions;
 	private Image logo, image;
 	private int index;
@@ -100,11 +100,12 @@ public class ModPack {
 	 * @param info - the description for the ModPack
 	 * @param mods - string containing a list of mods included in the ModPack by default
 	 * @param oldVersions - string containing all available old versions of the ModPack
+	 * @param animation - the animation to display before minecraft launches
 	 * @param idx - the actual position of the modpack in the index
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, int idx) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, String animation, int idx) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -113,6 +114,7 @@ public class ModPack {
 		this.mcVersion = mcVersion;
 		this.url = url;
 		this.serverUrl = serverUrl;
+		this.animation = animation;
 		logoName = logo;
 		imageName = image;
 		this.info = info;
@@ -334,5 +336,12 @@ public class ModPack {
 	 */
 	public void setMcVersion(String version) {
 		mcVersion = version;
+	}
+	
+	/**
+	 * @return the filename of the gif animation to display before minecraft loads
+	 */
+	public String getAnimation() {
+		return animation;
 	}
 }

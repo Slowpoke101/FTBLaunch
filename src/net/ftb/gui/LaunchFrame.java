@@ -59,6 +59,7 @@ import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
+import net.ftb.tools.AnimationManager;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
@@ -795,6 +796,9 @@ public class LaunchFrame extends JFrame {
 		if(man.erroneous) {
 			return false;
 		}
+		
+		AnimationManager ani = new AnimationManager(new JFrame(), true);
+		ani.setVisible(true);
 		try {
 			installMods(ModPack.getSelectedPack().getDir());
 			man.cleanUp();

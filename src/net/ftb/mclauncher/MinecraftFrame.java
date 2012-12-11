@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import net.ftb.data.ModPack;
+import net.ftb.util.OSUtils;
 import net.minecraft.Launcher;
 
 public class MinecraftFrame extends JFrame implements WindowListener {
@@ -65,10 +67,11 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		addWindowListener(this);
 	}
 
+	@SuppressWarnings({ "static-access", "deprecation" })
 	public void start(Applet mcApplet, String user, String session) {
 		Thread animation = new Thread();
 		animation.start();
-		JLabel label = new JLabel(new ImageIcon(getClass().getResource("/image/animation_test.gif")));
+		JLabel label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + "ModPacks" + ModPack.getSelectedPack().getDir() + ModPack.getSelectedPack().getAnimation()));
 		label.setBounds(new Rectangle(size));
 		getContentPane().setBackground(Color.black);
 		add(label);

@@ -158,7 +158,7 @@ public class ModManager extends JDialog {
 		});
 	}
 
-	private boolean upToDate() throws IOException {
+	public static boolean upToDate() throws IOException {
 		ModPack pack = ModPack.getSelectedPack();
 		File version = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "version");
 		if(!version.exists()) {
