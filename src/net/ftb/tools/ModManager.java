@@ -48,7 +48,6 @@ public class ModManager extends JDialog {
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
 			upToDate = upToDate();
 			if(!upToDate) {
-				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();
 				pack.setUpdated(true);
@@ -98,6 +97,10 @@ public class ModManager extends JDialog {
 			baseDynamic.mkdirs();
 			new File(baseDynamic, modPackName).createNewFile();
 			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
+			String animation = pack.getAnimation();
+			if(!animation.equalsIgnoreCase("empty")) {
+				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
+			}
 			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
 				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
 				clearModsFolder(pack);
@@ -222,7 +225,7 @@ public class ModManager extends JDialog {
 		ModPack pack = ModPack.getSelectedPack();
 		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
 		for(String file : tempFolder.list()) {
-			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version")) {
+			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
 				} catch (IOException e) {

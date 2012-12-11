@@ -68,7 +68,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	public void start(Applet mcApplet, String user, String session) {
 		JLabel label = new JLabel();
 		Thread animation = new Thread();
-		if(animationname.equalsIgnoreCase("empty")) {
+		if(!animationname.equalsIgnoreCase("empty")) {
 			try {
 				animation.start();
 				label = new JLabel(new ImageIcon(animationname));
@@ -76,10 +76,10 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				getContentPane().setBackground(Color.black);
 				add(label);
 				animation.sleep(3000);
+				animation.stop();
 			} catch (Exception e) {
 				label.add(label);
 			} finally {
-				animation.stop();
 				remove(label);
 			}
 		}

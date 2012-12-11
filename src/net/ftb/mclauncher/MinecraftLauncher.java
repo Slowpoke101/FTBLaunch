@@ -88,9 +88,8 @@ public class MinecraftLauncher {
 	private static void setMemory(List<String> arguments, String rmax) {
 		boolean memorySet = false;
 		try {
-			int min = 256, max = -1;
+			int min = 256;
 			if (rmax != null && Integer.parseInt(rmax) > 0) {
-				max = Integer.parseInt(rmax);
 				arguments.add("-Xms" + min + "M");
 				Logger.logInfo("Setting MinMemory to " + min);
 				arguments.add("-Xmx" + rmax + "M");

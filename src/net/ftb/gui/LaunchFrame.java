@@ -13,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -59,7 +58,6 @@ import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
-import net.ftb.tools.AnimationManager;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
@@ -127,7 +125,7 @@ public class LaunchFrame extends JFrame {
 		if(new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
 		}
-		
+
 		DownloadUtils thread = new DownloadUtils();
 		thread.start();
 
@@ -796,9 +794,6 @@ public class LaunchFrame extends JFrame {
 		if(man.erroneous) {
 			return false;
 		}
-		
-		AnimationManager ani = new AnimationManager(new JFrame(), true);
-		ani.setVisible(true);
 		try {
 			installMods(ModPack.getSelectedPack().getDir());
 			man.cleanUp();
