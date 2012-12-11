@@ -45,7 +45,7 @@ public class AnimationManager extends JDialog {
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
-			if(!ModManager.upToDate()) {
+			if(!ModManager.upToDate) {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();

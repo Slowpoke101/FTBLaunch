@@ -34,7 +34,7 @@ import net.ftb.util.OSUtils;
 
 public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
-	public static boolean update = false, backup = false, erroneous = false;
+	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static boolean backdated = false;
 	private static int curVersion = 0;
 	private JPanel contentPane;
@@ -46,7 +46,8 @@ public class ModManager extends JDialog {
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
-			if(!upToDate()) {
+			upToDate = upToDate();
+			if(!upToDate) {
 				Logger.logInfo("Not up to date!");
 				String installPath = OSUtils.getDynamicStorageLocation();
 				ModPack pack = ModPack.getSelectedPack();
@@ -158,7 +159,7 @@ public class ModManager extends JDialog {
 		});
 	}
 
-	public static boolean upToDate() throws IOException {
+	private boolean upToDate() throws IOException {
 		ModPack pack = ModPack.getSelectedPack();
 		File version = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "version");
 		if(!version.exists()) {
