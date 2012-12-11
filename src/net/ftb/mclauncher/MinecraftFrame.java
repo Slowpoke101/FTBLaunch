@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -17,9 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import net.ftb.data.ModPack;
-import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
 import net.minecraft.Launcher;
 
 public class MinecraftFrame extends JFrame implements WindowListener {
@@ -27,11 +23,11 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	private Launcher appletWrap = null;
 	private Dimension size;
 	private int windowState;
+	private String animationname;
 
-	public MinecraftFrame(String title, String imagePath, int x, int y, int xPos, int yPos, boolean autoMax, boolean centerWindow) {
+	public MinecraftFrame(String title, String imagePath, String animationname, int x, int y, int xPos, int yPos, boolean autoMax, boolean centerWindow) {
 		super(title);
-		
-		
+		this.animationname = animationname;
 		Color baseColor = new Color(40, 40, 40);
 		UIManager.put("control", baseColor);
 		UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
@@ -53,7 +49,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (Exception e1) { }
 		}
-		
+
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
 		windowState = getExtendedState() | ((autoMax) ? JFrame.MAXIMIZED_BOTH : 0);
@@ -62,39 +58,41 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		if(centerWindow) {
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			setLocation((screenSize.width - x) / 2, (screenSize.height - y) / 2);
-		} else  {
+		} else {
 			setLocation(xPos, yPos);
 		}
 		setResizable(true);
 		addWindowListener(this);
 	}
 
-	@SuppressWarnings({ "static-access", "deprecation" })
 	public void start(Applet mcApplet, String user, String session) {
 		JLabel label = new JLabel();
-		try {
-			Thread animation = new Thread();
-			animation.start();
-			label = new JLabel(new ImageIcon(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + ModPack.getSelectedPack().getDir() + File.separator + ModPack.getSelectedPack().getAnimation()));
-			label.setBounds(new Rectangle(size));
-			getContentPane().setBackground(Color.black);
-			add(label);
-			animation.sleep(3000);
-			animation.stop();
-		} catch (Exception e) { 
-			Logger.logError("Shiny Stuffs not found :(");
-			label.add(label);
+		Thread animation = new Thread();
+		if(animationname.equalsIgnoreCase("empty")) {
+			try {
+				animation.start();
+				label = new JLabel(new ImageIcon(animationname));
+				label.setBounds(new Rectangle(size));
+				getContentPane().setBackground(Color.black);
+				add(label);
+				animation.sleep(3000);
+			} catch (Exception e) {
+				label.add(label);
+			} finally {
+				animation.stop();
+				remove(label);
+			}
 		}
-		
+
 		try {
 			appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
-		} catch (MalformedURLException ignored){ }
+		} catch (MalformedURLException ignored) { }
 		appletWrap.setParameter("username", user);
 		appletWrap.setParameter("sessionid", session);
 		appletWrap.setParameter("stand-alone", "true");
 		mcApplet.setStub(appletWrap);
 		add(appletWrap);
-		remove(label);
+
 		appletWrap.setPreferredSize(size);
 		pack();
 		setExtendedState(windowState);

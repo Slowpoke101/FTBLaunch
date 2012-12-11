@@ -3,12 +3,8 @@ package net.ftb.tools;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -23,12 +19,8 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 

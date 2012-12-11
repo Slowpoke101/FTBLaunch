@@ -114,7 +114,11 @@ public class ModPack {
 		this.mcVersion = mcVersion;
 		this.url = url;
 		this.serverUrl = serverUrl;
-		this.animation = animation;
+		if(!animation.equalsIgnoreCase("")) {
+			this.animation = animation;
+		} else {
+			this.animation = "empty";
+		}
 		logoName = logo;
 		imageName = image;
 		this.info = info;
