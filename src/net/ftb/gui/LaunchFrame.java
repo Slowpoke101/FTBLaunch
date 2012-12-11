@@ -507,6 +507,8 @@ public class LaunchFrame extends JFrame {
 							ErrorUtils.tossError("Outdated launcher.");
 						} else {
 							ErrorUtils.tossError("Login failed: " + responseStr);
+							PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+							d.setVisible(true);
 						}
 					}
 					enableObjects();
