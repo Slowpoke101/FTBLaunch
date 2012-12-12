@@ -48,6 +48,9 @@ public class ChooseDir extends JFrame implements ActionListener {
 				Logger.logWarn("No Selection.");
 			}
 		} else {
+			if(!Settings.getSettings().getLastAddPath().isEmpty()) {
+				chooser.setCurrentDirectory(new File(Settings.getSettings().getLastAddPath()));
+			}
 			chooser.setDialogTitle("Please select the mod to install");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setAcceptAllFileFilterUsed(true);
@@ -56,6 +59,8 @@ public class ChooseDir extends JFrame implements ActionListener {
 				if(!destination.exists()) {
 					try {
 						FileUtils.copyFile(chooser.getSelectedFile(), destination);
+						Settings.getSettings().setLastAddPath(chooser.getSelectedFile().getPath());
+						LaunchFrame.getInstance().saveSettings();
 					} catch (IOException e1) {
 						Logger.logError(e1.getMessage());
 					}

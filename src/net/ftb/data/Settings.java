@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import net.ftb.util.OSUtils;
@@ -171,6 +172,14 @@ public class Settings extends Properties {
 
 	public String getPackVer() {
 		return getProperty(ModPack.getSelectedPack().getDir(), "Newest Version");
+	}
+
+	public String getLastAddPath() {
+		return getProperty("lastAddPath", "");
+	}
+	
+	public void setLastAddPath(String string) {
+		setProperty("lastAddPath", string);
 	}
 	
 //	public void addPrivatePack(String code) {
