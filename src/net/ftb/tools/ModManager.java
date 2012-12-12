@@ -55,6 +55,10 @@ public class ModManager extends JDialog {
 				if(modPackZip.exists()) {
 					FileUtils.delete(modPackZip);
 				}
+				File animationGif = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
+				if(animationGif.exists()) {
+					FileUtils.delete(animationGif);
+				}
 				erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 			}
 			return true;
