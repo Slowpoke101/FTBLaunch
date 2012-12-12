@@ -54,12 +54,11 @@ public class TextureManager extends JDialog {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
-				in = new BufferedInputStream(new URL(urlString).openStream());
+				URL url_ = new URL(urlString);
+				in = new BufferedInputStream(url_.openStream());
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
-				int count, amount = 0, steps = 0;
-				URL url_ = new URL(DownloadUtils.getCreeperhostLink(TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex()).getUrl()));
-				int mapSize = url_.openConnection().getContentLength();
+				int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
@@ -84,7 +83,7 @@ public class TextureManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink(texturePackName));
+			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks%5E" + texturePackName));
 			installTexturePack(texturePackName, dir);
 		}
 

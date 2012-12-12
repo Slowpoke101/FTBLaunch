@@ -61,12 +61,11 @@ public class MapManager extends JDialog {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
-				in = new BufferedInputStream(new URL(urlString).openStream());
+				URL url_ = new URL(urlString);
+				in = new BufferedInputStream(url_.openStream());
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
-				int count, amount = 0, steps = 0;
-				URL url_ = new URL(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-				int mapSize = url_.openConnection().getContentLength();
+				int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
@@ -91,7 +90,7 @@ public class MapManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(mapName));
+			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps%5E" + mapName));
 			FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
 			installMap(mapName, dir);
 		}
