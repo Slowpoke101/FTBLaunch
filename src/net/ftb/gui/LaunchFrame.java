@@ -806,9 +806,11 @@ public class LaunchFrame extends JFrame {
 	 */
 	private void cleanUpBin() {
 		File baseDir = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "bin" + File.separator);
-		for(String file : baseDir.list()) {
-			if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s") && new File(baseDir, file).exists()) {
-				new File(baseDir, file).delete();
+		if(baseDir.exists()) {
+			for(String file : baseDir.list()) {
+				if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s") && new File(baseDir, file).exists()) {
+					new File(baseDir, file).delete();
+				}
 			}
 		}
 	}
