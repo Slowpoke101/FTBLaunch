@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import net.ftb.util.OSUtils;
@@ -170,5 +171,31 @@ public class Settings extends Properties {
 
 	public String getPackVer() {
 		return getProperty(ModPack.getSelectedPack().getDir(), "Newest Version");
+	}
+	
+	public void addPrivatePack(String code) {
+		ArrayList<String> packList = new ArrayList<String>();
+		for(int i = 0; i < getPrivatePacks().length; i++) {
+			packList.add(getPrivatePacks()[i]);
+		}
+		packList.add(code);
+		String[] codes = new String[packList.size()];
+		for(int i = 0; i < packList.size(); i++) {
+			codes[i] = packList.get(i);
+		}
+		setPrivatePacks(codes);
+	}
+	
+	public void setPrivatePacks(String[] codes) {
+		String s = codes[0];
+		for(int i = 1; i < codes.length; i++) {
+			s.concat(",");
+			s.concat(codes[i]);
+		}
+		setProperty("privatePacks", s);
+	}
+	
+	public String[] getPrivatePacks() {
+		return getProperty("privatePacks", "").split(",");
 	}
 }
