@@ -625,7 +625,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	public void launchMinecraft(String workingDir, String username, String password) {
 		try {
-			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
+			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), Settings.getSettings().getAdditionalJavaOptions());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
 			try {
 				Thread.sleep(1500);
