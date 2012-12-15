@@ -84,8 +84,8 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static LaunchFrame instance = null;
-	private static String version = "1.1.5";
-	private static int buildNumber = 115;
+	private static String version = "1.1.6";
+	private static int buildNumber = 116;
 	private static final long serialVersionUID = 1L;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
