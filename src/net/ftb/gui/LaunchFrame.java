@@ -527,11 +527,8 @@ public class LaunchFrame extends JFrame {
 	public void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack pack = ModPack.getSelectedPack();
-		if(Settings.getSettings().getForceUpdate()) {
-			File temp = new File(new File(Settings.getSettings().getInstallPath(), pack.getDir()), "version");
-			if(temp.exists()) {
-				temp.delete();
-			}
+		if(Settings.getSettings().getForceUpdate() && new File(installPath, pack.getDir() + File.separator + "version").exists()) {
+			new File(installPath, pack.getDir() + File.separator + "version").delete();
 		}
 		if(!initializeMods()) {
 			enableObjects();
@@ -539,9 +536,8 @@ public class LaunchFrame extends JFrame {
 		}
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
-			cleanUpBin();
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), "minecraft.jar", new File(installPath, pack.getDir() + "/minecraft/bin").getPath(), false) {
+			final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
 				@Override
 				public void done() {
 					progMonitor.close();
@@ -551,15 +547,14 @@ public class LaunchFrame extends JFrame {
 							FileUtils.killMetaInf();
 							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
-							Logger.logError("Error occurred during downloading the game");
 							ErrorUtils.tossError("Error occurred during downloading the game");
 						}
 					} catch (CancellationException e) { 
-						ErrorUtils.tossError("Game update canceled");
+						ErrorUtils.tossError("Game update canceled.");
 					} catch (InterruptedException e) { 
-						ErrorUtils.tossError("Game update interrupted");
+						ErrorUtils.tossError("Game update interrupted.");
 					} catch (ExecutionException e) { 
-						ErrorUtils.tossError("Failed to download game");
+						ErrorUtils.tossError("Failed to download game.");
 					} finally {
 						enableObjects();
 					}
@@ -799,20 +794,6 @@ public class LaunchFrame extends JFrame {
 			man.cleanUp();
 		} catch (IOException e) { }
 		return true;
-	}
-
-	/**
-	 * Cleans the minecraft bin folder of old files
-	 */
-	private void cleanUpBin() {
-		File baseDir = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "bin" + File.separator);
-		if(baseDir.exists()) {
-			for(String file : baseDir.list()) {
-				if(!file.equalsIgnoreCase("version") && !file.equalsIgnoreCase("md5s") && new File(baseDir, file).exists()) {
-					new File(baseDir, file).delete();
-				}
-			}
-		}
 	}
 
 	/**
