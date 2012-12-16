@@ -1,24 +1,19 @@
 package net.ftb.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 
 public class FileUtils {
@@ -90,85 +85,68 @@ public class FileUtils {
 	 * @param outputLocation - location to extract to
 	 */
 	public static void extractZipTo(String zipLocation, String outputLocation) {
+		ZipInputStream zipinputstream = null;
 		try {
-			System.out.println("Extracting");
-			File fSourceZip = new File(zipLocation);
-			File temp = new File(outputLocation);
-			temp.mkdir();
-			ZipFile zipFile = new ZipFile(fSourceZip);
-			Enumeration<?> e = zipFile.entries();
-			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry) e.nextElement();
-				File destinationFilePath = new File(outputLocation, entry.getName());
-				destinationFilePath.getParentFile().mkdirs();
-				if (!entry.isDirectory() && !entry.getName().equals(".minecraft")) {
-					BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry));
-					int b;
-					byte buffer[] = new byte[1024];
-					FileOutputStream fos = new FileOutputStream(destinationFilePath);
-					BufferedOutputStream bos = new BufferedOutputStream(fos, 1024);
-					while ((b = bis.read(buffer, 0, 1024)) != -1) {
-						bos.write(buffer, 0, b);
+			byte[] buf = new byte[1024];
+			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
+			ZipEntry zipentry = zipinputstream.getNextEntry();
+			while (zipentry != null) { 
+				String entryName = zipentry.getName();
+				int n;
+				if(new File(entryName).getParent() != null && !zipentry.isDirectory() && !entryName.equalsIgnoreCase("minecraft") && !entryName.equalsIgnoreCase(".minecraft") && !entryName.equalsIgnoreCase("instMods")) {
+					new File(outputLocation + File.separator + entryName).getParentFile().mkdirs();
+					FileOutputStream fileoutputstream = new FileOutputStream(outputLocation + File.separator + entryName);             
+					while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+						fileoutputstream.write(buf, 0, n);
 					}
-					bos.flush();
-					bos.close();
-					bis.close();
-					fos.close();
+					fileoutputstream.close();
 				}
+				zipinputstream.closeEntry();
+				zipentry = zipinputstream.getNextEntry();
 			}
-			zipFile.close();
-		} catch (IOException ioe) {
-			Logger.logError(ioe.getMessage(), ioe);
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
 			backupExtract(zipLocation, outputLocation);
+		} finally {
+			try {
+				zipinputstream.close();
+			} catch (IOException e) { }
 		}
 	}
 
 	public static void backupExtract(String zipLocation, String outputLocation){
-
-		Logger.log("Extracting (Backup way)", LogLevel.INFO, null);
-
+		Logger.logInfo("Extracting (Backup way)");
 		byte[] buffer = new byte[1024];
-
+		ZipInputStream zis = null;
+		ZipEntry ze = null;
 		try{
-
 			File folder = new File(outputLocation);
 			if(!folder.exists()){
 				folder.mkdir();
 			}
-
-			ZipInputStream zis = new ZipInputStream(new FileInputStream(zipLocation));
-
-			ZipEntry ze = zis.getNextEntry();
-
+			zis = new ZipInputStream(new FileInputStream(zipLocation));
+			ze = zis.getNextEntry();
 			while(ze != null){
-
-				String fileName = ze.getName();
-				File newFile = new File(outputLocation + File.separator + fileName);
-
-				if(ze.isDirectory()) {
-					new File(newFile.getParent()).mkdirs();
-				} else {
-					FileOutputStream fos = null;
-
-					new File(newFile.getParent()).mkdirs();
-
-					fos = new FileOutputStream(newFile);
-
+				File newFile = new File(outputLocation, ze.getName());
+				newFile.getParentFile().mkdirs();
+				if(!ze.isDirectory()) {
+					FileOutputStream fos = new FileOutputStream(newFile);
 					int len;
 					while ((len = zis.read(buffer)) > 0) {
 						fos.write(buffer, 0, len);
 					}
-
+					fos.flush();
 					fos.close();
 				}
 				ze = zis.getNextEntry();
 			}
-
-			zis.closeEntry();
-			zis.close();
-
 		} catch(IOException ex) {
 			Logger.logError(ex.getMessage(), ex);
+		} finally {
+			try {
+				zis.closeEntry();
+				zis.close();
+			} catch (IOException e) { }	
 		}
 	}    
 
