@@ -40,6 +40,7 @@ import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
@@ -332,7 +333,9 @@ public class LaunchFrame extends JFrame {
 				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
 					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
 						try {
-							OSUtils.browse(DownloadUtils.getCreeperhostLink(ModPack.getSelectedPack().getServerUrl()));
+							String url = DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + Settings.getSettings().getPackVer() + "%5E" + ModPack.getSelectedPack().getServerUrl());
+							
+							OSUtils.browse(url);
 						} catch (NoSuchAlgorithmException e) { }
 					}
 				}
