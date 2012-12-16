@@ -58,7 +58,8 @@ public class I18N {
 	 * Set available locales and load fallback locale
 	 */
 	public static void setupLocale() {
-		localeFiles.put("enUS", "English"); localeIndices.put(0, "enUS");
+		localeFiles.put("enUS", "English"); 
+		localeIndices.put(0, "enUS");
 		try {
 			new LocaleUpdater().start();
 		} catch (Exception e) {

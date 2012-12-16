@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -135,13 +134,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(ramMaximum);
 		add(currentRam);
 
-		ArrayList<String> locales = new ArrayList<String>();
+		String[] locales = new String[I18N.localeIndices.size()];
 		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
 			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
-			locales.add(entry.getKey(), I18N.localeFiles.get(entry.getValue()));
+			locales[entry.getKey()] = entry.getValue();
 		}
 
-		locale = new JComboBox(locales.toArray());
+		locale = new JComboBox(locales);
 		locale.setBounds(190, 148, 222, 23);
 		locale.addActionListener(new ActionListener() {
 			@Override
