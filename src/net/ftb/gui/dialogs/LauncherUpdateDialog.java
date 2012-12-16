@@ -49,7 +49,7 @@ public class LauncherUpdateDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO: Call new frame containing html page?
-				OSUtils.browse("http://launcher.feed-the-beast.com/changelog.html");
+				OSUtils.browse("http://launcher.feed-the-beast.com/changelog.html?" + LaunchFrame.buildNumber);
 			}
 		});
 		panel.add(changelog);
