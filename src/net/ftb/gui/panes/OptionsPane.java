@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
@@ -14,7 +15,9 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -33,6 +36,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate, tglbtnCenterScreen;
@@ -49,6 +54,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
+	private JTextField javaInstallDir;
 
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -238,6 +244,45 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		autoMaxCheck.setSelected(Boolean.parseBoolean(Settings.getSettings().getAutoMaximize()));
 		autoMaxCheck.setBounds(613, 184, 183, 23);
 		add(autoMaxCheck);
+		
+		JLabel javaLocLabel = new JLabel("Java Location");
+		javaLocLabel.setBounds(490, 220, 110, 14);
+		add(javaLocLabel);
+		
+		javaInstallDir = new JTextField();
+		javaInstallDir.setEditable(false);
+		String javaInstall = Settings.getSettings().getJavaInstall();
+		javaInstallDir.setText(javaInstall);
+		javaInstallDir.setToolTipText(javaInstall);
+		javaInstallDir.setBounds(613, 220, 230, 23);
+		add(javaInstallDir);
+
+		JButton dirChooserButton = new JButton("Change");
+		dirChooserButton.setBounds(763, 240, 80, 23);
+		dirChooserButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser(Settings.getSettings().getJavaInstall());
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int option = chooser.showOpenDialog(OptionsPane.this);
+				if (JFileChooser.APPROVE_OPTION == option) {
+					File selectedDir = chooser.getSelectedFile();
+					String javaExecutableName = "java";
+					if (OS.WINDOWS.equals(OSUtils.getCurrentOS())) {
+						javaExecutableName += ".exe";
+					}
+					File javaExecutable = new File(selectedDir + System.getProperty("file.separator") + "bin" + System.getProperty("file.separator") + javaExecutableName);
+					if (javaExecutable.exists()) {
+						javaInstallDir.setText(selectedDir.getAbsolutePath());
+						saveSettingsInto(Settings.getSettings());
+					} else {
+						JOptionPane.showMessageDialog(OptionsPane.this, "The selected directoy is not a proper Java installation.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		add(dirChooserButton);
 	}
 
 	public void setDownloadServers() {
@@ -298,6 +343,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setDownlaodServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
 		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
 		settings.setAutoMaximize(String.valueOf(autoMaxCheck.isSelected()));
+		settings.setJavaInstall(javaInstallDir.getText());
 		try {
 			settings.save();
 		} catch (IOException e) { }
