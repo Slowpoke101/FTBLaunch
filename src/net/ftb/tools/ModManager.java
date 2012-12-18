@@ -242,7 +242,7 @@ public class ModManager extends JDialog {
 	public static void clearModsFolder(ModPack pack) throws IOException {
 		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
 		for(String file : modsFolder.list()) {
-			if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled")) {
+			if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
 				FileUtils.delete(new File(modsFolder, file));
 			}
 		}
