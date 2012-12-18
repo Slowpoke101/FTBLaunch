@@ -185,7 +185,9 @@ public class Settings extends Properties {
 	public void addPrivatePack(String code) {
 		ArrayList<String> packList = new ArrayList<String>();
 		for(int i = 0; i < getPrivatePacks().length; i++) {
-			packList.add(getPrivatePacks()[i]);
+			if(!getPrivatePacks()[i].equals("")) {
+				packList.add(getPrivatePacks()[i]);
+			}
 		}
 		packList.add(code);
 		String[] codes = new String[packList.size()];

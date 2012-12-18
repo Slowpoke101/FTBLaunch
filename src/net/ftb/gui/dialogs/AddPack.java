@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -30,13 +32,15 @@ public class AddPack extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				ArrayList<String> codes = new ArrayList<String>(Arrays.asList(Settings.getSettings().getPrivatePacks()));
 				
-				if(DownloadUtils.staticFileExists(textField.getText() + ".xml")) {
+				if(DownloadUtils.staticFileExists(textField.getText() + ".xml") && !codes.contains(textField.getText() + ".xml")) {
 					ModPack.loadXml(textField.getText() + ".xml");
 					Settings.getSettings().addPrivatePack(textField.getText());
 					setVisible(false);
 				} else {
-					ErrorUtils.tossError("Invalid Private Pack :(");
+					ErrorUtils.tossError("Invalid Private Pack :( (or already added)");
 				}
 			}
 		});
