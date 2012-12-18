@@ -85,6 +85,11 @@ public class Settings extends Properties {
 	public String getLocale() {
 		return getProperty("locale", "enUS");
 	}
+	
+	public String getJavaInstall() {
+		String javaHome = System.getProperty("java.home");
+		return getProperty("javaInstall", javaHome);
+	}
 
 	public void setLocale(String locale) {
 		setProperty("locale", locale);
@@ -180,6 +185,10 @@ public class Settings extends Properties {
 	
 	public void setLastAddPath(String string) {
 		setProperty("lastAddPath", string);
+	}
+	
+	public void setJavaInstall(String string) {
+		setProperty("javaInstall", string);
 	}
 	
 //	public void addPrivatePack(String code) {
