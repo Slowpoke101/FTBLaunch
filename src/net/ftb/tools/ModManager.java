@@ -36,7 +36,7 @@ public class ModManager extends JDialog {
 	private static final long serialVersionUID = 6897832855341265019L;
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static boolean backdated = false;
-	private static int curVersion = 0;
+	private static String curVersion = "";
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
@@ -174,7 +174,7 @@ public class ModManager extends JDialog {
 			version.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
-			curVersion = Integer.parseInt(pack.getVersion());
+			curVersion = pack.getVersion().replace(".", "_");
 			out.flush();
 			out.close();
 			return false;
@@ -183,23 +183,23 @@ public class ModManager extends JDialog {
 		String line = in.readLine();
 		in.close();
 		int currentVersion, requestedVersion;
-		currentVersion = (line != null) ? Integer.parseInt(line) : 0;
+		currentVersion = (line != null) ? Integer.parseInt(line.replace(".", "")) : 0;
 		if(!Settings.getSettings().getPackVer().equals("Newest Version")) {
-			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim());
+			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
 			if(requestedVersion != currentVersion) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write("" + requestedVersion);
+				out.write("" + Settings.getSettings().getPackVer());
 				out.flush();
 				out.close();
 				Logger.logInfo("Modpack is out of date.");
 				backdated = true;
-				curVersion = requestedVersion;
+				curVersion = Settings.getSettings().getPackVer().replace(".", "_");
 				return false;
 			} else {
 				Logger.logInfo("Modpack is up to date.");
 				return true;
 			}
-		} else if(Integer.parseInt(pack.getVersion()) > currentVersion) {
+		} else if(Integer.parseInt(pack.getVersion().replace(".", "")) > currentVersion) {
 			Logger.logInfo("Modpack is out of date.");
 			ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
 			p.setVisible(true);
@@ -215,7 +215,7 @@ public class ModManager extends JDialog {
 			}
 			BufferedWriter out = new BufferedWriter(new FileWriter(version));
 			out.write(pack.getVersion());
-			curVersion = Integer.parseInt(pack.getVersion());
+			curVersion = pack.getVersion().replace(".", "_");
 			out.flush();
 			out.close();
 			return false;
