@@ -35,6 +35,7 @@ public class AddPack extends JDialog {
 					url = new URL(DownloadUtils.getStaticCreeperhostLink(textField.getText() + ".xml"));
 					ModPack.loadXml(textField.getText() + ".xml");
 					Settings.getSettings().addPrivatePack(textField.getText());
+					setVisible(false);
 				} catch (MalformedURLException e1) {
 					ErrorUtils.tossError("Invalid Private Pack :(");
 				}
