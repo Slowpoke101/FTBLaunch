@@ -65,7 +65,12 @@ public class I18N {
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 		}
-		// Add files from i18n directory
+	}
+
+	/**
+	 * Add files from the locale directory
+	 */
+	public static void addFiles() {
 		int i = 1;
 		Properties tmp = new Properties();
 		String[] list = dir.list();

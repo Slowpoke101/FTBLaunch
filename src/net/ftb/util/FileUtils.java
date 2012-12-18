@@ -93,7 +93,7 @@ public class FileUtils {
 			while (zipentry != null) { 
 				String entryName = zipentry.getName();
 				int n;
-				if(new File(entryName).getParent() != null && !zipentry.isDirectory() && !entryName.equalsIgnoreCase("minecraft") && !entryName.equalsIgnoreCase(".minecraft") && !entryName.equalsIgnoreCase("instMods")) {
+				if(!zipentry.isDirectory() && !entryName.equalsIgnoreCase("minecraft") && !entryName.equalsIgnoreCase(".minecraft") && !entryName.equalsIgnoreCase("instMods")) {
 					new File(outputLocation + File.separator + entryName).getParentFile().mkdirs();
 					FileOutputStream fileoutputstream = new FileOutputStream(outputLocation + File.separator + entryName);             
 					while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {

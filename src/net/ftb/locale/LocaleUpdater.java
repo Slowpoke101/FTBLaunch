@@ -17,8 +17,8 @@ import net.ftb.util.OSUtils;
 
 public class LocaleUpdater extends Thread {
 	private final String root = OSUtils.getDynamicStorageLocation();
-	private File local = new File(root + File.separator + "locale" + File.separator + "version");
-	private File archive = new File(root + File.separator + "locales.zip");
+	private File local = new File(root, "locale" + File.separator + "version");
+	private File archive = new File(root, "locales.zip");
 	private int remoteVer;
 
 	public LocaleUpdater() {
@@ -35,6 +35,9 @@ public class LocaleUpdater extends Thread {
 				FileUtils.delete(local.getParentFile());
 			}
 			FileUtils.extractZipTo(archive.getAbsolutePath(), local.getParentFile().getPath());
+			if(!local.exists()) {
+				local.createNewFile();
+			}
 			Writer wr = new FileWriter(local);
 			wr.write(String.valueOf(remoteVer));
 			wr.close();
@@ -53,9 +56,7 @@ public class LocaleUpdater extends Thread {
 			dir.mkdirs();
 			tmp.mkdirs();
 		}
-
 		cleanUpFiles();
-
 		try {
 			URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
 			Scanner scanner = new Scanner(connection.getInputStream());
@@ -68,7 +69,6 @@ public class LocaleUpdater extends Thread {
 			Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
 			return;
 		}
-
 		if (local.exists()) {
 			try {
 				int localVer;
@@ -76,7 +76,6 @@ public class LocaleUpdater extends Thread {
 				localVer = scanner.nextInt();
 				Logger.logInfo("[i18n] localVer = " + localVer);
 				scanner.close();
-
 				if (localVer < remoteVer) {
 					updateFiles();
 				} else {
@@ -88,6 +87,7 @@ public class LocaleUpdater extends Thread {
 		} else {
 			updateFiles();
 		}
+		I18N.addFiles();
 	}
 
 	private void cleanUpFiles() {
