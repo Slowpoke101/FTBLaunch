@@ -317,12 +317,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				}
 			}
 		}
-		searched = false;
 		updatePacks();
 	}
 
 	public static void searchPacks(String search) {
-		CharSequence seq = search;
+		CharSequence seq = search.toLowerCase();
 		System.out.println("Searching Packs for : " + search);
 		packPanels.clear();
 		packs.removeAll();
@@ -334,15 +333,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		int counter = 0;
 		selectedPack = 0;
 		for(ModPack pack : ModPack.getPackArray()) {
-			String name = pack.getName().toLowerCase();
-			String author = pack.getAuthor().toLowerCase();
-			if(pack.getName().contains(seq) || pack.getAuthor().contains(seq) || name.contains(seq) || author.contains(seq)) {
+			if(pack.getName().toLowerCase().contains(seq) || pack.getAuthor().toLowerCase().contains(seq)) {
 				addPack(pack);
 				currentPacks.put(counter, pack);
 				counter++;
 			}
 		}
-		searched = true;
 		updatePacks();
 		seq = "";
 		packs.repaint();

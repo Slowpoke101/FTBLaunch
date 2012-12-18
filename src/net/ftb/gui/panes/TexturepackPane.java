@@ -43,6 +43,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
 	private static JEditorPane textureInfo;
+	
+	public static boolean searched;
 
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
 
@@ -220,11 +222,13 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				}
 			}
 		}
+		searched = false;
 		updateTexturePacks();
 	}
 
 	public static void searchTexturePacks(String search) {
-		System.out.println("Searching Texture Packs for : " + search);
+		CharSequence seq = search.toLowerCase();
+		System.out.println("Searching Packs for : " + search);
 		texturePackPanels.clear();
 		texturePacks.removeAll();
 		currentTexturePacks.clear();
@@ -234,14 +238,17 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacks.setOpaque(false);
 		int counter = 0;
 		selectedTexturePack = 0;
-		for(TexturePack texture : TexturePack.getTexturePackArray()) {
-			if(texture.getName().equalsIgnoreCase(search) || texture.getAuthor().equalsIgnoreCase(search)) {
-				addTexturePack(texture);
-				currentTexturePacks.put(counter, texture);
+		for(TexturePack map : TexturePack.getTexturePackArray()) {
+			if(map.getName().toLowerCase().contains(seq) || map.getAuthor().toLowerCase().contains(seq)) {
+				addTexturePack(map);
+				currentTexturePacks.put(counter, map);
 				counter++;
 			}
 		}
+		searched = true;
 		updateTexturePacks();
+		seq = "";
+		texturePacks.repaint();
 	}
 
 	private static void updateTexturePacks() {
@@ -272,7 +279,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static int getIndex() {
 		if(currentTexturePacks.size() > 0) {
 			if(currentTexturePacks.size() != TexturePack.getTexturePackArray().size()) {
-				if(!origin.equalsIgnoreCase("all")) {
+				if(!origin.equalsIgnoreCase("all") || searched) {
 					return currentTexturePacks.get(selectedTexturePack).getIndex();
 				}
 			}

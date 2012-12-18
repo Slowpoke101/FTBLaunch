@@ -35,8 +35,8 @@ public class ModPack {
 	/**
 	 * Loads the modpack.xml and adds it to the modpack array in this class
 	 */
-	public static void loadAll() {
-		ModpackLoader loader = new ModpackLoader();
+	public static void loadXml(String xmlFile) {
+		ModpackLoader loader = new ModpackLoader(xmlFile);
 		loader.start();
 	}
 

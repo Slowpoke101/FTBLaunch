@@ -19,7 +19,7 @@ public class FilterDialogPacks extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
-	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
+	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), btnSearch = new JButton("Search"), btnAddPack = new JButton("Add Pack");
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
 	private JComboBox comboBox;
 
@@ -43,10 +43,13 @@ public class FilterDialogPacks extends JDialog {
 		typeBox.setBounds(120, 10, 100, 30);
 		originLbl.setBounds(10, 40, 100, 30);
 		originBox.setBounds(120, 40, 100, 30);
-		applyButton.setBounds(10, 106, 100, 25);
-		searchButton.setBounds(10, 105, 210, 25);
+		applyButton.setBounds(10, 142, 100, 25);
 		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(120, 106, 100, 25);
+		cancelButton.setBounds(120, 142, 100, 25);
+		btnSearch.setBounds(10, 111, 100, 25);
+		btnAddPack.setBounds(120, 111, 100, 25);
+		panel.add(btnAddPack);
+		panel.add(btnSearch);
 		panel.add(typeLbl);
 		panel.add(typeBox);
 		panel.add(originLbl);
@@ -69,16 +72,32 @@ public class FilterDialogPacks extends JDialog {
 
 		typeBox.setSelectedItem(pane.type);
 		originBox.setSelectedItem(pane.origin);
-
-		searchButton.setBounds(10, 142, 210, 25);
-
-		panel.add(searchButton);
 		lblMinecraftVersion.setBounds(10, 70, 100, 30);
 
 		panel.add(lblMinecraftVersion);
 		comboBox.setBounds(120, 70, 100, 30);
 
 		panel.add(comboBox);
+		
+		btnAddPack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AddPack ap = new AddPack();
+				setVisible(false);
+				ap.setVisible(true);
+				ap.setAlwaysOnTop(true);
+			}
+		});
+		
+		btnSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SearchDialog sd = new SearchDialog(pane);
+				sd.setVisible(true);
+				setVisible(false);
+			}
+		});
+		
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -92,14 +111,6 @@ public class FilterDialogPacks extends JDialog {
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
-		searchButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				SearchDialog sd = new SearchDialog(pane);
-				sd.setVisible(true);
 				setVisible(false);
 			}
 		});

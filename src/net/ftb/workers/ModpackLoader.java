@@ -19,13 +19,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
+	
+	private String xmlFile;
+	
+	public ModpackLoader(String xmlFile) {
+		this.xmlFile = xmlFile;
+	}
+	
 	@Override
 	public void run() {
-		File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "Modpacks" + File.separator + "modpacks.xml");
+		File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "Modpacks" + File.separator + xmlFile);
 		try {
 			modPackFile.getParentFile().mkdirs();
-			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")), modPackFile);
-//			DownloadUtils.downloadToFile(new URL("https://dl.dropbox.com/u/2405919/modpacks.xml"), modPackFile); 
+			DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
 		} catch (IOException e) {
 			Logger.logWarn("Failed to load modpacks, loading from backup", e);
 		}
@@ -39,7 +45,7 @@ public class ModpackLoader extends Thread {
 		}
 		if(modPackStream == null) {
 			try {
-				modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink("modpacks.xml")).openStream();
+				modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)).openStream();
 			} catch(IOException e) {
 				Logger.logError("Completely unable to download the modpackfile - check your connection", e);
 				return;

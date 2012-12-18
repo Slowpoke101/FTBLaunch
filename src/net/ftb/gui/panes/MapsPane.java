@@ -49,7 +49,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JEditorPane mapInfo;
 
 	public static boolean loaded = false;
-	public static boolean searched = false;
+	public static boolean searched;
 
 	private static HashMap<Integer, Map> currentMaps = new HashMap<Integer, Map>();
 
@@ -234,12 +234,12 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				}
 			}
 		}
-		updateMaps();
 		searched = false;
+		updateMaps();
 	}
 
 	public static void searchMaps(String search) {
-		CharSequence seq = search;
+		CharSequence seq = search.toLowerCase();
 		System.out.println("Searching Packs for : " + search);
 		mapPanels.clear();
 		maps.removeAll();
@@ -251,9 +251,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		int counter = 0;
 		selectedMap = 0;
 		for(Map map : Map.getMapArray()) {
-			String name = map.getName().toLowerCase();
-			String author = map.getAuthor().toLowerCase();
-			if(map.getName().contains(seq) || map.getAuthor().contains(seq) || name.contains(seq) || author.contains(seq)) {
+			if(map.getName().toLowerCase().contains(seq) || map.getAuthor().toLowerCase().contains(seq)) {
 				addMap(map);
 				currentMaps.put(counter, map);
 				counter++;
@@ -302,7 +300,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static int getIndex() {
 		if(currentMaps.size() > 0) {
 			if(currentMaps.size() != Map.getMapArray().size()) {
-				if(!origin.equalsIgnoreCase("all")) {
+				if(!origin.equalsIgnoreCase("all") || searched) {
 					return currentMaps.get(selectedMap).getIndex();
 				}
 			}

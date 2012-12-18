@@ -192,7 +192,10 @@ public class LaunchFrame extends JFrame {
 				});
 
 				ModPack.addListener(frame.modPacksPane);
-				ModPack.loadAll();
+				ModPack.loadXml("modpacks.xml");
+				for(int i = 0; i < Settings.getSettings().getPrivatePacks().length; i++) {
+					ModPack.loadXml(Settings.getSettings().getPrivatePacks()[i] + ".xml");
+				}
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
