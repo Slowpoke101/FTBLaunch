@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -76,6 +77,24 @@ public class DownloadUtils extends Thread {
 		connection.disconnect();
 		Logger.logInfo(resolved);
 		return resolved; 
+	}
+	
+	/**
+	 * @param file - file on the repo in static
+	 * @return true if the file exists
+	 */
+	public static boolean staticFileExists(String file) {
+		
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
+			if(!reader.readLine().toLowerCase().contains("not found")) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**

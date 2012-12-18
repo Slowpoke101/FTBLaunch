@@ -30,13 +30,12 @@ public class AddPack extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				URL url;
-				try {
-					url = new URL(DownloadUtils.getStaticCreeperhostLink(textField.getText() + ".xml"));
+				
+				if(DownloadUtils.staticFileExists(textField.getText() + ".xml")) {
 					ModPack.loadXml(textField.getText() + ".xml");
 					Settings.getSettings().addPrivatePack(textField.getText());
 					setVisible(false);
-				} catch (MalformedURLException e1) {
+				} else {
 					ErrorUtils.tossError("Invalid Private Pack :(");
 				}
 			}
