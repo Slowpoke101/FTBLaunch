@@ -5,9 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import net.ftb.util.OSUtils;
 
@@ -183,25 +184,26 @@ public class Settings extends Properties {
 	}
 	
 	public void addPrivatePack(String code) {
-		ArrayList<String> packList = new ArrayList<String>();
-		for(int i = 0; i < getPrivatePacks().length; i++) {
-			if(!getPrivatePacks()[i].equals("")) {
-				packList.add(getPrivatePacks()[i]);
-			}
+		if (code == null || code.isEmpty()) return;
+		if (getProperty("privatePacks") != null)
+		{
+			Set<String> packList = new HashSet<String>(Arrays.asList(getPrivatePacks())); 
+			packList.add(code);
+			setPrivatePacks(packList.toArray(new String[packList.size()]));
 		}
-		packList.add(code);
-		String[] codes = new String[packList.size()];
-		for(int i = 0; i < packList.size(); i++) {
-			codes[i] = packList.get(i);
-		}
-		setPrivatePacks(codes);
+		else setProperty("privatePacks", code);
 	}
 	
 	public void setPrivatePacks(String[] codes) {
-		String s = codes[0];
-		for(int i = 1; i < codes.length; i++) {
-			s.concat(",");
-			s.concat(codes[i]);
+		String s = "";
+		if (codes.length > 0)
+		{
+			StringBuilder sb = new StringBuilder(codes[0]);
+			for (int i = 1; i < codes.length; i++)
+			{
+				sb.append(',').append(codes[i]);
+			}
+			s = sb.toString();
 		}
 		setProperty("privatePacks", s);
 	}
