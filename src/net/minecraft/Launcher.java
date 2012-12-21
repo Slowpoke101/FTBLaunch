@@ -3,13 +3,9 @@ package net.minecraft;
 import java.applet.Applet;
 import java.applet.AppletStub;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
-
-import net.ftb.log.Logger;
 
 public class Launcher extends Applet implements AppletStub {
 	private Applet wrappedApplet;
@@ -62,17 +58,8 @@ public class Launcher extends Applet implements AppletStub {
 
 	@Override
 	public void appletResize(int width, int height) {
-		wrappedApplet.resize(width, height);
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		wrappedApplet.resize(width, height);
-	}
-
-	@Override
-	public void resize(Dimension d) {
-		wrappedApplet.resize(d);
+		super.setSize(width, height);
+		wrappedApplet.setSize(width, height);
 	}
 
 	@Override
