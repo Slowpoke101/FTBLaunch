@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
@@ -73,12 +72,6 @@ public class MinecraftLauncher {
 		arguments.add(password);
 		arguments.add(ModPack.getSelectedPack().getName());
 		arguments.add(OSUtils.getDynamicStorageLocation() + "ModPacks" + separator + ModPack.getPack(ModpacksPane.getIndex()).getDir() + separator + ModPack.getPack(ModpacksPane.getIndex()).getLogoName());
-		arguments.add(Settings.getSettings().getMinecraftX());
-		arguments.add(Settings.getSettings().getMinecraftY());
-		arguments.add(Settings.getSettings().getMinecraftXPos());
-		arguments.add(Settings.getSettings().getMinecraftYPos());
-		arguments.add(Settings.getSettings().getAutoMaximize());
-		arguments.add(Settings.getSettings().getCenterWindow());
 
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
 		processBuilder.redirectErrorStream(true);
@@ -108,8 +101,7 @@ public class MinecraftLauncher {
 	}
 
 	public static void main(String[] args) {
-		String basepath = args[0], animationname = args[1], forgename = args[2], username = args[3], password = args[4], modPackName = args[5], modPackImageName = args[6],
-				minecraftX = args[7], minecraftY = args[8], minecraftXPos = args[9], minecraftYPos = args[10], minecraftMax = args[11], centerWindow = args[12];
+		String basepath = args[0], animationname = args[1], forgename = args[2], username = args[3], password = args[4], modPackName = args[5], modPackImageName = args[6];
 
 		try {
 			System.out.println("Loading jars...");
@@ -188,8 +180,7 @@ public class MinecraftLauncher {
 			try {
 				Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
 				Applet mcappl = (Applet) MCAppletClass.newInstance();
-				MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, animationname, Integer.parseInt(minecraftX), Integer.parseInt(minecraftY), 
-						Integer.parseInt(minecraftXPos), Integer.parseInt(minecraftYPos), Boolean.parseBoolean(minecraftMax), Boolean.parseBoolean(centerWindow));
+				MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, animationname);
 				mcWindow.start(mcappl, mcArgs[0], mcArgs[1]);
 			} catch (InstantiationException e) {
 				Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
