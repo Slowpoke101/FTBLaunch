@@ -81,7 +81,7 @@ public class ModpackLoader extends Thread {
 					Logger.logError(e.getMessage(), e);
 				}
 			}
-			ModpacksPane.loaded = true;
 		}
+		ModpacksPane.loaded = true;
 	}
 }
