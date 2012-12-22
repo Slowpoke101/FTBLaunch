@@ -165,14 +165,18 @@ public class ImageAndTextIcon implements Icon {
 	public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
 		if (imageObserver == null) {
 			g.drawImage(image, x, y, c);
-			g.setColor(Color.black);
-			g.fillOval(x + image.getWidth(imageObserver) - 17, y - 5, 20, 20);
+			g.setColor(new Color(40, 40, 40));
+			g.fillOval(x + image.getWidth(imageObserver) - 23, y - 5, 23, 20);
 			g.setColor(new Color(235, 115, 30));
-			g.drawString(description, x + image.getWidth(imageObserver) - 10, y + 10);
+			g.setFont(new Font("SansSerif", 12, 12));
+			g.drawString(description, x + image.getWidth(imageObserver) - 16, y + 10);
 		} else {
 			g.drawImage(image, x, y, imageObserver);
+			g.setColor(new Color(40, 40, 40));
+			g.fillOval(x + image.getWidth(imageObserver) - 23, y - 5, 23, 20);
 			g.setColor(new Color(235, 115, 30));
-			g.drawString(description, x + image.getWidth(imageObserver) - 10, y + 10);
+			g.setFont(new Font("SansSerif", 12, 12));
+			g.drawString(description, x + image.getWidth(imageObserver) - 16, y + 10);
 		}
 	}
 

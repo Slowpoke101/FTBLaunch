@@ -927,7 +927,7 @@ public class LaunchFrame extends JFrame {
 			System.out.println("read: " + s);
 			String[] str = s.split(",");
 			for(int j = 0; j < str.length; j++) {
-				if(timeStamps.contains(Long.parseLong(str[j]))) {
+				if(!timeStamps.contains(Long.parseLong(str[j]))) {
 					timeStamps.add(Long.parseLong(str[j]));
 				}
 			}
@@ -940,6 +940,7 @@ public class LaunchFrame extends JFrame {
 			System.out.println(l);
 			for(int j = 0; j < timeStamps.size(); j++) {
 				long time = timeStamps.get(j);
+				System.out.println(time);
 				if(time > l) {
 					i++;
 				}
