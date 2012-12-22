@@ -192,7 +192,11 @@ public class Settings extends Properties {
 		packList.add(code);
 		String[] codes = new String[packList.size()];
 		for(int i = 0; i < packList.size(); i++) {
+			System.out.println(packList.get(i));
 			codes[i] = packList.get(i);
+		}
+		for(int i = 0; i < codes.length; i++) {
+			System.out.println(codes[i]);
 		}
 		setPrivatePacks(codes);
 	}
@@ -203,6 +207,7 @@ public class Settings extends Properties {
 			s.concat(",");
 			s.concat(codes[i]);
 		}
+		System.out.println("Setting: " + s);
 		setProperty("privatePacks", s);
 	}
 	

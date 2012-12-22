@@ -36,7 +36,7 @@ public class AddPack extends JDialog {
 				ArrayList<String> codes = new ArrayList<String>(Arrays.asList(Settings.getSettings().getPrivatePacks()));
 				
 				if(DownloadUtils.staticFileExists(textField.getText() + ".xml") && !codes.contains(textField.getText() + ".xml")) {
-					ModPack.loadXml(textField.getText() + ".xml");
+					ModPack.loadXml(new String[]{textField.getText() + ".xml"});
 					Settings.getSettings().addPrivatePack(textField.getText());
 					setVisible(false);
 				} else {

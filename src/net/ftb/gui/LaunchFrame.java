@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -192,12 +193,8 @@ public class LaunchFrame extends JFrame {
 				});
 
 				ModPack.addListener(frame.modPacksPane);
-				ModPack.loadXml("modpacks.xml");
-				for(int i = 0; i < Settings.getSettings().getPrivatePacks().length; i++) {
-					if(!Settings.getSettings().getPrivatePacks()[i].equals("")) {
-						ModPack.loadXml(Settings.getSettings().getPrivatePacks()[i] + ".xml");
-					}
-				}
+				ModPack.loadXml(getXmls());
+				
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
@@ -898,5 +895,16 @@ public class LaunchFrame extends JFrame {
 		modPacksPane.updateLocale();
 		mapsPane.updateLocale();
 		tpPane.updateLocale();
+	}
+	
+	private static String[] getXmls() {
+		String[] s = new String[Settings.getSettings().getPrivatePacks().length + 1];
+		s[0] = "modpacks.xml";
+		for(int i = 0; i < Settings.getSettings().getPrivatePacks().length; i++) {
+			if(!Settings.getSettings().getPrivatePacks()[i].equals("")) {
+				s[i + 1] = Settings.getSettings().getPrivatePacks()[i] + ".xml";
+			}
+		}
+		return s;
 	}
 }
