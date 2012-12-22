@@ -5,7 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -209,9 +213,22 @@ public class Settings extends Properties {
 		}
 		System.out.println("Setting: " + s);
 		setProperty("privatePacks", s);
+		try {
+			settings.save();
+		} catch (IOException e) { }
 	}
 	
 	public String[] getPrivatePacks() {
 		return getProperty("privatePacks", "").split(",");
+	}
+	
+	public void setNewsDate() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		setProperty("newsDate", dateFormat.format(Calendar.getInstance().getTime()));
+	}
+	
+	public String getNewsDate() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return getProperty("newsDate", dateFormat.format(new Date(0)));
 	}
 }

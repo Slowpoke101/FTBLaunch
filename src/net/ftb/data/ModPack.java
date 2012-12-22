@@ -31,6 +31,7 @@ public class ModPack {
 	private boolean updated = false;
 	private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
+	private boolean privatePack;
 
 	/**
 	 * Loads the modpack.xml and adds it to the modpack array in this class
@@ -105,7 +106,7 @@ public class ModPack {
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, String animation, int idx) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, String animation, int idx, boolean privatePack) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -114,6 +115,7 @@ public class ModPack {
 		this.mcVersion = mcVersion;
 		this.url = url;
 		this.serverUrl = serverUrl;
+		this.privatePack = privatePack;
 		if(!animation.equalsIgnoreCase("")) {
 			this.animation = animation;
 		} else {
@@ -347,5 +349,9 @@ public class ModPack {
 	 */
 	public String getAnimation() {
 		return animation;
+	}
+	
+	public boolean getPrivatePack() {
+		return privatePack;
 	}
 }

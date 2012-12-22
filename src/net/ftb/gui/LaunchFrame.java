@@ -12,16 +12,22 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -420,13 +426,13 @@ public class LaunchFrame extends JFrame {
 		updateLocale();
 
 		tabbedPane.add(newsPane, 0);
-		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+		tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), getUnreadNews()));
 		tabbedPane.add(optionsPane, 1);
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 		tabbedPane.add(mapsPane, 3);
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 		tabbedPane.setEnabledAt(4, false);
@@ -906,5 +912,43 @@ public class LaunchFrame extends JFrame {
 			}
 		}
 		return s;
+	}
+	
+	public String getUnreadNews() {
+		int i = 0;
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
+			
+			ArrayList<Long> timeStamps = new ArrayList<Long>();
+
+			String s = reader.readLine();
+			s = s.trim();
+			System.out.println("read: " + s);
+			String[] str = s.split(",");
+			for(int j = 0; j < str.length; j++) {
+				if(timeStamps.contains(Long.parseLong(str[j]))) {
+					timeStamps.add(Long.parseLong(str[j]));
+				}
+			}
+			
+			DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			
+			Date d = format.parse(Settings.getSettings().getNewsDate());
+			
+			long l = d.getTime();
+			System.out.println(l);
+			for(int j = 0; j < timeStamps.size(); j++) {
+				long time = timeStamps.get(j);
+				if(time > l) {
+					i++;
+				}
+			}
+			
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		
+		return Integer.toString(i);
 	}
 }

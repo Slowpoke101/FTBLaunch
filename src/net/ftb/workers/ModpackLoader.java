@@ -30,6 +30,11 @@ public class ModpackLoader extends Thread {
 	public void run() {
 		
 		for(int j = 0; j < xmlFile.length; j++) {
+			boolean privatePack = false;
+			
+			if(!xmlFile[j].equalsIgnoreCase("modpacks.xml")) {
+				privatePack = true;
+			}
 			
 			File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "Modpacks" + File.separator + xmlFile[j]);
 			try {
@@ -76,7 +81,7 @@ public class ModpackLoader extends Thread {
 							modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 							modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", 
 							modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
-							modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", i));
+							modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", i, privatePack));
 				} catch (Exception e) {
 					Logger.logError(e.getMessage(), e);
 				}

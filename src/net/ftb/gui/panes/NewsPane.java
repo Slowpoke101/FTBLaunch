@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
 public class NewsPane extends JPanel implements ILauncherPane {
@@ -33,6 +34,8 @@ public class NewsPane extends JPanel implements ILauncherPane {
 	public void onVisible() {
 		try {
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
+			Settings.getSettings().setNewsDate();
+			Settings.getSettings().save();
 		} catch (IOException e1) {
 			Logger.logError(e1.getMessage(), e1);
 		}
