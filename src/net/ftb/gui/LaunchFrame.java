@@ -81,7 +81,7 @@ import net.ftb.workers.LoginWorker;
 public class LaunchFrame extends JFrame {
 	private LoginResponse RESPONSE;
 	private NewsPane newsPane;
-	private JPanel panel = new JPanel();
+	public static JPanel panel;
 	private JPanel footer = new JPanel();
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
@@ -94,7 +94,7 @@ public class LaunchFrame extends JFrame {
 	private static String version = "1.1.8";
 	private static final long serialVersionUID = 1L;
 
-	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
+	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
 
 	protected static UserManager userManager;
 
@@ -225,6 +225,8 @@ public class LaunchFrame extends JFrame {
 		setTitle("Feed the Beast Launcher v" + version);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
+		panel = new JPanel();
+		
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
@@ -426,15 +428,11 @@ public class LaunchFrame extends JFrame {
 		updateLocale();
 
 		tabbedPane.add(newsPane, 0);
-		tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), getUnreadNews()));
 		tabbedPane.add(optionsPane, 1);
-		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.add(modPacksPane, 2);
-		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 		tabbedPane.add(mapsPane, 3);
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+		setTabbedPaneIcons();
 		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.setSelectedIndex(tab);
 
@@ -448,6 +446,14 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public void setTabbedPaneIcons() {
+		tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), getUnreadNews()));
+		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
+		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 	}
 
 	/**
@@ -952,4 +958,8 @@ public class LaunchFrame extends JFrame {
 		
 		return Integer.toString(i);
 	}
+	
+//	public static JTabbedPane getTabbedPane() {
+//		return tabbedPane;
+//	}
 }
