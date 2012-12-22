@@ -35,7 +35,8 @@ public class AddPack extends JDialog {
 
 				ArrayList<String> codes = new ArrayList<String>(Arrays.asList(Settings.getSettings().getPrivatePacks()));
 				
-				if(DownloadUtils.staticFileExists(textField.getText() + ".xml") && !codes.contains(textField.getText() + ".xml")) {
+				if(/*DownloadUtils.staticFileExists(textField.getText() + ".xml") && */!codes.contains(textField.getText() + ".xml")) {
+					System.out.println("Adding: " + textField.getText());
 					ModPack.loadXml(new String[]{textField.getText() + ".xml"});
 					Settings.getSettings().addPrivatePack(textField.getText());
 					setVisible(false);
@@ -56,6 +57,7 @@ public class AddPack extends JDialog {
 			}
 		});
 		getContentPane().add(btnCancel);
+		getRootPane().setDefaultButton(btnAdd);
 	}
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
