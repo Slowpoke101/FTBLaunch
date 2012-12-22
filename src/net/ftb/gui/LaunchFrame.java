@@ -910,14 +910,15 @@ public class LaunchFrame extends JFrame {
 	}
 	
 	private static String[] getXmls() {
-		String[] s = new String[Settings.getSettings().getPrivatePacks().length + 1];
-		s[0] = "modpacks.xml";
-		for(int i = 0; i < Settings.getSettings().getPrivatePacks().length; i++) {
-			if(!Settings.getSettings().getPrivatePacks()[i].equals("")) {
-				s[i + 1] = Settings.getSettings().getPrivatePacks()[i] + ".xml";
+		ArrayList<String> s = new ArrayList<String>();
+		String[] privPacks = Settings.getSettings().getPrivatePacks();
+		s.add("modpacks.xml");
+		for(int i = 0; i < privPacks.length; i++) {
+			if(!privPacks[i].equals("")) {
+				s.add(privPacks[i] + ".xml");
 			}
 		}
-		return s;
+		return s.toArray(new String[] {});
 	}
 	
 	public String getUnreadNews() {
