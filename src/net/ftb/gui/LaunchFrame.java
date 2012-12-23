@@ -327,6 +327,7 @@ public class LaunchFrame extends JFrame {
 				} else if(users.getSelectedIndex() <= 1) {
 					ErrorUtils.tossError("Please select a profile!");
 				}
+				setTabbedPaneIcons();
 			}
 		});
 
@@ -446,10 +447,15 @@ public class LaunchFrame extends JFrame {
 	}
 	
 	public void setTabbedPaneIcons() {
-		tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), getUnreadNews()));
+		int i = getUnreadNews();
+		if(i > 0) {
+			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
+		} else {
+			tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+		}
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 	}
 
@@ -918,7 +924,7 @@ public class LaunchFrame extends JFrame {
 		return s.toArray(new String[] {});
 	}
 	
-	public String getUnreadNews() {
+	public int getUnreadNews() {
 		int i = 0;
 		BufferedReader reader = null;
 		try {
@@ -935,12 +941,12 @@ public class LaunchFrame extends JFrame {
 					timeStamps.add(Long.parseLong(str[j]));
 				}
 			}
-			
-			DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			
-			Date d = format.parse(Settings.getSettings().getNewsDate());
-			
-			long l = d.getTime();
+			long l;
+			if(Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
+				l = Long.parseLong(Settings.getSettings().getNewsDate());
+			} else {
+				l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
+			}
 			System.out.println(l);
 			for(int j = 0; j < timeStamps.size(); j++) {
 				long time = timeStamps.get(j);
@@ -954,7 +960,7 @@ public class LaunchFrame extends JFrame {
 			Logger.logError(e.getMessage(), e);
 		}
 		
-		return Integer.toString(i);
+		return i;
 	}
 	
 //	public static JTabbedPane getTabbedPane() {

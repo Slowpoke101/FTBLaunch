@@ -84,7 +84,6 @@ public class DownloadUtils extends Thread {
 	 * @return true if the file exists
 	 */
 	public static boolean staticFileExists(String file) {
-		
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
 			if(!reader.readLine().toLowerCase().contains("not found")) {

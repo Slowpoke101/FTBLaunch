@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
 public class Settings extends Properties {
@@ -160,6 +162,15 @@ public class Settings extends Properties {
 			setProperty("privatePacks", code);
 		}
 	}
+	
+	public void removePrivatePack(String code) {
+		ArrayList<String> codes = new ArrayList<String>(Arrays.asList(getPrivatePacks()));
+		if(codes.contains(code)) {
+			codes.remove(code);
+			System.out.println("removed");
+		}
+		setPrivatePacks(codes.toArray(new String[]{}));
+	}
 
 	public void setPrivatePacks(String[] codes) {
 		if(codes.length > 0) {
@@ -168,7 +179,10 @@ public class Settings extends Properties {
 				s += "," + codes[i];
 			}
 			setProperty("privatePacks", s);
+		} else {
+			setProperty("privatePacks", "");
 		}
+		save();
 	}
 
 	public String[] getPrivatePacks() {
@@ -176,13 +190,11 @@ public class Settings extends Properties {
 	}
 
 	public void setNewsDate() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		setProperty("newsDate", dateFormat.format(Calendar.getInstance().getTime()));
+		setProperty("newsDate", Long.toString(Calendar.getInstance().getTime().getTime()));
 	}
 
 	public String getNewsDate() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return getProperty("newsDate", dateFormat.format(new Date(0)));
+		return getProperty("newsDate", Long.toString(new Date(0).getTime()));
 	}
 
 	public void setLastExtendedState(int lastExtendedState) {

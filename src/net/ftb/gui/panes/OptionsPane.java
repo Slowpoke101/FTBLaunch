@@ -1,5 +1,6 @@
 package net.ftb.gui.panes;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -12,6 +13,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -177,6 +179,60 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
 		chckbxShowConsole.setBounds(613, 148, 183, 23);
 		add(chckbxShowConsole);
+		
+		minecraftX = new JTextField();
+		minecraftX.setBounds(190, 182, 95, 23);
+		minecraftX.setText(Integer.toString(Settings.getSettings().getLastDimension().width));
+		add(minecraftX);
+		minecraftX.addFocusListener(settingsChangeListener);
+		minecraftX.setColumns(10);
+		
+		JLabel lblMinecraftWindowSize = new JLabel("Minecraft Window Size");
+		lblMinecraftWindowSize.setBounds(10, 182, 170, 20);
+		add(lblMinecraftWindowSize);
+		
+		minecraftY = new JTextField();
+		minecraftY.setBounds(317, 182, 95, 23);
+		minecraftY.setText(Integer.toString(Settings.getSettings().getLastDimension().height));
+		add(minecraftY);
+		minecraftY.addFocusListener(settingsChangeListener);
+		minecraftY.setColumns(10);
+		
+		JLabel lblX_1 = new JLabel("x");
+		lblX_1.setBounds(295, 185, 15, 14);
+		add(lblX_1);
+		
+		JLabel lblMinecraftWindowPosition = new JLabel("Minecraft Window Position");
+		lblMinecraftWindowPosition.setBounds(10, 222, 170, 23);
+		add(lblMinecraftWindowPosition);
+		
+		xPosField = new JTextField();
+		xPosField.setBounds(190, 222, 95, 23);
+		xPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().x));
+		add(xPosField);
+		xPosField.addFocusListener(settingsChangeListener);
+		xPosField.setColumns(10);
+		
+		JLabel label = new JLabel("x");
+		label.setBounds(295, 226, 15, 14);
+		add(label);
+		
+		yPosField = new JTextField();
+		yPosField.setBounds(317, 222, 95, 23);
+		yPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().y));
+		add(yPosField);
+		yPosField.addFocusListener(settingsChangeListener);
+		yPosField.setColumns(10);
+		
+		autoMaxCheck = new JCheckBox("Auto Maximised?");
+		autoMaxCheck.setBounds(10, 252, 170, 23);
+		if(Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+			autoMaxCheck.setSelected(true);
+		} else {
+			autoMaxCheck.setSelected(false);
+		}
+		autoMaxCheck.addFocusListener(settingsChangeListener);
+		add(autoMaxCheck);
 	}
 
 	public void setDownloadServers() {
@@ -231,6 +287,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
 		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
+		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
+		settings.setLastExtendedState(autoMaxCheck.isSelected() ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
 		settings.save();
 	}
 
