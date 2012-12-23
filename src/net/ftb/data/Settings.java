@@ -9,15 +9,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -139,50 +141,45 @@ public class Settings extends Properties {
 	public String getLastAddPath() {
 		return getProperty("lastAddPath", "");
 	}
-	
+
 	public void setLastAddPath(String string) {
 		setProperty("lastAddPath", string);
 	}
-	
+
 	public void addPrivatePack(String code) {
-		ArrayList<String> packList = new ArrayList<String>();
-		for(int i = 0; i < getPrivatePacks().length; i++) {
-			if(!getPrivatePacks()[i].equals("")) {
-				packList.add(getPrivatePacks()[i]);
+		if(code == null || code.isEmpty()) {
+			return;
+		}
+		if(getProperty("privatePacks") != null) {
+			Set<String> packList = new HashSet<String>(Arrays.asList(getPrivatePacks()));
+			if(!packList.contains(code.toLowerCase())) {
+				packList.add(code);
+				setPrivatePacks(packList.toArray(new String[packList.size()]));
 			}
+		} else {
+			setProperty("privatePacks", code);
 		}
-		packList.add(code);
-		String[] codes = new String[packList.size()];
-		for(int i = 0; i < packList.size(); i++) {
-			System.out.println(packList.get(i));
-			codes[i] = packList.get(i);
-		}
-		for(int i = 0; i < codes.length; i++) {
-			System.out.println(codes[i]);
-		}
-		setPrivatePacks(codes);
 	}
-	
+
 	public void setPrivatePacks(String[] codes) {
-		String s = codes[0];
-		for(int i = 1; i < codes.length; i++) {
-			s.concat(",");
-			s.concat(codes[i]);
+		if(codes.length > 0) {
+			String s = codes[0];
+			for(int i = 1; i < codes.length; i++) {
+				s += "," + codes[i];
+			}
+			setProperty("privatePacks", s);
 		}
-		System.out.println("Setting: " + s);
-		setProperty("privatePacks", s);
-		settings.save();
 	}
-	
+
 	public String[] getPrivatePacks() {
 		return getProperty("privatePacks", "").split(",");
 	}
-	
+
 	public void setNewsDate() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		setProperty("newsDate", dateFormat.format(Calendar.getInstance().getTime()));
 	}
-	
+
 	public String getNewsDate() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		return getProperty("newsDate", dateFormat.format(new Date(0)));
