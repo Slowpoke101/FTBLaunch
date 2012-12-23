@@ -13,8 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -23,7 +21,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import net.ftb.log.Logger;
-import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
 public class Settings extends Properties {

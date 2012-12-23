@@ -35,12 +35,12 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
-	private JToggleButton tglbtnForceUpdate, tglbtnCenterScreen;
+	private JToggleButton tglbtnForceUpdate;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
 	private JComboBox locale, downloadServers;
-	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
-	private JCheckBox chckbxShowConsole, autoMaxCheck;
+	private JTextField installFolderTextField;
+	private JCheckBox chckbxShowConsole;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -53,7 +53,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public OptionsPane () {
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		currentRam = new JLabel();
-		currentRam.setBounds(427, 114, 85, 23);
+		currentRam.setBounds(427, 84, 85, 23);
 		long ram = 0;
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		Method m;
@@ -72,7 +72,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 
 		ramMaximum = new JSlider();
-		ramMaximum.setBounds(190, 114, 222, 23);
+		ramMaximum.setBounds(190, 84, 222, 23);
 		ramMaximum.setSnapToTicks(true);
 		ramMaximum.setMajorTickSpacing(256);
 		ramMaximum.setMinorTickSpacing(256);
@@ -130,7 +130,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(tglbtnForceUpdate);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
-		lblRamMaximum.setBounds(10, 114, 195, 23);
+		lblRamMaximum.setBounds(10, 84, 195, 23);
 		add(lblRamMaximum);
 		add(ramMaximum);
 		add(currentRam);
@@ -142,7 +142,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 
 		locale = new JComboBox(locales);
-		locale.setBounds(190, 148, 222, 23);
+		locale.setBounds(190, 114, 222, 23);
 		locale.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,12 +156,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		locale.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
 
 		lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
-		lblLocale.setBounds(10, 148, 195, 23);
+		lblLocale.setBounds(10, 114, 195, 23);
 		add(lblLocale);
 		add(locale);
 
 		downloadServers = new JComboBox(getDownloadServerNames());
-		downloadServers.setBounds(613, 115, 222, 23);
+		downloadServers.setBounds(613, 114, 222, 23);
 		downloadServers.addFocusListener(settingsChangeListener);
 		if(DownloadUtils.serversLoaded) {
 			if(DownloadUtils.downloadServers.containsKey(Settings.getSettings().getDownloadServer())) {
@@ -171,68 +171,14 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(downloadServers);
 
 		JLabel downloadLocation = new JLabel("Download Location");
-		downloadLocation.setBounds(490, 118, 110, 14);
+		downloadLocation.setBounds(490, 114, 110, 14);
 		add(downloadLocation);
 
 		chckbxShowConsole = new JCheckBox("Show Console?");
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
 		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
-		chckbxShowConsole.setBounds(613, 148, 183, 23);
+		chckbxShowConsole.setBounds(613, 114, 183, 23);
 		add(chckbxShowConsole);
-		
-		minecraftX = new JTextField();
-		minecraftX.setBounds(190, 182, 95, 23);
-		minecraftX.setText(Integer.toString(Settings.getSettings().getLastDimension().width));
-		add(minecraftX);
-		minecraftX.addFocusListener(settingsChangeListener);
-		minecraftX.setColumns(10);
-		
-		JLabel lblMinecraftWindowSize = new JLabel("Minecraft Window Size");
-		lblMinecraftWindowSize.setBounds(10, 182, 170, 20);
-		add(lblMinecraftWindowSize);
-		
-		minecraftY = new JTextField();
-		minecraftY.setBounds(317, 182, 95, 23);
-		minecraftY.setText(Integer.toString(Settings.getSettings().getLastDimension().height));
-		add(minecraftY);
-		minecraftY.addFocusListener(settingsChangeListener);
-		minecraftY.setColumns(10);
-		
-		JLabel lblX_1 = new JLabel("x");
-		lblX_1.setBounds(295, 185, 15, 14);
-		add(lblX_1);
-		
-		JLabel lblMinecraftWindowPosition = new JLabel("Minecraft Window Position");
-		lblMinecraftWindowPosition.setBounds(10, 222, 170, 23);
-		add(lblMinecraftWindowPosition);
-		
-		xPosField = new JTextField();
-		xPosField.setBounds(190, 222, 95, 23);
-		xPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().x));
-		add(xPosField);
-		xPosField.addFocusListener(settingsChangeListener);
-		xPosField.setColumns(10);
-		
-		JLabel label = new JLabel("x");
-		label.setBounds(295, 226, 15, 14);
-		add(label);
-		
-		yPosField = new JTextField();
-		yPosField.setBounds(317, 222, 95, 23);
-		yPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().y));
-		add(yPosField);
-		yPosField.addFocusListener(settingsChangeListener);
-		yPosField.setColumns(10);
-		
-		autoMaxCheck = new JCheckBox("Auto Maximised?");
-		autoMaxCheck.setBounds(10, 252, 170, 23);
-		if(Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
-			autoMaxCheck.setSelected(true);
-		} else {
-			autoMaxCheck.setSelected(false);
-		}
-		autoMaxCheck.addFocusListener(settingsChangeListener);
-		add(autoMaxCheck);
 	}
 
 	public void setDownloadServers() {
@@ -287,8 +233,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
 		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
-		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
-		settings.setLastExtendedState(autoMaxCheck.isSelected() ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
 		settings.save();
 	}
 
