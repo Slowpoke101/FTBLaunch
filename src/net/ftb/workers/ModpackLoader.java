@@ -36,7 +36,7 @@ public class ModpackLoader extends Thread {
 				privatePack = true;
 			}
 			
-			File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "Modpacks" + File.separator + xmlFile[j]);
+			File modPackFile = new File(OSUtils.getDynamicStorageLocation() + File.separator + "ModPacks" + File.separator + xmlFile[j]);
 			try {
 				modPackFile.getParentFile().mkdirs();
 				DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile[j])), modPackFile);
