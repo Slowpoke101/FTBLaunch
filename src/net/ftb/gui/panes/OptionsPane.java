@@ -226,11 +226,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		
 		autoMaxCheck = new JCheckBox("Auto Maximised?");
 		autoMaxCheck.setBounds(10, 252, 170, 23);
-		if(Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
-			autoMaxCheck.setSelected(true);
-		} else {
-			autoMaxCheck.setSelected(false);
-		}
+		autoMaxCheck.setSelected((Settings.getSettings().getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		add(autoMaxCheck);
 	}
@@ -288,7 +284,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
 		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
 		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
-		settings.setLastExtendedState(autoMaxCheck.isSelected() ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);
+		int lastExtendedState = settings.getLastExtendedState();
+		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
 		settings.save();
 	}
 
