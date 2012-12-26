@@ -133,6 +133,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packsScroll.setWheelScrollingEnabled(true);
 		packsScroll.setOpaque(false);
 		packsScroll.setViewportView(packs);
+		packsScroll.getVerticalScrollBar().setUnitIncrement(19);
 		add(packsScroll);
 
 		packInfo = new JEditorPane();

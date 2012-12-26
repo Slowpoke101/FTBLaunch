@@ -109,6 +109,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapsScroll.setWheelScrollingEnabled(true);
 		mapsScroll.setOpaque(false);
 		mapsScroll.setViewportView(maps);
+		mapsScroll.getVerticalScrollBar().setUnitIncrement(19);
 		add(mapsScroll);
 
 		mapInfo = new JEditorPane();

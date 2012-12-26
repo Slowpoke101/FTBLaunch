@@ -101,6 +101,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacksScroll.setWheelScrollingEnabled(true);
 		texturePacksScroll.setOpaque(false);
 		texturePacksScroll.setViewportView(texturePacks);
+		texturePacksScroll.getVerticalScrollBar().setUnitIncrement(19);
 		add(texturePacksScroll);
 
 		textureInfo = new JEditorPane();
