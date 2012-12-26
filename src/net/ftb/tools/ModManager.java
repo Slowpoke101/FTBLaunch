@@ -184,7 +184,7 @@ public class ModManager extends JDialog {
 		in.close();
 		int currentVersion, requestedVersion;
 		currentVersion = (line != null) ? Integer.parseInt(line.replace(".", "")) : 0;
-		if(!Settings.getSettings().getPackVer().equals("Newest Version")) {
+		if(!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) {
 			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
 			if(requestedVersion != currentVersion) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(version));
