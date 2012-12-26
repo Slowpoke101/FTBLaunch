@@ -19,43 +19,39 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
+	private String[] xmlFiles;
 
-	private String[] xmlFile;
-
-	public ModpackLoader(String[] xmlFile) {
-		this.xmlFile = xmlFile;
+	public ModpackLoader(String[] xmlFiles) {
+		this.xmlFiles = xmlFiles;
 	}
 
 	@Override
 	public void run() {
-		for(int j = 0; j < xmlFile.length; j++) {
-			boolean privatePack = false;
-			if(!xmlFile[j].equalsIgnoreCase("modpacks.xml")) {
-				privatePack = true;
-			}
-			File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile[j]);
+		for(String xmlFile : xmlFiles) {
+			boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
+			File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);
 			try {
 				modPackFile.getParentFile().mkdirs();
-				DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile[j])), modPackFile);
+				DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
 			} catch (IOException e) {
 				Logger.logWarn("Failed to load modpacks, loading from backup", e);
 			}
-			Logger.logInfo("loading modpack information for " + xmlFile[j] + "...");
-			Document doc;
+			Logger.logInfo("Loading modpack information for " + xmlFile + "...");
 			InputStream modPackStream = null;
 			try {
 				modPackStream = new FileInputStream(modPackFile);
-			} catch(IOException e) {
+			} catch (IOException e) {
 				Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
 			}
 			if(modPackStream == null) {
 				try {
-					modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile[j])).openStream();
-				} catch(IOException e) {
+					modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)).openStream();
+				} catch (IOException e) {
 					Logger.logError("Completely unable to download the modpack file - check your connection", e);
 				}
 			}
 			if(modPackStream != null) {
+				Document doc;
 				try {
 					doc = AppUtils.getXML(modPackStream);
 				} catch (Exception e) {
@@ -83,6 +79,9 @@ public class ModpackLoader extends Thread {
 						Logger.logError(e.getMessage(), e);
 					}
 				}
+				try {
+					modPackStream.close();
+				} catch (IOException e) { }
 			}
 		}
 		ModpacksPane.loaded = true;
