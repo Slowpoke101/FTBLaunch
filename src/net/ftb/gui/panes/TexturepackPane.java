@@ -228,7 +228,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	public static void searchTexturePacks(String search) {
 		CharSequence seq = search.toLowerCase();
-		System.out.println("Searching Packs for : " + search);
 		texturePackPanels.clear();
 		texturePacks.removeAll();
 		currentTexturePacks.clear();

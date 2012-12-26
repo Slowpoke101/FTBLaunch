@@ -240,7 +240,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	public static void searchMaps(String search) {
 		CharSequence seq = search.toLowerCase();
-		System.out.println("Searching Packs for : " + search);
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
