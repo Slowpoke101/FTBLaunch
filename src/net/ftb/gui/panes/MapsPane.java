@@ -297,14 +297,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	private static int getIndex() {
-		if(currentMaps.size() > 0) {
-			if(currentMaps.size() != Map.getMapArray().size()) {
-				if(!origin.equalsIgnoreCase("all") || searched || !compatible.equalsIgnoreCase("all")) {
-					return currentMaps.get(selectedMap).getIndex();
-				}
-			}
-		}
-		return selectedMap;
+		return (currentMaps.size() > 0) ? currentMaps.get(selectedMap).getIndex() : selectedMap;
 	}
 
 	private static int getMapNum() {

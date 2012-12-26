@@ -377,14 +377,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 
 	public static int getIndex() {
-		if(currentPacks.size() > 0) {
-			if(currentPacks.size() != ModPack.getPackArray().size()) {
-				if(!origin.equalsIgnoreCase("all") || type.equalsIgnoreCase("server") || searched || !mcVersion.equalsIgnoreCase("all")) {
-					return currentPacks.get(selectedPack).getIndex();
-				}
-			}
-		}
-		return selectedPack;
+		return (currentPacks.size() > 0) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
 	}
 
 	private static int getModNum() {

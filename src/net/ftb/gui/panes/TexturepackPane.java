@@ -43,7 +43,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
 	private static JEditorPane textureInfo;
-	
+
 	public static boolean searched;
 
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
@@ -276,14 +276,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	private static int getIndex() {
-		if(currentTexturePacks.size() > 0) {
-			if(currentTexturePacks.size() != TexturePack.getTexturePackArray().size()) {
-				if(!origin.equalsIgnoreCase("all") || searched) {
-					return currentTexturePacks.get(selectedTexturePack).getIndex();
-				}
-			}
-		}
-		return selectedTexturePack;
+		return (currentTexturePacks.size() > 0) ? currentTexturePacks.get(selectedTexturePack).getIndex() : selectedTexturePack;
 	}
 
 	private static int getTexturePackNum() {
