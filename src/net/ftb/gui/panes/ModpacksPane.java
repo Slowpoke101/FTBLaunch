@@ -174,7 +174,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		}
 
 		final int packIndex = packPanels.size();
-		Logger.logInfo("Adding pack " + getModNum());
+
 		final JPanel p = new JPanel();
 		p.setBounds(0, (packIndex * 55), 420, 55);
 		p.setLayout(null);
@@ -224,6 +224,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	@Override
 	public void onModPackAdded(ModPack pack) {
 		addPack(pack);
+		Logger.logInfo("Adding pack " + getModNum());
 		updatePacks();
 	}
 

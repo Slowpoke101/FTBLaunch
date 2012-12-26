@@ -150,8 +150,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			maps.removeAll();
 		}
 
-		final int mapIndex = mapPanels.size();
-		Logger.logInfo("Adding map " + getMapNum());
+		final int mapIndex = mapPanels.size();	
 		final JPanel p = new JPanel();
 		p.setBounds(0, (mapIndex * 55), 420, 55);
 		p.setLayout(null);
@@ -198,6 +197,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	@Override
 	public void onMapAdded(Map map) {
 		addMap(map);
+		Logger.logInfo("Adding map " + getMapNum());
 		updateMaps();
 	}
 

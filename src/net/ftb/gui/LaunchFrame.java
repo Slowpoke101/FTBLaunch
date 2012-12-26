@@ -20,14 +20,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -197,7 +193,7 @@ public class LaunchFrame extends JFrame {
 
 				ModPack.addListener(frame.modPacksPane);
 				ModPack.loadXml(getXmls());
-				
+
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
@@ -223,7 +219,7 @@ public class LaunchFrame extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
 		panel = new JPanel();
-		
+
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 480);
 		panel.setBounds(0, 0, 850, 480);
@@ -445,7 +441,7 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 	}
-	
+
 	public void setTabbedPaneIcons() {
 		int i = getUnreadNews();
 		if(i > 0) {
@@ -911,7 +907,7 @@ public class LaunchFrame extends JFrame {
 		mapsPane.updateLocale();
 		tpPane.updateLocale();
 	}
-	
+
 	private static String[] getXmls() {
 		ArrayList<String> s = new ArrayList<String>();
 		String[] privPacks = Settings.getSettings().getPrivatePacks();
@@ -923,13 +919,13 @@ public class LaunchFrame extends JFrame {
 		}
 		return s.toArray(new String[] {});
 	}
-	
+
 	public int getUnreadNews() {
 		int i = 0;
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
-			
+
 			ArrayList<Long> timeStamps = new ArrayList<Long>();
 
 			String s = reader.readLine();
@@ -953,15 +949,15 @@ public class LaunchFrame extends JFrame {
 					i++;
 				}
 			}
-			
+
 		} catch (Exception e) {
 			Logger.logError(e.getMessage(), e);
 		}
-		
+
 		return i;
 	}
-	
-//	public static JTabbedPane getTabbedPane() {
-//		return tabbedPane;
-//	}
+
+	//	public static JTabbedPane getTabbedPane() {
+	//		return tabbedPane;
+	//	}
 }

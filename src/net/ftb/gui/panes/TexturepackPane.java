@@ -27,6 +27,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
@@ -141,7 +142,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		}
 
 		final int texturePackIndex = texturePackPanels.size();
-		System.out.println("Adding texture pack " + getTexturePackNum());
+
 		final JPanel p = new JPanel();
 		p.setBounds(0, (texturePackIndex * 55), 420, 55);
 		p.setLayout(null);
@@ -190,6 +191,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	@Override
 	public void onTexturePackAdded(TexturePack texturePack) {
 		addTexturePack(texturePack);
+		Logger.logInfo("Adding texture pack " + getTexturePackNum());
 		updateTexturePacks();
 	}
 
