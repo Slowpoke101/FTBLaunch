@@ -57,25 +57,18 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		fixSize();
 		addWindowListener(this);
 		final MinecraftFrame thisFrame = this;
-		this.addComponentListener(new ComponentListener() {
+		addComponentListener(new ComponentListener() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Settings.getSettings().setLastDimension(thisFrame.getSize());
 				Settings.getSettings().save();
 			}
-
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				Settings.getSettings().setLastPosition(thisFrame.getLocation());
 			}
-
-			@Override
-			public void componentShown(ComponentEvent e) {
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent e) {
-			}
+			@Override public void componentShown(ComponentEvent e) { }
+			@Override public void componentHidden(ComponentEvent e) { }
 		});
 	}
 

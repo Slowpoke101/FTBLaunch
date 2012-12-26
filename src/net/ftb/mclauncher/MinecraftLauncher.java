@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
@@ -70,7 +71,7 @@ public class MinecraftLauncher {
 		arguments.add(forgename);
 		arguments.add(username);
 		arguments.add(password);
-		arguments.add(ModPack.getSelectedPack().getName());
+		arguments.add(ModPack.getSelectedPack().getName() + " v" + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
 		arguments.add(OSUtils.getDynamicStorageLocation() + "ModPacks" + separator + ModPack.getPack(ModpacksPane.getIndex()).getDir() + separator + ModPack.getPack(ModpacksPane.getIndex()).getLogoName());
 
 		ProcessBuilder processBuilder = new ProcessBuilder(arguments);
