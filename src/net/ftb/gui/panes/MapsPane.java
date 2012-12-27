@@ -137,7 +137,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() { 
+	@Override public void onVisible() {
+		compatible = ModPack.getSelectedPack().getDir();
 		sortMaps();
 	}
 
@@ -210,45 +211,34 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		LaunchFrame.getInstance().mapsPane.repaint();
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
-		HashMap<Integer, List<Map>> sorted = new HashMap<Integer, List<Map>>();
 		if(origin.equals("All")) {
-			sorted.put(0, new ArrayList<Map>());
-			sorted.put(1, new ArrayList<Map>());
 			for(Map map : Map.getMapArray()) {
 				if(compatible.equals("All") || map.isCompatible(compatible)) {
-					sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map); 
+					addMap(map);
+					currentMaps.put(counter, map);
+					counter++;
 				}
 			}
 		} else if(origin.equals("FTB")) {
-			sorted.put(0, new ArrayList<Map>());
-			sorted.put(1, new ArrayList<Map>());
 			for(Map map : Map.getMapArray()) {
 				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map); 
+						addMap(map);
+						currentMaps.put(counter, map);
+						counter++;
 					}
 				}
 			}
 		} else {
-			sorted.put(0, new ArrayList<Map>());
-			sorted.put(1, new ArrayList<Map>());
 			for(Map map : Map.getMapArray()) {
 				if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map); 
+						addMap(map);
+						currentMaps.put(counter, map);
+						counter++;
 					}
 				}
 			}
-		}
-		for(Map map : sorted.get(1)) {
-			addMap(map);
-			currentMaps.put(counter, map);
-			counter++;
-		}
-		for(Map map : sorted.get(0)) {
-			addMap(map);
-			currentMaps.put(counter, map);
-			counter++;
 		}
 		searched = false;
 		updateMaps();
