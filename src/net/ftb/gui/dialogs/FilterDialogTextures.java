@@ -23,6 +23,9 @@ public class FilterDialogTextures extends JDialog {
 
 	public FilterDialogTextures(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
+		
+		setupGui();
+		
 		// TODO: Overhaul Filter dialog towards texture packs
 		// Because more than likely ftb won't have a texture pack, and there is no server versions.
 		applyButton.addActionListener(new ActionListener() {
@@ -70,6 +73,6 @@ public class FilterDialogTextures extends JDialog {
 		panel.add(originBox);
 		panel.add(applyButton);
 		panel.add(cancelButton);
-		//		panel.add(searchButton);
+		panel.add(searchButton);
 	}
 }

@@ -176,4 +176,13 @@ public class TexturePack {
 	public String[] getCompatible() {
 		return compatible;
 	}
+
+	public boolean isCompatible(String dir) {
+		for(int i = 0; i < compatible.length; i++) {
+			if(compatible[i].equalsIgnoreCase(dir)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,10 +25,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.FilterDialogTextures;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -45,6 +49,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
 	private static JEditorPane textureInfo;
+	
+	private TexturepackPane instance = this;
 
 	public static boolean searched;
 
@@ -77,7 +83,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		filter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				FilterDialogTextures filter = new FilterDialogTextures(instance);
+				filter.setVisible(true);
 			}
 		});
 		add(filter);
@@ -132,8 +139,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	@Override public void onVisible() { 
-		compatible = ModPack.getSelectedPack().getDir();
-		sortTexturePacks();
 		updateFilter();
 	}
 
@@ -207,28 +212,28 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		int counter = 0;
 		selectedTexturePack = 0;
 		LaunchFrame.getInstance().tpPane.repaint();
-		if(origin.equalsIgnoreCase("all")) {
-			for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
-				addTexturePack(texturePack);
-				currentTexturePacks.put(counter, texturePack);
-				counter++;
-			}
-		} else if(origin.equalsIgnoreCase("ftb")) {
-			for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
-				if(texturePack.getAuthor().equalsIgnoreCase("the ftb team")) {
-					addTexturePack(texturePack);
-					currentTexturePacks.put(counter, texturePack);
-					counter++;
+		HashMap<Integer, List<TexturePack>> sorted = new HashMap<Integer, List<TexturePack>>();			
+		sorted.put(0, new ArrayList<TexturePack>());
+		sorted.put(1, new ArrayList<TexturePack>());
+		for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
+			ArrayList<String> comp = new ArrayList<String>(Arrays.asList(texturePack.getCompatible()));
+			if(compatible.equalsIgnoreCase("all")) {
+				sorted.get((texturePack.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(texturePack);
+			} else {
+				if(comp.contains(compatible)) {
+					sorted.get((texturePack.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(texturePack);
 				}
 			}
-		} else {
-			for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
-				if(!texturePack.getAuthor().equalsIgnoreCase("the ftb team")) {
-					addTexturePack(texturePack);
-					currentTexturePacks.put(counter, texturePack);
-					counter++;
-				}
-			}
+		}
+		for(TexturePack tp : sorted.get(1)) {
+			addTexturePack(tp);
+			currentTexturePacks.put(counter, tp);
+			counter++;
+		}
+		for(TexturePack tp : sorted.get(0)) {
+			addTexturePack(tp);
+			currentTexturePacks.put(counter, tp);
+			counter++;
 		}
 		searched = false;
 		updateTexturePacks();
