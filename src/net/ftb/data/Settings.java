@@ -167,16 +167,14 @@ public class Settings extends Properties {
 		setPrivatePacks(codes);
 	}
 
-    public void setPrivatePacks(List<String> codes)
-    {
-        StringBuilder sb = new StringBuilder();
+    public void setPrivatePacks(List<String> codes) {
+        String out = "";
         String sep = "";
-        for (String s : codes)
-        {
-            sb.append(sep).append(s);
+        for(String s : codes) {
+            out += sep + s;
             sep = ",";
         }
-        setProperty("privatePacks", sb.toString());
+        setProperty("privatePacks", out);
     }
 
 	public ArrayList<String> getPrivatePacks() {
