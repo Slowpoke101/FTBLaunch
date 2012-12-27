@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 
 import net.ftb.gui.LaunchFrame;
@@ -151,7 +152,7 @@ public class Settings extends Properties {
 			ArrayList<String> packList = getPrivatePacks();
 			if(!packList.contains(code.toLowerCase())) {
 				packList.add(code);
-				setPrivatePacks((String[]) packList.toArray());
+				setPrivatePacks(packList);
 			}
 		} else {
 			setProperty("privatePacks", code);
@@ -163,20 +164,20 @@ public class Settings extends Properties {
 		if(codes.contains(code)) {
 			codes.remove(code);
 		}
-		setPrivatePacks(codes.toArray(new String[]{}));
+		setPrivatePacks(codes);
 	}
 
-	public void setPrivatePacks(String[] codes) {
-		if(codes.length > 0) {
-			String s = codes[0];
-			for(int i = 1; i < codes.length; i++) {
-				s += "," + codes[i];
-			}
-			setProperty("privatePacks", s);
-		} else {
-			setProperty("privatePacks", "");
-		}
-	}
+    public void setPrivatePacks(List<String> codes)
+    {
+        StringBuilder sb = new StringBuilder();
+        String sep = "";
+        for (String s : codes)
+        {
+            sb.append(sep).append(s);
+            sep = ",";
+        }
+        setProperty("privatePacks", sb.toString());
+    }
 
 	public ArrayList<String> getPrivatePacks() {
 		String[] temp = getProperty("privatePacks", "").split(",");
