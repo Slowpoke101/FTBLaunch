@@ -427,7 +427,6 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
 		setTabbedPaneIcons();
-		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.setSelectedIndex(tab);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -475,7 +474,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-		//		tabbedPane.setEnabledAt(4, false);
+		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -779,7 +778,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
-		//		tabbedPane.setEnabledAt(4, true);
+		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
