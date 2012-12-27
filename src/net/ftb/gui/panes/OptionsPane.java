@@ -122,7 +122,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		tglbtnForceUpdate.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				tglbtnForceUpdate.setEnabled(false);
 				saveSettingsInto(Settings.getSettings());
 			}
 		});
