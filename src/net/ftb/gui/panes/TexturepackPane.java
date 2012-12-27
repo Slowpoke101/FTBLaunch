@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -39,7 +40,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
-	public static String origin = "All";
+	public static String origin = "All", compatible = "All";
 	private JButton filter;
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
@@ -130,7 +131,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() { }
+	@Override public void onVisible() { 
+		compatible = ModPack.getSelectedPack().getDir();
+		sortTexturePacks();
+		updateFilter();
+	}
 
 	/*
 	 * GUI Code to add a texture pack to the selection

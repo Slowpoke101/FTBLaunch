@@ -140,6 +140,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	@Override public void onVisible() {
 		compatible = ModPack.getSelectedPack().getDir();
 		sortMaps();
+		updateFilter();
 	}
 
 	/*
