@@ -138,7 +138,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	@Override public void onVisible() {
-		compatible = ModPack.getSelectedPack().getDir();
 		sortMaps();
 		updateFilter();
 	}
@@ -212,21 +211,20 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		LaunchFrame.getInstance().mapsPane.repaint();
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
+		HashMap<Integer, List<Map>> sorted = new HashMap<Integer, List<Map>>();			
+		sorted.put(0, new ArrayList<Map>());
+		sorted.put(1, new ArrayList<Map>());
 		if(origin.equals("All")) {
 			for(Map map : Map.getMapArray()) {
 				if(compatible.equals("All") || map.isCompatible(compatible)) {
-					addMap(map);
-					currentMaps.put(counter, map);
-					counter++;
+					sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
 				}
 			}
 		} else if(origin.equals("FTB")) {
 			for(Map map : Map.getMapArray()) {
 				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						addMap(map);
-						currentMaps.put(counter, map);
-						counter++;
+						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
 					}
 				}
 			}
@@ -234,12 +232,20 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			for(Map map : Map.getMapArray()) {
 				if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						addMap(map);
-						currentMaps.put(counter, map);
-						counter++;
+						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
 					}
 				}
 			}
+		}
+		for(Map map : sorted.get(1)) {
+			addMap(map);
+			currentMaps.put(counter, map);
+			counter++;
+		}
+		for(Map map : sorted.get(0)) {
+			addMap(map);
+			currentMaps.put(counter, map);
+			counter++;
 		}
 		searched = false;
 		updateMaps();
