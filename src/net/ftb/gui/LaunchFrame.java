@@ -909,12 +909,18 @@ public class LaunchFrame extends JFrame {
 	}
 
 	private static String[] getXmls() {
-		ArrayList<String> s = new ArrayList<String>();
-		String[] privPacks = Settings.getSettings().getPrivatePacks();
+		ArrayList<String> s = Settings.getSettings().getPrivatePacks();
+		if(s == null) {
+			s = new ArrayList<String>();
+		}
 		s.add("modpacks.xml");
-		for(int i = 0; i < privPacks.length; i++) {
-			if(!privPacks[i].equals("")) {
-				s.add(privPacks[i] + ".xml");
+		for(int i = 0; i < s.size(); i++) {
+			if(s.get(i).isEmpty()) {
+				s.remove(i);
+			} else if(!s.get(i).equalsIgnoreCase("modpacks.xml")) {
+				String temp = s.get(i);
+				s.remove(i);
+				s.add(temp + ".xml");
 			}
 		}
 		return s.toArray(new String[] {});
@@ -925,9 +931,7 @@ public class LaunchFrame extends JFrame {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
-
 			ArrayList<Long> timeStamps = new ArrayList<Long>();
-
 			String s = reader.readLine();
 			s = s.trim();
 			String[] str = s.split(",");

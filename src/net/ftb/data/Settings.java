@@ -153,10 +153,10 @@ public class Settings extends Properties {
 			return;
 		}
 		if(getProperty("privatePacks") != null) {
-			Set<String> packList = new HashSet<String>(Arrays.asList(getPrivatePacks()));
+			ArrayList<String> packList = getPrivatePacks();
 			if(!packList.contains(code.toLowerCase())) {
 				packList.add(code);
-				setPrivatePacks(packList.toArray(new String[packList.size()]));
+				setPrivatePacks((String[]) packList.toArray());
 			}
 		} else {
 			setProperty("privatePacks", code);
@@ -164,10 +164,9 @@ public class Settings extends Properties {
 	}
 	
 	public void removePrivatePack(String code) {
-		ArrayList<String> codes = new ArrayList<String>(Arrays.asList(getPrivatePacks()));
+		ArrayList<String> codes = getPrivatePacks();
 		if(codes.contains(code)) {
 			codes.remove(code);
-			System.out.println("removed");
 		}
 		setPrivatePacks(codes.toArray(new String[]{}));
 	}
@@ -182,11 +181,18 @@ public class Settings extends Properties {
 		} else {
 			setProperty("privatePacks", "");
 		}
-		save();
 	}
 
-	public String[] getPrivatePacks() {
-		return getProperty("privatePacks", "").split(",");
+	public ArrayList<String> getPrivatePacks() {
+		String[] temp = getProperty("privatePacks", "").split(",");
+		if(temp.length > 0) {
+			ArrayList<String> packs = new ArrayList<String>();
+			for(String line : temp) {
+				packs.add(line);
+			}
+			return packs;
+		}
+		return null;
 	}
 
 	public void setNewsDate() {

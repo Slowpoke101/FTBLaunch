@@ -82,7 +82,7 @@ public class FilterDialogPacks extends JDialog {
 		btnAddPack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AddPack ap = new AddPack();
+				AddPackDialog ap = new AddPackDialog();
 				setVisible(false);
 				ap.setVisible(true);
 				ap.setAlwaysOnTop(true);
