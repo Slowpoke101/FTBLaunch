@@ -19,10 +19,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.util.ErrorUtils;
 
 public class ProfileAdderDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
-
 	private JPanel panel = new JPanel();
-
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);

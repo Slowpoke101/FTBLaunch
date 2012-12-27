@@ -44,6 +44,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
+import net.ftb.gui.dialogs.InstallDirectoryDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
@@ -101,6 +102,7 @@ public class LaunchFrame extends JFrame {
 	public OptionsPane optionsPane;
 
 	public static int buildNumber = 118;
+	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
@@ -165,6 +167,11 @@ public class LaunchFrame extends JFrame {
 				}
 				I18N.setupLocale();
 				I18N.setLocale(Settings.getSettings().getLocale());
+
+				if(noConfig) {
+					InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
+					installDialog.setVisible(true);
+				}
 
 				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists()) {

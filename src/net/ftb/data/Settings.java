@@ -13,29 +13,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
-import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
 public class Settings extends Properties {
-	private static final long serialVersionUID = 1L;
 	private static Settings settings;
 	private File configFile;
 	private boolean forceUpdate = false;
 
 	static {
-		File cfgFile = new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg");
 		try {
-			settings = new Settings(cfgFile);
+			settings = new Settings(new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg"));
 		} catch (IOException e) {
 			Logger.logError("Failed to load settings", e);
 		}
@@ -47,8 +40,10 @@ public class Settings extends Properties {
 
 	public Settings(File file) throws IOException {
 		configFile = file;
-		if (file.exists()) {
+		if(file.exists()) {
 			load(new FileInputStream(file));
+		} else {
+			LaunchFrame.noConfig = true;
 		}
 	}
 
