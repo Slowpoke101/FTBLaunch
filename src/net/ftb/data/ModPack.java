@@ -186,7 +186,7 @@ public class ModPack {
 			}
 			BufferedReader in = new BufferedReader(new FileReader(verFile));
 			String line;
-			if((line = in.readLine()) == null || Integer.parseInt(version) > Integer.parseInt(line)) {
+			if((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) > Integer.parseInt(line.replace(".", ""))) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
 				out.write(version);
 				out.flush();
@@ -343,14 +343,14 @@ public class ModPack {
 	public void setMcVersion(String version) {
 		mcVersion = version;
 	}
-	
+
 	/**
 	 * @return the filename of the gif animation to display before minecraft loads
 	 */
 	public String getAnimation() {
 		return animation;
 	}
-	
+
 	public boolean getPrivatePack() {
 		return privatePack;
 	}
