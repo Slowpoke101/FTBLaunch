@@ -34,8 +34,6 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
-	private static final long serialVersionUID = 1L;
-
 	private static JPanel maps;
 	public static ArrayList<JPanel> mapPanels;
 	private static JScrollPane mapsScroll;
