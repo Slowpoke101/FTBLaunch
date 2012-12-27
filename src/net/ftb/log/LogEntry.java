@@ -14,11 +14,11 @@ public class LogEntry {
 	private final String dateString;
 	private final Date date;
 	private final Map<LogType, String> messageCache = new HashMap<LogType, String>();
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final String dateFormatString = "HH:mm:ss";
 
 	public LogEntry() {
 		this.date = new Date();
-		this.dateString = dateFormat.format(date);
+		this.dateString = new SimpleDateFormat(dateFormatString).format(date);
 		this.location = getLocation(cause);
 	}
 
