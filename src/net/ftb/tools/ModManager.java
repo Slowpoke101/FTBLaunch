@@ -33,7 +33,6 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class ModManager extends JDialog {
-	private static final long serialVersionUID = 6897832855341265019L;
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static boolean backdated = false;
 	private static String curVersion = "";
@@ -110,6 +109,11 @@ public class ModManager extends JDialog {
 				clearModsFolder(pack);
 				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
 				FileUtils.delete(new File(installPath, dir + "/instMods/"));
+				File version = new File(installPath, dir + sep + "version");
+				BufferedWriter out = new BufferedWriter(new FileWriter(version));
+				out.write(pack.getVersion());
+				out.flush();
+				out.close();
 				return true;
 			} else {
 				ErrorUtils.tossError("Error downloading modpack!!!");
@@ -172,11 +176,7 @@ public class ModManager extends JDialog {
 		if(!version.exists()) {
 			version.getParentFile().mkdirs();
 			version.createNewFile();
-			BufferedWriter out = new BufferedWriter(new FileWriter(version));
-			out.write(pack.getVersion());
-			curVersion = pack.getVersion().replace(".", "_");
-			out.flush();
-			out.close();
+			curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
 			return false;
 		}
 		BufferedReader in = new BufferedReader(new FileReader(version));
@@ -185,12 +185,8 @@ public class ModManager extends JDialog {
 		int currentVersion, requestedVersion;
 		currentVersion = (line != null) ? Integer.parseInt(line.replace(".", "")) : 0;
 		if(!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) {
-			requestedVersion =  Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
+			requestedVersion = Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
 			if(requestedVersion != currentVersion) {
-				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write("" + Settings.getSettings().getPackVer());
-				out.flush();
-				out.close();
 				Logger.logInfo("Modpack is out of date.");
 				backdated = true;
 				curVersion = Settings.getSettings().getPackVer().replace(".", "_");
@@ -213,11 +209,7 @@ public class ModManager extends JDialog {
 				}
 				FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
 			}
-			BufferedWriter out = new BufferedWriter(new FileWriter(version));
-			out.write(pack.getVersion());
 			curVersion = pack.getVersion().replace(".", "_");
-			out.flush();
-			out.close();
 			return false;
 		} else {
 			Logger.logInfo("Modpack is up to date.");
