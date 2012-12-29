@@ -41,7 +41,7 @@ public class AnalyticsRequestData {
 	private Integer eventValue = null;
 	//	utmcsr
 	//	Identifies a search engine, newsletter name, or other source specified in the
-	//	utm_source query parameter See the “Marketing Campaign Tracking”
+	//	utm_source query parameter See the Marketing Campaign Tracking
 	//	section for more information about query parameters.
 	//
 	//	utmccn
