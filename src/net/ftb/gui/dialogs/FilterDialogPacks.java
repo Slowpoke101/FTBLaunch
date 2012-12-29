@@ -17,11 +17,10 @@ import net.ftb.gui.panes.ModpacksPane;
 
 public class FilterDialogPacks extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
+	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:"), lblModPackAval = new JLabel("Mod Pack Avaliability:");
+	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox, comboBox, avalBox = new JComboBox(new String[]{"All", "Public", "Private"});
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), btnSearch = new JButton("Search"), btnAddPack = new JButton("Add Pack");
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
-	private JComboBox comboBox;
 
 	private ModpacksPane pane;
 
@@ -34,20 +33,20 @@ public class FilterDialogPacks extends JDialog {
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");
-		setBounds(300, 300, 230, 205);
+		setBounds(300, 300, 300, 236);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);
 		panel.setLayout(null);
 		setContentPane(panel);
-		typeLbl.setBounds(10, 10, 100, 30);
-		typeBox.setBounds(120, 10, 100, 30);
-		originLbl.setBounds(10, 40, 100, 30);
-		originBox.setBounds(120, 40, 100, 30);
-		applyButton.setBounds(10, 142, 100, 25);
+		typeLbl.setBounds(10, 10, 150, 30);
+		typeBox.setBounds(184, 10, 100, 30);
+		originLbl.setBounds(10, 40, 150, 30);
+		originBox.setBounds(184, 40, 100, 30);
+		applyButton.setBounds(10, 172, 150, 25);
 		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(120, 142, 100, 25);
-		btnSearch.setBounds(10, 111, 100, 25);
-		btnAddPack.setBounds(120, 111, 100, 25);
+		cancelButton.setBounds(184, 172, 100, 25);
+		btnSearch.setBounds(10, 141, 150, 25);
+		btnAddPack.setBounds(184, 141, 100, 25);
 		panel.add(btnAddPack);
 		panel.add(btnSearch);
 		panel.add(typeLbl);
@@ -72,12 +71,19 @@ public class FilterDialogPacks extends JDialog {
 
 		typeBox.setSelectedItem(pane.type);
 		originBox.setSelectedItem(pane.origin);
-		lblMinecraftVersion.setBounds(10, 70, 100, 30);
+		avalBox.setSelectedItem(pane.avaliability);
+		lblMinecraftVersion.setBounds(10, 70, 150, 30);
 
 		panel.add(lblMinecraftVersion);
-		comboBox.setBounds(120, 70, 100, 30);
+		comboBox.setBounds(184, 70, 100, 30);
 
 		panel.add(comboBox);
+		
+		avalBox.setBounds(184, 100, 100, 30);
+		panel.add(avalBox);
+		
+		lblModPackAval.setBounds(10, 100, 150, 25);
+		panel.add(lblModPackAval);
 		
 		btnAddPack.addActionListener(new ActionListener() {
 			@Override
@@ -104,6 +110,8 @@ public class FilterDialogPacks extends JDialog {
 				pane.type = (String)typeBox.getSelectedItem();
 				pane.origin = (String)originBox.getSelectedItem();
 				pane.mcVersion = (String)comboBox.getSelectedItem();
+				pane.avaliability = (String)avalBox.getSelectedItem();
+				System.out.println(avalBox.getSelectedItem());
 				pane.updateFilter();
 				setVisible(false);
 			}

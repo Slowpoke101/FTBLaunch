@@ -51,7 +51,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JEditorPane packInfo;
 
 	//	private JLabel loadingImage;
-	public static String type = "Client", origin = "All", mcVersion = "All";
+	public static String type = "Client", origin = "All", mcVersion = "All", avaliability = "All";
 	public static boolean loaded = false;
 	public static boolean searched;
 
@@ -240,24 +240,64 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			for(ModPack pack : ModPack.getPackArray()) {
 				if(type.equalsIgnoreCase("client")) {
 					if(mcVersion.equalsIgnoreCase("all")) {
-						addPack(pack);
-						currentPacks.put(counter, pack);
-						counter++;
+						if(avaliability.equalsIgnoreCase("all")) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
 					} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-						addPack(pack);
-						currentPacks.put(counter, pack);
-						counter++;
+						if(avaliability.equalsIgnoreCase("all")) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+							addPack(pack);
+							currentPacks.put(counter, pack);
+							counter++;
+						}
 					}
 				} else if (type.equalsIgnoreCase("server")) {
 					if(!pack.getServerUrl().isEmpty()) {
 						if(mcVersion.equalsIgnoreCase("all")) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						}
 					}
 				}
@@ -267,24 +307,64 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				if(pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(type.equalsIgnoreCase("client")) {
 						if(mcVersion.equalsIgnoreCase("all")) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						}
 					} else if (type.equalsIgnoreCase("server")) {
 						if(!pack.getServerUrl().isEmpty()) {
 							if(mcVersion.equalsIgnoreCase("all")) {
-								addPack(pack);
-								currentPacks.put(counter, pack);
-								counter++;
+								if(avaliability.equalsIgnoreCase("all")) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								}
 							} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-								addPack(pack);
-								currentPacks.put(counter, pack);
-								counter++;
+								if(avaliability.equalsIgnoreCase("all")) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								}
 							}
 						}
 					}
@@ -295,24 +375,64 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				if(!pack.getAuthor().equalsIgnoreCase("the ftb team")) {
 					if(type.equalsIgnoreCase("client")) {
 						if(mcVersion.equalsIgnoreCase("all")) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
+							if(avaliability.equalsIgnoreCase("all")) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+								addPack(pack);
+								currentPacks.put(counter, pack);
+								counter++;
+							}
 						}
 					} else if (type.equalsIgnoreCase("server")) {
 						if(!pack.getServerUrl().isEmpty()) {
 							if(mcVersion.equalsIgnoreCase("all")) {
-								addPack(pack);
-								currentPacks.put(counter, pack);
-								counter++;
+								if(avaliability.equalsIgnoreCase("all")) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								}
 							} else if(mcVersion.equalsIgnoreCase(pack.getMcVersion())) {
-								addPack(pack);
-								currentPacks.put(counter, pack);
-								counter++;
+								if(avaliability.equalsIgnoreCase("all")) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("public") && !pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								} else if(avaliability.equalsIgnoreCase("private") && pack.getPrivatePack()) {
+									addPack(pack);
+									currentPacks.put(counter, pack);
+									counter++;
+								}
 							}
 						}
 					}
