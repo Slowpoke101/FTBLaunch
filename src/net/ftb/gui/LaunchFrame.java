@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
@@ -68,6 +70,10 @@ import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
+import net.ftb.tracking.AnalyticsConfigData;
+import net.ftb.tracking.JGoogleAnalyticsTracker;
+import net.ftb.tracking.JGoogleAnalyticsTracker.DispatchMode;
+import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
@@ -106,6 +112,7 @@ public class LaunchFrame extends JFrame {
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
+	public static JGoogleAnalyticsTracker tracker;
 
 	public static final String FORGENAME = "MinecraftForge.zip";
 
@@ -122,6 +129,11 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
+		AnalyticsConfigData config = new AnalyticsConfigData("UA-37221496-1");
+		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.MULTI_THREAD);
+		tracker.setEnabled(true);
+		tracker.trackPageViewFromReferrer("net/ftb/gui/LaunchFrame.java", "Launcher Start", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
 		}
@@ -239,6 +251,23 @@ public class LaunchFrame extends JFrame {
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
+
+		addWindowListener(new WindowListener() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				tracker.completeBackgroundTasks(1000);
+				try {
+					Thread.sleep(1100);
+				} catch (InterruptedException e) { }
+			}
+
+			@Override public void windowActivated(WindowEvent arg0) { }
+			@Override public void windowClosed(WindowEvent arg0) { }
+			@Override public void windowDeactivated(WindowEvent arg0) { }
+			@Override public void windowDeiconified(WindowEvent arg0) { }
+			@Override public void windowIconified(WindowEvent arg0) { }
+			@Override public void windowOpened(WindowEvent arg0) { }
+		});
 
 		//Footer
 		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -643,6 +672,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+			tracker.completeBackgroundTasks(1000);
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }
