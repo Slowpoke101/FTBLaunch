@@ -206,7 +206,16 @@ public class Settings extends Properties {
 	}
 
 	public void setLastPosition(Point lastPosition) {
-		setObjectProperty("lastPosition", lastPosition);
+		int x = lastPosition.x;
+		int y = lastPosition.y;
+		if(x < 0) {
+			x = 0;
+		}
+		if(y < 0) {
+			y = 0;
+		}
+		Point p = new Point(x, y);
+		setObjectProperty("lastPosition", p);
 	}
 
 	public Point getLastPosition() {
