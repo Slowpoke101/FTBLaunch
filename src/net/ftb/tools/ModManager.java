@@ -96,28 +96,54 @@ public class ModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
-			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
-			baseDynamic.mkdirs();
-			new File(baseDynamic, modPackName).createNewFile();
-			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
-			String animation = pack.getAnimation();
-			if(!animation.equalsIgnoreCase("empty")) {
-				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
-			}
-			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
-				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-				clearModsFolder(pack);
-				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-				FileUtils.delete(new File(installPath, dir + "/instMods/"));
-				File version = new File(installPath, dir + sep + "version");
-				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write(pack.getVersion());
-				out.flush();
-				out.close();
-				return true;
+			if(pack.getPrivatePack()) {
+				File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
+				baseDynamic.mkdirs();
+				new File(baseDynamic, modPackName).createNewFile();
+				downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
+				String animation = pack.getAnimation();
+				if(!animation.equalsIgnoreCase("empty")) {
+					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
+				}
+				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
+					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+					clearModsFolder(pack);
+					FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+					FileUtils.delete(new File(installPath, dir + "/instMods/"));
+					File version = new File(installPath, dir + sep + "version");
+					BufferedWriter out = new BufferedWriter(new FileWriter(version));
+					out.write(pack.getVersion());
+					out.flush();
+					out.close();
+					return true;
+				} else {
+					ErrorUtils.tossError("Error downloading modpack!!!");
+					return false;
+				}
 			} else {
-				ErrorUtils.tossError("Error downloading modpack!!!");
-				return false;
+				File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
+				baseDynamic.mkdirs();
+				new File(baseDynamic, modPackName).createNewFile();
+				downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
+				String animation = pack.getAnimation();
+				if(!animation.equalsIgnoreCase("empty")) {
+					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
+				}
+				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
+					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+					clearModsFolder(pack);
+					FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+					FileUtils.delete(new File(installPath, dir + "/instMods/"));
+					File version = new File(installPath, dir + sep + "version");
+					BufferedWriter out = new BufferedWriter(new FileWriter(version));
+					out.write(pack.getVersion());
+					out.flush();
+					out.close();
+					return true;
+				} else {
+					ErrorUtils.tossError("Error downloading modpack!!!");
+					return false;
+				}
 			}
 		}
 	}
