@@ -1,5 +1,6 @@
 package net.ftb.gui.dialogs;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,8 +27,10 @@ public class AddPackDialog extends JDialog {
 
 	public AddPackDialog() {
 		super(LaunchFrame.getInstance(), true);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(null);
 		setBounds(300, 300, 300, 250);
+		setTitle("Private Pack Interface");
 		setResizable(false);
 
 		textField.setBounds(10, 137, 264, 30);
@@ -78,6 +81,7 @@ public class AddPackDialog extends JDialog {
 					Settings.getSettings().save();
 					Logger.logInfo(textField.getText() + " successfully removed.");
 					textField.setText("");
+					setVisible(false);
 				} else {
 					Logger.logInfo("Incorrect pack name.");
 				}

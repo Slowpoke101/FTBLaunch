@@ -1,5 +1,9 @@
 package net.ftb.gui.dialogs;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -29,6 +33,14 @@ public class SearchDialog extends JDialog {
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
+		searchBar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				lastPackSearch = searchBar.getText();
+				instance.sortPacks();
+				setVisible(false);
+			}
+		});
 	}
 
 	public SearchDialog(final MapsPane instance) {
@@ -45,6 +57,14 @@ public class SearchDialog extends JDialog {
 				instance.sortMaps();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
+		});
+		searchBar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				lastPackSearch = searchBar.getText();
+				instance.sortMaps();
+				setVisible(false);
+			}
 		});
 	}
 
@@ -63,6 +83,14 @@ public class SearchDialog extends JDialog {
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
+		searchBar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				lastPackSearch = searchBar.getText();
+				instance.sortTexturePacks();
+				setVisible(false);
+			}
+		});
 	}
 
 	private void setUpGui() {
@@ -70,6 +98,7 @@ public class SearchDialog extends JDialog {
 		setBounds(300, 300, 220, 90);
 		setResizable(false);
 		getContentPane().setLayout(null);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		searchBar.setBounds(10, 10, 200, 30);
 		getContentPane().add(searchBar);
 	}
