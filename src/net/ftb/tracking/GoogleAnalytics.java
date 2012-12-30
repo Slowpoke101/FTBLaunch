@@ -32,7 +32,7 @@ import java.util.Random;
  * @author Daniel Murphy
  *
  */
-public class GoogleAnalyticsV4_7_2 implements IGoogleAnalyticsURLBuilder{
+public class GoogleAnalytics {
 	public static final String URL_PREFIX = "http://www.google-analytics.com/__utm.gif";
 
 	private AnalyticsConfigData config;
@@ -40,7 +40,7 @@ public class GoogleAnalyticsV4_7_2 implements IGoogleAnalyticsURLBuilder{
 	private int cookie1;
 	private int cookie2;
 
-	public GoogleAnalyticsV4_7_2(AnalyticsConfigData argConfig){
+	public GoogleAnalytics(AnalyticsConfigData argConfig){
 		config = argConfig;
 		resetSession();
 	}

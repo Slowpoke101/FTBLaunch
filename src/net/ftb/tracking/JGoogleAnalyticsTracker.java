@@ -107,7 +107,7 @@ public class JGoogleAnalyticsTracker {
 
 	private GoogleAnalyticsVersion gaVersion;
 	private AnalyticsConfigData configData;
-	private IGoogleAnalyticsURLBuilder builder;
+	private GoogleAnalytics builder;
 	private DispatchMode mode;
 	private boolean enabled;
 
@@ -472,10 +472,10 @@ public class JGoogleAnalyticsTracker {
 	private void createBuilder() {
 		switch (gaVersion) {
 		case V_4_7_2:
-			builder = new GoogleAnalyticsV4_7_2(configData);
+			builder = new GoogleAnalytics(configData);
 			break;
 		default:
-			builder = new GoogleAnalyticsV4_7_2(configData);
+			builder = new GoogleAnalytics(configData);
 			break;
 		}
 	}
