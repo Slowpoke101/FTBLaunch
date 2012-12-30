@@ -18,7 +18,9 @@ import net.ftb.gui.panes.ModpacksPane;
 public class FilterDialogPacks extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:"), lblModPackAval = new JLabel("Mod Pack Avaliability:");
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox, comboBox, avalBox = new JComboBox(new String[]{"All", "Public", "Private"});
+	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), 
+			originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox, mcVersionBox, 
+			avalBox = new JComboBox(new String[]{"All", "Public", "Private"});
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), btnSearch = new JButton("Search"), btnAddPack = new JButton("Add Pack");
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
 
@@ -60,31 +62,31 @@ public class FilterDialogPacks extends JDialog {
 
 		mcVersions.add("All");
 
-		for(int i = 0; i < ModPack.getPackArray().size(); i++) {
-			String mcVersion = ModPack.getPack(i).getMcVersion();
-			if(!mcVersions.contains(mcVersion)) {
-				mcVersions.add(mcVersion);
+		for(ModPack pack : ModPack.getPackArray()) {
+			if(!mcVersions.contains(pack.getMcVersion())) {
+				mcVersions.add(pack.getMcVersion());
 			}
 		}
 
-		comboBox = new JComboBox(mcVersions.toArray());
+		mcVersionBox = new JComboBox(mcVersions.toArray());
 
 		typeBox.setSelectedItem(pane.type);
 		originBox.setSelectedItem(pane.origin);
 		avalBox.setSelectedItem(pane.avaliability);
+		mcVersionBox.setSelectedItem(pane.mcVersion);
 		lblMinecraftVersion.setBounds(10, 70, 150, 30);
 
 		panel.add(lblMinecraftVersion);
-		comboBox.setBounds(184, 70, 100, 30);
+		mcVersionBox.setBounds(184, 70, 100, 30);
 
-		panel.add(comboBox);
-		
+		panel.add(mcVersionBox);
+
 		avalBox.setBounds(184, 100, 100, 30);
 		panel.add(avalBox);
-		
+
 		lblModPackAval.setBounds(10, 100, 150, 25);
 		panel.add(lblModPackAval);
-		
+
 		btnAddPack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -94,7 +96,7 @@ public class FilterDialogPacks extends JDialog {
 				ap.setAlwaysOnTop(true);
 			}
 		});
-		
+
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -103,15 +105,14 @@ public class FilterDialogPacks extends JDialog {
 				setVisible(false);
 			}
 		});
-		
+
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				pane.type = (String)typeBox.getSelectedItem();
 				pane.origin = (String)originBox.getSelectedItem();
-				pane.mcVersion = (String)comboBox.getSelectedItem();
+				pane.mcVersion = (String)mcVersionBox.getSelectedItem();
 				pane.avaliability = (String)avalBox.getSelectedItem();
-				System.out.println(avalBox.getSelectedItem());
 				pane.updateFilter();
 				setVisible(false);
 			}

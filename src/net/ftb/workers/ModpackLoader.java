@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.panes.ModpacksPane;
@@ -19,10 +20,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
-	private String[] xmlFiles;
+	private ArrayList<String> xmlFiles = new ArrayList<String>();
 
-	public ModpackLoader(String[] xmlFiles) {
+	public ModpackLoader(ArrayList<String> xmlFiles) {
 		this.xmlFiles = xmlFiles;
+		xmlFiles.add(0, "modpacks.xml");
 	}
 
 	@Override

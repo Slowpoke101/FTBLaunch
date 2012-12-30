@@ -946,17 +946,16 @@ public class LaunchFrame extends JFrame {
 		tpPane.updateLocale();
 	}
 
-	private static String[] getXmls() {
+	private static ArrayList<String> getXmls() {
 		ArrayList<String> s = Settings.getSettings().getPrivatePacks();
 		if(s == null) {
 			s = new ArrayList<String>();
 		}
-		s.add("modpacks.xml");
 		for(int i = 0; i < s.size(); i++) {
 			if(s.get(i).isEmpty()) {
 				s.remove(i);
 				i--;
-			} else if(!s.get(i).equalsIgnoreCase("modpacks.xml")) {
+			} else {
 				String temp = s.get(i);
 				if(!temp.endsWith(".xml")) {
 					s.remove(i);
@@ -964,7 +963,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		}
-		return s.toArray(new String[] {});
+		return s;
 	}
 
 	public int getUnreadNews() {

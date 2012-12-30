@@ -36,8 +36,15 @@ public class ModPack {
 	/**
 	 * Loads the modpack.xml and adds it to the modpack array in this class
 	 */
-	public static void loadXml(String[] xmlFile) {
+	public static void loadXml(ArrayList<String> xmlFile) {
 		ModpackLoader loader = new ModpackLoader(xmlFile);
+		loader.start();
+	}
+	
+	public static void loadXml(String xmlFile) {
+		ArrayList<String> temp = new ArrayList<String>();
+		temp.add(xmlFile);
+		ModpackLoader loader = new ModpackLoader(temp);
 		loader.start();
 	}
 
@@ -351,7 +358,7 @@ public class ModPack {
 		return animation;
 	}
 
-	public boolean getPrivatePack() {
+	public boolean isPrivatePack() {
 		return privatePack;
 	}
 }

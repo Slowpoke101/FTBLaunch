@@ -40,7 +40,7 @@ public class AddPackDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if(DownloadUtils.staticFileExists(textField.getText() + ".xml") && !textField.getText().isEmpty()) {
 					Logger.logInfo("Adding: " + textField.getText());
-					ModPack.loadXml(new String[]{textField.getText() + ".xml"});
+					ModPack.loadXml(textField.getText() + ".xml");
 					Settings.getSettings().addPrivatePack(textField.getText());
 					Settings.getSettings().save();
 					setVisible(false);

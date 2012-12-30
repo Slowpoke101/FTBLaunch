@@ -96,7 +96,7 @@ public class ModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
-			if(pack.getPrivatePack()) {
+			if(pack.isPrivatePack()) {
 				File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 				baseDynamic.mkdirs();
 				new File(baseDynamic, modPackName).createNewFile();
