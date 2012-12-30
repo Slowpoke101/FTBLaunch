@@ -27,15 +27,8 @@ public class ModpackLoader extends Thread {
 
 	@Override
 	public void run() {
+		int counter = 0;
 		for(String xmlFile : xmlFiles) {
-			
-			//This fixes strange errors that should not be happening, but do
-			while(xmlFile.endsWith(".xml")) {
-				xmlFile = xmlFile.substring(0, xmlFile.length() - 4);
-			}
-				
-			xmlFile = xmlFile.concat(".xml");
-			
 			boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
 			File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);
 			try {
@@ -82,7 +75,8 @@ public class ModpackLoader extends Thread {
 								modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 								modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", 
 								modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
-								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", i, privatePack));
+								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", counter, privatePack));
+						counter++;
 					} catch (Exception e) {
 						Logger.logError(e.getMessage(), e);
 					}
