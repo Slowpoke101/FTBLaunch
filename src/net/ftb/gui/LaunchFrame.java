@@ -129,7 +129,7 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		AnalyticsConfigData config = new AnalyticsConfigData("UA-37221496-1");
+		AnalyticsConfigData config = new AnalyticsConfigData("UA-37335219-1");
 		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.MULTI_THREAD);
 		tracker.setEnabled(true);
 		tracker.trackPageViewFromReferrer("net/ftb/gui/LaunchFrame.java", "Launcher Start", "Feed The Beast", "http://www.feed-the-beast.com", "/");
