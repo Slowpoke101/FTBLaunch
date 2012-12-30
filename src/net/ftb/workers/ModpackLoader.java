@@ -28,6 +28,14 @@ public class ModpackLoader extends Thread {
 	@Override
 	public void run() {
 		for(String xmlFile : xmlFiles) {
+			
+			//This fixes strange errors that should not be happening, but do
+			while(xmlFile.endsWith(".xml")) {
+				xmlFile = xmlFile.substring(0, xmlFile.length() - 4);
+			}
+				
+			xmlFile = xmlFile.concat(".xml");
+			
 			boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
 			File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);
 			try {
