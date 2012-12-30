@@ -11,7 +11,7 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.TexturepackPane;
 
 public class SearchDialog extends JDialog {
-	private static String lastPackSearch, lastMapSearch, lastTextureSearch;
+	public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
 	public JTextField searchBar = new JTextField();
 
 	public SearchDialog(final ModpacksPane instance) {
@@ -20,12 +20,12 @@ public class SearchDialog extends JDialog {
 		searchBar.setText((lastPackSearch == null) ? "" : lastPackSearch);
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				instance.searchPacks(searchBar.getText());
 				lastPackSearch = searchBar.getText();
+				instance.sortPacks();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				instance.searchPacks(searchBar.getText());
 				lastPackSearch = searchBar.getText();
+				instance.sortPacks();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
@@ -37,12 +37,12 @@ public class SearchDialog extends JDialog {
 		searchBar.setText((lastMapSearch == null) ? "" : lastMapSearch);
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				instance.searchMaps(searchBar.getText());
 				lastMapSearch = searchBar.getText();
+				instance.sortMaps();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				instance.searchMaps(searchBar.getText());
 				lastMapSearch = searchBar.getText();
+				instance.sortMaps();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
@@ -54,19 +54,19 @@ public class SearchDialog extends JDialog {
 		searchBar.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
 		searchBar.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				instance.searchTexturePacks(searchBar.getText());
 				lastTextureSearch = searchBar.getText();
+				instance.sortTexturePacks();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				instance.searchTexturePacks(searchBar.getText());
 				lastTextureSearch = searchBar.getText();
+				instance.sortTexturePacks();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
 	}
 
 	private void setUpGui() {
-		setTitle("Searcher!");
+		setTitle("Text Search Filter");
 		setBounds(300, 300, 220, 90);
 		setResizable(false);
 		getContentPane().setLayout(null);

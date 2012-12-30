@@ -93,7 +93,6 @@ public class FilterDialogPacks extends JDialog {
 				AddPackDialog ap = new AddPackDialog();
 				setVisible(false);
 				ap.setVisible(true);
-				ap.setAlwaysOnTop(true);
 			}
 		});
 
@@ -102,7 +101,6 @@ public class FilterDialogPacks extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				SearchDialog sd = new SearchDialog(pane);
 				sd.setVisible(true);
-				setVisible(false);
 			}
 		});
 
@@ -117,6 +115,7 @@ public class FilterDialogPacks extends JDialog {
 				setVisible(false);
 			}
 		});
+		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

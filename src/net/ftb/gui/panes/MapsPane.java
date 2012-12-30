@@ -29,6 +29,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.FilterDialogMaps;
+import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -49,8 +50,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JEditorPane mapInfo;
 
 	public static boolean loaded = false;
-	public static boolean searched;
-
+	
 	private static HashMap<Integer, Map> currentMaps = new HashMap<Integer, Map>();
 
 	public MapsPane() {
@@ -200,39 +200,21 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		updateMaps();
 	}
 
-	private static void sortMaps() {
+	public static void sortMaps() {
 		mapPanels.clear();
 		maps.removeAll();
 		currentMaps.clear();
 		int counter = 0;
 		selectedMap = 0;
-		LaunchFrame.getInstance().mapsPane.repaint();
+		maps.repaint();
 		LaunchFrame.updateMapInstallLocs(new String[]{""});
 		mapInfo.setText("");
 		HashMap<Integer, List<Map>> sorted = new HashMap<Integer, List<Map>>();			
 		sorted.put(0, new ArrayList<Map>());
 		sorted.put(1, new ArrayList<Map>());
-		if(origin.equals("All")) {
-			for(Map map : Map.getMapArray()) {
-				if(compatible.equals("All") || map.isCompatible(compatible)) {
-					sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
-				}
-			}
-		} else if(origin.equals("FTB")) {
-			for(Map map : Map.getMapArray()) {
-				if(map.getAuthor().equalsIgnoreCase("the ftb team")) {
-					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
-					}
-				}
-			}
-		} else {
-			for(Map map : Map.getMapArray()) {
-				if(!map.getAuthor().equalsIgnoreCase("the ftb team")) {
-					if(compatible.equals("All") || map.isCompatible(compatible)) {
-						sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
-					}
-				}
+		for(Map map : Map.getMapArray()) {
+			if(originCheck(map) && compatibilityCheck(map) && textSearch(map)) {
+				sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
 			}
 		}
 		for(Map map : sorted.get(1)) {
@@ -245,32 +227,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			currentMaps.put(counter, map);
 			counter++;
 		}
-		searched = false;
 		updateMaps();
-	}
-
-	public static void searchMaps(String search) {
-		CharSequence seq = search.toLowerCase();
-		mapPanels.clear();
-		maps.removeAll();
-		currentMaps.clear();
-		maps.setMinimumSize(new Dimension(420, 0));
-		maps.setPreferredSize(new Dimension(420, 0));
-		maps.setLayout(null);
-		maps.setOpaque(false);
-		int counter = 0;
-		selectedMap = 0;
-		for(Map map : Map.getMapArray()) {
-			if(map.getName().toLowerCase().contains(seq) || map.getAuthor().toLowerCase().contains(seq)) {
-				addMap(map);
-				currentMaps.put(counter, map);
-				counter++;
-			}
-		}
-		searched = true;
-		updateMaps();
-		seq = "";
-		maps.repaint();
 	}
 
 	private static void updateMaps() {
@@ -322,5 +279,18 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
+	}
+	
+	private static boolean originCheck(Map map) {
+		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !map.getAuthor().equalsIgnoreCase("the ftb team"));
+	}
+	
+	private static boolean compatibilityCheck(Map map) {
+		return (compatible.equals("All") || map.isCompatible(compatible));
+	}
+	
+	private static boolean textSearch(Map map) {
+		String searchString = SearchDialog.lastMapSearch.toLowerCase();
+		return ((searchString.isEmpty()) || map.getName().toLowerCase().contains(searchString) || map.getAuthor().toLowerCase().contains(searchString));
 	}
 }

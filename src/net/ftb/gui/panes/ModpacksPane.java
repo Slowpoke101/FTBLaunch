@@ -29,6 +29,7 @@ import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.FilterDialogPacks;
+import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
@@ -228,7 +229,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		updatePacks();
 	}
 
-	private static void sortPacks() {
+	public static void sortPacks() {
 		packPanels.clear();
 		packs.removeAll();
 		currentPacks.clear();
@@ -237,42 +238,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packInfo.setText("");
 		packs.repaint();
 		for(ModPack pack : ModPack.getPackArray()) {
-			if(originCheck(pack)) {
-				if(typeCheck(pack)) {
-					if(mcVersionCheck(pack)) {
-						if(avaliabilityCheck(pack)) {
-							addPack(pack);
-							currentPacks.put(counter, pack);
-							counter++;
-						}
-					}
-				}
-			}
-		}
-		updatePacks();
-	}
-
-	public static void searchPacks(String search) {
-		CharSequence seq = search.toLowerCase();
-		packPanels.clear();
-		packs.removeAll();
-		currentPacks.clear();
-		packs.setMinimumSize(new Dimension(420, 0));
-		packs.setPreferredSize(new Dimension(420, 0));
-		packs.setLayout(null);
-		packs.setOpaque(false);
-		int counter = 0;
-		selectedPack = 0;
-		for(ModPack pack : ModPack.getPackArray()) {
-			if(pack.getName().toLowerCase().contains(seq) || pack.getAuthor().toLowerCase().contains(seq)) {
+			if(originCheck(pack) && typeCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
 				addPack(pack);
 				currentPacks.put(counter, pack);
 				counter++;
 			}
 		}
 		updatePacks();
-		seq = "";
-		packs.repaint();
 	}
 
 	private static void updatePacks() {
@@ -347,5 +319,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	private static boolean originCheck(ModPack pack) {
 		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && pack.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !pack.getAuthor().equalsIgnoreCase("the ftb team"));
+	}
+	
+	private static boolean textSearch(ModPack pack) {
+		String searchString = SearchDialog.lastPackSearch.toLowerCase();
+		return ((searchString.isEmpty()) || pack.getName().toLowerCase().contains(searchString) || pack.getAuthor().toLowerCase().contains(searchString));
 	}
 }
