@@ -83,7 +83,7 @@ public class TextureManager extends JDialog {
 			String installPath = OSUtils.getDynamicStorageLocation();
 			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
 			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks%5E" + texturePackName));
+			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks%5E" + texturePackName.substring(0, texturePackName.length() - 4) + "%5E" + installDir));
 			installTexturePack(texturePackName, dir);
 		}
 
