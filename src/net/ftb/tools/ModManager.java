@@ -184,7 +184,7 @@ public class ModManager extends JDialog {
 		in.close();
 		int currentVersion, requestedVersion;
 		currentVersion = (line != null) ? Integer.parseInt(line.replace(".", "")) : 0;
-		if(!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) {
+		if(!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") && !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) {
 			requestedVersion = Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
 			if(requestedVersion != currentVersion) {
 				Logger.logInfo("Modpack is out of date.");
