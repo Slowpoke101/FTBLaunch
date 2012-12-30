@@ -277,7 +277,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public void saveSettingsInto(Settings settings) {
 		settings.setInstallPath(installFolderTextField.getText());
-		settings.setForceUpdate(!tglbtnForceUpdate.isEnabled());
+		settings.setForceUpdate(tglbtnForceUpdate.isSelected());
 		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));

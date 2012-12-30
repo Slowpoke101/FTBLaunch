@@ -34,7 +34,6 @@ import net.ftb.util.OSUtils;
 
 public class ModManager extends JDialog {
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
-	private static boolean backdated = false;
 	private static String curVersion = "";
 	private JPanel contentPane;
 	private double downloadedPerc;
@@ -96,54 +95,29 @@ public class ModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
-			if(pack.isPrivatePack()) {
-				File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
-				baseDynamic.mkdirs();
-				new File(baseDynamic, modPackName).createNewFile();
-				downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
-				String animation = pack.getAnimation();
-				if(!animation.equalsIgnoreCase("empty")) {
-					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
-				}
-				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
-					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-					clearModsFolder(pack);
-					FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-					FileUtils.delete(new File(installPath, dir + "/instMods/"));
-					File version = new File(installPath, dir + sep + "version");
-					BufferedWriter out = new BufferedWriter(new FileWriter(version));
-					out.write(pack.getVersion());
-					out.flush();
-					out.close();
-					return true;
-				} else {
-					ErrorUtils.tossError("Error downloading modpack!!!");
-					return false;
-				}
+			String baseLink = (pack.isPrivatePack() ? "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" : "modpacks%5E" + dir + "%5E" + curVersion + "%5E");
+			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
+			baseDynamic.mkdirs();
+			new File(baseDynamic, modPackName).createNewFile();
+			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
+			String animation = pack.getAnimation();
+			if(!animation.equalsIgnoreCase("empty")) {
+				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+			}
+			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), baseLink + modPackName)) {
+				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+				clearModsFolder(pack);
+				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+				FileUtils.delete(new File(installPath, dir + "/instMods/"));
+				File version = new File(installPath, dir + sep + "version");
+				BufferedWriter out = new BufferedWriter(new FileWriter(version));
+				out.write(pack.getVersion());
+				out.flush();
+				out.close();
+				return true;
 			} else {
-				File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
-				baseDynamic.mkdirs();
-				new File(baseDynamic, modPackName).createNewFile();
-				downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName));
-				String animation = pack.getAnimation();
-				if(!animation.equalsIgnoreCase("empty")) {
-					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("modpacks%5E" + dir + "%5E" + curVersion + "%5E" + animation));
-				}
-				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), "modpacks%5E" + dir + "%5E" + curVersion + "%5E" + modPackName)) {
-					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-					clearModsFolder(pack);
-					FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-					FileUtils.delete(new File(installPath, dir + "/instMods/"));
-					File version = new File(installPath, dir + sep + "version");
-					BufferedWriter out = new BufferedWriter(new FileWriter(version));
-					out.write(pack.getVersion());
-					out.flush();
-					out.close();
-					return true;
-				} else {
-					ErrorUtils.tossError("Error downloading modpack!!!");
-					return false;
-				}
+				ErrorUtils.tossError("Error downloading modpack!!!");
+				return false;
 			}
 		}
 	}
@@ -214,7 +188,6 @@ public class ModManager extends JDialog {
 			requestedVersion = Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
 			if(requestedVersion != currentVersion) {
 				Logger.logInfo("Modpack is out of date.");
-				backdated = true;
 				curVersion = Settings.getSettings().getPackVer().replace(".", "_");
 				return false;
 			} else {
