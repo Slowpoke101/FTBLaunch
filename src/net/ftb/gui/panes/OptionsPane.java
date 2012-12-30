@@ -41,7 +41,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JSlider ramMaximum;
 	private JComboBox locale, downloadServers;
 	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
-	private JCheckBox chckbxShowConsole, autoMaxCheck;
+	private JCheckBox chckbxShowConsole, autoMaxCheck, snooper;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
@@ -52,7 +52,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	};
 
 	public OptionsPane () {
-		this.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
 		currentRam = new JLabel();
 		currentRam.setBounds(427, 114, 85, 23);
 		long ram = 0;
@@ -62,7 +62,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			m = operatingSystemMXBean.getClass().getDeclaredMethod("getTotalPhysicalMemorySize");
 			m.setAccessible(true);
 			Object value = m.invoke(operatingSystemMXBean);
-			if (value != null) {
+			if(value != null) {
 				ram = Long.valueOf(value.toString()) / 1024 / 1024;
 			} else {
 				Logger.logWarn("Could not get RAM Value");
@@ -136,7 +136,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(currentRam);
 
 		String[] locales = new String[I18N.localeIndices.size()];
-		for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
+		for(Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
 			Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
 			locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
 		}
@@ -228,6 +228,17 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		autoMaxCheck.setSelected((Settings.getSettings().getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		add(autoMaxCheck);
+
+		snooper = new JCheckBox("Disable Google Analytic Tracking");
+		snooper.setBounds(190, 252, 300, 23);
+		snooper.setSelected(Settings.getSettings().getSnooper());
+		snooper.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				saveSettingsInto(Settings.getSettings());
+			}
+		});
+		add(snooper);
 	}
 
 	public void setDownloadServers() {
@@ -286,6 +297,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		int lastExtendedState = settings.getLastExtendedState();
 		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
 		settings.setLastPosition(new Point(Integer.parseInt(xPosField.getText()), Integer.parseInt(yPosField.getText())));
+		settings.setSnooper(String.valueOf(snooper.isSelected()));
 		settings.save();
 	}
 

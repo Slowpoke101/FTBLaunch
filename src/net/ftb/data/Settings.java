@@ -158,7 +158,7 @@ public class Settings extends Properties {
 			setProperty("privatePacks", code);
 		}
 	}
-	
+
 	public void removePrivatePack(String code) {
 		ArrayList<String> codes = getPrivatePacks();
 		if(codes.contains(code)) {
@@ -167,15 +167,15 @@ public class Settings extends Properties {
 		setPrivatePacks(codes);
 	}
 
-    public void setPrivatePacks(List<String> codes) {
-        String out = "";
-        String sep = "";
-        for(String s : codes) {
-            out += sep + s;
-            sep = ",";
-        }
-        setProperty("privatePacks", out);
-    }
+	public void setPrivatePacks(List<String> codes) {
+		String out = "";
+		String sep = "";
+		for(String s : codes) {
+			out += sep + s;
+			sep = ",";
+		}
+		setProperty("privatePacks", out);
+	}
 
 	public ArrayList<String> getPrivatePacks() {
 		String[] temp = getProperty("privatePacks", "").split(",");
@@ -203,6 +203,14 @@ public class Settings extends Properties {
 
 	public int getLastExtendedState() {
 		return Integer.valueOf(getProperty("lastExtendedState", String.valueOf(Frame.MAXIMIZED_BOTH)));
+	}
+
+	public void setSnooper(String state) {
+		setProperty("snooperDisable", state);
+	}
+
+	public boolean getSnooper() {
+		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
 	}
 
 	public void setLastPosition(Point lastPosition) {
