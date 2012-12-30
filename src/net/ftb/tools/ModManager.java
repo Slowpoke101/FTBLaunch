@@ -111,7 +111,7 @@ public class ModManager extends JDialog {
 				FileUtils.delete(new File(installPath, dir + "/instMods/"));
 				File version = new File(installPath, dir + sep + "version");
 				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write(pack.getVersion());
+				out.write(curVersion.replace("_", "."));
 				out.flush();
 				out.close();
 				return true;
