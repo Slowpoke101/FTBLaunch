@@ -1,0 +1,47 @@
+LOCALE_NAME = Cymraeg
+LOCALE_LOADED = Wedi llwytho ffeil iaith Cymraeg!
+
+# Footer #
+DONATE_BUTTON = Cyfrannu
+
+# Main Tab
+EDIT_BUTTON = Golygu
+LAUNCH_BUTTON = Cychwyn
+PROFILE_CREATE = Creu Proffil
+PROFILE_SELECT = Dewis Proffil
+DOWNLOAD_SERVER_PACK = Lawrlwytho Mod Pack Gweinydd
+
+# Map Tab
+INSTALL_MAP = Gosod Map
+DOWNLOAD_MAP_SERVER = Lawrlwytho Map Gweinydd
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Gosod Pecyn Ansawdd
+
+# Options pane
+INSTALL_FOLDER = Ffolder gosodiad...
+FORCE_UPDATE = Gorfodi diweddaru?
+RAM_MAX = Uchafswm RAM (MB)
+LANGUAGE = Iaith
+
+# Shared strings
+FILTER_SETTINGS = Gosodiadau Hidlo
+
+# Modpacks pane
+MODS_EDIT_PACK = Golygu Mod Pack
+MODS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mods yn cael eu llwytho os gwelwch yn dda...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Mods wedi'u Galluogi
+MODS_EDIT_DISABLED_LABEL = Mods wedi'u Analluogi
+MODS_EDIT_OPEN_FOLDER = Agor Ffolder
+MODS_EDIT_ADD_MOD = Ychwanegu Mod
+MODS_EDIT_ENABLE_MOD = << Galluogi
+MODS_EDIT_DISABLE_MOD = Analluogi >>
+MODS_EDIT_TITLE = Golygydd Mod Pack
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mapiau yn cael eu llwytho os gwelwch yn dda...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Disgwyliwch tra mae pecynnau ansawdd yn cael eu llwytho os gwelwch yn dda...
