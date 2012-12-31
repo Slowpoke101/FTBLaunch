@@ -128,7 +128,7 @@ public class LaunchFrame extends JFrame {
 	 * @param args - CLI arguments
 	 */
 	public static void main(String[] args) {
-		AnalyticsConfigData config = new AnalyticsConfigData("UA-37330489-1");
+		AnalyticsConfigData config = new AnalyticsConfigData("UA-37330489-2");
 		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.MULTI_THREAD);
 		tracker.setEnabled(true);
 
