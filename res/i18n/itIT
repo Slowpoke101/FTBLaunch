@@ -1,26 +1,26 @@
 LOCALE_NAME = Italiano
-LOCALE_LOADED = La lingua italiana è stata attivata!
+LOCALE_LOADED = La lingua italiana è stata caricata!
 
 # Footer #
 DONATE_BUTTON = Dona!
 
 # Main Tab
 EDIT_BUTTON = Modifica
-LAUNCH_BUTTON = Lancia
+LAUNCH_BUTTON = Gioca
 PROFILE_CREATE = Crea Profilo
 PROFILE_SELECT = Seleziona Profilo
-DOWNLOAD_SERVER_PACK = Prendi La Versione Server Qui
+DOWNLOAD_SERVER_PACK = Scarica la versione server qui!
 
 # Map Tab
-INSTALL_MAP = Installa Mappa
-DOWNLOAD_MAP_SERVER = Download Mappa Server
+INSTALL_MAP = Installa la mappa
+DOWNLOAD_MAP_SERVER = Scarica la mappa server
 
 # TexturePack Tab
-INSTALL_TEXTUREPACK = Installa Pacchetto Texture
+INSTALL_TEXTUREPACK = Installa la texture pack
 
 # Options pane
-INSTALL_FOLDER = Cartella Di Destinazione 
-FORCE_UPDATE = Forza Aggiornamento?
+INSTALL_FOLDER = Cartella d'installazione 
+FORCE_UPDATE = Aggiornamento forzato?
 RAM_MAX = RAM Massima (MB)
 LANGUAGE = Lingua
 
@@ -28,20 +28,20 @@ LANGUAGE = Lingua
 FILTER_SETTINGS = Filtro 
 
 # Modpacks pane
-MODS_EDIT_PACK = Modifica Mod Pack
-MODS_WAIT_WHILE_LOADING = Per favore attenti mentre stanno caricando le mods...
+MODS_EDIT_PACK = Modifica ModPack
+MODS_WAIT_WHILE_LOADING = PPer favore attendi mentre i modpack si stanno caricando...
 
 # EditModPackDialog
-MODS_EDIT_ENABLED_LABEL = Attiva Mods
-MODS_EDIT_DISABLED_LABEL = Disabilita Mods
-MODS_EDIT_OPEN_FOLDER = Apri Cartella
-MODS_EDIT_ADD_MOD = Aggiungi Mod
+MODS_EDIT_ENABLED_LABEL = Attiva mods
+MODS_EDIT_DISABLED_LABEL = Disabilita mods
+MODS_EDIT_OPEN_FOLDER = Apri cartella
+MODS_EDIT_ADD_MOD = Aggiungi mod
 MODS_EDIT_ENABLE_MOD = << Abilita
 MODS_EDIT_DISABLE_MOD = Disabilita >>
-MODS_EDIT_TITLE = Editor Mod Pack
+MODS_EDIT_TITLE = ModPack Editor
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre la mappa si sta caricando...
+MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre le mappe si stanno caricando...
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre il pacchetto texture si sta caricando...
+TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre le texturepack si stanno caricando...
