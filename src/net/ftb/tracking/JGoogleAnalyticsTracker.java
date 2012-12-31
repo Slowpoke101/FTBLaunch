@@ -462,7 +462,7 @@ public class JGoogleAnalyticsTracker {
 			if (responseCode != HttpURLConnection.HTTP_OK) {
 				Logger.logError("JGoogleAnalyticsTracker: Error requesting url '{}', received response code {}" + argURL + responseCode);
 			} else {
-				Logger.logInfo("JGoogleAnalyticsTracker: Tracking success for url '{}'" + argURL);
+				Logger.logInfo("JGoogleAnalyticsTracker: Tracking success");
 			}
 		} catch (Exception e) {
 			Logger.logError("Error making tracking request", e);
