@@ -24,6 +24,7 @@ public class I18N {
 		deDE,
 		enUS,
 		esES,
+		fiFI,
 		frFR,
 		itIT,
 		nlNL,
@@ -128,6 +129,8 @@ public class I18N {
 			currentLocale = Locale.frFR;
 		} else if(locale.equalsIgnoreCase("cyGB")) {
 			currentLocale = Locale.cyGB;
+		} else if(locale.equalsIgnoreCase("fiFI")) {
+			currentLocale = Locale.fiFI;
 		} else {
 			currentLocale = Locale.enUS;
 		}
