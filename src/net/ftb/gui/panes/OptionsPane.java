@@ -41,17 +41,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JSlider ramMaximum;
 	private JComboBox locale, downloadServers;
 	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
-	private JCheckBox chckbxShowConsole, autoMaxCheck, snooper;
+	private JCheckBox chckbxShowConsole, autoMaxCheck, snooper, keepLauncherOpen;
+	private final Settings settings;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
 		@Override
 		public void focusLost(FocusEvent e) {
-			saveSettingsInto(Settings.getSettings());
+			saveSettingsInto(settings);
 		}
 		@Override public void focusGained(FocusEvent e) { }
 	};
 
-	public OptionsPane () {
+	public OptionsPane (Settings settings) {
+		this.settings = settings;
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		currentRam = new JLabel();
 		currentRam.setBounds(427, 114, 85, 23);
@@ -90,7 +92,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				}
 			}
 		}
-		int ramMax = (Integer.parseInt(Settings.getSettings().getRamMax()) > ramMaximum.getMaximum()) ? ramMaximum.getMaximum() : Integer.parseInt(Settings.getSettings().getRamMax());
+		int ramMax = (Integer.parseInt(settings.getRamMax()) > ramMaximum.getMaximum()) ? ramMaximum.getMaximum() : Integer.parseInt(settings.getRamMax());
 		ramMaximum.setValue(ramMax);
 		currentRam.setText(getAmount());
 		ramMaximum.addChangeListener(new ChangeListener() {
@@ -115,7 +117,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		installFolderTextField.setBounds(147, 11, 629, 23);
 		installFolderTextField.addFocusListener(settingsChangeListener);
 		installFolderTextField.setColumns(10);
-		installFolderTextField.setText(Settings.getSettings().getInstallPath());
+		installFolderTextField.setText(settings.getInstallPath());
 		add(installFolderTextField);
 
 		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
@@ -123,10 +125,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		tglbtnForceUpdate.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				saveSettingsInto(Settings.getSettings());
+				saveSettingsInto(OptionsPane.this.settings);
 			}
 		});
-		tglbtnForceUpdate.getModel().setPressed(Settings.getSettings().getForceUpdate());
+		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 		add(tglbtnForceUpdate);
 
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
@@ -152,7 +154,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			}
 		});
 		locale.addFocusListener(settingsChangeListener);
-		locale.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
+		locale.setSelectedItem(I18N.localeFiles.get(settings.getLocale()));
 
 		lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
 		lblLocale.setBounds(10, 148, 195, 23);
@@ -163,8 +165,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		downloadServers.setBounds(613, 115, 222, 23);
 		downloadServers.addFocusListener(settingsChangeListener);
 		if(DownloadUtils.serversLoaded) {
-			if(DownloadUtils.downloadServers.containsKey(Settings.getSettings().getDownloadServer())) {
-				downloadServers.setSelectedItem(Settings.getSettings().getDownloadServer());
+			if(DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
+				downloadServers.setSelectedItem(settings.getDownloadServer());
 			}
 		}
 		add(downloadServers);
@@ -175,13 +177,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		chckbxShowConsole = new JCheckBox("Show Console?");
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
-		chckbxShowConsole.setSelected(Boolean.parseBoolean(Settings.getSettings().getConsoleActive()));
+		chckbxShowConsole.setSelected(settings.getConsoleActive());
 		chckbxShowConsole.setBounds(613, 148, 183, 23);
 		add(chckbxShowConsole);
 
 		minecraftX = new JTextField();
 		minecraftX.setBounds(190, 182, 95, 23);
-		minecraftX.setText(Integer.toString(Settings.getSettings().getLastDimension().width));
+		minecraftX.setText(Integer.toString(settings.getLastDimension().width));
 		add(minecraftX);
 		minecraftX.addFocusListener(settingsChangeListener);
 		minecraftX.setColumns(10);
@@ -192,7 +194,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		minecraftY = new JTextField();
 		minecraftY.setBounds(317, 182, 95, 23);
-		minecraftY.setText(Integer.toString(Settings.getSettings().getLastDimension().height));
+		minecraftY.setText(Integer.toString(settings.getLastDimension().height));
 		add(minecraftY);
 		minecraftY.addFocusListener(settingsChangeListener);
 		minecraftY.setColumns(10);
@@ -207,7 +209,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		xPosField = new JTextField();
 		xPosField.setBounds(190, 222, 95, 23);
-		xPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().x));
+		xPosField.setText(Integer.toString(settings.getLastPosition().x));
 		add(xPosField);
 		xPosField.addFocusListener(settingsChangeListener);
 		xPosField.setColumns(10);
@@ -218,31 +220,32 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 		yPosField = new JTextField();
 		yPosField.setBounds(317, 222, 95, 23);
-		yPosField.setText(Integer.toString(Settings.getSettings().getLastPosition().y));
+		yPosField.setText(Integer.toString(settings.getLastPosition().y));
 		add(yPosField);
 		yPosField.addFocusListener(settingsChangeListener);
 		yPosField.setColumns(10);
 
 		autoMaxCheck = new JCheckBox("Auto Maximised?");
 		autoMaxCheck.setBounds(10, 252, 170, 23);
-		autoMaxCheck.setSelected((Settings.getSettings().getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
+		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		add(autoMaxCheck);
 
 		snooper = new JCheckBox("Disable Google Analytic Tracking");
 		snooper.setBounds(190, 252, 300, 23);
-		snooper.setSelected(Settings.getSettings().getSnooper());
-		snooper.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				saveSettingsInto(Settings.getSettings());
-			}
-		});
+		snooper.setSelected(settings.getSnooper());
+		snooper.addFocusListener(settingsChangeListener);
 		add(snooper);
+
+		keepLauncherOpen = new JCheckBox("Reopen launcher after exiting minecraft?");
+		keepLauncherOpen.setBounds(190, 282, 300, 23);
+		keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
+		keepLauncherOpen.addFocusListener(settingsChangeListener);
+		add(keepLauncherOpen);
 	}
 
 	public void setDownloadServers() {
-		String downloadserver = Settings.getSettings().getDownloadServer();
+		String downloadserver = settings.getDownloadServer();
 		downloadServers.removeAllItems();
 		for(String server : DownloadUtils.downloadServers.keySet()) {
 			downloadServers.addItem(server);
@@ -283,7 +286,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public void setInstallFolderText(String text) {
 		installFolderTextField.setText(text);
-		saveSettingsInto(Settings.getSettings());
+		saveSettingsInto(settings);
 	}
 
 	public void saveSettingsInto(Settings settings) {
@@ -292,12 +295,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
-		settings.setConsoleActive(String.valueOf(chckbxShowConsole.isSelected()));
+		settings.setConsoleActive(chckbxShowConsole.isSelected());
 		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
 		int lastExtendedState = settings.getLastExtendedState();
 		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
 		settings.setLastPosition(new Point(Integer.parseInt(xPosField.getText()), Integer.parseInt(yPosField.getText())));
-		settings.setSnooper(String.valueOf(snooper.isSelected()));
+		settings.setSnooper(snooper.isSelected());
+		settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
 		settings.save();
 	}
 

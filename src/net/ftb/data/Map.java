@@ -289,8 +289,8 @@ public class Map {
 	 * @return true if the pack is compatible with a map
 	 */
 	public boolean isCompatible(String dir) {
-		for(int i = 0; i < compatible.length; i++) {
-			if(compatible[i].equalsIgnoreCase(dir)) {
+		for (String aCompatible : compatible) {
+			if (aCompatible.equalsIgnoreCase(dir)) {
 				return true;
 			}
 		}
