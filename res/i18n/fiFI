@@ -1,0 +1,47 @@
+LOCALE_NAME = Suomi
+LOCALE_LOADED = Suomen kieli ladattu!
+
+# Footer #
+DONATE_BUTTON = Lahjoita
+
+# Main Tab
+EDIT_BUTTON = Muokkaa
+LAUNCH_BUTTON = Käynnistä
+PROFILE_CREATE = Luo profiili
+PROFILE_SELECT = Valitse profiili
+DOWNLOAD_SERVER_PACK = Lataa serveripaketti
+
+# Map Tab
+INSTALL_MAP = Asenna kartta
+DOWNLOAD_MAP_SERVER = Lataa serverikartta
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Asenna tekstuuripaketti
+
+# Options pane
+INSTALL_FOLDER = Asennuskansio...
+FORCE_UPDATE = Pakota päivitys?
+RAM_MAX = RAM maksimi (Mt)
+LANGUAGE = Kieli
+
+# Shared strings
+FILTER_SETTINGS = Suodatinasetukset
+
+# Modpacks pane
+MODS_EDIT_PACK = Muokkaa modipakettia
+MODS_WAIT_WHILE_LOADING = Odota, modeja ladataan...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Modit käytössä
+MODS_EDIT_DISABLED_LABEL = Modit poissa käytöstä
+MODS_EDIT_OPEN_FOLDER = Avaa kansio
+MODS_EDIT_ADD_MOD = Lisää modi
+MODS_EDIT_ENABLE_MOD = << Salli
+MODS_EDIT_DISABLE_MOD = Poista >>
+MODS_EDIT_TITLE = Muokkaa modipakettia
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Odota, karttoja ladataan...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Odota, tekstuuripaketteja ladataan...
