@@ -68,8 +68,7 @@ public class FilterDialogMaps extends JDialog {
 		packs.add("All");
 		for(int i = 0; i < Map.getMapArray().size(); i++) {
 			String[] compat = Map.getMap(i).getCompatible();
-			for(int j = 0; j < compat.length; j++) {
-				String compatable = compat[j];
+			for (String compatable : compat) {
 				if (!packs.contains(compatable)) {
 					packs.add(compatable);
 				}
