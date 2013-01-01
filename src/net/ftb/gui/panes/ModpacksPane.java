@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
@@ -95,8 +96,18 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		});
 		add(filter);
+		
+		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
+		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
-		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		String typeLblText = "<html><body>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + type + "</font>";
+		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "</body></html>";
+		
+		typeLbl = new JLabel(typeLblText);
 		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
@@ -272,7 +283,17 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 
 	public static void updateFilter() {
-		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + type + "<font color=rgb\"(243,119,31)\"> / </font>" + origin +"</body></html>");
+		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
+		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
+
+		String typeLblText = "<html><body>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + type + "</font>";
+		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "</body></html>";
+		
+		typeLbl.setText(typeLblText);
 		sortPacks();
 		LaunchFrame.getInstance().updateFooter();
 	}

@@ -40,6 +40,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
@@ -78,6 +79,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.StyleUtil;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -158,15 +160,7 @@ public class LaunchFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Color baseColor = new Color(40, 40, 40);
-				UIManager.put("control", baseColor);
-				UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
-				UIManager.put("nimbusBase", new Color(0, 0, 0));
-				UIManager.put("nimbusFocus", baseColor);
-				UIManager.put("nimbusBorder", baseColor);
-				UIManager.put("nimbusLightBackground", baseColor);
-				UIManager.put("info", baseColor.brighter().brighter());
-				UIManager.put("nimbusSelectionBackground", baseColor.brighter().brighter());
+				StyleUtil.loadUiStyles();
 				try {
 					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 						if ("Nimbus".equals(info.getName())) {
@@ -248,7 +242,7 @@ public class LaunchFrame extends JFrame {
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 850, 100);
 		footer.setLayout(null);
-		footer.setBackground(new Color(25, 25, 25));
+		footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
 		tabbedPane.setBounds(0, 0, 850, 380);
 		panel.add(tabbedPane);
 		panel.add(footer);

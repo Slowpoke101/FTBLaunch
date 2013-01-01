@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
@@ -86,7 +87,15 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		});
 		add(filter);
 
-		typeLbl = new JLabel("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + origin +"</body></html>");
+		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
+		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
+
+		String typeLblText = "<html><body>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "</body></html>";
+		
+		typeLbl = new JLabel(typeLblText);
 		typeLbl.setBounds(115, 5, 295, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
@@ -250,7 +259,15 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	public static void updateFilter() {
-		typeLbl.setText("<html><body><strong><font color=rgb\"(243,119,31)\">Filter:</strong></font> " + origin +"</body></html>");
+		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
+		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
+
+		String typeLblText = "<html><body>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "</body></html>";
+		
+		typeLbl.setText(typeLblText);
 		sortTexturePacks();
 		LaunchFrame.getInstance().updateFooter();
 	}

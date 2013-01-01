@@ -79,6 +79,14 @@ public class Settings extends Properties {
 	public void setInstallPath(String path) {
 		setProperty("installPath", path);
 	}
+	
+	public String getStyle() {
+		return getProperty("style", "defaultStyle.cfg");
+	}
+	
+	public void setStyle(String path) {
+		setProperty("style", path);
+	}
 
 	public boolean getForceUpdate() {
 		return forceUpdate;

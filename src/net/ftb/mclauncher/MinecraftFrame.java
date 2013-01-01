@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.ftb.data.Settings;
+import net.ftb.util.StyleUtil;
 import net.minecraft.Launcher;
 
 public class MinecraftFrame extends JFrame implements WindowListener {
@@ -29,15 +30,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 	public MinecraftFrame(String title, String imagePath, String animationname) {
 		super(title);
 		this.animationname = animationname;
-		Color baseColor = new Color(40, 40, 40);
-		UIManager.put("control", baseColor);
-		UIManager.put("text", baseColor.brighter().brighter().brighter().brighter().brighter());
-		UIManager.put("nimbusBase", new Color(0, 0, 0));
-		UIManager.put("nimbusFocus", baseColor);
-		UIManager.put("nimbusBorder", baseColor);
-		UIManager.put("nimbusLightBackground", baseColor);
-		UIManager.put("info", baseColor.brighter().brighter());
-		UIManager.put("nimbusSelectionBackground", baseColor.brighter().brighter());
+		StyleUtil.loadUiStyles();
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
