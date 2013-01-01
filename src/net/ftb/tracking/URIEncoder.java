@@ -31,7 +31,7 @@ public class URIEncoder {
 	private static String mark = "-_.!~*'()\"";
 
 	public static String encodeURI(String argString) {
-		StringBuffer uri = new StringBuffer(); // Encoded URL
+		StringBuilder uri = new StringBuilder(); // Encoded URL
 		char[] chars = argString.toCharArray();
 		for(int i = 0; i<chars.length; i++) {
 			char c = chars[i];

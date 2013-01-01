@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -176,7 +178,7 @@ public class LaunchFrame extends JFrame {
 				I18N.setupLocale();
 				I18N.setLocale(Settings.getSettings().getLocale());
 
-				if(noConfig) {
+				if (noConfig) {
 					InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
 					installDialog.setVisible(true);
 				}
@@ -186,13 +188,13 @@ public class LaunchFrame extends JFrame {
 					installDir.mkdirs();
 				}
 				File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-				if(!dynamicDir.exists()) {
+				if (!dynamicDir.exists()) {
 					dynamicDir.mkdirs();
 				}
 
 				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 				con = new LauncherConsole();
-				if(Boolean.parseBoolean(Settings.getSettings().getConsoleActive())) {
+				if (Settings.getSettings().getConsoleActive()) {
 					con.setVisible(true);
 				}
 
@@ -217,7 +219,7 @@ public class LaunchFrame extends JFrame {
 				//				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
-				if(updateChecker.shouldUpdate()){
+				if (updateChecker.shouldUpdate()) {
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 					p.setVisible(true);
 				}
@@ -295,7 +297,7 @@ public class LaunchFrame extends JFrame {
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-		String[] dropdown = merge(dropdown_, UserManager.getNames().toArray(new String[] {}));
+		String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users = new JComboBox(dropdown);
 		if(Settings.getSettings().getLastUser() != null) {
 			for(int i = 0; i < dropdown.length; i++) {
@@ -449,7 +451,7 @@ public class LaunchFrame extends JFrame {
 		modPacksPane = new ModpacksPane();
 		mapsPane = new MapsPane();
 		tpPane = new TexturepackPane();
-		optionsPane = new OptionsPane();
+		optionsPane = new OptionsPane(Settings.getSettings());
 
 		getRootPane().setDefaultButton(launch);
 		updateLocale();
@@ -680,7 +682,21 @@ public class LaunchFrame extends JFrame {
 				ProcessMonitor.create(minecraftProcess, new Runnable() {
 					@Override
 					public void run() {
-						System.exit(0);
+						if (!Settings.getSettings().getKeepLauncherOpen()) {
+							System.exit(0);
+						} else {
+							LaunchFrame launchFrame = LaunchFrame.this;
+							launchFrame.setVisible(true);
+							launchFrame.enableObjects();
+							try {
+								Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
+								tabbedPane.remove(1);
+								optionsPane = new OptionsPane(Settings.getSettings());
+								tabbedPane.add(optionsPane, 1);
+							} catch (Exception e1) {
+								Logger.logError("Failed to reload settings after launcher closed", e1);
+							}
+						}
 					}
 				});
 			}
@@ -719,7 +735,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			userManager.write();
 		} catch (IOException e) { }
-		String[] usernames = merge(dropdown_, UserManager.getNames().toArray(new String[]{}));
+		String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
 		users.removeAllItems();
 		for(int i = 0; i < usernames.length; i++) {
 			users.addItem(usernames[i]);
@@ -735,8 +751,8 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void updateTpInstallLocs(String[] locations) {
 		tpInstallLocation.removeAllItems();
-		for(int i = 0; i < locations.length; i++) {
-			tpInstallLocation.addItem(locations[i]);
+		for (String location : locations) {
+			tpInstallLocation.addItem(location);
 		}
 	}
 
@@ -746,21 +762,28 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void updateMapInstallLocs(String[] locations) {
 		mapInstallLocation.removeAllItems();
-		for(int i = 0; i < locations.length; i++) {
-			mapInstallLocation.addItem(locations[i]);
+		for (String location : locations) {
+			mapInstallLocation.addItem(location);
 		}
 	}
 
 	/**
-	 * @param A - First string array
-	 * @param B - Second string array
-	 * @return - Outputs resulting merged string array from the passed arrays
+	 * @param first - First array
+	 * @param rest - Rest of the arrays
+	 * @return - Outputs concatenated arrays
 	 */
-	public static String[] merge(String[] A, String[] B) {
-		String[] merged = new String[A.length+B.length];
-		System.arraycopy(A, 0, merged, 0, A.length);
-		System.arraycopy(B, 0, merged, A.length, B.length);
-		return merged;
+	public static <T> T[] concatenateArrays(T[] first, T[]... rest) {
+		int totalLength = first.length;
+		for (T[] array : rest) {
+			totalLength += array.length;
+		}
+		T[] result = Arrays.copyOf(first, totalLength);
+		int offset = first.length;
+		for (T[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
 	}
 
 	/**
@@ -971,9 +994,9 @@ public class LaunchFrame extends JFrame {
 			String s = reader.readLine();
 			s = s.trim();
 			String[] str = s.split(",");
-			for(int j = 0; j < str.length; j++) {
-				if(!timeStamps.contains(Long.parseLong(str[j]))) {
-					timeStamps.add(Long.parseLong(str[j]));
+			for (String aStr : str) {
+				if (!timeStamps.contains(Long.parseLong(aStr))) {
+					timeStamps.add(Long.parseLong(aStr));
 				}
 			}
 			long l;
@@ -983,9 +1006,9 @@ public class LaunchFrame extends JFrame {
 				l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
 			}
 			System.out.println(l);
-			for(int j = 0; j < timeStamps.size(); j++) {
-				long time = timeStamps.get(j);
-				if(time > l) {
+			for (Long timeStamp : timeStamps) {
+				long time = timeStamp;
+				if (time > l) {
 					i++;
 				}
 			}

@@ -61,11 +61,11 @@ public class GoogleAnalytics {
 
 		long now = System.currentTimeMillis();
 
-		sb.append("?utmwv="+getGoogleAnalyticsVersion()); // version
-		sb.append("&utmn=" + random.nextInt()); // random int so no caching
+		sb.append("?utmwv=").append(getGoogleAnalyticsVersion()); // version
+		sb.append("&utmn=").append(random.nextInt()); // random int so no caching
 
 		if(argData.getHostName() != null){
-			sb.append("&utmhn=" + getURIString(argData.getHostName())); // hostname
+			sb.append("&utmhn=").append(getURIString(argData.getHostName())); // hostname
 		}
 
 		if(argData.getEventAction() != null && argData.getEventCategory() != null){
@@ -73,51 +73,51 @@ public class GoogleAnalytics {
 			String category = getURIString(argData.getEventCategory());
 			String action = getURIString(argData.getEventAction());
 
-			sb.append("&utme=5("+category+"*"+action);
+			sb.append("&utme=5(").append(category).append("*").append(action);
 
 			if(argData.getEventLabel() != null){
-				sb.append("*"+getURIString(argData.getEventLabel()));
+				sb.append("*").append(getURIString(argData.getEventLabel()));
 			}
 			sb.append(")");
 
 			if(argData.getEventValue() != null){
-				sb.append("("+argData.getEventValue()+")");
+				sb.append("(").append(argData.getEventValue()).append(")");
 			}
 		}else if(argData.getEventAction() != null || argData.getEventCategory() != null){
 			throw new IllegalArgumentException("Event tracking must have both a category and an action");
 		}
 
 		if(config.getEncoding() != null){
-			sb.append("&utmcs="+ getURIString(config.getEncoding())); // encoding
+			sb.append("&utmcs=").append(getURIString(config.getEncoding())); // encoding
 		}else{
 			sb.append("&utmcs=-");
 		}
 		if(config.getScreenResolution() != null){
-			sb.append("&utmsr=" + getURIString(config.getScreenResolution())); // screen resolution
+			sb.append("&utmsr=").append(getURIString(config.getScreenResolution())); // screen resolution
 		}
 		if(config.getColorDepth() != null){
-			sb.append("&utmsc=" + getURIString(config.getColorDepth())); // color depth
+			sb.append("&utmsc=").append(getURIString(config.getColorDepth())); // color depth
 		}
 		if(config.getUserLanguage() != null){
-			sb.append("&utmul="+ getURIString(config.getUserLanguage())); // language
+			sb.append("&utmul=").append(getURIString(config.getUserLanguage())); // language
 		}
 		sb.append("&utmje=1"); // java enabled (probably)
 
 		if(config.getFlashVersion() != null){
-			sb.append("&utmfl="+getURIString(config.getFlashVersion())); // flash version
+			sb.append("&utmfl=").append(getURIString(config.getFlashVersion())); // flash version
 		}
 
 		if(argData.getPageTitle() != null){
-			sb.append("&utmdt=" + getURIString(argData.getPageTitle())); // page title
+			sb.append("&utmdt=").append(getURIString(argData.getPageTitle())); // page title
 		}
 
-		sb.append("&utmhid="+random.nextInt());
+		sb.append("&utmhid=").append(random.nextInt());
 
 		if(argData.getPageURL() != null){
-			sb.append("&utmp=" + getURIString(argData.getPageURL())); // page url
+			sb.append("&utmp=").append(getURIString(argData.getPageURL())); // page url
 		}
 
-		sb.append("&utmac=" + config.getTrackingCode()); // tracking code
+		sb.append("&utmac=").append(config.getTrackingCode()); // tracking code
 
 		// cookie data
 		// utmccn=(organic)|utmcsr=google|utmctr=snotwuh |utmcmd=organic
@@ -128,7 +128,7 @@ public class GoogleAnalytics {
 		String utmcct = getURIString(argData.getUtmcct());
 
 		// yes, this did take a while to figure out
-		sb.append("&utmcc=__utma%3D"+cookie1+"."+cookie2+"."+now+"."+now+"."+now+"."+"13%3B%2B__utmz%3D"+cookie1+"."+now+".1.1.utmcsr%3D"+utmcsr+"%7Cutmccn%3D"+utmccn+"%7utmcmd%3D"+utmcmd+(utmctr != null?"%7Cutmctr%3D"+utmctr:"")+(utmcct != null?"%7Cutmcct%3D"+utmcct:"")+"%3B&gaq=1");
+		sb.append("&utmcc=__utma%3D").append(cookie1).append(".").append(cookie2).append(".").append(now).append(".").append(now).append(".").append(now).append(".").append("13%3B%2B__utmz%3D").append(cookie1).append(".").append(now).append(".1.1.utmcsr%3D").append(utmcsr).append("%7Cutmccn%3D").append(utmccn).append("%7utmcmd%3D").append(utmcmd).append(utmctr != null ? "%7Cutmctr%3D" + utmctr : "").append(utmcct != null ? "%7Cutmcct%3D" + utmcct : "").append("%3B&gaq=1");
 		return sb.toString();
 	}
 

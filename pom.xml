@@ -20,10 +20,10 @@
     <defaultGoal>clean install package</defaultGoal>
 
     <sourceDirectory>src</sourceDirectory>
-    <resources>  
-      <resource>  
+    <resources>
+      <resource>
         <directory>res</directory>
-      </resource>  
+      </resource>
     </resources>
 
     <plugins>
@@ -51,7 +51,7 @@
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
             <manifestEntries>
-              <Implementation-Title>${version}</Implementation-Title>
+              <Implementation-Title>${project.version}</Implementation-Title>
               <Implementation-Version>${buildNumber}</Implementation-Version>
             </manifestEntries>
           </archive>
@@ -109,16 +109,16 @@
                   <fileset dir="res/template/FTB_Launcher.app" />
                 </copy>
                 <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/${project.artifactId}.app/Contents/Resources/FTB_Launcher.jar" />
-                <replace file="${project.build.directory}/${project.artifactId}.app/Contents/Info.plist" token="##VERSION##" value="${version}" />
+                <replace file="${project.build.directory}/${project.artifactId}.app/Contents/Info.plist" token="##VERSION##" value="${project.version}" />
                 <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" includes="FTB_Launcher" eol="unix" />
                 <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" eol="unix" />
                 <chmod file="${project.build.directory}/${project.artifactId}.app/Contents/MacOS/FTB_Launcher" perm="+x" />
                 <zip destfile="${project.build.directory}/${project.artifactId}.app.zip">
-		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" prefix="${project.artifactId}.app/Contents/MacOS/" filemode="755" />
-		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/Resources" prefix="${project.artifactId}.app/Contents/Resources/" />
-		  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" fullpath="${project.artifactId}.app/Contents/Info.plist" />
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" prefix="${project.artifactId}.app/Contents/MacOS/" filemode="755" />
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/Resources" prefix="${project.artifactId}.app/Contents/Resources/" />
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" fullpath="${project.artifactId}.app/Contents/Info.plist" />
                 </zip>
-		<delete dir="${project.build.directory}/${project.artifactId}.app" />
+                <delete dir="${project.build.directory}/${project.artifactId}.app" />
               </target>
             </configuration>
             <goals>
