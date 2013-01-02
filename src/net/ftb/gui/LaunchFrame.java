@@ -634,33 +634,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * @param filename - what to save it as on the system
-	 * @param urlString - the url to download
-	 * @throws IOException - various
-	 */
-	private void downloadUrl(String filename, String urlString) throws IOException {
-		BufferedInputStream in = null;
-		FileOutputStream fout = null;
-		try {
-			in = new BufferedInputStream(new URL(urlString).openStream());
-			fout = new FileOutputStream(filename);
-			byte data[] = new byte[1024];
-			int count;
-			while ((count = in.read(data, 0, 1024)) != -1) {
-				fout.write(data, 0, count);
-			}
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (fout != null) {
-				fout.flush();
-				fout.close();
-			}	
-		}
-	}
-
-	/**
 	 * launch the game with the mods in the classpath
 	 * @param workingDir - install path
 	 * @param username - the MC username
