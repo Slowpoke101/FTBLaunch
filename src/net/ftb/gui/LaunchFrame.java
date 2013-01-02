@@ -1,6 +1,5 @@
 package net.ftb.gui;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -696,6 +695,7 @@ public class LaunchFrame extends JFrame {
 								tabbedPane.remove(1);
 								optionsPane = new OptionsPane(Settings.getSettings());
 								tabbedPane.add(optionsPane, 1);
+								tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 							} catch (Exception e1) {
 								Logger.logError("Failed to reload settings after launcher closed", e1);
 							}
@@ -985,6 +985,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		}
+		s.add(0, "modpacks.xml");
 		return s;
 	}
 
@@ -1022,8 +1023,4 @@ public class LaunchFrame extends JFrame {
 
 		return i;
 	}
-
-	//	public static JTabbedPane getTabbedPane() {
-	//		return tabbedPane;
-	//	}
 }
