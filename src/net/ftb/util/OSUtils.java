@@ -14,6 +14,7 @@ import net.ftb.log.Logger;
 
 public class OSUtils {
 	private static byte[] cachedMacAddress;
+	private static String cachedUserHome;
 
 	public static enum OS {
 		WINDOWS,
@@ -21,6 +22,11 @@ public class OSUtils {
 		MACOSX,
 		OTHER,
 	}
+	
+	static {
+		cachedUserHome = System.getProperty("user.home");
+	}
+	
 
 	/**
 	 * Gets the default installation path for the current OS.
@@ -48,9 +54,9 @@ public class OSUtils {
 		case WINDOWS:
 			return System.getenv("APPDATA") + "/ftblauncher/";
 		case MACOSX:
-			return System.getProperty("user.home") + "/Library/Application Support/ftblauncher/";
+			return cachedUserHome + "/Library/Application Support/ftblauncher/";
 		case UNIX:
-			return System.getProperty("user.home") + "/.ftblauncher/";
+			return cachedUserHome + "/.ftblauncher/";
 		default:
 			return getDefInstallPath() + "/temp/";
 		}
