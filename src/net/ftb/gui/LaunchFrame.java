@@ -479,7 +479,10 @@ public class LaunchFrame extends JFrame {
 
 	public void setTabbedPaneIcons() {
 		int i = getUnreadNews();
-		if(i > 0) {
+		if (i > 2) {
+			Logger.logError("Too many new unread items");
+			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), Integer.toString(i)));
+		} else if (i > 0) {
 			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
 		} else {
 			tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
