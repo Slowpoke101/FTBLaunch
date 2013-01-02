@@ -40,7 +40,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
 	private JComboBox locale, downloadServers;
-	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField;
+	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField, additionalJavaOptions;
 	private JCheckBox chckbxShowConsole, autoMaxCheck, snooper, keepLauncherOpen;
 	private final Settings settings;
 
@@ -242,6 +242,15 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
 		keepLauncherOpen.addFocusListener(settingsChangeListener);
 		add(keepLauncherOpen);
+		
+		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Options: ");
+		additionalJavaOptionsLbl.setBounds(490, 182, 170, 14);
+		add(additionalJavaOptionsLbl);
+		
+		additionalJavaOptions = new JTextField(Settings.getSettings().getAdditionalJavaOptions());
+		additionalJavaOptions.setBounds(485, 207, 350, 23);
+		additionalJavaOptions.addFocusListener(settingsChangeListener);
+		add(additionalJavaOptions);
 	}
 
 	public void setDownloadServers() {
@@ -302,6 +311,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setLastPosition(new Point(Integer.parseInt(xPosField.getText()), Integer.parseInt(yPosField.getText())));
 		settings.setSnooper(snooper.isSelected());
 		settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
+		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
 		settings.save();
 	}
 

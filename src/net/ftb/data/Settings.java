@@ -227,6 +227,14 @@ public class Settings extends Properties {
 	public boolean getSnooper() {
 		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
 	}
+	
+	public String getAdditionalJavaOptions() {
+		return getProperty("additionalJavaOptions", "");
+	}
+	
+	public void setAdditionalJavaOptions(String opts) {
+		setProperty("additionalJavaOptions", opts);
+	}
 
 	public void setLastPosition(Point lastPosition) {
 		int x = lastPosition.x;

@@ -68,6 +68,8 @@ public class MinecraftLauncher {
 
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());
+		
+		arguments.add(Settings.getSettings().getAdditionalJavaOptions());
 
 		arguments.add(MinecraftLauncher.class.getCanonicalName());
 		arguments.add(workingDir);
