@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -78,7 +77,7 @@ public class DownloadUtils extends Thread {
 		Logger.logInfo(resolved);
 		return resolved; 
 	}
-	
+
 	/**
 	 * @param file - file on the repo in static
 	 * @return true if the file exists
@@ -165,6 +164,7 @@ public class DownloadUtils extends Thread {
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+		fos.close();
 	}
 
 	/**

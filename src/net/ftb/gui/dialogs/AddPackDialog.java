@@ -3,6 +3,8 @@ package net.ftb.gui.dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,6 +19,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
+import net.ftb.util.FileUtils;
+import net.ftb.util.OSUtils;
 
 public class AddPackDialog extends JDialog {
 	private JTextField textField = new JTextField();
@@ -79,6 +83,18 @@ public class AddPackDialog extends JDialog {
 				if(codes.contains(textField.getText())) {
 					Settings.getSettings().removePrivatePack(textField.getText());
 					Settings.getSettings().save();
+					try {
+						for(ModPack pack : ModPack.getPackArray()) {
+							if(pack.getParentXml().equalsIgnoreCase(textField.getText() + ".xml")) {
+								FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + pack.getDir()));
+							}
+						}
+						ModPack.removePacks(textField.getText() + ".xml");
+						FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + textField.getText() + ".xml"));
+						LaunchFrame.getInstance().modPacksPane.sortPacks();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					Logger.logInfo(textField.getText() + " successfully removed.");
 					textField.setText("");
 					setVisible(false);

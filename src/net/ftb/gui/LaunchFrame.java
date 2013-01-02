@@ -1,6 +1,5 @@
 package net.ftb.gui;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -982,6 +981,7 @@ public class LaunchFrame extends JFrame {
 				}
 			}
 		}
+		s.add(0, "modpacks.xml");
 		return s;
 	}
 
@@ -1019,8 +1019,4 @@ public class LaunchFrame extends JFrame {
 
 		return i;
 	}
-
-	//	public static JTabbedPane getTabbedPane() {
-	//		return tabbedPane;
-	//	}
 }

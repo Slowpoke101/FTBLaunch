@@ -24,7 +24,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, sep = File.separator;
+	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, sep = File.separator, xml;
 	private String[] mods, oldVersions;
 	private Image logo, image;
 	private int index;
@@ -40,7 +40,7 @@ public class ModPack {
 		ModpackLoader loader = new ModpackLoader(xmlFile);
 		loader.start();
 	}
-	
+
 	public static void loadXml(String xmlFile) {
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.add(xmlFile);
@@ -66,6 +66,18 @@ public class ModPack {
 		}
 		for (ModPackListener listener : listeners) {
 			listener.onModPackAdded(pack);
+		}
+	}
+
+	public static void removePacks(String xml) {
+		ArrayList<ModPack> remove = new ArrayList<ModPack>();
+		for(ModPack pack : packs) {
+			if(pack.getParentXml().equalsIgnoreCase(xml)) {
+				remove.add(pack);
+			}
+		}
+		for(ModPack pack : remove) {
+			packs.remove(pack);
 		}
 	}
 
@@ -113,7 +125,8 @@ public class ModPack {
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, String animation, int idx, boolean privatePack) throws IOException, NoSuchAlgorithmException {
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, 
+			String oldVersions, String animation, int idx, boolean privatePack, String xml) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -123,6 +136,7 @@ public class ModPack {
 		this.url = url;
 		this.serverUrl = serverUrl;
 		this.privatePack = privatePack;
+		this.xml = xml;
 		if(!animation.equalsIgnoreCase("")) {
 			this.animation = animation;
 		} else {
@@ -360,5 +374,9 @@ public class ModPack {
 
 	public boolean isPrivatePack() {
 		return privatePack;
+	}
+
+	public String getParentXml() {
+		return xml;
 	}
 }

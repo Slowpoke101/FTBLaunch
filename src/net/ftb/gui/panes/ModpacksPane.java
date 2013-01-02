@@ -96,7 +96,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			}
 		});
 		add(filter);
-		
+
 		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
 		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -106,7 +106,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl = new JLabel(typeLblText);
 		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -285,14 +285,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public static void updateFilter() {
 		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
 		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
-
 		String typeLblText = "<html><body>";
 		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + type + "</font>";
 		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl.setText(typeLblText);
 		sortPacks();
 		LaunchFrame.getInstance().updateFooter();

@@ -24,7 +24,6 @@ public class ModpackLoader extends Thread {
 
 	public ModpackLoader(ArrayList<String> xmlFiles) {
 		this.xmlFiles = xmlFiles;
-		xmlFiles.add(0, "modpacks.xml");
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class ModpackLoader extends Thread {
 								modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 								modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", 
 								modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
-								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", counter, privatePack));
+								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", counter, privatePack, xmlFile));
 						counter++;
 					} catch (Exception e) {
 						Logger.logError(e.getMessage(), e);
