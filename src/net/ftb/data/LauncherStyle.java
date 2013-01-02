@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class LauncherStyle extends Properties {
 
@@ -19,7 +20,7 @@ public class LauncherStyle extends Properties {
 	private static File baseStylePath;
 	
 	static {
-		baseStylePath = new File(Settings.getSettings().getInstallPath(), "launcher_styles");
+		baseStylePath = new File(OSUtils.getDynamicStorageLocation(), "launcher_styles");
 		
 		if (!baseStylePath.exists()) {
 			baseStylePath.mkdir();
