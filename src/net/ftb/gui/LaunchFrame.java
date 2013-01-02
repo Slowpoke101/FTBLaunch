@@ -692,6 +692,7 @@ public class LaunchFrame extends JFrame {
 								tabbedPane.remove(1);
 								optionsPane = new OptionsPane(Settings.getSettings());
 								tabbedPane.add(optionsPane, 1);
+								tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 							} catch (Exception e1) {
 								Logger.logError("Failed to reload settings after launcher closed", e1);
 							}
