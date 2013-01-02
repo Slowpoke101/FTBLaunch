@@ -37,7 +37,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
 			Settings.getSettings().setNewsDate();
 			Settings.getSettings().save();
-			LaunchFrame.getInstance().setTabbedPaneIcons();
+			LaunchFrame.getInstance().setNewsIcon();
 		} catch (IOException e1) {
 			Logger.logError(e1.getMessage(), e1);
 		}
