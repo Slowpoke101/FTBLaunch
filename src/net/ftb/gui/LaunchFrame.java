@@ -357,7 +357,6 @@ public class LaunchFrame extends JFrame {
 				} else if(users.getSelectedIndex() <= 1) {
 					ErrorUtils.tossError("Please select a profile!");
 				}
-				setTabbedPaneIcons();
 			}
 		});
 
@@ -461,7 +460,11 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
 		tabbedPane.setEnabledAt(4, false);
-		setTabbedPaneIcons();
+		setNewsIcon();
+		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
+		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 		tabbedPane.setSelectedIndex(tab);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -476,26 +479,19 @@ public class LaunchFrame extends JFrame {
 		});
 	}
 
-	public void setTabbedPaneIcons() {
+	public void setNewsIcon() {
 		int i = getUnreadNews();
-		if (i > 2) {
-			Logger.logError("Too many new unread items");
-			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), Integer.toString(i)));
-		} else if (i > 0) {
+		if(i > 0 && i < 100) {
 			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
 		} else {
 			tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 		}
-		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 	}
 
 	/**
 	 * call this to login
 	 */
-	public void doLogin(final String username, String password) {
+	private void doLogin(final String username, String password) {
 		if(password.isEmpty()) {
 			PasswordDialog p = new PasswordDialog(this, true);
 			p.setVisible(true);
@@ -509,6 +505,7 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Logging in...");
 
 		tabbedPane.setEnabledAt(0, false);
+		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
@@ -575,7 +572,7 @@ public class LaunchFrame extends JFrame {
 	 * checks whether an update is needed, and then starts the update process off
 	 * @param response - the response from the minecraft servers
 	 */
-	public void runGameUpdater(final LoginResponse response) {
+	private void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack pack = ModPack.getSelectedPack();
 		if(Settings.getSettings().getForceUpdate() && new File(installPath, pack.getDir() + File.separator + "version").exists()) {
@@ -641,7 +638,7 @@ public class LaunchFrame extends JFrame {
 	 * @param urlString - the url to download
 	 * @throws IOException - various
 	 */
-	public void downloadUrl(String filename, String urlString) throws IOException {
+	private void downloadUrl(String filename, String urlString) throws IOException {
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 		try {
@@ -834,8 +831,9 @@ public class LaunchFrame extends JFrame {
 	/**
 	 * Enables all items that are disabled upon launching
 	 */
-	private void enableObjects(){
+	private void enableObjects() {
 		tabbedPane.setEnabledAt(0, true);
+		setNewsIcon();
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
