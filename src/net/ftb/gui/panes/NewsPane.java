@@ -19,8 +19,8 @@ public class NewsPane extends JPanel implements ILauncherPane {
 
 	public NewsPane() {
 		super();
-		this.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setLayout(null);
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLayout(null);
 
 		news = new JEditorPane();
 		news.setEditable(false);
@@ -28,12 +28,15 @@ public class NewsPane extends JPanel implements ILauncherPane {
 		newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		newsPanel.setBounds(10, 10, 790, 290);
-		this.add(newsPanel);
+		add(newsPanel);
 	}
 
 	@Override
 	public void onVisible() {
 		try {
+//			if(!Settings.getSettings().getSnooper()) {
+//				LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/NewsPane.java", "News Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+//			}
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
 			Settings.getSettings().setNewsDate();
 			Settings.getSettings().save();

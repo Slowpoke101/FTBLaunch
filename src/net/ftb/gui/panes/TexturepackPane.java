@@ -26,6 +26,7 @@ import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -144,7 +145,10 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() { 
+	@Override public void onVisible() {
+//		if(!Settings.getSettings().getSnooper()) {
+//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+//		}
 		updateFilter();
 	}
 
