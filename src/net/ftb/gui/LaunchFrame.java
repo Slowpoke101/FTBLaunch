@@ -46,6 +46,7 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
@@ -214,8 +215,8 @@ public class LaunchFrame extends JFrame {
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
-				//				TexturePack.addListener(frame.tpPane);
-				//				TexturePack.loadAll();
+				TexturePack.addListener(frame.tpPane);
+				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if (updateChecker.shouldUpdate()) {
@@ -459,7 +460,6 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setEnabledAt(4, false);
 		setNewsIcon();
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
@@ -810,7 +810,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
-		//		tabbedPane.setEnabledAt(4, true);
+		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
