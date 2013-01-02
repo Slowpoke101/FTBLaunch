@@ -173,7 +173,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() { }
+	@Override 
+	public void onVisible() { 
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/ModpacksPane.java", "Modpacks Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
+	}
 
 	/*
 	 * GUI Code to add a modpack to the selection

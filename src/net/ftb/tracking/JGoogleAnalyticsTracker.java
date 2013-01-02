@@ -419,22 +419,28 @@ public class JGoogleAnalyticsTracker {
 
 		switch(mode){
 		case MULTI_THREAD:
-			Thread t = new Thread(asyncThreadGroup, "AnalyticsThread-" + asyncThreadGroup.activeCount()) {
-				public void run() {
-					synchronized (JGoogleAnalyticsTracker.class) {
-						asyncThreadsRunning++;
-					}
-					try {
-						dispatchRequest(url);
-					} finally {
+			try {
+				Thread t = new Thread(asyncThreadGroup, "AnalyticsThread-" + asyncThreadGroup.activeCount()) {
+					@Override
+					public void run() {
 						synchronized (JGoogleAnalyticsTracker.class) {
-							asyncThreadsRunning--;
+							asyncThreadsRunning++;
+							Logger.logInfo("Thread started. Current: " + asyncThreadsRunning);
+						}
+						try {
+							dispatchRequest(url);
+						} finally {
+							synchronized (JGoogleAnalyticsTracker.class) {
+								asyncThreadsRunning--;
+							}
 						}
 					}
-				}
-			};
-			t.setDaemon(true);
-			t.start();
+				};
+				t.setDaemon(true);
+				t.start();
+			} catch (IllegalThreadStateException e) {
+				e.printStackTrace();
+			}
 			break;
 		case SYNCHRONOUS:
 			dispatchRequest(url);
@@ -545,8 +551,7 @@ public class JGoogleAnalyticsTracker {
 		if ((backgroundThread != null) && (timeoutMillis > 0)) {
 			try {
 				backgroundThread.join(timeoutMillis);
-			} catch (InterruptedException e) {
-			}
+			} catch (InterruptedException e) { }
 			backgroundThread = null;
 		}
 	}

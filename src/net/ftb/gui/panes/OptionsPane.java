@@ -247,7 +247,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		additionalJavaOptionsLbl.setBounds(490, 182, 170, 14);
 		add(additionalJavaOptionsLbl);
 		
-		additionalJavaOptions = new JTextField(Settings.getSettings().getAdditionalJavaOptions());
+		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
 		additionalJavaOptions.setBounds(485, 207, 350, 23);
 		additionalJavaOptions.addFocusListener(settingsChangeListener);
 		add(additionalJavaOptions);
@@ -317,7 +317,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	public void updateLocale() {
 		lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
-		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));;
+		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));
 		lblRamMaximum.setText(I18N.getLocaleString("RAM_MAX"));
 		lblLocale.setText(I18N.getLocaleString("LANGUAGE"));
 	}
@@ -327,5 +327,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		return (ramMax >= 1024) ? Math.round((ramMax / 256) / 4) + "." + (((ramMax / 256) % 4) * 25) + " GB" : ramMax + " MB";
 	}
 
-	@Override public void onVisible() { }
+	@Override 
+	public void onVisible() { 
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/OptionsPane.java", "Options Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
+	}
 }
