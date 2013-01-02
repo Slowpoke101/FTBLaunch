@@ -243,8 +243,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		keepLauncherOpen.addFocusListener(settingsChangeListener);
 		add(keepLauncherOpen);
 		
-		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Options: ");
-		additionalJavaOptionsLbl.setBounds(490, 182, 170, 14);
+		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Options (For Advanced Users Only) : ");
+		additionalJavaOptionsLbl.setBounds(490, 182, 320, 14);
 		add(additionalJavaOptionsLbl);
 		
 		additionalJavaOptions = new JTextField(Settings.getSettings().getAdditionalJavaOptions());
