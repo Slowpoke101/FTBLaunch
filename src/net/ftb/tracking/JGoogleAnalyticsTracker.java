@@ -425,7 +425,7 @@ public class JGoogleAnalyticsTracker {
 					public void run() {
 						synchronized (JGoogleAnalyticsTracker.class) {
 							asyncThreadsRunning++;
-							Logger.logInfo("Thread started. Current: " + asyncThreadsRunning);
+//							Logger.logInfo("Thread started. Current: " + asyncThreadsRunning);
 						}
 						try {
 							dispatchRequest(url);
@@ -493,6 +493,7 @@ public class JGoogleAnalyticsTracker {
 		if (backgroundThread == null) {
 			backgroundThreadMayRun = true;
 			backgroundThread = new Thread(asyncThreadGroup, "AnalyticsBackgroundThread") {
+				@Override
 				public void run() {
 					Logger.logInfo("AnalyticsBackgroundThread started");
 					while (backgroundThreadMayRun) {

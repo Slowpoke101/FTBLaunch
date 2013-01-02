@@ -146,9 +146,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	@Override public void onVisible() {
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
+//		if(!Settings.getSettings().getSnooper()) {
+//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+//		}
 		updateFilter();
 	}
 

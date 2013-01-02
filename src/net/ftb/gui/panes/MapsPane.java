@@ -150,9 +150,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	@Override public void onVisible() {
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/MapsPane.java", "Map Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
+//		if(!Settings.getSettings().getSnooper()) {
+//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/MapsPane.java", "Map Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+//		}
 		sortMaps();
 		updateFilter();
 	}
