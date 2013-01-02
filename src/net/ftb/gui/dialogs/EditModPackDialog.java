@@ -231,13 +231,15 @@ public class EditModPackDialog extends JDialog {
 
 	private String[] getEnabled() {
 		enabledList_.clear();
-		for(String name : folder.list()) {
-			if(name.toLowerCase().endsWith(".zip")) {
-				enabledList_.add(name);
-			} else if(name.toLowerCase().endsWith(".jar")) {
-				enabledList_.add(name);
-			} else if(name.toLowerCase().endsWith(".litemod")) {
-				enabledList_.add(name);
+		if(folder.exists()) {
+			for(String name : folder.list()) {
+				if(name.toLowerCase().endsWith(".zip")) {
+					enabledList_.add(name);
+				} else if(name.toLowerCase().endsWith(".jar")) {
+					enabledList_.add(name);
+				} else if(name.toLowerCase().endsWith(".litemod")) {
+					enabledList_.add(name);
+				}
 			}
 		}
 		String[] enabledList = new String[enabledList_.size()];
@@ -249,13 +251,15 @@ public class EditModPackDialog extends JDialog {
 
 	private String[] getDisabled() {
 		disabledList_.clear();
-		for(String name : folder.list()) {
-			if(name.toLowerCase().endsWith(".zip.disabled")) {
-				disabledList_.add(name);
-			} else if(name.toLowerCase().endsWith(".jar.disabled")) {
-				disabledList_.add(name);
-			} else if(name.toLowerCase().endsWith(".litemod.disabled")) {
-				disabledList_.add(name);
+		if(folder.exists()) {
+			for(String name : folder.list()) {
+				if(name.toLowerCase().endsWith(".zip.disabled")) {
+					disabledList_.add(name);
+				} else if(name.toLowerCase().endsWith(".jar.disabled")) {
+					disabledList_.add(name);
+				} else if(name.toLowerCase().endsWith(".litemod.disabled")) {
+					disabledList_.add(name);
+				}
 			}
 		}
 		String[] enabledList = new String[disabledList_.size()];
