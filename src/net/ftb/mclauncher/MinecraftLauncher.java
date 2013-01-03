@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,9 +71,9 @@ public class MinecraftLauncher {
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());
 		
 		String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
-		if (additionalOptions.trim().length() > 0) {
-			arguments.add(Settings.getSettings().getAdditionalJavaOptions());
-		}
+		if (!additionalOptions.isEmpty()) {
+ 			Collections.addAll(arguments, additionalOptions.split("\\s+"));
+ 		}
 
 		arguments.add(MinecraftLauncher.class.getCanonicalName());
 		arguments.add(workingDir);
