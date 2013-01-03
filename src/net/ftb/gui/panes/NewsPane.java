@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
 public class NewsPane extends JPanel implements ILauncherPane {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +22,11 @@ public class NewsPane extends JPanel implements ILauncherPane {
 
 	public NewsPane() {
 		super();
-		setBorder(new EmptyBorder(0, 0, 0, 12));
+		if(OSUtils.getCurrentOS() == OS.WINDOWS) {
+			setBorder(new EmptyBorder(-5, -25, -5, 12));
+		} else {
+			setBorder(new EmptyBorder(0, 0, 0, 0));
+		}
 		setLayout(new BorderLayout());
 
 		news = new JEditorPane();
