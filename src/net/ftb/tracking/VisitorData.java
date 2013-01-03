@@ -17,11 +17,6 @@ public class VisitorData {
 		this.visits = visits;
 	}
 
-	public long newRequest() {
-		this.timestampCurrent = now();
-		return this.timestampCurrent;
-	}
-
 	public void resetSession() {
 		long now = now();
 		this.timestampPrevious = this.timestampCurrent;

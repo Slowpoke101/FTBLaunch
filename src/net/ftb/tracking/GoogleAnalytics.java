@@ -119,10 +119,10 @@ public class GoogleAnalytics {
 		int visitorId = config.getVisitorData().getVisitorId();
 		long timestampFirst = config.getVisitorData().getTimestampFirst();
 		long timestampPrevious=config.getVisitorData().getTimestampPrevious();
-		long timestampCurrent=config.getVisitorData().newRequest();
+		long timestampCurrent=config.getVisitorData().getTimestampCurrent();
 		int visits=config.getVisitorData().getVisits();
 
-		sb.append("&utmcc=__utma%3D").append(hostnameHash).append(".").append(visitorId).append(".").append(timestampFirst).append(".").append(timestampPrevious).append(".").append(timestampCurrent).append(".").append(visits).append("%3B%2B__utmz%3D").append(hostnameHash).append(".").append(now).append(".1.1.utmcsr%3D").append(utmcsr).append("%7Cutmccn%3D").append(utmccn).append("%7utmcmd%3D").append(utmcmd).append((utmctr != null ? "%7Cutmctr%3D" + utmctr : "")).append((utmcct != null ? "%7Cutmcct%3D" + utmcct : "")).append("%3B&gaq=1");
+		sb.append("&utmcc=__utma%3D").append(hostnameHash).append(".").append(visitorId).append(".").append(timestampFirst).append(".").append(timestampPrevious).append(".").append(timestampCurrent).append(".").append(visits).append("%3B%2B__utmz%3D").append(hostnameHash).append(".").append(timestampCurrent).append(".1.1.utmcsr%3D").append(utmcsr).append("%7Cutmccn%3D").append(utmccn).append("%7Cutmcmd%3D").append(utmcmd).append((utmctr != null ? "%7Cutmctr%3D" + utmctr : "")).append((utmcct != null ? "%7Cutmcct%3D" + utmcct : "")).append("%3B&gaq=1");
 		return sb.toString();
 	}
 
