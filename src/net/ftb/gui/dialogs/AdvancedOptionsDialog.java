@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.JButton;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -22,7 +22,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
-    private JButton exitBtn;
+	private JButton exitBtn;
 	private JTextField minecraftX, minecraftY, xPosField, yPosField, additionalJavaOptions;
 	private JCheckBox autoMaxCheck, snooper;
 	private static JComboBox downloadServers;
@@ -49,7 +49,7 @@ public class AdvancedOptionsDialog extends JDialog {
 			}
 		}
 		add(downloadServers);
-                
+
 		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Parameters: ");
 		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
 		add(additionalJavaOptionsLbl);
@@ -114,16 +114,16 @@ public class AdvancedOptionsDialog extends JDialog {
 		snooper.setSelected(settings.getSnooper());
 		snooper.addFocusListener(settingsChangeListener);
 		add(snooper);
-                
-                exitBtn = new JButton("EXIT");
-                exitBtn.setBounds(150, 190, 140, 28);
-                exitBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(false);
-                }
-                });
-                add(exitBtn);
+
+		exitBtn = new JButton("EXIT");
+		exitBtn.setBounds(150, 190, 140, 28);
+		exitBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+		add(exitBtn);
 	}
 
 	public static void setDownloadServers() {
