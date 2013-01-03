@@ -8,15 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -74,7 +70,6 @@ import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
 import net.ftb.tracking.AnalyticsConfigData;
 import net.ftb.tracking.JGoogleAnalyticsTracker;
-import net.ftb.tracking.JGoogleAnalyticsTracker.DispatchMode;
 import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.DownloadUtils;
@@ -134,7 +129,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		AnalyticsConfigData config = new AnalyticsConfigData("UA-37330489-2");
-		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.SINGLE_THREAD);
+		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2);
 		tracker.setEnabled(true);
 
 		if(!Settings.getSettings().getSnooper()) {
@@ -220,7 +215,7 @@ public class LaunchFrame extends JFrame {
 				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
-				if (updateChecker.shouldUpdate()) {
+				if(updateChecker.shouldUpdate()) {
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 					p.setVisible(true);
 				}
@@ -254,23 +249,6 @@ public class LaunchFrame extends JFrame {
 		panel.add(tabbedPane);
 		panel.add(footer);
 		setContentPane(panel);
-
-		addWindowListener(new WindowListener() {
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				tracker.completeBackgroundTasks(1000);
-				try {
-					Thread.sleep(1100);
-				} catch (InterruptedException e) { }
-			}
-
-			@Override public void windowActivated(WindowEvent arg0) { }
-			@Override public void windowClosed(WindowEvent arg0) { }
-			@Override public void windowDeactivated(WindowEvent arg0) { }
-			@Override public void windowDeiconified(WindowEvent arg0) { }
-			@Override public void windowIconified(WindowEvent arg0) { }
-			@Override public void windowOpened(WindowEvent arg0) { }
-		});
 
 		//Footer
 		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -377,6 +355,9 @@ public class LaunchFrame extends JFrame {
 						try {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
 							OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
+							if(!Settings.getSettings().getSnooper()) {
+								tracker.trackPageViewFromReferrer(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
+							}
 						} catch (NoSuchAlgorithmException e) { }
 					}
 				}
@@ -651,7 +632,6 @@ public class LaunchFrame extends JFrame {
 			if(!Settings.getSettings().getSnooper()) {
 				tracker.trackPageViewFromReferrer(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
 			}
-			tracker.completeBackgroundTasks(1000);
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }
@@ -662,7 +642,7 @@ public class LaunchFrame extends JFrame {
 				ProcessMonitor.create(minecraftProcess, new Runnable() {
 					@Override
 					public void run() {
-						if (!Settings.getSettings().getKeepLauncherOpen()) {
+						if(!Settings.getSettings().getKeepLauncherOpen()) {
 							System.exit(0);
 						} else {
 							LaunchFrame launchFrame = LaunchFrame.this;
