@@ -144,6 +144,14 @@ public class Settings extends Properties {
 	public String getPackVer() {
 		return getProperty(ModPack.getSelectedPack().getDir(), "Recommended Version");
 	}
+	
+	public void setMapVer(String string) {
+		setProperty(Map.getSelectedMap().getMapName(), string);
+	}
+
+	public String getMapVer() {
+		return getProperty(Map.getSelectedMap().getMapName(), "Recommended Version");
+	}
 
 	public String getLastAddPath() {
 		return getProperty("lastAddPath", "");

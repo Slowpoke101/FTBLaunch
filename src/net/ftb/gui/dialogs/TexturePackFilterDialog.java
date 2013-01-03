@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 
-public class FilterDialogTextures extends JDialog {
+public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
@@ -21,7 +21,7 @@ public class FilterDialogTextures extends JDialog {
 	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
 	private final JComboBox comboBox = new JComboBox();
 
-	public FilterDialogTextures(final TexturepackPane instance) {
+	public TexturePackFilterDialog(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		
 		setupGui();

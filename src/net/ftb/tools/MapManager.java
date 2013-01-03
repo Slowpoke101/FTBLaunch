@@ -29,8 +29,6 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class MapManager extends JDialog {
-	private static final long serialVersionUID = 6897832855341265019L;
-
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
@@ -42,9 +40,9 @@ public class MapManager extends JDialog {
 		@Override
 		protected Boolean doInBackground() throws Exception {
 			String installPath = Settings.getSettings().getInstallPath();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+			Map map = Map.getSelectedMap();
 			if(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
-				MapOverwriteDialog dialog = new MapOverwriteDialog(LaunchFrame.getInstance(), true);
+				MapOverwriteDialog dialog = new MapOverwriteDialog();
 				dialog.setVisible(true);
 				if(overwrite) {
 					FileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
@@ -86,23 +84,29 @@ public class MapManager extends JDialog {
 		}
 
 		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
-			Logger.logInfo("Downloading");
+			Logger.logInfo("Downloading Map");
 			String installPath = OSUtils.getDynamicStorageLocation();
+			String mapVer = Settings.getSettings().getMapVer();
+			Map map = Map.getSelectedMap();
 			new File(installPath + "/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps%5E" + mapName));
+			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps%5E" + dir + "%5E" + (mapVer.equalsIgnoreCase("Recommended Version") ? map.getVersion().replace(".", "_") : mapVer.replace(".", "_")) + "%5E" + mapName));
 			FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
 			installMap(mapName, dir);
 		}
 
 		protected void installMap(String mapName, String dir) throws IOException {
-			Logger.logInfo("Installing");
+			Logger.logInfo("Installing Map");
 			String installPath = Settings.getSettings().getInstallPath();
 			String tempPath = OSUtils.getDynamicStorageLocation();
-			Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+			Map map = Map.getSelectedMap();
 			new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
 			FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
+			// TODO: Implement versioning
 			FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
+			if(!Settings.getSettings().getSnooper()) {
+				LaunchFrame.tracker.trackPageViewFromReferrer(map.getName() + " Install", Map.getSelectedMap().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
+			}
 		}
 	}
 

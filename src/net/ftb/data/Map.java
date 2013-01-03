@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.MapsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
@@ -75,6 +76,14 @@ public class Map {
 	 */
 	public static Map getMap(int i) {
 		return maps.get(i);
+	}
+
+	/**
+	 * Used to grab the currently selected Map based off the selected index from MapsPane
+	 * @return Map - the currently selected Map
+	 */
+	public static Map getSelectedMap() {
+		return getMap(MapsPane.getSelectedMapIndex());
 	}
 
 	/**

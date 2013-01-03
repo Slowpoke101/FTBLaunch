@@ -1,7 +1,5 @@
 package net.ftb.gui.panes;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -14,7 +12,6 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -33,15 +30,14 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
-	private JToggleButton tglbtnForceUpdate, tglbtnCenterScreen;
+	private JToggleButton tglbtnForceUpdate;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
-	private JComboBox locale, downloadServers;
-	private JTextField minecraftX, minecraftY, installFolderTextField, xPosField, yPosField, additionalJavaOptions;
-	private JCheckBox chckbxShowConsole, autoMaxCheck, snooper, keepLauncherOpen;
+	private JComboBox locale;
+	private JTextField installFolderTextField;
+	private JCheckBox chckbxShowConsole, keepLauncherOpen;
 	private final Settings settings;
 
 	private FocusListener settingsChangeListener = new FocusListener() {
@@ -55,8 +51,37 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	public OptionsPane (Settings settings) {
 		this.settings = settings;
 		setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		JButton installBrowseBtn = new JButton("...");
+		installBrowseBtn.setBounds(786, 11, 49, 28);
+		installBrowseBtn.addActionListener(new ChooseDir(this));
+		setLayout(null);
+		add(installBrowseBtn);
+
+		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
+		lblInstallFolder.setBounds(10, 11, 127, 28);
+		add(lblInstallFolder);
+
+		installFolderTextField = new JTextField();
+		installFolderTextField.setBounds(147, 11, 629, 28);
+		installFolderTextField.addFocusListener(settingsChangeListener);
+		installFolderTextField.setColumns(10);
+		installFolderTextField.setText(settings.getInstallPath());
+		add(installFolderTextField);
+
+		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
+		tglbtnForceUpdate.setBounds(147, 48, 629, 29);
+		tglbtnForceUpdate.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				saveSettingsInto(OptionsPane.this.settings);
+			}
+		});
+		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+		add(tglbtnForceUpdate);
+
 		currentRam = new JLabel();
-		currentRam.setBounds(427, 114, 85, 23);
+		currentRam.setBounds(427, 95, 85, 25);
 		long ram = 0;
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		Method m;
@@ -75,7 +100,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		}
 
 		ramMaximum = new JSlider();
-		ramMaximum.setBounds(190, 114, 222, 23);
+		ramMaximum.setBounds(190, 95, 222, 25);
 		ramMaximum.setSnapToTicks(true);
 		ramMaximum.setMajorTickSpacing(256);
 		ramMaximum.setMinorTickSpacing(256);
@@ -103,36 +128,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		});
 		ramMaximum.addFocusListener(settingsChangeListener);
 
-		JButton installBrowseBtn = new JButton("...");
-		installBrowseBtn.setBounds(786, 11, 49, 23);
-		installBrowseBtn.addActionListener(new ChooseDir(this));
-		setLayout(null);
-		add(installBrowseBtn);
-
-		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
-		lblInstallFolder.setBounds(10, 11, 127, 23);
-		add(lblInstallFolder);
-
-		installFolderTextField = new JTextField();
-		installFolderTextField.setBounds(147, 11, 629, 23);
-		installFolderTextField.addFocusListener(settingsChangeListener);
-		installFolderTextField.setColumns(10);
-		installFolderTextField.setText(settings.getInstallPath());
-		add(installFolderTextField);
-
-		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
-		tglbtnForceUpdate.setBounds(147, 45, 629, 29);
-		tglbtnForceUpdate.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				saveSettingsInto(OptionsPane.this.settings);
-			}
-		});
-		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
-		add(tglbtnForceUpdate);
-
 		lblRamMaximum = new JLabel(I18N.getLocaleString("RAM_MAX"));
-		lblRamMaximum.setBounds(10, 114, 195, 23);
+		lblRamMaximum.setBounds(10, 95, 195, 25);
 		add(lblRamMaximum);
 		add(ramMaximum);
 		add(currentRam);
@@ -143,7 +140,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
 		}
 		locale = new JComboBox(locales);
-		locale.setBounds(190, 148, 222, 23);
+		locale.setBounds(190, 130, 222, 25);
 		locale.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -157,125 +154,21 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		locale.setSelectedItem(I18N.localeFiles.get(settings.getLocale()));
 
 		lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
-		lblLocale.setBounds(10, 148, 195, 23);
+		lblLocale.setBounds(10, 130, 195, 25);
 		add(lblLocale);
 		add(locale);
-
-		downloadServers = new JComboBox(getDownloadServerNames());
-		downloadServers.setBounds(613, 115, 222, 23);
-		downloadServers.addFocusListener(settingsChangeListener);
-		if(DownloadUtils.serversLoaded) {
-			if(DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
-				downloadServers.setSelectedItem(settings.getDownloadServer());
-			}
-		}
-		add(downloadServers);
-
-		JLabel downloadLocation = new JLabel("Download Location");
-		downloadLocation.setBounds(490, 118, 110, 14);
-		add(downloadLocation);
 
 		chckbxShowConsole = new JCheckBox("Show Console?");
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
 		chckbxShowConsole.setSelected(settings.getConsoleActive());
-		chckbxShowConsole.setBounds(613, 148, 183, 23);
+		chckbxShowConsole.setBounds(550, 95, 183, 25);
 		add(chckbxShowConsole);
 
-		minecraftX = new JTextField();
-		minecraftX.setBounds(190, 182, 95, 23);
-		minecraftX.setText(Integer.toString(settings.getLastDimension().width));
-		add(minecraftX);
-		minecraftX.addFocusListener(settingsChangeListener);
-		minecraftX.setColumns(10);
-
-		JLabel lblMinecraftWindowSize = new JLabel("Minecraft Window Size");
-		lblMinecraftWindowSize.setBounds(10, 182, 170, 20);
-		add(lblMinecraftWindowSize);
-
-		minecraftY = new JTextField();
-		minecraftY.setBounds(317, 182, 95, 23);
-		minecraftY.setText(Integer.toString(settings.getLastDimension().height));
-		add(minecraftY);
-		minecraftY.addFocusListener(settingsChangeListener);
-		minecraftY.setColumns(10);
-
-		JLabel lblX_1 = new JLabel("x");
-		lblX_1.setBounds(295, 185, 15, 14);
-		add(lblX_1);
-
-		JLabel lblMinecraftWindowPosition = new JLabel("Minecraft Window Position");
-		lblMinecraftWindowPosition.setBounds(10, 222, 170, 23);
-		add(lblMinecraftWindowPosition);
-
-		xPosField = new JTextField();
-		xPosField.setBounds(190, 222, 95, 23);
-		xPosField.setText(Integer.toString(settings.getLastPosition().x));
-		add(xPosField);
-		xPosField.addFocusListener(settingsChangeListener);
-		xPosField.setColumns(10);
-
-		JLabel label = new JLabel("x");
-		label.setBounds(295, 226, 15, 14);
-		add(label);
-
-		yPosField = new JTextField();
-		yPosField.setBounds(317, 222, 95, 23);
-		yPosField.setText(Integer.toString(settings.getLastPosition().y));
-		add(yPosField);
-		yPosField.addFocusListener(settingsChangeListener);
-		yPosField.setColumns(10);
-
-		autoMaxCheck = new JCheckBox("Auto Maximised?");
-		autoMaxCheck.setBounds(10, 252, 170, 23);
-		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
-		autoMaxCheck.addFocusListener(settingsChangeListener);
-		add(autoMaxCheck);
-
-		snooper = new JCheckBox("Disable Google Analytic Tracking");
-		snooper.setBounds(190, 252, 300, 23);
-		snooper.setSelected(settings.getSnooper());
-		snooper.addFocusListener(settingsChangeListener);
-		add(snooper);
-
 		keepLauncherOpen = new JCheckBox("Reopen launcher after exiting minecraft?");
-		keepLauncherOpen.setBounds(190, 282, 300, 23);
+		keepLauncherOpen.setBounds(550, 130, 300, 25);
 		keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
 		keepLauncherOpen.addFocusListener(settingsChangeListener);
 		add(keepLauncherOpen);
-		
-		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Options (For Advanced Users Only) : ");
-		additionalJavaOptionsLbl.setBounds(490, 182, 320, 14);
-		add(additionalJavaOptionsLbl);
-		
-		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
-		additionalJavaOptions.setBounds(485, 207, 350, 23);
-		additionalJavaOptions.addFocusListener(settingsChangeListener);
-		add(additionalJavaOptions);
-	}
-
-	public void setDownloadServers() {
-		String downloadserver = settings.getDownloadServer();
-		downloadServers.removeAllItems();
-		for(String server : DownloadUtils.downloadServers.keySet()) {
-			downloadServers.addItem(server);
-		}
-		if(DownloadUtils.downloadServers.containsKey(downloadserver)) {
-			downloadServers.setSelectedItem(downloadserver);
-		}
-	}
-
-	public String[] getDownloadServerNames() {
-		if(!DownloadUtils.serversLoaded) {
-			Logger.logWarn("Servers not loaded yet.");
-			return new String[] { "Automatic" };
-		} else {
-			Logger.logInfo("Servers are loaded, inserting into combo box.");
-			String[] out = new String[DownloadUtils.downloadServers.size()];
-			for(int i = 0; i < out.length; i++) {
-				out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
-			}
-			return out;
-		}
 	}
 
 	private class documentFilter extends PlainDocument {
@@ -303,15 +196,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		settings.setForceUpdate(tglbtnForceUpdate.isSelected());
 		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
-		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
 		settings.setConsoleActive(chckbxShowConsole.isSelected());
-		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
-		int lastExtendedState = settings.getLastExtendedState();
-		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
-		settings.setLastPosition(new Point(Integer.parseInt(xPosField.getText()), Integer.parseInt(yPosField.getText())));
-		settings.setSnooper(snooper.isSelected());
 		settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
-		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
 		settings.save();
 	}
 
@@ -327,10 +213,5 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		return (ramMax >= 1024) ? Math.round((ramMax / 256) / 4) + "." + (((ramMax / 256) % 4) * 25) + " GB" : ramMax + " MB";
 	}
 
-	@Override 
-	public void onVisible() { 
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/OptionsPane.java", "Options Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
-	}
+	@Override public void onVisible() { }
 }

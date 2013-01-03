@@ -15,7 +15,7 @@ import net.ftb.data.Map;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 
-public class FilterDialogMaps extends JDialog {
+public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
@@ -25,7 +25,7 @@ public class FilterDialogMaps extends JDialog {
 
 	private MapsPane pane;
 
-	public FilterDialogMaps(MapsPane instance) {
+	public MapFilterDialog(MapsPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setupGui();
 		this.pane = instance;

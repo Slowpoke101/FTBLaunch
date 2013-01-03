@@ -26,11 +26,10 @@ import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.FilterDialogTextures;
+import net.ftb.gui.dialogs.TexturePackFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
@@ -82,7 +81,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		filter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				FilterDialogTextures filter = new FilterDialogTextures(instance);
+				TexturePackFilterDialog filter = new TexturePackFilterDialog(instance);
 				filter.setVisible(true);
 			}
 		});
@@ -146,9 +145,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	@Override public void onVisible() {
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
 		updateFilter();
 	}
 

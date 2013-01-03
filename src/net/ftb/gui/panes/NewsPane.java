@@ -40,9 +40,6 @@ public class NewsPane extends JPanel implements ILauncherPane {
 	@Override
 	public void onVisible() {
 		try {
-			if(!Settings.getSettings().getSnooper()) {
-				LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/NewsPane.java", "News Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-			}
 			news.setPage("http://launcher.feed-the-beast.com/news.php");
 			Settings.getSettings().setNewsDate();
 			Settings.getSettings().save();

@@ -22,14 +22,14 @@ import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
-public class AddPackDialog extends JDialog {
+public class PrivatePackDialog extends JDialog {
 	private JTextField textField = new JTextField();
 	private JButton btnRemove = new JButton("Remove");
 	private JButton btnAdd = new JButton("Add");
 	private JButton btnCancel = new JButton("Cancel");
 	private JEditorPane editorPane = new JEditorPane();
 
-	public AddPackDialog() {
+	public PrivatePackDialog() {
 		super(LaunchFrame.getInstance(), true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(null);

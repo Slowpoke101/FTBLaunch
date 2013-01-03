@@ -29,7 +29,7 @@ import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
-import net.ftb.gui.dialogs.FilterDialogPacks;
+import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
@@ -90,7 +90,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(loaded) {
-					FilterDialogPacks filterDia = new FilterDialogPacks(instance);
+					ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
 					filterDia.setVisible(true);
 				}
 			}
@@ -173,12 +173,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		add(infoScroll);
 	}
 
-	@Override 
-	public void onVisible() { 
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/ModpacksPane.java", "Modpacks Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
-	}
+	@Override public void onVisible() { }
 
 	/*
 	 * GUI Code to add a modpack to the selection
@@ -302,7 +297,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		LaunchFrame.getInstance().updateFooter();
 	}
 
-	public static int getIndex() {
+	private static int getIndex() {
 		return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
 	}
 

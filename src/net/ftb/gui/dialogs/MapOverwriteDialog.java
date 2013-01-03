@@ -22,8 +22,8 @@ public class MapOverwriteDialog extends JDialog {
 	private JButton yesButton = new JButton("Yes");
 	private JButton noButton = new JButton("No");
 
-	public MapOverwriteDialog(LaunchFrame instance, boolean modal) {
-		super(instance, modal);
+	public MapOverwriteDialog() {
+		super(LaunchFrame.getInstance(), true);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("WARNING!");

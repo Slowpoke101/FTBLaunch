@@ -19,6 +19,7 @@ import java.util.Scanner;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.log.Logger;
 
 public class DownloadUtils extends Thread {
@@ -263,7 +264,7 @@ public class DownloadUtils extends Thread {
 		}
 		serversLoaded = true;
 		if(LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
-			LaunchFrame.getInstance().optionsPane.setDownloadServers();
+			AdvancedOptionsDialog.setDownloadServers();
 		}
 	}
 }

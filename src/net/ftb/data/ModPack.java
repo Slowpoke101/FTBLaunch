@@ -103,7 +103,7 @@ public class ModPack {
 	 * @return ModPack - the currently selected ModPack
 	 */
 	public static ModPack getSelectedPack() {
-		return getPack(ModpacksPane.getIndex());
+		return getPack(ModpacksPane.getSelectedModIndex());
 	}
 
 	/**

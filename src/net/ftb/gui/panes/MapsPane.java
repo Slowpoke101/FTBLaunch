@@ -27,10 +27,10 @@ import javax.swing.event.HyperlinkListener;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.FilterDialogMaps;
+import net.ftb.gui.dialogs.EditModPackDialog;
+import net.ftb.gui.dialogs.MapFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
@@ -43,7 +43,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
-	private JButton filter;
+	private JButton filter, selectVersion;
 	private static int selectedMap = 0;
 	private static boolean mapsAdded = false;
 	public static String type = "Client", origin = "All", compatible = "All";
@@ -81,7 +81,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(loaded) {
-					FilterDialogMaps filterDia = new FilterDialogMaps(instance);
+					MapFilterDialog filterDia = new MapFilterDialog(instance);
 					filterDia.setVisible(true);
 				}
 			}
@@ -101,9 +101,23 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		typeLblText += "</body></html>";
 		
 		typeLbl = new JLabel(typeLblText);
-		typeLbl.setBounds(115, 5, 295, 25);
+		typeLbl.setBounds(115, 5, 175, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
+		
+		selectVersion = new JButton(I18N.getLocaleString("VERSION_SELECT"));
+		selectVersion.setBounds(300, 5, 110, 25);
+		selectVersion.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(mapPanels.size() > 0) {
+					if(getSelectedMapIndex() >= 0) {
+						// TODO: Add version selection for map
+					}
+				}
+			}
+		});
+		add(selectVersion);
 
 		JTextArea filler = new JTextArea(I18N.getLocaleString("MAPS_WAIT_WHILE_LOADING"));
 		filler.setBorder(null);
@@ -150,9 +164,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	@Override public void onVisible() {
-		if(!Settings.getSettings().getSnooper()) {
-			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/MapsPane.java", "Map Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
 		sortMaps();
 		updateFilter();
 	}
@@ -270,7 +281,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		}
 	}
 
-	public int getSelectedMapIndex() {
+	public static int getSelectedMapIndex() {
 		return mapsAdded ? getIndex() : -1;
 	}
 
