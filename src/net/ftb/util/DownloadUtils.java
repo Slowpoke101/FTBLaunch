@@ -74,7 +74,6 @@ public class DownloadUtils extends Thread {
 			}
 		} catch (IOException e) { }
 		connection.disconnect();
-		Logger.logInfo(resolved);
 		return resolved; 
 	}
 
