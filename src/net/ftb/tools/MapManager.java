@@ -86,11 +86,10 @@ public class MapManager extends JDialog {
 		protected void downloadMap(String mapName, String dir) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading Map");
 			String installPath = OSUtils.getDynamicStorageLocation();
-			String mapVer = Settings.getSettings().getMapVer();
 			Map map = Map.getSelectedMap();
 			new File(installPath + "/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps%5E" + dir + "%5E" + (mapVer.equalsIgnoreCase("Recommended Version") ? map.getVersion().replace(".", "_") : mapVer.replace(".", "_")) + "%5E" + mapName));
+			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps%5E" + dir + "%5E" + map.getVersion().replace(".", "_") + "%5E" + mapName));
 			FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
 			installMap(mapName, dir);
 		}
@@ -102,7 +101,6 @@ public class MapManager extends JDialog {
 			Map map = Map.getSelectedMap();
 			new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
 			FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
-			// TODO: Implement versioning
 			FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
 			if(!Settings.getSettings().getSnooper()) {
 				LaunchFrame.tracker.trackPageViewFromReferrer(map.getName() + " Install", Map.getSelectedMap().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");

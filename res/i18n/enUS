@@ -14,7 +14,6 @@ DOWNLOAD_SERVER_PACK = Download Server ModPack
 # Map Tab
 INSTALL_MAP = Install Map
 DOWNLOAD_MAP_SERVER = Download Server Map
-VERSION_SELECT = Version Select
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Install TexturePack

@@ -29,7 +29,6 @@ import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.MapFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
@@ -43,7 +42,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
-	private JButton filter, selectVersion;
+	private JButton filter;
 	private static int selectedMap = 0;
 	private static boolean mapsAdded = false;
 	public static String type = "Client", origin = "All", compatible = "All";
@@ -52,7 +51,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JEditorPane mapInfo;
 
 	public static boolean loaded = false;
-	
+
 	private static HashMap<Integer, Map> currentMaps = new HashMap<Integer, Map>();
 
 	public MapsPane() {
@@ -87,7 +86,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			}
 		});
 		add(filter);
-		
+
 		String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
 		String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -99,25 +98,11 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + compatible + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl = new JLabel(typeLblText);
-		typeLbl.setBounds(115, 5, 175, 25);
+		typeLbl.setBounds(115, 5, 295, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		add(typeLbl);
-		
-		selectVersion = new JButton(I18N.getLocaleString("VERSION_SELECT"));
-		selectVersion.setBounds(300, 5, 110, 25);
-		selectVersion.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(mapPanels.size() > 0) {
-					if(getSelectedMapIndex() >= 0) {
-						// TODO: Add version selection for map
-					}
-				}
-			}
-		});
-		add(selectVersion);
 
 		JTextArea filler = new JTextArea(I18N.getLocaleString("MAPS_WAIT_WHILE_LOADING"));
 		filler.setBorder(null);
@@ -298,7 +283,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + compatible + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl.setText(typeLblText);
 		sortMaps();
 		LaunchFrame.getInstance().updateFooter();
@@ -320,15 +305,15 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}
-	
+
 	private static boolean originCheck(Map map) {
 		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !map.getAuthor().equalsIgnoreCase("the ftb team"));
 	}
-	
+
 	private static boolean compatibilityCheck(Map map) {
 		return (compatible.equals("All") || map.isCompatible(compatible));
 	}
-	
+
 	private static boolean textSearch(Map map) {
 		String searchString = SearchDialog.lastMapSearch.toLowerCase();
 		return ((searchString.isEmpty()) || map.getName().toLowerCase().contains(searchString) || map.getAuthor().toLowerCase().contains(searchString));
