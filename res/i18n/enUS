@@ -24,6 +24,7 @@ INSTALL_FOLDER = Install folder...
 FORCE_UPDATE = Force update?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
+ADVANCED_OPTIONS = Advanced Options
 
 # Shared strings
 FILTER_SETTINGS = Filter Settings

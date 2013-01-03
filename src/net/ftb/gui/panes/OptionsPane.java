@@ -28,11 +28,13 @@ import javax.swing.text.PlainDocument;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
+	private JButton installBrowseBtn, advancedOptionsBtn;
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
 	private JComboBox locale;
@@ -52,7 +54,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.settings = settings;
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		JButton installBrowseBtn = new JButton("...");
+		installBrowseBtn = new JButton("...");
 		installBrowseBtn.setBounds(786, 11, 49, 28);
 		installBrowseBtn.addActionListener(new ChooseDir(this));
 		setLayout(null);
@@ -169,21 +171,18 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
 		keepLauncherOpen.addFocusListener(settingsChangeListener);
 		add(keepLauncherOpen);
-	}
-
-	private class documentFilter extends PlainDocument {
-		public documentFilter(final String pattern) {
-			this.setDocumentFilter(new DocumentFilter() {
-				@Override
-				public void insertString(FilterBypass fb, int off, String str, AttributeSet attr) throws BadLocationException {
-					fb.insertString(off, str.replaceAll(pattern, ""), attr);
-				} 
-				@Override
-				public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) throws BadLocationException {
-					fb.replace(off, len, str.replaceAll(pattern, ""), attr);
-				}
-			});
-		}
+		
+		advancedOptionsBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS"));
+		advancedOptionsBtn.setBounds(147, 275, 629, 29);
+		advancedOptionsBtn.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				AdvancedOptionsDialog aod = new AdvancedOptionsDialog();
+				aod.setVisible(true);
+			}
+		});
+		advancedOptionsBtn.getModel().setPressed(settings.getForceUpdate());
+		add(advancedOptionsBtn);
 	}
 
 	public void setInstallFolderText(String text) {
