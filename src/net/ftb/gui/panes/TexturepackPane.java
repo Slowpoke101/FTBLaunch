@@ -111,7 +111,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		texturePacks.add(p);
 
 		texturePacksScroll = new JScrollPane();
-		texturePacksScroll.setBounds(0, 30, 420, 280);
+		texturePacksScroll.setBounds(-3, 30, 420, 283);
 		texturePacksScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		texturePacksScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		texturePacksScroll.setWheelScrollingEnabled(true);
@@ -146,9 +146,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	@Override public void onVisible() {
-//		if(!Settings.getSettings().getSnooper()) {
-//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-//		}
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/TexturepackPane.java", "Texturepack Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
 		updateFilter();
 	}
 

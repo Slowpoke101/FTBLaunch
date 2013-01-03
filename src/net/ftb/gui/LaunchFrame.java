@@ -81,6 +81,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
@@ -133,7 +134,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		AnalyticsConfigData config = new AnalyticsConfigData("UA-37330489-2");
-		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.MULTI_THREAD);
+		tracker = new JGoogleAnalyticsTracker(config, GoogleAnalyticsVersion.V_4_7_2, DispatchMode.SINGLE_THREAD);
 		tracker.setEnabled(true);
 
 		if(!Settings.getSettings().getSnooper()) {
@@ -239,7 +240,11 @@ public class LaunchFrame extends JFrame {
 		panel = new JPanel();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setBounds(100, 100, 850, 480);
+		if(OSUtils.getCurrentOS() == OS.WINDOWS) {
+			setBounds(100, 100, 842, 480);
+		} else {
+			setBounds(100, 100, 850, 480);
+		}
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
 		footer.setBounds(0, 380, 850, 100);
@@ -643,6 +648,9 @@ public class LaunchFrame extends JFrame {
 		try {
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+			if(!Settings.getSettings().getSnooper()) {
+				tracker.trackPageViewFromReferrer(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
+			}
 			tracker.completeBackgroundTasks(1000);
 			try {
 				Thread.sleep(1500);

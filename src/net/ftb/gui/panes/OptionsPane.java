@@ -329,8 +329,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
 	@Override 
 	public void onVisible() { 
-//		if(!Settings.getSettings().getSnooper()) {
-//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/OptionsPane.java", "Options Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-//		}
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/OptionsPane.java", "Options Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
 	}
 }

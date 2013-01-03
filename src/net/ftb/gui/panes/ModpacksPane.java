@@ -138,7 +138,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		packs.add(p);
 
 		packsScroll = new JScrollPane();
-		packsScroll.setBounds(0, 30, 420, 280);
+		packsScroll.setBounds(-3, 30, 420, 283);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
@@ -175,9 +175,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 	@Override 
 	public void onVisible() { 
-//		if(!Settings.getSettings().getSnooper()) {
-//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/ModpacksPane.java", "Modpacks Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-//		}
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/ModpacksPane.java", "Modpacks Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
 	}
 
 	/*

@@ -115,7 +115,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		maps.add(p);
 
 		mapsScroll = new JScrollPane();
-		mapsScroll.setBounds(0, 30, 420, 280);
+		mapsScroll.setBounds(-3, 30, 420, 283);
 		mapsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		mapsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		mapsScroll.setWheelScrollingEnabled(true);
@@ -150,9 +150,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	@Override public void onVisible() {
-//		if(!Settings.getSettings().getSnooper()) {
-//			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/MapsPane.java", "Map Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
-//		}
+		if(!Settings.getSettings().getSnooper()) {
+			LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/gui/MapsPane.java", "Map Tab View", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+		}
 		sortMaps();
 		updateFilter();
 	}
