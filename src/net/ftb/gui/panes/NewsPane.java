@@ -25,7 +25,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
 		if(OSUtils.getCurrentOS() == OS.WINDOWS) {
 			setBorder(new EmptyBorder(-5, -25, -5, 12));
 		} else {
-			setBorder(new EmptyBorder(0, 0, 0, 0));
+			setBorder(new EmptyBorder(-4, -25, -4, -2));
 		}
 		setLayout(new BorderLayout());
 
