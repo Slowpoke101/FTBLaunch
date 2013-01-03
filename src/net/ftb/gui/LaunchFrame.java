@@ -133,7 +133,7 @@ public class LaunchFrame extends JFrame {
 		tracker.setEnabled(true);
 
 		if(!Settings.getSettings().getSnooper()) {
-			tracker.trackPageViewFromReferrer("net/ftb/gui/LaunchFrame.java", "Launcher Start", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+			tracker.trackPageViewFromReferrer("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version, "Feed The Beast", "http://www.feed-the-beast.com", "/");
 		}
 
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
