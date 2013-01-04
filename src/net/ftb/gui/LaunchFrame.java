@@ -209,8 +209,8 @@ public class LaunchFrame extends JFrame {
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
-				TexturePack.addListener(frame.tpPane);
-				TexturePack.loadAll();
+//				TexturePack.addListener(frame.tpPane);
+//				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()) {
@@ -444,6 +444,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
+		tabbedPane.setEnabledAt(4, false);
 		setNewsIcon();
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
@@ -493,7 +494,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-		tabbedPane.setEnabledAt(4, false);
+//		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -796,7 +797,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
-		tabbedPane.setEnabledAt(4, true);
+//		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
