@@ -966,7 +966,6 @@ public class LaunchFrame extends JFrame {
 			} else {
 				l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
 			}
-			System.out.println(l);
 			for (Long timeStamp : timeStamps) {
 				long time = timeStamp;
 				if (time > l) {
