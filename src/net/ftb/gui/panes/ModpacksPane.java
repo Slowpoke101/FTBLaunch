@@ -199,8 +199,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setBackground(new Color(255, 255, 255, 0));
 		MouseListener lin = new MouseListener() {
 			@Override public void mouseClicked(MouseEvent e) {
-				selectedPack = packIndex;
-				updatePacks();
+				if(e.getClickCount() == 2)
+				{
+					LaunchFrame.getInstance().doLaunch();
+				}
 			}
 			@Override public void mouseReleased(MouseEvent e) { }
 			@Override public void mousePressed(MouseEvent e) { 

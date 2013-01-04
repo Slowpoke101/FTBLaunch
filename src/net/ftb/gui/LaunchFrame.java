@@ -330,13 +330,7 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-					Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
-					saveSettings();
-					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-				} else if(users.getSelectedIndex() <= 1) {
-					ErrorUtils.tossError("Please select a profile!");
-				}
+				doLaunch();
 			}
 		});
 
@@ -980,5 +974,15 @@ public class LaunchFrame extends JFrame {
 		}
 
 		return i;
+	}
+
+	public void doLaunch() {
+		if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+			Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
+			saveSettings();
+			doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+		} else if(users.getSelectedIndex() <= 1) {
+			ErrorUtils.tossError("Please select a profile!");
+		}
 	}
 }
