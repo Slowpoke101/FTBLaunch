@@ -91,7 +91,10 @@ public class ModManager extends JDialog {
 		}
 
 		protected boolean downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
-			Logger.logInfo("Downloading Mod Pack");			
+			Logger.logInfo("Downloading Mod Pack");
+			if(!Settings.getSettings().getSnooper()) {
+				LaunchFrame.tracker.trackPageViewFromReferrer("net/ftb/tools/ModManager.java", "Downloaded: " + modPackName + " v." + curVersion.replace('_', '.'), "Feed The Beast", "http://www.feed-the-beast.com", "/");
+			}
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
