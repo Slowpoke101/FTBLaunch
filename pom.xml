@@ -127,6 +127,21 @@
           </execution>
         </executions>
       </plugin>
+	  <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+			<artifactId>osxappbundle-maven-plugin</artifactId>
+			<version>1.0-alpha-1</version>
+			<configuration>
+				<mainClass>LaunchFrame</mainClass>
+		</configuration>
+		<executions>
+			<execution>
+				<goals>
+					<goal>bundle</goal>
+				</goals>
+			</execution>
+		</executions>
+	  </plugin> 
     </plugins>
   </build>
 
