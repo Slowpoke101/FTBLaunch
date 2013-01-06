@@ -94,10 +94,12 @@ public class DownloadUtils extends Thread {
 	 * @param file - file on the repo
 	 * @return boolean representing if the file exists 
 	 */
-	public static boolean fileExists(String url) {
-		// TODO: Just create link inside method, no need to cycle download servers if a file doesn't exist.
+	public static boolean fileExists(String file) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+			if(currentmd5.isEmpty()) {
+				currentmd5 = md5("mcepoch1" + getTime());
+			}
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file).openStream()));
 			return !reader.readLine().toLowerCase().contains("not found");
 		} catch (Exception e) {
 			return false;
