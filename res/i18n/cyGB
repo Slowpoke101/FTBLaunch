@@ -23,6 +23,7 @@ INSTALL_FOLDER = Ffolder gosodiad...
 FORCE_UPDATE = Gorfodi diweddaru?
 RAM_MAX = Uchafswm RAM (MB)
 LANGUAGE = Iaith
+ADVANCED_OPTIONS = Dewisiadau Uwch
 
 # Shared strings
 FILTER_SETTINGS = Gosodiadau Hidlo
