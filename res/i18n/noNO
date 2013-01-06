@@ -1,0 +1,48 @@
+LOCALE_NAME = Norsk
+LOCALE_LOADED = Norsk språk fil lasted!
+
+# Footer #
+DONATE_BUTTON = Doner
+
+# Main Tab
+EDIT_BUTTON = Rediger
+LAUNCH_BUTTON = Start
+PROFILE_CREATE = opprett profil
+PROFILE_SELECT = Velg profil
+DOWNLOAD_SERVER_PACK = Last ned Server ModPack
+
+# Map Tab
+INSTALL_MAP = Install Map
+DOWNLOAD_MAP_SERVER = Last ned Server kart
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Instaler TexturePack
+
+# Options pane
+INSTALL_FOLDER = Instalerer mappe...
+FORCE_UPDATE = Tving oppdatere?
+RAM_MAX = Maksimum RAM (MB)
+LANGUAGE = Språk
+ADVANCED_OPTIONS = Avanserte alternativer
+
+# Shared strings
+FILTER_SETTINGS = Filter instilinger
+
+# Modpacks pane
+MODS_EDIT_PACK = Rediger ModPack
+MODS_WAIT_WHILE_LOADING = Vennligst vent mens mods blir lasted...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Aktivere Mods
+MODS_EDIT_DISABLED_LABEL = Deaktivere Mods
+MODS_EDIT_OPEN_FOLDER = Åpne mappe
+MODS_EDIT_ADD_MOD = Legg til Mod
+MODS_EDIT_ENABLE_MOD = << Aktivere
+MODS_EDIT_DISABLE_MOD = Deaktivere >>
+MODS_EDIT_TITLE = ModPack redigerer
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Vennligst vent mens kart blir lasted...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Vennligst vent mens TexturePacks blir lasted...
