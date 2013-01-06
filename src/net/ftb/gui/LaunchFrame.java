@@ -78,6 +78,7 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
+import net.ftb.util.TrackerUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
@@ -128,9 +129,7 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void main(String[] args) {
 		tracker.setEnabled(true);
-		if(!Settings.getSettings().getSnooper()) {
-			tracker.trackPageViewFromReferrer("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version, "Feed The Beast", "http://www.feed-the-beast.com", "/");
-		}
+		TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
 
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
@@ -356,9 +355,7 @@ public class LaunchFrame extends JFrame {
 							} else {
 								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
 							}
-							if(!Settings.getSettings().getSnooper()) {
-								tracker.trackPageViewFromReferrer(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
-							}
+							TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
 						} catch (NoSuchAlgorithmException e) { }
 					}
 				}
@@ -633,9 +630,7 @@ public class LaunchFrame extends JFrame {
 		try {
 			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-			if(!Settings.getSettings().getSnooper()) {
-				tracker.trackPageViewFromReferrer(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
-			}
+			TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) { }

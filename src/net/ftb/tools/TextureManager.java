@@ -27,10 +27,10 @@ import javax.swing.border.EmptyBorder;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
+import net.ftb.util.TrackerUtils;
 
 public class TextureManager extends JDialog {
 	private static TexturePack updateTexture;
@@ -127,9 +127,7 @@ public class TextureManager extends JDialog {
 				}
 				out.flush();
 				out.close();
-				if(!Settings.getSettings().getSnooper()) {
-					LaunchFrame.tracker.trackPageViewFromReferrer(dir + " Install", dir + " / " + compDir + " / " + packVer, "Feed The Beast", "http://www.feed-the-beast.com", "/");
-				}
+				TrackerUtils.sendPageView(dir + " Install", dir + " / " + compDir + " / " + packVer);
 				return true;
 			}
 			return false;

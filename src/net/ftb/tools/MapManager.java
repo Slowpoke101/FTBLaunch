@@ -27,6 +27,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.TrackerUtils;
 
 public class MapManager extends JDialog {
 	private JPanel contentPane;
@@ -102,9 +103,7 @@ public class MapManager extends JDialog {
 			new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
 			FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
 			FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
-			if(!Settings.getSettings().getSnooper()) {
-				LaunchFrame.tracker.trackPageViewFromReferrer(map.getName() + " Install", map.getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
-			}
+			TrackerUtils.sendPageView(map.getName() + " Install", map.getName());
 		}
 	}
 
