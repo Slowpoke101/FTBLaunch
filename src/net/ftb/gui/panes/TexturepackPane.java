@@ -29,15 +29,13 @@ import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.TexturePackFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
+import net.ftb.gui.dialogs.TexturePackFilterDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
-	private static final long serialVersionUID = 1L;
-
 	private static JPanel texturePacks;
 	public static ArrayList<JPanel> texturePackPanels;
 	private static JScrollPane texturePacksScroll;
@@ -49,7 +47,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
 	private static JEditorPane textureInfo;
-	
+
 	private TexturepackPane instance = this;
 
 	private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
@@ -94,7 +92,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl = new JLabel(typeLblText);
 		typeLbl.setBounds(115, 5, 295, 25);
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -254,7 +252,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		}
 	}
 
-	public int getSelectedTexturePackIndex() {
+	public static int getSelectedTexturePackIndex() {
 		return texturePacksAdded ? getIndex() : -1;
 	}
 
@@ -266,7 +264,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
 		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
 		typeLblText += "</body></html>";
-		
+
 		typeLbl.setText(typeLblText);
 		sortTexturePacks();
 		LaunchFrame.getInstance().updateFooter();
@@ -288,11 +286,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	public void updateLocale() {
 		filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
 	}
-	
+
 	private static boolean compatibilityCheck(TexturePack tp) {
 		return (compatible.equalsIgnoreCase("all") || tp.isCompatible(compatible));
 	}
-	
+
 	private static boolean textSearch(TexturePack tp) {
 		String searchString = SearchDialog.lastTextureSearch.toLowerCase();
 		return ((searchString.isEmpty()) || tp.getName().toLowerCase().contains(searchString) || tp.getAuthor().toLowerCase().contains(searchString));

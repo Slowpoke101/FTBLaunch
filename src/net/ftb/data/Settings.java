@@ -145,6 +145,10 @@ public class Settings extends Properties {
 		return getProperty(ModPack.getSelectedPack().getDir(), "Recommended Version");
 	}
 
+	public String getPackVer(String packDir) {
+		return getProperty(packDir, "Recommended Version");
+	}
+
 	public String getLastAddPath() {
 		return getProperty("lastAddPath", "");
 	}

@@ -103,7 +103,7 @@ public class MapManager extends JDialog {
 			FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
 			FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
 			if(!Settings.getSettings().getSnooper()) {
-				LaunchFrame.tracker.trackPageViewFromReferrer(map.getName() + " Install", Map.getSelectedMap().getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
+				LaunchFrame.tracker.trackPageViewFromReferrer(map.getName() + " Install", map.getName(), "Feed The Beast", "http://www.feed-the-beast.com", "/");
 			}
 		}
 	}

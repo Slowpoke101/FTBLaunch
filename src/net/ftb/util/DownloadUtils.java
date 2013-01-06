@@ -49,7 +49,6 @@ public class DownloadUtils extends Thread {
 			}
 		} catch (IOException e) { }
 		connection.disconnect();
-		Logger.logInfo(resolved);
 		return resolved; 
 	}
 
@@ -80,11 +79,25 @@ public class DownloadUtils extends Thread {
 
 	/**
 	 * @param file - file on the repo in static
-	 * @return true if the file exists
+	 * @return boolean representing if the file exists 
 	 */
 	public static boolean staticFileExists(String file) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
+			return !reader.readLine().toLowerCase().contains("not found");
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	/**
+	 * @param file - file on the repo
+	 * @return boolean representing if the file exists 
+	 */
+	public static boolean fileExists(String url) {
+		// TODO: Just create link inside method, no need to cycle download servers if a file doesn't exist.
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
 			return !reader.readLine().toLowerCase().contains("not found");
 		} catch (Exception e) {
 			return false;
@@ -142,7 +155,6 @@ public class DownloadUtils extends Thread {
 				scanner.close();
 			}
 		}
-		Logger.logInfo(resolved);
 		return content;
 	}
 

@@ -17,6 +17,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.ftb.data.events.TexturePackListener;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
@@ -27,7 +29,6 @@ public class TexturePack {
 	private Image logo, image;
 	private String[] compatible;
 	private int index;
-
 	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
 	private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
 
@@ -53,8 +54,25 @@ public class TexturePack {
 		return texturePacks;
 	}
 
+	public static ModPack getModPackComp(String dir) {
+		for(ModPack pack : ModPack.getPackArray()) {
+			if(pack.getDir().equalsIgnoreCase(dir)) {
+				return pack;
+			}
+		}
+		return null;
+	}
+
 	public static TexturePack getTexturePack(int i) {
 		return texturePacks.get(i);
+	}
+
+	/**
+	 * Used to grab the currently selected TexturePack based off the selected index from TexturepackPane
+	 * @return TexturePack - the currently selected TexturePack
+	 */
+	public static TexturePack getSelectedTexturePack() {
+		return getTexturePack(TexturepackPane.getSelectedTexturePackIndex());
 	}
 
 	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, int idx) throws NoSuchAlgorithmException, IOException {
@@ -175,6 +193,14 @@ public class TexturePack {
 
 	public String[] getCompatible() {
 		return compatible;
+	}
+
+	/**
+	 * Used to get the selected mod pack
+	 * @return - the compatible pack based on the selected texture pack
+	 */
+	public String getSelectedCompatible() {
+		return compatible[LaunchFrame.getSelectedTPInstallIndex()];
 	}
 
 	public boolean isCompatible(String dir) {

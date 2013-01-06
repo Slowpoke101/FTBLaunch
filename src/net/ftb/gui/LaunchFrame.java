@@ -135,7 +135,7 @@ public class LaunchFrame extends JFrame {
 		if(new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
 		}
-		
+
 		if(new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
 			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
 		}
@@ -208,8 +208,8 @@ public class LaunchFrame extends JFrame {
 				Map.addListener(frame.mapsPane);
 				Map.loadAll();
 
-//				TexturePack.addListener(frame.tpPane);
-//				TexturePack.loadAll();
+				TexturePack.addListener(frame.tpPane);
+				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()) {
@@ -404,10 +404,10 @@ public class LaunchFrame extends JFrame {
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TextureManager.installDir = (String)tpInstallLocation.getSelectedItem();
-				TextureManager man = new TextureManager(new JFrame(), true);
-				man.setVisible(true);
-				TextureManager.cleanUp();
+				if(tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
+					TextureManager man = new TextureManager(new JFrame(), true);
+					man.setVisible(true);
+				}
 			}
 		});
 
@@ -447,7 +447,6 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
-		tabbedPane.setEnabledAt(4, false);
 		setNewsIcon();
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
@@ -497,7 +496,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setEnabledAt(3, false);
-//		tabbedPane.setEnabledAt(4, false);
+		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(false);
 
 		launch.setEnabled(false);
@@ -570,6 +569,9 @@ public class LaunchFrame extends JFrame {
 			enableObjects();
 			return;
 		}
+		try {
+			TextureManager.updateTextures();
+		} catch (Exception e1) { }
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
@@ -800,7 +802,7 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
-//		tabbedPane.setEnabledAt(4, true);
+		tabbedPane.setEnabledAt(4, true);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
@@ -811,6 +813,7 @@ public class LaunchFrame extends JFrame {
 		users.setEnabled(true);
 		serverbutton.setEnabled(true);
 		tpInstallLocation.setEnabled(true);
+		TextureManager.updating = false;
 	}
 
 	/**

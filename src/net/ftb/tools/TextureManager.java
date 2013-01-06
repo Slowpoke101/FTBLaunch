@@ -3,12 +3,18 @@ package net.ftb.tools;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,38 +25,55 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
-import net.ftb.util.FileUtils;
-import net.ftb.util.OSUtils;
+import net.ftb.util.ErrorUtils;
 
 public class TextureManager extends JDialog {
-	private static final long serialVersionUID = 6897832855341265019L;
-
+	private static TexturePack updateTexture;
+	private static ModPack updateModPack;
 	private JPanel contentPane;
 	private double downloadedPerc;
 	private final JProgressBar progressBar;
 	private final JLabel label;
-	public static boolean overwrite = false;
+	public static boolean updating = false;
 	private static String sep = File.separator;
-	public static String installDir = "FTBBETAA";
 
 	private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			String installPath = OSUtils.getDynamicStorageLocation();
-			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-			if(new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).exists()) {
-				new File(installPath, installDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl()).delete();
+			String installPath = Settings.getSettings().getInstallPath();
+			TexturePack texturePack = TexturePack.getSelectedTexturePack();
+			String compDir = texturePack.getSelectedCompatible();
+			ModPack compPack = TexturePack.getModPackComp(compDir);
+			if(updating) {
+				texturePack = updateTexture;
+				compDir = updateModPack.getDir();
+				compPack = updateModPack;
 			}
-			downloadTexturePack(texturePack.getUrl(), texturePack.getName());
-			return false;
+			if(compPack == null) {
+				ErrorUtils.tossError("Error: Invalid Mod Pack selected.");
+				return false;
+			}
+			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? TexturePack.getModPackComp(compDir).getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
+			String url = DownloadUtils.getCreeperhostLink("texturepacks%5E" + texturePack.getName().replace(" ", "_") + "%5E" + compDir + "%5E" + packVer + "%5E" + texturePack.getUrl());
+			if(DownloadUtils.fileExists(url)) {
+				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl());
+				if(oldFile.exists()) {
+					oldFile.delete();
+				}
+				return downloadTexturePack(texturePack.getUrl(), texturePack.getName(), compDir, packVer, url);
+			} else {
+				ErrorUtils.tossError("Error: Texture Pack not found for select mod pack's version!");
+				return false;
+			}
 		}
 
-		public void downloadUrl(String filename, String urlString) throws MalformedURLException, IOException, NoSuchAlgorithmException {
+		public boolean downloadUrl(String filename, String urlString) {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
@@ -71,33 +94,57 @@ public class TextureManager extends JDialog {
 						label.setText((amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb");
 					}
 				}
+			} catch (MalformedURLException e) {
+				Logger.logError("Texture Download Error", e);
+				return false;
+			} catch (IOException e) {
+				Logger.logError("Texture Download Error", e);
+				return false;
 			} finally {
-				in.close();
-				fout.flush();
-				fout.close();
+				try {
+					in.close();
+					fout.flush();
+					fout.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			return true;
 		}
 
-		protected void downloadTexturePack(String texturePackName, String dir) throws IOException, NoSuchAlgorithmException {
+		protected boolean downloadTexturePack(String texturePackName, String dir, String compDir, String packVer, String url) throws IOException {
 			Logger.logInfo("Downloading Texture Pack");
-			String installPath = OSUtils.getDynamicStorageLocation();
-			new File(installPath + "/TexturePacks/" + dir + "/").mkdirs();
-			new File(installPath + "/TexturePacks/" + dir + "/" + texturePackName).createNewFile();
-			downloadUrl(installPath + "/TexturePacks/" + dir + "/" + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks%5E" + texturePackName.substring(0, texturePackName.length() - 4) + "%5E" + installDir));
-			installTexturePack(texturePackName, dir);
-		}
-
-		protected void installTexturePack(String texturePackName, String dir) throws IOException {
-			Logger.logInfo("Installing Texture Pack");
 			String installPath = Settings.getSettings().getInstallPath();
-			String tempPath = OSUtils.getDynamicStorageLocation();
-			TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-			new File(installPath, installDir + "/minecraft/texturepacks/").mkdirs();
-			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + texturePackName), new File(installPath, installDir + "/minecraft/texturepacks/" + texturePackName));
-			FileUtils.copyFile(new File(tempPath, "TexturePacks/" + dir + "/" + "version"), new File(installPath, installDir + "/minecraft/texturepacks/" + dir + "_version"));
-			if(!Settings.getSettings().getSnooper()) {
-				LaunchFrame.tracker.trackPageViewFromReferrer("", "Map Installation", "Feed The Beast", "http://www.feed-the-beast.com", "/");
+			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep).mkdirs();
+			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName).createNewFile();
+			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, url)) {
+				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+				HashMap<String, String> installedTextures = new HashMap<String, String>();
+				if(versionFile.exists()) {
+					BufferedReader in = new BufferedReader(new FileReader(versionFile));
+					String line;
+					while((line = in.readLine()) != null) {
+						String[] split = line.toLowerCase().split(":");
+						if(split.length == 2) {
+							installedTextures.put(split[0], split[1]);
+						}
+					}
+					in.close();
+				}
+				installedTextures.put(dir.toLowerCase(), packVer);
+				BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
+				for(int i = 0; i < installedTextures.size(); i++) {
+					out.write(installedTextures.keySet().toArray()[i] + ":" + installedTextures.values().toArray()[i]);
+					out.newLine();
+				}
+				out.flush();
+				out.close();
+				if(!Settings.getSettings().getSnooper()) {
+					LaunchFrame.tracker.trackPageViewFromReferrer(dir + " Install", dir + " / " + compDir + " / " + packVer, "Feed The Beast", "http://www.feed-the-beast.com", "/");
+				}
+				return true;
 			}
+			return false;
 		}
 	}
 
@@ -147,15 +194,58 @@ public class TextureManager extends JDialog {
 		});
 	}
 
-	public static void cleanUp() {
-		TexturePack texturePack = TexturePack.getTexturePack(LaunchFrame.getSelectedTexturePackIndex());
-		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "TexturePacks" + sep + texturePack.getName() + sep);
-		for(String file: tempFolder.list()) {
-			if(!file.equals(texturePack.getLogoName()) && !file.equals(texturePack.getImageName()) && !file.equalsIgnoreCase("version")) {
-				try {
-					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
+	public static void updateTextures() throws NoSuchAlgorithmException, IOException {
+		boolean removed = false;
+		ModPack pack = ModPack.getSelectedPack();
+		String installDir = Settings.getSettings().getInstallPath();
+		File textureVersionFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+		HashMap<String, String> installedTextures = new HashMap<String, String>();
+		if(textureVersionFile.exists()) {
+			try {
+				BufferedReader in = new BufferedReader(new FileReader(textureVersionFile));
+				String line;
+				while((line = in.readLine()) != null) {
+					String[] split = line.toLowerCase().split(":");
+					if(split.length == 2) {
+						installedTextures.put(split[0], split[1]);
+					}
+				}
+				in.close();
+			} catch (FileNotFoundException e) {
+				Logger.logError("Update Textures Error", e);
+			} catch (IOException e) {
+				Logger.logError("Update Textures Error", e);
+			}
+			if(installedTextures.size() > 0) {
+				for(TexturePack tp : TexturePack.getTexturePackArray()) {
+					if(installedTextures.containsKey(tp.getName().toLowerCase()) && tp.isCompatible(pack.getDir())) {
+						File texturePackFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + "texturepacks" + sep + tp.getUrl());
+						if(texturePackFile.exists()) {
+							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
+							if(!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
+								String url = DownloadUtils.getCreeperhostLink("texturepacks%5E" + tp.getName().replace(" ", "_") + "%5E" + pack.getDir() + "%5E" + version + "%5E" + tp.getUrl());
+								if(DownloadUtils.fileExists(url)) {
+									updating = true;
+									TextureManager man = new TextureManager(new JFrame(), true);
+									man.updateTexture = tp;
+									man.updateModPack = pack;
+									man.setVisible(true);
+								}
+							}
+						} else {
+							installedTextures.remove(tp.getName().toLowerCase());
+							removed = true;
+						}
+					}
+				}
+				if(removed) {
+					BufferedWriter out = new BufferedWriter(new FileWriter(textureVersionFile));
+					for(int i = 0; i < installedTextures.size(); i++) {
+						out.write(installedTextures.keySet().toArray()[i] + ":" + installedTextures.values().toArray()[i]);
+						out.newLine();
+					}
+					out.flush();
+					out.close();
 				}
 			}
 		}
