@@ -42,7 +42,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
 			public void hyperlinkUpdate(HyperlinkEvent arg0) {
 				if(arg0.getEventType() == EventType.ACTIVATED) {
 					try {
-						Desktop.getDesktop().browse(new URI(arg0.getURL().toString()));
+						OSUtils.browse(arg0.getURL().toString());
 					} catch (Exception e) {
 						Logger.logError(e.getMessage(), e);
 					}
