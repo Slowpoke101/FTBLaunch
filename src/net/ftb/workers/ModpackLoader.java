@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
 	private ArrayList<String> xmlFiles = new ArrayList<String>();
+	private static int counter = 0;
 
 	public ModpackLoader(ArrayList<String> xmlFiles) {
 		this.xmlFiles = xmlFiles;
@@ -28,7 +29,6 @@ public class ModpackLoader extends Thread {
 
 	@Override
 	public void run() {
-		int counter = 0;
 		for(String xmlFile : xmlFiles) {
 			boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
 			File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);
