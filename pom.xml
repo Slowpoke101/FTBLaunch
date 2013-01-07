@@ -58,9 +58,9 @@
         </configuration>
       </plugin>
       <plugin>
-				<groupId>com.akathist.maven.plugins.launch4j</groupId>
-				<artifactId>launch4j-maven-plugin</artifactId>
-				<version>1.5.2</version>
+        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+        <artifactId>launch4j-maven-plugin</artifactId>
+        <version>1.5.2</version>
         <executions>
           <execution>
             <configuration>
@@ -138,11 +138,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.swinglabs</groupId>
-      <artifactId>swingx</artifactId>
+      <groupId>org.swinglabs.swingx</groupId>
+      <artifactId>swingx-all</artifactId>
       <version>1.6.4</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/External Jars/swingx-all-1.6.4.jar</systemPath>
     </dependency>
   </dependencies>
 </project>
