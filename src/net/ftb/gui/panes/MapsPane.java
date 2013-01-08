@@ -227,7 +227,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		sorted.put(1, new ArrayList<Map>());
 		for(Map map : Map.getMapArray()) {
 			if(originCheck(map) && compatibilityCheck(map) && textSearch(map)) {
-				sorted.get((map.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(map);
+				sorted.get((map.isCompatible(ModPack.getSelectedPack().getName())) ? 1 : 0).add(map);
 			}
 		}
 		for(Map map : sorted.get(1)) {

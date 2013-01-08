@@ -54,15 +54,6 @@ public class TexturePack {
 		return texturePacks;
 	}
 
-	public static ModPack getModPackComp(String dir) {
-		for(ModPack pack : ModPack.getPackArray()) {
-			if(pack.getDir().equalsIgnoreCase(dir)) {
-				return pack;
-			}
-		}
-		return null;
-	}
-
 	public static TexturePack getTexturePack(int i) {
 		return texturePacks.get(i);
 	}

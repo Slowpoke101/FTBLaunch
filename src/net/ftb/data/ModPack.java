@@ -98,6 +98,15 @@ public class ModPack {
 		return packs.get(i);
 	}
 
+	public static ModPack getPack(String dir) {
+		for(ModPack pack : packs) {
+			if(pack.getDir().equalsIgnoreCase(dir)) {
+				return pack;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Used to grab the currently selected ModPack based off the selected index from ModPacksPane
 	 * @return ModPack - the currently selected ModPack

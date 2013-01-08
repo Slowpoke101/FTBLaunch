@@ -49,7 +49,7 @@ public class TextureManager extends JDialog {
 			String installPath = Settings.getSettings().getInstallPath();
 			TexturePack texturePack = TexturePack.getSelectedTexturePack();
 			String compDir = texturePack.getSelectedCompatible();
-			ModPack compPack = TexturePack.getModPackComp(compDir);
+			ModPack compPack = ModPack.getPack(compDir);
 			if(updating) {
 				texturePack = updateTexture;
 				compDir = updateModPack.getDir();
@@ -59,7 +59,7 @@ public class TextureManager extends JDialog {
 				ErrorUtils.tossError("Error: Invalid Mod Pack destination selected.");
 				return false;
 			}
-			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? TexturePack.getModPackComp(compDir).getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
+			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
 			if(DownloadUtils.fileExists("texturepacks%5E" + texturePack.getName().replace(" ", "_") + "%5E" + compDir + "%5E" + packVer + "%5E" + texturePack.getUrl())) {
 				populateInstalledTextures(compPack);
 				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl());

@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import net.ftb.data.Map;
 import net.ftb.data.ModPack;
+import net.ftb.data.TexturePack;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -87,6 +89,10 @@ public class ModpackLoader extends Thread {
 				} catch (IOException e) { }
 			}
 		}
-		ModpacksPane.loaded = true;
+		if(!ModpacksPane.loaded) {
+			ModpacksPane.loaded = true;
+			Map.loadAll();
+			TexturePack.loadAll();
+		}
 	}
 }

@@ -205,10 +205,10 @@ public class LaunchFrame extends JFrame {
 				ModPack.loadXml(getXmls());
 
 				Map.addListener(frame.mapsPane);
-				Map.loadAll();
+//				Map.loadAll();
 
 				TexturePack.addListener(frame.tpPane);
-				TexturePack.loadAll();
+//				TexturePack.loadAll();
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if(updateChecker.shouldUpdate()) {
@@ -711,8 +711,10 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void updateTpInstallLocs(String[] locations) {
 		tpInstallLocation.removeAllItems();
-		for (String location : locations) {
-			tpInstallLocation.addItem(location);
+		for(String location : locations) {
+			if(!location.isEmpty()) {
+				tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
+			}
 		}
 	}
 
@@ -722,8 +724,10 @@ public class LaunchFrame extends JFrame {
 	 */
 	public static void updateMapInstallLocs(String[] locations) {
 		mapInstallLocation.removeAllItems();
-		for (String location : locations) {
-			mapInstallLocation.addItem(location);
+		for(String location : locations) {
+			if(!location.isEmpty()) {
+				mapInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
+			}
 		}
 	}
 

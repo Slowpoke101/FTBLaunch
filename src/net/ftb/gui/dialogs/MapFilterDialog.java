@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.ftb.data.Map;
+import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 
@@ -20,8 +21,6 @@ public class MapFilterDialog extends JDialog {
 	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Maps");
-	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
-	private final JComboBox comboBox = new JComboBox();
 
 	private MapsPane pane;
 
@@ -68,9 +67,9 @@ public class MapFilterDialog extends JDialog {
 		packs.add("All");
 		for(int i = 0; i < Map.getMapArray().size(); i++) {
 			String[] compat = Map.getMap(i).getCompatible();
-			for (String compatable : compat) {
-				if (!packs.contains(compatable)) {
-					packs.add(compatable);
+			for(String compatable : compat) {
+				if(!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName())) {
+					packs.add(ModPack.getPack(compatable.trim()).getName());
 				}
 			}
 		}

@@ -249,7 +249,7 @@ public class Map {
 	 * @return - the compatible pack based on the selected map
 	 */
 	public String getSelectedCompatible() {
-		return compatible[LaunchFrame.getSelectedMapInstallIndex()];
+		return compatible[LaunchFrame.getSelectedMapInstallIndex()].trim();
 	}
 
 	/**
@@ -293,13 +293,13 @@ public class Map {
 	}
 
 	/**
-	 * Checks if the map is compatible with the passed modpack directory
-	 * @param dir the directory of the pack
+	 * Checks if the map is compatible with the passed modpack name
+	 * @param packName the name of the pack
 	 * @return true if the pack is compatible with a map
 	 */
-	public boolean isCompatible(String dir) {
+	public boolean isCompatible(String packName) {
 		for (String aCompatible : compatible) {
-			if (aCompatible.equalsIgnoreCase(dir)) {
+			if (ModPack.getPack(aCompatible).getName().equals(packName)) {
 				return true;
 			}
 		}
