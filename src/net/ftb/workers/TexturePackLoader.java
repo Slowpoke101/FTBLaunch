@@ -35,7 +35,7 @@ public class TexturePackLoader extends Thread {
 						textureAttr.getNamedItem("version").getTextContent(), textureAttr.getNamedItem("url").getTextContent(),
 						textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
 						textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), 
-						textureAttr.getNamedItem("description").getTextContent(), i));
+						textureAttr.getNamedItem("description").getTextContent(),textureAttr.getNamedItem("resolution").getTextContent(), i));
 			}
 			TexturepackPane.loaded = true;
 		} catch (Exception e) { 

@@ -3,35 +3,44 @@ package net.ftb.gui.dialogs;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.management.InstanceAlreadyExistsException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.ftb.data.ModPack;
+import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 
+@SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
+	private JLabel compatibleLbl = new JLabel("Compatible Pack:"), resolutionLbl = new JLabel("Mod Pack Resolution:");
+	private JComboBox<String> compatibleBox, resolutionBox;
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
-	private final JLabel lblMinecraftVersion = new JLabel("Minecraft Version:");
-	private final JComboBox comboBox = new JComboBox();
 
+	private TexturepackPane instance;
+	
 	public TexturePackFilterDialog(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
+		
+		this.instance = instance;
 		
 		setupGui();
 		
 		// TODO: Overhaul Filter dialog towards texture packs
 		// Because more than likely ftb won't have a texture pack, and there is no server versions.
 		applyButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				instance.origin = (String)originBox.getSelectedItem();
+				instance.compatible = (String)compatibleBox.getSelectedItem();
+				instance.resolution = (String)resolutionBox.getSelectedItem();
 				instance.updateFilter();
 				setVisible(false);
 			}
@@ -51,26 +60,54 @@ public class TexturePackFilterDialog extends JDialog {
 		});
 	}
 
+	@SuppressWarnings("static-access")
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Filter");
-		setBounds(300, 300, 230, 205);
+		
+		int textures = TexturePack.getTexturePackArray().size();
+		
+		ArrayList<String> comp = new ArrayList<String>();
+		comp.add("All");
+		for(int i = 0; i < textures; i++) {
+			String[] s = TexturePack.getTexturePack(i).getCompatible();
+			for(int j = 0; j < s.length; j++) {
+				if(!comp.contains(ModPack.getPack(s[j].trim()).getName())) {
+					comp.add(ModPack.getPack(s[j].trim()).getName());
+				}
+			}
+		}
+		compatibleBox = new JComboBox<String>(comp.toArray(new String[]{}));
+		
+		ArrayList<String> res = new ArrayList<String>();
+		res.add("All");
+		for(int i = 0; i < textures; i++) {
+			if(!res.contains(TexturePack.getTexturePack(i).getResolution())) {
+				res.add(TexturePack.getTexturePack(i).getResolution());
+			}
+		}
+		resolutionBox = new JComboBox<String>(res.toArray(new String[]{}));
+		
+		compatibleBox.setSelectedItem(instance.compatible);
+		resolutionBox.setSelectedItem(instance.resolution);
+		
+		setBounds(350, 300, 280, 181);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);
 		panel.setLayout(null);
 		setContentPane(panel);
-		typeLbl.setBounds(10, 10, 100, 30);
-		typeBox.setBounds(120, 10, 100, 30);
-		originLbl.setBounds(10, 40, 100, 30);
-		originBox.setBounds(120, 40, 100, 30);
-		applyButton.setBounds(10, 106, 100, 25);
-		searchButton.setBounds(10, 105, 210, 25);
+		compatibleLbl.setBounds(10, 10, 144, 30);
+		compatibleBox.setBounds(146, 10, 118, 30);
+		resolutionBox.setBounds(146, 40, 118, 30);
+		resolutionLbl.setBounds(10, 40, 144, 30);
+		applyButton.setBounds(10, 117, 254, 25);
+		searchButton.setBounds(10, 81, 118, 25);
 		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(120, 106, 100, 25);
-		panel.add(typeLbl);
-		panel.add(typeBox);
-		panel.add(originLbl);
-		panel.add(originBox);
+		cancelButton.setBounds(146, 81, 118, 25);
+		panel.add(compatibleLbl);
+		panel.add(resolutionLbl);
+		panel.add(compatibleBox);
+		panel.add(resolutionBox);
 		panel.add(applyButton);
 		panel.add(cancelButton);
 		panel.add(searchButton);

@@ -42,8 +42,8 @@ public class MapFilterDialog extends JDialog {
 		typeBox.setBounds(120, 10, 100, 30);
 		originLbl.setBounds(10, 40, 100, 30);
 		originBox.setBounds(120, 40, 100, 30);
-		applyButton.setBounds(10, 106, 100, 25);
-		searchButton.setBounds(10, 141, 210, 25);
+		applyButton.setBounds(10, 141, 210, 25);
+		searchButton.setBounds(10, 110, 100, 25);
 		getRootPane().setDefaultButton(applyButton);
 		cancelButton.setBounds(120, 110, 100, 25);
 		panel.add(typeLbl);
@@ -54,7 +54,6 @@ public class MapFilterDialog extends JDialog {
 		panel.add(cancelButton);
 		panel.add(searchButton);
 		panel.setBounds(0, 0, 230, 250);
-		applyButton.setBounds(10, 110, 100, 25);
 		cancelButton.setBounds(120, 110, 100, 25);
 
 		typeBox.setSelectedItem(pane.type);

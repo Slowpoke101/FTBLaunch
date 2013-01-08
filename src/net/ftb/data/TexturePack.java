@@ -25,7 +25,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
-	private String name, author, version, url, mcversion, logoName, imageName, info, sep = File.separator;
+	private String name, author, version, url, mcversion, logoName, imageName, info, resolution, sep = File.separator;
 	private Image logo, image;
 	private String[] compatible;
 	private int index;
@@ -66,7 +66,7 @@ public class TexturePack {
 		return getTexturePack(TexturepackPane.getSelectedTexturePackIndex());
 	}
 
-	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, int idx) throws NoSuchAlgorithmException, IOException {
+	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, String resolution, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -78,6 +78,7 @@ public class TexturePack {
 		imageName = image;
 		this.compatible = compatible.split(",");
 		this.info = info;
+		this.resolution = resolution;
 		File tempDir = new File(installPath, "TexturePacks" + sep + name);
 		File verFile = new File(tempDir, "version");
 		URL url_;
@@ -185,6 +186,10 @@ public class TexturePack {
 	public String[] getCompatible() {
 		return compatible;
 	}
+	
+	public String getResolution() {
+		return resolution;
+	}
 
 	/**
 	 * Used to get the selected mod pack
@@ -194,9 +199,9 @@ public class TexturePack {
 		return compatible[LaunchFrame.getSelectedTPInstallIndex()].trim();
 	}
 
-	public boolean isCompatible(String dir) {
+	public boolean isCompatible(String packName) {
 		for (String aCompatible : compatible) {
-			if (aCompatible.equalsIgnoreCase(dir)) {
+			if (ModPack.getPack(aCompatible).getName().equals(packName)) {
 				return true;
 			}
 		}

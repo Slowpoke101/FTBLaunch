@@ -25,6 +25,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.LauncherStyle;
+import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
@@ -42,7 +43,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static JLabel splash;
 
 	private static JLabel typeLbl;
-	public static String origin = "All", compatible = "All";
+	public static String compatible = "All", resolution = "All";
 	private JButton filter;
 	private static boolean texturePacksAdded = false;
 	private static int selectedTexturePack = 0;
@@ -90,7 +91,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 		String typeLblText = "<html><body>";
 		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + compatible + "</font>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\"> / </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + resolution + "</font>";
 		typeLblText += "</body></html>";
 
 		typeLbl = new JLabel(typeLblText);
@@ -192,7 +195,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		p.add(logo);
 		texturePackPanels.add(p);
 		texturePacks.add(p);
-		if(origin.equalsIgnoreCase("all")) {
+		if(compatible.equalsIgnoreCase("all") && resolution.equalsIgnoreCase("all")) {
 			texturePacks.setMinimumSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
 			texturePacks.setPreferredSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
 		} else {
@@ -220,7 +223,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		sorted.put(0, new ArrayList<TexturePack>());
 		sorted.put(1, new ArrayList<TexturePack>());
 		for(TexturePack texturePack : TexturePack.getTexturePackArray()) {
-			if(compatibilityCheck(texturePack) && textSearch(texturePack)) {
+			if(compatibilityCheck(texturePack) && resolutionCheck(texturePack) && textSearch(texturePack)) {
 				sorted.get((texturePack.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(texturePack);
 			}
 		}
@@ -263,7 +266,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 		String typeLblText = "<html><body>";
 		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + compatible + "</font>";
+		typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\"> / </strong></font>";
+		typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + resolution + "</font>";
 		typeLblText += "</body></html>";
 
 		typeLbl.setText(typeLblText);
@@ -277,7 +282,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static int getTexturePackNum() {
 		if(currentTexturePacks.size() > 0) {
-			if(!origin.equalsIgnoreCase("all")) {
+			if(!compatible.equalsIgnoreCase("all") || !resolution.equalsIgnoreCase("all")) {
 				return currentTexturePacks.get((texturePackPanels.size() - 1)).getIndex();
 			}
 		}
@@ -289,7 +294,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	private static boolean compatibilityCheck(TexturePack tp) {
-		return (compatible.equalsIgnoreCase("all") || tp.isCompatible(compatible));
+		return (compatible.equals("All") || tp.isCompatible(compatible));
+	}
+	
+	private static boolean resolutionCheck(TexturePack tp) {
+		return (resolution.equals("All") || tp.getResolution().equalsIgnoreCase(resolution));
 	}
 
 	private static boolean textSearch(TexturePack tp) {
