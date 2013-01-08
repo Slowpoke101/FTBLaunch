@@ -245,6 +245,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
 				textureInfo.setText(TexturePack.getTexturePack(getIndex()).getInfo());
+				textureInfo.setCaretPosition(0);
 			} else {
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control"));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
