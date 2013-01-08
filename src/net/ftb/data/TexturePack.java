@@ -200,7 +200,7 @@ public class TexturePack {
 	 * @return - the compatible pack based on the selected texture pack
 	 */
 	public String getSelectedCompatible() {
-		return compatible[LaunchFrame.getSelectedTPInstallIndex()];
+		return compatible[LaunchFrame.getSelectedTPInstallIndex()].trim();
 	}
 
 	public boolean isCompatible(String dir) {
