@@ -3,10 +3,13 @@ package net.ftb.gui.panes;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,7 +45,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JPanel packs;
 	public static ArrayList<JPanel> packPanels;
 	private static JScrollPane packsScroll;
-	private static JLabel splash;
 
 	private static JLabel typeLbl;
 	private JButton filter, editModPack;
@@ -62,10 +64,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		super();
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
-
-		splash = new JLabel();
-		splash.setBounds(420, 0, 410, 200);
-		add(splash);
 
 		packPanels = new ArrayList<JPanel>();
 
@@ -158,13 +156,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				}
 			}
 		});
-		packInfo.setBounds(420, 210, 410, 90);
 		// TODO: Fix darker background for text area? Or is it better blending in?
 		packInfo.setBackground(UIManager.getColor("control").darker().darker());
 		add(packInfo);
 
 		infoScroll = new JScrollPane();
-		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setBounds(410, 25, 430, 290);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);
@@ -267,9 +264,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					mods += "</ul>";
 				}
 				packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(ModPack.getPack(getIndex()).getImage()));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				packInfo.setText(ModPack.getPack(getIndex()).getInfo() + mods);
+				File tempDir = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + ModPack.getPack(getIndex()).getDir());
+				packInfo.setText("<html><img src=' file:\\"+ tempDir.getPath() + File.separator + ModPack.getPack(getIndex()).getImageName() +"' width=400 height=200></img> <br>" + ModPack.getPack(getIndex()).getInfo() + mods);
 				packInfo.setCaretPosition(0);
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));

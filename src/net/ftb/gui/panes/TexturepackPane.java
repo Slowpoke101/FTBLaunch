@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	private static JPanel texturePacks;
 	public static ArrayList<JPanel> texturePackPanels;
 	private static JScrollPane texturePacksScroll;
-	private static JLabel splash;
 
 	private static JLabel typeLbl;
 	public static String compatible = "All", resolution = "All";
@@ -59,10 +59,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		super();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
-
-		splash = new JLabel();
-		splash.setBounds(420, 0, 410, 200);
-		this.add(splash);
 
 		texturePackPanels = new ArrayList<JPanel>();
 
@@ -136,7 +132,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(textureInfo);
 
 		JScrollPane infoScroll = new JScrollPane();
-		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setBounds(410, 25, 430, 290);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);
@@ -254,10 +250,10 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				}
 				
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(TexturePack.getTexturePack(getIndex()).getImage()));
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
-				textureInfo.setText(TexturePack.getTexturePack(getIndex()).getInfo() + packs);
+				File tempDir = new File(OSUtils.getDynamicStorageLocation(), "TexturePacks" + File.separator + TexturePack.getTexturePack(getIndex()).getName());
+				textureInfo.setText("<html><img src=' file:\\"+ tempDir.getPath() + File.separator + TexturePack.getTexturePack(getIndex()).getImageName() +"' width=400 height=200></img> <br>" + TexturePack.getTexturePack(getIndex()).getInfo() + packs);
 				textureInfo.setCaretPosition(0);
 			} else {
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control"));

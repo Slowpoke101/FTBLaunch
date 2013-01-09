@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JPanel maps;
 	public static ArrayList<JPanel> mapPanels;
 	private static JScrollPane mapsScroll;
-	private static JLabel splash;
 
 	private static JLabel typeLbl;
 	private JButton filter;
@@ -58,10 +58,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		super();
 		this.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setLayout(null);
-
-		splash = new JLabel();
-		splash.setBounds(420, 0, 410, 200);
-		this.add(splash);
 
 		mapPanels = new ArrayList<JPanel>();
 
@@ -139,7 +135,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(mapInfo);
 
 		JScrollPane infoScroll = new JScrollPane();
-		infoScroll.setBounds(420, 210, 410, 90);
+		infoScroll.setBounds(410, 25, 430, 290);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);
@@ -255,10 +251,10 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 					packs += "</ul>";
 				}
 				mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-				splash.setIcon(new ImageIcon(Map.getMap(getIndex()).getImage()));
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
-				mapInfo.setText(Map.getMap(getIndex()).getInfo() + packs);
+				File tempDir = new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
+				mapInfo.setText("<html><img src=' file:\\"+ tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>" + Map.getMap(getIndex()).getInfo() + packs);
 				mapInfo.setCaretPosition(0);
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));
