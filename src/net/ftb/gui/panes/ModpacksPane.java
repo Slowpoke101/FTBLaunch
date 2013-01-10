@@ -212,6 +212,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				Settings.getSettings().save();
 			}
 		});
+		version.setToolTipText("Modpack Versions");
 		add(version);
 
 		privatePack = new JButton("Private Packs");
