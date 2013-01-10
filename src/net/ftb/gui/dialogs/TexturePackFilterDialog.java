@@ -37,7 +37,7 @@ import net.ftb.gui.panes.TexturepackPane;
 public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel compatibleLbl = new JLabel("Compatible Pack:"), resolutionLbl = new JLabel("Mod Pack Resolution:");
-	private JComboBox<String> compatibleBox, resolutionBox;
+	private JComboBox compatibleBox, resolutionBox;
 	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
 
 	private TexturepackPane instance;
@@ -93,7 +93,7 @@ public class TexturePackFilterDialog extends JDialog {
 				}
 			}
 		}
-		compatibleBox = new JComboBox<String>(comp.toArray(new String[]{}));
+		compatibleBox = new JComboBox(comp.toArray(new String[]{}));
 		
 		ArrayList<String> res = new ArrayList<String>();
 		res.add("All");
@@ -102,7 +102,7 @@ public class TexturePackFilterDialog extends JDialog {
 				res.add(TexturePack.getTexturePack(i).getResolution());
 			}
 		}
-		resolutionBox = new JComboBox<String>(res.toArray(new String[]{}));
+		resolutionBox = new JComboBox(res.toArray(new String[]{}));
 		
 		compatibleBox.setSelectedItem(instance.compatible);
 		resolutionBox.setSelectedItem(instance.resolution);

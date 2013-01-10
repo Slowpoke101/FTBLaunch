@@ -71,7 +71,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JButton server;
 
 	private JButton privatePack;
-	private static JComboBox<String> version;
+	private static JComboBox version;
 	private static int selectedPack = 0;
 	private static boolean modPacksAdded = false;
 	private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
@@ -219,7 +219,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		});
 		add(server);
 
-		version = new JComboBox<String>(new String[]{});
+		version = new JComboBox(new String[]{});
 		version.setBounds(560, 5, 130, 25);
 		version.addActionListener(new ActionListener() {
 			@Override
