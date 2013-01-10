@@ -336,10 +336,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					String tempVer = Settings.getSettings().getPackVer();
 					version.removeAllItems();
 					version.addItem("Recommended");
-					for(String s : pack.getOldVersions()) {
-						version.addItem(s);
-					};
-					version.setSelectedItem(tempVer);
+					if(pack.getOldVersions() != null) {
+						for(String s : pack.getOldVersions()) {
+							version.addItem(s);
+						}
+						version.setSelectedItem(tempVer);
+					}
 				}
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
