@@ -58,7 +58,7 @@ public class MinecraftLauncher {
 		List<String> arguments = new ArrayList<String>();
 
 		String separator = System.getProperty("file.separator");
-		String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
+		String path = System.getProperty("java.home") + separator + "bin" + separator + "javaw";
 		arguments.add(path);
 
 		setMemory(arguments, rmax);
