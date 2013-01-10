@@ -334,8 +334,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					server.setEnabled(true);
 				}
 				
-				version.setSelectedItem(Settings.getSettings().getPackVer());
-				
 				if(ModPack.getPack(getIndex()) != null) {
 					version.removeAllItems();
 					version.addItem("Recommended");
@@ -345,6 +343,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 						}
 					}
 				}
+				
+				version.setSelectedItem(Settings.getSettings().getPackVer());
+				
 			} else {
 				packPanels.get(i).setBackground(UIManager.getColor("control"));
 				packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
