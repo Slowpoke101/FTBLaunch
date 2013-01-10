@@ -208,6 +208,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		
 		version = new JComboBox<String>(new String[]{});
 		version.setBounds(560, 5, 130, 25);
+		version.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Settings.getSettings().setPackVer(String.valueOf(version.getSelectedItem()));
+			}
+		});
 		add(version);
 		
 		privatePack = new JButton("Private Packs");
@@ -327,6 +333,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				} else {
 					server.setEnabled(true);
 				}
+				
+				version.setSelectedItem(Settings.getSettings().getPackVer());
 				
 				if(ModPack.getPack(getIndex()) != null) {
 					version.removeAllItems();

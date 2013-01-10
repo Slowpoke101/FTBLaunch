@@ -34,7 +34,6 @@ public class EditModPackDialog extends JDialog {
 	private JPanel modsFolderPane = new JPanel();
 	private JPanel coreModsFolderPane = new JPanel();
 	private JPanel jarModsFolderPane = new JPanel();
-	private JPanel oldVersionsFolderPane = new JPanel();
 
 	private JLabel enabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL") + "</h1></html></body>");
 	private JLabel disabledLabel = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL") + "</h1></html></body>");
@@ -59,8 +58,6 @@ public class EditModPackDialog extends JDialog {
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
-	private final JLabel lblTheOldVersions = new JLabel("Versions currently available:");
-	private final JComboBox oldVersions;
 
 	public enum Tab {
 		MODS,
@@ -93,27 +90,7 @@ public class EditModPackDialog extends JDialog {
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", modsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", jarModsFolderPane);
 		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", coreModsFolderPane);
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Modpack Version</body></html>", oldVersionsFolderPane);
 
-		oldVersionsFolderPane.setLayout(null);
-		lblTheOldVersions.setBounds(100, 42, 200, 39);
-		lblTheOldVersions.setHorizontalAlignment(SwingConstants.RIGHT);
-		oldVersionsFolderPane.add(lblTheOldVersions);
-		ArrayList<String> items = new ArrayList<String>();
-		items.add("Recommended Version");
-		if(ModPack.getSelectedPack().getOldVersions() != null) {
-			items.addAll(Arrays.asList(ModPack.getSelectedPack().getOldVersions()));
-		}
-		oldVersions = new JComboBox(items.toArray());
-		oldVersions.setSelectedItem(Settings.getSettings().getPackVer());
-		oldVersions.setBounds(317, 40, 250, 42);
-		oldVersions.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Settings.getSettings().setPackVer(String.valueOf(oldVersions.getSelectedItem()));
-			}
-		});
-		oldVersionsFolderPane.add(oldVersions);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
