@@ -101,7 +101,7 @@ public class LaunchFrame extends JFrame {
 
 	protected static UserManager userManager;
 
-	public ModpacksPane modPacksPane;
+	public static ModpacksPane modPacksPane;
 	public MapsPane mapsPane;
 	public TexturepackPane tpPane;
 	public OptionsPane optionsPane;
@@ -881,12 +881,11 @@ public class LaunchFrame extends JFrame {
 			disableMapButtons();
 			break;
 		default:
-			result = modPacksPane.type.equals("Server");
-			launch.setVisible(!result);
+			launch.setVisible(true);
 			edit.setEnabled(users.getSelectedIndex() > 1);
-			edit.setVisible(!result);
-			users.setVisible(!result);
-			serverbutton.setVisible(result);
+			edit.setVisible(true);
+			users.setVisible(true);
+			serverbutton.setVisible(false);
 			disableMapButtons();
 			disableTextureButtons();
 			break;

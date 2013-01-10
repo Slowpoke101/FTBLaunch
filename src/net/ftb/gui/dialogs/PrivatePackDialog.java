@@ -72,7 +72,7 @@ public class PrivatePackDialog extends JDialog {
 		editorPane.setEditable(false);
 		editorPane.setHighlighter(null);
 		editorPane.setContentType("text/html");
-		editorPane.setText("Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove. The removal will take effect on the next launcher load.");
+		editorPane.setText("Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.");
 		add(editorPane);
 
 		btnRemove.setBounds(102, 178, 80, 23);
