@@ -338,7 +338,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					version.addItem("Recommended");
 					for(String s : pack.getOldVersions()) {
 						version.addItem(s);
-					});
+					};
 					version.setSelectedItem(tempVer);
 				}
 			} else {
