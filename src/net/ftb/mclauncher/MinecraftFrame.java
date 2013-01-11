@@ -19,7 +19,6 @@ package net.ftb.mclauncher;
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -63,7 +62,7 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
 		setResizable(true);
-		fixSize();
+		fixSize(Settings.getSettings().getLastDimension());
 		addWindowListener(this);
 		final MinecraftFrame thisFrame = this;
 		addComponentListener(new ComponentListener() {
@@ -89,8 +88,8 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 			try {
 				animation.start();
 				label = new JLabel(new ImageIcon(animationname));
-				label.setBounds(0, 0, size.width - 16, size.height - 38);
-				fixSize();
+				label.setBounds(0, 0, size.width, size.height);
+				fixSize(size);
 				getContentPane().setBackground(Color.black);
 				add(label);
 				animation.sleep(3000);
@@ -111,19 +110,20 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		mcApplet.setStub(appletWrap);
 		add(appletWrap);
 
-		appletWrap.setPreferredSize(new Dimension(size.width - 16, size.height - 38));
+		appletWrap.setPreferredSize(size);
+
 		pack();
 		validate();
 		appletWrap.init();
 		appletWrap.start();
-		fixSize();
+		fixSize(size);
 		setVisible(true);
 	}
 
-	private void fixSize() {
-		this.setSize(Settings.getSettings().getLastDimension());
-		this.setLocation(Settings.getSettings().getLastPosition());
-		this.setExtendedState(Settings.getSettings().getLastExtendedState());
+	private void fixSize(Dimension size) {
+		setSize(size);
+		setLocation(Settings.getSettings().getLastPosition());
+		setExtendedState(Settings.getSettings().getLastExtendedState());
 	}
 
 	@Override
