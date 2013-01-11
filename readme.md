@@ -37,5 +37,5 @@ To do this, run these commands:
     git pull --rebase upstream master
     git push --force origin <branch_name>
 
-The first command is only necessary the first time. If you have issues merging, you will need to get a merge tool such as [P4Merge]().
+The first command is only necessary the first time. If you have issues merging, you will need to get a merge tool such as [P4Merge](http://perforce.com/product/components/perforce_visual_merge_and_diff_tools).
 Once it is set up, run `git mergetool`. Once all conflicts are fixed, run `git rebase --continue`, and `git push --force origin <branch_name>`.

@@ -1,28 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.ftb</groupId>
   <artifactId>FTB_Launcher</artifactId>
   <version>1.2.1</version>
   <packaging>jar</packaging>
-  <inceptionYear>2012</inceptionYear>
-  <properties>
-    <buildNumber>0</buildNumber>
-    <mainClass>net.ftb.gui.LaunchFrame</mainClass>
-    <minimumJreVersion>1.6</minimumJreVersion>
-    <currentYear>2013</currentYear>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
   <name>FTB Launcher</name>
+  <description>Launcher for the FTB Mod Pack </description>
   <url>https://github.com/Slowpoke101/FTBLaunch</url>
-
+  <inceptionYear>2012</inceptionYear>
   <organization>
     <name>FTB Launcher Contributors</name>
     <url>https://github.com/Slowpoke101/FTBLaunch</url>
   </organization>
-
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -32,9 +23,42 @@
     </license>
   </licenses>
 
+  <scm>
+    <connection>scm:git:https://github.com/Slowpoke101/FTBLaunch.git</connection>
+    <developerConnection>scm:git:git@github.com:Slowpoke101/FTBLaunch.git</developerConnection>
+    <tag>master</tag>
+    <url>https://github.com/Slowpoke101/FTBLaunch</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/Slowpoke101/FTBLaunch/issues</url>
+  </issueManagement>
+
+  <properties>
+    <buildNumber>0</buildNumber>
+    <mainClass>net.ftb.gui.LaunchFrame</mainClass>
+    <minimumJreVersion>1.6</minimumJreVersion>
+    <currentYear>2013</currentYear>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.swinglabs.swingx</groupId>
+      <artifactId>swingx-all</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <defaultGoal>clean package</defaultGoal>
-
     <sourceDirectory>${project.basedir}/src</sourceDirectory>
     <resources>
       <resource>
@@ -81,6 +105,10 @@
         <version>1.5.2</version>
         <executions>
           <execution>
+            <goals>
+              <goal>launch4j</goal>
+            </goals>
+            <phase>package</phase>
             <configuration>
               <headerType>gui</headerType>
               <stayAlive>false</stayAlive>
@@ -107,10 +135,6 @@
                 <originalFilename>${project.artifactId}.exe</originalFilename>
               </versionInfo>
             </configuration>
-            <phase>package</phase>
-            <goals>
-              <goal>launch4j</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
@@ -121,6 +145,9 @@
         <version>1.7</version>
         <executions>
           <execution>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>package</phase>
             <configuration>
               <target>
@@ -140,9 +167,6 @@
                 <delete dir="${project.build.directory}/${project.artifactId}.app" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
@@ -153,6 +177,10 @@
         <version>1.10.b1</version>
         <executions>
           <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+            <phase>clean</phase>
             <configuration>
               <properties>
                 <name>${project.name}</name>
@@ -175,30 +203,22 @@
                 <include>src/net/minecraft/**</include>
               </includes>
               <excludes>
-                  <exclude>src/net/ftb/tracking/**</exclude>
+                <exclude>src/net/ftb/tracking/**</exclude>
               </excludes>
             </configuration>
-            <phase>clean</phase>
-            <goals>
-              <goal>format</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.swinglabs.swingx</groupId>
-      <artifactId>swingx-all</artifactId>
-      <version>1.6.4</version>
-    </dependency>
-  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.9.1</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
