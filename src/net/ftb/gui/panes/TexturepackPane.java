@@ -253,9 +253,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	private static void updateTexturePacks() {
-		for (int i = 0; i < texturePackPanels.size(); i++) {
+		for(int i = 0; i < texturePackPanels.size(); i++) {
 			if(selectedTexturePack == i) {
-				
 				String packs = "";
 				if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
 					packs += "<p>This texture pack works with the folowing packs:</p><ul>";
@@ -264,7 +263,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 					}
 					packs += "</ul>";
 				}
-				
 				texturePackPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
 				texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());

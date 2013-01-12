@@ -732,6 +732,7 @@ public class LaunchFrame extends JFrame {
 				tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
 			}
 		}
+		tpInstallLocation.setSelectedItem(ModPack.getSelectedPack().getName());
 	}
 
 	/**
