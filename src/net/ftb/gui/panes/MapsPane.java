@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -270,7 +271,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
 				File tempDir = new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
-				mapInfo.setText("<html><img src=' file:\\"+ tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>" + Map.getMap(getIndex()).getInfo() + packs);
+				mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>" + Map.getMap(getIndex()).getInfo() + packs);
 				mapInfo.setCaretPosition(0);
 			} else {
 				mapPanels.get(i).setBackground(UIManager.getColor("control"));
