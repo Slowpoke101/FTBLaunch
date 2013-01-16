@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CFBundleName</key>
+    <string>${bundleName}</string>
+    <key>CFBundleIdentifier</key>
+    <string>${mainClass}</string>
+    <key>CFBundleVersion</key>
+    <string>${version}</string>
+    <key>CFBundleGetInfoString</key>
+    <string>${bundleName} (c) 2012-2013 FTB Developers</string>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <string>true</string>
+    <key>CFBundleExecutable</key>
+    <string>JavaApplicationStub</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>English</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleIconFile</key>
+    <string>${iconFile}</string>
+    <key>Java</key>
+    <dict>
+      <key>MainClass</key>
+      <string>${mainClass}</string>
+      <key>ClassPath</key>
+      ${classpath}
+      <key>JVMVersion</key>
+      <string>${jvmVersion}</string>
+      <key>VMOptions</key>
+      <string>${vmOptions}</string>
+    </dict>
+  </dict>
+</plist>
