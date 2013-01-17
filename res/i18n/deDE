@@ -23,6 +23,7 @@ INSTALL_FOLDER = Installationsverzeichnis
 FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
+ADVANCED_OPTIONS = Professionelle Optionen
 
 # Shared strings
 FILTER_SETTINGS = Filtern
