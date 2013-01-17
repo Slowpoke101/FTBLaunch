@@ -28,7 +28,7 @@ LANGUAGE = Sprache
 FILTER_SETTINGS = Filtern
 
 # Modpacks pane
-MODS_EDIT_PACK = Mod bearbeiten
+MODS_EDIT_PACK = Modpack bearbeiten
 MODS_WAIT_WHILE_LOADING = Bitte warten während Mods geladen werden...
 
 # EditModPackDialog
