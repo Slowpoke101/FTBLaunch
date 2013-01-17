@@ -61,19 +61,17 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (Exception e1) { }
 		}
-
-		// Fullscreen support in OS X.
-		if (OSUtils.getCurrentOS() == OS.MACOSX) {
-			try
-			{
+		// TODO: TEST THIS, also implement into using settings.
+		if(OSUtils.getCurrentOS() == OS.MACOSX) {
+			try {
 				Class<?> fullScreenUtilityClass = Class.forName("com.apple.eawt.FullScreenUtilities");
 				java.lang.reflect.Method setWindowCanFullScreenMethod = fullScreenUtilityClass.getDeclaredMethod("setWindowCanFullScreen", new Class[] { Window.class, Boolean.TYPE });
 				setWindowCanFullScreenMethod.invoke(null, new Object[] { this, Boolean.valueOf(true) });
 			} catch (Exception e) {
-				// This is not a fatal exception, so just log it for brevity.
 				e.printStackTrace();
 			}
 		}
+		// END TEST
 
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
