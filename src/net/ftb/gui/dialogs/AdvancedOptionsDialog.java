@@ -66,7 +66,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		}
 		add(downloadServers);
 
-		JLabel additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
+		JLabel additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS") + " ");
 		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
 		add(additionalJavaOptionsLbl);
 
