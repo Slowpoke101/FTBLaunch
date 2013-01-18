@@ -131,7 +131,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		snooper.addFocusListener(settingsChangeListener);
 		add(snooper);
 
-		exitBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS_EXIT"));
+		exitBtn = new JButton(I18N.getLocaleString("MAIN_EXIT"));
 		exitBtn.setBounds(150, 190, 140, 28);
 		exitBtn.addActionListener(new ActionListener() {
 			@Override
