@@ -32,14 +32,14 @@ public class PasswordDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	JPanel panel = new JPanel();
 	JPasswordField password = new JPasswordField(1);
-	JLabel passLabel = new JLabel("Password:");
-	JButton submitButton = new JButton("Submit");
+	JLabel passLabel = new JLabel(I18N.getLocaleString("PASSWORD_PASSLABEL"));
+	JButton submitButton = new JButton(I18N.getLocaleString("MAIN_SUBMIT"));
 
 	public PasswordDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Please Enter Password");
+		setTitle(I18N.getLocaleString("PASSWORD_ENTER"));
 		setBounds(300, 300, 300, 120);
 		setResizable(false);
 
