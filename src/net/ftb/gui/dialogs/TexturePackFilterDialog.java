@@ -36,9 +36,9 @@ import net.ftb.gui.panes.TexturepackPane;
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel compatibleLbl = new JLabel("Compatible Pack:"), resolutionLbl = new JLabel("Mod Pack Resolution:");
+	private JLabel compatibleLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK")), resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
 	private JComboBox compatibleBox, resolutionBox;
-	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Packs");
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHTEXTUREPACK"));
 
 	private TexturepackPane instance;
 	
@@ -79,7 +79,7 @@ public class TexturePackFilterDialog extends JDialog {
 	@SuppressWarnings("static-access")
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Filter");
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
 		
 		int textures = TexturePack.getTexturePackArray().size();
 		
