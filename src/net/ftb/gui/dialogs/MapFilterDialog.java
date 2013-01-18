@@ -48,7 +48,7 @@ public class MapFilterDialog extends JDialog {
 
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Filter");
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
 		setBounds(300, 300, 230, 205);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);
@@ -79,7 +79,7 @@ public class MapFilterDialog extends JDialog {
 		panel.add(packLbl);
 
 		ArrayList<String> packs = new ArrayList<String>();
-		packs.add(I18N.getLocaleString("MAIN_ALL"));
+		packs.add("All");
 		for(int i = 0; i < Map.getMapArray().size(); i++) {
 			String[] compat = Map.getMap(i).getCompatible();
 			for(String compatable : compat) {
