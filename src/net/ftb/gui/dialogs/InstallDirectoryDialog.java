@@ -37,7 +37,7 @@ import net.ftb.util.OSUtils;
 public class InstallDirectoryDialog extends JDialog {
 	private JLabel lblInstallFolder;
 	private JTextField installFolderTextField;
-	private JLabel text = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALLDIR_FIRSTUSE") + "</strong></font></center></body></html>");
+	private JLabel text = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
 	private JButton applyButton = new JButton("Apply");
 
 	public InstallDirectoryDialog() {
