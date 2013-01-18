@@ -38,7 +38,7 @@ public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel compatibleLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK")), resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
 	private JComboBox compatibleBox, resolutionBox;
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHTEXTUREPACK"));
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
 
 	private TexturepackPane instance;
 	
