@@ -24,6 +24,7 @@ FORCE_UPDATE = Force update?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 ADVANCED_OPTIONS = Advanced Options
+INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
 
 # Shared strings
 FILTER_SETTINGS = Filter Settings
@@ -46,3 +47,40 @@ MAPS_WAIT_WHILE_LOADING = Please wait while maps are being loaded...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Please wait while texture packs are being loaded...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Advanced Options
+ADVANCED_OPTIONS_DLLOCATION = Download Location:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Window Size:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Window Position:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Maximised?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disable Google Analytic Tracking
+
+# Update
+UPDATE_WICHUPDATE = Do you wish to update?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = of the launcher is available.
+LUNCHERUPDATE_CHANGELOG = View Changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update Available
+
+# Filter
+FILTER_PACKTYPE = Mod Pack Type:
+FILTER_ORIGIN = Mod Pack Origin:
+FILTER_COMPERTIBLEPACK = Compatible Pack:
+FILTER_3THPARTY = 3rd Party
+FILTER_APPLY = Apply Filter
+FILTER_SEARCHMAP = Search Maps
+FILTER_TITLE = Filter
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Warning! There is already a map by that name!
+MAPOVERRIDE_WISHOVERRIDE = Do you want to overwrite?
+
+# Main
+MAIN_EXIT = EXIT
+MAIN_APPLY = Apply
+MAIN_YES = Yes
+MAIN_NO = No
+MAIN_ALL = All
+MAIN_CANCEL = Cancel
