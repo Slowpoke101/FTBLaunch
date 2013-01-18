@@ -47,12 +47,12 @@ public class AdvancedOptionsDialog extends JDialog {
 	public AdvancedOptionsDialog() {
 		super(LaunchFrame.getInstance(), true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Advanced Options");
+		setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setBounds(440, 260, 440, 260);
 
-		JLabel downloadLocation = new JLabel("Download Location:");
+		JLabel downloadLocation = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
 		downloadLocation.setBounds(10, 10, 110, 25);
 		add(downloadLocation);
 
@@ -66,7 +66,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		}
 		add(downloadServers);
 
-		JLabel additionalJavaOptionsLbl = new JLabel("Additional Java Parameters: ");
+		JLabel additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
 		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
 		add(additionalJavaOptionsLbl);
 
@@ -82,7 +82,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		minecraftX.addFocusListener(settingsChangeListener);
 		minecraftX.setColumns(10);
 
-		JLabel lblMinecraftWindowSize = new JLabel("Minecraft Window Size:");
+		JLabel lblMinecraftWindowSize = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
 		lblMinecraftWindowSize.setBounds(10, 80, 170, 25);
 		add(lblMinecraftWindowSize);
 
@@ -97,7 +97,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		lblX_1.setBounds(297, 80, 15, 25);
 		add(lblX_1);
 
-		JLabel lblMinecraftWindowPosition = new JLabel("Minecraft Window Position:");
+		JLabel lblMinecraftWindowPosition = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
 		lblMinecraftWindowPosition.setBounds(10, 115, 170, 25);
 		add(lblMinecraftWindowPosition);
 
@@ -119,19 +119,19 @@ public class AdvancedOptionsDialog extends JDialog {
 		yPosField.addFocusListener(settingsChangeListener);
 		yPosField.setColumns(10);
 
-		autoMaxCheck = new JCheckBox("Auto Maximised?");
+		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
 		autoMaxCheck.setBounds(10, 150, 170, 25);
 		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		add(autoMaxCheck);
 
-		snooper = new JCheckBox("Disable Google Analytic Tracking");
+		snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
 		snooper.setBounds(190, 150, 300, 25);
 		snooper.setSelected(settings.getSnooper());
 		snooper.addFocusListener(settingsChangeListener);
 		add(snooper);
 
-		exitBtn = new JButton("EXIT");
+		exitBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS_EXIT"));
 		exitBtn.setBounds(150, 190, 140, 28);
 		exitBtn.addActionListener(new ActionListener() {
 			@Override
