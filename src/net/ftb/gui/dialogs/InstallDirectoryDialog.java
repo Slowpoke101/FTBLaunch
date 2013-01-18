@@ -17,6 +17,7 @@
 package net.ftb.gui.dialogs;
 
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,17 +88,14 @@ public class InstallDirectoryDialog extends JDialog {
 		SpringLayout layout = new SpringLayout();
 		panel.setLayout(layout);
 
-		JLabel messageLbl = new JLabel(
-			"<html><body><center><font size=\"3\"><strong>"
-			+ I18N.getLocaleString("INSTALL_FIRSTUSE")
-			+ "</strong></font></center></body></html>"
-		);
+		messageLbl = new JLabel(I18N.getLocaleString("INSTALL_FIRSTUSE"));
 		installPathLbl = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
 		installPath = new JTextField(10);
 		installPathBrowse = new JButton("...");
 		apply = new JButton(I18N.getLocaleString("MAIN_APPLY"));
 
 		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		messageLbl.setFont(messageLbl.getFont().deriveFont(Font.BOLD, 16.0f));
 
 		panel.add(messageLbl);
 		panel.add(installPathBrowse);

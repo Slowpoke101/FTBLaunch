@@ -39,6 +39,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -246,9 +247,22 @@ public class EditModPackDialog extends JDialog {
 
 		panel.add(tabbedPane);
 
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", new JPanel(new BorderLayout()));
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", new JPanel(new BorderLayout()));
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", new JPanel(new BorderLayout()));
+		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+
+		JLabel tabLabel;
+		tabLabel = new JLabel("Mods");
+		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+		tabbedPane.setTabComponentAt(0, tabLabel);
+
+		tabLabel = new JLabel("JarMods");
+		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+		tabbedPane.setTabComponentAt(1, tabLabel);
+
+		tabLabel = new JLabel("CoreMods");
+		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+		tabbedPane.setTabComponentAt(2, tabLabel);
 
 		enabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		disabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
