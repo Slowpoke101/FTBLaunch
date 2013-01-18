@@ -34,17 +34,17 @@ public class LauncherUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("Version " + UpdateChecker.verString + " of the launcher is available.");
-	private JLabel textTwo = new JLabel("Do you wish to update?");
-	private JButton changelog = new JButton("View Changelog");
-	private JButton yesButton = new JButton("Yes");
-	private JButton noButton = new JButton("No");
+	private JLabel textOne = new JLabel("Version " + UpdateChecker.verString + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
+	private JLabel textTwo = new JLabel(I18N.getLocaleString("LUNCHERUPDATE_WICHUPDATE"));
+	private JButton changelog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
+	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton noButton = new JButton("MAIN_NO");
 
 	public LauncherUpdateDialog(final UpdateChecker updateChecker) {
 		super(LaunchFrame.getInstance(), true);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Launcher Update Available");
+		setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
 		setBounds(300, 300, 300, 150);
 		setResizable(false);
 
