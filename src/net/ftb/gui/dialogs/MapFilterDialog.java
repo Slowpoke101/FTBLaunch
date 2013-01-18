@@ -34,7 +34,7 @@ import net.ftb.gui.panes.MapsPane;
 
 public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE")), originLbl = new JLabel(I18N.getLocaleString("PACK_ORIGIN")), packLbl = new JLabel(I18N.getLocaleString("FILTER_COPERTIBLEPACK"));
+	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE")), originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN")), packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
 	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}), compatibleBox;
 	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
 
