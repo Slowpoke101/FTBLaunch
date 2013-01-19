@@ -39,7 +39,7 @@ public class PasswordDialog extends JDialog {
 		super(instance, modal);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("PASSWORD_ENTER"));
+		setTitle(I18N.getLocaleString("PASSWORD_TITLE"));
 		setBounds(300, 300, 300, 120);
 		setResizable(false);
 
