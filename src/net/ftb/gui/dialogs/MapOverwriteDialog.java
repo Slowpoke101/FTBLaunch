@@ -31,10 +31,10 @@ import net.ftb.tools.MapManager;
 
 public class MapOverwriteDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("Warning! There is already a map by that name!");
-	private JLabel textTwo = new JLabel("Do you want to overwrite?");
-	private JButton yesButton = new JButton("Yes");
-	private JButton noButton = new JButton("No");
+	private JLabel textOne = new JLabel(I18N.getLocaleString("MAPOVERRIDE_FOUNDERROR"));
+	private JLabel textTwo = new JLabel(I18N.getLocaleString("MAPOVERRIDE_WISHOVERRIDE"));
+	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 	public MapOverwriteDialog() {
 		super(LaunchFrame.getInstance(), true);

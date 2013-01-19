@@ -34,17 +34,17 @@ public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("A new mod pack version is available!");
-	private JLabel textTwo = new JLabel("Do you wish to update?");
-	private JButton yesButton = new JButton("Yes");
-	private JButton noButton = new JButton("No");
-	private JCheckBox backup = new JCheckBox("Back-up config files?");
+	private JLabel textOne = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
+	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE")));
+	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES")));
+	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO")));
+	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP")));
 
 	public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Mod Pack Update Available");
+		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE")));
 		setBounds(300, 300, 300, 140);
 		setResizable(false);
 

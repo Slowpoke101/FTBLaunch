@@ -37,8 +37,8 @@ import net.ftb.util.OSUtils;
 public class InstallDirectoryDialog extends JDialog {
 	private JLabel lblInstallFolder;
 	private JTextField installFolderTextField;
-	private JLabel text = new JLabel("<html><body><center><font size=\"3\"><strong>Since this is your first time using the launcher, we suggest setting the install directory.</strong></font></center></body></html>");
-	private JButton applyButton = new JButton("Apply");
+	private JLabel text = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
+	private JButton applyButton = new JButton(I18N.getLocaleString("MAIN_APPLY"));
 
 	public InstallDirectoryDialog() {
 		super(LaunchFrame.getInstance(), true);
