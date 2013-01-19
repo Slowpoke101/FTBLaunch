@@ -37,7 +37,7 @@ public class ModPackFilterDialog extends JDialog {
 	private JComboBox originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}), compatibleBox, mcVersionBox, 
 			avalBox = new JComboBox(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")});
 	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), btnSearch = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK");
-	private final JLabel lblMinecraftVersion = new JLabel(I18N.getLocaleString("MC_VERSION"));
+	private final JLabel lblMinecraftVersion = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
 
 	private ModpacksPane pane;
 
