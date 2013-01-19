@@ -21,8 +21,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,15 +190,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		filler.setForeground(Color.white);
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
-		MouseListener lin = new MouseListener() {
+		MouseAdapter lin = new MouseAdapter() {
 			@Override public void mouseClicked(MouseEvent e) {
 				selectedTexturePack = texturePackIndex;
 				updateTexturePacks();
 			}
-			@Override public void mouseReleased(MouseEvent e) { }
-			@Override public void mousePressed(MouseEvent e) { }
-			@Override public void mouseExited(MouseEvent e) { }
-			@Override public void mouseEntered(MouseEvent e) { }
 		};
 		p.addMouseListener(lin);
 		filler.addMouseListener(lin);

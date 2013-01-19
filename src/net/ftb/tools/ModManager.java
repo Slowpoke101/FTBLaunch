@@ -16,8 +16,8 @@
  */
 package net.ftb.tools;
 
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -167,7 +167,7 @@ public class ModManager extends JDialog {
 		label.setBounds(0, 42, 313, 14);
 		contentPane.add(label);
 
-		addWindowListener(new WindowListener() {
+		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				ModManagerWorker worker = new ModManagerWorker() {
@@ -179,12 +179,6 @@ public class ModManager extends JDialog {
 				};
 				worker.execute();
 			}
-			@Override public void windowActivated(WindowEvent e) { }
-			@Override public void windowClosed(WindowEvent e) { }
-			@Override public void windowClosing(WindowEvent e) { }
-			@Override public void windowDeactivated(WindowEvent e) { }
-			@Override public void windowDeiconified(WindowEvent e) { }
-			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
 
