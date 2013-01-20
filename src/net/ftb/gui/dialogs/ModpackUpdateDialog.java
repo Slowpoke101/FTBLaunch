@@ -34,9 +34,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.tools.ModManager;
 
+@SuppressWarnings("serial")
 public class ModpackUpdateDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
-
 	private JLabel messageLbl;
 	private JLabel updateLbl;
 	private JButton update;

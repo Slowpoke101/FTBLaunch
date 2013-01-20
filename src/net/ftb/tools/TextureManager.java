@@ -48,6 +48,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.TrackerUtils;
 
+@SuppressWarnings("serial")
 public class TextureManager extends JDialog {
 	private static TexturePack updateTexture;
 	private static ModPack updateModPack;

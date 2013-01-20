@@ -53,6 +53,7 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JPanel maps;
 	public static ArrayList<JPanel> mapPanels;

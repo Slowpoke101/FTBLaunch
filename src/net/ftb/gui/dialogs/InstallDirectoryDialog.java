@@ -38,6 +38,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class InstallDirectoryDialog extends JDialog {
 	private JLabel messageLbl;
 	private JLabel installPathLbl;

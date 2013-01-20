@@ -36,9 +36,8 @@ import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 
+@SuppressWarnings("serial")
 public class ProfileEditorDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
-
 	private JLabel usernameLbl;
 	private JTextField username;
 	private JLabel passwordLbl;

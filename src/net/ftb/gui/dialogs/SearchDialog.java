@@ -33,6 +33,7 @@ import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.gui.panes.TexturepackPane;
 
+@SuppressWarnings("serial")
 public class SearchDialog extends JDialog {
 	public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
 	public JTextField query = new JTextField(20);

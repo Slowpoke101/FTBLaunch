@@ -49,6 +49,7 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
+@SuppressWarnings("serial")
 public class ModManager extends JDialog {
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static String curVersion = "";

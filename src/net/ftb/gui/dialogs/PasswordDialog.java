@@ -31,8 +31,8 @@ import javax.swing.SpringLayout;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 
+@SuppressWarnings("serial")
 public class PasswordDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
 	private JLabel passwordLbl;
 	private JPasswordField password;
 	private JButton login;

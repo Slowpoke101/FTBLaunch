@@ -58,9 +58,8 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
+@SuppressWarnings("serial")
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
-	private static final long serialVersionUID = 1L;
-
 	private static JPanel packs;
 	public static ArrayList<JPanel> packPanels;
 	private static JScrollPane packsScroll;

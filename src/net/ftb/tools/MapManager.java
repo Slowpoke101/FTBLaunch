@@ -45,6 +45,7 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
+@SuppressWarnings("serial")
 public class MapManager extends JDialog {
 	private JPanel contentPane;
 	private double downloadedPerc;

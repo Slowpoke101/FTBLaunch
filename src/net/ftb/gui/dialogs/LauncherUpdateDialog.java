@@ -34,8 +34,6 @@ import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
 
 public class LauncherUpdateDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
-
 	private JLabel messageLbl;
 	private JLabel updateLbl;
 	private JButton showChangeLog;

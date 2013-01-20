@@ -40,8 +40,8 @@ import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.minecraft.Launcher;
 
+@SuppressWarnings("serial")
 public class MinecraftFrame extends JFrame {
-	private static final long serialVersionUID = 1L;
 	private Launcher appletWrap = null;
 	private String animationname;
 
