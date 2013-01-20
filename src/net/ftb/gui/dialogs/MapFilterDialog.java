@@ -34,9 +34,9 @@ import net.ftb.gui.panes.MapsPane;
 
 public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel("Mod Pack Type:"), originLbl = new JLabel("Mod Pack Origin:"), packLbl = new JLabel("Compatible Pack:");
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {"All", "FTB", "3rd Party"}), compatibleBox;
-	private JButton applyButton = new JButton("Apply Filter"), cancelButton = new JButton("Cancel"), searchButton = new JButton("Search Maps");
+	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE")), originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN")), packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}), compatibleBox;
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
 
 	private MapsPane pane;
 
@@ -48,7 +48,7 @@ public class MapFilterDialog extends JDialog {
 
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Filter");
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
 		setBounds(300, 300, 230, 205);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);

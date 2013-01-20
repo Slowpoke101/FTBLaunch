@@ -23,12 +23,13 @@ INSTALL_FOLDER = Installationsverzeichnis
 FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
+ADVANCED_OPTIONS = Professionelle Optionen
 
 # Shared strings
 FILTER_SETTINGS = Filtern
 
 # Modpacks pane
-MODS_EDIT_PACK = Mod bearbeiten
+MODS_EDIT_PACK = Modpack bearbeiten
 MODS_WAIT_WHILE_LOADING = Bitte warten während Mods geladen werden...
 
 # EditModPackDialog
@@ -45,3 +46,79 @@ MAPS_WAIT_WHILE_LOADING = Bitte warten während Maps geladen werden...
 
 # Texturepacks pane
 TEXTURE_WAIT_WHILE_LOADING = Bitte warten während Texture Packs geladen werden...
+
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Professionelle Einstellungen
+ADVANCED_OPTIONS_DLLOCATION = Download Ort:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Follbind?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
+
+# Update
+UPDATE_WICHUPDATE = Wilst du Updaten?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist da.
+LUNCHERUPDATE_CHANGELOG = Zeig mir die Änderungen
+LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist da.
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist da!
+UPDATEMODPACK_BACKUP = Sichere die Einsellungen?
+UPDATEMODPACK_TITLE = Modpack Update ist da
+
+# Private Pack
+PRIVATEPACK_TITLE = Private Pack Helfer
+PRIVATEPACK_ERROR = Falsches Privates Pack.
+PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
+PRIVATEPACK_SECCESS = Erfolgreich Gelöscht.
+PRIVATEPACK_NOTEXISTS = Falscher Pack name.
+
+# Filter
+FILTER_PACKTYPE = Mod Pack Type:
+FILTER_ORIGIN = Mod Pack Macher:
+FILTER_COMPERTIBLEPACK = Compatible Pack:
+FILTER_3THPARTY = 3rd Party
+FILTER_APPLY = Filter Annehmen
+FILTER_SEARCHMAP = Suche Maps
+FILTER_TITLE = Filter
+FILTER_PUBLIC = Öfentlich
+FILTER_PRIVATE = Privat
+FILTER_MODPACKAVALIABILITY = Mod Pack Verfügbarkeit:
+FILTER_MCVERSION = Minecraft Version:
+FILTER_RESULUTION = Mod Pack Auflösung:
+FILTER_TEXSEARCH = Suche Packs
+
+# Play Offline
+PLAYOFFLINE_WANNA = Etwas stimmt nicht..\nWillst du offline spielen?
+
+# Password
+PASSWORD_PASSLABEL = Password: 
+PASSWORD_TITLE = Bitte gib dein Password ein
+
+# Profile
+PROFILEADDER_USERNAME = Nutzername:
+PROFILEADDER_PASSWORD = Password:
+PROFILEADDER_NAME = Profile Name:
+PROFILEADDER_SAVEPASSWORD = Speichere das Password
+PROFILEADDER_TITLE = Profilersteller
+PROFILADDER_ERROR = Fehler bei der Profilerstellung.
+PROFILEADDER_UPDATE = Update
+PROFILEDITOR_TITLE = Profile Editor
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Warnung! Da ist schon eine Map mit dem Namen!
+MAPOVERRIDE_WISHOVERRIDE = willst du sie überschreiben?
+
+# Main
+MAIN_EXIT = EXIT
+MAIN_APPLY = Annehmen
+MAIN_YES = Ja
+MAIN_NO = Nein
+MAIN_ALL = Alle
+MAIN_CANCEL = Beenden
+MAIN_SUBMIT = Abschicken
+MAIN_REMOVE = Löschen
+MAIN_ADD = Hinzufügen

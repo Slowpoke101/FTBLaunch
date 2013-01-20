@@ -40,9 +40,9 @@ import net.ftb.util.OSUtils;
 
 public class PrivatePackDialog extends JDialog {
 	private JTextField textField = new JTextField();
-	private JButton btnRemove = new JButton("Remove");
-	private JButton btnAdd = new JButton("Add");
-	private JButton btnCancel = new JButton("Cancel");
+	private JButton btnRemove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+	private JButton btnAdd = new JButton(I18N.getLocaleString("MAIN_ADD"));
+	private JButton btnCancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
 	private JEditorPane editorPane = new JEditorPane();
 
 	public PrivatePackDialog() {
@@ -50,7 +50,7 @@ public class PrivatePackDialog extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		getContentPane().setLayout(null);
 		setBounds(300, 300, 300, 250);
-		setTitle("Private Pack Interface");
+		setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
 		setResizable(false);
 
 		textField.setBounds(10, 137, 264, 30);
@@ -68,7 +68,7 @@ public class PrivatePackDialog extends JDialog {
 					Settings.getSettings().save();
 					setVisible(false);
 				} else {
-					ErrorUtils.tossError("Invalid Private Pack.");
+					ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ERROR"));
 				}
 			}
 		});
@@ -88,7 +88,7 @@ public class PrivatePackDialog extends JDialog {
 		editorPane.setEditable(false);
 		editorPane.setHighlighter(null);
 		editorPane.setContentType("text/html");
-		editorPane.setText("Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.");
+		editorPane.setText(I18N.getLocaleString("PRIVATEPACK_TEXT"));
 		add(editorPane);
 
 		btnRemove.setBounds(102, 178, 80, 23);
@@ -111,11 +111,11 @@ public class PrivatePackDialog extends JDialog {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					Logger.logInfo(textField.getText() + " successfully removed.");
+					Logger.logInfo(textField.getText() + " " + I18N.getLocaleString("PRIVATEPACK_SECCESS"));
 					textField.setText("");
 					setVisible(false);
 				} else {
-					Logger.logInfo("Incorrect pack name.");
+					Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS");
 				}
 			}
 		});

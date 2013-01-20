@@ -36,8 +36,8 @@ public class PlayOfflineDialog extends JDialog {
 	private JButton yes, no;
 
 	public PlayOfflineDialog(String cause, final String username) {
-		text = new JTextArea("Something went wrong..\nWould you like to Play Offline?");
-		yes = new JButton("Yes");
+		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA");
+		yes = new JButton(I18N.getLocaleString("MAIN_YES"));
 		yes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -45,7 +45,7 @@ public class PlayOfflineDialog extends JDialog {
 						+ File.separator + "minecraft", username, "offlinemods");
 			}
 		});
-		no = new JButton("No");
+		no = new JButton(I18N.getLocaleString("MAIN_NO"));
 		no.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

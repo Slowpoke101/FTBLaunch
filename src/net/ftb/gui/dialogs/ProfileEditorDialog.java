@@ -41,17 +41,17 @@ public class ProfileEditorDialog extends JDialog {
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);
-	private JLabel userLabel = new JLabel("Username:");
-	private JLabel passLabel = new JLabel("Password:");
-	private JLabel nameLabel = new JLabel("Profile Name:");
-	private JCheckBox savePassword = new JCheckBox("Remember Password");
-	private JButton updateButton = new JButton("Update");
-	private JButton removeButton = new JButton("Remove");
+	private JLabel userLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
+	private JLabel passLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
+	private JLabel nameLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
+	private JCheckBox savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
+	private JButton updateButton = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
+	private JButton removeButton = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
 
 	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
 		super(instance, modal);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Profile Editor");
+		setTitle(I18N.getLocaleString("PROFILEDITOR_TITLE"));
 		setBounds(300, 300, 300, 240);
 		setResizable(false);
 
