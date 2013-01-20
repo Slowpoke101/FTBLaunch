@@ -16,14 +16,19 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -38,6 +43,7 @@ public class PlayOfflineDialog extends JDialog {
 	private JButton abort;
 
 	public PlayOfflineDialog(String cause, final String username) {
+		super(LaunchFrame.getInstance(), true);
 		setupGui();
 
 		play.addActionListener(new ActionListener() {
@@ -57,17 +63,67 @@ public class PlayOfflineDialog extends JDialog {
 	}
 
 	public void setupGui() {
-		setBounds(300, 300, 225, 150);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle("Could not log in");
+		setResizable(false);
+
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
 		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
+		text.setEditable(false);
+		text.setHighlighter(null);
+		text.setBorder(BorderFactory.createEmptyBorder());
 		play = new JButton(I18N.getLocaleString("MAIN_YES"));
 		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
-		JScrollPane pane = new JScrollPane(text);
-		pane.setBounds(10, 10, 190, 60);
-		abort.setBounds(110, 80, 90, 25);
-		play.setBounds(10, 80, 90, 25);
-		getContentPane().setLayout(null);
-		getContentPane().add(pane);
-		getContentPane().add(abort);
-		getContentPane().add(play);
+
+		panel.add(text);
+		panel.add(abort);
+		panel.add(play);
+
+		Spring hSpring;
+		Spring columnWidth;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, text, hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(play);
+		columnWidth = Spring.sum(columnWidth, Spring.constant(10));
+		columnWidth = Spring.sum(columnWidth, Spring.width(abort));
+		columnWidth = Spring.max(columnWidth, Spring.width(text));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		layout.putConstraint(SpringLayout.EAST, play, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
+
+		Spring vSpring;
+		Spring rowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, text, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(text));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, play,  vSpring, SpringLayout.NORTH, panel);
+		layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
+
+		rowHeight = Spring.height(play);
+		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }

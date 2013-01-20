@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +24,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
@@ -72,35 +74,84 @@ public class LauncherUpdateDialog extends JDialog {
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
-		setBounds(300, 300, 300, 150);
 		setResizable(false);
 
-		JPanel panel = new JPanel();
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
 		messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
-		updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+		JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
 		showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
 		update = new JButton(I18N.getLocaleString("MAIN_YES"));
 		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
-		panel.setLayout(null);
-		panel.setBounds(0, 0, 300, 150);
-		setContentPane(panel);
-
-		messageLbl.setBounds(0, 0, 300, 30);
 		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(messageLbl);
-
-		updateLbl.setBounds(0, 20, 300, 30);
 		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(updateLbl);
 
-		showChangeLog.setBounds(65, 55, 170, 25);
+		panel.add(messageLbl);
 		panel.add(showChangeLog);
-
-		update.setBounds(65, 90, 80, 25);
+		panel.add(updateLbl);
 		panel.add(update);
-
-		abort.setBounds(155, 90, 80, 25);
 		panel.add(abort);
+
+		Spring hSpring;
+		Spring columnWidth;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(messageLbl);
+		columnWidth = Spring.max(columnWidth, Spring.width(showChangeLog));
+		columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.EAST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, showChangeLog,  0, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.EAST,              update,        -5, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.WEST,              abort,          5, SpringLayout.HORIZONTAL_CENTER, panel);
+
+		Spring vSpring;
+		Spring rowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, showChangeLog, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(showChangeLog));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
+		layout.putConstraint(SpringLayout.NORTH, abort,  vSpring, SpringLayout.NORTH, panel);
+
+		rowHeight = Spring.height(update);
+		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }

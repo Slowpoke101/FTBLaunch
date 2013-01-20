@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +28,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
@@ -46,16 +48,24 @@ public class TexturePackFilterDialog extends JDialog {
 	private JButton search;
 
 	private TexturepackPane instance;
-	
+
 	public TexturePackFilterDialog(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		
 		this.instance = instance;
-		
 		setupGui();
 		
+		getRootPane().setDefaultButton(apply);
+
 		int textures = TexturePack.getTexturePackArray().size();
 		
+		ArrayList<String> res = new ArrayList<String>();
+		res.add("All");
+		for(int i = 0; i < textures; i++) {
+			if(!res.contains(TexturePack.getTexturePack(i).getResolution())) {
+				res.add(TexturePack.getTexturePack(i).getResolution());
+			}
+		}
+
 		ArrayList<String> comp = new ArrayList<String>();
 		comp.add("All");
 		for(int i = 0; i < textures; i++) {
@@ -64,14 +74,6 @@ public class TexturePackFilterDialog extends JDialog {
 				if(!comp.contains(ModPack.getPack(s[j].trim()).getName())) {
 					comp.add(ModPack.getPack(s[j].trim()).getName());
 				}
-			}
-		}
-
-		ArrayList<String> res = new ArrayList<String>();
-		res.add("All");
-		for(int i = 0; i < textures; i++) {
-			if(!res.contains(TexturePack.getTexturePack(i).getResolution())) {
-				res.add(TexturePack.getTexturePack(i).getResolution());
 			}
 		}
 
@@ -91,12 +93,14 @@ public class TexturePackFilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
+
 		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -106,33 +110,26 @@ public class TexturePackFilterDialog extends JDialog {
 		});
 	}
 
-	@SuppressWarnings("static-access")
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("FILTER_TITLE"));
-		
-		JPanel panel = new JPanel();
+		setResizable(false);
+
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
 		compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
 		resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
-		compatiblePack = new JComboBox();
 		resolution = new JComboBox();
+		compatiblePack = new JComboBox();
 		apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
 		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
 		search = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
-		
-		setBounds(350, 300, 280, 181);
-		setResizable(false);
-		panel.setBounds(0, 0, 230, 140);
-		panel.setLayout(null);
-		setContentPane(panel);
-		compatiblePackLbl.setBounds(10, 10, 144, 30);
-		compatiblePack.setBounds(146, 10, 118, 30);
-		resolution.setBounds(146, 40, 118, 30);
-		resolutionLbl.setBounds(10, 40, 144, 30);
-		apply.setBounds(10, 117, 254, 25);
-		search.setBounds(10, 81, 118, 25);
-		getRootPane().setDefaultButton(apply);
-		cancel.setBounds(146, 81, 118, 25);
+
+		resolution.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
+		compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
+
 		panel.add(compatiblePackLbl);
 		panel.add(resolutionLbl);
 		panel.add(compatiblePack);
@@ -140,5 +137,84 @@ public class TexturePackFilterDialog extends JDialog {
 		panel.add(apply);
 		panel.add(cancel);
 		panel.add(search);
+
+		Spring hSpring;
+		Spring columnWidth;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, resolutionLbl,     hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(compatiblePackLbl);
+		columnWidth = Spring.max(columnWidth, Spring.width(resolutionLbl));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, resolution,     hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(compatiblePack);
+		columnWidth = Spring.max(columnWidth, Spring.width(resolution));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, compatiblePack, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.EAST, resolution,     hSpring, SpringLayout.WEST, panel);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		layout.putConstraint(SpringLayout.WEST, search,  10, SpringLayout.WEST,              panel);
+		layout.putConstraint(SpringLayout.EAST, search,  -5, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.WEST, cancel,   5, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST,              panel);
+
+		layout.putConstraint(SpringLayout.WEST, apply,  10, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
+
+		Spring vSpring;
+		Spring rowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl,       0, SpringLayout.BASELINE, compatiblePack);
+		layout.putConstraint(SpringLayout.NORTH,    compatiblePack,    vSpring, SpringLayout.NORTH,    panel);
+
+		rowHeight = Spring.height(compatiblePackLbl);
+		rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(5));
+
+		layout.putConstraint(SpringLayout.BASELINE, resolutionLbl,       0, SpringLayout.BASELINE, resolution);
+		layout.putConstraint(SpringLayout.NORTH,    resolution,    vSpring, SpringLayout.NORTH,    panel);
+
+		rowHeight = Spring.height(resolutionLbl);
+		rowHeight = Spring.max(rowHeight, Spring.height(resolution));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
+		layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
+
+		rowHeight = Spring.height(search);
+		rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(5));
+
+		layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(apply));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		pack();
+		setLocationRelativeTo(this.getOwner());
 	}
 }

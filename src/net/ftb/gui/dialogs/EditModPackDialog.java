@@ -16,6 +16,9 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +35,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -47,26 +52,24 @@ import net.ftb.util.OSUtils;
 public class EditModPackDialog extends JDialog {
 	private JTabbedPane tabbedPane;
 
-	private JPanel modsFolderPnl;
-	private JPanel coreModsFolderPnl;
-	private JPanel jarModsFolderPnl;
-
-	private JLabel enabledModsLbl;
-	private JLabel disabledModsLbl;
+	private JPanel formPnl;
 
 	private JButton openFolder;
 	private JButton addMod;
 	private JButton disableMod;
 	private JButton enableMod;
 
+	private JLabel enabledModsLbl;
+	private JLabel disabledModsLbl;
+
+	private JScrollPane enabledModsScl;
+	private JScrollPane disabledModsScl;
+
 	private JList enabledModsLst;
 	private JList disabledModsLst;
 
 	private List<String> enabledMods;
 	private List<String> disabledMods;
-
-	private JScrollPane enabledModsScl;
-	private JScrollPane disabledModsScl;
 
 	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
 	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
@@ -91,42 +94,37 @@ public class EditModPackDialog extends JDialog {
 
 		setupGui();
 
+		enabledMods = new ArrayList<String>();
+		disabledMods = new ArrayList<String>();
+
 		tabbedPane.setSelectedIndex(0);
+
+		enabledModsLst.setListData(getEnabled());
+		disabledModsLst.setListData(getDisabled());
+
+		addMod.addActionListener(new ChooseDir(this));
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				currentTab = Tab.values()[tabbedPane.getSelectedIndex()];
-				JPanel temp;
 				switch(currentTab) {
 				case MODS:
-					temp = modsFolderPnl;
 					folder = modsFolder;
 					break;
 				case COREMODS:
-					temp = coreModsFolderPnl;
 					folder = coreModsFolder;
 					break;
 				case JARMODS:
-					temp = jarModsFolderPnl;
 					folder = jarModsFolder;
 					break;
 				default: 
 					return;
 				}
-				temp.add(enabledModsScl);
-				temp.add(disabledModsScl);
-				temp.add(enabledModsLbl);
-				temp.add(disabledModsLbl);
-				temp.add(openFolder);
-				temp.add(addMod);
-				temp.add(enableMod);
-				temp.add(disableMod);
+				((JPanel)tabbedPane.getSelectedComponent()).add(formPnl);
 				updateLists();
 			}
 		});
-
-		addMod.addActionListener(new ChooseDir(this));
 
 		openFolder.addActionListener(new ActionListener() {
 			@Override
@@ -219,21 +217,21 @@ public class EditModPackDialog extends JDialog {
 		disabledModsLst.setListData(getDisabled());
 	}
 
-	public void setupGui() {
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
-		setBounds(300, 300, 635, 525);
 		setResizable(false);
-		getContentPane().setLayout(null);
+
+		Container panel;
+		panel = getContentPane();
+		panel.setLayout(new BorderLayout());
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-		modsFolderPnl = new JPanel();
-		coreModsFolderPnl = new JPanel();
-		jarModsFolderPnl = new JPanel();
+		formPnl = new JPanel();
 
-		enabledModsLbl = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL") + "</h1></html></body>");
-		disabledModsLbl = new JLabel("<html><body><h1>" + I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL") + "</h1></html></body>");
+		enabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL"));
+		disabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL"));
 
 		openFolder = new JButton(I18N.getLocaleString("MODS_EDIT_OPEN_FOLDER"));
 		addMod = new JButton(I18N.getLocaleString("MODS_EDIT_ADD_MOD"));
@@ -243,56 +241,139 @@ public class EditModPackDialog extends JDialog {
 		enabledModsLst = new JList();
 		disabledModsLst = new JList();
 
-		enabledMods = new ArrayList<String>();
-		disabledMods = new ArrayList<String>();
-
 		enabledModsScl = new JScrollPane(enabledModsLst);
 		disabledModsScl = new JScrollPane(disabledModsLst);
 
-		tabbedPane.setLocation(0, 0);
-		tabbedPane.setSize(getSize());
+		panel.add(tabbedPane);
 
-		modsFolderPnl.setLayout(null);
-		coreModsFolderPnl.setLayout(null);
-		jarModsFolderPnl.setLayout(null);
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", new JPanel(new BorderLayout()));
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", new JPanel(new BorderLayout()));
+		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", new JPanel(new BorderLayout()));
 
-		getContentPane().add(tabbedPane);
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>Mods</body></html>", modsFolderPnl);
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>JarMods</body></html>", jarModsFolderPnl);
-		tabbedPane.addTab("<html><body leftMargin=15 topmargin=8 marginwidth=15 marginheight=5>CoreMods</body></html>", coreModsFolderPnl);
-
-		addMod.setBounds(380, 410, 240, 35);
-		modsFolderPnl.add(addMod);
-
-		openFolder.setBounds(10, 410, 240, 35);
-		modsFolderPnl.add(openFolder);
-
-		enabledModsLbl.setBounds(10, 10, 240, 30);
 		enabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		modsFolderPnl.add(enabledModsLbl);
-
-		disabledModsLbl.setBounds(380, 10, 240, 30);
 		disabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		modsFolderPnl.add(disabledModsLbl);
 
-		enabledModsLst.setListData(getEnabled());
+		enabledModsLbl.setFont(enabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
+		disabledModsLbl.setFont(disabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
+
 		enabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
-		enabledModsScl.setViewportView(enabledModsLst);
-		enabledModsScl.setBounds(10, 40, 240, 360);
-		modsFolderPnl.add(enabledModsScl);
-
-		disabledModsLst.setListData(getDisabled());
 		disabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
+
+		enabledModsScl.setViewportView(enabledModsLst);
 		disabledModsScl.setViewportView(disabledModsLst);
-		disabledModsScl.setBounds(380, 40, 240, 360);
-		modsFolderPnl.add(disabledModsScl);
 
-		disableMod.setBounds(255, 80, 115, 30);
-		disableMod.setVisible(true);
-		modsFolderPnl.add(disableMod);
+		SpringLayout layout = new SpringLayout();
+		formPnl.setLayout(layout);
 
-		enableMod.setBounds(255, 120, 115, 30);
-		enableMod.setVisible(true);
-		modsFolderPnl.add(enableMod);
+		formPnl.add(enabledModsLbl);
+		formPnl.add(disabledModsLbl);
+		formPnl.add(enabledModsScl);
+		formPnl.add(disabledModsScl);
+		formPnl.add(disableMod);
+		formPnl.add(enableMod);
+		formPnl.add(addMod);
+		formPnl.add(openFolder);
+
+		Spring vSpring;
+		Spring rowHeight;
+		Spring buttonRowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, enabledModsLbl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, disabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
+
+		rowHeight = Spring.height(enabledModsLbl);
+		rowHeight = Spring.max(rowHeight, Spring.height(disabledModsLbl));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+
+		rowHeight = Spring.constant(320);
+
+		buttonRowHeight = Spring.scale(rowHeight, .5f);
+		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.height(enableMod)));
+		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.constant(5)));
+
+		layout.putConstraint(SpringLayout.SOUTH, enableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
+
+		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+
+		layout.putConstraint(SpringLayout.SOUTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, addMod,     vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
+
+		rowHeight = Spring.height(addMod);
+		rowHeight = Spring.max(rowHeight, Spring.height(openFolder));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, formPnl, vSpring, SpringLayout.NORTH, formPnl);
+
+		Spring hSpring;
+		Spring columnWidth;
+		Spring buttonColumnWidth;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
+
+		columnWidth = Spring.width(enabledModsLbl);
+		columnWidth = Spring.max(columnWidth, Spring.width(disabledModsLbl));
+		columnWidth = Spring.max(columnWidth, Spring.constant(260));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, openFolder, hSpring, SpringLayout.WEST, formPnl);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.WEST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+
+		buttonColumnWidth = Spring.width(enableMod);
+		buttonColumnWidth = Spring.max(buttonColumnWidth, Spring.width(disableMod));
+
+		hSpring = Spring.sum(hSpring, buttonColumnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.WEST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, formPnl, hSpring, SpringLayout.WEST, formPnl);
+
+		((JPanel)tabbedPane.getComponent(0)).add(formPnl);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }

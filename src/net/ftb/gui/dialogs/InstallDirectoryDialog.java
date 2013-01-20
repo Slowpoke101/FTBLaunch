@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.data.Settings;
@@ -69,8 +72,8 @@ public class InstallDirectoryDialog extends JDialog {
 		});
 	}
 
-	public void setInstallFolderText(String messageLbl) {
-		installPath.setText(messageLbl);
+	public void setInstallFolderText(String text) {
+		installPath.setText(text);
 		Settings.getSettings().setInstallPath(installPath.getText());
 		Settings.getSettings().save();
 	}
@@ -78,31 +81,90 @@ public class InstallDirectoryDialog extends JDialog {
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("Choose Install Directory");
-		setBounds(560, 150, 560, 150);
 		setResizable(false);
-		getContentPane().setLayout(null);
 
-		messageLbl = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
+		JLabel messageLbl = new JLabel(
+			"<html><body><center><font size=\"3\"><strong>"
+			+ I18N.getLocaleString("INSTALL_FIRSTUSE")
+			+ "</strong></font></center></body></html>"
+		);
 		installPathLbl = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
-		installPath = new JTextField();
+		installPath = new JTextField(10);
 		installPathBrowse = new JButton("...");
 		apply = new JButton(I18N.getLocaleString("MAIN_APPLY"));
 
-		messageLbl.setBounds(10, 10, 530, 30);
 		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		add(messageLbl);
 
-		installPathBrowse.setBounds(495, 50, 50, 23);
-		add(installPathBrowse);
-		installPathLbl.setBounds(10, 50, 127, 23);
-		add(installPathLbl);
-		installPath.setBounds(90, 50, 400, 23);
+		panel.add(messageLbl);
+		panel.add(installPathBrowse);
+		panel.add(installPathLbl);
+		panel.add(installPath);
+		panel.add(apply);
 
-		installPath.setColumns(10);
-		add(installPath);
+		Spring hSpring;
+		Spring columnWidth;
 
-		apply.setBounds(240, 85, 80, 23);
+		hSpring = Spring.constant(10);
 
-		add(apply);
+		layout.putConstraint(SpringLayout.WEST, messageLbl,     hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, installPathLbl, hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(installPathLbl);
+		columnWidth = Spring.sum(columnWidth, Spring.constant(5));
+
+		layout.putConstraint(SpringLayout.WEST, installPath, Spring.sum(hSpring, columnWidth), SpringLayout.WEST, panel);
+
+		columnWidth = Spring.sum(columnWidth, Spring.width(installPath));
+
+		layout.putConstraint(SpringLayout.EAST, installPath, Spring.sum(hSpring, columnWidth), SpringLayout.WEST, panel);
+
+		columnWidth = Spring.sum(columnWidth, Spring.constant(5));
+
+		layout.putConstraint(SpringLayout.WEST, installPathBrowse, Spring.sum(hSpring, columnWidth), SpringLayout.WEST, panel);
+
+		columnWidth = Spring.sum(columnWidth, Spring.width(installPathBrowse));
+		columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, apply, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+
+		Spring vSpring;
+		Spring rowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.BASELINE, installPathLbl, 0, SpringLayout.BASELINE, installPath);
+		layout.putConstraint(SpringLayout.BASELINE, installPathBrowse, 0, SpringLayout.BASELINE, installPath);
+		layout.putConstraint(SpringLayout.NORTH, installPath, vSpring, SpringLayout.NORTH, panel);
+
+		rowHeight = Spring.height(installPathLbl);
+		rowHeight = Spring.max(rowHeight, Spring.height(installPath));
+		rowHeight = Spring.max(rowHeight, Spring.height(installPathBrowse));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(apply));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }

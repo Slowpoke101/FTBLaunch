@@ -16,12 +16,15 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -32,11 +35,11 @@ import net.ftb.gui.panes.TexturepackPane;
 
 public class SearchDialog extends JDialog {
 	public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
-	public JTextField query = new JTextField();
+	public JTextField query = new JTextField(20);
 
 	public SearchDialog(final ModpacksPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		setUpGui();
+		setupGui();
 		query.setText((lastPackSearch == null) ? "" : lastPackSearch);
 		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
@@ -61,7 +64,7 @@ public class SearchDialog extends JDialog {
 
 	public SearchDialog(final MapsPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		setUpGui();
+		setupGui();
 		query.setText((lastMapSearch == null) ? "" : lastMapSearch);
 		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
@@ -86,7 +89,7 @@ public class SearchDialog extends JDialog {
 
 	public SearchDialog(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		setUpGui();
+		setupGui();
 		query.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
 		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
@@ -109,13 +112,40 @@ public class SearchDialog extends JDialog {
 		});
 	}
 
-	private void setUpGui() {
-		setTitle("Text Search Filter");
-		setBounds(300, 300, 220, 90);
-		setResizable(false);
-		getContentPane().setLayout(null);
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		query.setBounds(10, 10, 200, 30);
-		getContentPane().add(query);
+		setTitle("Text Search Filter");
+		setResizable(false);
+
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
+		panel.add(query);
+
+		Spring vSpring;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, query, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(query));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		Spring hSpring;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, query, hSpring, SpringLayout.WEST, panel);
+
+		hSpring = Spring.sum(hSpring, Spring.width(query));
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }
