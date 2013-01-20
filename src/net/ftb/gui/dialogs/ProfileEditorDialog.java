@@ -32,6 +32,7 @@ import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 
 public class ProfileEditorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

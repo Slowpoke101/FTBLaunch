@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 
 public class PasswordDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

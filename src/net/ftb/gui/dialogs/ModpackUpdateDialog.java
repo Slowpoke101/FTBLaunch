@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.tools.ModManager;
 
 public class ModpackUpdateDialog extends JDialog {
@@ -35,16 +36,16 @@ public class ModpackUpdateDialog extends JDialog {
 
 	private JPanel panel = new JPanel();
 	private JLabel textOne = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
-	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE")));
-	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES")));
-	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO")));
-	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP")));
+	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
 
 	public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE")));
+		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
 		setBounds(300, 300, 300, 140);
 		setResizable(false);
 
