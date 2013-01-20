@@ -28,6 +28,7 @@ import javax.swing.JTextArea;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 
 public class PlayOfflineDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +37,7 @@ public class PlayOfflineDialog extends JDialog {
 	private JButton yes, no;
 
 	public PlayOfflineDialog(String cause, final String username) {
-		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA");
+		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
 		yes = new JButton(I18N.getLocaleString("MAIN_YES"));
 		yes.addActionListener(new ActionListener() {
 			@Override

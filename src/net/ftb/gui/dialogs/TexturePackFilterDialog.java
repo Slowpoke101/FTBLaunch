@@ -32,6 +32,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.locale.I18N;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {

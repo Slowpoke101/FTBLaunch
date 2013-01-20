@@ -31,6 +31,7 @@ import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
+import net.ftb.locale.I18N;
 
 public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
