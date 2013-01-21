@@ -35,10 +35,10 @@ import net.ftb.locale.I18N;
 import net.ftb.util.OSUtils;
 
 public class InstallDirectoryDialog extends JDialog {
-	private JLabel lblInstallFolder;
-	private JTextField installFolderTextField;
-	private JLabel text = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
-	private JButton applyButton = new JButton(I18N.getLocaleString("MAIN_APPLY"));
+	private JLabel installPathLbl;
+	private JTextField installPath;
+	private JLabel messageLbl = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
+	private JButton apply = new JButton(I18N.getLocaleString("MAIN_APPLY"));
 
 	public InstallDirectoryDialog() {
 		super(LaunchFrame.getInstance(), true);
@@ -48,48 +48,48 @@ public class InstallDirectoryDialog extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(null);
 
-		text.setBounds(10, 10, 530, 30);
-		text.setHorizontalAlignment(SwingConstants.CENTER);
-		add(text);
+		messageLbl.setBounds(10, 10, 530, 30);
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		add(messageLbl);
 
-		JButton installBrowseBtn = new JButton("...");
-		installBrowseBtn.setBounds(495, 50, 50, 23);
-		installBrowseBtn.addActionListener(new ChooseDir(this));
-		add(installBrowseBtn);
+		JButton installPathBrowse = new JButton("...");
+		installPathBrowse.setBounds(495, 50, 50, 23);
+		installPathBrowse.addActionListener(new ChooseDir(this));
+		add(installPathBrowse);
 
-		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
-		lblInstallFolder.setBounds(10, 50, 127, 23);
-		add(lblInstallFolder);
+		installPathLbl = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
+		installPathLbl.setBounds(10, 50, 127, 23);
+		add(installPathLbl);
 
-		installFolderTextField = new JTextField();
-		installFolderTextField.setBounds(90, 50, 400, 23);
-		installFolderTextField.addFocusListener(new FocusListener() {
+		installPath = new JTextField();
+		installPath.setBounds(90, 50, 400, 23);
+		installPath.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				Settings.getSettings().setInstallPath(installFolderTextField.getText());
+				Settings.getSettings().setInstallPath(installPath.getText());
 				Settings.getSettings().save();
 			}
 			@Override public void focusGained(FocusEvent e) { }
 		});
-		installFolderTextField.setColumns(10);
-		installFolderTextField.setText(OSUtils.getDefInstallPath());
-		add(installFolderTextField);
+		installPath.setColumns(10);
+		installPath.setText(OSUtils.getDefInstallPath());
+		add(installPath);
 
-		applyButton.setBounds(240, 85, 80, 23);
-		applyButton.addActionListener(new ActionListener() {
+		apply.setBounds(240, 85, 80, 23);
+		apply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 			}
 		});
-		add(applyButton);
+		add(apply);
 
-		getRootPane().setDefaultButton(applyButton);
+		getRootPane().setDefaultButton(apply);
 	}
 
-	public void setInstallFolderText(String text) {
-		installFolderTextField.setText(text);
-		Settings.getSettings().setInstallPath(installFolderTextField.getText());
+	public void setInstallFolderText(String messageLbl) {
+		installPath.setText(messageLbl);
+		Settings.getSettings().setInstallPath(installPath.getText());
 		Settings.getSettings().save();
 	}
 }

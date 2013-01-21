@@ -39,15 +39,22 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
-	private JButton exitBtn;
-	private JTextField minecraftX;
-	private JTextField minecraftY;
-	private JTextField xPosField;
-	private JTextField yPosField;
+	private JButton exit;
+	private JLabel downloadLocationLbl;
+	private static JComboBox downloadLocation;
+	private JLabel additionalJavaOptionsLbl;
 	private JTextField additionalJavaOptions;
+	private JLabel mcWindowSizeLbl;
+	private JTextField mcWindowSizeWidth;
+	private JLabel mcWindowSizeSepLbl;
+	private JTextField mcWindowSizeHeight;
+	private JLabel mcWindowPosLbl;
+	private JTextField mcWindowPosX;
+	private JLabel mcWindowPosSepLbl;
+	private JTextField mcWindowPosY;
 	private JCheckBox autoMaxCheck;
 	private JCheckBox snooper;
-	private static JComboBox downloadServers;
+
 	private final Settings settings = Settings.getSettings();
 
 	public AdvancedOptionsDialog() {
@@ -58,21 +65,20 @@ public class AdvancedOptionsDialog extends JDialog {
 		getContentPane().setLayout(null);
 		setBounds(440, 260, 440, 260);
 
-		JLabel downloadLocation = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
-		downloadLocation.setBounds(10, 10, 110, 25);
-		add(downloadLocation);
-
-		downloadServers = new JComboBox(getDownloadServerNames());
-		downloadServers.setBounds(190, 10, 222, 25);
-		downloadServers.addFocusListener(settingsChangeListener);
+		downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
+		downloadLocationLbl.setBounds(10, 10, 110, 25);
+		add(downloadLocationLbl);
+		downloadLocation = new JComboBox(getDownloadServerNames());
+		downloadLocation.setBounds(190, 10, 222, 25);
+		downloadLocation.addFocusListener(settingsChangeListener);
 		if(DownloadUtils.serversLoaded) {
-			if(DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
-				downloadServers.setSelectedItem(settings.getDownloadServer());
+			if(DownloadUtils.downloadLocation.containsKey(settings.getDownloadServer())) {
+				downloadLocation.setSelectedItem(settings.getDownloadServer());
 			}
 		}
-		add(downloadServers);
+		add(downloadLocation);
 
-		JLabel additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS") + " ");
+		additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
 		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
 		add(additionalJavaOptionsLbl);
 
@@ -81,49 +87,49 @@ public class AdvancedOptionsDialog extends JDialog {
 		additionalJavaOptions.addFocusListener(settingsChangeListener);
 		add(additionalJavaOptions);
 
-		minecraftX = new JTextField();
-		minecraftX.setBounds(190, 80, 95, 25);
-		minecraftX.setText(Integer.toString(settings.getLastDimension().width));
-		add(minecraftX);
-		minecraftX.addFocusListener(settingsChangeListener);
-		minecraftX.setColumns(10);
+		mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
+		mcWindowSizeLbl.setBounds(10, 80, 170, 25);
+		add(mcWindowSizeLbl);
 
-		JLabel lblMinecraftWindowSize = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
-		lblMinecraftWindowSize.setBounds(10, 80, 170, 25);
-		add(lblMinecraftWindowSize);
+		mcWindowSizeWidth = new JTextField();
+		mcWindowSizeWidth.setBounds(190, 80, 95, 25);
+		mcWindowSizeWidth.setText(Integer.toString(settings.getLastDimension().width));
+		add(mcWindowSizeWidth);
+		mcWindowSizeWidth.addFocusListener(settingsChangeListener);
+		mcWindowSizeWidth.setColumns(10);
 
-		minecraftY = new JTextField();
-		minecraftY.setBounds(317, 80, 95, 25);
-		minecraftY.setText(Integer.toString(settings.getLastDimension().height));
-		add(minecraftY);
-		minecraftY.addFocusListener(settingsChangeListener);
-		minecraftY.setColumns(10);
+		mcWindowSizeSepLbl = new JLabel("x");
+		mcWindowSizeSepLbl.setBounds(297, 80, 15, 25);
+		add(mcWindowSizeSepLbl);
 
-		JLabel lblX_1 = new JLabel("x");
-		lblX_1.setBounds(297, 80, 15, 25);
-		add(lblX_1);
+		mcWindowSizeHeight = new JTextField();
+		mcWindowSizeHeight.setBounds(317, 80, 95, 25);
+		mcWindowSizeHeight.setText(Integer.toString(settings.getLastDimension().height));
+		add(mcWindowSizeHeight);
+		mcWindowSizeHeight.addFocusListener(settingsChangeListener);
+		mcWindowSizeHeight.setColumns(10);
 
-		JLabel lblMinecraftWindowPosition = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
-		lblMinecraftWindowPosition.setBounds(10, 115, 170, 25);
-		add(lblMinecraftWindowPosition);
+		mcWindowPosLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
+		mcWindowPosLbl.setBounds(10, 115, 170, 25);
+		add(mcWindowPosLbl);
 
-		xPosField = new JTextField();
-		xPosField.setBounds(190, 115, 95, 25);
-		xPosField.setText(Integer.toString(settings.getLastPosition().x));
-		add(xPosField);
-		xPosField.addFocusListener(settingsChangeListener);
-		xPosField.setColumns(10);
+		mcWindowPosX = new JTextField();
+		mcWindowPosX.setBounds(190, 115, 95, 25);
+		mcWindowPosX.setText(Integer.toString(settings.getLastPosition().x));
+		add(mcWindowPosX);
+		mcWindowPosX.addFocusListener(settingsChangeListener);
+		mcWindowPosX.setColumns(10);
 
-		JLabel label = new JLabel("x");
-		label.setBounds(297, 115, 15, 25);
-		add(label);
+		mcWindowPosSepLbl = new JLabel("x");
+		mcWindowPosSepLbl.setBounds(297, 115, 15, 25);
+		add(mcWindowPosSepLbl);
 
-		yPosField = new JTextField();
-		yPosField.setBounds(317, 115, 95, 25);
-		yPosField.setText(Integer.toString(settings.getLastPosition().y));
-		add(yPosField);
-		yPosField.addFocusListener(settingsChangeListener);
-		yPosField.setColumns(10);
+		mcWindowPosY = new JTextField();
+		mcWindowPosY.setBounds(317, 115, 95, 25);
+		mcWindowPosY.setText(Integer.toString(settings.getLastPosition().y));
+		add(mcWindowPosY);
+		mcWindowPosY.addFocusListener(settingsChangeListener);
+		mcWindowPosY.setColumns(10);
 
 		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
 		autoMaxCheck.setBounds(10, 150, 170, 25);
@@ -137,25 +143,25 @@ public class AdvancedOptionsDialog extends JDialog {
 		snooper.addFocusListener(settingsChangeListener);
 		add(snooper);
 
-		exitBtn = new JButton(I18N.getLocaleString("MAIN_EXIT"));
-		exitBtn.setBounds(150, 190, 140, 28);
-		exitBtn.addActionListener(new ActionListener() {
+		exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
+		exit.setBounds(150, 190, 140, 28);
+		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		add(exitBtn);
+		add(exit);
 	}
 
 	public static void setDownloadServers() {
 		String downloadserver = Settings.getSettings().getDownloadServer();
-		downloadServers.removeAllItems();
-		for(String server : DownloadUtils.downloadServers.keySet()) {
-			downloadServers.addItem(server);
+		downloadLocation.removeAllItems();
+		for(String server : DownloadUtils.downloadLocation.keySet()) {
+			downloadLocation.addItem(server);
 		}
-		if(DownloadUtils.downloadServers.containsKey(downloadserver)) {
-			downloadServers.setSelectedItem(downloadserver);
+		if(DownloadUtils.downloadLocation.containsKey(downloadserver)) {
+			downloadLocation.setSelectedItem(downloadserver);
 		}
 	}
 
@@ -164,20 +170,20 @@ public class AdvancedOptionsDialog extends JDialog {
 			Logger.logWarn("Servers not loaded yet.");
 			return new String[] { "Automatic" };
 		} else {
-			String[] out = new String[DownloadUtils.downloadServers.size()];
+			String[] out = new String[DownloadUtils.downloadLocation.size()];
 			for(int i = 0; i < out.length; i++) {
-				out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
+				out[i] = String.valueOf(DownloadUtils.downloadLocation.keySet().toArray()[i]);
 			}
 			return out;
 		}
 	}
 
 	public void saveSettingsInto(Settings settings) {
-		settings.setDownloadServer(String.valueOf(downloadServers.getItemAt(downloadServers.getSelectedIndex())));
-		settings.setLastDimension(new Dimension(Integer.parseInt(minecraftX.getText()), Integer.parseInt(minecraftY.getText())));
+		settings.setDownloadServer(String.valueOf(downloadLocation.getItemAt(downloadLocation.getSelectedIndex())));
+		settings.setLastDimension(new Dimension(Integer.parseInt(mcWindowSizeWidth.getText()), Integer.parseInt(mcWindowSizeHeight.getText())));
 		int lastExtendedState = settings.getLastExtendedState();
 		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
-		settings.setLastPosition(new Point(Integer.parseInt(xPosField.getText()), Integer.parseInt(yPosField.getText())));
+		settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
 		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
 		settings.setSnooper(snooper.isSelected());
 		settings.save();

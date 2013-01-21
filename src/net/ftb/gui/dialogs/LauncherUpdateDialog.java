@@ -35,11 +35,11 @@ public class LauncherUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
-	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-	private JButton changelog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
-	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JLabel messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
+	private JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+	private JButton showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
+	private JButton update = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 	public LauncherUpdateDialog(final UpdateChecker updateChecker) {
 		super(LaunchFrame.getInstance(), true);
@@ -53,41 +53,41 @@ public class LauncherUpdateDialog extends JDialog {
 		panel.setBounds(0, 0, 300, 150);
 		setContentPane(panel);
 
-		textOne.setBounds(0, 0, 300, 30);
-		textOne.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textOne);
+		messageLbl.setBounds(0, 0, 300, 30);
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(messageLbl);
 
-		textTwo.setBounds(0, 20, 300, 30);
-		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textTwo);
+		updateLbl.setBounds(0, 20, 300, 30);
+		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(updateLbl);
 
-		changelog.setBounds(65, 55, 170, 25);
-		changelog.addActionListener(new ActionListener() {
+		showChangeLog.setBounds(65, 55, 170, 25);
+		showChangeLog.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO: Call new frame containing html page?
-				OSUtils.browse("http://launcher.feed-the-beast.com/changelog.html?" + LaunchFrame.buildNumber);
+				OSUtils.browse("http://launcher.feed-the-beast.com/showChangeLog.html?" + LaunchFrame.buildNumber);
 			}
 		});
-		panel.add(changelog);
+		panel.add(showChangeLog);
 
-		yesButton.setBounds(65, 90, 80, 25);
-		yesButton.addActionListener(new ActionListener() {
+		update.setBounds(65, 90, 80, 25);
+		update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 				updateChecker.update();
 			}
 		});
-		panel.add(yesButton);
+		panel.add(update);
 
-		noButton.setBounds(155, 90, 80, 25);
-		noButton.addActionListener(new ActionListener() {
+		abort.setBounds(155, 90, 80, 25);
+		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 			}
 		});
-		panel.add(noButton);
+		panel.add(abort);
 	}
 }

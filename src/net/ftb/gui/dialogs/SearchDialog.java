@@ -32,27 +32,27 @@ import net.ftb.gui.panes.TexturepackPane;
 
 public class SearchDialog extends JDialog {
 	public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
-	public JTextField searchBar = new JTextField();
+	public JTextField query = new JTextField();
 
 	public SearchDialog(final ModpacksPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setUpGui();
-		searchBar.setText((lastPackSearch == null) ? "" : lastPackSearch);
-		searchBar.getDocument().addDocumentListener(new DocumentListener() {
+		query.setText((lastPackSearch == null) ? "" : lastPackSearch);
+		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				lastPackSearch = searchBar.getText();
+				lastPackSearch = query.getText();
 				instance.sortPacks();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				lastPackSearch = searchBar.getText();
+				lastPackSearch = query.getText();
 				instance.sortPacks();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
-		searchBar.addActionListener(new ActionListener() {
+		query.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				lastPackSearch = searchBar.getText();
+				lastPackSearch = query.getText();
 				instance.sortPacks();
 				setVisible(false);
 			}
@@ -62,22 +62,22 @@ public class SearchDialog extends JDialog {
 	public SearchDialog(final MapsPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setUpGui();
-		searchBar.setText((lastMapSearch == null) ? "" : lastMapSearch);
-		searchBar.getDocument().addDocumentListener(new DocumentListener() {
+		query.setText((lastMapSearch == null) ? "" : lastMapSearch);
+		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				lastMapSearch = searchBar.getText();
+				lastMapSearch = query.getText();
 				instance.sortMaps();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				lastMapSearch = searchBar.getText();
+				lastMapSearch = query.getText();
 				instance.sortMaps();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
-		searchBar.addActionListener(new ActionListener() {
+		query.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				lastPackSearch = searchBar.getText();
+				lastPackSearch = query.getText();
 				instance.sortMaps();
 				setVisible(false);
 			}
@@ -87,22 +87,22 @@ public class SearchDialog extends JDialog {
 	public SearchDialog(final TexturepackPane instance) {
 		super(LaunchFrame.getInstance(), true);
 		setUpGui();
-		searchBar.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
-		searchBar.getDocument().addDocumentListener(new DocumentListener() {
+		query.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
+		query.getDocument().addDocumentListener(new DocumentListener() {
 			@Override public void removeUpdate(DocumentEvent arg0) {
-				lastTextureSearch = searchBar.getText();
+				lastTextureSearch = query.getText();
 				instance.sortTexturePacks();
 			}
 			@Override public void insertUpdate(DocumentEvent arg0) {
-				lastTextureSearch = searchBar.getText();
+				lastTextureSearch = query.getText();
 				instance.sortTexturePacks();
 			}
 			@Override public void changedUpdate(DocumentEvent arg0) { }
 		});
-		searchBar.addActionListener(new ActionListener() {
+		query.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				lastPackSearch = searchBar.getText();
+				lastPackSearch = query.getText();
 				instance.sortTexturePacks();
 				setVisible(false);
 			}
@@ -115,7 +115,7 @@ public class SearchDialog extends JDialog {
 		setResizable(false);
 		getContentPane().setLayout(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		searchBar.setBounds(10, 10, 200, 30);
-		getContentPane().add(searchBar);
+		query.setBounds(10, 10, 200, 30);
+		getContentPane().add(query);
 	}
 }

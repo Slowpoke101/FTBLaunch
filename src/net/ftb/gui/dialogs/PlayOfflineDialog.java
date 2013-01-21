@@ -34,21 +34,21 @@ public class PlayOfflineDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea text;
-	private JButton yes;
-	private JButton no;
+	private JButton play;
+	private JButton abort;
 
 	public PlayOfflineDialog(String cause, final String username) {
 		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
-		yes = new JButton(I18N.getLocaleString("MAIN_YES"));
-		yes.addActionListener(new ActionListener() {
+		play = new JButton(I18N.getLocaleString("MAIN_YES"));
+		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + File.separator + ModPack.getSelectedPack().getDir()
 						+ File.separator + "minecraft", username, "offlinemods");
 			}
 		});
-		no = new JButton(I18N.getLocaleString("MAIN_NO"));
-		no.addActionListener(new ActionListener() {
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -61,11 +61,11 @@ public class PlayOfflineDialog extends JDialog {
 		setBounds(300, 300, 225, 150);
 		JScrollPane pane = new JScrollPane(text);
 		pane.setBounds(10, 10, 190, 60);
-		no.setBounds(110, 80, 90, 25);
-		yes.setBounds(10, 80, 90, 25);
+		abort.setBounds(110, 80, 90, 25);
+		play.setBounds(10, 80, 90, 25);
 		getContentPane().setLayout(null);
 		getContentPane().add(pane);
-		getContentPane().add(no);
-		getContentPane().add(yes);
+		getContentPane().add(abort);
+		getContentPane().add(play);
 	}
 }

@@ -35,10 +35,10 @@ public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
-	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JLabel messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
+	private JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+	private JButton update = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
 
 	public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
@@ -53,16 +53,16 @@ public class ModpackUpdateDialog extends JDialog {
 		panel.setBounds(0, 0, 300, 140);
 		setContentPane(panel);
 
-		textOne.setBounds(0, 0, 300, 30);
-		textOne.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textOne);
+		messageLbl.setBounds(0, 0, 300, 30);
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(messageLbl);
 
-		textTwo.setBounds(0, 20, 300, 30);
-		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textTwo);
+		updateLbl.setBounds(0, 20, 300, 30);
+		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(updateLbl);
 
-		yesButton.setBounds(65, 80, 80, 25);
-		yesButton.addActionListener(new ActionListener() {
+		update.setBounds(65, 80, 80, 25);
+		update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ModManager.update = true;
@@ -70,17 +70,17 @@ public class ModpackUpdateDialog extends JDialog {
 				setVisible(false);
 			}
 		});
-		panel.add(yesButton);
+		panel.add(update);
 
-		noButton.setBounds(155, 80, 80, 25);
-		noButton.addActionListener(new ActionListener() {
+		abort.setBounds(155, 80, 80, 25);
+		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ModManager.update = false;
 				setVisible(false);
 			}
 		});
-		panel.add(noButton);
+		panel.add(abort);
 
 		backup.setBounds(0, 45, 300, 30);
 		backup.setHorizontalAlignment(SwingConstants.CENTER);

@@ -37,13 +37,13 @@ public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
 	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
-	private JLabel packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"});
-	private JComboBox originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
-	private JComboBox compatibleBox;
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
+	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JComboBox type = new JComboBox(new String[] {"Client", "Server"});
+	private JComboBox origin = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
+	private JComboBox compatiblePack;
+	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JButton search = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
 
 	private MapsPane pane;
 
@@ -62,28 +62,28 @@ public class MapFilterDialog extends JDialog {
 		panel.setLayout(null);
 		setContentPane(panel);
 		typeLbl.setBounds(10, 10, 100, 30);
-		typeBox.setBounds(120, 10, 100, 30);
+		type.setBounds(120, 10, 100, 30);
 		originLbl.setBounds(10, 40, 100, 30);
-		originBox.setBounds(120, 40, 100, 30);
-		applyButton.setBounds(10, 141, 210, 25);
-		searchButton.setBounds(10, 110, 100, 25);
-		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(120, 110, 100, 25);
+		origin.setBounds(120, 40, 100, 30);
+		apply.setBounds(10, 141, 210, 25);
+		search.setBounds(10, 110, 100, 25);
+		getRootPane().setDefaultButton(apply);
+		cancel.setBounds(120, 110, 100, 25);
 		panel.add(typeLbl);
-		panel.add(typeBox);
+		panel.add(type);
 		panel.add(originLbl);
-		panel.add(originBox);
-		panel.add(applyButton);
-		panel.add(cancelButton);
-		panel.add(searchButton);
+		panel.add(origin);
+		panel.add(apply);
+		panel.add(cancel);
+		panel.add(search);
 		panel.setBounds(0, 0, 230, 250);
-		cancelButton.setBounds(120, 110, 100, 25);
+		cancel.setBounds(120, 110, 100, 25);
 
-		typeBox.setSelectedItem(pane.type);
-		originBox.setSelectedItem(pane.origin);
+		type.setSelectedItem(pane.type);
+		origin.setSelectedItem(pane.origin);
 
-		packLbl.setBounds(10, 70, 100, 30);
-		panel.add(packLbl);
+		compatiblePackLbl.setBounds(10, 70, 100, 30);
+		panel.add(compatiblePackLbl);
 
 		ArrayList<String> packs = new ArrayList<String>();
 		packs.add("All");
@@ -96,28 +96,28 @@ public class MapFilterDialog extends JDialog {
 			}
 		}
 
-		compatibleBox = new JComboBox(packs.toArray());
-		compatibleBox.setBounds(120, 70, 100, 30);
-		compatibleBox.setSelectedItem(pane.compatible);
-		panel.add(compatibleBox);
+		compatiblePack = new JComboBox(packs.toArray());
+		compatiblePack.setBounds(120, 70, 100, 30);
+		compatiblePack.setSelectedItem(pane.compatible);
+		panel.add(compatiblePack);
 
-		applyButton.addActionListener(new ActionListener() {
+		apply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				pane.compatible = (String)compatibleBox.getSelectedItem();
-				pane.type = (String)typeBox.getSelectedItem();
-				pane.origin = (String)originBox.getSelectedItem();
+				pane.compatible = (String)compatiblePack.getSelectedItem();
+				pane.type = (String)type.getSelectedItem();
+				pane.origin = (String)origin.getSelectedItem();
 				pane.updateFilter();
 				setVisible(false);
 			}
 		});
-		cancelButton.addActionListener(new ActionListener() {
+		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		searchButton.addActionListener(new ActionListener() {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				SearchDialog sd = new SearchDialog(pane);

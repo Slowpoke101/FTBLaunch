@@ -40,11 +40,11 @@ public class ProfileAdderDialog extends JDialog {
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);
-	private JLabel userLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
-	private JLabel passLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
-	private JLabel nameLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
+	private JLabel usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
+	private JLabel passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
+	private JLabel nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
 	private JCheckBox savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-	private JButton addButton = new JButton(I18N.getLocaleString("MAIN_ADD"));
+	private JButton add = new JButton(I18N.getLocaleString("MAIN_ADD"));
 
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
@@ -53,15 +53,15 @@ public class ProfileAdderDialog extends JDialog {
 		setBounds(300, 300, 300, 240);
 		setResizable(false);
 
-		getRootPane().setDefaultButton(addButton);
+		getRootPane().setDefaultButton(add);
 
 		panel.setBounds(0, 0, 300, 240);
 		setContentPane(panel);
 		panel.setLayout(null);
 
-		userLabel.setBounds(10, 10, 80, 30);
-		userLabel.setVisible(true);
-		panel.add(userLabel);
+		usernameLbl.setBounds(10, 10, 80, 30);
+		usernameLbl.setVisible(true);
+		panel.add(usernameLbl);
 
 		username.setBounds(100, 10, 170, 30);
 		username.setVisible(true);
@@ -79,17 +79,17 @@ public class ProfileAdderDialog extends JDialog {
 		});
 		panel.add(username);
 
-		passLabel.setBounds(10, 50, 80, 30);
-		passLabel.setVisible(true);
-		panel.add(passLabel);
+		passwordLbl.setBounds(10, 50, 80, 30);
+		passwordLbl.setVisible(true);
+		panel.add(passwordLbl);
 
 		password.setBounds(100, 50, 170, 30);
 		password.setVisible(true);
 		panel.add(password);
 
-		nameLabel.setBounds(10, 90, 80, 30);
-		nameLabel.setVisible(true);
-		panel.add(nameLabel);
+		nameLbl.setBounds(10, 90, 80, 30);
+		nameLbl.setVisible(true);
+		panel.add(nameLbl);
 
 		name.setBounds(100, 90, 170, 30);
 		name.setVisible(true);
@@ -105,9 +105,9 @@ public class ProfileAdderDialog extends JDialog {
 		});
 		panel.add(savePassword);
 
-		addButton.setBounds(125, 170, 50, 25);
-		addButton.setVisible(true);
-		addButton.addActionListener(new ActionListener() {
+		add.setBounds(125, 170, 50, 25);
+		add.setVisible(true);
+		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(savePassword.isSelected()) {
@@ -129,7 +129,7 @@ public class ProfileAdderDialog extends JDialog {
 				}
 			}
 		});
-		panel.add(addButton);
+		panel.add(add);
 	}
 
 	private boolean validate(String name, String user, char[] pass) {

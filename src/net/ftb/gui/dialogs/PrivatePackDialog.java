@@ -40,10 +40,10 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class PrivatePackDialog extends JDialog {
-	private JTextField textField = new JTextField();
-	private JButton btnRemove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
-	private JButton btnAdd = new JButton(I18N.getLocaleString("MAIN_ADD"));
-	private JButton btnCancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JTextField modpackName = new JTextField();
+	private JButton remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+	private JButton add = new JButton(I18N.getLocaleString("MAIN_ADD"));
+	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
 	private JEditorPane editorPane = new JEditorPane();
 
 	public PrivatePackDialog() {
@@ -54,18 +54,18 @@ public class PrivatePackDialog extends JDialog {
 		setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
 		setResizable(false);
 
-		textField.setBounds(10, 137, 264, 30);
-		textField.setColumns(10);
-		add(textField);
+		modpackName.setBounds(10, 137, 264, 30);
+		modpackName.setColumns(10);
+		add(modpackName);
 
-		btnAdd.setBounds(10, 178, 82, 23);
-		btnAdd.addActionListener(new ActionListener() {
+		add.setBounds(10, 178, 82, 23);
+		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(DownloadUtils.staticFileExists(textField.getText() + ".xml") && !textField.getText().isEmpty()) {
-					Logger.logInfo("Adding: " + textField.getText());
-					ModPack.loadXml(textField.getText() + ".xml");
-					Settings.getSettings().addPrivatePack(textField.getText());
+				if(DownloadUtils.staticFileExists(modpackName.getText() + ".xml") && !modpackName.getText().isEmpty()) {
+					Logger.logInfo("Adding: " + modpackName.getText());
+					ModPack.loadXml(modpackName.getText() + ".xml");
+					Settings.getSettings().addPrivatePack(modpackName.getText());
 					Settings.getSettings().save();
 					setVisible(false);
 				} else {
@@ -73,17 +73,17 @@ public class PrivatePackDialog extends JDialog {
 				}
 			}
 		});
-		add(btnAdd);
-		getRootPane().setDefaultButton(btnAdd);
+		add(add);
+		getRootPane().setDefaultButton(add);
 
-		btnCancel.setBounds(192, 178, 82, 23);
-		btnCancel.addActionListener(new ActionListener() {
+		cancel.setBounds(192, 178, 82, 23);
+		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		add(btnCancel);
+		add(cancel);
 
 		editorPane.setBounds(10, 11, 264, 115);
 		editorPane.setEditable(false);
@@ -92,34 +92,34 @@ public class PrivatePackDialog extends JDialog {
 		editorPane.setText(I18N.getLocaleString("PRIVATEPACK_TEXT"));
 		add(editorPane);
 
-		btnRemove.setBounds(102, 178, 80, 23);
-		btnRemove.addActionListener(new ActionListener() {
+		remove.setBounds(102, 178, 80, 23);
+		remove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
-				if(codes.contains(textField.getText())) {
-					Settings.getSettings().removePrivatePack(textField.getText());
+				if(codes.contains(modpackName.getText())) {
+					Settings.getSettings().removePrivatePack(modpackName.getText());
 					Settings.getSettings().save();
 					try {
 						for(ModPack pack : ModPack.getPackArray()) {
-							if(pack.getParentXml().equalsIgnoreCase(textField.getText() + ".xml")) {
+							if(pack.getParentXml().equalsIgnoreCase(modpackName.getText() + ".xml")) {
 								FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + pack.getDir()));
 							}
 						}
-						ModPack.removePacks(textField.getText() + ".xml");
-						FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + textField.getText() + ".xml"));
+						ModPack.removePacks(modpackName.getText() + ".xml");
+						FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + modpackName.getText() + ".xml"));
 						LaunchFrame.getInstance().modPacksPane.sortPacks();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					Logger.logInfo(textField.getText() + " " + I18N.getLocaleString("PRIVATEPACK_SECCESS"));
-					textField.setText("");
+					Logger.logInfo(modpackName.getText() + " " + I18N.getLocaleString("PRIVATEPACK_SECCESS"));
+					modpackName.setText("");
 					setVisible(false);
 				} else {
 					Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS"));
 				}
 			}
 		});
-		add(btnRemove);
+		add(remove);
 	}
 }

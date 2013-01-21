@@ -32,10 +32,10 @@ import net.ftb.tools.MapManager;
 
 public class MapOverwriteDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel(I18N.getLocaleString("MAPOVERRIDE_FOUNDERROR"));
-	private JLabel textTwo = new JLabel(I18N.getLocaleString("MAPOVERRIDE_WISHOVERRIDE"));
-	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JLabel messageLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_FOUNDERROR"));
+	private JLabel overwriteLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_WISHOVERRIDE"));
+	private JButton overwrite = new JButton(I18N.getLocaleString("MAIN_YES"));
+	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 	public MapOverwriteDialog() {
 		super(LaunchFrame.getInstance(), true);
@@ -48,31 +48,31 @@ public class MapOverwriteDialog extends JDialog {
 		panel.setBounds(0, 0, 300, 90);
 		setContentPane(panel);
 
-		textOne.setLocation(10, 50);
-		textOne.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textOne);
-		textTwo.setLocation(10, 80);
-		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textTwo);
+		messageLbl.setLocation(10, 50);
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(messageLbl);
+		overwriteLbl.setLocation(10, 80);
+		overwriteLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(overwriteLbl);
 
-		yesButton.setVisible(true);
-		yesButton.addActionListener(new ActionListener() {
+		overwrite.setVisible(true);
+		overwrite.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				MapManager.overwrite = true;
 				setVisible(false);
 			}
 		});
-		panel.add(yesButton);
+		panel.add(overwrite);
 
-		noButton.setVisible(true);
-		noButton.addActionListener(new ActionListener() {
+		abort.setVisible(true);
+		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				MapManager.overwrite = false;
 				setVisible(false);
 			}
 		});
-		panel.add(noButton);
+		panel.add(abort);
 	}
 }

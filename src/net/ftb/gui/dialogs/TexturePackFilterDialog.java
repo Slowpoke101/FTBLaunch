@@ -37,13 +37,13 @@ import net.ftb.locale.I18N;
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel compatibleLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
 	private JLabel resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
-	private JComboBox compatibleBox;
-	private JComboBox resolutionBox;
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton searchButton = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
+	private JComboBox compatiblePack;
+	private JComboBox resolution;
+	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JButton search = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
 
 	private TexturepackPane instance;
 	
@@ -56,23 +56,23 @@ public class TexturePackFilterDialog extends JDialog {
 		
 		// TODO: Overhaul Filter dialog towards texture packs
 		// Because more than likely ftb won't have a texture pack, and there is no server versions.
-		applyButton.addActionListener(new ActionListener() {
+		apply.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				instance.compatible = (String)compatibleBox.getSelectedItem();
-				instance.resolution = (String)resolutionBox.getSelectedItem();
+				instance.compatible = (String)compatiblePack.getSelectedItem();
+				instance.resolution = (String)resolution.getSelectedItem();
 				instance.updateFilter();
 				setVisible(false);
 			}
 		});
-		cancelButton.addActionListener(new ActionListener() {
+		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		searchButton.addActionListener(new ActionListener() {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				SearchDialog sd = new SearchDialog(instance);
@@ -98,7 +98,7 @@ public class TexturePackFilterDialog extends JDialog {
 				}
 			}
 		}
-		compatibleBox = new JComboBox(comp.toArray(new String[]{}));
+		compatiblePack = new JComboBox(comp.toArray(new String[]{}));
 		
 		ArrayList<String> res = new ArrayList<String>();
 		res.add("All");
@@ -107,30 +107,30 @@ public class TexturePackFilterDialog extends JDialog {
 				res.add(TexturePack.getTexturePack(i).getResolution());
 			}
 		}
-		resolutionBox = new JComboBox(res.toArray(new String[]{}));
+		resolution = new JComboBox(res.toArray(new String[]{}));
 		
-		compatibleBox.setSelectedItem(instance.compatible);
-		resolutionBox.setSelectedItem(instance.resolution);
+		compatiblePack.setSelectedItem(instance.compatible);
+		resolution.setSelectedItem(instance.resolution);
 		
 		setBounds(350, 300, 280, 181);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);
 		panel.setLayout(null);
 		setContentPane(panel);
-		compatibleLbl.setBounds(10, 10, 144, 30);
-		compatibleBox.setBounds(146, 10, 118, 30);
-		resolutionBox.setBounds(146, 40, 118, 30);
+		compatiblePackLbl.setBounds(10, 10, 144, 30);
+		compatiblePack.setBounds(146, 10, 118, 30);
+		resolution.setBounds(146, 40, 118, 30);
 		resolutionLbl.setBounds(10, 40, 144, 30);
-		applyButton.setBounds(10, 117, 254, 25);
-		searchButton.setBounds(10, 81, 118, 25);
-		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(146, 81, 118, 25);
-		panel.add(compatibleLbl);
+		apply.setBounds(10, 117, 254, 25);
+		search.setBounds(10, 81, 118, 25);
+		getRootPane().setDefaultButton(apply);
+		cancel.setBounds(146, 81, 118, 25);
+		panel.add(compatiblePackLbl);
 		panel.add(resolutionLbl);
-		panel.add(compatibleBox);
-		panel.add(resolutionBox);
-		panel.add(applyButton);
-		panel.add(cancelButton);
-		panel.add(searchButton);
+		panel.add(compatiblePack);
+		panel.add(resolution);
+		panel.add(apply);
+		panel.add(cancel);
+		panel.add(search);
 	}
 }

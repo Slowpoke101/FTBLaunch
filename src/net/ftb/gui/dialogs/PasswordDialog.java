@@ -33,8 +33,8 @@ public class PasswordDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	JPanel panel = new JPanel();
 	JPasswordField password = new JPasswordField(1);
-	JLabel passLabel = new JLabel(I18N.getLocaleString("PASSWORD_PASSLABEL"));
-	JButton submitButton = new JButton(I18N.getLocaleString("MAIN_SUBMIT"));
+	JLabel passwordLbl = new JLabel(I18N.getLocaleString("PASSWORD_PASSLABEL"));
+	JButton login = new JButton(I18N.getLocaleString("MAIN_SUBMIT"));
 
 	public PasswordDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
@@ -44,23 +44,23 @@ public class PasswordDialog extends JDialog {
 		setBounds(300, 300, 300, 120);
 		setResizable(false);
 
-		getRootPane().setDefaultButton(submitButton);
+		getRootPane().setDefaultButton(login);
 
 		panel.setBounds(0, 0, 300, 100);
 		setContentPane(panel);
 		panel.setLayout(null);
 
-		passLabel.setBounds(10, 10, 80, 30);
-		passLabel.setVisible(true);
-		panel.add(passLabel);
+		passwordLbl.setBounds(10, 10, 80, 30);
+		passwordLbl.setVisible(true);
+		panel.add(passwordLbl);
 
 		password.setBounds(100, 10, 170, 30);
 		password.setVisible(true);
 		panel.add(password);
 
-		submitButton.setBounds(105, 50, 90, 25);
-		submitButton.setVisible(true);
-		submitButton.addActionListener(new ActionListener() {
+		login.setBounds(105, 50, 90, 25);
+		login.setVisible(true);
+		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(!new String(password.getPassword()).isEmpty()){
@@ -69,6 +69,6 @@ public class PasswordDialog extends JDialog {
 				}
 			}
 		});
-		panel.add(submitButton);
+		panel.add(login);
 	}
 }

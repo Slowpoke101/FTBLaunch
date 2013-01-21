@@ -35,16 +35,16 @@ import net.ftb.locale.I18N;
 public class ModPackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
 	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
-	private JLabel packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JLabel lblModPackAval = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
-	private JComboBox originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
-	private JComboBox compatibleBox;
-	private JComboBox mcVersionBox, 
-	private JComboBox avalBox = new JComboBox(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")});
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton btnSearch = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
-	private final JLabel lblMinecraftVersion = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
+	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JLabel availabilityLbl = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
+	private JComboBox origin = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
+	private JComboBox compatiblePack;
+	private JComboBox mcVersion; 
+	private JComboBox availability = new JComboBox(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")});
+	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JButton search = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
+	private final JLabel mcVersionLbl = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
 
 	private ModpacksPane pane;
 
@@ -63,16 +63,16 @@ public class ModPackFilterDialog extends JDialog {
 		panel.setLayout(null);
 		setContentPane(panel);
 		originLbl.setBounds(10, 11, 150, 30);
-		originBox.setBounds(184, 11, 100, 30);
-		applyButton.setBounds(10, 143, 274, 25);
-		getRootPane().setDefaultButton(applyButton);
-		cancelButton.setBounds(184, 107, 100, 25);
-		btnSearch.setBounds(10, 107, 150, 25);
-		panel.add(btnSearch);
+		origin.setBounds(184, 11, 100, 30);
+		apply.setBounds(10, 143, 274, 25);
+		getRootPane().setDefaultButton(apply);
+		cancel.setBounds(184, 107, 100, 25);
+		search.setBounds(10, 107, 150, 25);
+		panel.add(search);
 		panel.add(originLbl);
-		panel.add(originBox);
-		panel.add(applyButton);
-		panel.add(cancelButton);
+		panel.add(origin);
+		panel.add(apply);
+		panel.add(cancel);
 
 		ArrayList<String> mcVersions = new ArrayList<String>();
 
@@ -84,24 +84,24 @@ public class ModPackFilterDialog extends JDialog {
 			}
 		}
 
-		mcVersionBox = new JComboBox(mcVersions.toArray());
-		originBox.setSelectedItem(pane.origin);
-		avalBox.setSelectedItem(pane.avaliability);
-		mcVersionBox.setSelectedItem(pane.mcVersion);
-		lblMinecraftVersion.setBounds(10, 41, 150, 30);
+		mcVersion = new JComboBox(mcVersions.toArray());
+		origin.setSelectedItem(pane.origin);
+		availability.setSelectedItem(pane.avaliability);
+		mcVersion.setSelectedItem(pane.mcVersion);
+		mcVersionLbl.setBounds(10, 41, 150, 30);
 
-		panel.add(lblMinecraftVersion);
-		mcVersionBox.setBounds(184, 41, 100, 30);
+		panel.add(mcVersionLbl);
+		mcVersion.setBounds(184, 41, 100, 30);
 
-		panel.add(mcVersionBox);
+		panel.add(mcVersion);
 
-		avalBox.setBounds(184, 71, 100, 30);
-		panel.add(avalBox);
+		availability.setBounds(184, 71, 100, 30);
+		panel.add(availability);
 
-		lblModPackAval.setBounds(10, 71, 150, 25);
-		panel.add(lblModPackAval);
+		availabilityLbl.setBounds(10, 71, 150, 25);
+		panel.add(availabilityLbl);
 
-		btnSearch.addActionListener(new ActionListener() {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				SearchDialog sd = new SearchDialog(pane);
@@ -109,18 +109,18 @@ public class ModPackFilterDialog extends JDialog {
 			}
 		});
 
-		applyButton.addActionListener(new ActionListener() {
+		apply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				pane.origin = (String)originBox.getSelectedItem();
-				pane.mcVersion = (String)mcVersionBox.getSelectedItem();
-				pane.avaliability = (String)avalBox.getSelectedItem();
+				pane.origin = (String)origin.getSelectedItem();
+				pane.mcVersion = (String)mcVersion.getSelectedItem();
+				pane.avaliability = (String)availability.getSelectedItem();
 				pane.updateFilter();
 				setVisible(false);
 			}
 		});
 		
-		cancelButton.addActionListener(new ActionListener() {
+		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);

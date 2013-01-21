@@ -42,12 +42,12 @@ public class ProfileEditorDialog extends JDialog {
 	private JTextField username = new JTextField(1);
 	private JPasswordField password = new JPasswordField(1);
 	private JTextField name = new JTextField(1);
-	private JLabel userLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
-	private JLabel passLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
-	private JLabel nameLabel = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
+	private JLabel usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
+	private JLabel passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
+	private JLabel nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
 	private JCheckBox savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-	private JButton updateButton = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
-	private JButton removeButton = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+	private JButton update = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
+	private JButton remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
 
 	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
 		super(instance, modal);
@@ -56,15 +56,15 @@ public class ProfileEditorDialog extends JDialog {
 		setBounds(300, 300, 300, 240);
 		setResizable(false);
 
-		getRootPane().setDefaultButton(updateButton);
+		getRootPane().setDefaultButton(update);
 
 		panel.setBounds(0, 0, 300, 240);
 		setContentPane(panel);
 		panel.setLayout(null);
 
-		userLabel.setBounds(10, 10, 80, 30);
-		userLabel.setVisible(true);
-		panel.add(userLabel);
+		usernameLbl.setBounds(10, 10, 80, 30);
+		usernameLbl.setVisible(true);
+		panel.add(usernameLbl);
 
 		username.setBounds(100, 10, 170, 30);
 		username.setText(UserManager.getUsername(editingName));
@@ -82,9 +82,9 @@ public class ProfileEditorDialog extends JDialog {
 		});
 		panel.add(username);
 
-		passLabel.setBounds(10, 50, 80, 30);
-		passLabel.setVisible(true);
-		panel.add(passLabel);
+		passwordLbl.setBounds(10, 50, 80, 30);
+		passwordLbl.setVisible(true);
+		panel.add(passwordLbl);
 
 		savePassword.setBounds(100, 130, 170, 30);
 		savePassword.addActionListener(new ActionListener() {
@@ -106,18 +106,18 @@ public class ProfileEditorDialog extends JDialog {
 		panel.add(password);
 		panel.add(savePassword);
 
-		nameLabel.setBounds(10, 90, 80, 30);
-		nameLabel.setVisible(true);
-		panel.add(nameLabel);
+		nameLbl.setBounds(10, 90, 80, 30);
+		nameLbl.setVisible(true);
+		panel.add(nameLbl);
 
 		name.setBounds(100, 90, 170, 30);
 		name.setVisible(true);
 		name.setText(editingName);
 		panel.add(name);
 
-		updateButton.setBounds(57, 170, 80, 25);
-		updateButton.setVisible(true);
-		updateButton.addActionListener(new ActionListener() {
+		update.setBounds(57, 170, 80, 25);
+		update.setVisible(true);
+		update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))) {
@@ -133,11 +133,11 @@ public class ProfileEditorDialog extends JDialog {
 				}
 			}
 		});
-		panel.add(updateButton);
+		panel.add(update);
 
-		removeButton.setBounds(163, 170, 80, 25);
-		removeButton.setVisible(true);
-		removeButton.addActionListener(new ActionListener() {
+		remove.setBounds(163, 170, 80, 25);
+		remove.setVisible(true);
+		remove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				UserManager.removeUser(editingName);
@@ -145,6 +145,6 @@ public class ProfileEditorDialog extends JDialog {
 				setVisible(false);
 			}
 		});
-		panel.add(removeButton);
+		panel.add(remove);
 	}
 }
