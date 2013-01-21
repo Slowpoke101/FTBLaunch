@@ -35,9 +35,15 @@ import net.ftb.locale.I18N;
 
 public class MapFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE")), originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN")), packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"}), originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}), compatibleBox;
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
+	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
+	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
+	private JLabel packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JComboBox typeBox = new JComboBox(new String[] {"Client", "Server"});
+	private JComboBox originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
+	private JComboBox compatibleBox;
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+	private JButton cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JButton searchButton = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
 
 	private MapsPane pane;
 

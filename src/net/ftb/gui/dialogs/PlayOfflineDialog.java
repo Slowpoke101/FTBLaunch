@@ -34,7 +34,8 @@ public class PlayOfflineDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea text;
-	private JButton yes, no;
+	private JButton yes;
+	private JButton no;
 
 	public PlayOfflineDialog(String cause, final String username) {
 		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));

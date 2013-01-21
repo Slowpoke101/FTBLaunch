@@ -37,9 +37,13 @@ import net.ftb.locale.I18N;
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel compatibleLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK")), resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
-	private JComboBox compatibleBox, resolutionBox;
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), searchButton = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
+	private JLabel compatibleLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+	private JLabel resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
+	private JComboBox compatibleBox;
+	private JComboBox resolutionBox;
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+	private JButton cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+	private JButton searchButton = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
 
 	private TexturepackPane instance;
 	

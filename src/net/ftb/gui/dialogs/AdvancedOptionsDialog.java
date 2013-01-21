@@ -40,8 +40,13 @@ import net.ftb.util.DownloadUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
 	private JButton exitBtn;
-	private JTextField minecraftX, minecraftY, xPosField, yPosField, additionalJavaOptions;
-	private JCheckBox autoMaxCheck, snooper;
+	private JTextField minecraftX;
+	private JTextField minecraftY;
+	private JTextField xPosField;
+	private JTextField yPosField;
+	private JTextField additionalJavaOptions;
+	private JCheckBox autoMaxCheck;
+	private JCheckBox snooper;
 	private static JComboBox downloadServers;
 	private final Settings settings = Settings.getSettings();
 
