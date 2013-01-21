@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
 
@@ -38,7 +39,7 @@ public class LauncherUpdateDialog extends JDialog {
 	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
 	private JButton changelog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
 	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton noButton = new JButton("MAIN_NO");
+	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 	public LauncherUpdateDialog(final UpdateChecker updateChecker) {
 		super(LaunchFrame.getInstance(), true);

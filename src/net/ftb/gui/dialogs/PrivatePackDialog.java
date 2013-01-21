@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
@@ -115,7 +116,7 @@ public class PrivatePackDialog extends JDialog {
 					textField.setText("");
 					setVisible(false);
 				} else {
-					Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS");
+					Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS"));
 				}
 			}
 		});

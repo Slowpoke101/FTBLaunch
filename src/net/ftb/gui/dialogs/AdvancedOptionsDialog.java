@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 

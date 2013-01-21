@@ -32,6 +32,7 @@ import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 
 public class ProfileAdderDialog extends JDialog {
@@ -115,7 +116,7 @@ public class ProfileAdderDialog extends JDialog {
 						LaunchFrame.writeUsers(name.getText());
 						setVisible(false);
 					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR");
+						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
 					}
 				} else {
 					if(validate(name.getText(), username.getText())) {
@@ -123,7 +124,7 @@ public class ProfileAdderDialog extends JDialog {
 						LaunchFrame.writeUsers(name.getText());
 						setVisible(false);
 					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR");
+						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
 					}
 				}
 			}

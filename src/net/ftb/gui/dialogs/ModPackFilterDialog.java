@@ -30,13 +30,14 @@ import javax.swing.JPanel;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.locale.I18N;
 
 public class ModPackFilterDialog extends JDialog {
 	private JPanel panel = new JPanel();
-	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"), packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"), lblModPackAval = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY");
+	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN")), packLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK")), lblModPackAval = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
 	private JComboBox originBox = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}), compatibleBox, mcVersionBox, 
 			avalBox = new JComboBox(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")});
-	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), btnSearch = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK");
+	private JButton applyButton = new JButton(I18N.getLocaleString("FILTER_APPLY")), cancelButton = new JButton(I18N.getLocaleString("MAIN_CANCEL")), btnSearch = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
 	private final JLabel lblMinecraftVersion = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
 
 	private ModpacksPane pane;
@@ -49,7 +50,7 @@ public class ModPackFilterDialog extends JDialog {
 
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("FILTER_TITLE");
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
 		setBounds(300, 300, 300, 209);
 		setResizable(false);
 		panel.setBounds(0, 0, 230, 140);

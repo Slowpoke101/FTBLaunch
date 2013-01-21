@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.tools.MapManager;
 
 public class MapOverwriteDialog extends JDialog {
