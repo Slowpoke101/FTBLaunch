@@ -31,20 +31,38 @@ import net.ftb.locale.I18N;
 
 public class PasswordDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
-	JPanel panel = new JPanel();
-	JPasswordField password = new JPasswordField(1);
-	JLabel passwordLbl = new JLabel(I18N.getLocaleString("PASSWORD_PASSLABEL"));
-	JButton login = new JButton(I18N.getLocaleString("MAIN_SUBMIT"));
+	private JLabel passwordLbl;
+	private JPasswordField password;
+	private JButton login;
 
 	public PasswordDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
+		setupGui();
+
+		getRootPane().setDefaultButton(login);
+
+		login.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if(!new String(password.getPassword()).isEmpty()){
+					LaunchFrame.tempPass = new String(password.getPassword());
+					setVisible(false);
+				}
+			}
+		});
+	}
+
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("PASSWORD_TITLE"));
 		setBounds(300, 300, 300, 120);
 		setResizable(false);
 
-		getRootPane().setDefaultButton(login);
+		JPanel panel = new JPanel();
+		passwordLbl = new JLabel(I18N.getLocaleString("PASSWORD_PASSLABEL"));
+		password = new JPasswordField(1);
+		login = new JButton(I18N.getLocaleString("MAIN_SUBMIT"));
 
 		panel.setBounds(0, 0, 300, 100);
 		setContentPane(panel);
@@ -60,15 +78,6 @@ public class PasswordDialog extends JDialog {
 
 		login.setBounds(105, 50, 90, 25);
 		login.setVisible(true);
-		login.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(!new String(password.getPassword()).isEmpty()){
-					LaunchFrame.tempPass = new String(password.getPassword());
-					setVisible(false);
-				}
-			}
-		});
 		panel.add(login);
 	}
 }

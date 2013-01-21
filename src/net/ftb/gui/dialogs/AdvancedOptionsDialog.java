@@ -59,108 +59,53 @@ public class AdvancedOptionsDialog extends JDialog {
 
 	public AdvancedOptionsDialog() {
 		super(LaunchFrame.getInstance(), true);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
-		setResizable(false);
-		getContentPane().setLayout(null);
-		setBounds(440, 260, 440, 260);
+		setupGui();
 
-		downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
-		downloadLocationLbl.setBounds(10, 10, 110, 25);
-		add(downloadLocationLbl);
-		downloadLocation = new JComboBox(getDownloadServerNames());
-		downloadLocation.setBounds(190, 10, 222, 25);
-		downloadLocation.addFocusListener(settingsChangeListener);
 		if(DownloadUtils.serversLoaded) {
-			if(DownloadUtils.downloadLocation.containsKey(settings.getDownloadServer())) {
+			if(DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
 				downloadLocation.setSelectedItem(settings.getDownloadServer());
 			}
 		}
-		add(downloadLocation);
 
-		additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
-		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
-		add(additionalJavaOptionsLbl);
-
-		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
-		additionalJavaOptions.setBounds(190, 45, 222, 28);
-		additionalJavaOptions.addFocusListener(settingsChangeListener);
-		add(additionalJavaOptions);
-
-		mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
-		mcWindowSizeLbl.setBounds(10, 80, 170, 25);
-		add(mcWindowSizeLbl);
-
-		mcWindowSizeWidth = new JTextField();
-		mcWindowSizeWidth.setBounds(190, 80, 95, 25);
 		mcWindowSizeWidth.setText(Integer.toString(settings.getLastDimension().width));
-		add(mcWindowSizeWidth);
-		mcWindowSizeWidth.addFocusListener(settingsChangeListener);
-		mcWindowSizeWidth.setColumns(10);
-
-		mcWindowSizeSepLbl = new JLabel("x");
-		mcWindowSizeSepLbl.setBounds(297, 80, 15, 25);
-		add(mcWindowSizeSepLbl);
-
-		mcWindowSizeHeight = new JTextField();
-		mcWindowSizeHeight.setBounds(317, 80, 95, 25);
 		mcWindowSizeHeight.setText(Integer.toString(settings.getLastDimension().height));
-		add(mcWindowSizeHeight);
-		mcWindowSizeHeight.addFocusListener(settingsChangeListener);
-		mcWindowSizeHeight.setColumns(10);
-
-		mcWindowPosLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
-		mcWindowPosLbl.setBounds(10, 115, 170, 25);
-		add(mcWindowPosLbl);
-
-		mcWindowPosX = new JTextField();
-		mcWindowPosX.setBounds(190, 115, 95, 25);
 		mcWindowPosX.setText(Integer.toString(settings.getLastPosition().x));
-		add(mcWindowPosX);
-		mcWindowPosX.addFocusListener(settingsChangeListener);
-		mcWindowPosX.setColumns(10);
-
-		mcWindowPosSepLbl = new JLabel("x");
-		mcWindowPosSepLbl.setBounds(297, 115, 15, 25);
-		add(mcWindowPosSepLbl);
-
-		mcWindowPosY = new JTextField();
-		mcWindowPosY.setBounds(317, 115, 95, 25);
 		mcWindowPosY.setText(Integer.toString(settings.getLastPosition().y));
-		add(mcWindowPosY);
-		mcWindowPosY.addFocusListener(settingsChangeListener);
-		mcWindowPosY.setColumns(10);
-
-		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
-		autoMaxCheck.setBounds(10, 150, 170, 25);
 		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
-		autoMaxCheck.addFocusListener(settingsChangeListener);
-		add(autoMaxCheck);
-
-		snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
-		snooper.setBounds(190, 150, 300, 25);
 		snooper.setSelected(settings.getSnooper());
-		snooper.addFocusListener(settingsChangeListener);
-		add(snooper);
 
-		exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
-		exit.setBounds(150, 190, 140, 28);
+		FocusListener settingsChangeListener = new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				saveSettingsInto(settings);
+			}
+			@Override public void focusGained(FocusEvent e) { }
+		};
+
+		downloadLocation.addFocusListener(settingsChangeListener);
+		additionalJavaOptions.addFocusListener(settingsChangeListener);
+		mcWindowSizeWidth.addFocusListener(settingsChangeListener);
+		mcWindowSizeHeight.addFocusListener(settingsChangeListener);
+		mcWindowPosX.addFocusListener(settingsChangeListener);
+		mcWindowPosY.addFocusListener(settingsChangeListener);
+		autoMaxCheck.addFocusListener(settingsChangeListener);
+		snooper.addFocusListener(settingsChangeListener);
+
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		add(exit);
 	}
 
 	public static void setDownloadServers() {
 		String downloadserver = Settings.getSettings().getDownloadServer();
 		downloadLocation.removeAllItems();
-		for(String server : DownloadUtils.downloadLocation.keySet()) {
+		for(String server : DownloadUtils.downloadServers.keySet()) {
 			downloadLocation.addItem(server);
 		}
-		if(DownloadUtils.downloadLocation.containsKey(downloadserver)) {
+		if(DownloadUtils.downloadServers.containsKey(downloadserver)) {
 			downloadLocation.setSelectedItem(downloadserver);
 		}
 	}
@@ -170,9 +115,9 @@ public class AdvancedOptionsDialog extends JDialog {
 			Logger.logWarn("Servers not loaded yet.");
 			return new String[] { "Automatic" };
 		} else {
-			String[] out = new String[DownloadUtils.downloadLocation.size()];
+			String[] out = new String[DownloadUtils.downloadServers.size()];
 			for(int i = 0; i < out.length; i++) {
-				out[i] = String.valueOf(DownloadUtils.downloadLocation.keySet().toArray()[i]);
+				out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
 			}
 			return out;
 		}
@@ -189,11 +134,74 @@ public class AdvancedOptionsDialog extends JDialog {
 		settings.save();
 	}
 
-	private FocusListener settingsChangeListener = new FocusListener() {
-		@Override
-		public void focusLost(FocusEvent e) {
-			saveSettingsInto(settings);
-		}
-		@Override public void focusGained(FocusEvent e) { }
-	};
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
+		setResizable(false);
+		getContentPane().setLayout(null);
+		setBounds(440, 260, 440, 260);
+
+		downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
+		downloadLocationLbl.setBounds(10, 10, 110, 25);
+		add(downloadLocationLbl);
+		downloadLocation = new JComboBox(getDownloadServerNames());
+		downloadLocation.setBounds(190, 10, 222, 25);
+		add(downloadLocation);
+
+		additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
+		additionalJavaOptionsLbl.setBounds(10, 45, 320, 25);
+		add(additionalJavaOptionsLbl);
+
+		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
+		additionalJavaOptions.setBounds(190, 45, 222, 28);
+		add(additionalJavaOptions);
+
+		mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
+		mcWindowSizeLbl.setBounds(10, 80, 170, 25);
+		add(mcWindowSizeLbl);
+
+		mcWindowSizeWidth = new JTextField();
+		mcWindowSizeWidth.setBounds(190, 80, 95, 25);
+		add(mcWindowSizeWidth);
+		mcWindowSizeWidth.setColumns(10);
+
+		mcWindowSizeSepLbl = new JLabel("x");
+		mcWindowSizeSepLbl.setBounds(297, 80, 15, 25);
+		add(mcWindowSizeSepLbl);
+
+		mcWindowSizeHeight = new JTextField();
+		mcWindowSizeHeight.setBounds(317, 80, 95, 25);
+		add(mcWindowSizeHeight);
+		mcWindowSizeHeight.setColumns(10);
+
+		mcWindowPosLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
+		mcWindowPosLbl.setBounds(10, 115, 170, 25);
+		add(mcWindowPosLbl);
+
+		mcWindowPosX = new JTextField();
+		mcWindowPosX.setBounds(190, 115, 95, 25);
+		add(mcWindowPosX);
+		mcWindowPosX.setColumns(10);
+
+		mcWindowPosSepLbl = new JLabel("x");
+		mcWindowPosSepLbl.setBounds(297, 115, 15, 25);
+		add(mcWindowPosSepLbl);
+
+		mcWindowPosY = new JTextField();
+		mcWindowPosY.setBounds(317, 115, 95, 25);
+		mcWindowPosY.setColumns(10);
+		add(mcWindowPosY);
+
+		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
+		autoMaxCheck.setBounds(10, 150, 170, 25);
+		add(autoMaxCheck);
+
+		snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
+		snooper.setBounds(190, 150, 300, 25);
+		add(snooper);
+
+		exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
+		exit.setBounds(150, 190, 140, 28);
+		add(exit);
+	}
 }

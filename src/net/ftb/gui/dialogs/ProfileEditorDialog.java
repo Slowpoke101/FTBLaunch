@@ -37,56 +37,39 @@ import net.ftb.locale.I18N;
 public class ProfileEditorDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel = new JPanel();
-
-	private JTextField username = new JTextField(1);
-	private JPasswordField password = new JPasswordField(1);
-	private JTextField name = new JTextField(1);
-	private JLabel usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
-	private JLabel passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
-	private JLabel nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
-	private JCheckBox savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-	private JButton update = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
-	private JButton remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+	private JLabel usernameLbl;
+	private JTextField username;
+	private JLabel passwordLbl;
+	private JPasswordField password;
+	private JLabel nameLbl;
+	private JTextField name;
+	private JCheckBox savePassword;
+	private JButton update;
+	private JButton remove;
 
 	public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
 		super(instance, modal);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("PROFILEDITOR_TITLE"));
-		setBounds(300, 300, 300, 240);
-		setResizable(false);
+
+		setupGui();
 
 		getRootPane().setDefaultButton(update);
 
-		panel.setBounds(0, 0, 300, 240);
-		setContentPane(panel);
-		panel.setLayout(null);
-
-		usernameLbl.setBounds(10, 10, 80, 30);
-		usernameLbl.setVisible(true);
-		panel.add(usernameLbl);
-
-		username.setBounds(100, 10, 170, 30);
 		username.setText(UserManager.getUsername(editingName));
-		username.setVisible(true);
+		name.setText(editingName);
+
 		username.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
 			}
+
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				name.setText(username.getText());
 			}
 			@Override public void changedUpdate(DocumentEvent e) { }
 		});
-		panel.add(username);
 
-		passwordLbl.setBounds(10, 50, 80, 30);
-		passwordLbl.setVisible(true);
-		panel.add(passwordLbl);
-
-		savePassword.setBounds(100, 130, 170, 30);
 		savePassword.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -94,8 +77,6 @@ public class ProfileEditorDialog extends JDialog {
 			}
 		});
 
-		password.setBounds(100, 50, 170, 30);
-		password.setVisible(true);
 		if(UserManager.getPassword(editingName).isEmpty()){
 			password.setEnabled(false);
 			savePassword.setSelected(false);
@@ -103,20 +84,7 @@ public class ProfileEditorDialog extends JDialog {
 			password.setText(UserManager.getPassword(editingName));
 			savePassword.setSelected(true);
 		}
-		panel.add(password);
-		panel.add(savePassword);
 
-		nameLbl.setBounds(10, 90, 80, 30);
-		nameLbl.setVisible(true);
-		panel.add(nameLbl);
-
-		name.setBounds(100, 90, 170, 30);
-		name.setVisible(true);
-		name.setText(editingName);
-		panel.add(name);
-
-		update.setBounds(57, 170, 80, 25);
-		update.setVisible(true);
 		update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -133,10 +101,7 @@ public class ProfileEditorDialog extends JDialog {
 				}
 			}
 		});
-		panel.add(update);
 
-		remove.setBounds(163, 170, 80, 25);
-		remove.setVisible(true);
 		remove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -145,6 +110,62 @@ public class ProfileEditorDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("PROFILEDITOR_TITLE"));
+		setBounds(300, 300, 300, 240);
+		setResizable(false);
+
+		JPanel panel = new JPanel();
+		usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
+		username = new JTextField(1);
+		passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
+		password = new JPasswordField(1);
+		nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
+		name = new JTextField(1);
+		savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
+		update = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
+		remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+
+		panel.setBounds(0, 0, 300, 240);
+		setContentPane(panel);
+		panel.setLayout(null);
+
+		usernameLbl.setBounds(10, 10, 80, 30);
+		usernameLbl.setVisible(true);
+		panel.add(usernameLbl);
+
+		username.setBounds(100, 10, 170, 30);
+		username.setVisible(true);
+		panel.add(username);
+
+		passwordLbl.setBounds(10, 50, 80, 30);
+		passwordLbl.setVisible(true);
+		panel.add(passwordLbl);
+
+		password.setBounds(100, 50, 170, 30);
+		password.setVisible(true);
+		panel.add(password);
+		nameLbl.setBounds(10, 90, 80, 30);
+		nameLbl.setVisible(true);
+		panel.add(nameLbl);
+
+		name.setBounds(100, 90, 170, 30);
+		name.setVisible(true);
+		panel.add(name);
+
+		savePassword.setBounds(100, 130, 170, 30);
+		savePassword.setVisible(true);
+		panel.add(savePassword);
+
+		update.setBounds(57, 170, 80, 25);
+		update.setVisible(true);
+		panel.add(update);
+
+		remove.setBounds(163, 170, 80, 25);
+		remove.setVisible(true);
 		panel.add(remove);
 	}
 }

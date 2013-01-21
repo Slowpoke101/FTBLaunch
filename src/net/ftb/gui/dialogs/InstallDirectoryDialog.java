@@ -35,34 +35,23 @@ import net.ftb.locale.I18N;
 import net.ftb.util.OSUtils;
 
 public class InstallDirectoryDialog extends JDialog {
+	private JLabel messageLbl;
 	private JLabel installPathLbl;
 	private JTextField installPath;
-	private JLabel messageLbl = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
-	private JButton apply = new JButton(I18N.getLocaleString("MAIN_APPLY"));
+	private JButton installPathBrowse;
+	private JButton apply;
 
 	public InstallDirectoryDialog() {
 		super(LaunchFrame.getInstance(), true);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Choose Install Directory");
-		setBounds(560, 150, 560, 150);
-		setResizable(false);
-		getContentPane().setLayout(null);
 
-		messageLbl.setBounds(10, 10, 530, 30);
-		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		add(messageLbl);
+		setupGui();
 
-		JButton installPathBrowse = new JButton("...");
-		installPathBrowse.setBounds(495, 50, 50, 23);
+		getRootPane().setDefaultButton(apply);
+
 		installPathBrowse.addActionListener(new ChooseDir(this));
-		add(installPathBrowse);
 
-		installPathLbl = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
-		installPathLbl.setBounds(10, 50, 127, 23);
-		add(installPathLbl);
+		installPath.setText(OSUtils.getDefInstallPath());
 
-		installPath = new JTextField();
-		installPath.setBounds(90, 50, 400, 23);
 		installPath.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -71,25 +60,49 @@ public class InstallDirectoryDialog extends JDialog {
 			}
 			@Override public void focusGained(FocusEvent e) { }
 		});
-		installPath.setColumns(10);
-		installPath.setText(OSUtils.getDefInstallPath());
-		add(installPath);
 
-		apply.setBounds(240, 85, 80, 23);
 		apply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 			}
 		});
-		add(apply);
-
-		getRootPane().setDefaultButton(apply);
 	}
 
 	public void setInstallFolderText(String messageLbl) {
 		installPath.setText(messageLbl);
 		Settings.getSettings().setInstallPath(installPath.getText());
 		Settings.getSettings().save();
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle("Choose Install Directory");
+		setBounds(560, 150, 560, 150);
+		setResizable(false);
+		getContentPane().setLayout(null);
+
+		messageLbl = new JLabel("<html><body><center><font size=\"3\"><strong>" + I18N.getLocaleString("INSTALL_FIRSTUSE") + "</strong></font></center></body></html>");
+		installPathLbl = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
+		installPath = new JTextField();
+		installPathBrowse = new JButton("...");
+		apply = new JButton(I18N.getLocaleString("MAIN_APPLY"));
+
+		messageLbl.setBounds(10, 10, 530, 30);
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		add(messageLbl);
+
+		installPathBrowse.setBounds(495, 50, 50, 23);
+		add(installPathBrowse);
+		installPathLbl.setBounds(10, 50, 127, 23);
+		add(installPathLbl);
+		installPath.setBounds(90, 50, 400, 23);
+
+		installPath.setColumns(10);
+		add(installPath);
+
+		apply.setBounds(240, 85, 80, 23);
+
+		add(apply);
 	}
 }

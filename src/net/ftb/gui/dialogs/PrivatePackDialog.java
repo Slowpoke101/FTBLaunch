@@ -40,25 +40,19 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class PrivatePackDialog extends JDialog {
-	private JTextField modpackName = new JTextField();
-	private JButton remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
-	private JButton add = new JButton(I18N.getLocaleString("MAIN_ADD"));
-	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JEditorPane editorPane = new JEditorPane();
+	private JEditorPane editorPane;
+	private JTextField modpackName;
+	private JButton remove;
+	private JButton add;
+	private JButton cancel;
 
 	public PrivatePackDialog() {
 		super(LaunchFrame.getInstance(), true);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		getContentPane().setLayout(null);
-		setBounds(300, 300, 300, 250);
-		setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
-		setResizable(false);
 
-		modpackName.setBounds(10, 137, 264, 30);
-		modpackName.setColumns(10);
-		add(modpackName);
+		setupGui();
 
-		add.setBounds(10, 178, 82, 23);
+		getRootPane().setDefaultButton(add);
+
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -73,26 +67,14 @@ public class PrivatePackDialog extends JDialog {
 				}
 			}
 		});
-		add(add);
-		getRootPane().setDefaultButton(add);
 
-		cancel.setBounds(192, 178, 82, 23);
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		add(cancel);
 
-		editorPane.setBounds(10, 11, 264, 115);
-		editorPane.setEditable(false);
-		editorPane.setHighlighter(null);
-		editorPane.setContentType("text/html");
-		editorPane.setText(I18N.getLocaleString("PRIVATEPACK_TEXT"));
-		add(editorPane);
-
-		remove.setBounds(102, 178, 80, 23);
 		remove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -120,6 +102,38 @@ public class PrivatePackDialog extends JDialog {
 				}
 			}
 		});
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		getContentPane().setLayout(null);
+		setBounds(300, 300, 300, 250);
+		setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
+		setResizable(false);
+
+		editorPane = new JEditorPane();
+		modpackName = new JTextField();
+		remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
+		add = new JButton(I18N.getLocaleString("MAIN_ADD"));
+		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+
+		modpackName.setBounds(10, 137, 264, 30);
+		modpackName.setColumns(10);
+		add(modpackName);
+
+		add.setBounds(10, 178, 82, 23);
+		add(add);
+		cancel.setBounds(192, 178, 82, 23);
+		add(cancel);
+
+		editorPane.setBounds(10, 11, 264, 115);
+		editorPane.setEditable(false);
+		editorPane.setHighlighter(null);
+		editorPane.setContentType("text/html");
+		editorPane.setText(I18N.getLocaleString("PRIVATEPACK_TEXT"));
+		add(editorPane);
+
+		remove.setBounds(102, 178, 80, 23);
 		add(remove);
 	}
 }

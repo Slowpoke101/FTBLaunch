@@ -34,20 +34,53 @@ import net.ftb.util.OSUtils;
 public class LauncherUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel = new JPanel();
-	private JLabel messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
-	private JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-	private JButton showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
-	private JButton update = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JLabel messageLbl;
+	private JLabel updateLbl;
+	private JButton showChangeLog;
+	private JButton update;
+	private JButton abort;
 
 	public LauncherUpdateDialog(final UpdateChecker updateChecker) {
 		super(LaunchFrame.getInstance(), true);
 
+		setupGui();
+
+		showChangeLog.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Call new frame containing html page?
+				OSUtils.browse("http://launcher.feed-the-beast.com/showChangeLog.html?" + LaunchFrame.buildNumber);
+			}
+		});
+
+		update.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+				updateChecker.update();
+			}
+		});
+
+		abort.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+			}
+		});
+	}
+
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
 		setBounds(300, 300, 300, 150);
 		setResizable(false);
+
+		JPanel panel = new JPanel();
+		messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
+		updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+		showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
+		update = new JButton(I18N.getLocaleString("MAIN_YES"));
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 		panel.setLayout(null);
 		panel.setBounds(0, 0, 300, 150);
@@ -62,32 +95,12 @@ public class LauncherUpdateDialog extends JDialog {
 		panel.add(updateLbl);
 
 		showChangeLog.setBounds(65, 55, 170, 25);
-		showChangeLog.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Call new frame containing html page?
-				OSUtils.browse("http://launcher.feed-the-beast.com/showChangeLog.html?" + LaunchFrame.buildNumber);
-			}
-		});
 		panel.add(showChangeLog);
 
 		update.setBounds(65, 90, 80, 25);
-		update.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-				updateChecker.update();
-			}
-		});
 		panel.add(update);
 
 		abort.setBounds(155, 90, 80, 25);
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-			}
-		});
 		panel.add(abort);
 	}
 }

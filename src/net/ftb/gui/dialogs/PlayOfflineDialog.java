@@ -38,8 +38,8 @@ public class PlayOfflineDialog extends JDialog {
 	private JButton abort;
 
 	public PlayOfflineDialog(String cause, final String username) {
-		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
-		play = new JButton(I18N.getLocaleString("MAIN_YES"));
+		setupGui();
+
 		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -47,18 +47,20 @@ public class PlayOfflineDialog extends JDialog {
 						+ File.separator + "minecraft", username, "offlinemods");
 			}
 		});
-		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+
 		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		drawGui();
 	}
 
-	public void drawGui() {
+	public void setupGui() {
 		setBounds(300, 300, 225, 150);
+		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
+		play = new JButton(I18N.getLocaleString("MAIN_YES"));
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 		JScrollPane pane = new JScrollPane(text);
 		pane.setBounds(10, 10, 190, 60);
 		abort.setBounds(110, 80, 90, 25);

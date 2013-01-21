@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -34,56 +35,30 @@ import net.ftb.gui.panes.MapsPane;
 import net.ftb.locale.I18N;
 
 public class MapFilterDialog extends JDialog {
-	private JPanel panel = new JPanel();
-	private JLabel typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
-	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
-	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JComboBox type = new JComboBox(new String[] {"Client", "Server"});
-	private JComboBox origin = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
+	private JLabel typeLbl;
+	private JComboBox type;
+	private JLabel originLbl;
+	private JComboBox origin;
+	private JLabel compatiblePackLbl;
 	private JComboBox compatiblePack;
-	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton search = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
+	private JButton apply;
+	private JButton cancel;
+	private JButton search;
 
 	private MapsPane pane;
 
 	public MapFilterDialog(MapsPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		setupGui();
-		this.pane = instance;
-	}
 
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("FILTER_TITLE"));
-		setBounds(300, 300, 230, 205);
-		setResizable(false);
-		panel.setBounds(0, 0, 230, 140);
-		panel.setLayout(null);
-		setContentPane(panel);
-		typeLbl.setBounds(10, 10, 100, 30);
-		type.setBounds(120, 10, 100, 30);
-		originLbl.setBounds(10, 40, 100, 30);
-		origin.setBounds(120, 40, 100, 30);
-		apply.setBounds(10, 141, 210, 25);
-		search.setBounds(10, 110, 100, 25);
+		setupGui();
+
 		getRootPane().setDefaultButton(apply);
-		cancel.setBounds(120, 110, 100, 25);
-		panel.add(typeLbl);
-		panel.add(type);
-		panel.add(originLbl);
-		panel.add(origin);
-		panel.add(apply);
-		panel.add(cancel);
-		panel.add(search);
-		panel.setBounds(0, 0, 230, 250);
-		cancel.setBounds(120, 110, 100, 25);
+
+		this.pane = instance;
 
 		type.setSelectedItem(pane.type);
 		origin.setSelectedItem(pane.origin);
-
-		compatiblePackLbl.setBounds(10, 70, 100, 30);
-		panel.add(compatiblePackLbl);
+		compatiblePack.setSelectedItem(pane.compatible);
 
 		ArrayList<String> packs = new ArrayList<String>();
 		packs.add("All");
@@ -96,10 +71,9 @@ public class MapFilterDialog extends JDialog {
 			}
 		}
 
-		compatiblePack = new JComboBox(packs.toArray());
-		compatiblePack.setBounds(120, 70, 100, 30);
-		compatiblePack.setSelectedItem(pane.compatible);
-		panel.add(compatiblePack);
+		type.setModel(new DefaultComboBoxModel(new String[] {"Client", "Server"}));
+		origin.setModel(new DefaultComboBoxModel(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}));
+		compatiblePack.setModel(new DefaultComboBoxModel(packs.toArray()));
 
 		apply.addActionListener(new ActionListener() {
 			@Override
@@ -111,12 +85,14 @@ public class MapFilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+
 		cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
+
 		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -125,5 +101,50 @@ public class MapFilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
+		setBounds(300, 300, 230, 205);
+		setResizable(false);
+
+		JPanel panel = new JPanel();
+		typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
+		type = new JComboBox();
+		originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
+		origin = new JComboBox();
+		compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+		compatiblePack = new JComboBox();
+		apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+		search = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
+
+		panel.setBounds(0, 0, 230, 140);
+		panel.setLayout(null);
+		setContentPane(panel);
+
+		typeLbl.setBounds(10, 10, 100, 30);
+		type.setBounds(120, 10, 100, 30);
+		originLbl.setBounds(10, 40, 100, 30);
+		origin.setBounds(120, 40, 100, 30);
+		apply.setBounds(10, 141, 210, 25);
+		search.setBounds(10, 110, 100, 25);
+		cancel.setBounds(120, 110, 100, 25);
+		panel.add(typeLbl);
+		panel.add(type);
+		panel.add(originLbl);
+		panel.add(origin);
+		panel.add(apply);
+		panel.add(cancel);
+		panel.add(search);
+		panel.setBounds(0, 0, 230, 250);
+		cancel.setBounds(120, 110, 100, 25);
+
+		compatiblePackLbl.setBounds(10, 70, 100, 30);
+		panel.add(compatiblePackLbl);
+
+		compatiblePack.setBounds(120, 70, 100, 30);
+		panel.add(compatiblePack);
 	}
 }

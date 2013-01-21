@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.management.InstanceAlreadyExistsException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -36,14 +37,13 @@ import net.ftb.locale.I18N;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
-	private JPanel panel = new JPanel();
-	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JLabel resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
+	private JLabel compatiblePackLbl;
 	private JComboBox compatiblePack;
+	private JLabel resolutionLbl;
 	private JComboBox resolution;
-	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton search = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
+	private JButton apply;
+	private JButton cancel;
+	private JButton search;
 
 	private TexturepackPane instance;
 	
@@ -54,8 +54,33 @@ public class TexturePackFilterDialog extends JDialog {
 		
 		setupGui();
 		
-		// TODO: Overhaul Filter dialog towards texture packs
-		// Because more than likely ftb won't have a texture pack, and there is no server versions.
+		int textures = TexturePack.getTexturePackArray().size();
+		
+		ArrayList<String> comp = new ArrayList<String>();
+		comp.add("All");
+		for(int i = 0; i < textures; i++) {
+			String[] s = TexturePack.getTexturePack(i).getCompatible();
+			for(int j = 0; j < s.length; j++) {
+				if(!comp.contains(ModPack.getPack(s[j].trim()).getName())) {
+					comp.add(ModPack.getPack(s[j].trim()).getName());
+				}
+			}
+		}
+
+		ArrayList<String> res = new ArrayList<String>();
+		res.add("All");
+		for(int i = 0; i < textures; i++) {
+			if(!res.contains(TexturePack.getTexturePack(i).getResolution())) {
+				res.add(TexturePack.getTexturePack(i).getResolution());
+			}
+		}
+
+		compatiblePack.setModel(new DefaultComboBoxModel(res.toArray(new String[]{})));
+		resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[]{})));
+
+		compatiblePack.setSelectedItem(instance.compatible);
+		resolution.setSelectedItem(instance.resolution);
+
 		apply.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			@Override
@@ -86,31 +111,14 @@ public class TexturePackFilterDialog extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("FILTER_TITLE"));
 		
-		int textures = TexturePack.getTexturePackArray().size();
-		
-		ArrayList<String> comp = new ArrayList<String>();
-		comp.add("All");
-		for(int i = 0; i < textures; i++) {
-			String[] s = TexturePack.getTexturePack(i).getCompatible();
-			for(int j = 0; j < s.length; j++) {
-				if(!comp.contains(ModPack.getPack(s[j].trim()).getName())) {
-					comp.add(ModPack.getPack(s[j].trim()).getName());
-				}
-			}
-		}
-		compatiblePack = new JComboBox(comp.toArray(new String[]{}));
-		
-		ArrayList<String> res = new ArrayList<String>();
-		res.add("All");
-		for(int i = 0; i < textures; i++) {
-			if(!res.contains(TexturePack.getTexturePack(i).getResolution())) {
-				res.add(TexturePack.getTexturePack(i).getResolution());
-			}
-		}
-		resolution = new JComboBox(res.toArray(new String[]{}));
-		
-		compatiblePack.setSelectedItem(instance.compatible);
-		resolution.setSelectedItem(instance.resolution);
+		JPanel panel = new JPanel();
+		compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+		resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
+		compatiblePack = new JComboBox();
+		resolution = new JComboBox();
+		apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+		search = new JButton(I18N.getLocaleString("FILTER_TEXSEARCH"));
 		
 		setBounds(350, 300, 280, 181);
 		setResizable(false);

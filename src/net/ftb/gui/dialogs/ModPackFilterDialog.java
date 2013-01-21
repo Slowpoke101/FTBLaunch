@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,46 +34,26 @@ import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.locale.I18N;
 
 public class ModPackFilterDialog extends JDialog {
-	private JPanel panel = new JPanel();
-	private JLabel originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
-	private JLabel compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-	private JLabel availabilityLbl = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
-	private JComboBox origin = new JComboBox(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")});
-	private JComboBox compatiblePack;
+	private JLabel originLbl;
+	private JComboBox origin;
+	private JLabel availabilityLbl;
+	private JComboBox availability;
+	private JLabel mcVersionLbl;
 	private JComboBox mcVersion; 
-	private JComboBox availability = new JComboBox(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")});
-	private JButton apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-	private JButton cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-	private JButton search = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
-	private final JLabel mcVersionLbl = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
+	private JButton apply;
+	private JButton cancel;
+	private JButton search;
 
 	private ModpacksPane pane;
 
 	public ModPackFilterDialog(ModpacksPane instance) {
 		super(LaunchFrame.getInstance(), true);
-		setupGui();
-		this.pane = instance;
-	}
 
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("FILTER_TITLE"));
-		setBounds(300, 300, 300, 209);
-		setResizable(false);
-		panel.setBounds(0, 0, 230, 140);
-		panel.setLayout(null);
-		setContentPane(panel);
-		originLbl.setBounds(10, 11, 150, 30);
-		origin.setBounds(184, 11, 100, 30);
-		apply.setBounds(10, 143, 274, 25);
+		setupGui();
+
 		getRootPane().setDefaultButton(apply);
-		cancel.setBounds(184, 107, 100, 25);
-		search.setBounds(10, 107, 150, 25);
-		panel.add(search);
-		panel.add(originLbl);
-		panel.add(origin);
-		panel.add(apply);
-		panel.add(cancel);
+
+		this.pane = instance;
 
 		ArrayList<String> mcVersions = new ArrayList<String>();
 
@@ -84,22 +65,13 @@ public class ModPackFilterDialog extends JDialog {
 			}
 		}
 
-		mcVersion = new JComboBox(mcVersions.toArray());
+		mcVersion.setModel(new DefaultComboBoxModel(mcVersions.toArray()));
+		origin.setModel(new DefaultComboBoxModel(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}));
+		availability.setModel(new DefaultComboBoxModel(new String[]{ I18N.getLocaleString("MAIN_ALL"),  I18N.getLocaleString("FILTER_PUBLIC"),  I18N.getLocaleString("FILTER_PRIVATE")}));
+
 		origin.setSelectedItem(pane.origin);
-		availability.setSelectedItem(pane.avaliability);
 		mcVersion.setSelectedItem(pane.mcVersion);
-		mcVersionLbl.setBounds(10, 41, 150, 30);
-
-		panel.add(mcVersionLbl);
-		mcVersion.setBounds(184, 41, 100, 30);
-
-		panel.add(mcVersion);
-
-		availability.setBounds(184, 71, 100, 30);
-		panel.add(availability);
-
-		availabilityLbl.setBounds(10, 71, 150, 25);
-		panel.add(availabilityLbl);
+		availability.setSelectedItem(pane.avaliability);
 
 		search.addActionListener(new ActionListener() {
 			@Override
@@ -126,5 +98,50 @@ public class ModPackFilterDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("FILTER_TITLE"));
+		setBounds(300, 300, 300, 209);
+		setResizable(false);
+
+		JPanel panel = new JPanel();
+		originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
+		origin = new JComboBox();
+		availabilityLbl = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
+		availability = new JComboBox();
+		mcVersionLbl = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
+		mcVersion = new JComboBox();
+		apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+		search = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
+
+		panel.setBounds(0, 0, 230, 140);
+		panel.setLayout(null);
+		setContentPane(panel);
+		originLbl.setBounds(10, 11, 150, 30);
+		origin.setBounds(184, 11, 100, 30);
+		apply.setBounds(10, 143, 274, 25);
+		cancel.setBounds(184, 107, 100, 25);
+		search.setBounds(10, 107, 150, 25);
+		panel.add(search);
+		panel.add(originLbl);
+		panel.add(origin);
+		panel.add(apply);
+		panel.add(cancel);
+
+		mcVersionLbl.setBounds(10, 41, 150, 30);
+
+		panel.add(mcVersionLbl);
+		mcVersion.setBounds(184, 41, 100, 30);
+
+		panel.add(mcVersion);
+
+		availability.setBounds(184, 71, 100, 30);
+		panel.add(availability);
+
+		availabilityLbl.setBounds(10, 71, 150, 25);
+		panel.add(availabilityLbl);
 	}
 }

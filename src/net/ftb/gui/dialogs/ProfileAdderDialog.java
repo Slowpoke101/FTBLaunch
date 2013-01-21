@@ -36,35 +36,24 @@ import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 
 public class ProfileAdderDialog extends JDialog {
-	private JPanel panel = new JPanel();
-	private JTextField username = new JTextField(1);
-	private JPasswordField password = new JPasswordField(1);
-	private JTextField name = new JTextField(1);
-	private JLabel usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
-	private JLabel passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
-	private JLabel nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
-	private JCheckBox savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-	private JButton add = new JButton(I18N.getLocaleString("MAIN_ADD"));
+	private JLabel usernameLbl;
+	private JTextField username;
+	private JLabel passwordLbl;
+	private JPasswordField password;
+	private JLabel nameLbl;
+	private JTextField name;
+	private JCheckBox savePassword;
+	private JButton add;
 
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("PROFILEADDER_TITLE"));
-		setBounds(300, 300, 300, 240);
-		setResizable(false);
+
+		setupGui();
 
 		getRootPane().setDefaultButton(add);
 
-		panel.setBounds(0, 0, 300, 240);
-		setContentPane(panel);
-		panel.setLayout(null);
+		savePassword.setSelected(true);
 
-		usernameLbl.setBounds(10, 10, 80, 30);
-		usernameLbl.setVisible(true);
-		panel.add(usernameLbl);
-
-		username.setBounds(100, 10, 170, 30);
-		username.setVisible(true);
 		username.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
@@ -77,36 +66,14 @@ public class ProfileAdderDialog extends JDialog {
 			}
 			@Override public void changedUpdate(DocumentEvent e) { }
 		});
-		panel.add(username);
 
-		passwordLbl.setBounds(10, 50, 80, 30);
-		passwordLbl.setVisible(true);
-		panel.add(passwordLbl);
-
-		password.setBounds(100, 50, 170, 30);
-		password.setVisible(true);
-		panel.add(password);
-
-		nameLbl.setBounds(10, 90, 80, 30);
-		nameLbl.setVisible(true);
-		panel.add(nameLbl);
-
-		name.setBounds(100, 90, 170, 30);
-		name.setVisible(true);
-		panel.add(name);
-
-		savePassword.setBounds(100, 130, 170, 30);
-		savePassword.setSelected(true);
 		savePassword.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				password.setEnabled(savePassword.isSelected());
 			}
 		});
-		panel.add(savePassword);
 
-		add.setBounds(125, 170, 50, 25);
-		add.setVisible(true);
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -129,7 +96,6 @@ public class ProfileAdderDialog extends JDialog {
 				}
 			}
 		});
-		panel.add(add);
 	}
 
 	private boolean validate(String name, String user, char[] pass) {
@@ -148,5 +114,57 @@ public class ProfileAdderDialog extends JDialog {
 			}
 		}
 		return false;
+	}
+
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("PROFILEADDER_TITLE"));
+		setBounds(300, 300, 300, 240);
+		setResizable(false);
+
+		JPanel panel = new JPanel();
+		usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
+		username = new JTextField(1);
+		passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
+		password = new JPasswordField(1);
+		nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
+		name = new JTextField(1);
+		savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
+		add = new JButton(I18N.getLocaleString("MAIN_ADD"));
+
+		panel.setBounds(0, 0, 300, 240);
+		setContentPane(panel);
+		panel.setLayout(null);
+
+		usernameLbl.setBounds(10, 10, 80, 30);
+		usernameLbl.setVisible(true);
+		panel.add(usernameLbl);
+
+		username.setBounds(100, 10, 170, 30);
+		username.setVisible(true);
+		panel.add(username);
+
+		passwordLbl.setBounds(10, 50, 80, 30);
+		passwordLbl.setVisible(true);
+		panel.add(passwordLbl);
+
+		password.setBounds(100, 50, 170, 30);
+		password.setVisible(true);
+		panel.add(password);
+		nameLbl.setBounds(10, 90, 80, 30);
+		nameLbl.setVisible(true);
+		panel.add(nameLbl);
+
+		name.setBounds(100, 90, 170, 30);
+		name.setVisible(true);
+		panel.add(name);
+
+		savePassword.setBounds(100, 130, 170, 30);
+		savePassword.setVisible(true);
+		panel.add(savePassword);
+
+		add.setBounds(125, 170, 50, 25);
+		add.setVisible(true);
+		panel.add(add);
 	}
 }

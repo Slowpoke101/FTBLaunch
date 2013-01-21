@@ -31,19 +31,44 @@ import net.ftb.locale.I18N;
 import net.ftb.tools.MapManager;
 
 public class MapOverwriteDialog extends JDialog {
-	private JPanel panel = new JPanel();
-	private JLabel messageLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_FOUNDERROR"));
-	private JLabel overwriteLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_WISHOVERRIDE"));
-	private JButton overwrite = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+	private JLabel messageLbl;
+	private JLabel overwriteLbl;
+	private JButton overwrite;
+	private JButton abort;
 
 	public MapOverwriteDialog() {
 		super(LaunchFrame.getInstance(), true);
 
+		setupGui();
+
+		overwrite.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				MapManager.overwrite = true;
+				setVisible(false);
+			}
+		});
+
+		abort.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				MapManager.overwrite = false;
+				setVisible(false);
+			}
+		});
+	}
+
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle("WARNING!");
 		setBounds(300, 300, 300, 90);
 		setResizable(false);
+
+		JPanel panel = new JPanel();
+		messageLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_FOUNDERROR"));
+		overwriteLbl = new JLabel(I18N.getLocaleString("MAPOVERRIDE_WISHOVERRIDE"));
+		overwrite = new JButton(I18N.getLocaleString("MAIN_YES"));
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
 		panel.setBounds(0, 0, 300, 90);
 		setContentPane(panel);
@@ -56,23 +81,9 @@ public class MapOverwriteDialog extends JDialog {
 		panel.add(overwriteLbl);
 
 		overwrite.setVisible(true);
-		overwrite.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				MapManager.overwrite = true;
-				setVisible(false);
-			}
-		});
 		panel.add(overwrite);
 
 		abort.setVisible(true);
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				MapManager.overwrite = false;
-				setVisible(false);
-			}
-		});
 		panel.add(abort);
 	}
 }

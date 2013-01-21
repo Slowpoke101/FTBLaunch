@@ -34,20 +34,47 @@ import net.ftb.tools.ModManager;
 public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel = new JPanel();
-	private JLabel messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
-	private JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-	private JButton update = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton abort = new JButton(I18N.getLocaleString("MAIN_NO"));
-	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
+	private JLabel messageLbl;
+	private JLabel updateLbl;
+	private JButton update;
+	private JButton abort;
+	private JCheckBox backup;
 
 	public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
+		setupGui();
+
+		update.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ModManager.update = true;
+				ModManager.backup = backup.isSelected();
+				setVisible(false);
+			}
+		});
+
+		abort.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ModManager.update = false;
+				setVisible(false);
+			}
+		});
+	}
+
+	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
 		setBounds(300, 300, 300, 140);
 		setResizable(false);
+
+		JPanel panel = new JPanel();
+		messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
+		updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+		update = new JButton(I18N.getLocaleString("MAIN_YES"));
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+		backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
 
 		panel.setLayout(null);
 		panel.setBounds(0, 0, 300, 140);
@@ -62,24 +89,9 @@ public class ModpackUpdateDialog extends JDialog {
 		panel.add(updateLbl);
 
 		update.setBounds(65, 80, 80, 25);
-		update.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ModManager.update = true;
-				ModManager.backup = backup.isSelected();
-				setVisible(false);
-			}
-		});
 		panel.add(update);
 
 		abort.setBounds(155, 80, 80, 25);
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ModManager.update = false;
-				setVisible(false);
-			}
-		});
 		panel.add(abort);
 
 		backup.setBounds(0, 45, 300, 30);
