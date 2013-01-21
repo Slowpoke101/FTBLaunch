@@ -55,6 +55,7 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Window Size:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Window Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Maximised?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disable Google Analytic Tracking
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additional Java Parameters:
 
 # Update
 UPDATE_WICHUPDATE = Do you wish to update?
@@ -90,6 +91,7 @@ FILTER_MODPACKAVALIABILITY = Mod Pack Avaliability:
 FILTER_MCVERSION = Minecraft Version:
 FILTER_RESULUTION = Mod Pack Resolution:
 FILTER_TEXSEARCH = Search Packs
+FILTER_SEARCHPACK = Search
 
 # Play Offline
 PLAYOFFLINE_WANNA = Something went wrong..\nWould you like to Play Offline?
