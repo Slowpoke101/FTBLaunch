@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
@@ -34,35 +37,18 @@ import net.ftb.tools.ModManager;
 public class ModpackUpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel panel = new JPanel();
-	private JLabel textOne = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
-	private JLabel textTwo = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-	private JButton yesButton = new JButton(I18N.getLocaleString("MAIN_YES"));
-	private JButton noButton = new JButton(I18N.getLocaleString("MAIN_NO"));
-	private JCheckBox backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
+	private JLabel messageLbl;
+	private JLabel updateLbl;
+	private JButton update;
+	private JButton abort;
+	private JCheckBox backup;
 
 	public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
-		setBounds(300, 300, 300, 140);
-		setResizable(false);
+		setupGui();
 
-		panel.setLayout(null);
-		panel.setBounds(0, 0, 300, 140);
-		setContentPane(panel);
-
-		textOne.setBounds(0, 0, 300, 30);
-		textOne.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textOne);
-
-		textTwo.setBounds(0, 20, 300, 30);
-		textTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(textTwo);
-
-		yesButton.setBounds(65, 80, 80, 25);
-		yesButton.addActionListener(new ActionListener() {
+		update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ModManager.update = true;
@@ -70,20 +56,100 @@ public class ModpackUpdateDialog extends JDialog {
 				setVisible(false);
 			}
 		});
-		panel.add(yesButton);
 
-		noButton.setBounds(155, 80, 80, 25);
-		noButton.addActionListener(new ActionListener() {
+		abort.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				ModManager.update = false;
 				setVisible(false);
 			}
 		});
-		panel.add(noButton);
+	}
 
-		backup.setBounds(0, 45, 300, 30);
+	private void setupGui() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
+		setResizable(false);
+
+		Container panel = getContentPane();
+		SpringLayout layout = new SpringLayout();
+		panel.setLayout(layout);
+
+		messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
+		updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+		backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
+		update = new JButton(I18N.getLocaleString("MAIN_YES"));
+		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+
+		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		backup.setHorizontalAlignment(SwingConstants.CENTER);
+
+		panel.add(messageLbl);
+		panel.add(updateLbl);
 		panel.add(backup);
+		panel.add(update);
+		panel.add(abort);
+
+		Spring hSpring;
+		Spring columnWidth;
+
+		hSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, backup,     hSpring, SpringLayout.WEST, panel);
+
+		columnWidth = Spring.width(messageLbl);
+		columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
+		columnWidth = Spring.max(columnWidth, Spring.width(backup));
+
+		hSpring = Spring.sum(hSpring, columnWidth);
+
+		layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.EAST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.EAST, backup,     hSpring, SpringLayout.WEST, panel);
+
+		hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backup, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+		layout.putConstraint(SpringLayout.WEST, abort,   5, SpringLayout.HORIZONTAL_CENTER, panel);
+
+		Spring vSpring;
+		Spring rowHeight;
+
+		vSpring = Spring.constant(10);
+
+		layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
+		vSpring = Spring.sum(vSpring, Spring.constant(5));
+
+		layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, backup, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(backup));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
+		layout.putConstraint(SpringLayout.NORTH, abort,  vSpring, SpringLayout.NORTH, panel);
+
+		rowHeight = Spring.height(update);
+		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+
+		vSpring = Spring.sum(vSpring, rowHeight);
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+		pack();
+		setLocationRelativeTo(getOwner());
 	}
 }
