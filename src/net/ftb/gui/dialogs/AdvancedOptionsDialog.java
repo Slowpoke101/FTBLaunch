@@ -146,7 +146,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		SpringLayout layout = new SpringLayout();
 		getContentPane().setLayout(layout);
 
-		downloadLocationLbl = new JLabel(I18N.getLocaleString("MAIN_REMOVE"));
+		downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
 		downloadLocation = new JComboBox(getDownloadServerNames());
 		additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
 		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
