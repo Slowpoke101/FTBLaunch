@@ -391,7 +391,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
+					if(getSelectedModIndex() >= 0) {
 						try {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
 							if(ModPack.getSelectedPack().isPrivatePack()) {
@@ -1031,7 +1031,7 @@ public class LaunchFrame extends JFrame {
 	}
 
 	public void doLaunch() {
-		if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+		if(users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
 			Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
 			saveSettings();
 			doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
