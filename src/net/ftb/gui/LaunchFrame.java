@@ -412,7 +412,7 @@ public class LaunchFrame extends JFrame {
 		mapInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+				if(getSelectedMapIndex() >= 0) {
 					MapManager man = new MapManager(new JFrame(), true);
 					man.setVisible(true);
 					MapManager.cleanUp();
@@ -431,7 +431,7 @@ public class LaunchFrame extends JFrame {
 		serverMap.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+				if(getSelectedMapIndex() >= 0) {
 					try {
 						OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 					} catch (NoSuchAlgorithmException e) { }
