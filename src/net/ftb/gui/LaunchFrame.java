@@ -445,7 +445,7 @@ public class LaunchFrame extends JFrame {
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
+				if(getSelectedTexturePackIndex() >= 0) {
 					TextureManager man = new TextureManager(new JFrame(), true);
 					man.setVisible(true);
 				}
