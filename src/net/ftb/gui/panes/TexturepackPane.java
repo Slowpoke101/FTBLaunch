@@ -302,7 +302,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static int getTexturePackNum() {
 		if(currentTexturePacks.size() > 0) {
-			if(!compatible.equalsIgnoreCase("all") || !resolution.equalsIgnoreCase("all")) {
+			if(!compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || !resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
 				return currentTexturePacks.get((texturePackPanels.size() - 1)).getIndex();
 			}
 		}
@@ -314,11 +314,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	private static boolean compatibilityCheck(TexturePack tp) {
-		return (compatible.equals("All") || tp.isCompatible(compatible));
+		return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.isCompatible(compatible));
 	}
 	
 	private static boolean resolutionCheck(TexturePack tp) {
-		return (resolution.equals("All") || tp.getResolution().equalsIgnoreCase(resolution));
+		return (resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.getResolution().equalsIgnoreCase(resolution));
 	}
 
 	private static boolean textSearch(TexturePack tp) {

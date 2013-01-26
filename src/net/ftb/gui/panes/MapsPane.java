@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -308,7 +309,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static int getMapNum() {
 		if(currentMaps.size() > 0) {
-			if(!origin.equalsIgnoreCase("all")) {
+			if(!origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
 				return currentMaps.get((mapPanels.size() - 1)).getIndex();
 			}
 		}
@@ -320,11 +321,11 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	private static boolean originCheck(Map map) {
-		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !map.getAuthor().equalsIgnoreCase("the ftb team"));
+		return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !map.getAuthor().equalsIgnoreCase("the ftb team"));
 	}
 
 	private static boolean compatibilityCheck(Map map) {
-		return (compatible.equals("All") || map.isCompatible(compatible));
+		return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || map.isCompatible(compatible));
 	}
 
 	private static boolean textSearch(Map map) {
