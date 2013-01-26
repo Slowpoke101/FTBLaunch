@@ -29,8 +29,11 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -157,7 +160,7 @@ public class LaunchFrame extends JFrame {
 
 		DownloadUtils thread = new DownloadUtils();
 		thread.start();
-
+		
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
@@ -205,6 +208,39 @@ public class LaunchFrame extends JFrame {
 				if (Settings.getSettings().getConsoleActive()) {
 					con.setVisible(true);
 				}
+				
+				File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
+				
+				try {
+					if(!credits.exists()) {
+						FileOutputStream fos = new FileOutputStream(credits);
+						OutputStreamWriter osw = new OutputStreamWriter(fos);
+						
+						osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
+						osw.write("-------------------------------" + System.getProperty("line.separator"));
+						osw.write("Launcher Developers:" + System.getProperty("line.separator"));
+						osw.write("jjw123" + System.getProperty("line.separator"));
+						osw.write("unv_annihilator" + System.getProperty("line.separator"));
+						osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+						osw.write("Web Developers:" + System.getProperty("line.separator"));
+						osw.write("captainnana" + System.getProperty("line.separator"));
+						osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+						osw.write("Modpack Team:" + System.getProperty("line.separator"));
+						osw.write("CWW256" + System.getProperty("line.separator"));
+						osw.write("Lathanael" + System.getProperty("line.separator"));
+						osw.write("Watchful11" + System.getProperty("line.separator"));
+						
+						osw.flush();
+						
+						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
+						
+					}
+				} catch (FileNotFoundException e1) {
+					Logger.logError(e1.getMessage());
+				} catch (IOException e1) {
+					Logger.logError(e1.getMessage());
+				}
+
 
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
