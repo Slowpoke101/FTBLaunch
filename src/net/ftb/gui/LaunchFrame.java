@@ -233,8 +233,13 @@ public class LaunchFrame extends JFrame {
 						osw.flush();
 						
 						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
-						
 					}
+					
+					if(!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
+						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
+						Settings.getSettings().setLoaded(true);
+					}
+					
 				} catch (FileNotFoundException e1) {
 					Logger.logError(e1.getMessage());
 				} catch (IOException e1) {
