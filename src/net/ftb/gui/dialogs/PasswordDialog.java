@@ -39,9 +39,9 @@ public class PasswordDialog extends JDialog {
 
 	public PasswordDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
+		setupGui();
 
 		getRootPane().setDefaultButton(login);
-
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
