@@ -35,9 +35,8 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 
+@SuppressWarnings("serial")
 public class PlayOfflineDialog extends JDialog {
-	private static final long serialVersionUID = 1L;
-
 	private JTextArea text;
 	private JButton play;
 	private JButton abort;

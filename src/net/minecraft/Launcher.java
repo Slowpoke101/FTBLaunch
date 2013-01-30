@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
 
+@SuppressWarnings("serial")
 public class Launcher extends Applet implements AppletStub {
 	private Applet wrappedApplet;
 	private URL documentBase;

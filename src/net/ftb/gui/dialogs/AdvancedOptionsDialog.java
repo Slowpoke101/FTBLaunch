@@ -22,8 +22,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -77,12 +77,11 @@ public class AdvancedOptionsDialog extends JDialog {
 		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		snooper.setSelected(settings.getSnooper());
 
-		FocusListener settingsChangeListener = new FocusListener() {
+		FocusAdapter settingsChangeListener = new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				saveSettingsInto(settings);
 			}
-			@Override public void focusGained(FocusEvent e) { }
 		};
 
 		downloadLocation.addFocusListener(settingsChangeListener);

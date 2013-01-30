@@ -39,6 +39,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class Settings extends Properties {
 	private static Settings settings;
 	private File configFile;

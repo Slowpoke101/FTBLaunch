@@ -21,8 +21,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +53,7 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	private static JPanel maps;
 	public static ArrayList<JPanel> mapPanels;
@@ -189,18 +190,15 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		filler.setForeground(Color.white);
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
-		MouseListener lin = new MouseListener() {
+		MouseAdapter lin = new MouseAdapter() {
 			@Override public void mouseClicked(MouseEvent e) {
 				selectedMap = mapIndex;
 				updateMaps();
 			}
-			@Override public void mouseReleased(MouseEvent e) { }
 			@Override public void mousePressed(MouseEvent e) { 
 				selectedMap = mapIndex;
 				updateMaps();
 			}
-			@Override public void mouseExited(MouseEvent e) { }
-			@Override public void mouseEntered(MouseEvent e) { }
 		};
 		p.addMouseListener(lin);
 		filler.addMouseListener(lin);

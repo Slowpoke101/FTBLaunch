@@ -48,6 +48,7 @@ import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
+@SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
 	private JButton installBrowseBtn, advancedOptionsBtn;
