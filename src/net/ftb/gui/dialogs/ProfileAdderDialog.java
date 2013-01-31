@@ -16,17 +16,15 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -34,28 +32,38 @@ import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 
 public class ProfileAdderDialog extends JDialog {
-	private JLabel usernameLbl;
-	private JTextField username;
-	private JLabel passwordLbl;
-	private JPasswordField password;
-	private JLabel nameLbl;
-	private JTextField name;
-	private JCheckBox savePassword;
-	private JButton add;
+	private JPanel panel = new JPanel();
+	private JTextField username = new JTextField(1);
+	private JPasswordField password = new JPasswordField(1);
+	private JTextField name = new JTextField(1);
+	private JLabel userLabel = new JLabel("Username:");
+	private JLabel passLabel = new JLabel("Password:");
+	private JLabel nameLabel = new JLabel("Profile Name:");
+	private JCheckBox savePassword = new JCheckBox("Remember Password");
+	private JButton addButton = new JButton("Add");
 
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+		setTitle("Profile Creator");
+		setBounds(300, 300, 300, 240);
+		setResizable(false);
 
-		setupGui();
+		getRootPane().setDefaultButton(addButton);
 
-		getRootPane().setDefaultButton(add);
+		panel.setBounds(0, 0, 300, 240);
+		setContentPane(panel);
+		panel.setLayout(null);
 
-		savePassword.setSelected(true);
+		userLabel.setBounds(10, 10, 80, 30);
+		userLabel.setVisible(true);
+		panel.add(userLabel);
 
+		username.setBounds(100, 10, 170, 30);
+		username.setVisible(true);
 		username.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
@@ -68,15 +76,37 @@ public class ProfileAdderDialog extends JDialog {
 			}
 			@Override public void changedUpdate(DocumentEvent e) { }
 		});
+		panel.add(username);
 
+		passLabel.setBounds(10, 50, 80, 30);
+		passLabel.setVisible(true);
+		panel.add(passLabel);
+
+		password.setBounds(100, 50, 170, 30);
+		password.setVisible(true);
+		panel.add(password);
+
+		nameLabel.setBounds(10, 90, 80, 30);
+		nameLabel.setVisible(true);
+		panel.add(nameLabel);
+
+		name.setBounds(100, 90, 170, 30);
+		name.setVisible(true);
+		panel.add(name);
+
+		savePassword.setBounds(100, 130, 170, 30);
+		savePassword.setSelected(true);
 		savePassword.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				password.setEnabled(savePassword.isSelected());
 			}
 		});
+		panel.add(savePassword);
 
-		add.addActionListener(new ActionListener() {
+		addButton.setBounds(125, 170, 50, 25);
+		addButton.setVisible(true);
+		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(savePassword.isSelected()) {
@@ -85,7 +115,7 @@ public class ProfileAdderDialog extends JDialog {
 						LaunchFrame.writeUsers(name.getText());
 						setVisible(false);
 					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
+						ErrorUtils.tossError("Unable to create profile.");
 					}
 				} else {
 					if(validate(name.getText(), username.getText())) {
@@ -93,11 +123,12 @@ public class ProfileAdderDialog extends JDialog {
 						LaunchFrame.writeUsers(name.getText());
 						setVisible(false);
 					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
+						ErrorUtils.tossError("Unable to create profile.");
 					}
 				}
 			}
 		});
+		panel.add(addButton);
 	}
 
 	private boolean validate(String name, String user, char[] pass) {
@@ -116,117 +147,5 @@ public class ProfileAdderDialog extends JDialog {
 			}
 		}
 		return false;
-	}
-
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("PROFILEADDER_TITLE"));
-		setResizable(false);
-
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		panel.setLayout(layout);
-
-		usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
-		username = new JTextField(16);
-		passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
-		password = new JPasswordField(16);
-		nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
-		name = new JTextField(16);
-		savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-		add = new JButton(I18N.getLocaleString("MAIN_ADD"));
-
-		usernameLbl.setLabelFor(username);
-		passwordLbl.setLabelFor(password);
-		nameLbl.setLabelFor(name);
-
-		panel.add(usernameLbl);
-		panel.add(username);
-		panel.add(passwordLbl);
-		panel.add(password);
-		panel.add(nameLbl);
-		panel.add(name);
-		panel.add(savePassword);
-		panel.add(add);
-
-		Spring hSpring;
-		Spring columnWidth;
-
-		hSpring = Spring.constant(10);
-
-		layout.putConstraint(SpringLayout.WEST, usernameLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, passwordLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, nameLbl,     hSpring, SpringLayout.WEST, panel);
-
-		columnWidth = Spring.width(usernameLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(passwordLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(nameLbl));
-
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-		layout.putConstraint(SpringLayout.WEST, username,     hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, password,     hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, name,         hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, savePassword, hSpring, SpringLayout.WEST, panel);
-
-		columnWidth = Spring.width(username);
-		columnWidth = Spring.max(columnWidth, Spring.width(password));
-		columnWidth = Spring.max(columnWidth, Spring.width(name));
-		columnWidth = Spring.max(columnWidth, Spring.width(savePassword));
-
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, add, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-
-		Spring vSpring;
-		Spring rowHeight;
-
-		vSpring = Spring.constant(10);
-
-		layout.putConstraint(SpringLayout.BASELINE, usernameLbl,       0, SpringLayout.BASELINE, username);
-		layout.putConstraint(SpringLayout.NORTH,    username,    vSpring, SpringLayout.NORTH,    panel);
-
-		rowHeight = Spring.height(usernameLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(username));
-
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-		layout.putConstraint(SpringLayout.BASELINE, passwordLbl,       0, SpringLayout.BASELINE, password);
-		layout.putConstraint(SpringLayout.NORTH,    password,    vSpring, SpringLayout.NORTH,    panel);
-
-		rowHeight = Spring.height(passwordLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(password));
-
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-		layout.putConstraint(SpringLayout.BASELINE, nameLbl,       0, SpringLayout.BASELINE, name);
-		layout.putConstraint(SpringLayout.NORTH,    name,    vSpring, SpringLayout.NORTH,    panel);
-
-		rowHeight = Spring.height(nameLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(name));
-
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-		layout.putConstraint(SpringLayout.NORTH, savePassword, vSpring, SpringLayout.NORTH, panel);
-
-		vSpring = Spring.sum(vSpring, Spring.height(savePassword));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-		layout.putConstraint(SpringLayout.NORTH, add, vSpring, SpringLayout.NORTH, panel);
-
-		vSpring = Spring.sum(vSpring, Spring.height(add));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
-
-		pack();
-		setLocationRelativeTo(getOwner());
 	}
 }

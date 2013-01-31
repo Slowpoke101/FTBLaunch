@@ -29,11 +29,8 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -86,7 +83,6 @@ import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
-import net.ftb.tools.TextureManager;
 import net.ftb.tracking.AnalyticsConfigData;
 import net.ftb.tracking.JGoogleAnalyticsTracker;
 import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
@@ -109,7 +105,7 @@ public class LaunchFrame extends JFrame {
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel tpInstallLocLbl = new JLabel();
-	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
+	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), mapInstall = new JButton(), serverMap = new JButton();
 
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
@@ -160,7 +156,7 @@ public class LaunchFrame extends JFrame {
 
 		DownloadUtils thread = new DownloadUtils();
 		thread.start();
-		
+
 		Logger.logInfo("FTBLaunch starting up (version "+ version + ")");
 		Logger.logInfo("Java version: "+System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: "+System.getProperty("java.vendor"));
@@ -208,44 +204,6 @@ public class LaunchFrame extends JFrame {
 				if (Settings.getSettings().getConsoleActive()) {
 					con.setVisible(true);
 				}
-				
-				File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
-				
-				try {
-					if(!credits.exists()) {
-						FileOutputStream fos = new FileOutputStream(credits);
-						OutputStreamWriter osw = new OutputStreamWriter(fos);
-						
-						osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
-						osw.write("-------------------------------" + System.getProperty("line.separator"));
-						osw.write("Launcher Developers:" + System.getProperty("line.separator"));
-						osw.write("jjw123" + System.getProperty("line.separator"));
-						osw.write("unv_annihilator" + System.getProperty("line.separator"));
-						osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-						osw.write("Web Developers:" + System.getProperty("line.separator"));
-						osw.write("captainnana" + System.getProperty("line.separator"));
-						osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-						osw.write("Modpack Team:" + System.getProperty("line.separator"));
-						osw.write("CWW256" + System.getProperty("line.separator"));
-						osw.write("Lathanael" + System.getProperty("line.separator"));
-						osw.write("Watchful11" + System.getProperty("line.separator"));
-						
-						osw.flush();
-						
-						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
-					}
-					
-					if(!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
-						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
-						Settings.getSettings().setLoaded(true);
-					}
-					
-				} catch (FileNotFoundException e1) {
-					Logger.logError(e1.getMessage());
-				} catch (IOException e1) {
-					Logger.logError(e1.getMessage());
-				}
-
 
 				LaunchFrame frame = new LaunchFrame(2);
 				instance = frame;
@@ -387,28 +345,12 @@ public class LaunchFrame extends JFrame {
 		launch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				doLaunch();
-			}
-		});
-
-		serverbutton.setBounds(480, 20, 330, 30);
-		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
-		serverbutton.setVisible(false);
-		serverbutton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-					if(modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-						try {
-							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
-							if(ModPack.getSelectedPack().isPrivatePack()) {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
-							} else {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
-							}
-							TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-						} catch (NoSuchAlgorithmException e) { }
-					}
+				if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
+					Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
+					saveSettings();
+					doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+				} else if(users.getSelectedIndex() <= 1) {
+					ErrorUtils.tossError("Please select a profile!");
 				}
 			}
 		});
@@ -439,22 +381,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-					try {
-						OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-					} catch (NoSuchAlgorithmException e) { }
-				}
-			}
-		});
-
-		tpInstall.setBounds(650, 20, 160, 30);
-		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-		tpInstall.setVisible(false);
-		tpInstall.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
-					TextureManager man = new TextureManager(new JFrame(), true);
-					man.setVisible(true);
+					OSUtils.browse(DownloadUtils.getCreeperhostLink(Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 				}
 			}
 		});
@@ -474,11 +401,9 @@ public class LaunchFrame extends JFrame {
 		footer.add(footerCreeper);
 		footer.add(launch);
 		footer.add(donate);
-		footer.add(serverbutton);
 		footer.add(mapInstall);
 		footer.add(mapInstallLocation);
 		footer.add(serverMap);
-		footer.add(tpInstall);
 		footer.add(tpInstallLocation);
 
 		newsPane = new NewsPane();
@@ -550,11 +475,9 @@ public class LaunchFrame extends JFrame {
 		launch.setEnabled(false);
 		users.setEnabled(false);
 		edit.setEnabled(false);
-		serverbutton.setEnabled(false);
 		mapInstall.setEnabled(false);
 		mapInstallLocation.setEnabled(false);
 		serverMap.setEnabled(false);
-		tpInstall.setEnabled(false);
 		tpInstallLocation.setEnabled(false);
 
 		LoginWorker loginWorker = new LoginWorker(username, password) {
@@ -617,9 +540,6 @@ public class LaunchFrame extends JFrame {
 			enableObjects();
 			return;
 		}
-		try {
-			TextureManager.updateTextures();
-		} catch (Exception e1) { }
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
@@ -853,18 +773,15 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
 		tabbedPane.setEnabledAt(3, true);
-		tabbedPane.setEnabledAt(4, true);
+		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
 		mapInstall.setEnabled(true);
 		mapInstallLocation.setEnabled(true);
 		serverMap.setEnabled(true);
-		tpInstall.setEnabled(true);
 		launch.setEnabled(true);
 		users.setEnabled(true);
-		serverbutton.setEnabled(true);
 		tpInstallLocation.setEnabled(true);
-		TextureManager.updating = false;
 	}
 
 	/**
@@ -889,7 +806,6 @@ public class LaunchFrame extends JFrame {
 	 * disables the buttons that are usually active on the footer
 	 */
 	public void disableMainButtons() {
-		serverbutton.setVisible(false);
 		launch.setVisible(false);
 		edit.setVisible(false);
 		users.setVisible(false);
@@ -905,14 +821,6 @@ public class LaunchFrame extends JFrame {
 	}
 
 	/**
-	 * disables the footer buttons active when the texture pack tab is selected
-	 */
-	public void disableTextureButtons() {
-		tpInstall.setVisible(false);
-		tpInstallLocation.setVisible(false);
-	}
-
-	/**
 	 * update the footer to the correct buttons for active tab
 	 */
 	public void updateFooter() {
@@ -924,10 +832,8 @@ public class LaunchFrame extends JFrame {
 			mapInstallLocation.setVisible(!result);
 			serverMap.setVisible(result);
 			disableMainButtons();
-			disableTextureButtons();
 			break;
 		case TEXTURE:
-			tpInstall.setVisible(true);
 			tpInstallLocation.setVisible(true);
 			disableMainButtons();
 			disableMapButtons();
@@ -937,9 +843,7 @@ public class LaunchFrame extends JFrame {
 			edit.setEnabled(users.getSelectedIndex() > 1);
 			edit.setVisible(true);
 			users.setVisible(true);
-			serverbutton.setVisible(false);
 			disableMapButtons();
-			disableTextureButtons();
 			break;
 		}
 	}
@@ -954,24 +858,18 @@ public class LaunchFrame extends JFrame {
 			donate.setBounds(330, 20, 80, 30);
 			mapInstall.setBounds(620, 20, 190, 30);
 			mapInstallLocation.setBounds(420, 20, 190, 30);
-			serverbutton.setBounds(420, 20, 390, 30);
 			tpInstallLocation.setBounds(420, 20, 190, 30);
-			tpInstall.setBounds(620, 20, 190, 30);
 		} else {
 			edit.setBounds(480, 20, 60, 30);
 			donate.setBounds(390, 20, 80, 30);
 			mapInstall.setBounds(650, 20, 160, 30);
 			mapInstallLocation.setBounds(480, 20, 160, 30);
-			serverbutton.setBounds(480, 20, 330, 30);
 			tpInstallLocation.setBounds(480, 20, 160, 30);
-			tpInstall.setBounds(650, 20, 160, 30);
 		}
 		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
 		edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
 		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
 		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
-		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
 		donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
@@ -1035,15 +933,5 @@ public class LaunchFrame extends JFrame {
 		}
 
 		return i;
-	}
-
-	public void doLaunch() {
-		if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-			Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
-			saveSettings();
-			doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-		} else if(users.getSelectedIndex() <= 1) {
-			ErrorUtils.tossError("Please select a profile!");
-		}
 	}
 }

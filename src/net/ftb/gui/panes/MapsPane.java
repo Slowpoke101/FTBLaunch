@@ -27,7 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -261,9 +260,9 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 			if(selectedMap == i) {
 				String packs = "";
 				if (Map.getMap(getIndex()).getCompatible() != null) {
-					packs += "<p>This map works with the following packs:</p><ul>";
+					packs += "<p>This map works with the folowing packs:</p><ul>";
 					for (String name : Map.getMap(getIndex()).getCompatible()) {
-						packs += "<li>" + ModPack.getPack(name).getName() + "</li>";
+						packs += "<li>" + name + "</li>";
 					}
 					packs += "</ul>";
 				}
@@ -309,7 +308,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 	private static int getMapNum() {
 		if(currentMaps.size() > 0) {
-			if(!origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
+			if(!origin.equalsIgnoreCase("all")) {
 				return currentMaps.get((mapPanels.size() - 1)).getIndex();
 			}
 		}
@@ -321,11 +320,11 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	}
 
 	private static boolean originCheck(Map map) {
-		return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !map.getAuthor().equalsIgnoreCase("the ftb team"));
+		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !map.getAuthor().equalsIgnoreCase("the ftb team"));
 	}
 
 	private static boolean compatibilityCheck(Map map) {
-		return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || map.isCompatible(compatible));
+		return (compatible.equals("All") || map.isCompatible(compatible));
 	}
 
 	private static boolean textSearch(Map map) {

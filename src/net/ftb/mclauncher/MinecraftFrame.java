@@ -20,7 +20,6 @@ import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
@@ -35,8 +34,6 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.ftb.data.Settings;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.minecraft.Launcher;
 
@@ -61,17 +58,6 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (Exception e1) { }
 		}
-		// TODO: TEST THIS, also implement into using settings.
-		if(OSUtils.getCurrentOS() == OS.MACOSX) {
-			try {
-				Class<?> fullScreenUtilityClass = Class.forName("com.apple.eawt.FullScreenUtilities");
-				java.lang.reflect.Method setWindowCanFullScreenMethod = fullScreenUtilityClass.getDeclaredMethod("setWindowCanFullScreen", new Class[] { Window.class, Boolean.TYPE });
-				setWindowCanFullScreenMethod.invoke(null, new Object[] { this, Boolean.valueOf(true) });
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		// END TEST
 
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);

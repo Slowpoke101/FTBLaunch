@@ -257,9 +257,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 			if(selectedTexturePack == i) {
 				String packs = "";
 				if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
-					packs += "<p>This texture pack works with the following packs:</p><ul>";
+					packs += "<p>This texture pack works with the folowing packs:</p><ul>";
 					for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
-						packs += "<li>" + ModPack.getPack(name).getName() + "</li>";
+						packs += "<li>" + name + "</li>";
 					}
 					packs += "</ul>";
 				}
@@ -302,7 +302,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 	private static int getTexturePackNum() {
 		if(currentTexturePacks.size() > 0) {
-			if(!compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || !resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
+			if(!compatible.equalsIgnoreCase("all") || !resolution.equalsIgnoreCase("all")) {
 				return currentTexturePacks.get((texturePackPanels.size() - 1)).getIndex();
 			}
 		}
@@ -314,11 +314,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	}
 
 	private static boolean compatibilityCheck(TexturePack tp) {
-		return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.isCompatible(compatible));
+		return (compatible.equals("All") || tp.isCompatible(compatible));
 	}
 	
 	private static boolean resolutionCheck(TexturePack tp) {
-		return (resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.getResolution().equalsIgnoreCase(resolution));
+		return (resolution.equals("All") || tp.getResolution().equalsIgnoreCase(resolution));
 	}
 
 	private static boolean textSearch(TexturePack tp) {

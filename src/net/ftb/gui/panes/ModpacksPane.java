@@ -49,7 +49,6 @@ import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
-import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
@@ -68,9 +67,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	private static JLabel typeLbl;
 	private JButton filter, editModPack;
 
-	private static JButton server;
 
-	private JButton privatePack;
 	private static JComboBox version;
 	private static int selectedPack = 0;
 	private static boolean modPacksAdded = false;
@@ -193,55 +190,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		infoScroll.setViewportView(packInfo);
 		infoScroll.setOpaque(false);
 		add(infoScroll);
-
-		server = new JButton("Download Server");
-		server.setBounds(420, 5, 130, 25);
-
-		server.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-					if(LaunchFrame.modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-						try {
-							if(!ModPack.getSelectedPack().getServerUrl().equals("") && ModPack.getSelectedPack().getServerUrl() != null) {
-								String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
-								if(ModPack.getSelectedPack().isPrivatePack()) {
-									OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
-								} else {
-									OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
-								}
-								TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-							}
-						} catch (NoSuchAlgorithmException e) { }
-					}
-				}
-			}
-		});
-		add(server);
-
-		version = new JComboBox(new String[]{});
-		version.setBounds(560, 5, 130, 25);
-		version.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
-				Settings.getSettings().save();
-			}
-		});
-		version.setToolTipText("Modpack Versions");
-		add(version);
-
-		privatePack = new JButton("Private Packs");
-		privatePack.setBounds(700, 5, 120, 25);
-		privatePack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				PrivatePackDialog ap = new PrivatePackDialog();
-				ap.setVisible(true);
-			}
-		});
-
-		add(privatePack);
 	}
 
 	@Override public void onVisible() { }
@@ -270,10 +218,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		filler.setBackground(new Color(255, 255, 255, 0));
 		MouseListener lin = new MouseListener() {
 			@Override public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2)
-				{
-					LaunchFrame.getInstance().doLaunch();
-				}
+				selectedPack = packIndex;
+				updatePacks();
 			}
 			@Override public void mouseReleased(MouseEvent e) { }
 			@Override public void mousePressed(MouseEvent e) { 
@@ -347,11 +293,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 					packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + ModPack.getPack(getIndex()).getImageName() +"' width=400 height=200></img> <br>" + ModPack.getPack(getIndex()).getInfo() + mods);
 					packInfo.setCaretPosition(0);
 
-					if(ModPack.getSelectedPack().getServerUrl().equals("") || ModPack.getSelectedPack().getServerUrl() == null) {
-						server.setEnabled(false);
-					} else {
-						server.setEnabled(true);
-					}
 					String tempVer = Settings.getSettings().getPackVer();
 					version.removeAllItems();
 					version.addItem("Recommended");
@@ -405,15 +346,15 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	}
 
 	private static boolean avaliabilityCheck(ModPack pack) {
-		return (avaliability.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PUBLIC")) && !pack.isPrivatePack()) || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PRIVATE")) && pack.isPrivatePack());
+		return (avaliability.equalsIgnoreCase("all")) || (avaliability.equalsIgnoreCase("public") && !pack.isPrivatePack()) || (avaliability.equalsIgnoreCase("private") && pack.isPrivatePack());
 	}
 
 	private static boolean mcVersionCheck(ModPack pack) {
-		return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
+		return (mcVersion.equalsIgnoreCase("all")) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
 	}
 
 	private static boolean originCheck(ModPack pack) {
-		return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && pack.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !pack.getAuthor().equalsIgnoreCase("the ftb team"));
+		return (origin.equalsIgnoreCase("all")) || (origin.equalsIgnoreCase("ftb") && pack.getAuthor().equalsIgnoreCase("the ftb team")) || (origin.equalsIgnoreCase("3rd party") && !pack.getAuthor().equalsIgnoreCase("the ftb team"));
 	}
 
 	private static boolean textSearch(ModPack pack) {

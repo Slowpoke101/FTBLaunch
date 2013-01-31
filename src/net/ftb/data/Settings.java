@@ -247,14 +247,6 @@ public class Settings extends Properties {
 	public boolean getSnooper() {
 		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
 	}
-	
-	public void setLoaded(boolean state) {
-		setProperty("loaded", String.valueOf(state));
-	}
-
-	public boolean getLoaded() {
-		return Boolean.parseBoolean(getProperty("loaded", "false"));
-	}
 
 	public String getAdditionalJavaOptions() {
 		return getProperty("additionalJavaOptions", "");

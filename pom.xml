@@ -57,28 +57,12 @@
     </dependency>
   </dependencies>
 
-  <!-- Build plugin repositories -->
-  <pluginRepositories>
-    <pluginRepository>
-      <id>spout-repo</id>
-      <url>http://repo.spout.org</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
     <defaultGoal>clean package</defaultGoal>
     <sourceDirectory>${project.basedir}/src</sourceDirectory>
     <resources>
       <resource>
         <directory>${project.basedir}/res</directory>
-        <includes>
-          <include>*</include>
-          <include>**/*</include>
-        </includes>
-        <excludes>
-          <exclude>app/*</exclude>
-          <exclude>exe/*</exclude>
-        </excludes>
       </resource>
     </resources>
 
@@ -116,11 +100,87 @@
       </plugin>
 
       <plugin>
+        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+        <artifactId>launch4j-maven-plugin</artifactId>
+        <version>1.5.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>launch4j</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <headerType>gui</headerType>
+              <stayAlive>false</stayAlive>
+              <jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
+              <outfile>${project.build.directory}/${project.artifactId}-${project.version}.exe</outfile>
+              <classPath>
+                <mainClass>${mainClass}</mainClass>
+                <addDependencies>false</addDependencies>
+                <preCp>anything</preCp>
+              </classPath>
+              <jre>
+                <minVersion>1.6.0</minVersion>
+              </jre>
+              <icon>${basedir}/res/image/logo_ftb.ico</icon>
+              <versionInfo>
+                <fileVersion>2.0.0.${buildNumber}</fileVersion>
+                <txtFileVersion>2.0.0.${buildNumber}</txtFileVersion>
+                <productVersion>2.0.0.${buildNumber}</productVersion>
+                <txtProductVersion>2.0.0.${buildNumber}</txtProductVersion>
+                <fileDescription>${project.name}</fileDescription>
+                <productName>${project.name}</productName>
+                <copyright>${project.organization.name}, ${project.organization.url}</copyright>
+                <internalName>${project.artifactId}</internalName>
+                <originalFilename>${project.artifactId}.exe</originalFilename>
+              </versionInfo>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <copy todir="${project.build.directory}/${project.artifactId}.app">
+                  <fileset dir="res/template/FTB_Launcher.app" />
+                </copy>
+                <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar" tofile="${project.build.directory}/${project.artifactId}.app/Contents/Resources/FTB_Launcher.jar" />
+                <replace file="${project.build.directory}/${project.artifactId}.app/Contents/Info.plist" token="##VERSION##" value="${project.version}" />
+                <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" includes="FTB_Launcher" eol="unix" />
+                <fixcrlf srcdir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" eol="unix" />
+                <chmod file="${project.build.directory}/${project.artifactId}.app/Contents/MacOS/FTB_Launcher" perm="+x" />
+                <zip destfile="${project.build.directory}/${project.artifactId}.app.zip">
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/MacOS" prefix="${project.artifactId}.app/Contents/MacOS/" filemode="755" />
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/Resources" prefix="${project.artifactId}.app/Contents/Resources/" />
+                  <zipfileset dir="${project.build.directory}/${project.artifactId}.app/Contents/" includes="Info.plist" fullpath="${project.artifactId}.app/Contents/Info.plist" />
+                </zip>
+                <delete dir="${project.build.directory}/${project.artifactId}.app" />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
         <version>1.10.b1</version>
         <executions>
           <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+            <phase>clean</phase>
             <configuration>
               <properties>
                 <name>${project.name}</name>
@@ -146,10 +206,6 @@
                 <exclude>src/net/ftb/tracking/**</exclude>
               </excludes>
             </configuration>
-            <goals>
-              <goal>format</goal>
-            </goals>
-            <phase>clean</phase>
           </execution>
         </executions>
       </plugin>
@@ -166,111 +222,13 @@
           <configLocation>style_checks.xml</configLocation>
         </configuration>
         <reportSets>
-          <reportSet>
-            <reports>
-              <report>checkstyle</report>
-            </reports>
-          </reportSet>
+        	<reportSet>
+        		<reports>
+        			<report>checkstyle</report>
+        		</reports>
+        	</reportSet>
         </reportSets>
       </plugin>
     </plugins>
   </reporting>
-
-  <!-- Profiles -->
-  <profiles>
-    <!-- Windows -->
-    <profile>
-      <id>package-win</id>
-      <activation>
-        <os>
-          <family>windows</family>
-        </os>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.akathist.maven.plugins.launch4j</groupId>
-            <artifactId>launch4j-maven-plugin</artifactId>
-            <version>1.5.2</version>
-            <executions>
-              <execution>
-                <configuration>
-                  <headerType>gui</headerType>
-                  <stayAlive>false</stayAlive>
-                  <jar>${project.build.directory}/${project.artifactId}-${project.version}.jar</jar>
-                  <outfile>${project.build.directory}/${project.artifactId}-${project.version}.exe</outfile>
-                  <classPath>
-                    <mainClass>${mainClass}</mainClass>
-                    <addDependencies>false</addDependencies>
-                    <preCp>anything</preCp>
-                  </classPath>
-                  <jre>
-                    <minVersion>1.6.0</minVersion>
-                  </jre>
-                  <icon>${basedir}/res/exe/icon.ico</icon>
-                  <versionInfo>
-                    <fileVersion>2.0.0.${buildNumber}</fileVersion>
-                    <txtFileVersion>2.0.0.${buildNumber}</txtFileVersion>
-                    <productVersion>2.0.0.${buildNumber}</productVersion>
-                    <txtProductVersion>2.0.0.${buildNumber}</txtProductVersion>
-                    <fileDescription>${project.name}</fileDescription>
-                    <productName>${project.name}</productName>
-                    <copyright>${project.organization.name}, ${project.organization.url}</copyright>
-                    <internalName>${project.artifactId}</internalName>
-                    <originalFilename>${project.artifactId}.exe</originalFilename>
-                  </versionInfo>
-                </configuration>
-                <goals>
-                  <goal>launch4j</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <!-- Mac OS X -->
-    <profile>
-      <id>package-mac</id>
-      <activation>
-        <os>
-          <family>mac</family>
-        </os>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.spout</groupId>
-            <artifactId>osxapp-maven-plugin</artifactId>
-            <version>1.2-SNAPSHOT</version>
-            <executions>
-              <execution>
-                <configuration>
-                  <mainClass>${mainClass}</mainClass>
-                  <bundleName>${project.name}</bundleName>
-                  <version>${project.version}</version>
-                  <iconFile>${basedir}/res/app/icon.icns</iconFile>
-                  <dictionaryFile>${basedir}/res/app/Info.plist.template</dictionaryFile>
-                  <javaApplicationStub>${basedir}/res/app/JavaApplicationStub</javaApplicationStub>
-                  <zipFile>${project.build.directory}/${project.build.finalName}-app.zip</zipFile>
-                  <internetEnable>true</internetEnable>
-                  <jvmVersion>${minimumJreVersion}+</jvmVersion>
-                  <vmOptions>-Xms512M -Xmx1024M -Xdock:name="FTB Launcher" -Xdock:icon="icon.icns"</vmOptions>
-                  <excludeArtifactIds>
-                    <excludeArtifactId>swingx-all</excludeArtifactId>
-                  </excludeArtifactIds>
-                </configuration>
-                <goals>
-                  <goal>bundle</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

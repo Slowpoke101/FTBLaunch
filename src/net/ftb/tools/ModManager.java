@@ -122,21 +122,17 @@ public class ModManager extends JDialog {
 			if(!animation.equalsIgnoreCase("empty")) {
 				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
 			}
-			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), baseLink + modPackName)) {
-				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-				clearModsFolder(pack);
-				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-				FileUtils.delete(new File(installPath, dir + "/instMods/"));
-				File version = new File(installPath, dir + sep + "version");
-				BufferedWriter out = new BufferedWriter(new FileWriter(version));
-				out.write(curVersion.replace("_", "."));
-				out.flush();
-				out.close();
-				return true;
-			} else {
-				ErrorUtils.tossError("Error downloading modpack!!!");
-				return false;
-			}
+			
+			FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+			clearModsFolder(pack);
+			FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+			FileUtils.delete(new File(installPath, dir + "/instMods/"));
+			File version = new File(installPath, dir + sep + "version");
+			BufferedWriter out = new BufferedWriter(new FileWriter(version));
+			out.write(curVersion.replace("_", "."));
+			out.flush();
+			out.close();
+			return true;
 		}
 	}
 

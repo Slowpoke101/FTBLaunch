@@ -24,7 +24,6 @@ FORCE_UPDATE = Force update?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 ADVANCED_OPTIONS = Advanced Options
-INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
 
 # Shared strings
 FILTER_SETTINGS = Filter Settings
@@ -47,80 +46,3 @@ MAPS_WAIT_WHILE_LOADING = Please wait while maps are being loaded...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Please wait while texture packs are being loaded...
-
-# Advanced  Options
-ADVANCED_OPTIONS_TITLE = Advanced Options
-ADVANCED_OPTIONS_DLLOCATION = Download Location:
-ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Window Size:
-ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Window Position:
-ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Maximised?
-ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disable Google Analytic Tracking
-ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additional Java Parameters:
-
-# Update
-UPDATE_WICHUPDATE = Do you wish to update?
-
-# LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = of the launcher is available.
-LUNCHERUPDATE_CHANGELOG = View Changelog
-LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update Available
-
-# Modpack Update
-UPDATEMODPACK_ISAVALIBLE = A new mod pack version is available!
-UPDATEMODPACK_BACKUP = Back-up config files?
-UPDATEMODPACK_TITLE = Mod Pack Update Available
-
-# Private Pack
-PRIVATEPACK_TITLE = Private Pack Interface
-PRIVATEPACK_ERROR = Invalid Private Pack.
-PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
-PRIVATEPACK_SECCESS = successfully removed.
-PRIVATEPACK_NOTEXISTS = Incorrect pack name.
-
-# Filter
-FILTER_PACKTYPE = Mod Pack Type:
-FILTER_ORIGIN = Mod Pack Origin:
-FILTER_COMPERTIBLEPACK = Compatible Pack:
-FILTER_3THPARTY = 3rd Party
-FILTER_APPLY = Apply Filter
-FILTER_SEARCHMAP = Search Maps
-FILTER_TITLE = Filter
-FILTER_PUBLIC = Public
-FILTER_PRIVATE = Private
-FILTER_MODPACKAVALIABILITY = Mod Pack Avaliability:
-FILTER_MCVERSION = Minecraft Version:
-FILTER_RESULUTION = Mod Pack Resolution:
-FILTER_TEXSEARCH = Search Packs
-FILTER_SEARCHPACK = Search
-
-# Play Offline
-PLAYOFFLINE_WANNA = Something went wrong..\nWould you like to Play Offline?
-
-# Password
-PASSWORD_PASSLABEL = Password: 
-PASSWORD_TITLE = Please Enter Password 
-
-# Profile
-PROFILEADDER_USERNAME = Username:
-PROFILEADDER_PASSWORD = Password:
-PROFILEADDER_NAME = Profile Name:
-PROFILEADDER_SAVEPASSWORD = Remember Password
-PROFILEADDER_TITLE = Profile Creator
-PROFILADDER_ERROR = Unable to create profile.
-PROFILEADDER_UPDATE = Update
-PROFILEDITOR_TITLE = Profile Editor
-
-# Map Override
-MAPOVERRIDE_FOUNDERROR = Warning! There is already a map by that name!
-MAPOVERRIDE_WISHOVERRIDE = Do you want to overwrite?
-
-# Main
-MAIN_EXIT = EXIT
-MAIN_APPLY = Apply
-MAIN_YES = Yes
-MAIN_NO = No
-MAIN_ALL = All
-MAIN_CANCEL = Cancel
-MAIN_SUBMIT = Submit
-MAIN_REMOVE = Remove
-MAIN_ADD = Add

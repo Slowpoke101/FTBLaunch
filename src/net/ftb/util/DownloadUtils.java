@@ -42,31 +42,15 @@ public class DownloadUtils extends Thread {
 	public static boolean serversLoaded = false; 
 	public static HashMap<String, String> downloadServers = new HashMap<String, String>();
 	private static String currentmd5 = "";
+	
+	private static String paxURL = "";
 
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
 	 * @return - the direct link
-	 * @throws NoSuchAlgorithmException - see md5
 	 */
-	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		if(currentmd5.isEmpty()) {
-			currentmd5 = md5("mcepoch1" + getTime());
-		}
-		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://www.creeperrepo.net";
-		resolved += "/direct/FTB2/" + currentmd5 + "/" + file;
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			for(String server : downloadServers.values()) {
-				if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("www.creeperrepo.net")) {
-					resolved = "http://" + server + "/direct/FTB2/" + currentmd5 + "/" + file;
-					connection = (HttpURLConnection) new URL(resolved).openConnection();
-				}
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
-		Logger.logInfo(resolved);
-		return resolved; 
+	public static String getCreeperhostLink(String file) {
+		return paxURL + file;
 	}
 
 	/**
@@ -74,107 +58,7 @@ public class DownloadUtils extends Thread {
 	 * @return - the direct link
 	 */
 	public static String getStaticCreeperhostLink(String file) {
-		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://www.creeperrepo.net";
-		resolved += "/static/FTB2/" + file;
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			if(connection.getResponseCode() != 200) {
-				for(String server : downloadServers.values()) {
-					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("www.creeperrepo.net")) {
-						resolved = "http://" + server + "/static/FTB2/" + file;
-						connection = (HttpURLConnection) new URL(resolved).openConnection();
-					} else if(connection.getResponseCode() == 200) {
-						break;
-					}
-				}
-			}
-		} catch (IOException e) { }
-		connection.disconnect();
-		return resolved; 
-	}
-
-	/**
-	 * @param file - file on the repo in static
-	 * @return boolean representing if the file exists 
-	 */
-	public static boolean staticFileExists(String file) {
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
-			return !reader.readLine().toLowerCase().contains("not found");
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	/**
-	 * @param file - file on the repo
-	 * @return boolean representing if the file exists 
-	 */
-	public static boolean fileExists(String file) {
-		try {
-			if(currentmd5.isEmpty()) {
-				currentmd5 = md5("mcepoch1" + getTime());
-			}
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file).openStream()));
-			return !reader.readLine().toLowerCase().contains("not found");
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	/**
-	 * @param input - String to hash
-	 * @return - hashed string
-	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
-	 */
-	public static String md5(String input) throws NoSuchAlgorithmException {
-		String result = input;
-		if (input != null) {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(input.getBytes());
-			BigInteger hash = new BigInteger(1, md.digest());
-			result = hash.toString(16);
-			while (result.length() < 32) {
-				result = "0" + result;
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * gets the time from the creeperhost servers
-	 * @return - the time in the DDMMYY format
-	 */
-	public static String getTime() {
-		String content = null;
-		Scanner scanner = null;
-		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://www.creeperrepo.net";
-		resolved += "/getdate";
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			if(connection.getResponseCode() != 200) {
-				for(String server : downloadServers.values()) {
-					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("www.creeperrepo.net")) {
-						resolved = "http://" + server + "/getdate";
-						connection = (HttpURLConnection) new URL(resolved).openConnection();
-					} else if(connection.getResponseCode() == 200) {
-						break;
-					}
-				}
-			}
-			scanner = new Scanner(connection.getInputStream());
-			scanner.useDelimiter( "\\Z" );
-			content = scanner.next();
-		} catch (IOException e) { 
-		} finally {
-			connection.disconnect();
-			if (scanner != null) {
-				scanner.close();
-			}
-		}
-		return content;
+		return paxURL + file;
 	}
 
 	/**
@@ -196,46 +80,6 @@ public class DownloadUtils extends Thread {
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
 		fos.close();
-	}
-
-	/**
-	 * Checks the file for corruption.
-	 * @param file - File to check
-	 * @return boolean representing if it is valid
-	 * @throws IOException 
-	 */
-	public static boolean isValid(File file, String url) throws IOException {
-		String content = null;
-		Scanner scanner = null;
-		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://www.creeperrepo.net";
-		resolved += "/md5/FTB2/" + url;
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			if(connection.getResponseCode() != 200) {
-				for(String server : downloadServers.values()) {
-					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("www.creeperrepo.net")) {
-						resolved = "http://" + server + "/md5/FTB2/" + url;
-						connection = (HttpURLConnection) new URL(resolved).openConnection();
-					} else if(connection.getResponseCode() == 200) {
-						break;
-					}
-				}
-			}
-			scanner = new Scanner(connection.getInputStream());
-			scanner.useDelimiter( "\\Z" );
-			content = scanner.next();
-		} catch (IOException e) { 
-		} finally {
-			connection.disconnect();
-			if (scanner != null) {
-				scanner.close();
-			}
-		}
-		String result = fileMD5(file);
-		Logger.logInfo("Local: " + result.toUpperCase());
-		Logger.logInfo("Remote: " + content.toUpperCase());
-		return content.equalsIgnoreCase(result);
 	}
 
 	/**
