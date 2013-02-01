@@ -77,7 +77,7 @@ public class TexturePackFilterDialog extends JDialog {
 			}
 		}
 
-		compatiblePack.setModel(new DefaultComboBoxModel(res.toArray(new String[]{})));
+		compatiblePack.setModel(new DefaultComboBoxModel(comp.toArray(new String[]{})));
 		resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[]{})));
 
 		compatiblePack.setSelectedItem(instance.compatible);
