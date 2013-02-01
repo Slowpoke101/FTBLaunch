@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -101,6 +101,7 @@ import net.ftb.util.TrackerUtils;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
+@SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
 	private LoginResponse RESPONSE;
 	private NewsPane newsPane;
@@ -306,28 +307,20 @@ public class LaunchFrame extends JFrame {
 		//Footer
 		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo.setBounds(20, 20, 42, 42);
-		footerLogo.addMouseListener(new MouseListener() {
+		footerLogo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				OSUtils.browse("http://www.feed-the-beast.com");
 			}
-			@Override public void mouseReleased(MouseEvent arg0) { }
-			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) { }
-			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
 		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper.setBounds(72, 20, 132, 42);
-		footerCreeper.addMouseListener(new MouseListener() {
+		footerCreeper.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
 			}
-			@Override public void mouseReleased(MouseEvent arg0) { }
-			@Override public void mousePressed(MouseEvent arg0) { }
-			@Override public void mouseExited(MouseEvent arg0) { }
-			@Override public void mouseEntered(MouseEvent arg0) { }
 		});
 
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");

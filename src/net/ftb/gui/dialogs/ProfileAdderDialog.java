@@ -37,6 +37,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 
+@SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
 	private JLabel usernameLbl;
 	private JTextField username;

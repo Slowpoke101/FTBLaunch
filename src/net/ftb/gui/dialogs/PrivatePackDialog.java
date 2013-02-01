@@ -42,6 +42,7 @@ import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class PrivatePackDialog extends JDialog {
 	private JEditorPane editorPane;
 	private JTextField modpackName;

@@ -21,8 +21,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -38,6 +38,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class InstallDirectoryDialog extends JDialog {
 	private JLabel messageLbl;
 	private JLabel installPathLbl;
@@ -56,13 +57,12 @@ public class InstallDirectoryDialog extends JDialog {
 
 		installPath.setText(OSUtils.getDefInstallPath());
 
-		installPath.addFocusListener(new FocusListener() {
+		installPath.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				Settings.getSettings().setInstallPath(installPath.getText());
 				Settings.getSettings().save();
 			}
-			@Override public void focusGained(FocusEvent e) { }
 		});
 
 		apply.addActionListener(new ActionListener() {
