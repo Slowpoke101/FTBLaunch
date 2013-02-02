@@ -49,12 +49,10 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
 public class OptionsPane extends JPanel implements ILauncherPane {
-	private JToggleButton tglbtnForceUpdate;
-	private JButton installBrowseBtn, advancedOptionsBtn;
-	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
+	private JButton advancedOptionsBtn;
+	private JLabel lblRamMaximum, lblLocale, currentRam;
 	private JSlider ramMaximum;
 	private JComboBox locale;
-	private JTextField installFolderTextField;
 	private JCheckBox chckbxShowConsole, keepLauncherOpen;
 	private final Settings settings;
 
@@ -70,33 +68,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		this.settings = settings;
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		installBrowseBtn = new JButton("...");
-		installBrowseBtn.setBounds(786, 11, 49, 28);
-		installBrowseBtn.addActionListener(new ChooseDir(this));
 		setLayout(null);
-		add(installBrowseBtn);
-
-		lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));
-		lblInstallFolder.setBounds(10, 11, 127, 28);
-		add(lblInstallFolder);
-
-		installFolderTextField = new JTextField();
-		installFolderTextField.setBounds(147, 11, 629, 28);
-		installFolderTextField.addFocusListener(settingsChangeListener);
-		installFolderTextField.setColumns(10);
-		installFolderTextField.setText(settings.getInstallPath());
-		add(installFolderTextField);
-
-		tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
-		tglbtnForceUpdate.setBounds(147, 48, 629, 29);
-		tglbtnForceUpdate.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				saveSettingsInto(OptionsPane.this.settings);
-			}
-		});
-		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
-		add(tglbtnForceUpdate);
 
 		currentRam = new JLabel();
 		currentRam.setBounds(427, 95, 85, 25);
@@ -202,13 +174,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	}
 
 	public void setInstallFolderText(String text) {
-		installFolderTextField.setText(text);
 		saveSettingsInto(settings);
 	}
 
 	public void saveSettingsInto(Settings settings) {
-		settings.setInstallPath(installFolderTextField.getText());
-		settings.setForceUpdate(tglbtnForceUpdate.isSelected());
 		settings.setRamMax(String.valueOf(ramMaximum.getValue()));
 		settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
 		settings.setConsoleActive(chckbxShowConsole.isSelected());
@@ -217,8 +186,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	}
 
 	public void updateLocale() {
-		lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
-		tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));
 		lblRamMaximum.setText(I18N.getLocaleString("RAM_MAX"));
 		lblLocale.setText(I18N.getLocaleString("LANGUAGE"));
 	}

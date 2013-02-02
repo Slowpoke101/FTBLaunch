@@ -420,12 +420,16 @@ public class LaunchFrame extends JFrame {
 		tabbedPane.add(modPacksPane, 2);
 		tabbedPane.add(mapsPane, 3);
 		tabbedPane.add(tpPane, 4);
-		setNewsIcon();
+		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
 		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
 		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
 		tabbedPane.setSelectedIndex(tab);
+		
+		tabbedPane.setEnabledAt(0, false);
+		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setEnabledAt(4, false);
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
@@ -768,11 +772,10 @@ public class LaunchFrame extends JFrame {
 	 * Enables all items that are disabled upon launching
 	 */
 	private void enableObjects() {
-		tabbedPane.setEnabledAt(0, true);
-		setNewsIcon();
+		tabbedPane.setEnabledAt(0, false);
 		tabbedPane.setEnabledAt(1, true);
 		tabbedPane.setEnabledAt(2, true);
-		tabbedPane.setEnabledAt(3, true);
+		tabbedPane.setEnabledAt(3, false);
 		tabbedPane.setEnabledAt(4, false);
 		tabbedPane.getSelectedComponent().setEnabled(true);
 		updateFooter();
@@ -875,7 +878,6 @@ public class LaunchFrame extends JFrame {
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 		writeUsers((String)users.getSelectedItem());
 		optionsPane.updateLocale();
-		modPacksPane.updateLocale();
 		mapsPane.updateLocale();
 		tpPane.updateLocale();
 	}
