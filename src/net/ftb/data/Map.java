@@ -94,6 +94,10 @@ public class Map {
 		return maps.get(i);
 	}
 
+	public static int size() {
+		return maps.size();
+	}
+
 	/**
 	 * Used to grab the currently selected Map based off the selected index from MapsPane
 	 * @return Map - the currently selected Map
