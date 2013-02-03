@@ -23,6 +23,8 @@ INSTALL_FOLDER = Install folder...
 FORCE_UPDATE = Force update?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
+SHOW_CONSOLE = Show Console?
+REOPEN_LAUNCHER = Reopen launcher after exiting minecraft?
 ADVANCED_OPTIONS = Advanced Options
 INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
 
