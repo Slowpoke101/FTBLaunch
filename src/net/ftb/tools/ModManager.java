@@ -16,8 +16,8 @@
  */
 package net.ftb.tools;
 
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -49,6 +49,7 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
+@SuppressWarnings("serial")
 public class ModManager extends JDialog {
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static String curVersion = "";
@@ -122,17 +123,21 @@ public class ModManager extends JDialog {
 			if(!animation.equalsIgnoreCase("empty")) {
 				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
 			}
-			
-			FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-			clearModsFolder(pack);
-			FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-			FileUtils.delete(new File(installPath, dir + "/instMods/"));
-			File version = new File(installPath, dir + sep + "version");
-			BufferedWriter out = new BufferedWriter(new FileWriter(version));
-			out.write(curVersion.replace("_", "."));
-			out.flush();
-			out.close();
-			return true;
+			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), baseLink + modPackName)) {
+				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+				clearModsFolder(pack);
+				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+				FileUtils.delete(new File(installPath, dir + "/instMods/"));
+				File version = new File(installPath, dir + sep + "version");
+				BufferedWriter out = new BufferedWriter(new FileWriter(version));
+				out.write(curVersion.replace("_", "."));
+				out.flush();
+				out.close();
+				return true;
+			} else {
+				ErrorUtils.tossError("Error downloading modpack!!!");
+				return false;
+			}
 		}
 	}
 
@@ -163,7 +168,7 @@ public class ModManager extends JDialog {
 		label.setBounds(0, 42, 313, 14);
 		contentPane.add(label);
 
-		addWindowListener(new WindowListener() {
+		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				ModManagerWorker worker = new ModManagerWorker() {
@@ -175,12 +180,6 @@ public class ModManager extends JDialog {
 				};
 				worker.execute();
 			}
-			@Override public void windowActivated(WindowEvent e) { }
-			@Override public void windowClosed(WindowEvent e) { }
-			@Override public void windowClosing(WindowEvent e) { }
-			@Override public void windowDeactivated(WindowEvent e) { }
-			@Override public void windowDeiconified(WindowEvent e) { }
-			@Override public void windowIconified(WindowEvent e) { }
 		});
 	}
 

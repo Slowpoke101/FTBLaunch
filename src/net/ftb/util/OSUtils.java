@@ -49,16 +49,16 @@ public class OSUtils {
 	 * @return a string containing the default install path for the current OS.
 	 */
 	public static String getDefInstallPath() {
-		switch(getCurrentOS()) {
-		case WINDOWS:
-			return System.getenv("APPDATA") + "/ftblauncher/data/";
-		case MACOSX:
-			return cachedUserHome + "/Library/Application Support/ftblauncher/data/";
-		case UNIX:
-			return cachedUserHome + "/.ftblauncher/data/";
-		default:
-			return getDefInstallPath() + "/temp/";
+		try {
+			CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+			File jarFile;
+			jarFile = new File(codeSource.getLocation().toURI().getPath());
+			return jarFile.getParentFile().getPath();
+		} catch (URISyntaxException e) {
+			Logger.logError(e.getMessage(), e);
 		}
+		Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
+		return System.getProperty("user.dir") + "//FTB Pack Install";
 	}
 
 	/**

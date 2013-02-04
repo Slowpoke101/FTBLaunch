@@ -43,7 +43,7 @@ public class MinecraftLauncher {
 		File tempDir = new File(new File(workingDir).getParentFile(), "instMods/");
 		if(tempDir.isDirectory()) {
 			for(String name : tempDir.list()) {
-				if(name.toLowerCase().contains("forge") && name.toLowerCase().endsWith(".zip")) {
+				if(name.toLowerCase().contains("forge") && name.toLowerCase().contains("minecraft") && name.toLowerCase().endsWith(".zip")) {
 					if(!name.toLowerCase().equalsIgnoreCase(forgename)) {
 						if(new File(tempDir, forgename).exists()) {
 							new File(tempDir, name).delete();

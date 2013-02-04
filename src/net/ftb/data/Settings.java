@@ -39,6 +39,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+@SuppressWarnings("serial")
 public class Settings extends Properties {
 	private static Settings settings;
 	private File configFile;
@@ -61,7 +62,7 @@ public class Settings extends Properties {
 		if(file.exists()) {
 			load(new FileInputStream(file));
 		} else {
-			LaunchFrame.noConfig = true;
+//			LaunchFrame.noConfig = true;
 		}
 	}
 
@@ -90,7 +91,7 @@ public class Settings extends Properties {
 	}
 
 	public String getInstallPath() {
-		return getProperty("installPath", OSUtils.getDefInstallPath());
+		return getProperty("installPath", OSUtils.getDynamicStorageLocation());
 	}
 
 	public void setInstallPath(String path) {
@@ -150,7 +151,7 @@ public class Settings extends Properties {
 	}
 
 	public boolean getConsoleActive() {
-		return Boolean.valueOf(getProperty("consoleActive", "true"));
+		return Boolean.valueOf(getProperty("consoleActive", "false"));
 	}
 
 	public void setPackVer(String string) {
@@ -246,6 +247,14 @@ public class Settings extends Properties {
 
 	public boolean getSnooper() {
 		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
+	}
+	
+	public void setLoaded(boolean state) {
+		setProperty("loaded", String.valueOf(state));
+	}
+
+	public boolean getLoaded() {
+		return Boolean.parseBoolean(getProperty("loaded", "false"));
 	}
 
 	public String getAdditionalJavaOptions() {

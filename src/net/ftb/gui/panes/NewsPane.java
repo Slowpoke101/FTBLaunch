@@ -36,9 +36,8 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 
+@SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
-	private static final long serialVersionUID = 1L;
-
 	private JEditorPane news;
 	private JScrollPane newsPanel;
 

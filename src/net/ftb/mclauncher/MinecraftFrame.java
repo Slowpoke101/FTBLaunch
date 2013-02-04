@@ -20,10 +20,11 @@ import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -34,11 +35,13 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.ftb.data.Settings;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.minecraft.Launcher;
 
-public class MinecraftFrame extends JFrame implements WindowListener {
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class MinecraftFrame extends JFrame {
 	private Launcher appletWrap = null;
 	private String animationname;
 
@@ -58,14 +61,45 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (Exception e1) { }
 		}
+		// TODO: TEST THIS, also implement into using settings.
+		if(OSUtils.getCurrentOS() == OS.MACOSX) {
+			try {
+				Class<?> fullScreenUtilityClass = Class.forName("com.apple.eawt.FullScreenUtilities");
+				java.lang.reflect.Method setWindowCanFullScreenMethod = fullScreenUtilityClass.getDeclaredMethod("setWindowCanFullScreen", new Class[] { Window.class, Boolean.TYPE });
+				setWindowCanFullScreenMethod.invoke(null, new Object[] { this, Boolean.valueOf(true) });
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// END TEST
 
 		setIconImage(Toolkit.getDefaultToolkit().createImage(imagePath));
 		super.setVisible(true);
 		setResizable(true);
 		fixSize(Settings.getSettings().getLastDimension());
-		addWindowListener(this);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				Settings.getSettings().setLastExtendedState(getExtendedState());
+				Settings.getSettings().save();
+				new Thread() {
+					public void run() {
+						try {
+							Thread.sleep(30000L);
+						} catch (InterruptedException localInterruptedException) { }
+						System.out.println("FORCING EXIT!");
+						System.exit(0);
+					}
+				}.start();
+				if (appletWrap != null) {
+					appletWrap.stop();
+					appletWrap.destroy();
+				}
+				System.exit(0);
+			}
+		});
 		final MinecraftFrame thisFrame = this;
-		addComponentListener(new ComponentListener() {
+		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Settings.getSettings().setLastDimension(thisFrame.getSize());
@@ -75,8 +109,6 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 			public void componentMoved(ComponentEvent e) {
 				Settings.getSettings().setLastPosition(thisFrame.getLocation());
 			}
-			@Override public void componentShown(ComponentEvent e) { }
-			@Override public void componentHidden(ComponentEvent e) { }
 		});
 	}
 
@@ -125,31 +157,4 @@ public class MinecraftFrame extends JFrame implements WindowListener {
 		setLocation(Settings.getSettings().getLastPosition());
 		setExtendedState(Settings.getSettings().getLastExtendedState());
 	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		Settings.getSettings().setLastExtendedState(this.getExtendedState());
-		Settings.getSettings().save();
-		new Thread() {
-			public void run() {
-				try {
-					Thread.sleep(30000L);
-				} catch (InterruptedException localInterruptedException) { }
-				System.out.println("FORCING EXIT!");
-				System.exit(0);
-			}
-		}.start();
-		if (appletWrap != null) {
-			appletWrap.stop();
-			appletWrap.destroy();
-		}
-		System.exit(0);
-	}
-
-	@Override public void windowActivated(WindowEvent e) { }
-	@Override public void windowClosed(WindowEvent e) { }
-	@Override public void windowDeactivated(WindowEvent e) { }
-	@Override public void windowDeiconified(WindowEvent e) { }
-	@Override public void windowIconified(WindowEvent e) { }
-	@Override public void windowOpened(WindowEvent e) { }
 }
