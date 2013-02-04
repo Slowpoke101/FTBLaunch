@@ -103,13 +103,13 @@ PASSWORD_TITLE = Bitte gib dein Password ein
 
 # Profile
 PROFILEADDER_USERNAME = Nutzername:
-PROFILEADDER_PASSWORD = Password:
-PROFILEADDER_NAME = Profile Name:
-PROFILEADDER_SAVEPASSWORD = Speichere das Password
-PROFILEADDER_TITLE = Profilersteller
+PROFILEADDER_PASSWORD = Passwort:
+PROFILEADDER_NAME = Profilname:
+PROFILEADDER_SAVEPASSWORD = Passwort speichern
+PROFILEADDER_TITLE = Profilerstellung
 PROFILADDER_ERROR = Fehler bei der Profilerstellung.
 PROFILEADDER_UPDATE = Update
-PROFILEDITOR_TITLE = Profile Editor
+PROFILEDITOR_TITLE = Profileditor
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warnung! Da ist schon eine Map mit dem Namen!
