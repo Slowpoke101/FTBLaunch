@@ -52,7 +52,7 @@ TEXTURE_WAIT_WHILE_LOADING = Bitte warten während Texture Packs geladen werden.
 
 # Advanced  Options
 ADVANCED_OPTIONS_TITLE = Professionelle Einstellungen
-ADVANCED_OPTIONS_DLLOCATION = Download Ort:
+ADVANCED_OPTIONS_DLLOCATION = Downloadort:
 ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
@@ -60,7 +60,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 
 # Update
-UPDATE_WICHUPDATE = Wilst du Updaten?
+UPDATE_WICHUPDATE = Wilst du updaten?
 
 # LUNCHERUPDATE
 LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist da.
@@ -77,12 +77,12 @@ PRIVATEPACK_TITLE = Private Pack Helfer
 PRIVATEPACK_ERROR = Falsches Privates Pack.
 PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
 PRIVATEPACK_SECCESS = Erfolgreich Gelöscht.
-PRIVATEPACK_NOTEXISTS = Falscher Pack name.
+PRIVATEPACK_NOTEXISTS = Falscher Pack Name.
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Type:
 FILTER_ORIGIN = Mod Pack Macher:
-FILTER_COMPERTIBLEPACK = Compatible Pack:
+FILTER_COMPERTIBLEPACK = Kompatibles Pack:
 FILTER_3THPARTY = 3rd Party
 FILTER_APPLY = Filter Annehmen
 FILTER_SEARCHMAP = Suche Maps
@@ -98,8 +98,8 @@ FILTER_TEXSEARCH = Suche Packs
 PLAYOFFLINE_WANNA = Etwas stimmt nicht..\nWillst du offline spielen?
 
 # Password
-PASSWORD_PASSLABEL = Password: 
-PASSWORD_TITLE = Bitte gib dein Password ein
+PASSWORD_PASSLABEL = Passwort: 
+PASSWORD_TITLE = Bitte gib dein Passwort ein
 
 # Profile
 PROFILEADDER_USERNAME = Nutzername:
@@ -116,7 +116,7 @@ MAPOVERRIDE_FOUNDERROR = Warnung! Da ist schon eine Map mit dem Namen!
 MAPOVERRIDE_WISHOVERRIDE = willst du sie überschreiben?
 
 # Main
-MAIN_EXIT = EXIT
+MAIN_EXIT = Schließen
 MAIN_APPLY = Annehmen
 MAIN_YES = Ja
 MAIN_NO = Nein
