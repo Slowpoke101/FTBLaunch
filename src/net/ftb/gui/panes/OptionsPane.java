@@ -177,13 +177,13 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		add(lblLocale);
 		add(locale);
 
-		chckbxShowConsole = new JCheckBox("Show Console?");
+		chckbxShowConsole = new JCheckBox(I18N.getLocaleString("SHOW_CONSOLE"));
 		chckbxShowConsole.addFocusListener(settingsChangeListener);
 		chckbxShowConsole.setSelected(settings.getConsoleActive());
 		chckbxShowConsole.setBounds(550, 95, 183, 25);
 		add(chckbxShowConsole);
 
-		keepLauncherOpen = new JCheckBox("Reopen launcher after exiting minecraft?");
+		keepLauncherOpen = new JCheckBox(I18N.getLocaleString("REOPEN_LAUNCHER"));
 		keepLauncherOpen.setBounds(550, 130, 300, 25);
 		keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
 		keepLauncherOpen.addFocusListener(settingsChangeListener);
