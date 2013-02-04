@@ -57,6 +57,7 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 
 # Update
 UPDATE_WICHUPDATE = Wilst du Updaten?
