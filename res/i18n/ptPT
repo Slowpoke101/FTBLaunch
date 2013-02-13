@@ -21,9 +21,12 @@ INSTALL_TEXTUREPACK = Instalar Pacote de Texturas
 # Options pane
 INSTALL_FOLDER = Pasta de instalação...
 FORCE_UPDATE = Forçar atualização?
-RAM_MIN = RAM Mínima (MB)
 RAM_MAX = RAM Máxima (MB)
 LANGUAGE = Linguagem
+SHOW_CONSOLE = Mostrar Consola?
+REOPEN_LAUNCHER = Reabrir o launcher depois do minecraft ser fechado?
+ADVANCED_OPTIONS = Opções Avançadas
+INSTALL_FIRSTUSE = Como esta é a tua primeira vez a usar o launcher, é recomendado que configures o diretório de instalação.
 
 # Shared strings
 FILTER_SETTINGS = Definições do Filtro
@@ -46,3 +49,80 @@ MAPS_WAIT_WHILE_LOADING = Aguarde enquanto os mapas estão a ser carregados...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Aguarde enquanto os pacotes de texturas estão a ser carregados...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Opções Avançadas
+ADVANCED_OPTIONS_DLLOCATION = Localização de Transferências:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Tamanho da Janela do Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_POS = Posição da Janela do Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Maximizar automáticamente?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Desativar o Tracker do Google Analytics
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Parâmetros do Java Adicionais:
+
+# Update
+UPDATE_WICHUPDATE = Desejas atualizar?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = do launcher está disponível.
+LUNCHERUPDATE_CHANGELOG = Ver o Changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Atualização do Launcher Disponível
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Uma nova versão deste mod pack version está disponível!
+UPDATEMODPACK_BACKUP = Fazer um backup dos ficheiros de configurações?
+UPDATEMODPACK_TITLE = Atualização do Mod Pack Disponível
+
+# Private Pack
+PRIVATEPACK_TITLE = Interface do Pack Privado
+PRIVATEPACK_ERROR = Pack Privado Inválido.
+PRIVATEPACK_TEXT = Escreve aqui o código que obtiveste do dono do pack privado e clica em adicionar, o pack irá estar disponível na tua lista de packs. Ele será carregado automáticamente no arranque do laucher. Se desejares remover um pack privado, escreve aqui o código de novo, e clica em remover.
+PRIVATEPACK_SECCESS = foi removido com sucesso.
+PRIVATEPACK_NOTEXISTS = Nome do pack incorreto.
+
+# Filter
+FILTER_PACKTYPE = Tipo do Mod Pack:
+FILTER_ORIGIN = Origem do Mod Pack:
+FILTER_COMPERTIBLEPACK = Pack Compatível:
+FILTER_3THPARTY = Packs de Terceiros
+FILTER_APPLY = Aplicar FIltro
+FILTER_SEARCHMAP = Procurar Mapas
+FILTER_TITLE = Filtrar
+FILTER_PUBLIC = Público
+FILTER_PRIVATE = Privado
+FILTER_MODPACKAVALIABILITY = Disponibilidade do Mod Pack:
+FILTER_MCVERSION = Versão do Minecraft:
+FILTER_RESULUTION = Resolução do Mod Pack:
+FILTER_TEXSEARCH = Procurar Packs
+FILTER_SEARCHPACK = Procurar
+
+# Play Offline
+PLAYOFFLINE_WANNA = Alguma coisa correu malS..\nGostavas de Jogar Offline?
+
+# Password
+PASSWORD_PASSLABEL = Senha: 
+PASSWORD_TITLE = Introduza a Senha 
+
+# Profile
+PROFILEADDER_USERNAME = Nome de Utilizador:
+PROFILEADDER_PASSWORD = Senha:
+PROFILEADDER_NAME = Nome de Perfil:
+PROFILEADDER_SAVEPASSWORD = Lembrar Senha
+PROFILEADDER_TITLE = Criador de Perfil
+PROFILADDER_ERROR = Não foi possível criar o perfil.
+PROFILEADDER_UPDATE = Atualizar
+PROFILEDITOR_TITLE = Editor de Perfil
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Aviso! Já existe um mapa com esse nome!
+MAPOVERRIDE_WISHOVERRIDE = Desejas subtitui-lo?
+
+# Main
+MAIN_EXIT = SAIR
+MAIN_APPLY = Aplicar
+MAIN_YES = Sim
+MAIN_NO = Não
+MAIN_ALL = Tudo
+MAIN_CANCEL = Cancelar
+MAIN_SUBMIT = Enviar
+MAIN_REMOVE = Remover
+MAIN_ADD = Adicionar
