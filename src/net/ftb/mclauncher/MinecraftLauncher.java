@@ -82,6 +82,8 @@ public class MinecraftLauncher {
 		arguments.add("-XX:+UseConcMarkSweepGC");
 		arguments.add("-XX:+CMSIncrementalMode");
 		arguments.add("-XX:+AggressiveOpts");
+		arguments.add("-XX:+CMSClassUnloadingEnabled");
+		arguments.add("-XX:MaxPermSize=128m");
 
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());
