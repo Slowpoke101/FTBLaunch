@@ -2,14 +2,14 @@ LOCALE_NAME = Portuguese (Português Europeu)
 LOCALE_LOADED = Traduções em Português (Europeu) carregadas!
 
 # Footer #
-DONATE_BUTTON = Doar
+DONATE_BUTTON = Fazer Doação
 
 # Main Tab
 EDIT_BUTTON = Editar
 LAUNCH_BUTTON = Iniciar
 PROFILE_CREATE = Criar Perfil
 PROFILE_SELECT = Selecionar Prefil
-DOWNLOAD_SERVER_PACK = Arranja a versão para servidores aqui
+DOWNLOAD_SERVER_PACK = Download Versões de Servidor
 
 # Map Tab
 INSTALL_MAP = Instalar Mapa
