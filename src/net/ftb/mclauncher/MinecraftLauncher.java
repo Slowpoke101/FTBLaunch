@@ -166,7 +166,7 @@ public class MinecraftLauncher {
 			}
 
 			System.out.println("Loading natives...");
-			String nativesDir = new File(new File(basepath, "bin"), "natives").toString();
+			String nativesDir = new File(new File(basepath, "bin"), "natives").getAbsoluteFile().toString();
 			System.out.println("Natives loaded...");
 
 			System.setProperty("org.lwjgl.librarypath", nativesDir);
