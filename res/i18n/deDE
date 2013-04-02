@@ -24,7 +24,7 @@ FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
-REOPEN_LAUNCHER = Launcher öffnen nach der Beendigung von Minecraft?
+REOPEN_LAUNCHER = Launcher öffnen nach Minecraft?
 ADVANCED_OPTIONS = Professionelle Optionen
 
 # Shared strings
@@ -74,9 +74,9 @@ UPDATEMODPACK_TITLE = Modpack Update ist da
 
 # Private Pack
 PRIVATEPACK_TITLE = Private Pack Helfer
-PRIVATEPACK_ERROR = Falsches Privates Pack.
-PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
-PRIVATEPACK_SECCESS = Erfolgreich Gelöscht.
+PRIVATEPACK_ERROR = Falsches Private Pack.
+PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Private Pack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen willst, gib einfach den Code nochmal ein und klicke entfernen.
+PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
 PRIVATEPACK_NOTEXISTS = Falscher Pack Name.
 
 # Filter
@@ -84,7 +84,7 @@ FILTER_PACKTYPE = Mod Pack Type:
 FILTER_ORIGIN = Mod Pack Macher:
 FILTER_COMPERTIBLEPACK = Kompatibles Pack:
 FILTER_3THPARTY = 3rd Party
-FILTER_APPLY = Filter Annehmen
+FILTER_APPLY = Filter annehmen
 FILTER_SEARCHMAP = Suche Maps
 FILTER_TITLE = Filter
 FILTER_PUBLIC = Öfentlich
@@ -113,7 +113,7 @@ PROFILEDITOR_TITLE = Profileditor
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warnung! Da ist schon eine Map mit dem Namen!
-MAPOVERRIDE_WISHOVERRIDE = willst du sie überschreiben?
+MAPOVERRIDE_WISHOVERRIDE = Willst du sie überschreiben?
 
 # Main
 MAIN_EXIT = Schließen
