@@ -23,6 +23,10 @@ INSTALL_FOLDER = Asennuskansio...
 FORCE_UPDATE = Pakota päivitys?
 RAM_MAX = RAM maksimi (Mt)
 LANGUAGE = Kieli
+SHOW_CONSOLE = Näytä konsoli?
+REOPEN_LAUNCHER = Palaa aloitukseen Minecraftin sulkemisen jälkeen?
+ADVANCED_OPTIONS = Edistyneet asetukset
+INSTALL_FIRSTUSE = Tämä on ensimmäinen kerta kun käytät Feed The Beastia. Suosittelemme valitsemaan asennuskansion.
 
 # Shared strings
 FILTER_SETTINGS = Suodatinasetukset
@@ -45,3 +49,80 @@ MAPS_WAIT_WHILE_LOADING = Odota, karttoja ladataan...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Odota, tekstuuripaketteja ladataan...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Edistyneet asetukset
+ADVANCED_OPTIONS_DLLOCATION = Latauskohde:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft -ikkunan koko:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft -ikkunan sijainti:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automaattisesti maksimoitu?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Estä Google Analytic -seuraus
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Lisä-Java parametrit:
+
+# Update
+UPDATE_WICHUPDATE = Haluatko päivittää?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = FTB:n on saatavilla.
+LUNCHERUPDATE_CHANGELOG = Näytä muutosloki
+LUNCHERUPDATE_ISAVAILABLETITLE = Feed The Beastin päivitys saatavilla
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Uusi modipaketin versio saatavilla!
+UPDATEMODPACK_BACKUP = Varmuuskopioi konfiguraatio-tiedostot?
+UPDATEMODPACK_TITLE = Modipaketin päivitys saatavilla
+
+# Private Pack
+PRIVATEPACK_TITLE = Yksityisen paketin käyttöliittymä
+PRIVATEPACK_ERROR = Yksityinen paketti virheellinen.
+PRIVATEPACK_TEXT = Syötä koodi jonka sait yksityisen paketin omistajalta ja klikkaa "Lisää" niin paketti lisätään listaan. Se latautuu automaattisesti aloituksessa. Jos haluat poistaa paketin, syötä koodi uudelleen ja klikkaa "Poista".
+PRIVATEPACK_SECCESS = poistettu onnistuneesti.
+PRIVATEPACK_NOTEXISTS = Virheellinen paketin nimi.
+
+# Filter
+FILTER_PACKTYPE = Modipaketin tyyppi:
+FILTER_ORIGIN = Modipaketin alkuperä:
+FILTER_COMPERTIBLEPACK = Yhteensopiva paketti:
+FILTER_3THPARTY = 3. osapuolen
+FILTER_APPLY = Käytä suodatinta
+FILTER_SEARCHMAP = Etsi karttoja
+FILTER_TITLE = Suodatin
+FILTER_PUBLIC = Julkinen
+FILTER_PRIVATE = Yksityinen
+FILTER_MODPACKAVALIABILITY = Modipaketin saatavuus:
+FILTER_MCVERSION = Minecraftin versio:
+FILTER_RESULUTION = Modipaketin resoluutio:
+FILTER_TEXSEARCH = Etsi paketteja
+FILTER_SEARCHPACK = Etsi
+
+# Play Offline
+PLAYOFFLINE_WANNA = Jotain meni pieleen..\nHaluatko pelata Offline-tilassa?
+
+# Password
+PASSWORD_PASSLABEL = Salasana: 
+PASSWORD_TITLE = Syötä salasana 
+
+# Profile
+PROFILEADDER_USERNAME = Käyttäjänimi:
+PROFILEADDER_PASSWORD = Salasana:
+PROFILEADDER_NAME = Profiilin nimi:
+PROFILEADDER_SAVEPASSWORD = Muista salasana
+PROFILEADDER_TITLE = Profiilin luoja
+PROFILADDER_ERROR = Profiilin luominen ei onnistu.
+PROFILEADDER_UPDATE = Päivitä
+PROFILEDITOR_TITLE = Profiilin muokkaus
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Varoitus! Sinulla on jo tämän niminen kartta!
+MAPOVERRIDE_WISHOVERRIDE = Haluatko korvata?
+
+# Main
+MAIN_EXIT = POISTU
+MAIN_APPLY = Käytä
+MAIN_YES = Kyllä
+MAIN_NO = Ei
+MAIN_ALL = Kaikki
+MAIN_CANCEL = Peruuta
+MAIN_SUBMIT = Toimita
+MAIN_REMOVE = Poista
+MAIN_ADD = Lisää
