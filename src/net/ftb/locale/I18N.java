@@ -31,7 +31,7 @@ public class I18N {
 	private static Properties fallback = new Properties();
 	private static File dir = new File(OSUtils.getDynamicStorageLocation(), "locale");
 	public static HashMap<String, String> localeFiles = new HashMap<String, String>();
-	public static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
+	public final static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
 	public static Locale currentLocale = Locale.enUS;
 
 	public enum Locale {
@@ -77,8 +77,10 @@ public class I18N {
 	 * Set available locales and load fallback locale
 	 */
 	public static void setupLocale() {
-		localeFiles.put("enUS", "English"); 
-		localeIndices.put(0, "enUS");
+		localeFiles.put("enUS", "English");
+		synchronized (localeIndices) {
+			localeIndices.put(0, "enUS");
+		}
 		try {
 			new LocaleUpdater().start();
 		} catch (Exception e) {
@@ -100,7 +102,9 @@ public class I18N {
 						tmp.clear();
 						tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
 						localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-						localeIndices.put(i, file);
+						synchronized (localeIndices) {
+							localeIndices.put(i, file);
+						}
 						i++;
 					}
 				} catch (IOException e) {
