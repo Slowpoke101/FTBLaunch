@@ -26,9 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractListModel;
@@ -42,13 +40,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -206,8 +204,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
 		packs.addMouseListener(new MouseAdapter() {
 			@Override public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2)
-				{
+				if(e.getClickCount() == 2) {
 					LaunchFrame.getInstance().doLaunch();
 				}
 			}
@@ -246,6 +243,8 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 				}
 			}
 		});
+		
+		packs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);

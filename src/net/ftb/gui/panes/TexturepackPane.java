@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -220,6 +221,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 			}
 		});
 
+		texturePacks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);
 		filter.addActionListener(new ActionListener() {

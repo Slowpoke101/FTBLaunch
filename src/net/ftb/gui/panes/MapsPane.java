@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -214,6 +215,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 				}
 			}
 		});
+		
+		maps.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
 		filter.setBounds(5, 5, 105, 25);
