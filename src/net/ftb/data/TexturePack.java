@@ -74,10 +74,6 @@ public class TexturePack {
 		return texturePacks.get(i);
 	}
 
-	public static int size() {
-		return texturePacks.size();
-	}
-
 	/**
 	 * Used to grab the currently selected TexturePack based off the selected index from TexturepackPane
 	 * @return TexturePack - the currently selected TexturePack
