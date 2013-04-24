@@ -114,12 +114,6 @@ public class ModPack {
 		return packs.get(i);
 	}
 
-	/**
-	 * Returns the number of available ModPacks.
-	 */
-	public static int size() {
-		return packs.size();
-	}
 
 	public static ModPack getPack(String dir) {
 		for(ModPack pack : packs) {
