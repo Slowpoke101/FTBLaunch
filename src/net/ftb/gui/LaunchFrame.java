@@ -109,6 +109,7 @@ public class LaunchFrame extends JFrame {
 	private JPanel footer = new JPanel();
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+    private JLabel footerWiki = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_wiki.png")));
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
 
@@ -323,6 +324,15 @@ public class LaunchFrame extends JFrame {
 			}
 		});
 
+        footerWiki.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerWiki.setBounds(204,20,140,42);
+        footerWiki.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                OSUtils.browse("http://ftbwiki.org/");
+            }
+        });
+
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
@@ -465,6 +475,7 @@ public class LaunchFrame extends JFrame {
 		footer.add(users);
 		footer.add(footerLogo);
 		footer.add(footerCreeper);
+        footer.add(footerWiki);
 		footer.add(launch);
 		footer.add(donate);
 		footer.add(serverbutton);
