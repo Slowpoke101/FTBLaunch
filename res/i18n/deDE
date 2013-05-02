@@ -24,15 +24,15 @@ FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
-REOPEN_LAUNCHER = Launcher öffnen nach Minecraft?
-ADVANCED_OPTIONS = Professionelle Optionen
+REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
+ADVANCED_OPTIONS = Erweiterte Optionen
 
 # Shared strings
 FILTER_SETTINGS = Filtern
 
 # Modpacks pane
 MODS_EDIT_PACK = Modpack bearbeiten
-MODS_WAIT_WHILE_LOADING = Bitte warten während Mods geladen werden...
+MODS_WAIT_WHILE_LOADING = Bitte warten während die Mods geladen werden...
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
@@ -44,14 +44,14 @@ MODS_EDIT_DISABLE_MOD = deaktivieren >>
 MODS_EDIT_TITLE = Modpack bearbeiten
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Bitte warten während Maps geladen werden...
+MAPS_WAIT_WHILE_LOADING = Bitte warten während die Maps geladen werden...
 
 # Texturepacks pane
-TEXTURE_WAIT_WHILE_LOADING = Bitte warten während Texture Packs geladen werden...
+TEXTURE_WAIT_WHILE_LOADING = Bitte warten während die Texture Packs geladen werden...
 
 
 # Advanced  Options
-ADVANCED_OPTIONS_TITLE = Professionelle Einstellungen
+ADVANCED_OPTIONS_TITLE = Erweiterte Einstellungen
 ADVANCED_OPTIONS_DLLOCATION = Downloadort:
 ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
@@ -63,28 +63,28 @@ ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 UPDATE_WICHUPDATE = Wilst du updaten?
 
 # LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist da.
-LUNCHERUPDATE_CHANGELOG = Zeig mir die Änderungen
-LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist da.
+LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist verfügbar.
+LUNCHERUPDATE_CHANGELOG = Änderungen
+LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
 
 # Modpack Update
-UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist da!
-UPDATEMODPACK_BACKUP = Sichere die Einsellungen?
-UPDATEMODPACK_TITLE = Modpack Update ist da
+UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist verfügbar!
+UPDATEMODPACK_BACKUP = Einstellungen Sichern?
+UPDATEMODPACK_TITLE = Modpack Update ist verfügbar
 
 # Private Pack
-PRIVATEPACK_TITLE = Private Pack Helfer
-PRIVATEPACK_ERROR = Falsches Private Pack.
-PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Private Pack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen willst, gib einfach den Code nochmal ein und klicke entfernen.
+PRIVATEPACK_TITLE = Private Pack Interface
+PRIVATEPACK_ERROR = Ungültiges Private Pack.
+PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen willst, gib einfach den Code nochmal ein und klicke entfernen.
 PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
 PRIVATEPACK_NOTEXISTS = Falscher Pack Name.
 
 # Filter
-FILTER_PACKTYPE = Mod Pack Type:
-FILTER_ORIGIN = Mod Pack Macher:
+FILTER_PACKTYPE = Mod Pack Typ:
+FILTER_ORIGIN = Mod Pack Team:
 FILTER_COMPERTIBLEPACK = Kompatibles Pack:
 FILTER_3THPARTY = 3rd Party
-FILTER_APPLY = Filter annehmen
+FILTER_APPLY = Filter anwenden
 FILTER_SEARCHMAP = Suche Maps
 FILTER_TITLE = Filter
 FILTER_PUBLIC = Öfentlich
@@ -112,7 +112,7 @@ PROFILEADDER_UPDATE = Update
 PROFILEDITOR_TITLE = Profileditor
 
 # Map Override
-MAPOVERRIDE_FOUNDERROR = Warnung! Da ist schon eine Map mit dem Namen!
+MAPOVERRIDE_FOUNDERROR = Warnung! Es exististiert bereits eine Map mit diesem Namen!
 MAPOVERRIDE_WISHOVERRIDE = Willst du sie überschreiben?
 
 # Main
@@ -121,7 +121,7 @@ MAIN_APPLY = Annehmen
 MAIN_YES = Ja
 MAIN_NO = Nein
 MAIN_ALL = Alle
-MAIN_CANCEL = Beenden
+MAIN_CANCEL = Abbrechen
 MAIN_SUBMIT = Abschicken
 MAIN_REMOVE = Löschen
 MAIN_ADD = Hinzufügen
