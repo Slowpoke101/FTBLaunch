@@ -115,7 +115,7 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static LaunchFrame instance = null;
-	private static String version = "1.2.3";
+	private static String version = "1.2.4";
 
 	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
 
@@ -126,7 +126,7 @@ public class LaunchFrame extends JFrame {
 	public TexturepackPane tpPane;
 	public OptionsPane optionsPane;
 
-	public static int buildNumber = 123;
+	public static int buildNumber = 124;
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
@@ -391,7 +391,7 @@ public class LaunchFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-					if(getSelectedModIndex() >= 0) {
+					if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
 						try {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
 							if(ModPack.getSelectedPack().isPrivatePack()) {
@@ -412,7 +412,7 @@ public class LaunchFrame extends JFrame {
 		mapInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(getSelectedMapIndex() >= 0) {
+				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
 					MapManager man = new MapManager(new JFrame(), true);
 					man.setVisible(true);
 					MapManager.cleanUp();
@@ -431,7 +431,7 @@ public class LaunchFrame extends JFrame {
 		serverMap.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if(getSelectedMapIndex() >= 0) {
+				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
 					try {
 						OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 					} catch (NoSuchAlgorithmException e) { }
@@ -445,7 +445,7 @@ public class LaunchFrame extends JFrame {
 		tpInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(getSelectedTexturePackIndex() >= 0) {
+				if(tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
 					TextureManager man = new TextureManager(new JFrame(), true);
 					man.setVisible(true);
 				}
