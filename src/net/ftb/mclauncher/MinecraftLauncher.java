@@ -76,7 +76,15 @@ public class MinecraftLauncher {
 		List<String> arguments = new ArrayList<String>();
 
 		String separator = System.getProperty("file.separator");
-		String path = System.getProperty("java.home") + separator + "bin" + separator + "java" + (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS ? "w" : "");
+		String customPath = Settings.getSettings().getJavaBinaryPath();
+		
+		String path = null;
+		
+		if (customPath.isEmpty())
+				path = System.getProperty("java.home") + separator + "bin" + separator + "java" + (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS ? "w" : "");
+		else
+				path = customPath;
+		
 		arguments.add(path);
 
 		setMemory(arguments, rmax);

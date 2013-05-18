@@ -264,6 +264,14 @@ public class Settings extends Properties {
 	public void setAdditionalJavaOptions(String opts) {
 		setProperty("additionalJavaOptions", opts);
 	}
+	
+	public String getJavaBinaryPath() {
+		return getProperty("javaBinaryPath");
+	}
+	
+	public void setJavaBinaryPath(String opts) {
+		setProperty("javaBinaryPath", opts);
+	}
 
 	public void setLastPosition(Point lastPosition) {
 		int x = lastPosition.x;
