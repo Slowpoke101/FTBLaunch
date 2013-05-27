@@ -87,9 +87,9 @@ public class MinecraftLauncher {
 		arguments.add("-XX:+AggressiveOpts");
 		arguments.add("-XX:+CMSClassUnloadingEnabled");
 		if(maxPermSize.equalsIgnoreCase("")) {
-			arguments.add("-XX:MaxPermSize=128m");
+			arguments.add("-XX:PermSize=128m");
 		} else {
-			arguments.add("-XX:MaxPermSize=" + maxPermSize);
+			arguments.add("-XX:PermSize=" + maxPermSize);
 		}
 
 		arguments.add("-cp");
