@@ -624,7 +624,7 @@ public class LaunchFrame extends JFrame {
 						if(get()) {
 							Logger.logInfo("Game update complete");
 							FileUtils.killMetaInf();
-							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
 						} else {
 							ErrorUtils.tossError("Error occurred during downloading the game");
 						}
@@ -660,7 +660,7 @@ public class LaunchFrame extends JFrame {
 			});
 			updater.execute();
 		} else {
-			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
 		}
 	}
 
@@ -670,9 +670,9 @@ public class LaunchFrame extends JFrame {
 	 * @param username - the MC username
 	 * @param password - the MC password
 	 */
-	public void launchMinecraft(String workingDir, String username, String password) {
+	public void launchMinecraft(String workingDir, String username, String password, String maxPermSize) {
 		try {
-			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
+			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
 			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
 			TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
 			try {

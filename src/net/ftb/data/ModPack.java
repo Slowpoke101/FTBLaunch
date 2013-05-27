@@ -40,7 +40,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {	
-	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, sep = File.separator, xml;
+	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
 	private String[] mods, oldVersions;
 	private Image logo, image;
 	private int index;
@@ -152,7 +152,7 @@ public class ModPack {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, 
-			String oldVersions, String animation, int idx, boolean privatePack, String xml) throws IOException, NoSuchAlgorithmException {
+			String oldVersions, String animation, String maxPermSize, int idx, boolean privatePack, String xml) throws IOException, NoSuchAlgorithmException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -163,6 +163,7 @@ public class ModPack {
 		this.serverUrl = serverUrl;
 		this.privatePack = privatePack;
 		this.xml = xml;
+		this.maxPermSize = maxPermSize;
 		if(!animation.equalsIgnoreCase("")) {
 			this.animation = animation;
 		} else {
@@ -404,5 +405,9 @@ public class ModPack {
 
 	public String getParentXml() {
 		return xml;
+	}
+
+	public String getMaxPermSize() {
+		return maxPermSize;
 	}
 }

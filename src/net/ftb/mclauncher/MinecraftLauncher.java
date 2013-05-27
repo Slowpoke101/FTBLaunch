@@ -38,7 +38,8 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class MinecraftLauncher {
-	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
+	
+	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax, String maxPermSize) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
 		File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
@@ -85,7 +86,11 @@ public class MinecraftLauncher {
 		arguments.add("-XX:+CMSIncrementalMode");
 		arguments.add("-XX:+AggressiveOpts");
 		arguments.add("-XX:+CMSClassUnloadingEnabled");
-		arguments.add("-XX:MaxPermSize=128m");
+		if(maxPermSize.equalsIgnoreCase("")) {
+			arguments.add("-XX:MaxPermSize=128m");
+		} else {
+			arguments.add("-XX:MaxPermSize=" + maxPermSize);
+		}
 
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());

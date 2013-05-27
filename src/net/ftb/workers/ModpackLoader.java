@@ -94,7 +94,8 @@ public class ModpackLoader extends Thread {
 								modPackAttr.getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description").getTextContent(),
 								modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", 
 								modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
-								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", counter, privatePack, xmlFile));
+								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "",
+								modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr.getNamedItem("maxPermSize").getTextContent() : "", counter, privatePack, xmlFile));
 						counter++;
 					} catch (Exception e) {
 						Logger.logError(e.getMessage(), e);
