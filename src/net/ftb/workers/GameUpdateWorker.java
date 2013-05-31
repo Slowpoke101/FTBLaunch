@@ -30,6 +30,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.SwingWorker;
 
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -41,6 +42,8 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 	protected String status, reqVersion;
 	protected File binDir;
 	protected URL[] jarURLs;
+	protected boolean debugVerbose = Settings.getSettings().getDebugLauncher();
+	protected String debugTag = "debug: GameUpdateWorker: ";
 
 	public GameUpdateWorker(String packVersion, String binDir) {
 		reqVersion = packVersion;
@@ -50,11 +53,13 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 	@Override
 	protected Boolean doInBackground() {
+		if (debugVerbose) { Logger.logInfo(debugTag + "Loading MC assets..."); }
 		setStatus("Downloading jars...");
 		if (!loadJarURLs()) {
 			return false;
 		}
 		if (!binDir.exists()) {
+			if (debugVerbose) { Logger.logWarn(debugTag + "binDir not found, creating: " + binDir.getPath()); }
 			binDir.mkdirs();
 		}
 		Logger.logInfo("Downloading Jars");
@@ -113,14 +118,15 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			}
 		}
 		for(int i = 0; i < jarURLs.length; i++) {
-			int triesLeft = 0;
+			int attempt = 0;
+			final int attempts = 5;
 			int lastfile = -1;
 			boolean downloadSuccess = false;
-			while(!downloadSuccess && (triesLeft < 5)) {
+			while(!downloadSuccess && (attempt < attempts)) {
 				try {
-					triesLeft++;
-					if(triesLeft == 0 || lastfile == i) {
-						Logger.logInfo("Connecting.. Try " + triesLeft + " of 5");
+					attempt++;
+					if(debugVerbose || lastfile == i) {
+						Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs[i].toURI());
 					}
 					lastfile = i;
 					URLConnection dlConnection = jarURLs[i].openConnection();
@@ -138,7 +144,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					byte[] buffer = new byte[24000];
 					int readLen;
 					int currentDLSize = 0;
-					while((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {						
+					while((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {
 						outStream.write(buffer, 0, readLen);
 						currentDLSize += readLen;
 						totalDownloadedSize += readLen;
