@@ -57,6 +57,7 @@ public class AdvancedOptionsDialog extends JDialog {
 	private JTextField mcWindowPosY;
 	private JCheckBox autoMaxCheck;
 	private JCheckBox snooper;
+	private JCheckBox debugLauncherVerbose;
 
 	private final Settings settings = Settings.getSettings();
 
@@ -76,6 +77,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		mcWindowPosY.setText(Integer.toString(settings.getLastPosition().y));
 		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
 		snooper.setSelected(settings.getSnooper());
+		debugLauncherVerbose.setSelected(settings.getDebugLauncher());
 
 		FocusAdapter settingsChangeListener = new FocusAdapter() {
 			@Override
@@ -92,6 +94,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		mcWindowPosY.addFocusListener(settingsChangeListener);
 		autoMaxCheck.addFocusListener(settingsChangeListener);
 		snooper.addFocusListener(settingsChangeListener);
+		debugLauncherVerbose.addFocusListener(settingsChangeListener);
 
 		exit.addActionListener(new ActionListener() {
 			@Override
@@ -133,13 +136,14 @@ public class AdvancedOptionsDialog extends JDialog {
 		settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
 		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
 		settings.setSnooper(snooper.isSelected());
+		settings.setDebugLauncher(debugLauncherVerbose.isSelected());
 		settings.save();
 	}
 
 	private void setupGui() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
-		setResizable(false);
+		setResizable(true); // false
 
 		Container panel = getContentPane();
 		SpringLayout layout = new SpringLayout();
@@ -159,6 +163,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		mcWindowPosY = new JTextField(4);
 		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
 		snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
+		debugLauncherVerbose = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE"));
 		exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
 
 		downloadLocationLbl.setLabelFor(downloadLocation);
@@ -177,6 +182,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		add(mcWindowPosY);
 		add(autoMaxCheck);
 		add(snooper);
+		add(debugLauncherVerbose);
 		add(exit);
 
 		Spring hSpring;
@@ -190,6 +196,7 @@ public class AdvancedOptionsDialog extends JDialog {
 		layout.putConstraint(SpringLayout.WEST, mcWindowPosLbl,           hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, autoMaxCheck,             hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, snooper,                  hSpring, SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose,     hSpring, SpringLayout.WEST, panel);
 
 		columnWidth = Spring.width(downloadLocationLbl);
 		columnWidth = Spring.max(columnWidth, Spring.width(additionalJavaOptionsLbl));
@@ -298,6 +305,11 @@ public class AdvancedOptionsDialog extends JDialog {
 		layout.putConstraint(SpringLayout.NORTH, snooper, vSpring, SpringLayout.NORTH, panel);
 
 		vSpring = Spring.sum(vSpring, Spring.height(snooper));
+		vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+		layout.putConstraint(SpringLayout.NORTH, debugLauncherVerbose, vSpring, SpringLayout.NORTH, panel);
+
+		vSpring = Spring.sum(vSpring, Spring.height(debugLauncherVerbose));
 		vSpring = Spring.sum(vSpring, Spring.constant(10));
 
 		layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);

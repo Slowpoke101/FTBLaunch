@@ -109,6 +109,9 @@ public class ModManager extends JDialog {
 		}
 
 		protected boolean downloadModPack(String modPackName, String dir) throws IOException, NoSuchAlgorithmException {
+			boolean debugVerbose = Settings.getSettings().getDebugLauncher();
+			String debugTag = "debug: downloadModPack: ";
+
 			Logger.logInfo("Downloading Mod Pack");
 			TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Downloaded: " + modPackName + " v." + curVersion.replace('_', '.'));
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
@@ -116,6 +119,12 @@ public class ModManager extends JDialog {
 			ModPack pack = ModPack.getSelectedPack();
 			String baseLink = (pack.isPrivatePack() ? "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" : "modpacks%5E" + dir + "%5E" + curVersion + "%5E");
 			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
+			if (debugVerbose) {
+				Logger.logInfo(debugTag + "pack dir: " + dir);
+				Logger.logInfo(debugTag + "dynamicLoc: " + dynamicLoc);
+				Logger.logInfo(debugTag + "installPath: " + installPath);
+				Logger.logInfo(debugTag + "baseLink: " + baseLink);
+			}
 			baseDynamic.mkdirs();
 			new File(baseDynamic, modPackName).createNewFile();
 			downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
@@ -124,7 +133,9 @@ public class ModManager extends JDialog {
 				downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
 			}
 			if(DownloadUtils.isValid(new File(baseDynamic, modPackName), baseLink + modPackName)) {
+				if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
 				FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+				if (debugVerbose) { Logger.logInfo(debugTag + "Purging mods, coremods, instMods"); }
 				clearModsFolder(pack);
 				FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
 				FileUtils.delete(new File(installPath, dir + "/instMods/"));
@@ -133,6 +144,7 @@ public class ModManager extends JDialog {
 				out.write(curVersion.replace("_", "."));
 				out.flush();
 				out.close();
+				if (debugVerbose) { Logger.logInfo(debugTag + "Pack extracted, version tagged."); }
 				return true;
 			} else {
 				ErrorUtils.tossError("Error downloading modpack!!!");
@@ -235,7 +247,11 @@ public class ModManager extends JDialog {
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
 				try {
-					FileUtils.delete(new File(tempFolder, file));
+					if (Settings.getSettings().getDebugLauncher() && file.endsWith(".zip")) {
+						Logger.logInfo("debug: retaining modpack file: " + tempFolder + File.separator + file);
+					} else {
+						FileUtils.delete(new File(tempFolder, file));
+					}
 				} catch (IOException e) {
 					Logger.logError(e.getMessage(), e);
 				}

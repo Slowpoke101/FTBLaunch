@@ -249,6 +249,14 @@ public class Settings extends Properties {
 		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
 	}
 	
+	public void setDebugLauncher(boolean state) {
+		setProperty("debugLauncher", String.valueOf(state));
+	}
+
+	public boolean getDebugLauncher() {
+		return Boolean.parseBoolean(getProperty("debugLauncher", "false"));
+	}
+
 	public void setLoaded(boolean state) {
 		setProperty("loaded", String.valueOf(state));
 	}
