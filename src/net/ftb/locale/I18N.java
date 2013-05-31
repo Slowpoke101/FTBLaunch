@@ -126,37 +126,18 @@ public class I18N {
 	 * @param locale the language file to be loaded
 	 */
 	public static void setLocale(String locale) {
-		if (locale.equalsIgnoreCase("daDK")) {
-			currentLocale = Locale.daDK;
-		} else if (locale.equalsIgnoreCase("deDE")) {
-			currentLocale = Locale.deDE;
-		} else if(locale.equalsIgnoreCase("nlNL")) {
-			currentLocale = Locale.nlNL;
-		} else if(locale.equalsIgnoreCase("ptBR")) {
-			currentLocale = Locale.ptBR;
-		} else if(locale.equalsIgnoreCase("ptPT")) {
-			currentLocale = Locale.ptPT;
-		} else if(locale.equalsIgnoreCase("ruRU")) {
-			currentLocale = Locale.ruRU;
-		} else if(locale.equalsIgnoreCase("svSE")) {
-			currentLocale = Locale.svSE;
-		} else if(locale.equalsIgnoreCase("esES")) {
-			currentLocale = Locale.esES;
-		} else if(locale.equalsIgnoreCase("itIT")) {
-			currentLocale = Locale.itIT;
-		} else if(locale.equalsIgnoreCase("maHU")) {
-			currentLocale = Locale.maHU;
-		} else if(locale.equalsIgnoreCase("frFR")) {
-			currentLocale = Locale.frFR;
-		} else if(locale.equalsIgnoreCase("cyGB")) {
-			currentLocale = Locale.cyGB;
-		} else if(locale.equalsIgnoreCase("fiFI")) {
-			currentLocale = Locale.fiFI;
-		} else if(locale.equalsIgnoreCase("noNO")) {
-			currentLocale = Locale.noNO;
-		} else {
-			currentLocale = Locale.enUS;
-		}
+	    if (locale == null) {
+	        locale = "enUS";
+	        currentLocale = Locale.enUS;
+	    }
+	    else {
+	        try {
+	        currentLocale = Locale.valueOf(locale);
+	        } catch(IllegalArgumentException e) {
+	            Logger.logWarn("[i18n] Unknown locale " + locale + ". Loaded enUs");
+	            currentLocale = Locale.enUS;
+	        }
+	    }	   
 		getLocaleProperties(locale);
 		Logger.logInfo("[i18n] " + locale + " " + locales.getProperty("LOCALE_LOADED", "loaded"));
 	}
