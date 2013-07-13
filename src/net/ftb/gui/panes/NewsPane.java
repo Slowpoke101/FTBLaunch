@@ -17,10 +17,7 @@
 package net.ftb.gui.panes;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
