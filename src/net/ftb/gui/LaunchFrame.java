@@ -903,6 +903,8 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo(ModPack.getSelectedPack().getDir());
 		ModManager man = new ModManager(new JFrame(), true);
 		man.setVisible(true);
+		while (man == null) { }
+		while (!man.worker.isDone()) { }
 		if(man.erroneous) {
 			return false;
 		}
