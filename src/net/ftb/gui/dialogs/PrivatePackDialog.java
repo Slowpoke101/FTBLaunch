@@ -59,7 +59,7 @@ public class PrivatePackDialog extends JDialog {
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(DownloadUtils.staticFileExists(modpackName.getText() + ".xml") && !modpackName.getText().isEmpty()) {
+				if(DownloadUtils.staticFileExists(modpackName.getText() + ".xml") && !modpackName.getText().isEmpty() && !Settings.getSettings().getPrivatePacks().contains(modpackName.getText())) {
 					Logger.logInfo("Adding: " + modpackName.getText());
 					ModPack.loadXml(modpackName.getText() + ".xml");
 					Settings.getSettings().addPrivatePack(modpackName.getText());
@@ -89,6 +89,7 @@ public class PrivatePackDialog extends JDialog {
 						for(ModPack pack : ModPack.getPackArray()) {
 							if(pack.getParentXml().equalsIgnoreCase(modpackName.getText() + ".xml")) {
 								FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + pack.getDir()));
+								break;
 							}
 						}
 						ModPack.removePacks(modpackName.getText() + ".xml");

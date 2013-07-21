@@ -180,7 +180,7 @@ public class Settings extends Properties {
 		}
 		if(getProperty("privatePacks") != null) {
 			ArrayList<String> packList = getPrivatePacks();
-			if(!packList.contains(code.toLowerCase())) {
+			if(!packList.contains(code)) {
 				packList.add(code);
 				setPrivatePacks(packList);
 			}
