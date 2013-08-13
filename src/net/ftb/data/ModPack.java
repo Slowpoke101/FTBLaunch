@@ -87,13 +87,20 @@ public class ModPack {
 
 	public static void removePacks(String xml) {
 		ArrayList<ModPack> remove = new ArrayList<ModPack>();
+		int removed = -1; // TODO: if private xmls ever contain more than one modpack, we need to change this
 		for(ModPack pack : packs) {
 			if(pack.getParentXml().equalsIgnoreCase(xml)) {
 				remove.add(pack);
 			}
 		}
 		for(ModPack pack : remove) {
+			removed = pack.getIndex();
 			packs.remove(pack);
+		}
+		for(ModPack pack : packs) {
+			if(removed != -1 && pack.getIndex() > removed) {
+				pack.setIndex(pack.getIndex() - 1);
+			}
 		}
 	}
 
@@ -254,6 +261,10 @@ public class ModPack {
 	 */
 	public int getIndex() {
 		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	/**

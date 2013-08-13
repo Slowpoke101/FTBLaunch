@@ -252,6 +252,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		if (!modPacksAdded) {
 			modPacksAdded = true;
 			packs.removeAll();
+			packs.repaint();
 		}
 		final int packIndex = packPanels.size();
 		final JPanel p = new JPanel();
@@ -303,7 +304,11 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public void onModPackAdded(ModPack pack) {
 		addPack(pack);
 		Logger.logInfo("Adding pack " + packPanels.size());
-		updatePacks();
+		if(!currentPacks.isEmpty()) {
+			sortPacks();
+		} else {
+			updatePacks();
+		}
 	}
 
 	public static void sortPacks() {
@@ -314,6 +319,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		selectedPack = 0;
 		packInfo.setText("");
 		packs.repaint();
+		modPacksAdded = false;
 		for(ModPack pack : ModPack.getPackArray()) {
 			if(originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
 				currentPacks.put(counter, pack);

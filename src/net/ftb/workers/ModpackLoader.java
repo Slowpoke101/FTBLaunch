@@ -39,7 +39,6 @@ import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
 	private ArrayList<String> xmlFiles = new ArrayList<String>();
-	private static int counter = 0;
 
 	public ModpackLoader(ArrayList<String> xmlFiles) {
 		this.xmlFiles = xmlFiles;
@@ -95,8 +94,8 @@ public class ModpackLoader extends Thread {
 								modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", 
 								modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
 								modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "",
-								modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr.getNamedItem("maxPermSize").getTextContent() : "", counter, privatePack, xmlFile));
-						counter++;
+								modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr.getNamedItem("maxPermSize").getTextContent() : "", 
+								(ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()), privatePack, xmlFile));
 					} catch (Exception e) {
 						Logger.logError(e.getMessage(), e);
 					}
