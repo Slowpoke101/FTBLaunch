@@ -26,10 +26,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -86,15 +86,23 @@ public class ModManager extends JDialog {
 			return true;
 		}
 
-		public void downloadUrl(String filename, String urlString) {
+		public String downloadUrl(String filename, String urlString) {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
+			HttpURLConnection connection = null;
+			String md5 = "";
 			try {
 				URL url_ = new URL(urlString);
-				in = new BufferedInputStream(url_.openStream());
-				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
-				int count, amount = 0, modPackSize = url_.openConnection().getContentLength(), steps = 0;
+				connection = (HttpURLConnection) url_.openConnection();
+				connection.setAllowUserInteraction(true);
+				connection.setConnectTimeout(14000);
+				connection.setReadTimeout(20000);
+				connection.connect();
+				md5 = connection.getHeaderField("Content-MD5");
+				in = new BufferedInputStream(connection.getInputStream());
+				fout = new FileOutputStream(filename);
+				int count, amount = 0, modPackSize = connection.getContentLength(), steps = 0;
 				progressBar.setMaximum(10000);
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
@@ -113,13 +121,21 @@ public class ModManager extends JDialog {
 				e.printStackTrace();
 			} finally {
 				try {
-					in.close();
-					fout.flush();
-					fout.close();
+					if(in != null) {
+						in.close();
+					}
+					if(fout != null) {
+						fout.flush();
+						fout.close();
+					}
+					if(connection != null) {
+						connection.disconnect();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+			return md5;
 		}
 
 		protected boolean downloadModPack(String modPackName, String dir) {
@@ -140,9 +156,10 @@ public class ModManager extends JDialog {
 				Logger.logInfo(debugTag + "baseLink: " + baseLink);
 			}
 			baseDynamic.mkdirs();
+			String md5 = "";
 			try {
 				new File(baseDynamic, modPackName).createNewFile();
-				downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
+				md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -157,7 +174,7 @@ public class ModManager extends JDialog {
 				}
 			}
 			try {
-				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), baseLink + modPackName)) {
+				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), md5)) {
 					if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
 					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
 					if (debugVerbose) { Logger.logInfo(debugTag + "Purging mods, coremods, instMods"); }
