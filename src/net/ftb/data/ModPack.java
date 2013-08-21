@@ -171,7 +171,7 @@ public class ModPack {
 		this.privatePack = privatePack;
 		this.xml = xml;
 		this.maxPermSize = maxPermSize;
-		if(!animation.equalsIgnoreCase("")) {
+		if(!animation.isEmpty()) {
 			this.animation = animation;
 		} else {
 			this.animation = "empty";
