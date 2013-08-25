@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
@@ -82,7 +83,11 @@ public class MapManager extends JDialog {
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
-				progressBar.setMaximum(10000);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						progressBar.setMaximum(10000);
+					}
+				});
 				while((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
 					downloadedPerc += (count * 1.0 / mapSize) * 100;
@@ -90,8 +95,14 @@ public class MapManager extends JDialog {
 					steps++;
 					if(steps > 100) {
 						steps = 0;
-						progressBar.setValue((int)downloadedPerc * 100);
-						label.setText((amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb");
+						final String txt = (amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb";
+						final int perc =  (int)downloadedPerc * 100;
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								progressBar.setValue(perc);
+								label.setText(txt);
+							}
+						});
 					}
 				}
 			} finally {
