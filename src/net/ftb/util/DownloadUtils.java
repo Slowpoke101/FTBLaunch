@@ -213,6 +213,47 @@ public class DownloadUtils extends Thread {
 	}
 
 	/**
+	 * Checks the file for corruption.
+	 * @param file - File to check
+	 * @param url - base url to grab md5 with old method
+	 * @return boolean representing if it is valid
+	 * @throws IOException 
+	 */
+	public static boolean backupIsValid(File file, String url) throws IOException {
+		String content = null;
+		Scanner scanner = null;
+		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://www.creeperrepo.net";
+		resolved += "/md5/FTB2/" + url;
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) new URL(resolved).openConnection();
+			if(connection.getResponseCode() != 200) {
+				for(String server : downloadServers.values()) {
+					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("www.creeperrepo.net")) {
+						resolved = "http://" + server + "/md5/FTB2/" + url;
+						connection = (HttpURLConnection) new URL(resolved).openConnection();
+					} else if(connection.getResponseCode() == 200) {
+						break;
+					}
+				}
+			}
+			scanner = new Scanner(connection.getInputStream());
+			scanner.useDelimiter( "\\Z" );
+			content = scanner.next();
+		} catch (IOException e) { 
+		} finally {
+			connection.disconnect();
+			if (scanner != null) {
+				scanner.close();
+			}
+		}
+		String result = fileMD5(file);
+		Logger.logInfo("Local: " + result.toUpperCase());
+		Logger.logInfo("Remote: " + content.toUpperCase());
+		return content.equalsIgnoreCase(result);
+	}
+
+	/**
 	 * Gets the md5 of the downloaded file
 	 * @param file - File to check
 	 * @return - string of file's md5

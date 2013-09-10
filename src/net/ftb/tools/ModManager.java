@@ -185,7 +185,7 @@ public class ModManager extends JDialog {
 				}
 			}
 			try {
-				if(DownloadUtils.isValid(new File(baseDynamic, modPackName), md5)) {
+				if((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic, modPackName), md5)) {
 					if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
 					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
 					if (debugVerbose) { Logger.logInfo(debugTag + "Purging mods, coremods, instMods"); }
