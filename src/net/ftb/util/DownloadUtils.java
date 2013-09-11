@@ -72,14 +72,14 @@ public class DownloadUtils extends Thread {
 	 */
 	public static String getStaticCreeperhostLink(String file) {
 		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://new.creeperrepo.net";
-		resolved += "/static/FTB2/" + file;
+		resolved += "/FTB2/static/" + file;
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 			if(connection.getResponseCode() != 200) {
 				for(String server : downloadServers.values()) {
 					if(connection.getResponseCode() != 200) {
-						resolved = "http://" + server + "/static/FTB2/" + file;
+						resolved = "http://" + server + "/FTB2/static/" + file;
 						connection = (HttpURLConnection) new URL(resolved).openConnection();
 					} else {
 						break;
