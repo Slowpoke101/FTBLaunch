@@ -22,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -42,7 +41,6 @@ public class DownloadUtils extends Thread {
 	public static boolean serversLoaded = false; 
 	public static HashMap<String, String> downloadServers = new HashMap<String, String>();
 	public static HashMap<String, String> backupServers = new HashMap<String, String>();
-	private static String currentmd5 = "";
 
 	/**
 	 * @param file - the name of the file, as saved to the repo (including extension)
@@ -50,24 +48,22 @@ public class DownloadUtils extends Thread {
 	 * @throws NoSuchAlgorithmException - see md5
 	 */
 	public static String getCreeperhostLink(String file) throws NoSuchAlgorithmException {
-		if(currentmd5.isEmpty()) {
-			currentmd5 = md5("mcepoch1" + getTime());
-		}
 		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://new.creeperrepo.net";
-		resolved += "/direct/FTB2/" + currentmd5 + "/" + file;
+		resolved += "/FTB2/" + file;
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 			for(String server : downloadServers.values()) {
-				if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("new.creeperrepo.net")) {
-					resolved = "http://" + server + "/direct/FTB2/" + currentmd5 + "/" + file;
+				if(connection.getResponseCode() != 200) {
+					resolved = "http://" + server + "/FTB2/" + file;
 					connection = (HttpURLConnection) new URL(resolved).openConnection();
+				} else {
+					break;
 				}
 			}
 		} catch (IOException e) { }
 		connection.disconnect();
-		Logger.logInfo(resolved);
-		return resolved; 
+		return resolved;
 	}
 
 	/**
@@ -82,17 +78,17 @@ public class DownloadUtils extends Thread {
 			connection = (HttpURLConnection) new URL(resolved).openConnection();
 			if(connection.getResponseCode() != 200) {
 				for(String server : downloadServers.values()) {
-					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("new.creeperrepo.net")) {
+					if(connection.getResponseCode() != 200) {
 						resolved = "http://" + server + "/static/FTB2/" + file;
 						connection = (HttpURLConnection) new URL(resolved).openConnection();
-					} else if(connection.getResponseCode() == 200) {
+					} else {
 						break;
 					}
 				}
 			}
 		} catch (IOException e) { }
 		connection.disconnect();
-		return resolved; 
+		return resolved;
 	}
 
 	/**
@@ -114,68 +110,11 @@ public class DownloadUtils extends Thread {
 	 */
 	public static boolean fileExists(String file) {
 		try {
-			if(currentmd5.isEmpty()) {
-				currentmd5 = md5("mcepoch1" + getTime());
-			}
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/direct/FTB2/" + currentmd5 + "/" + file).openStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/FTB2/" + file).openStream()));
 			return !reader.readLine().toLowerCase().contains("not found");
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	/**
-	 * @param input - String to hash
-	 * @return - hashed string
-	 * @throws NoSuchAlgorithmException - in case "MD5" isnt a correct input
-	 */
-	public static String md5(String input) throws NoSuchAlgorithmException {
-		String result = input;
-		if (input != null) {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(input.getBytes());
-			BigInteger hash = new BigInteger(1, md.digest());
-			result = hash.toString(16);
-			while (result.length() < 32) {
-				result = "0" + result;
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * gets the time from the creeperhost servers
-	 * @return - the time in the DDMMYY format
-	 */
-	public static String getTime() {
-		String content = null;
-		Scanner scanner = null;
-		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://new.creeperrepo.net";
-		resolved += "/getdate";
-		HttpURLConnection connection = null;
-		try {
-			connection = (HttpURLConnection) new URL(resolved).openConnection();
-			if(connection.getResponseCode() != 200) {
-				for(String server : downloadServers.values()) {
-					if(connection.getResponseCode() != 200 && !server.equalsIgnoreCase("new.creeperrepo.net")) {
-						resolved = "http://" + server + "/getdate";
-						connection = (HttpURLConnection) new URL(resolved).openConnection();
-					} else if(connection.getResponseCode() == 200) {
-						break;
-					}
-				}
-			}
-			scanner = new Scanner(connection.getInputStream());
-			scanner.useDelimiter( "\\Z" );
-			content = scanner.next();
-		} catch (IOException e) { 
-		} finally {
-			connection.disconnect();
-			if (scanner != null) {
-				scanner.close();
-			}
-		}
-		return content;
 	}
 
 	/**
@@ -221,6 +160,7 @@ public class DownloadUtils extends Thread {
 	 * @throws IOException 
 	 */
 	public static boolean backupIsValid(File file, String url) throws IOException {
+		Logger.logInfo("Issue with new md5 method, attempting to use backup method.");
 		String content = null;
 		Scanner scanner = null;
 		String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : "http://new.creeperrepo.net";
@@ -236,17 +176,15 @@ public class DownloadUtils extends Thread {
 			}
 			if(response != 200 || (content == null || content.isEmpty())) {
 				for(String server : backupServers.values()) {
-					if(!server.equalsIgnoreCase("new.creeperrepo.net")) {
-						resolved = "http://" + server + "/md5/FTB2/" + url;
-						connection = (HttpURLConnection) new URL(resolved).openConnection();
-						response = connection.getResponseCode();
-						if(response == 200) {
-							scanner = new Scanner(connection.getInputStream());
-							scanner.useDelimiter( "\\Z" );
-							content = scanner.next();
-							if(content != null && !content.isEmpty()) {
-								break;
-							}
+					resolved = "http://" + server + "/md5/FTB2/" + url.replace("/", "%5E");
+					connection = (HttpURLConnection) new URL(resolved).openConnection();
+					response = connection.getResponseCode();
+					if(response == 200) {
+						scanner = new Scanner(connection.getInputStream());
+						scanner.useDelimiter( "\\Z" );
+						content = scanner.next();
+						if(content != null && !content.isEmpty()) {
+							break;
 						}
 					}
 				}
@@ -302,13 +240,18 @@ public class DownloadUtils extends Thread {
 	public void run() {
 		downloadServers.put("Automatic", "new.creeperrepo.net");
 		BufferedReader in = null;
+		// New Servers
 		try {
-			in = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/mirrors").openStream()));
+			in = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/edges.json").openStream()));
 			String line;
-			while((line = in.readLine()) != null) {
+			while((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
+				line = line.replace("{", "").replace("}", "").replace("\"", "");
 				String[] splitString = line.split(",");
-				if(splitString.length == 2) {
-					backupServers.put(splitString[0], splitString[1]);
+				for(String entry : splitString) {
+					String[] splitEntry = entry.split(":");
+					if(splitEntry.length == 2) {
+						downloadServers.put(splitEntry[0], splitEntry[1]);
+					}
 				}
 			}
 			in.close();
@@ -321,17 +264,15 @@ public class DownloadUtils extends Thread {
 				} catch (IOException e) { }
 			}
 		}
+		
+		// Backup md5 servers
 		try {
-			in = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/edges").openStream()));
+			in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
 			String line;
-			while((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-				line = line.replace("{", "").replace("}", "");
+			while((line = in.readLine()) != null) {
 				String[] splitString = line.split(",");
-				for(String entry : splitString) {
-					String[] splitEntry = entry.split(":");
-					if(splitEntry.length == 2) {
-						downloadServers.put(splitEntry[0], splitEntry[1]);
-					}
+				if(splitString.length == 2) {
+					backupServers.put(splitString[0], splitString[1]);
 				}
 			}
 			in.close();

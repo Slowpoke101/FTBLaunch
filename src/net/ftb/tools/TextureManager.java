@@ -78,7 +78,7 @@ public class TextureManager extends JDialog {
 				return false;
 			}
 			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
-			if(DownloadUtils.fileExists("texturepacks%5E" + texturePack.getName().replace(" ", "_") + "%5E" + compDir + "%5E" + packVer + "%5E" + texturePack.getUrl())) {
+			if(DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePack.getUrl())) {
 				populateInstalledTextures(compPack);
 				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl());
 				if(oldFile.exists()) {
@@ -145,7 +145,7 @@ public class TextureManager extends JDialog {
 			String installPath = Settings.getSettings().getInstallPath();
 			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep).mkdirs();
 			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName).createNewFile();
-			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks%5E" + dir.replace(" ", "_") + "%5E" + compDir + "%5E" + packVer + "%5E" + texturePackName))) {
+			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePackName))) {
 				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
 				installedTextures.put(dir.toLowerCase(), packVer);
 				BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
@@ -216,7 +216,7 @@ public class TextureManager extends JDialog {
 						if(texturePackFile.exists()) {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
 							if(!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
-								if(DownloadUtils.fileExists("texturepacks%5E" + tp.getName().replace(" ", "_") + "%5E" + pack.getDir() + "%5E" + version + "%5E" + tp.getUrl())) {
+								if(DownloadUtils.fileExists("texturepacks/" + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + version + "/" + tp.getUrl())) {
 									updating = true;
 									TextureManager man = new TextureManager(new JFrame(), true);
 									man.updateTexture = tp;
