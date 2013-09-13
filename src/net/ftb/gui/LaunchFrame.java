@@ -115,7 +115,7 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static LaunchFrame instance = null;
-	private static String version = "1.2.7";
+	private static String version = "1.2.8";
 
 	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
 
@@ -126,7 +126,7 @@ public class LaunchFrame extends JFrame {
 	public TexturepackPane tpPane;
 	public OptionsPane optionsPane;
 
-	public static int buildNumber = 127;
+	public static int buildNumber = 128;
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
@@ -395,9 +395,9 @@ public class LaunchFrame extends JFrame {
 						try {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
 							if(ModPack.getSelectedPack().isPrivatePack()) {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
+								OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
 							} else {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
+								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
 							}
 							TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
 						} catch (NoSuchAlgorithmException e) { }
