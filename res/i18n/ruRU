@@ -1,4 +1,4 @@
-LOCALE_NAME = Русского (Russian)
+LOCALE_NAME = Русский (Russian)
 LOCALE_LOADED = Загружен файл Русского языка!
 
 # Footer #
@@ -19,7 +19,7 @@ DOWNLOAD_MAP_SERVER = Загрузить карту для сервера
 INSTALL_TEXTUREPACK = Установить дополнительные текстуры
 
 # Options pane
-INSTALL_FOLDER = Установочный путь...
+INSTALL_FOLDER = Путь для установки...
 FORCE_UPDATE = Принудительное обновление?
 RAM_MAX = Максимум ОЗУ (Мб)
 LANGUAGE = Язык
