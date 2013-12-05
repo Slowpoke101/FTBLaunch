@@ -38,7 +38,10 @@ public class FileUtils {
 	 * @param destinationFolder - where to move to
 	 * @throws IOException
 	 */
-	public static void copyFolder(File sourceFolder, File destinationFolder) throws IOException {
+    public static void copyFolder(File sourceFolder, File destinationFolder) throws IOException {
+        copyFolder(sourceFolder, destinationFolder, true);
+    }
+    public static void copyFolder(File sourceFolder, File destinationFolder, boolean overwrite) throws IOException {
 		if (sourceFolder.isDirectory()) {
 			if (!destinationFolder.exists()) {
 				destinationFolder.mkdirs();
@@ -47,10 +50,10 @@ public class FileUtils {
 			for (String file : files) {
 				File srcFile = new File(sourceFolder, file);
 				File destFile = new File(destinationFolder, file);
-				copyFolder(srcFile, destFile);
+				copyFolder(srcFile, destFile, overwrite);
 			}
 		} else {
-			copyFile(sourceFolder, destinationFolder);
+			copyFile(sourceFolder, destinationFolder, overwrite);
 		}
 	}
 
@@ -59,11 +62,15 @@ public class FileUtils {
 	 * @param destinationFile - where to move to
 	 * @throws IOException
 	 */
-	public static void copyFile(File sourceFile, File destinationFile) throws IOException {
+    public static void copyFile(File sourceFile, File destinationFile) throws IOException {
+        copyFile(sourceFile, destinationFile, true);
+    }
+    public static void copyFile(File sourceFile, File destinationFile, boolean overwrite) throws IOException {
 		if (sourceFile.exists()) {
 			if(!destinationFile.exists()) {
 				destinationFile.createNewFile();
-			}
+			} 
+			else if (!overwrite) return;
 			FileChannel sourceStream = null, destinationStream = null;
 			try {
 				sourceStream = new FileInputStream(sourceFile).getChannel();

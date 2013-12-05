@@ -55,6 +55,11 @@
       <artifactId>swingx-all</artifactId>
       <version>1.6.4</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.4</version>
+    </dependency>
   </dependencies>
 
   <!-- Build plugin repositories -->
