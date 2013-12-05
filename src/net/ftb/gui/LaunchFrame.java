@@ -32,15 +32,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,12 +56,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import net.feed_the_beast.launcher.json.JsonFactory;
+import net.feed_the_beast.launcher.versions.Library;
+import net.feed_the_beast.launcher.versions.Version;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
@@ -82,6 +100,7 @@ import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
+import net.ftb.mclauncher.MinecraftLauncherNew;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
@@ -625,7 +644,14 @@ public class LaunchFrame extends JFrame {
 		try {
 			TextureManager.updateTextures();
 		} catch (Exception e1) { }
-		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
+		
+		if (pack.getMcVersion().startsWith("1.6") || pack.getVersion().startsWith("1.7"))
+		{
+		    setupNewStyle(installPath, pack);
+		    return;
+		}
+		
+        MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 
 		// I know it's wordy, but it's correct; why is this not using File.separator ? http://stackoverflow.com/questions/2417485/file-separator-vs-slash-in-paths
 
@@ -679,6 +705,271 @@ public class LaunchFrame extends JFrame {
 		}
 	}
 
+	private void setupNewStyle(final String installPath, final ModPack pack)
+	{
+        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
+        
+        if (assets.size() > 0)
+        {
+            final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100); //Not sure why this isnt showing...
+            AssetDownloader downloader = new AssetDownloader(prog, assets)
+            {
+                @Override
+                public void done()
+                {
+                    prog.close();
+                    try
+                    {
+                        if(get())
+                        {
+                            Logger.logInfo("Asset downloading complete");
+                            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+                        }
+                        else
+                        {
+                            ErrorUtils.tossError("Error occurred during downloading the assets");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        ErrorUtils.tossError("Failed to download files.");
+                    }
+                    finally
+                    {
+                        enableObjects();
+                    }
+                }
+            };
+            downloader.execute();
+        }
+        else
+        {
+            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+        }
+	}
+
+	private static class DownloadInfo
+	{
+	    public URL url;
+	    public File local;
+	    public String name;
+        public long size = 0;
+        public DownloadInfo(){}
+        public DownloadInfo(URL url, File local, String name)
+        {
+            this.url = url;
+            this.local = local;
+            this.name = name;
+        }
+	}
+	
+	private static final class AssetInfo extends DownloadInfo
+	{
+	    public final String etag;
+	    private AssetInfo(File root, Element node) throws MalformedURLException
+	    {
+	        url = new URL("http://resources.download.minecraft.net/" + getText(node, "Key", null));
+            name =  getText(node, "Key", "");
+            etag = getText(node, "ETag", "").replace("\"", "");
+            size = Long.parseLong(getText(node, "Size", "0"));
+            local = new File(root, name);
+	    }
+
+	    private String getText(Element node, String name, String def)
+	    {
+	        NodeList lst = node.getElementsByTagName(name);
+	        if (lst == null)
+	            return def;
+	        return lst.item(0).getChildNodes().item(0).getNodeValue();
+	    }
+
+	    public String toString()
+	    {
+	        return etag + " " + name + " " + size;
+	    }
+	}
+
+	private static class AssetDownloader extends SwingWorker<Boolean, Void>
+	{
+	    private List<DownloadInfo> downloads;
+	    private final ProgressMonitor monitor;
+	    private String status;
+	    private long total = 1;
+	    
+	    private AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads)
+	    {
+	        this.downloads = downloads;
+	        this.monitor = monitor;
+
+            for (DownloadInfo i : downloads) total += i.size;
+
+            addPropertyChangeListener(new PropertyChangeListener()
+            {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt)
+                {
+                    if (monitor.isCanceled()) AssetDownloader.this.cancel(false);
+                    if (!AssetDownloader.this.isDone())
+                    {
+                        monitor.setProgress(AssetDownloader.this.getProgress());
+                        monitor.setNote(AssetDownloader.this.getStatus());
+                    }
+                }
+            });
+	    }
+
+	    protected String getStatus()
+	    {
+	        return status;
+	    }
+
+        @Override
+        protected Boolean doInBackground() throws Exception
+        {
+            long downloaded = 0;
+            boolean allDownloaded = true;
+
+            byte[] buffer = new byte[24000];
+            for (int x = 0; x < downloads.size(); x++)
+            {
+                DownloadInfo asset = downloads.get(x);
+                int attempt = 0;
+                final int attempts = 5;
+                boolean downloadSuccess = false;
+                while(!downloadSuccess && (attempt < attempts))
+                {
+                    try
+                    {
+                        if (attempt++ > 0)
+                        {
+                            Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
+                        }
+                        URLConnection con = asset.url.openConnection();
+                        if (con instanceof HttpURLConnection)
+                        {
+                            con.setRequestProperty("Cache-Control", "no-cache");
+                            con.connect();
+                        }
+                        this.status = "Downloading " + asset.name + "...";
+                        asset.local.getParentFile().mkdirs();
+                        InputStream input = con.getInputStream();
+                        FileOutputStream output = new FileOutputStream(asset.local);
+                        int readLen;
+                        int currentSize = 0;
+                        while((readLen = input.read(buffer, 0, buffer.length)) != -1)
+                        {
+                            output.write(buffer, 0, readLen);
+                            currentSize += readLen;
+                            downloaded += readLen;
+                            int prog = (int)((downloaded / total) * 100);
+                            if(prog > 100) prog = 100;
+                            if(prog < 0  ) prog = 0;
+                            setProgress(prog);
+                        }
+                        input.close();
+                        output.close();
+                        if(con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0))
+                        {
+                            downloadSuccess = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        downloadSuccess = false;
+                        Logger.logWarn("Connection failed, trying again");
+                    }
+                }
+                if (!downloadSuccess)
+                {
+                    allDownloaded = false;
+                }
+            }
+            status = allDownloaded ? "Success" : "Downloads failed";
+            return allDownloaded;
+        }
+	}
+	
+	private List<DownloadInfo> gatherAssets(File root, String mcVersion)
+	{
+	    try
+        {
+	        String baseUrl = "http://resources.download.minecraft.net/";
+            Document doc = DocumentBuilderFactory.newInstance()
+                           .newDocumentBuilder()
+                           .parse(new URL(baseUrl).openConnection().getInputStream());
+            List<DownloadInfo> list = new ArrayList<DownloadInfo>();
+
+            File assetsDir = new File(root, "assets");
+            NodeList nodes = doc.getElementsByTagName("Contents");
+            for (int x = 0; x < nodes.getLength(); x++)
+            {
+                if (nodes.item(x).getNodeType() == Node.ELEMENT_NODE)
+                {
+                    AssetInfo asset = new AssetInfo(assetsDir, (Element)nodes.item(x));
+                    if (!asset.name.isEmpty() && !asset.name.endsWith("/"))
+                    {
+                        File local = new File(assetsDir, asset.name);
+                        if (!local.exists())
+                        {
+                            list.add(asset);
+                        }
+                        else if (!asset.etag.isEmpty() && !DownloadUtils.fileMD5(local).equalsIgnoreCase(asset.etag))
+                        {
+                            local.delete();
+                            list.add(asset);
+                        }
+                        else if (asset.etag.isEmpty())
+                        {
+                            list.add(asset);
+                        }
+                    }
+                }
+            }
+
+            File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
+            if (!local.exists())
+            {
+                list.add(new DownloadInfo(
+                    new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)),
+                    local, local.getName()
+                ));
+            }
+
+            URL url = new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+            File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+            DownloadUtils.downloadToFile(url, json);
+            Version version = JsonFactory.loadVersion(json);
+            for (Library lib : version.getLibraries())
+            {
+                if (lib.natives == null)
+                {
+                    local = new File(root, "libraries/" + lib.getPath());
+                    if (!local.exists())
+                    {
+                        list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                    }
+                }
+                else
+                {
+                    local = new File(root, "libraries/" + lib.getPathNatives());
+                    if (!local.exists())
+                    {
+                        list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
+                    }
+                    
+                }
+            }
+            return list;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+	    return null;
+	}
+
 	/**
 	 * launch the game with the mods in the classpath
 	 * @param workingDir - install path
@@ -722,6 +1013,127 @@ public class LaunchFrame extends JFrame {
 		} catch(Exception e) { }
 	}
 
+    public void launchMinecraftNew(String installDir, ModPack pack, String username, String password, String maxPermSize)
+    {
+        try
+        {
+            File packDir  = new File(installDir, pack.getDir());
+            File gameDir  = new File(packDir,    "minecraft");
+            File assetDir = new File(installDir, "assets");
+            File libDir   = new File(installDir, "libraries");
+            File natDir   = new File(packDir,     "natives");
+
+            if (natDir.exists())
+            {
+                natDir.delete();
+            }
+            natDir.mkdirs();
+
+            Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion())));
+            byte[] buf = new byte[1024];
+            for (Library lib : base.getLibraries())
+            {
+                if (lib.natives != null)
+                {
+                    File local = new File(libDir, lib.getPathNatives());
+                    ZipInputStream input = null;
+                    try
+                    {
+                        input = new ZipInputStream(new FileInputStream(local));
+                        ZipEntry entry = input.getNextEntry();
+                        while (entry != null)
+                        { 
+                            String name = entry.getName();
+                            int n;
+                            if (lib.extract == null || !lib.extract.exclude(name))
+                            {
+                                File output = new File(natDir, name);
+                                output.getParentFile().mkdirs();
+                                FileOutputStream out = new FileOutputStream(output);             
+                                while ((n = input.read(buf, 0, 1024)) > -1)
+                                {
+                                    out.write(buf, 0, n);
+                                }
+                                out.close();
+                            }
+                            input.closeEntry();
+                            entry = input.getNextEntry();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.logError(e.getMessage(), e);
+                        ErrorUtils.tossError("Error extracitng natives: " + e.getMessage());
+                    }
+                    finally
+                    {
+                        try {
+                            input.close();
+                        } catch (IOException e) { }
+                    }
+                }
+            }
+            List<File> classpath = new ArrayList<File>();
+            Version packjson = new Version();
+            if (new File(gameDir, "pack.json").exists())
+            {
+                packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                for (Library lib : packjson.getLibraries())
+                {
+                    classpath.add(new File(libDir, lib.getPath()));
+                }
+            }
+            classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
+            for (Library lib : base.getLibraries())
+            {
+                classpath.add(new File(libDir, lib.getPath()));
+            }
+            
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(
+                    gameDir, assetDir, natDir,
+                    classpath,
+                    username, password,
+                    packjson.mainClass != null ? packjson.mainClass : base.mainClass,
+                    packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+                    Settings.getSettings().getRamMax(), maxPermSize,
+                    pack.getMcVersion());
+            
+            StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) { }
+            try {
+                minecraftProcess.exitValue();
+            } catch (IllegalThreadStateException e) {
+                this.setVisible(false);
+                ProcessMonitor.create(minecraftProcess, new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!Settings.getSettings().getKeepLauncherOpen()) {
+                            System.exit(0);
+                        } else {
+                            LaunchFrame launchFrame = LaunchFrame.this;
+                            launchFrame.setVisible(true);
+                            launchFrame.enableObjects();
+                            try {
+                                Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
+                                tabbedPane.remove(1);
+                                optionsPane = new OptionsPane(Settings.getSettings());
+                                tabbedPane.add(optionsPane, 1);
+                                tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+                            } catch (Exception e1) {
+                                Logger.logError("Failed to reload settings after launcher closed", e1);
+                            }
+                        }
+                    }
+                });
+            }
+        } catch(Exception e) { 
+            e.printStackTrace();
+        }
+    }
+
 	/**
 	 * @param modPackName - The pack to install (should already be downloaded)
 	 * @throws IOException
@@ -753,6 +1165,8 @@ public class LaunchFrame extends JFrame {
 							 new File(installpath, packDir + "/minecraft/"));
 		FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"),
 							 new File(installpath, packDir + "/instMods/"));
+        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"),
+                             new File(installpath, "/libraries/"), false);
 	}
 
 	/**

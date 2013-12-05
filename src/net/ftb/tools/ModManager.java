@@ -304,7 +304,7 @@ public class ModManager extends JDialog {
 		for(String file : tempFolder.list()) {
 			if(!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
 				try {
-					if (Settings.getSettings().getDebugLauncher() && file.endsWith(".zip")) {
+					if (Settings.getSettings().getDebugLauncher() || file.endsWith(".zip")) {
 						Logger.logInfo("debug: retaining modpack file: " + tempFolder + File.separator + file);
 					} else {
 						FileUtils.delete(new File(tempFolder, file));

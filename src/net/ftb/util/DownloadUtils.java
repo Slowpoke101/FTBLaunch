@@ -132,6 +132,7 @@ public class DownloadUtils extends Thread {
 	 * @param file The file to save to.
 	 */
 	public static void downloadToFile(URL url, File file) throws IOException {
+	    file.getParentFile().mkdirs();
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
@@ -208,7 +209,7 @@ public class DownloadUtils extends Thread {
 	 * @return - string of file's md5
 	 * @throws IOException 
 	 */
-	private static String fileMD5(File file) throws IOException {
+	public static String fileMD5(File file) throws IOException {
 		if(!file.exists()) {
 			return "";
 		}
