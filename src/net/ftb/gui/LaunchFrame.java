@@ -134,7 +134,7 @@ public class LaunchFrame extends JFrame {
 	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static LaunchFrame instance = null;
-	private static String version = "1.2.8";
+	private static String version = "1.2.9";
 
 	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
 
@@ -145,7 +145,7 @@ public class LaunchFrame extends JFrame {
 	public TexturepackPane tpPane;
 	public OptionsPane optionsPane;
 
-	public static int buildNumber = 128;
+	public static int buildNumber = 129;
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
