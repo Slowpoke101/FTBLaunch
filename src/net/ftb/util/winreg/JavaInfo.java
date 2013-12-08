@@ -27,8 +27,8 @@ public class JavaInfo implements Comparable<JavaInfo> {
         String[] tokens = versionInfo.split("\"");
         if (tokens.length < 2) this.version = "0.0.0_00";
         else this.version = tokens[1];
-        if (version.toLowerCase().contains("ea")){
-            version.replace("ea", "00");
+        if (version.contains("-ea"))
+            version = version.replace("-ea", "_00");
         this.is64bits = versionInfo.toUpperCase().contains("64-BIT");
         this.path     = javaPath;
         
@@ -42,7 +42,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.major = Integer.parseInt(s[0]);
         this.minor = Integer.parseInt(s[1]);
         this.revision = Integer.parseInt(s[2]);
-        }
+
     }
 
     /**
