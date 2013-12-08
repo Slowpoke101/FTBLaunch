@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.feed_the_beast.launcher.versions.OS;
+import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;

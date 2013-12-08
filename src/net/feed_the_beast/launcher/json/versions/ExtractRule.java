@@ -1,4 +1,4 @@
-package net.feed_the_beast.launcher.versions;
+package net.feed_the_beast.launcher.json.versions;
 
 import java.util.List;
 

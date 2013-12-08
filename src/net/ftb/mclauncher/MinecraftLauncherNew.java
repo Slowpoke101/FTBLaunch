@@ -25,30 +25,39 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import net.feed_the_beast.launcher.json.JsonFactory;
-import net.feed_the_beast.launcher.versions.Library;
-import net.feed_the_beast.launcher.versions.OS;
-import net.feed_the_beast.launcher.versions.Version;
-import net.ftb.data.ModPack;
+import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
+import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.winreg.JavaFinder;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 public class MinecraftLauncherNew
 {
 	public static Process launchMinecraft(File gameDir, File assetDir, File nativesDir, 
 	        List<File> classpath,
 	        String username, String password,
-	        String mainClass, String args,
+	        String mainClass, String args, String assetIndex,
 	        String rmax, String maxPermSize,
 	        String version) throws IOException
     {
+	    
+	    assetDir = syncAssets(assetDir, assetIndex);
+	    
 		StringBuilder cpb = new StringBuilder("");
 		for (File f : classpath)
 		{
@@ -211,5 +220,48 @@ public class MinecraftLauncherNew
 		} catch (Throwable t) {
 			Logger.logError("Unhandled error launching minecraft", t);
 		}
+	}
+
+	private static File syncAssets(File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException
+	{
+	    Logger.logInfo("Syncing Assets:");
+	    File objects = new File(assetDir, "objects");
+	    AssetIndex index = JsonFactory.loadAssetIndex(new File(assetDir, "indexes/{INDEX}.json".replace("{INDEX}", indexName)));
+	    
+	    if (!index.virtual)
+	        return assetDir;
+
+        File targetDir = new File(assetDir, "virtual/" + indexName);
+        
+	    Set<File> old = FileUtils.listFiles(targetDir);
+	    
+	    for (Entry<String, Asset> e : index.objects.entrySet())
+	    {
+	        Asset asset = e.getValue();
+	        File local = new File(targetDir, e.getKey());
+	        File object = new File(objects, asset.hash.substring(0, 2) + "/" + asset.hash);
+
+            old.remove(local);
+	        
+	        if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash))
+	        {
+	            Logger.logInfo("  Changed: " + e.getKey());
+	            FileUtils.copyFile(object, local, true);
+	        }
+	        else if (!local.exists())
+	        {
+                Logger.logInfo("  Added: " + e.getKey());
+                FileUtils.copyFile(object, local);
+	        }
+	    }
+
+	    for (File f : old)
+	    {
+	        String name = f.getAbsolutePath().replace(targetDir.getAbsolutePath(), "");
+	        Logger.logInfo("  Removed: " + name.substring(1));
+	        f.delete();
+	    }
+
+	    return targetDir;
 	}
 }
