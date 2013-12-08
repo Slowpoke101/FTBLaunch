@@ -1,4 +1,7 @@
 package net.ftb.util.winreg;
+
+import net.ftb.log.Logger;
+
 /**
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.
  * Needs WinRegistry.java. Get it at: http://stackoverflow.com/questions/62289/read-write-to-windows-registry-using-java
@@ -24,9 +27,8 @@ public class JavaInfo implements Comparable<JavaInfo> {
         String[] tokens = versionInfo.split("\"");
         if (tokens.length < 2) this.version = "0.0.0_00";
         else this.version = tokens[1];
-        if (!version.contains("ea")){
+        if (version.toLowerCase().contains("ea")){
             version.replace("ea", "00");
-        }
         this.is64bits = versionInfo.toUpperCase().contains("64-BIT");
         this.path     = javaPath;
         
@@ -40,7 +42,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.major = Integer.parseInt(s[0]);
         this.minor = Integer.parseInt(s[1]);
         this.revision = Integer.parseInt(s[2]);
-        
+        }
     }
 
     /**
