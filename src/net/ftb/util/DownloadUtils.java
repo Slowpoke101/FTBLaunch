@@ -210,13 +210,19 @@ public class DownloadUtils extends Thread {
 	 * @throws IOException 
 	 */
 	public static String fileMD5(File file) throws IOException {
+	    return fileHash(file, "md5");
+	}
+	public static String fileSHA(File file) throws IOException {
+	    return fileHash(file, "sha1").toLowerCase();
+	}
+	public static String fileHash(File file, String type) throws IOException {
 		if(!file.exists()) {
 			return "";
 		}
 		URL fileUrl = file.toURI().toURL();
 		MessageDigest dgest = null;
 		try {
-			dgest = MessageDigest.getInstance("md5");
+			dgest = MessageDigest.getInstance(type);
 		} catch (NoSuchAlgorithmException e) { }
 		InputStream str = fileUrl.openStream();
 		byte[] buffer = new byte[65536];

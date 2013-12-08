@@ -1,4 +1,4 @@
-package net.feed_the_beast.launcher.versions;
+package net.feed_the_beast.launcher.json.versions;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +16,7 @@ public class Version
     public int minimumLauncherVersion;
     public String incompatibilityReason;
     public List<OSRule> rules;
+    public String assets;
     
     private List<Library> _libraries;
 
@@ -34,5 +35,10 @@ public class Version
             }
         }
         return _libraries;
+    }
+
+    public String getAssets()
+    {
+        return assets == null ? "legacy" : assets;
     }
 }

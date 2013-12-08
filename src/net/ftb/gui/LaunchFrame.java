@@ -43,6 +43,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
@@ -72,8 +74,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import net.feed_the_beast.launcher.json.JsonFactory;
-import net.feed_the_beast.launcher.versions.Library;
-import net.feed_the_beast.launcher.versions.Version;
+import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
+import net.feed_the_beast.launcher.json.versions.Library;
+import net.feed_the_beast.launcher.json.versions.Version;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
@@ -755,12 +759,21 @@ public class LaunchFrame extends JFrame {
 	    public File local;
 	    public String name;
         public long size = 0;
+        public String hash;
+        public String hashType;
+        
         public DownloadInfo(){}
         public DownloadInfo(URL url, File local, String name)
+        {
+            this(url, local, name, null, "md5");
+        }
+        public DownloadInfo(URL url, File local, String name, String hash, String hashType)
         {
             this.url = url;
             this.local = local;
             this.name = name;
+            this.hash = hash;
+            this.hashType = hashType;
         }
 	}
 	
@@ -869,9 +882,17 @@ public class LaunchFrame extends JFrame {
                         }
                         input.close();
                         output.close();
+                        String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
                         if(con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0))
                         {
-                            downloadSuccess = true;
+                            if (asset.hash != null && !asset.hash.toLowerCase().equals(hash))
+                            {
+                                asset.local.delete();
+                            }
+                            else
+                            {
+                                downloadSuccess = true;
+                            }
                         }
                     }
                     catch (Exception e)
@@ -895,11 +916,12 @@ public class LaunchFrame extends JFrame {
 	{
 	    try
         {
+            List<DownloadInfo> list = new ArrayList<DownloadInfo>();
+	        /*
 	        String baseUrl = "http://resources.download.minecraft.net/";
             Document doc = DocumentBuilderFactory.newInstance()
                            .newDocumentBuilder()
                            .parse(new URL(baseUrl).openConnection().getInputStream());
-            List<DownloadInfo> list = new ArrayList<DownloadInfo>();
 
             File assetsDir = new File(root, "assets");
             NodeList nodes = doc.getElementsByTagName("Contents");
@@ -927,6 +949,7 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             }
+            */
 
             File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
             if (!local.exists())
@@ -959,6 +982,75 @@ public class LaunchFrame extends JFrame {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
                     }
                     
+                }
+            }
+            
+            // Move the old format to the new:
+            File test = new File(root, "assets/READ_ME_I_AM_VERY_IMPORTANT.txt");
+            if (test.exists())
+            {
+                File assets = new File(root, "assets");
+                Set<File> old = FileUtils.listFiles(assets);
+                File objects = new File(assets, "objects");
+                String[] skip = new String[]
+                {
+                    objects.getAbsolutePath(),
+                    new File(assets, "indexes").getAbsolutePath(),
+                    new File(assets, "virtual").getAbsolutePath()
+                };
+                
+                for (File f : old)
+                {
+                    String path = f.getAbsolutePath();
+                    boolean move = true;
+                    for (String prefix : skip)
+                    {
+                        if (path.startsWith(prefix)) move = false;
+                    }
+                    if (move)
+                    {
+                        String hash = DownloadUtils.fileSHA(f);
+                        File cache = new File(objects, hash.substring(0,2) + "/" + hash);
+                        Logger.logInfo("Caching Asset: " + hash + " - " + f.getAbsolutePath().replace(assets.getAbsolutePath(), ""));
+                        if (!cache.exists())
+                        {
+                            cache.getParentFile().mkdirs();
+                            f.renameTo(cache);
+                        }
+                        f.delete();
+                    }
+                }
+
+                List<File> dirs = FileUtils.listDirs(assets);
+                for (File dir : dirs)
+                {
+                    if (dir.listFiles().length == 0)
+                    {
+                        dir.delete();
+                    }
+                }
+            }
+
+            url = new URL("https://s3.amazonaws.com/Minecraft.Download/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
+            json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
+            DownloadUtils.downloadToFile(url, json);
+            AssetIndex index = JsonFactory.loadAssetIndex(json);
+            
+            for (Entry<String, Asset> e : index.objects.entrySet())
+            {
+                String name = e.getKey();
+                Asset asset = e.getValue();
+                String path = asset.hash.substring(0,2) + "/" + asset.hash;
+                local = new File(root, "assets/objects/" + path);
+                
+                if (local.exists() && !asset.hash.equals(DownloadUtils.fileSHA(local)))
+                {
+                    local.delete();
+                }
+                
+                if (!local.exists())
+                {
+                    list.add(new DownloadInfo(new URL("http://resources.download.minecraft.net/" + path), local, name, asset.hash, "sha1"));
                 }
             }
             return list;
@@ -1095,6 +1187,7 @@ public class LaunchFrame extends JFrame {
                     username, password,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass,
                     packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+                    packjson.assets != null ? packjson.assets : base.getAssets(),
                     Settings.getSettings().getRamMax(), maxPermSize,
                     pack.getMcVersion());
             

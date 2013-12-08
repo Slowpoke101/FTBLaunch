@@ -22,6 +22,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -68,6 +74,7 @@ public class FileUtils {
     public static void copyFile(File sourceFile, File destinationFile, boolean overwrite) throws IOException {
 		if (sourceFile.exists()) {
 			if(!destinationFile.exists()) {
+			    destinationFile.getParentFile().mkdirs();
 				destinationFile.createNewFile();
 			} 
 			else if (!overwrite) return;
@@ -211,4 +218,53 @@ public class FileUtils {
 			Logger.logError(e.getMessage(), e);
 		}
 	}
+
+
+	public static List<File> listDirs(File path)
+	{
+	    List<File> ret = new ArrayList<File>();
+	    if (path.exists()) listDirs(path, ret);
+	    Collections.sort(ret, new Comparator<File>()
+        {
+            @Override
+            public int compare(File o1, File o2)
+            {
+                return o2.compareTo(o1);
+            }
+        });
+	    return ret;
+	}
+
+    private static void listDirs(File path, List<File> list)
+    {
+        for (File f : path.listFiles())
+        {
+            if (f.isDirectory())
+            {
+                listDirs(f, list);
+                list.add(f);
+            }
+        }
+    }
+
+	public static Set<File> listFiles(File path)
+	{
+	    Set<File> set = new HashSet<File>();
+	    if (path.exists())
+	    {
+	        listFiles(path, set);
+	    }
+	    return set;
+	}
+
+	private static void listFiles(File path, Set<File> set)
+    {
+        for (File f : path.listFiles())
+        {
+            if (f.isDirectory())
+                listFiles(f, set);
+            else
+                set.add(f);
+        }
+    }
 }
