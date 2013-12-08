@@ -43,6 +43,9 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
+import net.ftb.util.winreg.JavaFinder;
 
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -120,7 +123,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		ramMaximum.setMajorTickSpacing(256);
 		ramMaximum.setMinorTickSpacing(256);
 		ramMaximum.setMinimum(256);
-		String vmType = System.getProperty("sun.arch.data.model");
+		String vmType= new String();
+		if (OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+		    vmType = JavaFinder.parseWinJavaVersion().is64bits ? "64" : "32";
+		}else
+		    vmType = System.getProperty("sun.arch.data.model");
 		if(vmType != null){
 			if(vmType.equals("64")) {
 				ramMaximum.setMaximum((int)ram);

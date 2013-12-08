@@ -38,6 +38,7 @@ import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
+import net.ftb.util.winreg.JavaFinder;
 
 public class MinecraftLauncherNew
 {
@@ -58,7 +59,12 @@ public class MinecraftLauncherNew
 		List<String> arguments = new ArrayList<String>();
 
 		String separator = System.getProperty("file.separator");
-		String path = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
+		String path = new String();
+		if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
+		    path = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
+		else
+		    path = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
+		Logger.logInfo("Java Path: " + path);
 		arguments.add(path);
 
 		setMemory(arguments, rmax);
