@@ -22,9 +22,11 @@ public class JavaInfo implements Comparable<JavaInfo> {
     public JavaInfo(String javaPath) {
         String versionInfo = RuntimeStreamer.execute( new String[] { javaPath, "-version" } );
         String[] tokens = versionInfo.split("\"");
-
         if (tokens.length < 2) this.version = "0.0.0_00";
         else this.version = tokens[1];
+        if (!version.contains("ea")){
+            version.replace("ea", "00");
+        }
         this.is64bits = versionInfo.toUpperCase().contains("64-BIT");
         this.path     = javaPath;
         
@@ -33,9 +35,6 @@ public class JavaInfo implements Comparable<JavaInfo> {
             this.build = Integer.parseInt(this.version.substring(version.indexOf('_') + 1));
             this.version = version.substring(0, this.version.indexOf('_'));
 
-        }
-        if (!version.contains("ea")){
-            version.replace("ea", "00");
         }
         String[] s = this.version.split("\\.");
         this.major = Integer.parseInt(s[0]);
