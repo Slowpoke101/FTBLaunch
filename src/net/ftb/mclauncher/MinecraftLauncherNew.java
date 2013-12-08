@@ -75,9 +75,9 @@ public class MinecraftLauncherNew
 		arguments.add("-XX:+AggressiveOpts");
 		arguments.add("-XX:+CMSClassUnloadingEnabled");
 		arguments.add("-XX:PermSize=" + maxPermSize);
-        arguments.add("-Dorg.lwjgl.librarypath=\"" + nativesDir.getAbsolutePath() + '"');
-        arguments.add("-Dnet.java.games.input.librarypath=\"" + nativesDir.getAbsolutePath() + '"');
-        arguments.add("-Duser.home=\"" + gameDir.getParentFile().getAbsolutePath() + '"');
+        arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
+        arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
+        arguments.add("-Duser.home=" + gameDir.getParentFile().getAbsolutePath());
 
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());
