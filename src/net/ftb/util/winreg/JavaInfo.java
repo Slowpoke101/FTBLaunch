@@ -34,11 +34,14 @@ public class JavaInfo implements Comparable<JavaInfo> {
             this.version = version.substring(0, this.version.indexOf('_'));
 
         }
+        if (!version.contains("ea")){
+            version.replace("ea", "00");
+        }
         String[] s = this.version.split("\\.");
         this.major = Integer.parseInt(s[0]);
         this.minor = Integer.parseInt(s[1]);
         this.revision = Integer.parseInt(s[2]);
-
+        
     }
 
     /**
