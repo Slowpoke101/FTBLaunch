@@ -79,10 +79,10 @@ public class MinecraftLauncherNew
 		setMemory(arguments, rmax);
 
         if(maxPermSize == null || maxPermSize.isEmpty()) maxPermSize = "128m";
-		arguments.add("-XX:+UseConcMarkSweepGC");
-		arguments.add("-XX:+CMSIncrementalMode");
-		arguments.add("-XX:+AggressiveOpts");
-		arguments.add("-XX:+CMSClassUnloadingEnabled");
+		//arguments.add("-XX:+UseConcMarkSweepGC");
+		//arguments.add("-XX:+CMSIncrementalMode");
+		//arguments.add("-XX:+AggressiveOpts");
+		//arguments.add("-XX:+CMSClassUnloadingEnabled");
 		arguments.add("-XX:PermSize=" + maxPermSize);
         arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
         arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());

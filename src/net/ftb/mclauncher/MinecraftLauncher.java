@@ -87,10 +87,10 @@ public class MinecraftLauncher {
 
 		setMemory(arguments, rmax);
 
-		arguments.add("-XX:+UseConcMarkSweepGC");
-		arguments.add("-XX:+CMSIncrementalMode");
-		arguments.add("-XX:+AggressiveOpts");
-		arguments.add("-XX:+CMSClassUnloadingEnabled");
+		//arguments.add("-XX:+UseConcMarkSweepGC");
+		//arguments.add("-XX:+CMSIncrementalMode");
+		//arguments.add("-XX:+AggressiveOpts");
+		//arguments.add("-XX:+CMSClassUnloadingEnabled");
 		if(maxPermSize.isEmpty()) {
 			arguments.add("-XX:PermSize=128m");
 		} else {
