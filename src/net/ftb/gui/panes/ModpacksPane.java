@@ -141,7 +141,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 			public void actionPerformed(ActionEvent e) {
 				if(packPanels.size() > 0) {
 					if(getSelectedModIndex() >= 0) {
-						EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance());
+						EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack() );
 						empd.setVisible(true);
 					}
 				}

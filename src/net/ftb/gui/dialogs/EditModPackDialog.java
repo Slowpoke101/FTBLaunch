@@ -46,6 +46,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class EditModPackDialog extends JDialog {
@@ -69,6 +70,7 @@ public class EditModPackDialog extends JDialog {
 
 	private List<String> enabledMods;
 	private List<String> disabledMods;
+	private int mcversion = 000;
 
 	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
 	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
@@ -84,9 +86,11 @@ public class EditModPackDialog extends JDialog {
 		OLD_VERSIONS
 	}
 
-	public EditModPackDialog(LaunchFrame instance) {
+	public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
 		super(instance, true);
-
+		if (modPack != null && modPack.getMcVersion() != null)
+		    mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
+		Logger.logInfo("MCVersion: " + mcversion);
 		modsFolder.mkdirs();
 		coreModsFolder.mkdirs();
 		jarModsFolder.mkdirs();
@@ -246,14 +250,15 @@ public class EditModPackDialog extends JDialog {
 		panel.add(tabbedPane);
 
 		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+		if(mcversion <= 152){
 		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
 		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
-
+		}
 		JLabel tabLabel;
 		tabLabel = new JLabel("Mods");
 		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
 		tabbedPane.setTabComponentAt(0, tabLabel);
-
+        if(mcversion <= 152){
 		tabLabel = new JLabel("JarMods");
 		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
 		tabbedPane.setTabComponentAt(1, tabLabel);
@@ -261,7 +266,7 @@ public class EditModPackDialog extends JDialog {
 		tabLabel = new JLabel("CoreMods");
 		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
 		tabbedPane.setTabComponentAt(2, tabLabel);
-
+        }
 		enabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		disabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
