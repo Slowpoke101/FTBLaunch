@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ftb.log.Logger;
+
 /**
  * Windows-specific java versions finder
  *****************************************************************************/
@@ -105,6 +107,7 @@ public class JavaFinder
      ****************************************************************************/
     public static JavaInfo parseWinJavaVersion ()
     {
+        Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
         if (prefered != null)
             return prefered;
         else
@@ -115,6 +118,7 @@ public class JavaFinder
 
             for (int i = 0; i < javas.size(); i++)
             {
+                Logger.logInfo(javas.get(i).toString());
                 if (prefered == null && javas.get(i) != null)
                     prefered = javas.get(i);
                 if (javas.get(i).is64bits)
