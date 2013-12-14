@@ -79,7 +79,6 @@ public class ModManager extends JDialog {
 					if(animationGif.exists()) {
 						FileUtils.delete(animationGif);
 					}
-					clearModsFolder(pack);
 					erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 				}
 			} catch (IOException e) {
@@ -194,9 +193,6 @@ public class ModManager extends JDialog {
                     FileUtils.delete(new File(installPath, dir + "/instMods/"));
 				    if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
 					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-
-
-
 					File version = new File(installPath, dir + sep + "version");
 					BufferedWriter out = new BufferedWriter(new FileWriter(version));
 					out.write(curVersion.replace("_", "."));
