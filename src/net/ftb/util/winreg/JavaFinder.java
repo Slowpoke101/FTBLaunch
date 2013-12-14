@@ -131,15 +131,16 @@ public class JavaFinder
             {
                 for (int i = 0; i < java64.size(); i++)
                 {
-                    if (!prefered.is64bits || java64.get(i).compareTo(prefered) == -1)
+                    if (!prefered.is64bits || java64.get(i).compareTo(prefered) == 1)
                         prefered = java64.get(i);
                 }
                 for (int i = 0; i < java64.size(); i++)
                 {
-                    if (!prefered.is64bits && java32.get(i).compareTo(prefered) == -1)
+                    if (!prefered.is64bits && java32.get(i).compareTo(prefered) == 1)
                         prefered = java32.get(i);
                 }
             }
+            Logger.logInfo("FTB Launcher Prefers: " + prefered.toString());
             return prefered;
         }
     }
