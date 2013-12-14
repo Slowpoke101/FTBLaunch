@@ -79,6 +79,7 @@ public class ModManager extends JDialog {
 					if(animationGif.exists()) {
 						FileUtils.delete(animationGif);
 					}
+					clearModsFolder(pack);
 					erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 				}
 			} catch (IOException e) {
@@ -187,11 +188,15 @@ public class ModManager extends JDialog {
 			try {
 				if((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic, modPackName), md5)) {
 					if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
-					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-					if (debugVerbose) { Logger.logInfo(debugTag + "Purging mods, coremods, instMods"); }
+                    if (debugVerbose) { Logger.logInfo(debugTag + "Purging mods, coremods, instMods"); }
 					clearModsFolder(pack);
-					FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-					FileUtils.delete(new File(installPath, dir + "/instMods/"));
+                    FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+                    FileUtils.delete(new File(installPath, dir + "/instMods/"));
+				    if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
+					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+
+
+
 					File version = new File(installPath, dir + sep + "version");
 					BufferedWriter out = new BufferedWriter(new FileWriter(version));
 					out.write(curVersion.replace("_", "."));
@@ -317,17 +322,29 @@ public class ModManager extends JDialog {
 	}
 
 	public static void clearModsFolder(ModPack pack) {
-		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + "/minecraft/mods");
-		if(modsFolder.exists()) {
-			for(String file : modsFolder.list()) {
-				if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
-					try {
-						FileUtils.delete(new File(modsFolder, file));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "mods");
+		clearFolder(modsFolder);
+	}
+	
+	public static void clearFolder(File folder){
+	    if(folder.exists()) {
+            for(String file : folder.list()) {
+                if (new File(folder, file).isDirectory()){
+                    //Logger.logInfo(new File(folder, file).toString());
+                    clearFolder(new File(folder, file));
+                }
+                if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
+                    try {
+                        FileUtils.delete(new File(folder, file));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+
+
+
+                    }
+                }
+            }
+	    }
 	}
 }
