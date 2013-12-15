@@ -192,6 +192,9 @@ public class ModManager extends JDialog {
                     FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
                     FileUtils.delete(new File(installPath, dir + "/instMods/"));
 				    if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
+				    if(new File(baseDynamic.getPath() + sep + modPackName).exists()){
+				    	clearFolder(new File(baseDynamic.getPath() + sep + modPackName));
+				    }
 					FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
 					File version = new File(installPath, dir + sep + "version");
 					BufferedWriter out = new BufferedWriter(new FileWriter(version));
