@@ -80,9 +80,9 @@ public class ModManager extends JDialog {
 					if(animationGif.exists()) {
 						FileUtils.delete(animationGif);
 					}
-			        String dynamicLoc = OSUtils.getDynamicStorageLocation();
+                    String dynamicLoc = OSUtils.getDynamicStorageLocation();
                     baseDynamic = new File(dynamicLoc, "ModPacks" + sep + pack.getDir() + sep);
-			        clearFolder(new File(baseDynamic.getPath() + sep + pack.getName()));
+                    clearModsFolder(pack);
 					erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 				}
 			} catch (IOException e) {
@@ -324,6 +324,7 @@ public class ModManager extends JDialog {
 	public static void clearModsFolder(ModPack pack) {
 		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "mods");
 		clearFolder(modsFolder);
+        clearFolder(new File(baseDynamic.getPath() + sep + pack.getName()));
 	}
 	
 	public static void clearFolder(File folder){
