@@ -62,6 +62,7 @@ public class ModManager extends JDialog {
 	private final JLabel label;
 	private static String sep = File.separator;
 	public static ModManagerWorker worker;
+	private static File baseDynamic;
 
 	public class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
@@ -79,6 +80,9 @@ public class ModManager extends JDialog {
 					if(animationGif.exists()) {
 						FileUtils.delete(animationGif);
 					}
+			        String dynamicLoc = OSUtils.getDynamicStorageLocation();
+                    baseDynamic = new File(dynamicLoc, "ModPacks" + sep + pack.getDir() + sep);
+			        clearFolder(new File(baseDynamic.getPath() + sep + pack.getName()));
 					erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 				}
 			} catch (IOException e) {
@@ -159,7 +163,7 @@ public class ModManager extends JDialog {
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
 			String baseLink = (pack.isPrivatePack() ? "privatepacks/" + dir + "/" + curVersion + "/" : "modpacks/" + dir + "/" + curVersion + "/");
-			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
+			baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 			if (debugVerbose) {
 				Logger.logInfo(debugTag + "pack dir: " + dir);
 				Logger.logInfo(debugTag + "dynamicLoc: " + dynamicLoc);
@@ -331,7 +335,8 @@ public class ModManager extends JDialog {
                 }
                 if(file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
                     try {
-                        FileUtils.delete(new File(folder, file));
+                        boolean b = FileUtils.delete(new File(folder, file));
+                        if(!b) Logger.logInfo("Error deleting " + file);
                     } catch (IOException e) {
                         e.printStackTrace();
 
