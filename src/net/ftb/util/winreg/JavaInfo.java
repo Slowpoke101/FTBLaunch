@@ -40,9 +40,9 @@ public class JavaInfo implements Comparable<JavaInfo> {
         
         String[] s = this.version.split("[._-]");
         this.major = Integer.parseInt(s[0]);
-        this.minor = Integer.parseInt(s[1]);
-        this.revision = Integer.parseInt(s[2]);
-        this.build = Integer.parseInt(s[3]); 
+        this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
+        this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
+        this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0; 
 
     }
 
