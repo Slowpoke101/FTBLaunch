@@ -158,7 +158,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
 				if (Desktop.isDesktopSupported()) {
 					Desktop desktop = Desktop.getDesktop();
 					try {
-						desktop.browse(new URI("http://support.feed-the-beast.com/?qa=hot"));
+						desktop.browse(new URI("http://desk.feed-the-beast.com/"));
 					} catch (Exception exc) {
 						Logger.logError("Could not open url: " + exc.getMessage());
 					}
