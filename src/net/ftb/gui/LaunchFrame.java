@@ -716,7 +716,7 @@ public class LaunchFrame extends JFrame {
         if (assets.size() > 0)
         {
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100); //Not sure why this isnt showing...
-            AssetDownloader downloader = new AssetDownloader(prog, assets)
+            final AssetDownloader downloader = new AssetDownloader(prog, assets)
             {
                 @Override
                 public void done()
@@ -745,6 +745,25 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             };
+
+            downloader.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (prog.isCanceled()) {
+                        downloader.cancel(false);
+                    }
+                    if (!downloader.isDone()) {
+                        int progress = downloader.getProgress();
+                        if (progress < 0) {
+                            progress = 0;
+                        } else if (progress > 100) {
+                            progress = 100;
+                        }
+                        prog.setProgress(progress);
+                        prog.setNote(downloader.getStatus());
+                    }
+                }
+            });
             downloader.execute();
         }
         else
