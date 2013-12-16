@@ -82,7 +82,7 @@ public class ModManager extends JDialog {
 					}
                     String dynamicLoc = OSUtils.getDynamicStorageLocation();
                     baseDynamic = new File(dynamicLoc, "ModPacks" + sep + pack.getDir() + sep);
-                    clearModsFolder(pack);
+                    //clearModsFolder(pack);
 					erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
 				}
 			} catch (IOException e) {
@@ -162,6 +162,7 @@ public class ModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
+	        //clearModsFolder(pack);
 			String baseLink = (pack.isPrivatePack() ? "privatepacks/" + dir + "/" + curVersion + "/" : "modpacks/" + dir + "/" + curVersion + "/");
 			baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 			if (debugVerbose) {
@@ -324,7 +325,10 @@ public class ModManager extends JDialog {
 	public static void clearModsFolder(ModPack pack) {
 		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "mods");
 		clearFolder(modsFolder);
-        clearFolder(new File(baseDynamic.getPath() + sep + pack.getName()));
+	   Logger.logInfo("Mods Folder: " + modsFolder.toString());
+	   File dyn = new File(baseDynamic.getPath(), "minecraft" + File.separator + "mods");
+	   Logger.logInfo("Dynamic Folder: " + dyn);
+       clearFolder(dyn);
 	}
 	
 	public static void clearFolder(File folder){
