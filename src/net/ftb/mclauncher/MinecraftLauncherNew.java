@@ -78,7 +78,7 @@ public class MinecraftLauncherNew
 
 		setMemory(arguments, rmax);
 
-        if(maxPermSize == null || maxPermSize.isEmpty()) maxPermSize = "128m";
+        if(maxPermSize == null || maxPermSize.isEmpty()) maxPermSize = "256m";
 		//arguments.add("-XX:+UseConcMarkSweepGC");
 		//arguments.add("-XX:+CMSIncrementalMode");
 		//arguments.add("-XX:+AggressiveOpts");
