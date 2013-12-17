@@ -137,10 +137,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 			if(vmType.equals("64")) {
 				ramMaximum.setMaximum((int)ram);
 			} else if(vmType.equals("32")) {
-				if(ram < 1536) {
+				if(ram < 1024) {
 					ramMaximum.setMaximum((int)ram);
 				} else {
-					ramMaximum.setMaximum(1536);
+					ramMaximum.setMaximum(1024);
 				}
 			}
 		}
@@ -213,7 +213,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 									Logger.logError("Could not open url: " + exc.getMessage());
 								}
 							} else {
-								Logger.logWarn("Could not open url, not supported");
+								Logger.logWarn("Could not open Java Download url, not supported");
 							}
 						}
 					});
