@@ -16,6 +16,8 @@
  */
 package net.ftb.gui.panes;
 
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -23,6 +25,7 @@ import java.awt.event.FocusListener;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -33,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -50,8 +54,8 @@ import net.ftb.util.winreg.JavaFinder;
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
 	private JToggleButton tglbtnForceUpdate;
-	private JButton installBrowseBtn, advancedOptionsBtn;
-	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
+	private JButton installBrowseBtn, advancedOptionsBtn, btnInstallJava;
+	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX, lbl32BitWarning;
 	private JSlider ramMaximum;
 	private JComboBox locale;
 	private JTextField installFolderTextField;
@@ -126,16 +130,17 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		String vmType= new String();
 		if (OSUtils.getCurrentOS().equals(OS.WINDOWS)){
 		    vmType = JavaFinder.parseWinJavaVersion().is64bits ? "64" : "32";
-		}else
+		}else{
 		    vmType = System.getProperty("sun.arch.data.model");
+		}
 		if(vmType != null){
 			if(vmType.equals("64")) {
 				ramMaximum.setMaximum((int)ram);
 			} else if(vmType.equals("32")) {
-				if(ram < 1024) {
+				if(ram < 1536) {
 					ramMaximum.setMaximum((int)ram);
 				} else {
-					ramMaximum.setMaximum(1024);
+					ramMaximum.setMaximum(1536);
 				}
 			}
 		}
@@ -182,6 +187,41 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		lblLocale.setBounds(10, 130, 195, 25);
 		add(lblLocale);
 		add(locale);
+		
+		// Dependant on vmType from earlier RAM calculations to detect 64 bit JVM 
+		if(vmType.equals("32")) {
+			lbl32BitWarning = new JLabel(I18N.getLocaleString("JAVA_32BIT_WARNING"));
+			lbl32BitWarning.setBounds(230, 170, 500, 25);
+			lbl32BitWarning.setForeground(Color.red);
+			add(lbl32BitWarning);
+			
+			if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
+				// Detect if OS is 64 or 32 bit
+				String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+				String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
+
+				if(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64"))) {
+					btnInstallJava = new JButton(I18N.getLocaleString("DOWNLOAD_JAVA64"));
+					btnInstallJava.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							if(Desktop.isDesktopSupported()) {
+								Desktop desktop = Desktop.getDesktop();
+								try {
+									desktop.browse(new URI("http://javadl.sun.com/webapps/download/AutoDL?BundleId=81821"));
+								} catch (Exception exc) {
+									Logger.logError("Could not open url: " + exc.getMessage());
+								}
+							} else {
+								Logger.logWarn("Could not open url, not supported");
+							}
+						}
+					});
+					btnInstallJava.setBounds(385, 200, 150, 28);
+					add(btnInstallJava);
+				}
+			}
+		}
 
 		chckbxShowConsole = new JCheckBox(I18N.getLocaleString("SHOW_CONSOLE"));
 		chckbxShowConsole.addFocusListener(settingsChangeListener);

@@ -27,6 +27,8 @@ SHOW_CONSOLE = Show Console?
 REOPEN_LAUNCHER = Reopen launcher after exiting minecraft?
 ADVANCED_OPTIONS = Advanced Options
 INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
+DOWNLOAD_JAVA64 = Download Java 64-bit
+JAVA_32BIT_WARNING = Your system is using a 32-bit version of Java. This will limit Minecraft to 1.5gb of RAM.
 
 # Shared strings
 FILTER_SETTINGS = Filter Settings
