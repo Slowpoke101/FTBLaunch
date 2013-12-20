@@ -47,8 +47,13 @@ public class PlayOfflineDialog extends JDialog {
 		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + File.separator + ModPack.getSelectedPack().getDir()
+			    if (Integer.parseInt(ModPack.getSelectedPack().getMcVersion().replaceAll("[^\\d]", "")) < 162){
+				LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() 
 						+ File.separator + "minecraft", username, "offlinemods", ModPack.getSelectedPack().getMaxPermSize());
+			    }else{
+			        LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", ModPack.getSelectedPack().getMaxPermSize());
+
+			    }
 			}
 		});
 
