@@ -5,7 +5,7 @@ LOCALE_LOADED = Nederlands taalbestand geladen!
 DONATE_BUTTON = Doneer
 
 # Main Tab
-EDIT_BUTTON = Bewerken
+EDIT_BUTTON = Bewerk
 LAUNCH_BUTTON = Starten
 PROFILE_CREATE = Maak Profiel
 PROFILE_SELECT = Kies Profiel
@@ -23,18 +23,24 @@ INSTALL_FOLDER = Installatiemap...
 FORCE_UPDATE = Forceer update?
 RAM_MAX = Maximum RAM (MB)
 LANGUAGE = Taal
+SHOW_CONSOLE = Toon Console?
+REOPEN_LAUNCHER = Heropenen launcher na het verlaten van minecraft?
+ADVANCED_OPTIONS = Geavanceerde Opties
+INSTALL_FIRSTUSE = Aangezien dit de eerste keer dat u dit programma gebruikt, wij raden u aan de installatie map.
+DOWNLOAD_JAVA64 = Download Java 64-bit
+JAVA_32BIT_WARNING = Het systeem gebruikt een 32-bits versie van Java. Dit zal beperken Minecraft tot 1 GB RAM.
 
 # Shared strings
 FILTER_SETTINGS = Filterinstellingen
 
 # Modpacks pane
-MODS_EDIT_PACK = Bewerk Mod Pack
+MODS_EDIT_PACK = Bewerken Mod Pack
 MODS_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de mods worden geladen...
 
 # EditModPackDialog
-MODS_EDIT_ENABLED_LABEL = Ingeschakelde Mods
-MODS_EDIT_DISABLED_LABEL = Uitgeschakelde Mods
-MODS_EDIT_OPEN_FOLDER = Open Map
+MODS_EDIT_ENABLED_LABEL = Ingeschakeld Mods
+MODS_EDIT_DISABLED_LABEL = Uitschakelen Mods
+MODS_EDIT_OPEN_FOLDER = Map Openen
 MODS_EDIT_ADD_MOD = Voeg Mod Toe
 MODS_EDIT_ENABLE_MOD = << Inschakelen
 MODS_EDIT_DISABLE_MOD = Uitschakelen >>
@@ -45,3 +51,81 @@ MAPS_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de kaarten worden geladen...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de texture packs worden geladen...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Geavanceerde Opties
+ADVANCED_OPTIONS_DLLOCATION = Download Locatie:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Window Maat:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Window Positie:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Gemaximaliseerde?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Uitschakelen Google Analytics Tracking
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additionele Java Parameters:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Additionele Launcher Debugging
+
+# Update
+UPDATE_WICHUPDATE = Wilt u updaten?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = van het programma beschikbaar is.
+LUNCHERUPDATE_CHANGELOG = Bekijk Changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Programma Update Beschikbaar
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Een nieuwe mod pakket versie beschikbaar!
+UPDATEMODPACK_BACKUP = Back-up configuratiebestanden bestanden?
+UPDATEMODPACK_TITLE = Mod Pack Update beschikbaar
+
+# Private Pack
+PRIVATEPACK_TITLE = Private Pack Interface
+PRIVATEPACK_ERROR = Ongeldige Private Pack.
+PRIVATEPACK_TEXT = Type in de prive-code die je krijgt van de particuliere pakket eigenaar en klik op toevoegen, zal het peloton dan in je rugzak lijst. Het wordt automatisch geladen bij het opstarten. Wilt u een prive-eenheid te verwijderen, typt u de code opnieuw in en klik op verwijderen.
+PRIVATEPACK_SECCESS = succesvol verwijderd.
+PRIVATEPACK_NOTEXISTS = Verkeerde pak naam.
+
+# Filter
+FILTER_PACKTYPE = Mod Pack Soort:
+FILTER_ORIGIN = Mod Pack Afkomst:
+FILTER_COMPERTIBLEPACK = Compatibele Pack:
+FILTER_3THPARTY = 3rd Party
+FILTER_APPLY = Filter toepassen
+FILTER_SEARCHMAP = Kaarten Zoek
+FILTER_TITLE = Filter
+FILTER_PUBLIC = Publiek
+FILTER_PRIVATE = Persoonlijk
+FILTER_MODPACKAVALIABILITY = Mod Pack Beschikbaarheid:
+FILTER_MCVERSION = Minecraft Versie:
+FILTER_RESULUTION = Mod Pack Resolutie:
+FILTER_TEXSEARCH = Zoeken Packs
+FILTER_SEARCHPACK = Zoeken
+
+# Play Offline
+PLAYOFFLINE_WANNA = Er ging iets mis .. \nWil je offline spelen?
+
+# Password
+PASSWORD_PASSLABEL = Wachtwoord:
+PASSWORD_TITLE = Voer Het Wachtwoord:
+
+# Profile
+PROFILEADDER_USERNAME = Gebruikersnaam:
+PROFILEADDER_PASSWORD = Wachtwoord:
+PROFILEADDER_NAME = Profiel Naam:
+PROFILEADDER_SAVEPASSWORD = Wachtwoord Onthouden
+PROFILEADDER_TITLE = Profiel Creator
+PROFILADDER_ERROR = Kan geen profiel aanmaken.
+PROFILEADDER_UPDATE = Update
+PROFILEDITOR_TITLE = Profiel Editor
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Waarschuwing! Er bestaat al een map met die naam!
+MAPOVERRIDE_WISHOVERRIDE = Wilt u overschrijven?
+
+# Main
+MAIN_EXIT = Afslag
+MAIN_APPLY = Toepassen
+MAIN_YES = Ja
+MAIN_NO = Nee
+MAIN_ALL = Alle
+MAIN_CANCEL = Annuleren
+MAIN_SUBMIT = Voorstellen
+MAIN_REMOVE = Verwijderen
+MAIN_ADD = Toevoegen
