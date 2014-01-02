@@ -3,11 +3,11 @@
 
   <groupId>net.ftb</groupId>
   <artifactId>FTB_Launcher</artifactId>
-  <version>1.3.2</version>
+  <version>1.3.3</version>
   <packaging>jar</packaging>
 
   <name>FTB Launcher</name>
-  <description>Launcher for the FTB Mod Pack </description>
+  <description>Launcher for the FTB Mod Packs </description>
   <url>https://github.com/Slowpoke101/FTBLaunch</url>
   <inceptionYear>2012</inceptionYear>
   <organization>

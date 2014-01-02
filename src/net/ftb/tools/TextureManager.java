@@ -68,6 +68,7 @@ public class TextureManager extends JDialog {
 			TexturePack texturePack = TexturePack.getSelectedTexturePack();
 			String compDir = texturePack.getSelectedCompatible();
 			ModPack compPack = ModPack.getPack(compDir);
+		    int mcversion = Integer.parseInt(compPack.getMcVersion().replace("[^\\d]", ""));
 			if(updating) {
 				texturePack = updateTexture;
 				compDir = updateModPack.getDir();
@@ -80,7 +81,7 @@ public class TextureManager extends JDialog {
 			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
 			if(DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePack.getUrl())) {
 				populateInstalledTextures(compPack);
-				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + "texturepacks" + sep + texturePack.getUrl());
+				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
 				if(oldFile.exists()) {
 					oldFile.delete();
 				}
@@ -143,10 +144,12 @@ public class TextureManager extends JDialog {
 		protected boolean downloadTexturePack(String texturePackName, String dir, String compDir, String packVer) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading Texture Pack");
 			String installPath = Settings.getSettings().getInstallPath();
-			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep).mkdirs();
-			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName).createNewFile();
-			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePackName))) {
-				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+			ModPack pack =  ModPack.getSelectedPack();
+		    int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
+			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
+			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();
+			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePackName))) {
+				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 				installedTextures.put(dir.toLowerCase(), packVer);
 				BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
 				for(int i = 0; i < installedTextures.size(); i++) {
@@ -160,6 +163,14 @@ public class TextureManager extends JDialog {
 			}
 			return false;
 		}
+	}
+	
+	public static String getTPDirectory(int MCVersion){
+	   if (MCVersion < 160){
+	       return "texturepacks";
+	   }else{
+	       return "resourcepacks";
+	   }
 	}
 
 	public TextureManager(JFrame owner, Boolean model) {
@@ -205,14 +216,15 @@ public class TextureManager extends JDialog {
 	public static void updateTextures() throws NoSuchAlgorithmException, IOException {
 		boolean removed = false;
 		ModPack pack = ModPack.getSelectedPack();
+		int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
 		String installDir = Settings.getSettings().getInstallPath();
-		File textureVersionFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+		File textureVersionFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 		if(textureVersionFile.exists()) {
 			populateInstalledTextures(pack);
 			if(installedTextures.size() > 0) {
 				for(TexturePack tp : TexturePack.getTexturePackArray()) {
 					if(installedTextures.containsKey(tp.getName().toLowerCase()) && tp.isCompatible(pack.getDir())) {
-						File texturePackFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + "texturepacks" + sep + tp.getUrl());
+						File texturePackFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + tp.getUrl());
 						if(texturePackFile.exists()) {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
 							if(!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
@@ -244,7 +256,9 @@ public class TextureManager extends JDialog {
 	}
 
 	private static void populateInstalledTextures(ModPack pack) {
-		File textureVersionFile = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+
+	    int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
+		File textureVersionFile = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 		if(installedTextures != null) {
 			installedTextures.clear();
 		} else {
