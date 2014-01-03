@@ -177,7 +177,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		// Dependant on vmType from earlier RAM calculations to detect 64 bit JVM 
 		if(vmType.equals("32")) {
 			lbl32BitWarning = new JLabel(I18N.getLocaleString("JAVA_32BIT_WARNING"));
-			lbl32BitWarning.setBounds(230, 170, 500, 25);
+			lbl32BitWarning.setBounds(190, 170, 500, 25);
 			lbl32BitWarning.setForeground(Color.red);
 			add(lbl32BitWarning);
 			
@@ -203,7 +203,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 							}
 						}
 					});
-					btnInstallJava.setBounds(385, 200, 150, 28);
+					btnInstallJava.setBounds(345, 200, 150, 28);
 					add(btnInstallJava);
 				}
 			}
