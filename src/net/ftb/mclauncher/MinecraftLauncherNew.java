@@ -77,13 +77,26 @@ public class MinecraftLauncherNew
 		arguments.add(path);
 
 		setMemory(arguments, rmax);
-		if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
-            // Detect if OS is 64 or 32 bit
+		
+	    if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
             String arch = System.getenv("PROCESSOR_ARCHITECTURE");
             String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-            if(!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64"))))
-                 if(maxPermSize == null || maxPermSize.isEmpty()) maxPermSize = "128m";}
-		    if(maxPermSize == null || maxPermSize.isEmpty()) maxPermSize = "256m";
+	        if(!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")))) {
+	            if(maxPermSize == null || maxPermSize.isEmpty()) {
+	                if(OSUtils.getOSTotalMemory() > 2048) {
+	                    maxPermSize = "192m";
+	                } else {
+	                    maxPermSize = "128m";
+	                }
+	            }
+	        }
+	    }
+	    
+        if(maxPermSize == null || maxPermSize.isEmpty()) {
+        	// 64-bit or Non-Windows
+        	maxPermSize = "256m";
+        }
+		
 		//arguments.add("-XX:+UseConcMarkSweepGC");
 		//arguments.add("-XX:+CMSIncrementalMode");
 		//arguments.add("-XX:+AggressiveOpts");
