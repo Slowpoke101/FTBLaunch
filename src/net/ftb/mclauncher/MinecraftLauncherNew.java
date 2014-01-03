@@ -85,10 +85,10 @@ public class MinecraftLauncherNew
 	            if(maxPermSize == null || maxPermSize.isEmpty()) {
 	                if(OSUtils.getOSTotalMemory() > 2048) {
 	                    maxPermSize = "192m";
-	                    Logger.logInfo("Defaulting PermSize to 192m")
+	                    Logger.logInfo("Defaulting PermSize to 192m");
 	                } else {
 	                    maxPermSize = "128m";
-	                    Logger.logInfo("Defaulting PermSize to 128m")
+	                    Logger.logInfo("Defaulting PermSize to 128m");
 	                }
 	            }
 	        }
@@ -97,7 +97,7 @@ public class MinecraftLauncherNew
         if(maxPermSize == null || maxPermSize.isEmpty()) {
         	// 64-bit or Non-Windows
         	maxPermSize = "256m";
-            Logger.logInfo("Defaulting PermSize to 256m")
+            Logger.logInfo("Defaulting PermSize to 256m");
         }
 		
 		//arguments.add("-XX:+UseConcMarkSweepGC");
