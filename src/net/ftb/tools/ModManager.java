@@ -172,23 +172,32 @@ public class ModManager extends JDialog {
 				Logger.logInfo(debugTag + "baseLink: " + baseLink);
 			}
 			baseDynamic.mkdirs();
+
 			String md5 = "";
 			try {
-				new File(baseDynamic, modPackName).createNewFile();
-				md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			String animation = pack.getAnimation();
-			if(!animation.equalsIgnoreCase("empty")) {
-				try {
-					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
+				File packFile = new File(baseDynamic, modPackName);
+				if(!packFile.exists() || !DownloadUtils.backupIsValid(packFile, baseLink + modPackName)) {
+					try {
+						new File(baseDynamic, modPackName).createNewFile();
+						md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
+					} catch (NoSuchAlgorithmException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String animation = pack.getAnimation();
+					if(!animation.equalsIgnoreCase("empty")) {
+						try {
+							downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+						} catch (NoSuchAlgorithmException e) {
+							e.printStackTrace();
+						}
+					}
 				}
+			} catch (Exception e) {
+				Logger.logError("Error validating pack archive");
 			}
+			
 			try {
 				if((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic, modPackName), md5)) {
 					if (debugVerbose) { Logger.logInfo(debugTag + "Extracting pack."); }
