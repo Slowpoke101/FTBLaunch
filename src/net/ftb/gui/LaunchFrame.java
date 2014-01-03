@@ -194,6 +194,11 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 
+		if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
+			Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
+		}
+    	
+        
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {

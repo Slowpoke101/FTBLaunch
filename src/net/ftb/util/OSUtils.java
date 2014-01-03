@@ -102,6 +102,28 @@ public class OSUtils {
 		
 		return ram;
     }
+
+    public static long getOSFreeMemory() {
+        long ram = 0;
+        
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+		Method m;
+		try {
+			m = operatingSystemMXBean.getClass().getDeclaredMethod("getFreePhysicalMemorySize");
+			m.setAccessible(true);
+			Object value = m.invoke(operatingSystemMXBean);
+			if(value != null) {
+				ram = Long.valueOf(value.toString()) / 1024 / 1024;
+			} else {
+				Logger.logWarn("Could not get free RAM Value");
+				ram = 1024;
+			}
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		
+		return ram;
+    }
     
 	/**
 	 * Used to get the java delimiter for current OS

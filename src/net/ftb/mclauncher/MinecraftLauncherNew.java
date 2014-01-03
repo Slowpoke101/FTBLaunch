@@ -81,12 +81,14 @@ public class MinecraftLauncherNew
 	    if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
             String arch = System.getenv("PROCESSOR_ARCHITECTURE");
             String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-	        if(!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")))) {
+            if(!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")))) {
 	            if(maxPermSize == null || maxPermSize.isEmpty()) {
 	                if(OSUtils.getOSTotalMemory() > 2048) {
 	                    maxPermSize = "192m";
+	                    Logger.logInfo("Defaulting PermSize to 192m")
 	                } else {
 	                    maxPermSize = "128m";
+	                    Logger.logInfo("Defaulting PermSize to 128m")
 	                }
 	            }
 	        }
@@ -95,6 +97,7 @@ public class MinecraftLauncherNew
         if(maxPermSize == null || maxPermSize.isEmpty()) {
         	// 64-bit or Non-Windows
         	maxPermSize = "256m";
+            Logger.logInfo("Defaulting PermSize to 256m")
         }
 		
 		//arguments.add("-XX:+UseConcMarkSweepGC");
