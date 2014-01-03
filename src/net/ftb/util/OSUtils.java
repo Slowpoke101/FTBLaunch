@@ -18,6 +18,9 @@ package net.ftb.util;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URI;
@@ -78,6 +81,28 @@ public class OSUtils {
 		}
 	}
 
+    public static long getOSTotalMemory() {
+        long ram = 0;
+        
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+		Method m;
+		try {
+			m = operatingSystemMXBean.getClass().getDeclaredMethod("getTotalPhysicalMemorySize");
+			m.setAccessible(true);
+			Object value = m.invoke(operatingSystemMXBean);
+			if(value != null) {
+				ram = Long.valueOf(value.toString()) / 1024 / 1024;
+			} else {
+				Logger.logWarn("Could not get RAM Value");
+				ram = 1024;
+			}
+		} catch (Exception e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		
+		return ram;
+    }
+    
 	/**
 	 * Used to get the java delimiter for current OS
 	 * @return string containing java delimiter for current OS

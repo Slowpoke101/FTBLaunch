@@ -140,8 +140,14 @@ public class JavaFinder
                         prefered = java32.get(i);
                 }
             }
-            Logger.logInfo("FTB Launcher Prefers: " + prefered.toString());
-            return prefered;
+            
+            if(prefered == null) {
+            	Logger.logError("No Java versions found!");
+            	return null;
+            } else {
+	            Logger.logInfo("FTB Launcher Prefers: " + prefered.toString());
+	            return prefered;
+            }
         }
     }
 }
