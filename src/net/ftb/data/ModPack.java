@@ -254,6 +254,26 @@ public class ModPack {
 		}
 		return result;
 	}
+	
+	public boolean needsUpdate(File verFile) {
+		boolean result = false;
+		try {
+			if(!verFile.exists()) {
+				verFile.getParentFile().mkdirs();
+				verFile.createNewFile();
+				result = true;
+			}
+			BufferedReader in = new BufferedReader(new FileReader(verFile));
+			String line;
+			if((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) > Integer.parseInt(line.replace(".", ""))) {
+				result = true;
+			}
+			in.close();
+		} catch (IOException e) {
+			Logger.logError(e.getMessage(), e);
+		}
+		return result;
+	}
 
 	/**
 	 * Used to get index of modpack

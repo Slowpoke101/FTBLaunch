@@ -194,6 +194,11 @@ public class LaunchFrame extends JFrame {
 		Logger.logInfo("Java vm: "+System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
 		Logger.logInfo("OS: "+System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 
+		if(OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
+			Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
+		}
+    	
+        
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -640,11 +645,17 @@ public class LaunchFrame extends JFrame {
 			new File(installPath, pack.getDir() + File.separator + "version").delete();
 			if (debugVerbose) { Logger.logInfo(debugTag + "Pack found and delete attempted"); }
 		}
-		if(!initializeMods()) {
-			if (debugVerbose) { Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu."); }
-			enableObjects();
-			return;
+		
+		File verFile = new File(installPath, pack.getDir() + File.separator + "version");
+		
+		if(Settings.getSettings().getForceUpdate() || !verFile.exists() || pack.needsUpdate(verFile)) {
+			if(!initializeMods()) {
+				if (debugVerbose) { Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu."); }
+				enableObjects();
+				return;
+			}
 		}
+		
 		try {
 			TextureManager.updateTextures();
 		} catch (Exception e1) { }
@@ -715,15 +726,17 @@ public class LaunchFrame extends JFrame {
         
         if (assets.size() > 0)
         {
+        	Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
+        	
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100); //Not sure why this isnt showing...
             final AssetDownloader downloader = new AssetDownloader(prog, assets)
             {
                 @Override
                 public void done()
                 {
-                    prog.close();
                     try
                     {
+                        prog.close();
                         if(get())
                         {
                             Logger.logInfo("Asset downloading complete");
@@ -746,24 +759,6 @@ public class LaunchFrame extends JFrame {
                 }
             };
 
-            downloader.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (prog.isCanceled()) {
-                        downloader.cancel(false);
-                    }
-                    if (!downloader.isDone()) {
-                        int progress = downloader.getProgress();
-                        if (progress < 0) {
-                            progress = 0;
-                        } else if (progress > 100) {
-                            progress = 100;
-                        }
-                        prog.setProgress(progress);
-                        prog.setNote(downloader.getStatus());
-                    }
-                }
-            });
             downloader.execute();
         }
         else
@@ -827,39 +822,28 @@ public class LaunchFrame extends JFrame {
 	    private List<DownloadInfo> downloads;
 	    private final ProgressMonitor monitor;
 	    private String status;
-	    private long total = 1;
+	    private int progressIndex = 0;
 	    
 	    private AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads)
 	    {
 	        this.downloads = downloads;
 	        this.monitor = monitor;
 
-            for (DownloadInfo i : downloads) total += i.size;
-
+	        monitor.setMaximum(downloads.size() * 100);
+	        
             addPropertyChangeListener(new PropertyChangeListener()
             {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt)
                 {
                     if (monitor.isCanceled()) AssetDownloader.this.cancel(false);
-                    if (!AssetDownloader.this.isDone())
-                    {
-                        monitor.setProgress(AssetDownloader.this.getProgress());
-                        monitor.setNote(AssetDownloader.this.getStatus());
-                    }
                 }
             });
-	    }
-
-	    protected String getStatus()
-	    {
-	        return status;
 	    }
 
         @Override
         protected Boolean doInBackground() throws Exception
         {
-            long downloaded = 0;
             boolean allDownloaded = true;
 
             byte[] buffer = new byte[24000];
@@ -889,15 +873,22 @@ public class LaunchFrame extends JFrame {
                         FileOutputStream output = new FileOutputStream(asset.local);
                         int readLen;
                         int currentSize = 0;
+                        int size = Integer.parseInt(con.getHeaderField("Content-Length"));
+                        setProgress(0);
                         while((readLen = input.read(buffer, 0, buffer.length)) != -1)
                         {
                             output.write(buffer, 0, readLen);
                             currentSize += readLen;
-                            downloaded += readLen;
-                            int prog = (int)((downloaded / total) * 100);
+                            int prog = (int)((currentSize / size) * 100);
                             if(prog > 100) prog = 100;
                             if(prog < 0  ) prog = 0;
+                            
                             setProgress(prog);
+                            
+                            prog = (progressIndex * 100) + prog;
+                            
+                            monitor.setProgress(prog);
+                            monitor.setNote(this.status);
                         }
                         input.close();
                         output.close();
@@ -913,6 +904,7 @@ public class LaunchFrame extends JFrame {
                                 downloadSuccess = true;
                             }
                         }
+                        progressIndex += 1;
                     }
                     catch (Exception e)
                     {
