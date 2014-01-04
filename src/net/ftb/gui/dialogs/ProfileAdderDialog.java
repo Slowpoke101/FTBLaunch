@@ -35,10 +35,12 @@ import javax.swing.event.DocumentListener;
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 
 @SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
+    private String updatecreds = new String("");
 	private JLabel usernameLbl;
 	private JTextField username;
 	private JLabel passwordLbl;
@@ -47,58 +49,79 @@ public class ProfileAdderDialog extends JDialog {
 	private JTextField name;
 	private JCheckBox savePassword;
 	private JButton add;
+	private JLabel messageLbl;
 
+	public ProfileAdderDialog(LaunchFrame instance,String unlocalizedMessage, boolean modal) {
+	    super(instance, modal);
+	    setUnlocalizedMessage(unlocalizedMessage);
+	    preSetup();
+	}
 	public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
 		super(instance, modal);
+		preSetup();
 
-		setupGui();
+	}
+	public void preSetup(){
+	       setupGui();
 
-		getRootPane().setDefaultButton(add);
+	        getRootPane().setDefaultButton(add);
 
-		savePassword.setSelected(true);
+	        savePassword.setSelected(true);
 
-		username.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				name.setText(username.getText());
-			}
+	        username.getDocument().addDocumentListener(new DocumentListener() {
+	            @Override
+	            public void removeUpdate(DocumentEvent arg0) {
+	                name.setText(username.getText());
+	            }
 
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				name.setText(username.getText());
-			}
-			@Override public void changedUpdate(DocumentEvent e) { }
-		});
+	            @Override
+	            public void insertUpdate(DocumentEvent arg0) {
+	                name.setText(username.getText());
+	            }
+	            @Override public void changedUpdate(DocumentEvent e) { }
+	        });
 
-		savePassword.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				password.setEnabled(savePassword.isSelected());
-			}
-		});
+	        savePassword.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent event) {
+	                password.setEnabled(savePassword.isSelected());
+	            }
+	        });
 
-		add.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(savePassword.isSelected()) {
-					if(validate(name.getText(), username.getText(), password.getPassword())) {
-						UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-						LaunchFrame.writeUsers(name.getText());
-						setVisible(false);
-					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
-					}
-				} else {
-					if(validate(name.getText(), username.getText())) {
-						UserManager.addUser(username.getText(), "", name.getText());
-						LaunchFrame.writeUsers(name.getText());
-						setVisible(false);
-					} else {
-						ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
-					}
-				}
-			}
-		});
+	        add.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent event) {
+	                if(savePassword.isSelected()) {
+	                    if(validate(name.getText(), username.getText(), password.getPassword())) {
+	                        UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
+	                        LaunchFrame.writeUsers(name.getText());
+	                        setVisible(false);
+	                    } else {
+	                        ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
+	                    }
+	                } else {
+	                    if(validate(name.getText(), username.getText())) {
+	                        UserManager.addUser(username.getText(), "", name.getText());
+	                        LaunchFrame.writeUsers(name.getText());
+	                        setVisible(false);
+	                    } else {
+	                        ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
+	                    }
+	                }
+	            }
+	        });
+	}
+	public void setUnlocalizedMessage(String editingName){
+	    if(editingName.equals("CHANGEDUUID")){
+            updatecreds = I18N.getLocaleString(editingName);
+            password.setEnabled(false);
+            savePassword.setSelected(false);
+        }else if(editingName.equals("OLDCREDS")){
+            updatecreds = I18N.getLocaleString(editingName);
+            password.setEnabled(false);
+            savePassword.setSelected(false);
+        }
+	    
 	}
 
 	private boolean validate(String name, String user, char[] pass) {
@@ -140,7 +163,12 @@ public class ProfileAdderDialog extends JDialog {
 		usernameLbl.setLabelFor(username);
 		passwordLbl.setLabelFor(password);
 		nameLbl.setLabelFor(name);
-
+		
+		if(!updatecreds.equals("")){
+	        messageLbl = new JLabel(updatecreds);
+	        panel.add(messageLbl);
+	    }
+		Logger.logError("GUI FUN");
 		panel.add(usernameLbl);
 		panel.add(username);
 		panel.add(passwordLbl);
@@ -158,8 +186,13 @@ public class ProfileAdderDialog extends JDialog {
 		layout.putConstraint(SpringLayout.WEST, usernameLbl, hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, passwordLbl, hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, nameLbl,     hSpring, SpringLayout.WEST, panel);
-
+		
 		columnWidth = Spring.width(usernameLbl);
+		if(!updatecreds.equals("")){
+	        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+	        columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
+
+		}
 		columnWidth = Spring.max(columnWidth, Spring.width(passwordLbl));
 		columnWidth = Spring.max(columnWidth, Spring.width(nameLbl));
 

@@ -106,6 +106,8 @@ PASSWORD_PASSLABEL = Password:
 PASSWORD_TITLE = Please Enter Password 
 
 # Profile
+OLDCREDS = Old Setup Login Data Found or Login Data Missing: please update.
+CHANGEDUUID = A change has been detected to the users hardware that prevents the launcher from accessing your credentials, please re-enter them.
 PROFILEADDER_USERNAME = Username:
 PROFILEADDER_PASSWORD = Password:
 PROFILEADDER_NAME = Profile Name:

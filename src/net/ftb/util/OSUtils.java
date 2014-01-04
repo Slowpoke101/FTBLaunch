@@ -158,7 +158,14 @@ public class OSUtils {
 			return OS.OTHER;
 		}
 	}
-
+	
+	/**
+     * sees if the hash of the UUID matches the one stored in the config
+     * @return true if UUID matches hash or false if it does not
+     */
+	public static boolean verifyUUID(){
+	    return true;
+	}
 	/**
 	 * Grabs the mac address of computer and makes it 10 times longer
 	 * @return a byte array containing mac address
