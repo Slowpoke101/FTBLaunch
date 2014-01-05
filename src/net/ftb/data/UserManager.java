@@ -16,10 +16,12 @@
  */
 package net.ftb.data;
 
+import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,6 +31,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.CryptoUtils;
 import net.ftb.util.OSUtils;
 
 
@@ -86,11 +89,11 @@ public class UserManager {
 
 		// TODO: Remove this in a while once people are unlikely to have old format saved logindata
 		if (_users.isEmpty()) {
-		    Logger.logError(I18N.getLocaleString("OLDCREDS"));
-		    ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "OLDCREDS", true);
-            p.setVisible(true);
+		    //Logger.logError(I18N.getLocaleString("OLDCREDS"));
+		   // ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "OLDCREDS", true);
+           // p.setVisible(true);
 
-		    /*try {
+		    try {
 				BufferedReader read = new BufferedReader(new FileReader(_file));
 				String str;
 				while((str = read.readLine()) != null) {
@@ -100,7 +103,7 @@ public class UserManager {
 				read.close();
 			} catch (Exception ex) {
 				Logger.logError(ex.getMessage(), ex);
-			}*/
+			}
 		}
 	}
 
