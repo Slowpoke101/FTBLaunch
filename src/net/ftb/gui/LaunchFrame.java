@@ -87,6 +87,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
+import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
@@ -151,6 +152,8 @@ public class LaunchFrame extends JFrame {
 
 	public static int buildNumber = 134;
 	public static boolean noConfig = false;
+	public static boolean allowVersionChange = false;
+	public static boolean doVersionBackup = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
@@ -628,6 +631,16 @@ public class LaunchFrame extends JFrame {
 		loginWorker.execute();
 	}
 
+	private Boolean checkVersion(File verFile, ModPack pack) {
+		Integer storedVersion = pack.getStoredVersion(verFile);
+		Integer onlineVersion = pack.getPackVersion();
+		if(storedVersion != onlineVersion) {
+			ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
+			verDialog.setVisible(true);
+		}
+		return allowVersionChange & (storedVersion != onlineVersion);
+	}
+	
 	/**
 	 * checks whether an update is needed, and then starts the update process off
 	 * @param response - the response from the minecraft servers
@@ -645,14 +658,26 @@ public class LaunchFrame extends JFrame {
 			Logger.logInfo(debugTag + "pack check path: " + pack.getDir() + File.separator + "version");
 		}
 
-		if(Settings.getSettings().getForceUpdate() && new File(installPath, pack.getDir() + File.separator + "version").exists()) {
-			new File(installPath, pack.getDir() + File.separator + "version").delete();
+		File verFile = new File(installPath, pack.getDir() + File.separator + "version");
+
+		if(Settings.getSettings().getForceUpdate() && verFile.exists()) {
+			verFile.delete();
 			if (debugVerbose) { Logger.logInfo(debugTag + "Pack found and delete attempted"); }
 		}
 		
-		File verFile = new File(installPath, pack.getDir() + File.separator + "version");
-		
-		if(Settings.getSettings().getForceUpdate() || !verFile.exists() || pack.needsUpdate(verFile)) {
+		if(Settings.getSettings().getForceUpdate() || !verFile.exists() || checkVersion(verFile, pack)) {
+			if(doVersionBackup) {
+				try {
+					File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
+					if(destination.exists()) {
+						FileUtils.delete(destination);
+					}
+					FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
+				} catch (IOException e) {
+					Logger.logError(e.getMessage(), e);
+				}
+			}
+			
 			if(!initializeMods()) {
 				if (debugVerbose) { Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu."); }
 				enableObjects();

@@ -64,6 +64,7 @@ ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
 
 # Update
 UPDATE_WICHUPDATE = Do you wish to update?
+UPDATE_DOWNGRADE = Do you wish to downgrade?
 
 # LUNCHERUPDATE
 LUNCHERUPDATE_ISAVAILABLE = of the launcher is available.
@@ -74,6 +75,7 @@ LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update Available
 UPDATEMODPACK_ISAVALIBLE = A new mod pack version is available!
 UPDATEMODPACK_BACKUP = Back-up config files?
 UPDATEMODPACK_TITLE = Mod Pack Update Available
+UPDATEMODPACK_DOWNGRADE = Installed version is newer than selected version
 
 # Private Pack
 PRIVATEPACK_TITLE = Private Pack Interface

@@ -232,21 +232,45 @@ public class ModPack {
 	 * @return checks the version file against the current modpack version
 	 */
 	private boolean upToDate(File verFile) {
-		boolean result = true;
-		try {
-			if(!verFile.exists()) {
-				verFile.getParentFile().mkdirs();
-				verFile.createNewFile();
-				result = false;
-			}
-			BufferedReader in = new BufferedReader(new FileReader(verFile));
-			String line;
-			if((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) != Integer.parseInt(line.replace(".", ""))) {
+		if(getStoredVersion(verFile) != getPackVersion()) {
+			try {
+				if(!verFile.exists()) {
+					verFile.getParentFile().mkdirs();
+					verFile.createNewFile();
+				}
 				BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
 				out.write(version);
 				out.flush();
 				out.close();
-				result = false;
+				return false;
+			} catch (IOException e) {
+				Logger.logError(e.getMessage(), e);
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean needsUpdate(File verFile) {
+		return getStoredVersion(verFile) != getPackVersion();
+	}
+
+	public Integer getPackVersion() {
+		return Integer.parseInt(version.replace(".", ""));
+	}
+	
+	public Integer getStoredVersion(File verFile) {
+		Integer result = 0;
+		try {
+			if(!verFile.exists()) {
+				verFile.getParentFile().mkdirs();
+				verFile.createNewFile();
+			}
+			BufferedReader in = new BufferedReader(new FileReader(verFile));
+			String line;
+			if((line = in.readLine()) != null) {
+				result = Integer.parseInt(line.replace(".", ""));
 			}
 			in.close();
 		} catch (IOException e) {
@@ -255,26 +279,6 @@ public class ModPack {
 		return result;
 	}
 	
-	public boolean needsUpdate(File verFile) {
-		boolean result = false;
-		try {
-			if(!verFile.exists()) {
-				verFile.getParentFile().mkdirs();
-				verFile.createNewFile();
-				result = true;
-			}
-			BufferedReader in = new BufferedReader(new FileReader(verFile));
-			String line;
-			if((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) != Integer.parseInt(line.replace(".", ""))) {
-				result = true;
-			}
-			in.close();
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-		return result;
-	}
-
 	/**
 	 * Used to get index of modpack
 	 * @return - the index of the modpack in the GUI
