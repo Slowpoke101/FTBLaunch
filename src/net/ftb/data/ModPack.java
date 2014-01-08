@@ -232,7 +232,7 @@ public class ModPack {
 	 * @return checks the version file against the current modpack version
 	 */
 	private boolean upToDate(File verFile) {
-		if(getStoredVersion(verFile) != getPackVersion()) {
+		if(Integer.parseInt(getStoredVersion(verFile).replace(".", "")) != Integer.parseInt(version.replace(".", ""))) {
 			try {
 				if(!verFile.exists()) {
 					verFile.getParentFile().mkdirs();
@@ -253,15 +253,11 @@ public class ModPack {
 	}
 	
 	public boolean needsUpdate(File verFile) {
-		return getStoredVersion(verFile) != getPackVersion();
-	}
-
-	public Integer getPackVersion() {
-		return Integer.parseInt(version.replace(".", ""));
+		return Integer.parseInt(getStoredVersion(verFile).replace(".", "")) != Integer.parseInt(version.replace(".", ""));
 	}
 	
-	public Integer getStoredVersion(File verFile) {
-		Integer result = 0;
+	public String getStoredVersion(File verFile) {
+		String result = "";
 		try {
 			if(!verFile.exists()) {
 				verFile.getParentFile().mkdirs();
@@ -270,7 +266,7 @@ public class ModPack {
 			BufferedReader in = new BufferedReader(new FileReader(verFile));
 			String line;
 			if((line = in.readLine()) != null) {
-				result = Integer.parseInt(line.replace(".", ""));
+				result = line;
 			}
 			in.close();
 		} catch (IOException e) {

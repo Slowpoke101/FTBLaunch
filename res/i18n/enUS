@@ -76,6 +76,7 @@ UPDATEMODPACK_ISAVALIBLE = A new mod pack version is available!
 UPDATEMODPACK_BACKUP = Back-up config files?
 UPDATEMODPACK_TITLE = Mod Pack Update Available
 UPDATEMODPACK_DOWNGRADE = Installed version is newer than selected version
+UPDATEMODPACK_FROM_TO_VERSION = Current Version: %LOCALVER%\nSelected Version: %ONLINEVER%
 
 # Private Pack
 PRIVATEPACK_TITLE = Private Pack Interface
