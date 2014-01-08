@@ -112,7 +112,7 @@ public class ModPackVersionChangeDialog extends JDialog {
 
 		layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, updateLbl,  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, versionLbl,  Spring.constant(80), SpringLayout.WEST, panel);
+		layout.putConstraint(SpringLayout.WEST, versionLbl,  hSpring, SpringLayout.WEST, panel);
 		layout.putConstraint(SpringLayout.WEST, backup,     hSpring, SpringLayout.WEST, panel);
 
 		columnWidth = Spring.width(messageLbl);
