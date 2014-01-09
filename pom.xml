@@ -65,8 +65,8 @@
   <!-- Build plugin repositories -->
   <pluginRepositories>
     <pluginRepository>
-      <id>spout-repo</id>
-      <url>http://repo.spout.org</url>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </pluginRepository>
   </pluginRepositories>
 
@@ -268,9 +268,9 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.spout</groupId>
-            <artifactId>osxapp-maven-plugin</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>osxappbundle-maven-plugin</artifactId>
+            <version>1.0-alpha-2</version>
             <executions>
               <execution>
                 <configuration>
@@ -278,12 +278,10 @@
                   <bundleName>${project.name}</bundleName>
                   <version>${project.version}</version>
                   <iconFile>${basedir}/res/app/icon.icns</iconFile>
-                  <dictionaryFile>${basedir}/res/app/Info.plist.template</dictionaryFile>
                   <javaApplicationStub>${basedir}/res/app/JavaApplicationStub</javaApplicationStub>
                   <zipFile>${project.build.directory}/${project.build.finalName}-app.zip</zipFile>
                   <internetEnable>true</internetEnable>
                   <jvmVersion>${minimumJreVersion}+</jvmVersion>
-                  <vmOptions>-Xms512M -Xmx1024M -Xdock:name="FTB Launcher" -Xdock:icon="icon.icns"</vmOptions>
                   <excludeArtifactIds>
                     <excludeArtifactId>swingx-all</excludeArtifactId>
                   </excludeArtifactIds>
