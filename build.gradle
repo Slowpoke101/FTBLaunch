@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+		maven {
+            name 'Shadow'
+            url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
+        }
+        maven {
+            name = 'ForgeFS'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+		maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.gradle.plugins:shadow:0.7.4'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
+    }
+
+}
+
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'shadow'
+apply plugin: 'launch4j'
+
+project.ext {
+    mainClass = 'net.ftb.gui.LaunchFrame'
+    currentYear = '2014'
+}
+
+group = 'net.ftb'
+version = '1.3.4'
+description = "FTB Launcher"
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+afterEvaluate {
+	launch4j {
+		icon = file("res/exe/icon.ico").getCanonicalPath()
+		jreMinVersion = '1.6.0'
+		jar = project.tasks.jar.getArchivePath().getPath()
+		outFile = project.tasks.jar.getCanonicalPath().replace(".jar", ".exe")
+		mainClassName = project.mainClass
+	}
+}
+
+shadow {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+	//classifier = "${System.getenv().BUILD_NUMBER}"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': project.mainClass
+    }
+}
+
+repositories {
+	mavenCentral()
+}
+dependencies {
+    compile 'org.swinglabs.swingx:swingx-all:1.6.4'
+	compile 'com.google.code.gson:gson:2.2.4'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'res'
+        }
+    }
+}

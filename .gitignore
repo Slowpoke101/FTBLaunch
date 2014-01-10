@@ -4,5 +4,17 @@ bin/
 *.jardesc
 ftblaunch.cfg
 target/
+/target/
+#eclipse
+/.settings/
+.project
+.classpath
+/bin/
+
+#idea
+/.idea
 *.iml
 .idea/
+#gradle
+/build
+/.gradle
