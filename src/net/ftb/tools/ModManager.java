@@ -96,59 +96,99 @@ public class ModManager extends JDialog {
 			FileOutputStream fout = null;
 			HttpURLConnection connection = null;
 			String md5 = "";
+			int amount = 0, startAmount = -1, modPackSize = 0, count = 0, steps = 0;
+			int retryCount = 5;
+			
 			try {
-				URL url_ = new URL(urlString);
-				byte data[] = new byte[1024];
-				connection = (HttpURLConnection) url_.openConnection();
-				connection.setAllowUserInteraction(true);
-				connection.setConnectTimeout(14000);
-				connection.setReadTimeout(20000);
-				connection.connect();
-				md5 = connection.getHeaderField("Content-MD5");
-				in = new BufferedInputStream(connection.getInputStream());
 				fout = new FileOutputStream(filename);
-				int count, amount = 0, modPackSize = connection.getContentLength(), steps = 0;
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						progressBar.setMaximum(10000);
-					}
-				});
-				while((count = in.read(data, 0, 1024)) != -1) {
-					fout.write(data, 0, count);
-					downloadedPerc += (count * 1.0 / modPackSize) * 100;
-					amount += count;
-					steps++;
-					if(steps > 100) {
-						steps = 0;
-						final String txt = (amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb";
-						final int perc =  (int)downloadedPerc * 100;
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								progressBar.setValue(perc);
-								label.setText(txt);
-							}
-						});
-					}
-				}
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally {
+				Logger.logError("Failed opening output file: " + filename);
+				return null;
+			}
+
+			do {
+				try {
+					startAmount = amount;
+					
+					if(amount > 0) {
+						Logger.logInfo("Resuming download from offset " + Integer.toString(amount));
+					}
+					
+					URL url_ = new URL(urlString);
+					byte data[] = new byte[1024];
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							progressBar.setMaximum(10000);
+						}
+					});
+					
+					connection = (HttpURLConnection) url_.openConnection();
+					connection.setAllowUserInteraction(true);
+					connection.setConnectTimeout(14000);
+					connection.setReadTimeout(20000);
+					if(amount > 0) {
+						connection.setRequestProperty("Range", "bytes=" + amount + "-");
+					}
+					connection.connect();
+					md5 = connection.getHeaderField("Content-MD5");
+					in = new BufferedInputStream(connection.getInputStream());
+					if(modPackSize == 0) {
+						modPackSize = connection.getContentLength();
+					} else {
+						if(amount + connection.getContentLength() != modPackSize) {
+							throw new IOException("Resume failed");
+						} else {
+							Logger.logInfo("Resume started sucessfully");
+						}
+					}
+					
+					while((count = in.read(data, 0, 1024)) != -1) {
+						fout.write(data, 0, count);
+						
+						if(count > 0)
+							retryCount = 5;
+
+						downloadedPerc += (count * 1.0 / modPackSize) * 100;
+						amount += count;
+						steps++;
+						if(steps > 100) {
+							steps = 0;
+							final String txt = (amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb";
+							final int perc =  (int)downloadedPerc * 100;
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									progressBar.setValue(perc);
+									label.setText(txt);
+								}
+							});
+						}
+					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 				try {
 					if(in != null) {
 						in.close();
-					}
-					if(fout != null) {
-						fout.flush();
-						fout.close();
 					}
 					if(connection != null) {
 						connection.disconnect();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
+				}				
+			} while(amount < modPackSize && (amount > startAmount || retryCount-- > 0));
+			
+			try {
+				if(fout != null) {
+					fout.flush();
+					fout.close();
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			return md5;
 		}
