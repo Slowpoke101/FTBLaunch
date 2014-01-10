@@ -18,6 +18,8 @@ buildscript {
     dependencies {
         classpath 'org.gradle.plugins:shadow:0.7.4'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
+		classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
+
     }
 
 }
@@ -27,6 +29,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'shadow'
 apply plugin: 'launch4j'
+apply plugin: 'macAppBundle'
 
 project.ext {
     mainClass = 'net.ftb.gui.LaunchFrame'
@@ -53,6 +56,9 @@ shadow {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
 	//classifier = "${System.getenv().BUILD_NUMBER}"
+}
+macAppBundle {
+    mainClassName = project.mainClass
 }
 
 jar {
