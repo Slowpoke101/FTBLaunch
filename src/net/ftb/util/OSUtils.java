@@ -179,7 +179,7 @@ public class OSUtils {
 			while(networkInterfaces.hasMoreElements()) {
 				NetworkInterface network = networkInterfaces.nextElement();
 				byte[] mac = network.getHardwareAddress();
-				if(mac != null && mac.length > 0) {
+				if(mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint()) {
 					cachedMacAddress = new byte[mac.length * 10];
 					for(int i = 0; i < cachedMacAddress.length; i++) {
 						cachedMacAddress[i] = mac[i - (Math.round(i / mac.length) * mac.length)];
