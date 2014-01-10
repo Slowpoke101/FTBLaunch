@@ -28,7 +28,7 @@ REOPEN_LAUNCHER = Heropenen launcher na het verlaten van minecraft?
 ADVANCED_OPTIONS = Geavanceerde Opties
 INSTALL_FIRSTUSE = Aangezien dit de eerste keer dat u dit programma gebruikt, wij raden u aan de installatie map.
 DOWNLOAD_JAVA64 = Download Java 64-bit
-JAVA_32BIT_WARNING = Het systeem gebruikt een 32-bits versie van Java. Dit zal beperken Minecraft tot 1 GB RAM.
+JAVA_32BIT_WARNING = Het systeem gebruikt een 32-bits versie van Java. Dit zal beperken Minecraft tot 1.5 GB RAM.
 
 # Shared strings
 FILTER_SETTINGS = Filterinstellingen
@@ -64,6 +64,7 @@ ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Additionele Launcher Debugging
 
 # Update
 UPDATE_WICHUPDATE = Wilt u updaten?
+UPDATE_DOWNGRADE = Wilt u downgraden?
 
 # LUNCHERUPDATE
 LUNCHERUPDATE_ISAVAILABLE = van het programma beschikbaar is.
@@ -74,6 +75,8 @@ LUNCHERUPDATE_ISAVAILABLETITLE = Programma Update Beschikbaar
 UPDATEMODPACK_ISAVALIBLE = Een nieuwe mod pakket versie beschikbaar!
 UPDATEMODPACK_BACKUP = Back-up configuratiebestanden bestanden?
 UPDATEMODPACK_TITLE = Mod Pack Update beschikbaar
+UPDATEMODPACK_DOWNGRADE = Geïnstalleerde versie is nieuwer dan geselecteerde versie
+UPDATEMODPACK_FROM_TO_VERSION = Huidige versie: %LOCALVER%\nGeselecteerde versie: %ONLINEVER%
 
 # Private Pack
 PRIVATEPACK_TITLE = Private Pack Interface
@@ -106,6 +109,8 @@ PASSWORD_PASSLABEL = Wachtwoord:
 PASSWORD_TITLE = Voer Het Wachtwoord:
 
 # Profile
+OLDCREDS = Oude Setup Inloggegevens Gevonden of Inloggen Gegevens Vermist: dan kunt u bijwerken.
+CHANGEDUUID = Een verandering is ontdekt aan de gebruikers hardware die de launcher geen toegang krijgt tot uw referenties, voer aub opnieuw in hen.
 PROFILEADDER_USERNAME = Gebruikersnaam:
 PROFILEADDER_PASSWORD = Wachtwoord:
 PROFILEADDER_NAME = Profiel Naam:
