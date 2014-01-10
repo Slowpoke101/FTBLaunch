@@ -44,7 +44,7 @@ afterEvaluate {
 		icon = file("res/exe/icon.ico").getCanonicalPath()
 		jreMinVersion = '1.6.0'
 		jar = project.tasks.jar.getArchivePath().getPath()
-		outFile = project.tasks.jar.getCanonicalPath().replace(".jar", ".exe")
+		outFile = project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")
 		mainClassName = project.mainClass
 	}
 }
