@@ -219,7 +219,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	@Override
 	public void onMapAdded(Map map) {
 		addMap(map);
-		Logger.logInfo("Adding map " + getMapNum());
+		Logger.logInfo("Adding map " + getMapNum()+ " (" + map.getName() + ")");
 		updateMaps();
 	}
 

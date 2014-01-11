@@ -216,7 +216,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 	@Override
 	public void onTexturePackAdded(TexturePack texturePack) {
 		addTexturePack(texturePack);
-		Logger.logInfo("Adding texture pack " + getTexturePackNum());
+        Logger.logInfo("Adding texture pack " + getTexturePackNum() + " (" + texturePack.getName() + ")");
 		updateTexturePacks();
 	}
 

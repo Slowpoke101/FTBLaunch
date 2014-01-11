@@ -136,7 +136,7 @@ public class JavaFinder
                     if (!prefered.is64bits && java32.get(i).compareTo(prefered) == 1)
                         prefered = java32.get(i);
                 }
-                Logger.logInfo("FTB Launcher Prefers: " + prefered.toString());
+                Logger.logInfo("Preffered: " + prefered.toString());
             }
         }
 
