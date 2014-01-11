@@ -107,18 +107,16 @@ public class JavaFinder
      ****************************************************************************/
     public static JavaInfo parseWinJavaVersion ()
     {
-        Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
-        if (prefered != null)
+        if (prefered != null){
+            Logger.logInfo("Prefered (From OS): " + prefered.toString());
             return prefered;
-        else
-        {
+        } else {
             List<JavaInfo> javas = JavaFinder.findJavas();
             List<JavaInfo> java32 = new ArrayList<JavaInfo>();
             List<JavaInfo> java64 = new ArrayList<JavaInfo>();
 
             for (int i = 0; i < javas.size(); i++)
             {
-                Logger.logInfo(javas.get(i).toString());
                 if (prefered == null && javas.get(i) != null)
                     prefered = javas.get(i);
                 if (javas.get(i).is64bits)
@@ -140,12 +138,12 @@ public class JavaFinder
                         prefered = java32.get(i);
                 }
             }
-            
+
             if(prefered == null) {
             	Logger.logError("No Java versions found!");
             	return null;
             } else {
-	            Logger.logInfo("FTB Launcher Prefers: " + prefered.toString());
+	            Logger.logInfo("Preferred: " + prefered.toString());
 	            return prefered;
             }
         }
