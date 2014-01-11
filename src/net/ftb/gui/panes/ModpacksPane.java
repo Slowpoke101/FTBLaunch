@@ -303,7 +303,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	@Override
 	public void onModPackAdded(ModPack pack) {
 		addPack(pack);
-		Logger.logInfo("Adding pack " + packPanels.size());
+		Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack.getName() + ")");
 		if(!currentPacks.isEmpty()) {
 			sortPacks();
 		} else {
