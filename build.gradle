@@ -68,12 +68,23 @@ task fixJars(type: Copy) {
 }
 task deleteShadow(type: Delete) {
     delete "${project.tasks.jar.getArchivePath().getPath().replace('.jar', '-shadow.jar')}"
+
+	}
+task zipApp(type: Zip) {
+    from "${project.buildDir}/macApp/"
+    destinationDir = file("${project.buildDir}\\libs")
+    classifier = 'app'	
 }
-build.dependsOn(deleteShadow)
+apply plugin: 'macAppBundle'
+
+assemble.dependsOn.remove(createDmg)
+build.dependsOn.remove(createDmg)
+build.dependsOn(zipApp)
+zipApp.dependsOn(createApp)
+createApp.dependsOn(deleteShadow)
 deleteShadow.dependsOn(fixJars)
 fixJars.dependsOn(deleteOrig)
 deleteOrig.dependsOn(shadowJar)
-
 
 afterEvaluate {
 	launch4j {
@@ -85,13 +96,11 @@ afterEvaluate {
 	}
 }
 
-if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-      apply plugin: 'macAppBundle'
 macAppBundle {
     mainClassName = project.mainClass
 }
 
-}
+//}
 jar {
     manifest {
         attributes 'Main-Class': project.mainClass
