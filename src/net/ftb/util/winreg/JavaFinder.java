@@ -100,14 +100,14 @@ public class JavaFinder
         return null;
     }
 
-    private static JavaInfo prefered;
+    private static JavaInfo preferred;
 
     /**
      * Standalone testing - lists all Javas in the system
      ****************************************************************************/
     public static JavaInfo parseWinJavaVersion ()
     {
-        if (prefered == null){
+        if (preferred == null){
             List<JavaInfo> javas = JavaFinder.findJavas();
             List<JavaInfo> java32 = new ArrayList<JavaInfo>();
             List<JavaInfo> java64 = new ArrayList<JavaInfo>();
@@ -116,8 +116,8 @@ public class JavaFinder
             for (int i = 0; i < javas.size(); i++)
             {
                 Logger.logInfo(javas.get(i).toString());
-                if (prefered == null && javas.get(i) != null)
-                    prefered = javas.get(i);
+                if (preferred == null && javas.get(i) != null)
+                    preferred = javas.get(i);
                 if (javas.get(i).is64bits)
                     java64.add(javas.get(i));
                 else
@@ -128,20 +128,20 @@ public class JavaFinder
             {
                 for (int i = 0; i < java64.size(); i++)
                 {
-                    if (!prefered.is64bits || java64.get(i).compareTo(prefered) == 1)
-                        prefered = java64.get(i);
+                    if (!preferred.is64bits || java64.get(i).compareTo(preferred) == 1)
+                        preferred = java64.get(i);
                 }
                 for (int i = 0; i < java64.size(); i++)
                 {
-                    if (!prefered.is64bits && java32.get(i).compareTo(prefered) == 1)
-                        prefered = java32.get(i);
+                    if (!preferred.is64bits && java32.get(i).compareTo(preferred) == 1)
+                        preferred = java32.get(i);
                 }
             }
-            Logger.logInfo("Preffered: " + prefered.toString());
+            Logger.logInfo("Preferred: " + preferred.toString());
         }
 
-        if(prefered != null){
-            return prefered;
+        if(preferred != null){
+            return preferred;
         }else{
             Logger.logError("No Java versions found!");
             return null;
