@@ -79,7 +79,12 @@ public class TextureManager extends JDialog {
 				return false;
 			}
 			String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir)).replace(".", "_");
-			if(DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePack.getUrl())) {
+			String packStr = new String();
+            if (mcversion>160)
+                packStr = "";
+            else
+                packStr = "/" + packVer;
+			if(DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + packStr + "/" + texturePack.getUrl())) {
 				populateInstalledTextures(compPack);
 				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
 				if(oldFile.exists()) {
@@ -148,7 +153,12 @@ public class TextureManager extends JDialog {
 		    int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
 			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
 			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();
-			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + compDir + "/" + packVer + "/" + texturePackName))) {
+			String packStr = new String();
+			if (mcversion>160)
+			    packStr = "";
+			else
+			    packStr = "/" + packVer;    
+			if(downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName, DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + compDir +  packStr + "/" + texturePackName))) {
 				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 				installedTextures.put(dir.toLowerCase(), packVer);
 				BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
