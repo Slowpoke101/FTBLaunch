@@ -83,7 +83,7 @@ public class MinecraftLauncherNew
             String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
             if(!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")))) {
 	            if(maxPermSize == null || maxPermSize.isEmpty()) {
-	                if(OSUtils.getOSTotalMemory() > 2048) {
+	                if(OSUtils.getOSTotalMemory() > 2046) {
 	                    maxPermSize = "192m";
 	                    Logger.logInfo("Defaulting PermSize to 192m");
 	                } else {

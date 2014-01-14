@@ -102,6 +102,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		currentRam = new JLabel();
 		currentRam.setBounds(427, 95, 85, 25);
 		long ram = OSUtils.getOSTotalMemory();
+		long freeram = OSUtils.getOSFreeMemory();
 
 		ramMaximum = new JSlider();
 		ramMaximum.setBounds(190, 95, 222, 25);
@@ -122,7 +123,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 				if(ram < 1024) {
 					ramMaximum.setMaximum((int)ram);
 				} else {
-				    if(ram > 2536) {
+				    if(freeram > 2046) {
                         ramMaximum.setMaximum(1536);
                     } else {
                         ramMaximum.setMaximum(1024);
