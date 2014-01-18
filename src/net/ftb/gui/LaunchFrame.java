@@ -688,7 +688,7 @@ public class LaunchFrame extends JFrame {
 			TextureManager.updateTextures();
 		} catch (Exception e1) { }
 		
-		if (pack.getMcVersion().startsWith("1.6") || pack.getVersion().startsWith("1.7"))
+		if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7"))
 		{
 		    setupNewStyle(installPath, pack);
 		    return;
