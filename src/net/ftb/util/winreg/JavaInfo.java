@@ -31,7 +31,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         else this.version = tokens[1];
         this.origVersion = version;
         this.version = Pattern.compile(regex).matcher(this.version).replaceAll("0");
-        this.is64bits = versionInfo.toUpperCase().contains("64-BIT");
+        this.is64bits = versionInfo.toUpperCase().contains("64-");
         this.path     = javaPath;
         
         String[] s = this.version.split("[._-]");
