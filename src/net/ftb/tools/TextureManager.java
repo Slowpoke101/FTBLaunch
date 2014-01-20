@@ -69,7 +69,7 @@ public class TextureManager extends JDialog {
 			String compDir = texturePack.getSelectedCompatible();
 			ModPack compPack = ModPack.getPack(compDir);
 		    int mcversion = Integer.parseInt(compPack.getMcVersion().replace("[^\\d]", ""));
-			if(updating) {
+		    if(updating) {
 				texturePack = updateTexture;
 				compDir = updateModPack.getDir();
 				compPack = updateModPack;
@@ -85,7 +85,7 @@ public class TextureManager extends JDialog {
             else
                 packStr = "/" + packVer;
 			if(DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + packStr + "/" + texturePack.getUrl())) {
-				populateInstalledTextures(compPack);
+			    populateInstalledTextures(compPack);
 				File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
 				if(oldFile.exists()) {
 					oldFile.delete();
@@ -238,7 +238,12 @@ public class TextureManager extends JDialog {
 						if(texturePackFile.exists()) {
 							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
 							if(!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
-								if(DownloadUtils.fileExists("texturepacks/" + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + version + "/" + tp.getUrl())) {
+					            String packStr = new String();
+					            if (mcversion>160)
+					                packStr = "";
+					            else
+					                packStr = "/" + version;    
+							    if(DownloadUtils.fileExists("texturepacks/" + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
 									updating = true;
 									TextureManager man = new TextureManager(new JFrame(), true);
 									man.updateTexture = tp;
