@@ -632,7 +632,8 @@ public class LaunchFrame extends JFrame {
 
 	private Boolean checkVersion(File verFile, ModPack pack) {
 		String storedVersion = pack.getStoredVersion(verFile);
-		String onlineVersion = pack.getVersion();
+		String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion() : Settings.getSettings().getPackVer();
+
 		if(Integer.parseInt(storedVersion.replace(".", "")) != Integer.parseInt(onlineVersion.replace(".",  ""))) {
 			ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
 			verDialog.setVisible(true);
