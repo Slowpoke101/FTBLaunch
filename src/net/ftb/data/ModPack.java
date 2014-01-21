@@ -232,7 +232,9 @@ public class ModPack {
 	 * @return checks the version file against the current modpack version
 	 */
 	private boolean upToDate(File verFile) {
-		if(Integer.parseInt(getStoredVersion(verFile).replace(".", "")) != Integer.parseInt(version.replace(".", ""))) {
+		String storedVersion = getStoredVersion(verFile).replace(".", "");
+		
+		if(storedVersion == "" || Integer.parseInt(storedVersion) != Integer.parseInt(version.replace(".", ""))) {
 			try {
 				if(!verFile.exists()) {
 					verFile.getParentFile().mkdirs();
