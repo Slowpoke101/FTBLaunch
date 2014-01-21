@@ -68,7 +68,7 @@ public class TextureManager extends JDialog {
 			TexturePack texturePack = TexturePack.getSelectedTexturePack();
 			String compDir = texturePack.getSelectedCompatible();
 			ModPack compPack = ModPack.getPack(compDir);
-		    int mcversion = Integer.parseInt(compPack.getMcVersion().replace("[^\\d]", ""));
+		    int mcversion = Integer.parseInt(compPack.getMcVersion().replace(".", ""));
 		    if(updating) {
 				texturePack = updateTexture;
 				compDir = updateModPack.getDir();
@@ -150,7 +150,7 @@ public class TextureManager extends JDialog {
 			Logger.logInfo("Downloading Texture Pack");
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack =  ModPack.getSelectedPack();
-		    int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
+		    int mcversion = Integer.parseInt(pack.getMcVersion().replace(".", ""));
 			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
 			new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();
 			String packStr = new String();
@@ -226,7 +226,7 @@ public class TextureManager extends JDialog {
 	public static void updateTextures() throws NoSuchAlgorithmException, IOException {
 		boolean removed = false;
 		ModPack pack = ModPack.getSelectedPack();
-		int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
+		int mcversion = Integer.parseInt(pack.getMcVersion().replace(".", ""));
 		String installDir = Settings.getSettings().getInstallPath();
 		File textureVersionFile = new File(installDir, pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 		if(textureVersionFile.exists()) {
@@ -272,7 +272,7 @@ public class TextureManager extends JDialog {
 
 	private static void populateInstalledTextures(ModPack pack) {
 
-	    int mcversion = Integer.parseInt(pack.getMcVersion().replace("[^\\d]", ""));
+	    int mcversion = Integer.parseInt(pack.getMcVersion().replace(".", ""));
 		File textureVersionFile = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
 		if(installedTextures != null) {
 			installedTextures.clear();
