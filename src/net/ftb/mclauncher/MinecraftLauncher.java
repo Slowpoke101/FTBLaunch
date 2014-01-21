@@ -97,6 +97,9 @@ public class MinecraftLauncher {
 			arguments.add("-XX:PermSize=" + maxPermSize);
 		}
 
+		// Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
+		arguments.add("-Djava.net.preferIPv4Stack=true");
+
 		arguments.add("-cp");
 		arguments.add(System.getProperty("java.class.path") + cpb.toString());
 		

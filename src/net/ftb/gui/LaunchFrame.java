@@ -199,7 +199,9 @@ public class LaunchFrame extends JFrame {
         Logger.logInfo("Launcher Install Dir: " + Settings.getSettings().getInstallPath());
 		Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
     	
-        
+		// Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
+		System.setProperty("java.net.preferIPv4Stack" , "true");
+		
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
