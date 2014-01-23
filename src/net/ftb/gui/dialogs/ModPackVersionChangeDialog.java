@@ -77,7 +77,7 @@ public class ModPackVersionChangeDialog extends JDialog {
 		SpringLayout layout = new SpringLayout();
 		panel.setLayout(layout);
 
-		if(Integer.parseInt(onlineVersion.replace(".","")) > Integer.parseInt(storedVersion.replace(".",""))) {
+		if(Integer.parseInt(onlineVersion.replace(".","")) > (storedVersion == "" ? 0 : Integer.parseInt(storedVersion.replace(".","")))) {
 			messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
 			updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
 		} else {
