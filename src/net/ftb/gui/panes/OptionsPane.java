@@ -111,7 +111,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		ramMaximum.setMinorTickSpacing(256);
 		ramMaximum.setMinimum(256);
 		String vmType= new String();
-		if (OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+		if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null){
 		    vmType = JavaFinder.parseWinJavaVersion().is64bits ? "64" : "32";
 		}else{
 		    vmType = System.getProperty("sun.arch.data.model");
@@ -234,7 +234,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		advancedOptionsBtn.getModel().setPressed(settings.getForceUpdate());
 		add(advancedOptionsBtn);
 		
-		if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion().path != null) {
+		if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null) {
 		    lblJavaVersion = new JLabel("Java version: " + JavaFinder.parseWinJavaVersion().origVersion);
     		lblJavaVersion.setBounds(15,276,250,25);
     		add(lblJavaVersion);
