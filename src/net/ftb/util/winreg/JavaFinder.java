@@ -137,7 +137,8 @@ public class JavaFinder
                         preferred = java32.get(i);
                 }
             }
-            Logger.logInfo("Preferred: " + preferred.toString());
+            if (preferred != null)
+                Logger.logInfo("Preferred: " + preferred.toString());
         }
 
         if(preferred != null){
