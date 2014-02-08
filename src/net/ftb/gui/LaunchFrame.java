@@ -122,58 +122,59 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.ftb.util.TrackerUtils;
+import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
 @SuppressWarnings("serial")
-public class LaunchFrame extends JFrame {
-	private LoginResponse RESPONSE;
-	private NewsPane newsPane;
-	public static JPanel panel;
-	private JPanel footer = new JPanel();
-	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JLabel tpInstallLocLbl = new JLabel();
-	private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
+public class LaunchFrame extends JFrame
+{
+    private LoginResponse RESPONSE;
+    private NewsPane newsPane;
+    public static JPanel panel;
+    private JPanel footer = new JPanel();
+    private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+    private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+    private JLabel tpInstallLocLbl = new JLabel();
+    private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+            tpInstall = new JButton();
 
-	private static String[] dropdown_ = {"Select Profile", "Create Profile"};
-	private static JComboBox users, tpInstallLocation, mapInstallLocation;
-	private static LaunchFrame instance = null;
-	private static String version = "1.3.5";
+    private static String[] dropdown_ = { "Select Profile", "Create Profile" };
+    private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static LaunchFrame instance = null;
+    private static String version = "1.3.5";
+    public static boolean canUseAuthlib;
 
-	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);	
+    public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-	protected static UserManager userManager;
+    protected static UserManager userManager;
 
-	public static ModpacksPane modPacksPane;
-	public MapsPane mapsPane;
-	public TexturepackPane tpPane;
-	public OptionsPane optionsPane;
+    public static ModpacksPane modPacksPane;
+    public MapsPane mapsPane;
+    public TexturepackPane tpPane;
+    public OptionsPane optionsPane;
 
-	public static int buildNumber = 135;
-	public static boolean noConfig = false;
-	public static boolean allowVersionChange = false;
-	public static boolean doVersionBackup = false;
-	public static LauncherConsole con;
-	public static String tempPass = "";
-	public static Panes currentPane = Panes.MODPACK;
-	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-37330489-2"), GoogleAnalyticsVersion.V_4_7_2);
+    public static int buildNumber = 135;
+    public static boolean noConfig = false;
+    public static boolean allowVersionChange = false;
+    public static boolean doVersionBackup = false;
+    public static LauncherConsole con;
+    public static String tempPass = "";
+    public static Panes currentPane = Panes.MODPACK;
+    public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-37330489-2"), GoogleAnalyticsVersion.V_4_7_2);
 
-	public static final String FORGENAME = "MinecraftForge.zip";
+    public static final String FORGENAME = "MinecraftForge.zip";
 
-	protected enum Panes {
-		NEWS,
-		OPTIONS,
-		MODPACK,
-		MAPS,
-		TEXTURE
-	}
+    protected enum Panes
+    {
+        NEWS, OPTIONS, MODPACK, MAPS, TEXTURE
+    }
 
-	/**
-	 * Launch the application.
-	 * @param args - CLI arguments
-	 */
-	public static void main(String[] args) {
+    /**
+     * Launch the application.
+     * @param args - CLI arguments
+     */
+    public static void main(String[] args) {
 		tracker.setEnabled(true);
 		TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
 
@@ -309,470 +310,599 @@ public class LaunchFrame extends JFrame {
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 					p.setVisible(true);
 				}
-			}
+				AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath()+ File.separator + "authlib" + File.separator ,"1.4.2"){
+				};
+	            
+            };
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public LaunchFrame(final int tab) {
-		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
-		setResizable(false);
-		setTitle("Feed the Beast Launcher v" + version);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+    /**
+     * Create the frame.
+     */
+    public LaunchFrame(final int tab)
+    {
+        setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
+        setResizable(false);
+        setTitle("Feed the Beast Launcher v" + version);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-		panel = new JPanel();
+        panel = new JPanel();
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		if(OSUtils.getCurrentOS() == OS.WINDOWS) {
-			setBounds(100, 100, 842, 480);
-		} else {
-			setBounds(100, 100, 850, 480);
-		}
-		panel.setBounds(0, 0, 850, 480);
-		panel.setLayout(null);
-		footer.setBounds(0, 380, 850, 100);
-		footer.setLayout(null);
-		footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		tabbedPane.setBounds(0, 0, 850, 380);
-		panel.add(tabbedPane);
-		panel.add(footer);
-		setContentPane(panel);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        if (OSUtils.getCurrentOS() == OS.WINDOWS)
+        {
+            setBounds(100, 100, 842, 480);
+        }
+        else
+        {
+            setBounds(100, 100, 850, 480);
+        }
+        panel.setBounds(0, 0, 850, 480);
+        panel.setLayout(null);
+        footer.setBounds(0, 380, 850, 100);
+        footer.setLayout(null);
+        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+        tabbedPane.setBounds(0, 0, 850, 380);
+        panel.add(tabbedPane);
+        panel.add(footer);
+        setContentPane(panel);
 
-		//Footer
-		footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		footerLogo.setBounds(20, 20, 42, 42);
-		footerLogo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.feed-the-beast.com");
-			}
-		});
+        //Footer
+        footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerLogo.setBounds(20, 20, 42, 42);
+        footerLogo.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked (MouseEvent event)
+            {
+                OSUtils.browse("http://www.feed-the-beast.com");
+            }
+        });
 
-		footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		footerCreeper.setBounds(72, 20, 132, 42);
-		footerCreeper.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
-			}
-		});
+        footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerCreeper.setBounds(72, 20, 132, 42);
+        footerCreeper.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked (MouseEvent event)
+            {
+                OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
+            }
+        });
 
-		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
-		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
+        dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
+        dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-		String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
-		users = new JComboBox(dropdown);
-		if(Settings.getSettings().getLastUser() != null) {
-			for(int i = 0; i < dropdown.length; i++) {
-				if(dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
-					users.setSelectedIndex(i);
-				}
-			}
-		}
+        String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
+        users = new JComboBox(dropdown);
+        if (Settings.getSettings().getLastUser() != null)
+        {
+            for (int i = 0; i < dropdown.length; i++)
+            {
+                if (dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser()))
+                {
+                    users.setSelectedIndex(i);
+                }
+            }
+        }
 
-		donate = new JButton(I18N.getLocaleString("DONATE_BUTTON"));
-		donate.setBounds(390, 20, 80, 30);
-		donate.setEnabled(false);
-		donate.setToolTipText("Coming Soon...");
-		donate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+        donate = new JButton(I18N.getLocaleString("DONATE_BUTTON"));
+        donate.setBounds(390, 20, 80, 30);
+        donate.setEnabled(false);
+        donate.setToolTipText("Coming Soon...");
+        donate.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent e)
+            {
+            }
+        });
 
-		users.setBounds(550, 20, 150, 30);
-		users.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(users.getSelectedIndex() == 1) {
-					ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
-					users.setSelectedIndex(0);
-					p.setVisible(true);
-				}
-				edit.setEnabled(users.getSelectedIndex() > 1);
-			}
-		});
+        users.setBounds(550, 20, 150, 30);
+        users.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent e)
+            {
+                if (users.getSelectedIndex() == 1)
+                {
+                    ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
+                    users.setSelectedIndex(0);
+                    p.setVisible(true);
+                }
+                edit.setEnabled(users.getSelectedIndex() > 1);
+            }
+        });
 
-		edit = new JButton(I18N.getLocaleString("EDIT_BUTTON"));
-		edit.setBounds(480, 20, 60, 30);
-		edit.setVisible(true);
-		edit.setEnabled(users.getSelectedIndex() > 1);
-		edit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(users.getSelectedIndex() > 1) {
-					ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String)users.getSelectedItem(), true);
-					users.setSelectedIndex(0);
-					p.setVisible(true);
-				}
-				edit.setEnabled(users.getSelectedIndex() > 1);
-			}
-		});
+        edit = new JButton(I18N.getLocaleString("EDIT_BUTTON"));
+        edit.setBounds(480, 20, 60, 30);
+        edit.setVisible(true);
+        edit.setEnabled(users.getSelectedIndex() > 1);
+        edit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent event)
+            {
+                if (users.getSelectedIndex() > 1)
+                {
+                    ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String) users.getSelectedItem(), true);
+                    users.setSelectedIndex(0);
+                    p.setVisible(true);
+                }
+                edit.setEnabled(users.getSelectedIndex() > 1);
+            }
+        });
 
-		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
-		launch.setBounds(711, 20, 100, 30);
-		launch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				doLaunch();
-			}
-		});
+        launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        launch.setBounds(711, 20, 100, 30);
+        launch.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent arg0)
+            {
+                doLaunch();
+            }
+        });
 
-		serverbutton.setBounds(480, 20, 330, 30);
-		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
-		serverbutton.setVisible(false);
-		serverbutton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-					if(users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-						try {
-							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
-							if(ModPack.getSelectedPack().isPrivatePack()) {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-							} else {
-								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-							}
-							TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-						} catch (NoSuchAlgorithmException e) { }
-					}
-				}
-			}
-		});
+        serverbutton.setBounds(480, 20, 330, 30);
+        serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
+        serverbutton.setVisible(false);
+        serverbutton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent event)
+            {
+                if (!ModPack.getSelectedPack().getServerUrl().isEmpty())
+                {
+                    if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0)
+                    {
+                        try
+                        {
+                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
+                                    .getSelectedPack().getVersion().replace(".", "_")
+                                    : Settings.getSettings().getPackVer().replace(".", "_");
+                            if (ModPack.getSelectedPack().isPrivatePack())
+                            {
+                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
+                            }
+                            else
+                            {
+                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
+                            }
+                            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
+                        }
+                        catch (NoSuchAlgorithmException e)
+                        {
+                        }
+                    }
+                }
+            }
+        });
 
-		mapInstall.setBounds(650, 20, 160, 30);
-		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
-		mapInstall.setVisible(false);
-		mapInstall.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-					MapManager man = new MapManager(new JFrame(), true);
-					man.setVisible(true);
-					MapManager.cleanUp();
-				}
-			}
-		});
+        mapInstall.setBounds(650, 20, 160, 30);
+        mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
+        mapInstall.setVisible(false);
+        mapInstall.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent arg0)
+            {
+                if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0)
+                {
+                    MapManager man = new MapManager(new JFrame(), true);
+                    man.setVisible(true);
+                    MapManager.cleanUp();
+                }
+            }
+        });
 
-		mapInstallLocation = new JComboBox();
-		mapInstallLocation.setBounds(480, 20, 160, 30);
-		mapInstallLocation.setToolTipText("Install to...");
-		mapInstallLocation.setVisible(false);
+        mapInstallLocation = new JComboBox();
+        mapInstallLocation.setBounds(480, 20, 160, 30);
+        mapInstallLocation.setToolTipText("Install to...");
+        mapInstallLocation.setVisible(false);
 
-		serverMap.setBounds(480, 20, 330, 30);
-		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
-		serverMap.setVisible(false);
-		serverMap.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-					try {
-						OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-					} catch (NoSuchAlgorithmException e) { }
-				}
-			}
-		});
+        serverMap.setBounds(480, 20, 330, 30);
+        serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
+        serverMap.setVisible(false);
+        serverMap.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent event)
+            {
+                if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0)
+                {
+                    try
+                    {
+                        OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
+                                + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
+                    }
+                    catch (NoSuchAlgorithmException e)
+                    {
+                    }
+                }
+            }
+        });
 
-		tpInstall.setBounds(650, 20, 160, 30);
-		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-		tpInstall.setVisible(false);
-		tpInstall.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
-					TextureManager man = new TextureManager(new JFrame(), true);
-					man.setVisible(true);
-				}
-			}
-		});
+        tpInstall.setBounds(650, 20, 160, 30);
+        tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
+        tpInstall.setVisible(false);
+        tpInstall.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed (ActionEvent arg0)
+            {
+                if (tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0)
+                {
+                    TextureManager man = new TextureManager(new JFrame(), true);
+                    man.setVisible(true);
+                }
+            }
+        });
 
-		tpInstallLocation = new JComboBox();
-		tpInstallLocation.setBounds(480, 20, 160, 30);
-		tpInstallLocation.setToolTipText("Install to...");
-		tpInstallLocation.setVisible(false);
+        tpInstallLocation = new JComboBox();
+        tpInstallLocation.setBounds(480, 20, 160, 30);
+        tpInstallLocation.setToolTipText("Install to...");
+        tpInstallLocation.setVisible(false);
 
-		tpInstallLocLbl.setText("Install to...");
-		tpInstallLocLbl.setBounds(480, 20, 80, 30);
-		tpInstallLocLbl.setVisible(false);
+        tpInstallLocLbl.setText("Install to...");
+        tpInstallLocLbl.setBounds(480, 20, 80, 30);
+        tpInstallLocLbl.setVisible(false);
 
-		footer.add(edit);
-		footer.add(users);
-		footer.add(footerLogo);
-		footer.add(footerCreeper);
-		footer.add(launch);
-		footer.add(donate);
-		footer.add(serverbutton);
-		footer.add(mapInstall);
-		footer.add(mapInstallLocation);
-		footer.add(serverMap);
-		footer.add(tpInstall);
-		footer.add(tpInstallLocation);
+        footer.add(edit);
+        footer.add(users);
+        footer.add(footerLogo);
+        footer.add(footerCreeper);
+        footer.add(launch);
+        footer.add(donate);
+        footer.add(serverbutton);
+        footer.add(mapInstall);
+        footer.add(mapInstallLocation);
+        footer.add(serverMap);
+        footer.add(tpInstall);
+        footer.add(tpInstallLocation);
 
-		newsPane = new NewsPane();
-		modPacksPane = new ModpacksPane();
-		mapsPane = new MapsPane();
-		tpPane = new TexturepackPane();
-		optionsPane = new OptionsPane(Settings.getSettings());
+        newsPane = new NewsPane();
+        modPacksPane = new ModpacksPane();
+        mapsPane = new MapsPane();
+        tpPane = new TexturepackPane();
+        optionsPane = new OptionsPane(Settings.getSettings());
 
-		getRootPane().setDefaultButton(launch);
-		updateLocale();
+        getRootPane().setDefaultButton(launch);
+        updateLocale();
 
-		tabbedPane.add(newsPane, 0);
-		tabbedPane.add(optionsPane, 1);
-		tabbedPane.add(modPacksPane, 2);
-		tabbedPane.add(mapsPane, 3);
-		tabbedPane.add(tpPane, 4);
-		setNewsIcon();
-		tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-		tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
-		tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
-		tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
-		tabbedPane.setSelectedIndex(tab);
+        tabbedPane.add(newsPane, 0);
+        tabbedPane.add(optionsPane, 1);
+        tabbedPane.add(modPacksPane, 2);
+        tabbedPane.add(mapsPane, 3);
+        tabbedPane.add(tpPane, 4);
+        setNewsIcon();
+        tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+        tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
+        tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+        tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+        tabbedPane.setSelectedIndex(tab);
 
-		tabbedPane.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent event) {
-				if(tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
-					((ILauncherPane)tabbedPane.getSelectedComponent()).onVisible();
-					currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
-					updateFooter();
-				}
-			}
-		});
-	}
+        tabbedPane.addChangeListener(new ChangeListener()
+        {
+            @Override
+            public void stateChanged (ChangeEvent event)
+            {
+                if (tabbedPane.getSelectedComponent() instanceof ILauncherPane)
+                {
+                    ((ILauncherPane) tabbedPane.getSelectedComponent()).onVisible();
+                    currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
+                    updateFooter();
+                }
+            }
+        });
+    }
 
-	public void setNewsIcon() {
-		int i = getUnreadNews();
-		if(i > 0 && i < 100) {
-			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
-		} else {
-			tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-		}
-	}
+    public void setNewsIcon ()
+    {
+        int i = getUnreadNews();
+        if (i > 0 && i < 100)
+        {
+            tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
+        }
+        else
+        {
+            tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+        }
+    }
 
-	/**
-	 * call this to login
-	 */
-	private void doLogin(final String username, String password) {
-		if(password.isEmpty()) {
-			PasswordDialog p = new PasswordDialog(this, true);
-			p.setVisible(true);
-			if(tempPass.isEmpty()){
-				enableObjects();
-				return;
-			}
-			password = tempPass;
-		}
+    /**
+     * call this to login
+     */
+    private void doLogin (final String username, String password)
+    {
+        if (password.isEmpty())
+        {
+            PasswordDialog p = new PasswordDialog(this, true);
+            p.setVisible(true);
+            if (tempPass.isEmpty())
+            {
+                enableObjects();
+                return;
+            }
+            password = tempPass;
+        }
 
-		Logger.logInfo("Logging in...");
+        Logger.logInfo("Logging in...");
 
-		tabbedPane.setEnabledAt(0, false);
-		tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-		tabbedPane.setEnabledAt(1, false);
-		tabbedPane.setEnabledAt(2, false);
-		tabbedPane.setEnabledAt(3, false);
-		tabbedPane.setEnabledAt(4, false);
-		tabbedPane.getSelectedComponent().setEnabled(false);
+        tabbedPane.setEnabledAt(0, false);
+        tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+        tabbedPane.setEnabledAt(1, false);
+        tabbedPane.setEnabledAt(2, false);
+        tabbedPane.setEnabledAt(3, false);
+        tabbedPane.setEnabledAt(4, false);
+        tabbedPane.getSelectedComponent().setEnabled(false);
 
-		launch.setEnabled(false);
-		users.setEnabled(false);
-		edit.setEnabled(false);
-		serverbutton.setEnabled(false);
-		mapInstall.setEnabled(false);
-		mapInstallLocation.setEnabled(false);
-		serverMap.setEnabled(false);
-		tpInstall.setEnabled(false);
-		tpInstallLocation.setEnabled(false);
+        launch.setEnabled(false);
+        users.setEnabled(false);
+        edit.setEnabled(false);
+        serverbutton.setEnabled(false);
+        mapInstall.setEnabled(false);
+        mapInstallLocation.setEnabled(false);
+        serverMap.setEnabled(false);
+        tpInstall.setEnabled(false);
+        tpInstallLocation.setEnabled(false);
 
-		LoginWorker loginWorker = new LoginWorker(username, password) {
-			@Override
-			public void done() {
-				String responseStr;
-				try {
-					responseStr = get();
-				} catch (InterruptedException err) {
-					Logger.logError(err.getMessage(), err);
-					enableObjects();
-					return;
-				} catch (ExecutionException err) {
-					if(err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
-						Logger.logError(err.getMessage(), err);
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
-						d.setVisible(true);
-					}
-					enableObjects();
-					return;
-				}
+        LoginWorker loginWorker = new LoginWorker(username, password)
+        {
+            @Override
+            public void done ()
+            {
+                String responseStr;
+                try
+                {
+                    responseStr = get();
+                }
+                catch (InterruptedException err)
+                {
+                    Logger.logError(err.getMessage(), err);
+                    enableObjects();
+                    return;
+                }
+                catch (ExecutionException err)
+                {
+                    if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException)
+                    {
+                        Logger.logError(err.getMessage(), err);
+                        PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+                        d.setVisible(true);
+                    }
+                    enableObjects();
+                    return;
+                }
 
-				try {
-					RESPONSE = new LoginResponse(responseStr);
-				} catch (IllegalArgumentException e) {
-					if(responseStr.contains(":")) {
-						Logger.logError("Received invalid response from server.");
-					} else {
-						if(responseStr.equalsIgnoreCase("bad login")) {
-							ErrorUtils.tossError("Invalid username or password.");
-						} else if(responseStr.equalsIgnoreCase("old version")) {
-							ErrorUtils.tossError("Outdated launcher.");
-						} else {
-							ErrorUtils.tossError("Login failed: " + responseStr);
-							PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
-							d.setVisible(true);
-						}
-					}
-					enableObjects();
-					return;
-				}
-				Logger.logInfo("Login complete.");
-				runGameUpdater(RESPONSE);
-			}
-		};
-		loginWorker.execute();
-	}
+                try
+                {
+                    RESPONSE = new LoginResponse(responseStr);
+                }
+                catch (IllegalArgumentException e)
+                {
+                    if (responseStr.contains(":"))
+                    {
+                        Logger.logError("Received invalid response from server.");
+                    }
+                    else
+                    {
+                        if (responseStr.equalsIgnoreCase("bad login"))
+                        {
+                            ErrorUtils.tossError("Invalid username or password.");
+                        }
+                        else if (responseStr.equalsIgnoreCase("old version"))
+                        {
+                            ErrorUtils.tossError("Outdated launcher.");
+                        }
+                        else
+                        {
+                            ErrorUtils.tossError("Login failed: " + responseStr);
+                            PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+                            d.setVisible(true);
+                        }
+                    }
+                    enableObjects();
+                    return;
+                }
+                Logger.logInfo("Login complete.");
+                runGameUpdater(RESPONSE);
+            }
+        };
+        loginWorker.execute();
+    }
 
-	private Boolean checkVersion(File verFile, ModPack pack) {
-		String storedVersion = pack.getStoredVersion(verFile);
-		String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion() : Settings.getSettings().getPackVer();
+    private Boolean checkVersion (File verFile, ModPack pack)
+    {
+        String storedVersion = pack.getStoredVersion(verFile);
+        String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
+                .getVersion() : Settings.getSettings().getPackVer();
 
-		if(storedVersion == "") {
-			// Always allow updates from a version that isn't installed at all
-			allowVersionChange = true;
-			return true;
-		} else if(Integer.parseInt(storedVersion.replace(".", "")) != Integer.parseInt(onlineVersion.replace(".",  ""))) {
-			ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
-			verDialog.setVisible(true);
-		}
-		return allowVersionChange & (storedVersion != onlineVersion);
-	}
-	
-	/**
-	 * checks whether an update is needed, and then starts the update process off
-	 * @param response - the response from the minecraft servers
-	 */
-	private void runGameUpdater(final LoginResponse response) {
-		final String installPath = Settings.getSettings().getInstallPath();
-		final ModPack pack = ModPack.getSelectedPack();
-		boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-		final String debugTag = "DEBUG: runGameUpdater: ";
+        if (storedVersion == "")
+        {
+            // Always allow updates from a version that isn't installed at all
+            allowVersionChange = true;
+            return true;
+        }
+        else if (Integer.parseInt(storedVersion.replace(".", "")) != Integer.parseInt(onlineVersion.replace(".", "")))
+        {
+            ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
+            verDialog.setVisible(true);
+        }
+        return allowVersionChange & (storedVersion != onlineVersion);
+    }
 
-		if (debugVerbose) {
-			Logger.logInfo(debugTag + "ForceUpdate: " + Settings.getSettings().getForceUpdate());
-			Logger.logInfo(debugTag + "installPath: " + installPath);
-			Logger.logInfo(debugTag + "pack dir: " + pack.getDir());
-			Logger.logInfo(debugTag + "pack check path: " + pack.getDir() + File.separator + "version");
-		}
+    /**
+     * checks whether an update is needed, and then starts the update process off
+     * @param response - the response from the minecraft servers
+     */
+    private void runGameUpdater (final LoginResponse response)
+    {
+        final String installPath = Settings.getSettings().getInstallPath();
+        final ModPack pack = ModPack.getSelectedPack();
+        boolean debugVerbose = Settings.getSettings().getDebugLauncher();
+        final String debugTag = "DEBUG: runGameUpdater: ";
 
-		File verFile = new File(installPath, pack.getDir() + File.separator + "version");
+        if (debugVerbose)
+        {
+            Logger.logInfo(debugTag + "ForceUpdate: " + Settings.getSettings().getForceUpdate());
+            Logger.logInfo(debugTag + "installPath: " + installPath);
+            Logger.logInfo(debugTag + "pack dir: " + pack.getDir());
+            Logger.logInfo(debugTag + "pack check path: " + pack.getDir() + File.separator + "version");
+        }
 
-		if(Settings.getSettings().getForceUpdate() && verFile.exists()) {
-			verFile.delete();
-			if (debugVerbose) { Logger.logInfo(debugTag + "Pack found and delete attempted"); }
-		}
-		
-		if(Settings.getSettings().getForceUpdate() || !verFile.exists() || checkVersion(verFile, pack)) {
-			if(doVersionBackup) {
-				try {
-					File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
-					if(destination.exists()) {
-						FileUtils.delete(destination);
-					}
-					FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
-			}
-			
-			if(!initializeMods()) {
-				if (debugVerbose) { Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu."); }
-				enableObjects();
-				return;
-			}
-		}
-		
-		try {
-			TextureManager.updateTextures();
-		} catch (Exception e1) { }
-		
-		if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7"))
-		{
-		    setupNewStyle(installPath, pack);
-		    return;
-		}
-		
+        File verFile = new File(installPath, pack.getDir() + File.separator + "version");
+
+        if (Settings.getSettings().getForceUpdate() && verFile.exists())
+        {
+            verFile.delete();
+            if (debugVerbose)
+            {
+                Logger.logInfo(debugTag + "Pack found and delete attempted");
+            }
+        }
+
+        if (Settings.getSettings().getForceUpdate() || !verFile.exists() || checkVersion(verFile, pack))
+        {
+            if (doVersionBackup)
+            {
+                try
+                {
+                    File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
+                    if (destination.exists())
+                    {
+                        FileUtils.delete(destination);
+                    }
+                    FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
+                }
+                catch (IOException e)
+                {
+                    Logger.logError(e.getMessage(), e);
+                }
+            }
+
+            if (!initializeMods())
+            {
+                if (debugVerbose)
+                {
+                    Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu.");
+                }
+                enableObjects();
+                return;
+            }
+        }
+
+        try
+        {
+            TextureManager.updateTextures();
+        }
+        catch (Exception e1)
+        {
+        }
+
+        if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7"))
+        {
+            setupNewStyle(installPath, pack);
+            return;
+        }
+
         MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 
-		// I know it's wordy, but it's correct; why is this not using File.separator ? http://stackoverflow.com/questions/2417485/file-separator-vs-slash-in-paths
+        // I know it's wordy, but it's correct; why is this not using File.separator ? http://stackoverflow.com/questions/2417485/file-separator-vs-slash-in-paths
 
-		if(!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
-			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
-				@Override
-				public void done() {
-					progMonitor.close();
-					try {
-						if(get()) {
-							Logger.logInfo("Game update complete");
-							FileUtils.killMetaInf();
-							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-						} else {
-							ErrorUtils.tossError("Error occurred during downloading the game");
-						}
-					} catch (CancellationException e) { 
-						ErrorUtils.tossError("Game update canceled.");
-					} catch (InterruptedException e) { 
-						ErrorUtils.tossError("Game update interrupted.");
-					} catch (ExecutionException e) { 
-						ErrorUtils.tossError("Failed to download game.");
-					} finally {
-						enableObjects();
-					}
-				}
-			};
+        if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft"))
+        {
+            final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+            final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath())
+            {
+                @Override
+                public void done ()
+                {
+                    progMonitor.close();
+                    try
+                    {
+                        if (get())
+                        {
+                            Logger.logInfo("Game update complete");
+                            FileUtils.killMetaInf();
+                            launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+                        }
+                        else
+                        {
+                            ErrorUtils.tossError("Error occurred during downloading the game");
+                        }
+                    }
+                    catch (CancellationException e)
+                    {
+                        ErrorUtils.tossError("Game update canceled.");
+                    }
+                    catch (InterruptedException e)
+                    {
+                        ErrorUtils.tossError("Game update interrupted.");
+                    }
+                    catch (ExecutionException e)
+                    {
+                        ErrorUtils.tossError("Failed to download game.");
+                    }
+                    finally
+                    {
+                        enableObjects();
+                    }
+                }
+            };
 
-			updater.addPropertyChangeListener(new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					if (progMonitor.isCanceled()) {
-						updater.cancel(false);
-					}
-					if (!updater.isDone()) {
-						int prog = updater.getProgress();
-						if (prog < 0) {
-							prog = 0;
-						} else if (prog > 100) {
-							prog = 100;
-						}
-						progMonitor.setProgress(prog);
-						progMonitor.setNote(updater.getStatus());
-					}
-				}
-			});
-			updater.execute();
-		} else {
-			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-		}
-	}
+            updater.addPropertyChangeListener(new PropertyChangeListener()
+            {
+                @Override
+                public void propertyChange (PropertyChangeEvent evt)
+                {
+                    if (progMonitor.isCanceled())
+                    {
+                        updater.cancel(false);
+                    }
+                    if (!updater.isDone())
+                    {
+                        int prog = updater.getProgress();
+                        if (prog < 0)
+                        {
+                            prog = 0;
+                        }
+                        else if (prog > 100)
+                        {
+                            prog = 100;
+                        }
+                        progMonitor.setProgress(prog);
+                        progMonitor.setNote(updater.getStatus());
+                    }
+                }
+            });
+            updater.execute();
+        }
+        else
+        {
+            launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+        }
+    }
 
-	private void setupNewStyle(final String installPath, final ModPack pack)
-	{
+    private void setupNewStyle (final String installPath, final ModPack pack)
+    {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
-        
+
         if (assets.size() > 0)
         {
-        	Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
-        	
+            Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
+
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100); //Not sure why this isnt showing...
             final AssetDownloader downloader = new AssetDownloader(prog, assets)
             {
                 @Override
-                public void done()
+                public void done ()
                 {
                     try
                     {
                         prog.close();
-                        if(get())
+                        if (get())
                         {
                             Logger.logInfo("Asset downloading complete");
                             launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
@@ -800,22 +930,26 @@ public class LaunchFrame extends JFrame {
         {
             launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
         }
-	}
+    }
 
-	private static class DownloadInfo
-	{
-	    public URL url;
-	    public File local;
-	    public String name;
+    private static class DownloadInfo
+    {
+        public URL url;
+        public File local;
+        public String name;
         public long size = 0;
         public String hash;
         public String hashType;
-        
-        public DownloadInfo(){}
+
+        public DownloadInfo()
+        {
+        }
+
         public DownloadInfo(URL url, File local, String name)
         {
             this(url, local, name, null, "md5");
         }
+
         public DownloadInfo(URL url, File local, String name, String hash, String hashType)
         {
             this.url = url;
@@ -824,60 +958,62 @@ public class LaunchFrame extends JFrame {
             this.hash = hash;
             this.hashType = hashType;
         }
-	}
-	
-	private static final class AssetInfo extends DownloadInfo
-	{
-	    public final String etag;
-	    private AssetInfo(File root, Element node) throws MalformedURLException
-	    {
-	        url = new URL("http://resources.download.minecraft.net/" + getText(node, "Key", null));
-            name =  getText(node, "Key", "");
+    }
+
+    private static final class AssetInfo extends DownloadInfo
+    {
+        public final String etag;
+
+        private AssetInfo(File root, Element node) throws MalformedURLException
+        {
+            url = new URL("http://resources.download.minecraft.net/" + getText(node, "Key", null));
+            name = getText(node, "Key", "");
             etag = getText(node, "ETag", "").replace("\"", "");
             size = Long.parseLong(getText(node, "Size", "0"));
             local = new File(root, name);
-	    }
+        }
 
-	    private String getText(Element node, String name, String def)
-	    {
-	        NodeList lst = node.getElementsByTagName(name);
-	        if (lst == null)
-	            return def;
-	        return lst.item(0).getChildNodes().item(0).getNodeValue();
-	    }
+        private String getText (Element node, String name, String def)
+        {
+            NodeList lst = node.getElementsByTagName(name);
+            if (lst == null)
+                return def;
+            return lst.item(0).getChildNodes().item(0).getNodeValue();
+        }
 
-	    public String toString()
-	    {
-	        return etag + " " + name + " " + size;
-	    }
-	}
+        public String toString ()
+        {
+            return etag + " " + name + " " + size;
+        }
+    }
 
-	private static class AssetDownloader extends SwingWorker<Boolean, Void>
-	{
-	    private List<DownloadInfo> downloads;
-	    private final ProgressMonitor monitor;
-	    private String status;
-	    private int progressIndex = 0;
-	    
-	    private AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads)
-	    {
-	        this.downloads = downloads;
-	        this.monitor = monitor;
+    private static class AssetDownloader extends SwingWorker<Boolean, Void>
+    {
+        private List<DownloadInfo> downloads;
+        private final ProgressMonitor monitor;
+        private String status;
+        private int progressIndex = 0;
 
-	        monitor.setMaximum(downloads.size() * 100);
-	        
+        private AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads)
+        {
+            this.downloads = downloads;
+            this.monitor = monitor;
+
+            monitor.setMaximum(downloads.size() * 100);
+
             addPropertyChangeListener(new PropertyChangeListener()
             {
                 @Override
-                public void propertyChange(PropertyChangeEvent evt)
+                public void propertyChange (PropertyChangeEvent evt)
                 {
-                    if (monitor.isCanceled()) AssetDownloader.this.cancel(false);
+                    if (monitor.isCanceled())
+                        AssetDownloader.this.cancel(false);
                 }
             });
-	    }
+        }
 
         @Override
-        protected Boolean doInBackground() throws Exception
+        protected Boolean doInBackground () throws Exception
         {
             boolean allDownloaded = true;
 
@@ -888,7 +1024,7 @@ public class LaunchFrame extends JFrame {
                 int attempt = 0;
                 final int attempts = 5;
                 boolean downloadSuccess = false;
-                while(!downloadSuccess && (attempt < attempts))
+                while (!downloadSuccess && (attempt < attempts))
                 {
                     try
                     {
@@ -910,25 +1046,27 @@ public class LaunchFrame extends JFrame {
                         int currentSize = 0;
                         int size = Integer.parseInt(con.getHeaderField("Content-Length"));
                         setProgress(0);
-                        while((readLen = input.read(buffer, 0, buffer.length)) != -1)
+                        while ((readLen = input.read(buffer, 0, buffer.length)) != -1)
                         {
                             output.write(buffer, 0, readLen);
                             currentSize += readLen;
-                            int prog = (int)((currentSize / size) * 100);
-                            if(prog > 100) prog = 100;
-                            if(prog < 0  ) prog = 0;
-                            
+                            int prog = (int) ((currentSize / size) * 100);
+                            if (prog > 100)
+                                prog = 100;
+                            if (prog < 0)
+                                prog = 0;
+
                             setProgress(prog);
-                            
+
                             prog = (progressIndex * 100) + prog;
-                            
+
                             monitor.setProgress(prog);
                             monitor.setNote(this.status);
                         }
                         input.close();
                         output.close();
                         String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
-                        if(con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0))
+                        if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0))
                         {
                             if (asset.hash != null && !asset.hash.toLowerCase().equals(hash))
                             {
@@ -956,15 +1094,15 @@ public class LaunchFrame extends JFrame {
             status = allDownloaded ? "Success" : "Downloads failed";
             return allDownloaded;
         }
-	}
-	
-	private List<DownloadInfo> gatherAssets(File root, String mcVersion)
-	{
-	    try
+    }
+
+    private List<DownloadInfo> gatherAssets (File root, String mcVersion)
+    {
+        try
         {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
-	        /*
-	        String baseUrl = "http://resources.download.minecraft.net/";
+            /*
+            String baseUrl = "http://resources.download.minecraft.net/";
             Document doc = DocumentBuilderFactory.newInstance()
                            .newDocumentBuilder()
                            .parse(new URL(baseUrl).openConnection().getInputStream());
@@ -1000,10 +1138,7 @@ public class LaunchFrame extends JFrame {
             File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
             if (!local.exists())
             {
-                list.add(new DownloadInfo(
-                    new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)),
-                    local, local.getName()
-                ));
+                list.add(new DownloadInfo(new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local, local.getName()));
             }
 
             URL url = new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
@@ -1027,10 +1162,10 @@ public class LaunchFrame extends JFrame {
                     {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
                     }
-                    
+
                 }
             }
-            
+
             // Move the old format to the new:
             File test = new File(root, "assets/READ_ME_I_AM_VERY_IMPORTANT.txt");
             if (test.exists())
@@ -1038,25 +1173,21 @@ public class LaunchFrame extends JFrame {
                 File assets = new File(root, "assets");
                 Set<File> old = FileUtils.listFiles(assets);
                 File objects = new File(assets, "objects");
-                String[] skip = new String[]
-                {
-                    objects.getAbsolutePath(),
-                    new File(assets, "indexes").getAbsolutePath(),
-                    new File(assets, "virtual").getAbsolutePath()
-                };
-                
+                String[] skip = new String[] { objects.getAbsolutePath(), new File(assets, "indexes").getAbsolutePath(), new File(assets, "virtual").getAbsolutePath() };
+
                 for (File f : old)
                 {
                     String path = f.getAbsolutePath();
                     boolean move = true;
                     for (String prefix : skip)
                     {
-                        if (path.startsWith(prefix)) move = false;
+                        if (path.startsWith(prefix))
+                            move = false;
                     }
                     if (move)
                     {
                         String hash = DownloadUtils.fileSHA(f);
-                        File cache = new File(objects, hash.substring(0,2) + "/" + hash);
+                        File cache = new File(objects, hash.substring(0, 2) + "/" + hash);
                         Logger.logInfo("Caching Asset: " + hash + " - " + f.getAbsolutePath().replace(assets.getAbsolutePath(), ""));
                         if (!cache.exists())
                         {
@@ -1081,19 +1212,19 @@ public class LaunchFrame extends JFrame {
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             DownloadUtils.downloadToFile(url, json);
             AssetIndex index = JsonFactory.loadAssetIndex(json);
-            
+
             for (Entry<String, Asset> e : index.objects.entrySet())
             {
                 String name = e.getKey();
                 Asset asset = e.getValue();
-                String path = asset.hash.substring(0,2) + "/" + asset.hash;
+                String path = asset.hash.substring(0, 2) + "/" + asset.hash;
                 local = new File(root, "assets/objects/" + path);
-                
+
                 if (local.exists() && !asset.hash.equals(DownloadUtils.fileSHA(local)))
                 {
                     local.delete();
                 }
-                
+
                 if (!local.exists())
                 {
                     list.add(new DownloadInfo(new URL("http://resources.download.minecraft.net/" + path), local, name, asset.hash, "sha1"));
@@ -1105,61 +1236,81 @@ public class LaunchFrame extends JFrame {
         {
             e.printStackTrace();
         }
-	    return null;
-	}
+        return null;
+    }
 
-	/**
-	 * launch the game with the mods in the classpath
-	 * @param workingDir - install path
-	 * @param username - the MC username
-	 * @param password - the MC password
-	 */
-	public void launchMinecraft(String workingDir, String username, String password, String maxPermSize) {
-		try {
-			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
-			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-			TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) { }
-			try {
-				minecraftProcess.exitValue();
-			} catch (IllegalThreadStateException e) {
-				this.setVisible(false);
-				ProcessMonitor.create(minecraftProcess, new Runnable() {
-					@Override
-					public void run() {
-						if(!Settings.getSettings().getKeepLauncherOpen()) {
-							System.exit(0);
-						} else {
-							LaunchFrame launchFrame = LaunchFrame.this;
-							launchFrame.setVisible(true);
-							launchFrame.enableObjects();
-							try {
-								Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
-								tabbedPane.remove(1);
-								optionsPane = new OptionsPane(Settings.getSettings());
-								tabbedPane.add(optionsPane, 1);
-								tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-							} catch (Exception e1) {
-								Logger.logError("Failed to reload settings after launcher closed", e1);
-							}
-						}
-					}
-				});
-			}
-		} catch(Exception e) { }
-	}
-
-    public void launchMinecraftNew(String installDir, ModPack pack, String username, String password, String maxPermSize)
+    /**
+     * launch the game with the mods in the classpath
+     * @param workingDir - install path
+     * @param username - the MC username
+     * @param password - the MC password
+     */
+    public void launchMinecraft (String workingDir, String username, String password, String maxPermSize)
     {
         try
         {
-            File packDir  = new File(installDir, pack.getDir());
-            File gameDir  = new File(packDir,    "minecraft");
+            Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
+            StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
+            try
+            {
+                Thread.sleep(1500);
+            }
+            catch (InterruptedException e)
+            {
+            }
+            try
+            {
+                minecraftProcess.exitValue();
+            }
+            catch (IllegalThreadStateException e)
+            {
+                this.setVisible(false);
+                ProcessMonitor.create(minecraftProcess, new Runnable()
+                {
+                    @Override
+                    public void run ()
+                    {
+                        if (!Settings.getSettings().getKeepLauncherOpen())
+                        {
+                            System.exit(0);
+                        }
+                        else
+                        {
+                            LaunchFrame launchFrame = LaunchFrame.this;
+                            launchFrame.setVisible(true);
+                            launchFrame.enableObjects();
+                            try
+                            {
+                                Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
+                                tabbedPane.remove(1);
+                                optionsPane = new OptionsPane(Settings.getSettings());
+                                tabbedPane.add(optionsPane, 1);
+                                tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+                            }
+                            catch (Exception e1)
+                            {
+                                Logger.logError("Failed to reload settings after launcher closed", e1);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void launchMinecraftNew (String installDir, ModPack pack, String username, String password, String maxPermSize)
+    {
+        try
+        {
+            File packDir = new File(installDir, pack.getDir());
+            File gameDir = new File(packDir, "minecraft");
             File assetDir = new File(installDir, "assets");
-            File libDir   = new File(installDir, "libraries");
-            File natDir   = new File(packDir,     "natives");
+            File libDir = new File(installDir, "libraries");
+            File natDir = new File(packDir, "natives");
 
             if (natDir.exists())
             {
@@ -1180,14 +1331,14 @@ public class LaunchFrame extends JFrame {
                         input = new ZipInputStream(new FileInputStream(local));
                         ZipEntry entry = input.getNextEntry();
                         while (entry != null)
-                        { 
+                        {
                             String name = entry.getName();
                             int n;
                             if (lib.extract == null || !lib.extract.exclude(name))
                             {
                                 File output = new File(natDir, name);
                                 output.getParentFile().mkdirs();
-                                FileOutputStream out = new FileOutputStream(output);             
+                                FileOutputStream out = new FileOutputStream(output);
                                 while ((n = input.read(buf, 0, 1024)) > -1)
                                 {
                                     out.write(buf, 0, n);
@@ -1205,9 +1356,13 @@ public class LaunchFrame extends JFrame {
                     }
                     finally
                     {
-                        try {
+                        try
+                        {
                             input.close();
-                        } catch (IOException e) { }
+                        }
+                        catch (IOException e)
+                        {
+                        }
                     }
                 }
             }
@@ -1226,409 +1381,490 @@ public class LaunchFrame extends JFrame {
             {
                 classpath.add(new File(libDir, lib.getPath()));
             }
-            
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(
-                    gameDir, assetDir, natDir,
-                    classpath,
-                    username, password,
-                    packjson.mainClass != null ? packjson.mainClass : base.mainClass,
-                    packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(),
-                    Settings.getSettings().getRamMax(), maxPermSize,
-                    pack.getMcVersion());
-            
+
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(gameDir, assetDir, natDir, classpath, username, password, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
+                    packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings()
+                            .getRamMax(), maxPermSize, pack.getMcVersion());
+
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
-            try {
+            try
+            {
                 Thread.sleep(1500);
-            } catch (InterruptedException e) { }
-            try {
+            }
+            catch (InterruptedException e)
+            {
+            }
+            try
+            {
                 minecraftProcess.exitValue();
-            } catch (IllegalThreadStateException e) {
+            }
+            catch (IllegalThreadStateException e)
+            {
                 this.setVisible(false);
-                ProcessMonitor.create(minecraftProcess, new Runnable() {
+                ProcessMonitor.create(minecraftProcess, new Runnable()
+                {
                     @Override
-                    public void run() {
-                        if(!Settings.getSettings().getKeepLauncherOpen()) {
+                    public void run ()
+                    {
+                        if (!Settings.getSettings().getKeepLauncherOpen())
+                        {
                             System.exit(0);
-                        } else {
+                        }
+                        else
+                        {
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
-                            try {
+                            try
+                            {
                                 Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
                                 tabbedPane.remove(1);
                                 optionsPane = new OptionsPane(Settings.getSettings());
                                 tabbedPane.add(optionsPane, 1);
                                 tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-                            } catch (Exception e1) {
+                            }
+                            catch (Exception e1)
+                            {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
                     }
                 });
             }
-        } catch(Exception e) { 
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-	/**
-	 * @param modPackName - The pack to install (should already be downloaded)
-	 * @throws IOException
-	 */
-	protected void installMods(String modPackName) throws IOException {
-		String installpath = Settings.getSettings().getInstallPath();
-		String temppath = OSUtils.getDynamicStorageLocation();
+    /**
+     * @param modPackName - The pack to install (should already be downloaded)
+     * @throws IOException
+     */
+    protected void installMods (String modPackName) throws IOException
+    {
+        String installpath = Settings.getSettings().getInstallPath();
+        String temppath = OSUtils.getDynamicStorageLocation();
 
-		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+        ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 
-		String packDir = pack.getDir();
+        String packDir = pack.getDir();
 
-		Logger.logInfo("dirs mk'd");
+        Logger.logInfo("dirs mk'd");
 
-		File source = new File(temppath, "ModPacks/" + packDir + "/.minecraft");
-		if(!source.exists()) {
-			source = new File(temppath, "ModPacks/" + packDir + "/minecraft");
-		}
+        File source = new File(temppath, "ModPacks/" + packDir + "/.minecraft");
+        if (!source.exists())
+        {
+            source = new File(temppath, "ModPacks/" + packDir + "/minecraft");
+        }
 
-		if (Settings.getSettings().getDebugLauncher()) {
-			final String debugTag = "debug: installMods: ";
-			Logger.logInfo(debugTag + "install path: " + installpath);
-			Logger.logInfo(debugTag + "temp path: " + temppath);
-			Logger.logInfo(debugTag + "source: " + source);
-			Logger.logInfo(debugTag + "packDir: " + packDir);
-		}
+        if (Settings.getSettings().getDebugLauncher())
+        {
+            final String debugTag = "debug: installMods: ";
+            Logger.logInfo(debugTag + "install path: " + installpath);
+            Logger.logInfo(debugTag + "temp path: " + temppath);
+            Logger.logInfo(debugTag + "source: " + source);
+            Logger.logInfo(debugTag + "packDir: " + packDir);
+        }
 
-		FileUtils.copyFolder(source,
-							 new File(installpath, packDir + "/minecraft/"));
-		FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"),
-							 new File(installpath, packDir + "/instMods/"));
-        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"),
-                             new File(installpath, "/libraries/"), false);
-	}
+        FileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"));
+        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"), new File(installpath, packDir + "/instMods/"));
+        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
+    }
 
-	/**
-	 * "Saves" the settings from the GUI controls into the settings class.
-	 */
-	public void saveSettings() {
-		Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
-		instance.optionsPane.saveSettingsInto(Settings.getSettings());
-	}
+    /**
+     * "Saves" the settings from the GUI controls into the settings class.
+     */
+    public void saveSettings ()
+    {
+        Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
+        instance.optionsPane.saveSettingsInto(Settings.getSettings());
+    }
 
-	/**
-	 * @param user - user added/edited
-	 */
-	public static void writeUsers(String user) {
-		try {
-			userManager.write();
-		} catch (IOException e) { }
-		String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
-		users.removeAllItems();
-		for(int i = 0; i < usernames.length; i++) {
-			users.addItem(usernames[i]);
-			if(usernames[i].equals(user)) {
-				users.setSelectedIndex(i);
-			}
-		}
-	}
+    /**
+     * @param user - user added/edited
+     */
+    public static void writeUsers (String user)
+    {
+        try
+        {
+            userManager.write();
+        }
+        catch (IOException e)
+        {
+        }
+        String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
+        users.removeAllItems();
+        for (int i = 0; i < usernames.length; i++)
+        {
+            users.addItem(usernames[i]);
+            if (usernames[i].equals(user))
+            {
+                users.setSelectedIndex(i);
+            }
+        }
+    }
 
-	/**
-	 * updates the tpInstall to the available ones
-	 * @param locations - the available locations to install the tp to
-	 */
-	public static void updateTpInstallLocs(String[] locations) {
-		tpInstallLocation.removeAllItems();
-		for(String location : locations) {
-			if(!location.isEmpty()) {
-				tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
-			}
-		}
-		tpInstallLocation.setSelectedItem(ModPack.getSelectedPack().getName());
-	}
+    /**
+     * updates the tpInstall to the available ones
+     * @param locations - the available locations to install the tp to
+     */
+    public static void updateTpInstallLocs (String[] locations)
+    {
+        tpInstallLocation.removeAllItems();
+        for (String location : locations)
+        {
+            if (!location.isEmpty())
+            {
+                tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
+            }
+        }
+        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack().getName());
+    }
 
-	/**
-	 * updates the mapInstall to the available ones
-	 * @param locations - the available locations to install the map to
-	 */
-	public static void updateMapInstallLocs(String[] locations) {
-		mapInstallLocation.removeAllItems();
-		for(String location : locations) {
-			if(!location.isEmpty()) {
-				mapInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
-			}
-		}
-	}
+    /**
+     * updates the mapInstall to the available ones
+     * @param locations - the available locations to install the map to
+     */
+    public static void updateMapInstallLocs (String[] locations)
+    {
+        mapInstallLocation.removeAllItems();
+        for (String location : locations)
+        {
+            if (!location.isEmpty())
+            {
+                mapInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
+            }
+        }
+    }
 
-	/**
-	 * @param first - First array
-	 * @param rest - Rest of the arrays
-	 * @return - Outputs concatenated arrays
-	 */
-	public static <T> T[] concatenateArrays(T[] first, T[]... rest) {
-		int totalLength = first.length;
-		for (T[] array : rest) {
-			totalLength += array.length;
-		}
-		T[] result = Arrays.copyOf(first, totalLength);
-		int offset = first.length;
-		for (T[] array : rest) {
-			System.arraycopy(array, 0, result, offset, array.length);
-			offset += array.length;
-		}
-		return result;
-	}
+    /**
+     * @param first - First array
+     * @param rest - Rest of the arrays
+     * @return - Outputs concatenated arrays
+     */
+    public static <T> T[] concatenateArrays (T[] first, T[]... rest)
+    {
+        int totalLength = first.length;
+        for (T[] array : rest)
+        {
+            totalLength += array.length;
+        }
+        T[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        for (T[] array : rest)
+        {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
+    }
 
-	/**
-	 * @return - Outputs selected modpack index
-	 */
-	public static int getSelectedModIndex() {
-		return instance.modPacksPane.getSelectedModIndex();
-	}
+    /**
+     * @return - Outputs selected modpack index
+     */
+    public static int getSelectedModIndex ()
+    {
+        return instance.modPacksPane.getSelectedModIndex();
+    }
 
-	/**
-	 * @return - Outputs selected map index
-	 */
-	public static int getSelectedMapIndex() {
-		return instance.mapsPane.getSelectedMapIndex();
-	}
+    /**
+     * @return - Outputs selected map index
+     */
+    public static int getSelectedMapIndex ()
+    {
+        return instance.mapsPane.getSelectedMapIndex();
+    }
 
-	/**
-	 * @return - Outputs selected texturepack index
-	 */
-	public static int getSelectedTexturePackIndex() {
-		return instance.tpPane.getSelectedTexturePackIndex();
-	}
+    /**
+     * @return - Outputs selected texturepack index
+     */
+    public static int getSelectedTexturePackIndex ()
+    {
+        return instance.tpPane.getSelectedTexturePackIndex();
+    }
 
-	/**
-	 * @return - Outputs selected map install index
-	 */
-	public static int getSelectedMapInstallIndex() {
-		return instance.mapInstallLocation.getSelectedIndex();
-	}
+    /**
+     * @return - Outputs selected map install index
+     */
+    public static int getSelectedMapInstallIndex ()
+    {
+        return instance.mapInstallLocation.getSelectedIndex();
+    }
 
-	/**
-	 * @return - Outputs selected texturepack install index
-	 */
-	public static int getSelectedTPInstallIndex() {
-		return instance.tpInstallLocation.getSelectedIndex();
-	}
+    /**
+     * @return - Outputs selected texturepack install index
+     */
+    public static int getSelectedTPInstallIndex ()
+    {
+        return instance.tpInstallLocation.getSelectedIndex();
+    }
 
-	/**
-	 * @return - Outputs LaunchFrame instance
-	 */
-	public static LaunchFrame getInstance() {
-		return instance;
-	}
+    /**
+     * @return - Outputs LaunchFrame instance
+     */
+    public static LaunchFrame getInstance ()
+    {
+        return instance;
+    }
 
-	/**
-	 * Enables all items that are disabled upon launching
-	 */
-	private void enableObjects() {
-		tabbedPane.setEnabledAt(0, true);
-		setNewsIcon();
-		tabbedPane.setEnabledAt(1, true);
-		tabbedPane.setEnabledAt(2, true);
-		tabbedPane.setEnabledAt(3, true);
-		tabbedPane.setEnabledAt(4, true);
-		tabbedPane.getSelectedComponent().setEnabled(true);
-		updateFooter();
-		mapInstall.setEnabled(true);
-		mapInstallLocation.setEnabled(true);
-		serverMap.setEnabled(true);
-		tpInstall.setEnabled(true);
-		launch.setEnabled(true);
-		users.setEnabled(true);
-		serverbutton.setEnabled(true);
-		tpInstallLocation.setEnabled(true);
-		TextureManager.updating = false;
-	}
+    /**
+     * Enables all items that are disabled upon launching
+     */
+    private void enableObjects ()
+    {
+        tabbedPane.setEnabledAt(0, true);
+        setNewsIcon();
+        tabbedPane.setEnabledAt(1, true);
+        tabbedPane.setEnabledAt(2, true);
+        tabbedPane.setEnabledAt(3, true);
+        tabbedPane.setEnabledAt(4, true);
+        tabbedPane.getSelectedComponent().setEnabled(true);
+        updateFooter();
+        mapInstall.setEnabled(true);
+        mapInstallLocation.setEnabled(true);
+        serverMap.setEnabled(true);
+        tpInstall.setEnabled(true);
+        launch.setEnabled(true);
+        users.setEnabled(true);
+        serverbutton.setEnabled(true);
+        tpInstallLocation.setEnabled(true);
+        TextureManager.updating = false;
+    }
 
-	/**
-	 * Download and install mods
-	 * @return boolean - represents whether it was successful in initializing mods
-	 */
-	private boolean initializeMods() {
-		boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-		final String debugTag = "debug: initializeMods: ";
+    /**
+     * Download and install mods
+     * @return boolean - represents whether it was successful in initializing mods
+     */
+    private boolean initializeMods ()
+    {
+        boolean debugVerbose = Settings.getSettings().getDebugLauncher();
+        final String debugTag = "debug: initializeMods: ";
 
-		if (debugVerbose) { Logger.logInfo(debugTag + "pack dir..."); }
-		Logger.logInfo(ModPack.getSelectedPack().getDir());
-		ModManager man = new ModManager(new JFrame(), true);
-		man.setVisible(true);
-		while (man == null) { }
-		while (!man.worker.isDone()) { }
-		if(man.erroneous) {
-			return false;
-		}
-		try {
-			installMods(ModPack.getSelectedPack().getDir());
-			man.cleanUp();
-		} catch (IOException e) {
-			if (debugVerbose) { Logger.logInfo(debugTag + "Exception: " + e); }
-		}
-		return true;
-	}
+        if (debugVerbose)
+        {
+            Logger.logInfo(debugTag + "pack dir...");
+        }
+        Logger.logInfo(ModPack.getSelectedPack().getDir());
+        ModManager man = new ModManager(new JFrame(), true);
+        man.setVisible(true);
+        while (man == null)
+        {
+        }
+        while (!man.worker.isDone())
+        {
+        }
+        if (man.erroneous)
+        {
+            return false;
+        }
+        try
+        {
+            installMods(ModPack.getSelectedPack().getDir());
+            man.cleanUp();
+        }
+        catch (IOException e)
+        {
+            if (debugVerbose)
+            {
+                Logger.logInfo(debugTag + "Exception: " + e);
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * disables the buttons that are usually active on the footer
-	 */
-	public void disableMainButtons() {
-		serverbutton.setVisible(false);
-		launch.setVisible(false);
-		edit.setVisible(false);
-		users.setVisible(false);
-	}
+    /**
+     * disables the buttons that are usually active on the footer
+     */
+    public void disableMainButtons ()
+    {
+        serverbutton.setVisible(false);
+        launch.setVisible(false);
+        edit.setVisible(false);
+        users.setVisible(false);
+    }
 
-	/**
-	 * disables the footer buttons active when the modpack tab is selected
-	 */
-	public void disableMapButtons() {
-		mapInstall.setVisible(false);
-		mapInstallLocation.setVisible(false);
-		serverMap.setVisible(false);
-	}
+    /**
+     * disables the footer buttons active when the modpack tab is selected
+     */
+    public void disableMapButtons ()
+    {
+        mapInstall.setVisible(false);
+        mapInstallLocation.setVisible(false);
+        serverMap.setVisible(false);
+    }
 
-	/**
-	 * disables the footer buttons active when the texture pack tab is selected
-	 */
-	public void disableTextureButtons() {
-		tpInstall.setVisible(false);
-		tpInstallLocation.setVisible(false);
-	}
+    /**
+     * disables the footer buttons active when the texture pack tab is selected
+     */
+    public void disableTextureButtons ()
+    {
+        tpInstall.setVisible(false);
+        tpInstallLocation.setVisible(false);
+    }
 
-	/**
-	 * update the footer to the correct buttons for active tab
-	 */
-	public void updateFooter() {
-		boolean result;
-		switch(currentPane) {
-		case MAPS:
-			result = mapsPane.type.equals("Server");
-			mapInstall.setVisible(!result);
-			mapInstallLocation.setVisible(!result);
-			serverMap.setVisible(result);
-			disableMainButtons();
-			disableTextureButtons();
-			break;
-		case TEXTURE:
-			tpInstall.setVisible(true);
-			tpInstallLocation.setVisible(true);
-			disableMainButtons();
-			disableMapButtons();
-			break;
-		default:
-			launch.setVisible(true);
-			edit.setEnabled(users.getSelectedIndex() > 1);
-			edit.setVisible(true);
-			users.setVisible(true);
-			serverbutton.setVisible(false);
-			disableMapButtons();
-			disableTextureButtons();
-			break;
-		}
-	}
+    /**
+     * update the footer to the correct buttons for active tab
+     */
+    public void updateFooter ()
+    {
+        boolean result;
+        switch (currentPane)
+        {
+        case MAPS:
+            result = mapsPane.type.equals("Server");
+            mapInstall.setVisible(!result);
+            mapInstallLocation.setVisible(!result);
+            serverMap.setVisible(result);
+            disableMainButtons();
+            disableTextureButtons();
+            break;
+        case TEXTURE:
+            tpInstall.setVisible(true);
+            tpInstallLocation.setVisible(true);
+            disableMainButtons();
+            disableMapButtons();
+            break;
+        default:
+            launch.setVisible(true);
+            edit.setEnabled(users.getSelectedIndex() > 1);
+            edit.setVisible(true);
+            users.setVisible(true);
+            serverbutton.setVisible(false);
+            disableMapButtons();
+            disableTextureButtons();
+            break;
+        }
+    }
 
-	// TODO: Make buttons dynamically sized.
-	/**
-	 * updates the buttons/text to language specific
-	 */
-	public void updateLocale() {
-		if(I18N.currentLocale == Locale.deDE) {
-			edit.setBounds(420, 20, 120, 30);
-			donate.setBounds(330, 20, 80, 30);
-			mapInstall.setBounds(620, 20, 190, 30);
-			mapInstallLocation.setBounds(420, 20, 190, 30);
-			serverbutton.setBounds(420, 20, 390, 30);
-			tpInstallLocation.setBounds(420, 20, 190, 30);
-			tpInstall.setBounds(620, 20, 190, 30);
-		} else {
-			edit.setBounds(480, 20, 60, 30);
-			donate.setBounds(390, 20, 80, 30);
-			mapInstall.setBounds(650, 20, 160, 30);
-			mapInstallLocation.setBounds(480, 20, 160, 30);
-			serverbutton.setBounds(480, 20, 330, 30);
-			tpInstallLocation.setBounds(480, 20, 160, 30);
-			tpInstall.setBounds(650, 20, 160, 30);
-		}
-		launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
-		edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
-		mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
-		serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
-		tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-		donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
-		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
-		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
-		writeUsers((String)users.getSelectedItem());
-		optionsPane.updateLocale();
-		modPacksPane.updateLocale();
-		mapsPane.updateLocale();
-		tpPane.updateLocale();
-	}
+    // TODO: Make buttons dynamically sized.
+    /**
+     * updates the buttons/text to language specific
+     */
+    public void updateLocale ()
+    {
+        if (I18N.currentLocale == Locale.deDE)
+        {
+            edit.setBounds(420, 20, 120, 30);
+            donate.setBounds(330, 20, 80, 30);
+            mapInstall.setBounds(620, 20, 190, 30);
+            mapInstallLocation.setBounds(420, 20, 190, 30);
+            serverbutton.setBounds(420, 20, 390, 30);
+            tpInstallLocation.setBounds(420, 20, 190, 30);
+            tpInstall.setBounds(620, 20, 190, 30);
+        }
+        else
+        {
+            edit.setBounds(480, 20, 60, 30);
+            donate.setBounds(390, 20, 80, 30);
+            mapInstall.setBounds(650, 20, 160, 30);
+            mapInstallLocation.setBounds(480, 20, 160, 30);
+            serverbutton.setBounds(480, 20, 330, 30);
+            tpInstallLocation.setBounds(480, 20, 160, 30);
+            tpInstall.setBounds(650, 20, 160, 30);
+        }
+        launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
+        serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
+        mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
+        serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
+        tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
+        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
+        dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
+        dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
+        writeUsers((String) users.getSelectedItem());
+        optionsPane.updateLocale();
+        modPacksPane.updateLocale();
+        mapsPane.updateLocale();
+        tpPane.updateLocale();
+    }
 
-	private static ArrayList<String> getXmls() {
-		ArrayList<String> s = Settings.getSettings().getPrivatePacks();
-		if(s == null) {
-			s = new ArrayList<String>();
-		}
-		for(int i = 0; i < s.size(); i++) {
-			if(s.get(i).isEmpty()) {
-				s.remove(i);
-				i--;
-			} else {
-				String temp = s.get(i);
-				if(!temp.endsWith(".xml")) {
-					s.remove(i);
-					s.add(i, temp + ".xml");
-				}
-			}
-		}
-		s.add(0, "modpacks.xml");
-		return s;
-	}
+    private static ArrayList<String> getXmls ()
+    {
+        ArrayList<String> s = Settings.getSettings().getPrivatePacks();
+        if (s == null)
+        {
+            s = new ArrayList<String>();
+        }
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s.get(i).isEmpty())
+            {
+                s.remove(i);
+                i--;
+            }
+            else
+            {
+                String temp = s.get(i);
+                if (!temp.endsWith(".xml"))
+                {
+                    s.remove(i);
+                    s.add(i, temp + ".xml");
+                }
+            }
+        }
+        s.add(0, "modpacks.xml");
+        return s;
+    }
 
-	public int getUnreadNews() {
-		int i = 0;
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
-			ArrayList<Long> timeStamps = new ArrayList<Long>();
-			String s = reader.readLine();
-			s = s.trim();
-			String[] str = s.split(",");
-			for (String aStr : str) {
-				if (!timeStamps.contains(Long.parseLong(aStr))) {
-					timeStamps.add(Long.parseLong(aStr));
-				}
-			}
-			long l;
-			if(Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
-				l = Long.parseLong(Settings.getSettings().getNewsDate());
-			} else {
-				l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
-			}
-			for (Long timeStamp : timeStamps) {
-				long time = timeStamp;
-				if (time > l) {
-					i++;
-				}
-			}
+    public int getUnreadNews ()
+    {
+        int i = 0;
+        BufferedReader reader = null;
+        try
+        {
+            reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
+            ArrayList<Long> timeStamps = new ArrayList<Long>();
+            String s = reader.readLine();
+            s = s.trim();
+            String[] str = s.split(",");
+            for (String aStr : str)
+            {
+                if (!timeStamps.contains(Long.parseLong(aStr)))
+                {
+                    timeStamps.add(Long.parseLong(aStr));
+                }
+            }
+            long l;
+            if (Long.parseLong(Settings.getSettings().getNewsDate()) == 0)
+            {
+                l = Long.parseLong(Settings.getSettings().getNewsDate());
+            }
+            else
+            {
+                l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
+            }
+            for (Long timeStamp : timeStamps)
+            {
+                long time = timeStamp;
+                if (time > l)
+                {
+                    i++;
+                }
+            }
 
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-		}
+        }
+        catch (Exception e)
+        {
+            Logger.logError(e.getMessage(), e);
+        }
 
-		return i;
-	}
+        return i;
+    }
 
-	public void doLaunch() {
-		if(users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-			Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
-			saveSettings();
-			doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-		} else if(users.getSelectedIndex() <= 1) {
-			ErrorUtils.tossError("Please select a profile!");
-		}
-	}
+    public void doLaunch ()
+    {
+        if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null)
+        {
+            Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
+            saveSettings();
+            doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+        }
+        else if (users.getSelectedIndex() <= 1)
+        {
+            ErrorUtils.tossError("Please select a profile!");
+        }
+    }
 }
