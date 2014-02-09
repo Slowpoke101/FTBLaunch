@@ -14,9 +14,8 @@ public class AuthlibHelper
 
     protected static String authenticateWithAuthlib (String user, String pass)
     {
-        Logger.logError("authlib");
         String ID, displayName;
-        if (user == null)
+        if (user != null)
         {
             YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
@@ -51,9 +50,7 @@ public class AuthlibHelper
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline()))
                 {
                     if ((authentication instanceof YggdrasilUserAuthentication))
-                    {
-                        Logger.logError("IF YOU ARENT PROGWML6 and you see this alert him IMMEDIATLEY" + String.format("token:%s:%s", new Object[] { authentication.getAuthenticatedToken(), authentication.getSelectedProfile().getId() }));
-                        
+                    {                        
                         return String.format("token:%s:%s", new Object[] { authentication.getAuthenticatedToken(), authentication.getSelectedProfile().getId() });
                     }
                 }

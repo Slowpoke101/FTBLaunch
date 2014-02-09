@@ -46,12 +46,9 @@ public class LoginWorker extends SwingWorker<String, Void>
     {
         try
         {
-            Logger.logError("BG");
-
             String authlibreturn = new String();
             if (LaunchFrame.canUseAuthlib)
             {
-                Logger.logError("canAL");
                 try
                 {
                     authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
@@ -63,8 +60,7 @@ public class LoginWorker extends SwingWorker<String, Void>
             }
             if (!authlibreturn.equals(null) && !authlibreturn.isEmpty())
             {
-                Logger.logError("using AL return");
-
+                Logger.logError("using Authlib return");
                 return authlibreturn;
             }
             else

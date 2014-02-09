@@ -656,9 +656,7 @@ public class LaunchFrame extends JFrame
                 String responseStr;
                 try
                 {
-                    Logger.logError("pre");
                     responseStr = get();
-                    Logger.logError("post");
                 }
                 catch (InterruptedException err)
                 {

@@ -17,26 +17,21 @@
 package net.ftb.workers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.SwingWorker;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
@@ -81,45 +76,39 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
 
     protected boolean addToClasspath (String location)
     {
-        CustomCL sysLoader;
-        URL u;
-        Class sysclass;
-        Class[] parameters;
-
+        File f = new File(location);
         try
         {
-            //Cast down the classloader to urlclassloader and call addURL
-            URL urls[] = {};
-           // addURL(new URL("file://" + location));
-            sysLoader = new CustomCL(urls);//(CustomCL) (URLClassLoader) ClassLoader.getSystemClassLoader();
-             //           System.out.println("Loading file from " + u.toExternalForm());
-            sysLoader.addURL(new URL("file://" + location));
-            sysLoader.loadClass("com.mojang.authlib.exceptions.AuthenticationException");
-            /*sysclass = URLClassLoader.class;
-            parameters = new Class[] { URL.class };
-            Method method = sysclass.getDeclaredMethod("addURL", parameters);
-            method.setAccessible(true);
-            method.invoke(sysLoader,  u);*/
-            Class C = Class.forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
-
+            if (f.exists())
+            {
+                URL urls[] = { f.toURI().toURL() };
+                addURL(f.toURI().toURL());
+                Class C = this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
+                Class C2 = this.getClass().forName("com.mojang.authlib.Agent");
+                Class C3 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
+                Class C4 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
+            }
+            else
+            {
+                Logger.logError("Authlib file does not exist");
+            }
         }
         catch (Throwable t)
         {
             t.printStackTrace(System.err);
             return false;
         }
+        LaunchFrame.canUseAuthlib = true;
         return true;
-
-        //return addSoftwareLibrary(new File(location));
     }
 
-    public static void addURL (URL u) throws IOException
+    public void addURL (URL u) throws IOException
     {
-        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        URLClassLoader sysloader = (URLClassLoader) this.getClass().getClassLoader();
         Class sysclass = URLClassLoader.class;
         try
         {
-            Method method = sysclass.getDeclaredMethod("addURL",  new Class[] { URL.class });
+            Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
             method.invoke(sysloader, new Object[] { u });
         }
@@ -127,28 +116,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         {
             t.printStackTrace();
             throw new IOException("Error, could not add URL to system classloader");
-        }// end try catch
-    }// end method
-
-    private static boolean addSoftwareLibrary (File file)
-    {
-
-        Method method;
-        try
-        {
-
-            method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[] { URL.class });
-            method.setAccessible(true);
-            method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });
-
         }
-        catch (Exception e)
-        {
-            Logger.logError("ERROR adding Authlib to the java classpath");
-            return false;
-        }
-        LaunchFrame.canUseAuthlib = true;
-        return true;
     }
 
     protected boolean downloadJars ()

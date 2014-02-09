@@ -52,6 +52,7 @@ shadow {
 	destinationDir = "${buildDir}/libs/"
 	artifactSet {
         include 'com.google.code.gson'
+		include 'org.apache.logging.log4j'
     }
 }
 task deleteOrig(type: Delete) {
@@ -120,6 +121,7 @@ dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.mojang:authlib:1.4.2'
+    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 
 	}
 
