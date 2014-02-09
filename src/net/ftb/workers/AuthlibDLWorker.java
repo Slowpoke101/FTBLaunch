@@ -76,19 +76,67 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         }
         setStatus("Adding Authlib to Classpath");
         Logger.logInfo("Adding Authlib to Classpath");
-        return addToClasspath(binDir + "authlib" + authlibVersion + ".jar");
+        return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
     }
 
     protected boolean addToClasspath (String location)
     {
-        return addSoftwareLibrary(new File(location));
+        CustomCL sysLoader;
+        URL u;
+        Class sysclass;
+        Class[] parameters;
+
+        try
+        {
+            //Cast down the classloader to urlclassloader and call addURL
+            URL urls[] = {};
+           // addURL(new URL("file://" + location));
+            sysLoader = new CustomCL(urls);//(CustomCL) (URLClassLoader) ClassLoader.getSystemClassLoader();
+             //           System.out.println("Loading file from " + u.toExternalForm());
+            sysLoader.addURL(new URL("file://" + location));
+            sysLoader.loadClass("com.mojang.authlib.exceptions.AuthenticationException");
+            /*sysclass = URLClassLoader.class;
+            parameters = new Class[] { URL.class };
+            Method method = sysclass.getDeclaredMethod("addURL", parameters);
+            method.setAccessible(true);
+            method.invoke(sysLoader,  u);*/
+            Class C = Class.forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
+
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace(System.err);
+            return false;
+        }
+        return true;
+
+        //return addSoftwareLibrary(new File(location));
     }
+
+    public static void addURL (URL u) throws IOException
+    {
+        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class sysclass = URLClassLoader.class;
+        try
+        {
+            Method method = sysclass.getDeclaredMethod("addURL",  new Class[] { URL.class });
+            method.setAccessible(true);
+            method.invoke(sysloader, new Object[] { u });
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            throw new IOException("Error, could not add URL to system classloader");
+        }// end try catch
+    }// end method
 
     private static boolean addSoftwareLibrary (File file)
     {
+
         Method method;
         try
         {
+
             method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
             method.invoke(ClassLoader.getSystemClassLoader(), new Object[] { file.toURI().toURL() });

@@ -46,11 +46,27 @@ public class LoginWorker extends SwingWorker<String, Void>
     {
         try
         {
+            Logger.logError("BG");
+
             String authlibreturn = new String();
             if (LaunchFrame.canUseAuthlib)
-                authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
+            {
+                Logger.logError("canAL");
+                try
+                {
+                    authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
+                }
+                catch (Exception e)
+                {
+                    Logger.logError("Error using authlib");
+                }
+            }
             if (!authlibreturn.equals(null) && !authlibreturn.isEmpty())
+            {
+                Logger.logError("using AL return");
+
                 return authlibreturn;
+            }
             else
                 Logger.logError("Failed to use Mojang's authentication library, falling back on old method.");
             return AppUtils.downloadString(new URL("https://login.minecraft.net/?user=" + URLEncoder.encode(username, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&version=13"));
@@ -61,4 +77,8 @@ public class LoginWorker extends SwingWorker<String, Void>
             return "";
         }
     }
+
+   
+      
+
 }
