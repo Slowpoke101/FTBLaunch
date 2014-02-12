@@ -21,6 +21,8 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -130,6 +132,34 @@ public class LauncherConsole extends JFrame implements ILogListener {
 			}
 		});
 		panel.add(pastebin);
+
+
+        JButton clipboard = new JButton("Copy log to clipboard");
+        clipboard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                JOptionPane pane = new JOptionPane("Do you want to copy the full log to your clipboard?");
+                Object[] options = new String[] { "Yes do it", "Cancel" };
+                pane.setOptions(options);
+                JDialog dialog = pane.createDialog(new JFrame(), "Copy to log clipboard");
+                dialog.setVisible(true);
+                Object obj = pane.getValue();
+                int result = -1;
+                for(int i = 0; i < options.length; i++) {
+                    if (options[i].equals(obj)) {
+                        result = i;
+                    }
+                }
+                if(result == 0) {
+                    StringSelection stringSelection = new StringSelection(Logger.getLogs());
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(stringSelection, null);
+                }
+            }
+        });
+        panel.add(clipboard);
+
+
 
 		logTypeComboBox = new JComboBox(LogType.values());
 		logTypeComboBox.setSelectedItem(logType);
