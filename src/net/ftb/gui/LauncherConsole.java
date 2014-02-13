@@ -44,6 +44,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.ftb.locale.I18N;
 import net.ftb.data.Settings;
 import net.ftb.log.ILogListener;
 import net.ftb.log.LogEntry;
@@ -134,14 +135,14 @@ public class LauncherConsole extends JFrame implements ILogListener {
 		panel.add(pastebin);
 
 
-        JButton clipboard = new JButton("Copy log to clipboard");
+        JButton clipboard = new JButton(I18N.getLocaleString("CONSOLE_COPYCLIP"));
         clipboard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                JOptionPane pane = new JOptionPane("Do you want to copy the full log to your clipboard?");
-                Object[] options = new String[] { "Yes do it", "Cancel" };
+                JOptionPane pane = new JOptionPane(I18N.getLocaleString("CONSOLE_CLIP_CONFIRM"));
+                Object[] options = new String[] { I18N.getLocaleString("MAIN_YES"), I18N.getLocaleString("MAIN_CANCEL") };
                 pane.setOptions(options);
-                JDialog dialog = pane.createDialog(new JFrame(), "Copy to log clipboard");
+                JDialog dialog = pane.createDialog(new JFrame(), I18N.getLocaleString("CONSOLE_COPYCLIP"));
                 dialog.setVisible(true);
                 Object obj = pane.getValue();
                 int result = -1;
