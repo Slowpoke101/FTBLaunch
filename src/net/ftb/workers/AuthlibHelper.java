@@ -17,6 +17,7 @@ public class AuthlibHelper
         String ID, displayName;
         if (user != null)
         {
+            Logger.logInfo("Beginning authlib authentication attempt");
             YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
@@ -51,7 +52,8 @@ public class AuthlibHelper
                 {
                     if ((authentication instanceof YggdrasilUserAuthentication))
                     {                        
-                        return String.format("token:%s:%s", new Object[] { authentication.getAuthenticatedToken(), authentication.getSelectedProfile().getId() });
+                        
+                        return String.format("%s:token:%s:%s:%s", new Object[] {authentication.getAgent().getVersion(), authentication.getAvailableProfiles()[0].getName(), authentication.getAuthenticatedToken(), authentication.getSelectedProfile().getId()});
                     }
                 }
             }

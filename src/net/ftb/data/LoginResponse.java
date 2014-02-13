@@ -17,21 +17,24 @@
 package net.ftb.data;
 
 public class LoginResponse {
-	private String latestVersion, downloadTicket, username, sessionID;
-
+	private String latestVersion, downloadTicket, username, sessionID, type, uuid;
+	
 	/**
 	 * Constructor for LoginResponse class
 	 * @param responseString - the response from the minecraft server
 	 */
 	public LoginResponse(String responseString) {
 		String[] responseValues = responseString.split(":");
-		if (responseValues.length < 4) {
+		if (responseValues.length < 5) {
 			throw new IllegalArgumentException("Invalid response string.");
 		} else {
-			this.latestVersion = responseValues[0];
-			this.downloadTicket = responseValues[1];
-			this.username = responseValues[2];
-			this.sessionID = responseValues[3];
+		    //System.out.println(responseString);
+		    this.type = responseValues[0];
+			this.latestVersion = responseValues[1];
+            this.downloadTicket = responseValues[2];
+            this.username = responseValues[3];
+            this.sessionID = responseValues[4]; 
+            this.uuid = responseValues[5];
 		}
 	}
 
@@ -66,4 +69,12 @@ public class LoginResponse {
 	public String getSessionID() {
 		return sessionID;
 	}
+	
+	   /**
+     * Used to grab the user's uuid from response string
+     * @return - the uuid of the user
+     */
+	public String getUUID() {
+        return uuid;
+    }
 }
