@@ -51,7 +51,7 @@ public class LoginWorker extends SwingWorker<String, Void>
             {
                 try
                 {
-                  // authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
+                  authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
                 }
                 catch (Exception e)
                 {
@@ -60,7 +60,7 @@ public class LoginWorker extends SwingWorker<String, Void>
             }
             if (!authlibreturn.equals(null) && !authlibreturn.isEmpty())
             {
-                Logger.logError("using Authlib return");
+                Logger.logInfo("using Authlib authentication data");
                 return "A:" + authlibreturn;
             }
             else
