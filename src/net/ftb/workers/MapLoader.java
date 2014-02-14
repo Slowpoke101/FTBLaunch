@@ -54,8 +54,7 @@ public class MapLoader extends Thread {
                         i));
             }
             MapsPane.loaded = true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }

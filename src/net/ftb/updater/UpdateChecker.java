@@ -42,8 +42,7 @@ public class UpdateChecker {
         loadInfo();
         try {
             FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             Logger.logError(ignored.getMessage(), ignored);
         }
     }
@@ -62,8 +61,7 @@ public class UpdateChecker {
             }
             verString += temp[temp.length - 1];
             downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }
@@ -77,8 +75,7 @@ public class UpdateChecker {
         try {
             path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Couldn't get path to current launcher jar/exe", e);
         }
         String temporaryUpdatePath = OSUtils.getDynamicStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
@@ -90,8 +87,7 @@ public class UpdateChecker {
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);
             SelfUpdate.runUpdate(path, temporaryUpdatePath);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }

@@ -146,12 +146,10 @@ public class Map {
             tempImg = ImageIO.read(url_);
             ImageIO.write(tempImg, "png", new File(tempDir, image));
             tempImg.flush();
-        }
-        else {
+        } else {
             if (new File(tempDir, logo).exists()) {
                 this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
-            }
-            else {
+            } else {
                 url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
                 this.logo = Toolkit.getDefaultToolkit().createImage(url_);
                 BufferedImage tempImg = ImageIO.read(url_);
@@ -160,8 +158,7 @@ public class Map {
             }
             if (new File(tempDir, image).exists()) {
                 this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
-            }
-            else {
+            } else {
                 url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
                 this.image = Toolkit.getDefaultToolkit().createImage(url_);
                 BufferedImage tempImg = ImageIO.read(url_);
@@ -194,8 +191,7 @@ public class Map {
                 result = false;
             }
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
         }
         return result;

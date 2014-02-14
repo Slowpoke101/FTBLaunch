@@ -42,8 +42,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
         super();
         if (OSUtils.getCurrentOS() == OS.WINDOWS) {
             setBorder(new EmptyBorder(-5, -25, -5, 12));
-        }
-        else {
+        } else {
             setBorder(new EmptyBorder(-4, -25, -4, -2));
         }
         setLayout(new BorderLayout());
@@ -56,8 +55,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
                 if (arg0.getEventType() == EventType.ACTIVATED) {
                     try {
                         OSUtils.browse(arg0.getURL().toString());
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }
                 }
@@ -76,8 +74,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             Settings.getSettings().setNewsDate();
             Settings.getSettings().save();
             LaunchFrame.getInstance().setNewsIcon();
-        }
-        catch (IOException e1) {
+        } catch (IOException e1) {
             Logger.logError(e1.getMessage(), e1);
         }
     }

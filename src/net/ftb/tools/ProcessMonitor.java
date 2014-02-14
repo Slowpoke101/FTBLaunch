@@ -33,8 +33,7 @@ public class ProcessMonitor implements Runnable {
     public void run () {
         try {
             proc.waitFor();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             Logger.logError(e.getMessage(), e);
         }
         complete = true;

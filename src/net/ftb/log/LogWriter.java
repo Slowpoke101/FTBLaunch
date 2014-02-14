@@ -37,8 +37,7 @@ public class LogWriter implements ILogListener {
             try {
                 logWriter.write(entry.toString(LogType.EXTENDED) + System.getProperty("line.separator"));
                 logWriter.flush();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
             }
         }

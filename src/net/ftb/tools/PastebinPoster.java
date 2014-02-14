@@ -69,46 +69,38 @@ public class PastebinPoster extends Thread {
                         Desktop desktop = Desktop.getDesktop();
                         try {
                             desktop.browse(new URI(result.trim()));
-                        }
-                        catch (Exception exc) {
+                        } catch (Exception exc) {
                             Logger.logError("Could not open url: " + exc.getMessage());
                         }
-                    }
-                    else {
+                    } else {
                         Logger.logWarn("Could not open url, not supported");
                     }
-                }
-                else {
+                } else {
                     String err = result.trim();
                     if (err.length() > 100) {
                         err = err.substring(0, 100);
                     }
                     Logger.logError(err);
                 }
-            }
-            else {
+            } else {
                 Logger.logError("didn't get a 200 response code!");
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage());
-        }
-        finally {
+        } finally {
             if (conn != null) {
                 conn.disconnect();
             }
             if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException ignored) {
+                } catch (IOException ignored) {
                 }
             }
             if (out != null) {
                 try {
                     out.close();
-                }
-                catch (IOException ignored) {
+                } catch (IOException ignored) {
                 }
             }
         }

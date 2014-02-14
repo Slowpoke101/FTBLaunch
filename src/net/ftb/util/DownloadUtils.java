@@ -58,13 +58,11 @@ public class DownloadUtils extends Thread {
                 if (connection.getResponseCode() != 200) {
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
-                }
-                else {
+                } else {
                     break;
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
         }
         connection.disconnect();
         return resolved;
@@ -86,14 +84,12 @@ public class DownloadUtils extends Thread {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
         }
         connection.disconnect();
         return resolved;
@@ -107,8 +103,7 @@ public class DownloadUtils extends Thread {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
             return !reader.readLine().toLowerCase().contains("not found");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -121,8 +116,7 @@ public class DownloadUtils extends Thread {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/FTB2/" + file).openStream()));
             return !reader.readLine().toLowerCase().contains("not found");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -201,10 +195,8 @@ public class DownloadUtils extends Thread {
                     }
                 }
             }
-        }
-        catch (IOException e) {
-        }
-        finally {
+        } catch (IOException e) {
+        } finally {
             connection.disconnect();
             if (scanner != null) {
                 scanner.close();
@@ -238,8 +230,7 @@ public class DownloadUtils extends Thread {
         MessageDigest dgest = null;
         try {
             dgest = MessageDigest.getInstance(type);
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
         }
         InputStream str = fileUrl.openStream();
         byte[] buffer = new byte[65536];
@@ -279,16 +270,13 @@ public class DownloadUtils extends Thread {
                 }
             }
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
-        }
-        finally {
+        } finally {
             if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                 }
             }
         }
@@ -304,16 +292,13 @@ public class DownloadUtils extends Thread {
                 }
             }
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
-        }
-        finally {
+        } finally {
             if (in != null) {
                 try {
                     in.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                 }
             }
         }

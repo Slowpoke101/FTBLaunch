@@ -65,8 +65,7 @@ public class PrivatePackDialog extends JDialog {
                     Settings.getSettings().addPrivatePack(modpackName.getText());
                     Settings.getSettings().save();
                     setVisible(false);
-                }
-                else {
+                } else {
                     ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ERROR"));
                 }
             }
@@ -96,15 +95,13 @@ public class PrivatePackDialog extends JDialog {
                         ModPack.removePacks(modpackName.getText() + ".xml");
                         FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "ModPacks/" + modpackName.getText() + ".xml"));
                         LaunchFrame.getInstance().modPacksPane.sortPacks();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     Logger.logInfo(modpackName.getText() + " " + I18N.getLocaleString("PRIVATEPACK_SECCESS"));
                     modpackName.setText("");
                     setVisible(false);
-                }
-                else {
+                } else {
                     Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS"));
                 }
             }

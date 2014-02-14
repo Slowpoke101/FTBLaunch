@@ -85,8 +85,7 @@ public class ModManager extends JDialog {
                     //clearModsFolder(pack);
                     erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return true;
@@ -102,8 +101,7 @@ public class ModManager extends JDialog {
 
             try {
                 fout = new FileOutputStream(filename);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Logger.logError("Failed opening output file: " + filename);
                 return null;
@@ -137,12 +135,10 @@ public class ModManager extends JDialog {
                     in = new BufferedInputStream(connection.getInputStream());
                     if (modPackSize == 0) {
                         modPackSize = connection.getContentLength();
-                    }
-                    else {
+                    } else {
                         if (amount + connection.getContentLength() != modPackSize) {
                             throw new IOException("Resume failed");
-                        }
-                        else {
+                        } else {
                             Logger.logInfo("Resume started sucessfully");
                         }
                     }
@@ -168,11 +164,9 @@ public class ModManager extends JDialog {
                             });
                         }
                     }
-                }
-                catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -183,8 +177,7 @@ public class ModManager extends JDialog {
                     if (connection != null) {
                         connection.disconnect();
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             } while (amount < modPackSize && (amount > startAmount || retryCount-- > 0));
@@ -194,8 +187,7 @@ public class ModManager extends JDialog {
                     fout.flush();
                     fout.close();
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return md5;
@@ -228,25 +220,21 @@ public class ModManager extends JDialog {
                     try {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
-                    }
-                    catch (NoSuchAlgorithmException e) {
+                    } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     String animation = pack.getAnimation();
                     if (!animation.equalsIgnoreCase("empty")) {
                         try {
                             downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
-                        }
-                        catch (NoSuchAlgorithmException e) {
+                        } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
                         }
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Logger.logError("Error validating pack archive");
             }
 
@@ -275,13 +263,11 @@ public class ModManager extends JDialog {
                         Logger.logInfo(debugTag + "Pack extracted, version tagged.");
                     }
                     return true;
-                }
-                else {
+                } else {
                     ErrorUtils.tossError("Error downloading modpack!!!");
                     return false;
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return false;
@@ -350,13 +336,11 @@ public class ModManager extends JDialog {
                 Logger.logInfo("Modpack is out of date.");
                 curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
                 return false;
-            }
-            else {
+            } else {
                 Logger.logInfo("Modpack is up to date.");
                 return true;
             }
-        }
-        else if (Integer.parseInt(pack.getVersion().replace(".", "")) > currentVersion) {
+        } else if (Integer.parseInt(pack.getVersion().replace(".", "")) > currentVersion) {
             Logger.logInfo("Modpack is out of date.");
             if (LaunchFrame.allowVersionChange) {
                 curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion().replace(".", "_") : Settings.getSettings().getPackVer())
@@ -377,8 +361,7 @@ public class ModManager extends JDialog {
             }
             curVersion = pack.getVersion().replace(".", "_");
             return false;
-        }
-        else {
+        } else {
             Logger.logInfo("Modpack is up to date.");
             return true;
         }
@@ -392,12 +375,10 @@ public class ModManager extends JDialog {
                 try {
                     if (Settings.getSettings().getDebugLauncher() || file.endsWith(".zip")) {
                         Logger.logInfo("debug: retaining modpack file: " + tempFolder + File.separator + file);
-                    }
-                    else {
+                    } else {
                         FileUtils.delete(new File(tempFolder, file));
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Logger.logError(e.getMessage(), e);
                 }
             }
@@ -425,8 +406,7 @@ public class ModManager extends JDialog {
                         boolean b = FileUtils.delete(new File(folder, file));
                         if (!b)
                             Logger.logInfo("Error deleting " + file);
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
 
                     }

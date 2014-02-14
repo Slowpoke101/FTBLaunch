@@ -17,8 +17,7 @@ public class Library {
             _applies = Action.DISALLOW;
             if (rules == null) {
                 _applies = Action.ALLOW;
-            }
-            else {
+            } else {
                 for (OSRule rule : rules) {
                     if (rule.applies())
                         _applies = rule.action;

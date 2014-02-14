@@ -80,8 +80,7 @@ public class User implements Serializable {
         _password = password;
         if (_password.isEmpty()) {
             _encryptedPassword = "";
-        }
-        else {
+        } else {
             _encryptedPassword = CryptoUtils.encrypt(_password, OSUtils.getMacAddress());
         }
     }
@@ -104,8 +103,7 @@ public class User implements Serializable {
         s.defaultReadObject();
         if (!_encryptedPassword.isEmpty()) {
             _password = CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
-        }
-        else {
+        } else {
             _password = "";
         }
     }

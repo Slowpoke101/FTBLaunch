@@ -84,11 +84,9 @@ public class AppUtils {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         try {
             return docFactory.newDocumentBuilder().parse(stream);
-        }
-        catch (ParserConfigurationException ignored) {
+        } catch (ParserConfigurationException ignored) {
             Logger.logError(ignored.getMessage(), ignored);
-        }
-        catch (UnknownHostException e) {
+        } catch (UnknownHostException e) {
             Logger.logError(e.getMessage(), e);
         }
         return null;

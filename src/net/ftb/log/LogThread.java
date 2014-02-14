@@ -36,8 +36,7 @@ public class LogThread extends Thread {
             while ((entry = logQueue.take()) != null) {
                 if (listeners.isEmpty()) {
                     (entry.level == LogLevel.ERROR ? System.err : System.out).println(entry.toString(LogType.EXTENDED));
-                }
-                else {
+                } else {
                     List<ILogListener> tempListeners = new ArrayList<ILogListener>();
                     tempListeners.addAll(listeners);
                     for (ILogListener listener : tempListeners) {
@@ -45,16 +44,14 @@ public class LogThread extends Thread {
                     }
                 }
             }
-        }
-        catch (InterruptedException ignored) {
+        } catch (InterruptedException ignored) {
         }
     }
 
     public void handleLog (LogEntry logEntry) {
         try {
             logQueue.put(logEntry);
-        }
-        catch (InterruptedException ignored) {
+        } catch (InterruptedException ignored) {
             Logger.logError(ignored.getMessage(), ignored);
         }
     }

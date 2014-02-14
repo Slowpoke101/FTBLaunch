@@ -78,8 +78,7 @@ public class MinecraftLauncherNew {
                     if (OSUtils.getOSTotalMemory() > 2046) {
                         maxPermSize = "192m";
                         Logger.logInfo("Defaulting PermSize to 192m");
-                    }
-                    else {
+                    } else {
                         maxPermSize = "128m";
                         Logger.logInfo("Defaulting PermSize to 128m");
                     }
@@ -149,8 +148,7 @@ public class MinecraftLauncherNew {
                 Logger.logInfo("Setting MaxMemory to " + rmax);
                 memorySet = true;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Error parsing memory settings", e);
         }
         if (!memorySet) {
@@ -192,8 +190,7 @@ public class MinecraftLauncherNew {
             for (int i = 0; i < classPathFiles.size(); i++) {
                 try {
                     urls[i] = classPathFiles.get(i).toURI().toURL();
-                }
-                catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 System.out.println("Added URL to classpath: " + urls[i].toString());
@@ -240,13 +237,11 @@ public class MinecraftLauncherNew {
                 Applet mcappl = (Applet) MCAppletClass.newInstance();
                 MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, animationname);
                 mcWindow.start(mcappl, username, password);
-            }
-            catch (InstantiationException e) {
+            } catch (InstantiationException e) {
                 Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
                 mc.getMethod("main", String[].class).invoke(null, (Object) new String[] { username, password });
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             Logger.logError("Unhandled error launching minecraft", t);
         }
     }
@@ -273,8 +268,7 @@ public class MinecraftLauncherNew {
             if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
                 Logger.logInfo("  Changed: " + e.getKey());
                 FileUtils.copyFile(object, local, true);
-            }
-            else if (!local.exists()) {
+            } else if (!local.exists()) {
                 Logger.logInfo("  Added: " + e.getKey());
                 FileUtils.copyFile(object, local);
             }

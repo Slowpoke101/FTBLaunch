@@ -115,23 +115,19 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         String vmType = new String();
         if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null) {
             vmType = JavaFinder.parseWinJavaVersion().is64bits ? "64" : "32";
-        }
-        else {
+        } else {
             vmType = System.getProperty("sun.arch.data.model");
         }
         if (vmType != null) {
             if (vmType.equals("64")) {
                 ramMaximum.setMaximum((int) ram);
-            }
-            else if (vmType.equals("32")) {
+            } else if (vmType.equals("32")) {
                 if (ram < 1024) {
                     ramMaximum.setMaximum((int) ram);
-                }
-                else {
+                } else {
                     if (freeram > 2046) {
                         ramMaximum.setMaximum(1536);
-                    }
-                    else {
+                    } else {
                         ramMaximum.setMaximum(1024);
                     }
                 }
@@ -202,12 +198,10 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                                 Desktop desktop = Desktop.getDesktop();
                                 try {
                                     desktop.browse(new URI("http://javadl.sun.com/webapps/download/AutoDL?BundleId=81821"));
-                                }
-                                catch (Exception exc) {
+                                } catch (Exception exc) {
                                     Logger.logError("Could not open url: " + exc.getMessage());
                                 }
-                            }
-                            else {
+                            } else {
                                 Logger.logWarn("Could not open Java Download url, not supported");
                             }
                         }

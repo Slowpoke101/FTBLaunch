@@ -50,8 +50,7 @@ public class UserManager {
             for (User user : _users) {
                 objectOutputStream.writeObject(user);
             }
-        }
-        finally {
+        } finally {
             objectOutputStream.close();
             fileOutputStream.close();
         }
@@ -78,15 +77,12 @@ public class UserManager {
                         _users.add((User) obj);
                     }
                 }
-            }
-            catch (EOFException ignored) {
-            }
-            finally {
+            } catch (EOFException ignored) {
+            } finally {
                 objectInputStream.close();
                 fileInputStream.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Failed to decode logindata", e);
         }
 
@@ -104,8 +100,7 @@ public class UserManager {
                     _users.add(new User(str));
                 }
                 read.close();
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Logger.logError(ex.getMessage(), ex);
             }
         }

@@ -38,12 +38,10 @@ public abstract class AnalyticsDispatcher {
             try {
                 Long time = Long.valueOf(Long.parseLong(timeDispatched));
                 analyticsString = analyticsString + "&utmqt=" + (System.currentTimeMillis() - time.longValue());
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 Logger.logError("Error parsing utmht parameter: ", e);
             }
-        }
-        else {
+        } else {
             Logger.logWarn("Unable to find utmht parameter: " + analyticsString);
         }
         dispatchToNetwork(analyticsString);

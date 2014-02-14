@@ -54,8 +54,7 @@ public class TexturePackLoader extends Thread {
                         textureAttr.getNamedItem("resolution").getTextContent(), i));
             }
             TexturepackPane.loaded = true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }

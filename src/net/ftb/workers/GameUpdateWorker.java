@@ -102,8 +102,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
             default:
                 return false;
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             Logger.logError(e.getMessage(), e);
             return false;
         }
@@ -117,8 +116,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
             try {
                 fileSizes[i] = jarURLs[i].openConnection().getContentLength();
                 totalDownloadSize += fileSizes[i];
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
@@ -157,8 +155,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                         int prog = (int) ((totalDownloadedSize / totalDownloadSize) * 100);
                         if (prog > 100) {
                             prog = 100;
-                        }
-                        else if (prog < 0) {
+                        } else if (prog < 0) {
                             prog = 0;
                         }
                         setProgress(prog);
@@ -168,8 +165,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                     if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[i] || fileSizes[i] <= 0)) {
                         downloadSuccess = true;
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     downloadSuccess = false;
                     Logger.logWarn("Connection failed, trying again");
                 }
@@ -209,17 +205,14 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                 outStream.close();
                 currentEntry = zipIn.getNextEntry();
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
             return false;
-        }
-        finally {
+        } finally {
             try {
                 zipIn.close();
                 input.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
             }
         }

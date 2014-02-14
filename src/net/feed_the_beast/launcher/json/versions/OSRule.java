@@ -21,8 +21,7 @@ public class OSRule {
                 if (!Pattern.compile(os.version).matcher(OS.VERSION).matches()) {
                     return false;
                 }
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
             }
         }
         return true;

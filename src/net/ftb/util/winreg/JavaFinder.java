@@ -36,8 +36,7 @@ public class JavaFinder {
                     result.add(val + "\\bin\\java.exe");
                 }
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return result;
@@ -127,8 +126,7 @@ public class JavaFinder {
 
         if (preferred != null) {
             return preferred;
-        }
-        else {
+        } else {
             Logger.logError("No Java versions found!");
             return null;
         }

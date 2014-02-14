@@ -172,8 +172,7 @@ public class ModPack {
         this.maxPermSize = maxPermSize;
         if (!animation.isEmpty()) {
             this.animation = animation;
-        }
-        else {
+        } else {
             this.animation = "empty";
         }
         logoName = logo;
@@ -181,14 +180,12 @@ public class ModPack {
         this.info = info;
         if (mods.isEmpty()) {
             this.mods = null;
-        }
-        else {
+        } else {
             this.mods = mods.split("; ");
         }
         if (oldVersions.isEmpty()) {
             this.oldVersions = null;
-        }
-        else {
+        } else {
             this.oldVersions = oldVersions.split(";");
         }
         String installPath = OSUtils.getDynamicStorageLocation();
@@ -206,12 +203,10 @@ public class ModPack {
             tempImg = ImageIO.read(url_);
             ImageIO.write(tempImg, "png", new File(tempDir, image));
             tempImg.flush();
-        }
-        else {
+        } else {
             if (new File(tempDir, logo).exists()) {
                 this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
-            }
-            else {
+            } else {
                 url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
                 this.logo = Toolkit.getDefaultToolkit().createImage(url_);
                 BufferedImage tempImg = ImageIO.read(url_);
@@ -220,8 +215,7 @@ public class ModPack {
             }
             if (new File(tempDir, image).exists()) {
                 this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
-            }
-            else {
+            } else {
                 url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
                 this.image = Toolkit.getDefaultToolkit().createImage(url_);
                 BufferedImage tempImg = ImageIO.read(url_);
@@ -250,8 +244,7 @@ public class ModPack {
                 out.flush();
                 out.close();
                 return false;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
@@ -277,8 +270,7 @@ public class ModPack {
                 result = line;
             }
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
         }
         return result;

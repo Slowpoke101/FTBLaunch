@@ -47,16 +47,13 @@ public class I18N {
         if (file.equalsIgnoreCase("enUS")) {
             try {
                 locales.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError("[i18n] Could not load language file", e);
             }
-        }
-        else {
+        } else {
             try {
                 locales.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logWarn("[i18n] Could not load language file", e);
             }
         }
@@ -72,8 +69,7 @@ public class I18N {
         }
         try {
             new LocaleUpdater().start();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }
@@ -97,8 +93,7 @@ public class I18N {
                         }
                         i++;
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Logger.logWarn("[i18n] Could not load language file", e);
                 }
             }
@@ -107,8 +102,7 @@ public class I18N {
             fallback.clear();
             fallback.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
             Logger.logInfo("[i18n] Fallback enUS loaded");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("[i18n] Could not load fallback file", e);
         }
     }
@@ -121,12 +115,10 @@ public class I18N {
         if (locale == null) {
             locale = "enUS";
             currentLocale = Locale.enUS;
-        }
-        else {
+        } else {
             try {
                 currentLocale = Locale.valueOf(locale);
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 Logger.logWarn("[i18n] Unknown locale " + locale + ". Loaded enUs");
                 currentLocale = Locale.enUS;
             }

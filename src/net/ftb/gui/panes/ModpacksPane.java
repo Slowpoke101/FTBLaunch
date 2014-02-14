@@ -208,15 +208,13 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
                                 if (ModPack.getSelectedPack().isPrivatePack()) {
                                     OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E"
                                             + ModPack.getSelectedPack().getServerUrl()));
-                                }
-                                else {
+                                } else {
                                     OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E"
                                             + ModPack.getSelectedPack().getServerUrl()));
                                 }
                                 TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
                             }
-                        }
-                        catch (NoSuchAlgorithmException e) {
+                        } catch (NoSuchAlgorithmException e) {
                         }
                     }
                 }
@@ -300,8 +298,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         if (currentPacks.isEmpty()) {
             packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
             packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
-        }
-        else {
+        } else {
             packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
             packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
         }
@@ -317,8 +314,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack.getName() + ")");
         if (!currentPacks.isEmpty()) {
             sortPacks();
-        }
-        else {
+        } else {
             updatePacks();
         }
     }
@@ -364,8 +360,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
                     if (ModPack.getSelectedPack().getServerUrl().equals("") || ModPack.getSelectedPack().getServerUrl() == null) {
                         server.setEnabled(false);
-                    }
-                    else {
+                    } else {
                         server.setEnabled(true);
                     }
                     String tempVer = Settings.getSettings().getPackVer();
@@ -378,8 +373,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
                         version.setSelectedItem(tempVer);
                     }
                 }
-            }
-            else {
+            } else {
                 packPanels.get(i).setBackground(UIManager.getColor("control"));
                 packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
@@ -415,8 +409,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         if (I18N.currentLocale == Locale.deDE) {
             editModPack.setBounds(290, 5, 120, 25);
             typeLbl.setBounds(115, 5, 165, 25);
-        }
-        else {
+        } else {
             editModPack.setBounds(300, 5, 110, 25);
             typeLbl.setBounds(115, 5, 175, 25);
         }

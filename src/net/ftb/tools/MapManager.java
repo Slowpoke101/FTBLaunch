@@ -65,8 +65,7 @@ public class MapManager extends JDialog {
                 dialog.setVisible(true);
                 if (overwrite) {
                     FileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
-                }
-                else {
+                } else {
                     Logger.logInfo("Canceled map installation.");
                     return false;
                 }
@@ -106,8 +105,7 @@ public class MapManager extends JDialog {
                         });
                     }
                 }
-            }
-            finally {
+            } finally {
                 in.close();
                 fout.flush();
                 fout.close();
@@ -184,8 +182,7 @@ public class MapManager extends JDialog {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
                 try {
                     FileUtils.delete(new File(tempFolder, file));
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Logger.logError(e.getMessage(), e);
                 }
             }

@@ -53,8 +53,7 @@ public class OSUtils {
             File jarFile;
             jarFile = new File(codeSource.getLocation().toURI().getPath());
             return jarFile.getParentFile().getPath();
-        }
-        catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             Logger.logError(e.getMessage(), e);
         }
         Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
@@ -89,13 +88,11 @@ public class OSUtils {
             Object value = m.invoke(operatingSystemMXBean);
             if (value != null) {
                 ram = Long.valueOf(value.toString()) / 1024 / 1024;
-            }
-            else {
+            } else {
                 Logger.logWarn("Could not get RAM Value");
                 ram = 1024;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
 
@@ -113,13 +110,11 @@ public class OSUtils {
             Object value = m.invoke(operatingSystemMXBean);
             if (value != null) {
                 ram = Long.valueOf(value.toString()) / 1024 / 1024;
-            }
-            else {
+            } else {
                 Logger.logWarn("Could not get free RAM Value");
                 ram = 1024;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
 
@@ -151,14 +146,11 @@ public class OSUtils {
         String osString = System.getProperty("os.name").toLowerCase();
         if (osString.contains("win")) {
             return OS.WINDOWS;
-        }
-        else if (osString.contains("nix") || osString.contains("nux")) {
+        } else if (osString.contains("nix") || osString.contains("nux")) {
             return OS.UNIX;
-        }
-        else if (osString.contains("mac")) {
+        } else if (osString.contains("mac")) {
             return OS.MACOSX;
-        }
-        else {
+        } else {
             return OS.OTHER;
         }
     }
@@ -192,8 +184,7 @@ public class OSUtils {
                     return cachedMacAddress;
                 }
             }
-        }
-        catch (SocketException e) {
+        } catch (SocketException e) {
             Logger.logWarn("Exception getting MAC address", e);
         }
 
@@ -209,15 +200,13 @@ public class OSUtils {
         try {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(new URI(url));
-            }
-            else if (getCurrentOS() == OS.UNIX) {
+            } else if (getCurrentOS() == OS.UNIX) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
                 if (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists()) {
                     new ProcessBuilder("xdg-open", url).start();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Could not open link", e);
         }
     }
@@ -233,15 +222,13 @@ public class OSUtils {
         try {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(path);
-            }
-            else if (getCurrentOS() == OS.UNIX) {
+            } else if (getCurrentOS() == OS.UNIX) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
                 if (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists()) {
                     new ProcessBuilder("xdg-open", path.toString()).start();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Could not open file", e);
         }
     }

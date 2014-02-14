@@ -53,8 +53,7 @@ public class AWTSystemPopulator {
                 }
                 data.setColorDepth(colorDepth);
             }
-        }
-        catch (HeadlessException e) {
+        } catch (HeadlessException e) {
             data.setScreenResolution("NA");
             data.setColorDepth("NA");
         }

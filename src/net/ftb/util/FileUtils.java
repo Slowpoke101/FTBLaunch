@@ -59,8 +59,7 @@ public class FileUtils {
                 File destFile = new File(destinationFolder, file);
                 copyFolder(srcFile, destFile, overwrite);
             }
-        }
-        else {
+        } else {
             copyFile(sourceFolder, destinationFolder, overwrite);
         }
     }
@@ -79,16 +78,14 @@ public class FileUtils {
             if (!destinationFile.exists()) {
                 destinationFile.getParentFile().mkdirs();
                 destinationFile.createNewFile();
-            }
-            else if (!overwrite)
+            } else if (!overwrite)
                 return;
             FileChannel sourceStream = null, destinationStream = null;
             try {
                 sourceStream = new FileInputStream(sourceFile).getChannel();
                 destinationStream = new FileOutputStream(destinationFile).getChannel();
                 destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
-            }
-            finally {
+            } finally {
                 if (sourceStream != null) {
                     sourceStream.close();
                 }
@@ -139,16 +136,13 @@ public class FileUtils {
                 zipinputstream.closeEntry();
                 zipentry = zipinputstream.getNextEntry();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
             backupExtract(zipLocation, outputLocation);
-        }
-        finally {
+        } finally {
             try {
                 zipinputstream.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
         }
     }
@@ -179,16 +173,13 @@ public class FileUtils {
                 }
                 ze = zis.getNextEntry();
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.logError(ex.getMessage(), ex);
-        }
-        finally {
+        } finally {
             try {
                 zis.closeEntry();
                 zis.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
         }
     }
@@ -225,11 +216,9 @@ public class FileUtils {
                 return;
             }
             outputTmpFile.renameTo(inputFile);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Logger.logError(e.getMessage(), e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
         }
     }

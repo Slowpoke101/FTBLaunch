@@ -27,8 +27,7 @@ public class LoginResponse {
         String[] responseValues = responseString.split(":");
         if (responseValues.length < 5) {
             throw new IllegalArgumentException("Invalid response string.");
-        }
-        else {
+        } else {
             //System.out.println(responseString);
             this.type = responseValues[0];
             this.latestVersion = responseValues[1];

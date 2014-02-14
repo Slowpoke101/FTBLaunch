@@ -37,8 +37,7 @@ public class URIEncoder {
             char c = chars[i];
             if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || mark.indexOf(c) != -1) {
                 uri.append(c);
-            }
-            else {
+            } else {
                 uri.append("%");
                 uri.append(Integer.toHexString((int) c));
             }

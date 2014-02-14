@@ -52,23 +52,20 @@ public class ModpackLoader extends Thread {
             try {
                 modPackFile.getParentFile().mkdirs();
                 DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logWarn("Failed to load modpacks, loading from backup", e);
             }
             Logger.logInfo("Loading modpack information for " + xmlFile + "...");
             InputStream modPackStream = null;
             try {
                 modPackStream = new FileInputStream(modPackFile);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
             }
             if (modPackStream == null) {
                 try {
                     modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)).openStream();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Logger.logError("Completely unable to download the modpack file - check your connection", e);
                 }
             }
@@ -76,8 +73,7 @@ public class ModpackLoader extends Thread {
                 Document doc;
                 try {
                     doc = AppUtils.getXML(modPackStream);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Logger.logError("Exception reading modpack file", e);
                     return;
                 }
@@ -97,15 +93,13 @@ public class ModpackLoader extends Thread {
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
                                 .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()), privatePack, xmlFile));
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }
                 }
                 try {
                     modPackStream.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                 }
             }
         }

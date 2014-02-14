@@ -213,8 +213,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
         if (origin.equalsIgnoreCase("all")) {
             maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
             maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-        }
-        else {
+        } else {
             maps.setMinimumSize(new Dimension(420, (currentMaps.size() * 55)));
             maps.setPreferredSize(new Dimension(420, (currentMaps.size() * 55)));
         }
@@ -276,8 +275,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
                 mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + Map.getMap(getIndex()).getInfo() + packs);
                 mapInfo.setCaretPosition(0);
-            }
-            else {
+            } else {
                 mapPanels.get(i).setBackground(UIManager.getColor("control"));
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }

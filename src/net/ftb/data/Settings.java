@@ -48,8 +48,7 @@ public class Settings extends Properties {
     static {
         try {
             settings = new Settings(new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg"));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Failed to load settings", e);
         }
     }
@@ -62,8 +61,7 @@ public class Settings extends Properties {
         configFile = file;
         if (file.exists()) {
             load(new FileInputStream(file));
-        }
-        else {
+        } else {
             LaunchFrame.noConfig = true;
         }
     }
@@ -71,8 +69,7 @@ public class Settings extends Properties {
     public void save () {
         try {
             store(new FileOutputStream(configFile), "FTBLaunch Config File");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Failed to save settings", e);
         }
     }
@@ -187,8 +184,7 @@ public class Settings extends Properties {
                 packList.add(code);
                 setPrivatePacks(packList);
             }
-        }
-        else {
+        } else {
             setProperty("privatePacks", code);
         }
     }
@@ -327,12 +323,10 @@ public class Settings extends Properties {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
             try {
                 return ois.readObject();
-            }
-            finally {
+            } finally {
                 ois.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Failed to read object from string: " + s, e);
             return null;
         }
@@ -345,13 +339,11 @@ public class Settings extends Properties {
             try {
                 oos.writeObject(o);
                 return javax.xml.bind.DatatypeConverter.printBase64Binary(baos.toByteArray());
-            }
-            finally {
+            } finally {
                 baos.close();
                 oos.close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Failed to write object to string" + o, e);
             return null;
         }

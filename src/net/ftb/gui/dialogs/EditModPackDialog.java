@@ -142,8 +142,7 @@ public class EditModPackDialog extends JDialog {
                         new File(folder, name).renameTo(new File(folder, name + ".disabled"));
                     }
                     updateLists();
-                }
-                else {
+                } else {
                     if (enabledModsLst.getSelectedIndex() >= 0) {
                         String name = enabledMods.get(enabledModsLst.getSelectedIndex());
                         new File(folder, name).renameTo(new File(folder, name + ".disabled"));
@@ -162,8 +161,7 @@ public class EditModPackDialog extends JDialog {
                         new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
                     }
                     updateLists();
-                }
-                else {
+                } else {
                     if (disabledModsLst.getSelectedIndex() >= 0) {
                         String name = disabledMods.get(disabledModsLst.getSelectedIndex());
                         new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
@@ -180,11 +178,9 @@ public class EditModPackDialog extends JDialog {
             for (String name : folder.list()) {
                 if (name.toLowerCase().endsWith(".zip")) {
                     enabledMods.add(name);
-                }
-                else if (name.toLowerCase().endsWith(".jar")) {
+                } else if (name.toLowerCase().endsWith(".jar")) {
                     enabledMods.add(name);
-                }
-                else if (name.toLowerCase().endsWith(".litemod")) {
+                } else if (name.toLowerCase().endsWith(".litemod")) {
                     enabledMods.add(name);
                 }
             }
@@ -202,11 +198,9 @@ public class EditModPackDialog extends JDialog {
             for (String name : folder.list()) {
                 if (name.toLowerCase().endsWith(".zip.disabled")) {
                     disabledMods.add(name);
-                }
-                else if (name.toLowerCase().endsWith(".jar.disabled")) {
+                } else if (name.toLowerCase().endsWith(".jar.disabled")) {
                     disabledMods.add(name);
-                }
-                else if (name.toLowerCase().endsWith(".litemod.disabled")) {
+                } else if (name.toLowerCase().endsWith(".litemod.disabled")) {
                     disabledMods.add(name);
                 }
             }

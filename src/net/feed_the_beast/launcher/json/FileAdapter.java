@@ -22,8 +22,7 @@ public class FileAdapter extends TypeAdapter<File> {
     public void write (JsonWriter json, File value) throws IOException {
         if (value == null) {
             json.nullValue();
-        }
-        else {
+        } else {
             json.value(value.getAbsolutePath());
         }
     }

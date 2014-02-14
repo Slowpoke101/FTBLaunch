@@ -70,12 +70,10 @@ public class ChooseDir extends JFrame implements ActionListener {
                 Logger.logInfo("getCurrentDirectory(): " + chooser.getCurrentDirectory());
                 Logger.logInfo("getSelectedFile() : " + chooser.getSelectedFile());
                 optionsPane.setInstallFolderText(chooser.getSelectedFile().getPath());
-            }
-            else {
+            } else {
                 Logger.logWarn("No Selection.");
             }
-        }
-        else if (editMPD != null) {
+        } else if (editMPD != null) {
             if (!Settings.getSettings().getLastAddPath().isEmpty()) {
                 chooser.setCurrentDirectory(new File(Settings.getSettings().getLastAddPath()));
             }
@@ -89,21 +87,17 @@ public class ChooseDir extends JFrame implements ActionListener {
                         FileUtils.copyFile(chooser.getSelectedFile(), destination);
                         Settings.getSettings().setLastAddPath(chooser.getSelectedFile().getPath());
                         LaunchFrame.getInstance().saveSettings();
-                    }
-                    catch (IOException e1) {
+                    } catch (IOException e1) {
                         Logger.logError(e1.getMessage());
                     }
                     editMPD.updateLists();
-                }
-                else {
+                } else {
                     ErrorUtils.tossError("File already exists, cannot add mod!");
                 }
-            }
-            else {
+            } else {
                 Logger.logWarn("No Selection.");
             }
-        }
-        else {
+        } else {
             chooser.setCurrentDirectory(new File(Settings.getSettings().getInstallPath()));
             chooser.setDialogTitle(choosertitle);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -112,8 +106,7 @@ public class ChooseDir extends JFrame implements ActionListener {
                 Logger.logInfo("getCurrentDirectory(): " + chooser.getCurrentDirectory());
                 Logger.logInfo("getSelectedFile() : " + chooser.getSelectedFile());
                 installDialog.setInstallFolderText(chooser.getSelectedFile().getPath());
-            }
-            else {
+            } else {
                 Logger.logWarn("No Selection.");
             }
         }

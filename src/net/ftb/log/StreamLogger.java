@@ -48,8 +48,7 @@ public class StreamLogger extends Thread {
                 }
                 Arrays.fill(buffer, (byte) 0);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError(e.getMessage(), e);
         }
     }

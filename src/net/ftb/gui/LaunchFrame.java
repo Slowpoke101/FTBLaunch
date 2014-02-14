@@ -207,12 +207,10 @@ public class LaunchFrame extends JFrame {
                             break;
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     try {
                         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                    }
-                    catch (Exception e1) {
+                    } catch (Exception e1) {
                     }
                 }
                 I18N.setupLocale();
@@ -274,11 +272,9 @@ public class LaunchFrame extends JFrame {
                         Settings.getSettings().setLoaded(true);
                     }
 
-                }
-                catch (FileNotFoundException e1) {
+                } catch (FileNotFoundException e1) {
                     Logger.logError(e1.getMessage());
-                }
-                catch (IOException e1) {
+                } catch (IOException e1) {
                     Logger.logError(e1.getMessage());
                 }
 
@@ -329,8 +325,7 @@ public class LaunchFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         if (OSUtils.getCurrentOS() == OS.WINDOWS) {
             setBounds(100, 100, 842, 480);
-        }
-        else {
+        } else {
             setBounds(100, 100, 850, 480);
         }
         panel.setBounds(0, 0, 850, 480);
@@ -437,13 +432,11 @@ public class LaunchFrame extends JFrame {
                                     : Settings.getSettings().getPackVer().replace(".", "_");
                             if (ModPack.getSelectedPack().isPrivatePack()) {
                                 OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                            }
-                            else {
+                            } else {
                                 OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
                             }
                             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-                        }
-                        catch (NoSuchAlgorithmException e) {
+                        } catch (NoSuchAlgorithmException e) {
                         }
                     }
                 }
@@ -479,8 +472,7 @@ public class LaunchFrame extends JFrame {
                     try {
                         OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
                                 + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-                    }
-                    catch (NoSuchAlgorithmException e) {
+                    } catch (NoSuchAlgorithmException e) {
                     }
                 }
             }
@@ -558,8 +550,7 @@ public class LaunchFrame extends JFrame {
         int i = getUnreadNews();
         if (i > 0 && i < 100) {
             tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
-        }
-        else {
+        } else {
             tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
         }
     }
@@ -604,13 +595,11 @@ public class LaunchFrame extends JFrame {
                 String responseStr;
                 try {
                     responseStr = get();
-                }
-                catch (InterruptedException err) {
+                } catch (InterruptedException err) {
                     Logger.logError(err.getMessage(), err);
                     enableObjects();
                     return;
-                }
-                catch (ExecutionException err) {
+                } catch (ExecutionException err) {
                     if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
                         Logger.logError(err.getMessage(), err);
                         PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
@@ -622,19 +611,15 @@ public class LaunchFrame extends JFrame {
 
                 try {
                     RESPONSE = new LoginResponse(responseStr);
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     if (responseStr.contains(":")) {
                         Logger.logError("Received invalid response from server.");
-                    }
-                    else {
+                    } else {
                         if (responseStr.equalsIgnoreCase("bad login")) {
                             ErrorUtils.tossError("Invalid username or password.");
-                        }
-                        else if (responseStr.equalsIgnoreCase("old version")) {
+                        } else if (responseStr.equalsIgnoreCase("old version")) {
                             ErrorUtils.tossError("Outdated launcher.");
-                        }
-                        else {
+                        } else {
                             ErrorUtils.tossError("Login failed: " + responseStr);
                             PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
                             d.setVisible(true);
@@ -659,8 +644,7 @@ public class LaunchFrame extends JFrame {
             // Always allow updates from a version that isn't installed at all
             allowVersionChange = true;
             return true;
-        }
-        else if (Integer.parseInt(storedVersion.replace(".", "")) != Integer.parseInt(onlineVersion.replace(".", ""))) {
+        } else if (Integer.parseInt(storedVersion.replace(".", "")) != Integer.parseInt(onlineVersion.replace(".", ""))) {
             ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
             verDialog.setVisible(true);
         }
@@ -701,8 +685,7 @@ public class LaunchFrame extends JFrame {
                         FileUtils.delete(destination);
                     }
                     FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Logger.logError(e.getMessage(), e);
                 }
             }
@@ -718,8 +701,7 @@ public class LaunchFrame extends JFrame {
 
         try {
             TextureManager.updateTextures();
-        }
-        catch (Exception e1) {
+        } catch (Exception e1) {
         }
 
         if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7")) {
@@ -742,21 +724,16 @@ public class LaunchFrame extends JFrame {
                             Logger.logInfo("Game update complete");
                             FileUtils.killMetaInf();
                             launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-                        }
-                        else {
+                        } else {
                             ErrorUtils.tossError("Error occurred during downloading the game");
                         }
-                    }
-                    catch (CancellationException e) {
+                    } catch (CancellationException e) {
                         ErrorUtils.tossError("Game update canceled.");
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         ErrorUtils.tossError("Game update interrupted.");
-                    }
-                    catch (ExecutionException e) {
+                    } catch (ExecutionException e) {
                         ErrorUtils.tossError("Failed to download game.");
-                    }
-                    finally {
+                    } finally {
                         enableObjects();
                     }
                 }
@@ -772,8 +749,7 @@ public class LaunchFrame extends JFrame {
                         int prog = updater.getProgress();
                         if (prog < 0) {
                             prog = 0;
-                        }
-                        else if (prog > 100) {
+                        } else if (prog > 100) {
                             prog = 100;
                         }
                         progMonitor.setProgress(prog);
@@ -782,8 +758,7 @@ public class LaunchFrame extends JFrame {
                 }
             });
             updater.execute();
-        }
-        else {
+        } else {
             launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
         }
     }
@@ -803,24 +778,20 @@ public class LaunchFrame extends JFrame {
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
                             launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-                        }
-                        else {
+                        } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         ErrorUtils.tossError("Failed to download files.");
-                    }
-                    finally {
+                    } finally {
                         enableObjects();
                     }
                 }
             };
 
             downloader.execute();
-        }
-        else {
+        } else {
             launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
         }
     }
@@ -943,14 +914,12 @@ public class LaunchFrame extends JFrame {
                         if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0)) {
                             if (asset.hash != null && !asset.hash.toLowerCase().equals(hash)) {
                                 asset.local.delete();
-                            }
-                            else {
+                            } else {
                                 downloadSuccess = true;
                             }
                         }
                         progressIndex += 1;
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         downloadSuccess = false;
                         Logger.logWarn("Connection failed, trying again");
@@ -1017,8 +986,7 @@ public class LaunchFrame extends JFrame {
                     if (!local.exists()) {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                     }
-                }
-                else {
+                } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
                     if (!local.exists()) {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
@@ -1082,8 +1050,7 @@ public class LaunchFrame extends JFrame {
                 }
             }
             return list;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -1102,21 +1069,18 @@ public class LaunchFrame extends JFrame {
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
                 Thread.sleep(1500);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
             try {
                 minecraftProcess.exitValue();
-            }
-            catch (IllegalThreadStateException e) {
+            } catch (IllegalThreadStateException e) {
                 this.setVisible(false);
                 ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
                     public void run () {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
-                        }
-                        else {
+                        } else {
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
@@ -1126,16 +1090,14 @@ public class LaunchFrame extends JFrame {
                                 optionsPane = new OptionsPane(Settings.getSettings());
                                 tabbedPane.add(optionsPane, 1);
                                 tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-                            }
-                            catch (Exception e1) {
+                            } catch (Exception e1) {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
                     }
                 });
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
     }
 
@@ -1176,16 +1138,13 @@ public class LaunchFrame extends JFrame {
                             input.closeEntry();
                             entry = input.getNextEntry();
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                         ErrorUtils.tossError("Error extracitng natives: " + e.getMessage());
-                    }
-                    finally {
+                    } finally {
                         try {
                             input.close();
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                         }
                     }
                 }
@@ -1211,21 +1170,18 @@ public class LaunchFrame extends JFrame {
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
                 Thread.sleep(1500);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
             try {
                 minecraftProcess.exitValue();
-            }
-            catch (IllegalThreadStateException e) {
+            } catch (IllegalThreadStateException e) {
                 this.setVisible(false);
                 ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
                     public void run () {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
-                        }
-                        else {
+                        } else {
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
@@ -1235,16 +1191,14 @@ public class LaunchFrame extends JFrame {
                                 optionsPane = new OptionsPane(Settings.getSettings());
                                 tabbedPane.add(optionsPane, 1);
                                 tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-                            }
-                            catch (Exception e1) {
+                            } catch (Exception e1) {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
                     }
                 });
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1295,8 +1249,7 @@ public class LaunchFrame extends JFrame {
     public static void writeUsers (String user) {
         try {
             userManager.write();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
         }
         String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
         users.removeAllItems();
@@ -1443,8 +1396,7 @@ public class LaunchFrame extends JFrame {
         try {
             installMods(ModPack.getSelectedPack().getDir());
             man.cleanUp();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             if (debugVerbose) {
                 Logger.logInfo(debugTag + "Exception: " + e);
             }
@@ -1524,8 +1476,7 @@ public class LaunchFrame extends JFrame {
             serverbutton.setBounds(420, 20, 390, 30);
             tpInstallLocation.setBounds(420, 20, 190, 30);
             tpInstall.setBounds(620, 20, 190, 30);
-        }
-        else {
+        } else {
             edit.setBounds(480, 20, 60, 30);
             donate.setBounds(390, 20, 80, 30);
             mapInstall.setBounds(650, 20, 160, 30);
@@ -1559,8 +1510,7 @@ public class LaunchFrame extends JFrame {
             if (s.get(i).isEmpty()) {
                 s.remove(i);
                 i--;
-            }
-            else {
+            } else {
                 String temp = s.get(i);
                 if (!temp.endsWith(".xml")) {
                     s.remove(i);
@@ -1589,8 +1539,7 @@ public class LaunchFrame extends JFrame {
             long l;
             if (Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
                 l = Long.parseLong(Settings.getSettings().getNewsDate());
-            }
-            else {
+            } else {
                 l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
             }
             for (Long timeStamp : timeStamps) {
@@ -1600,8 +1549,7 @@ public class LaunchFrame extends JFrame {
                 }
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
 
@@ -1613,8 +1561,7 @@ public class LaunchFrame extends JFrame {
             Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
             saveSettings();
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-        }
-        else if (users.getSelectedIndex() <= 1) {
+        } else if (users.getSelectedIndex() <= 1) {
             ErrorUtils.tossError("Please select a profile!");
         }
     }

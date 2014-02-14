@@ -182,8 +182,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         String info = "";
         if (texturePack.getInfo().length() > 60) {
             info = texturePack.getInfo().substring(0, 59) + "...";
-        }
-        else {
+        } else {
             info = texturePack.getInfo();
         }
         JTextArea filler = new JTextArea(texturePack.getName() + " : " + texturePack.getAuthor() + "\n" + info);
@@ -209,8 +208,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         if (compatible.equalsIgnoreCase("all") && resolution.equalsIgnoreCase("all")) {
             texturePacks.setMinimumSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
             texturePacks.setPreferredSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
-        }
-        else {
+        } else {
             texturePacks.setMinimumSize(new Dimension(420, (currentTexturePacks.size()) * 55));
             texturePacks.setPreferredSize(new Dimension(420, (currentTexturePacks.size()) * 55));
         }
@@ -270,8 +268,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 textureInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + TexturePack.getTexturePack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + TexturePack.getTexturePack(getIndex()).getInfo() + packs);
                 textureInfo.setCaretPosition(0);
-            }
-            else {
+            } else {
                 texturePackPanels.get(i).setBackground(UIManager.getColor("control"));
                 texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }

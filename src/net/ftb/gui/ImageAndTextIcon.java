@@ -100,8 +100,7 @@ public class ImageAndTextIcon implements Icon {
             tracker.addImage(image, id);
             try {
                 tracker.waitForID(id, 0);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 System.out.println("INTERRUPTED while loading Image");
             }
             loadStatus = tracker.statusID(id, false);
@@ -199,8 +198,7 @@ public class ImageAndTextIcon implements Icon {
             g.setColor(Color.WHITE);
             g.setFont(new Font("SansSerif", Font.BOLD, 12));
             g.drawString(description, x + image.getWidth(imageObserver) - 15, y + 15);
-        }
-        else {
+        } else {
             g.drawImage(image, x, y, c);
             g.setColor(Color.WHITE);
             g.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -294,8 +292,7 @@ public class ImageAndTextIcon implements Icon {
                 if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
                     throw new IOException("failed to load image contents");
                 }
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new IOException("image load interrupted");
             }
         }

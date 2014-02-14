@@ -42,8 +42,7 @@ public class EnumAdaptorFactory implements TypeAdapterFactory {
             public void write (JsonWriter writer, T value) throws IOException {
                 if (value == null) {
                     writer.nullValue();
-                }
-                else {
+                } else {
                     writer.value(value.toString().toLowerCase(Locale.US));
                 }
             }

@@ -56,12 +56,10 @@ public class MinecraftFrame extends JFrame {
                     break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            }
-            catch (Exception e1) {
+            } catch (Exception e1) {
             }
         }
         // TODO: TEST THIS, also implement into using settings.
@@ -70,8 +68,7 @@ public class MinecraftFrame extends JFrame {
                 Class<?> fullScreenUtilityClass = Class.forName("com.apple.eawt.FullScreenUtilities");
                 java.lang.reflect.Method setWindowCanFullScreenMethod = fullScreenUtilityClass.getDeclaredMethod("setWindowCanFullScreen", new Class[] { Window.class, Boolean.TYPE });
                 setWindowCanFullScreenMethod.invoke(null, new Object[] { this, Boolean.valueOf(true) });
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -90,8 +87,7 @@ public class MinecraftFrame extends JFrame {
                     public void run () {
                         try {
                             Thread.sleep(30000L);
-                        }
-                        catch (InterruptedException localInterruptedException) {
+                        } catch (InterruptedException localInterruptedException) {
                         }
                         System.out.println("FORCING EXIT!");
                         System.exit(0);
@@ -133,19 +129,16 @@ public class MinecraftFrame extends JFrame {
                 add(label);
                 Thread.sleep(3000);
                 animation.stop();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 label.add(label);
-            }
-            finally {
+            } finally {
                 remove(label);
             }
         }
 
         try {
             appletWrap = new Launcher(mcApplet, new URL("http://www.minecraft.net/game"));
-        }
-        catch (MalformedURLException ignored) {
+        } catch (MalformedURLException ignored) {
         }
         appletWrap.setParameter("username", user);
         appletWrap.setParameter("sessionid", session);

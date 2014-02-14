@@ -79,12 +79,10 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 Class C2 = this.getClass().forName("com.mojang.authlib.Agent");
                 Class C3 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
                 Class C4 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
-            }
-            else {
+            } else {
                 Logger.logError("Authlib file does not exist");
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace(System.err);
             return false;
         }
@@ -99,8 +97,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
             method.invoke(sysloader, new Object[] { u });
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
             throw new IOException("Error, could not add URL to system classloader");
         }
@@ -109,8 +106,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
     protected boolean downloadJars () {
         try {
             jarURLs = new URL("https://libraries.minecraft.net/com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             Logger.logError(e.getMessage(), e);
             return false;
         }
@@ -122,8 +118,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
@@ -161,8 +156,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                     int prog = (int) ((totalDownloadedSize / totalDownloadSize) * 100);
                     if (prog > 100) {
                         prog = 100;
-                    }
-                    else if (prog < 0) {
+                    } else if (prog < 0) {
                         prog = 0;
                     }
                     setProgress(prog);
@@ -172,8 +166,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[0] || fileSizes[0] <= 0)) {
                     downloadSuccess = true;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 downloadSuccess = false;
                 e.printStackTrace();
                 Logger.logWarn("Connection failed, trying again");

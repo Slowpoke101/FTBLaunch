@@ -40,17 +40,14 @@ public class DateAdapter implements JsonDeserializer<Date>, JsonSerializer<Date>
         synchronized (enUsFormat) {
             try {
                 return enUsFormat.parse(value);
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 try {
                     return iso8601Format.parse(value);
-                }
-                catch (ParseException e2) {
+                } catch (ParseException e2) {
                     try {
                         String tmp = value.replace("Z", "+00:00");
                         return iso8601Format.parse(tmp.substring(0, 22) + tmp.substring(23));
-                    }
-                    catch (ParseException e3) {
+                    } catch (ParseException e3) {
                         throw new JsonSyntaxException("Invalid date: " + value, e3);
                     }
                 }

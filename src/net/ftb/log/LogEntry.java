@@ -44,20 +44,15 @@ public class LogEntry {
             message = message.toLowerCase();
             if (message.contains("[severe]") || message.contains("[stderr]") || message.contains("[error]")) {
                 level = LogLevel.ERROR;
-            }
-            else if (message.contains("[info]")) {
+            } else if (message.contains("[info]")) {
                 level = LogLevel.INFO;
-            }
-            else if (message.contains("[warning]") || message.contains("[warn]")) {
+            } else if (message.contains("[warning]") || message.contains("[warn]")) {
                 level = LogLevel.WARN;
-            }
-            else if (message.contains("error") || message.contains("severe")) {
+            } else if (message.contains("error") || message.contains("severe")) {
                 level = LogLevel.ERROR;
-            }
-            else if (message.contains("warn")) {
+            } else if (message.contains("warn")) {
                 level = LogLevel.WARN;
-            }
-            else {
+            } else {
                 level = LogLevel.INFO;
             }
         }

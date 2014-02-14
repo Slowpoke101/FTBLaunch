@@ -58,8 +58,7 @@ public class LocaleUpdater extends Thread {
             wr.write(String.valueOf(remoteVer));
             wr.close();
             cleanUpFiles();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logWarn("[i18n] Update IOException", e);
         }
     }
@@ -80,11 +79,9 @@ public class LocaleUpdater extends Thread {
             remoteVer = scanner.nextInt();
             Logger.logInfo("[i18n] remoteVer = " + remoteVer);
             scanner.close();
-        }
-        catch (MalformedURLException e1) {
+        } catch (MalformedURLException e1) {
             Logger.logError(e1.getMessage(), e1);
-        }
-        catch (IOException e1) {
+        } catch (IOException e1) {
             Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
             return;
         }
@@ -97,16 +94,13 @@ public class LocaleUpdater extends Thread {
                 scanner.close();
                 if (localVer < remoteVer) {
                     updateFiles();
-                }
-                else {
+                } else {
                     Logger.logInfo("[i18n] Files are up to date");
                 }
-            }
-            catch (FileNotFoundException e1) {
+            } catch (FileNotFoundException e1) {
                 Logger.logInfo("[i18n] Could not read version file", e1);
             }
-        }
-        else {
+        } else {
             updateFiles();
         }
         I18N.addFiles();

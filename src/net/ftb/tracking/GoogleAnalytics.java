@@ -79,14 +79,12 @@ public class GoogleAnalytics {
             if (argData.getEventValue() != null) {
                 sb.append("(").append(argData.getEventValue()).append(")");
             }
-        }
-        else if (argData.getEventAction() != null || argData.getEventCategory() != null) {
+        } else if (argData.getEventAction() != null || argData.getEventCategory() != null) {
             throw new IllegalArgumentException("Event tracking must have both a category and an action");
         }
         if (config.getEncoding() != null) {
             sb.append("&utmcs=").append(getURIString(config.getEncoding())); // encoding
-        }
-        else {
+        } else {
             sb.append("&utmcs=-");
         }
         if (config.getScreenResolution() != null) {

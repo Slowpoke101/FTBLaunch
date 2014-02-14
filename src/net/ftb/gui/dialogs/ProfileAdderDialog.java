@@ -101,18 +101,15 @@ public class ProfileAdderDialog extends JDialog {
                         UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
-                    }
-                    else {
+                    } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
-                }
-                else {
+                } else {
                     if (validate(name.getText(), username.getText())) {
                         UserManager.addUser(username.getText(), "", name.getText());
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
-                    }
-                    else {
+                    } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
                 }
@@ -125,8 +122,7 @@ public class ProfileAdderDialog extends JDialog {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
             savePassword.setSelected(false);
-        }
-        else if (editingName.equals("OLDCREDS")) {
+        } else if (editingName.equals("OLDCREDS")) {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
             savePassword.setSelected(false);

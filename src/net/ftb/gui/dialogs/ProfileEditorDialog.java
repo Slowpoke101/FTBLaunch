@@ -61,8 +61,7 @@ public class ProfileEditorDialog extends JDialog {
         if (UserManager.getPassword(editingName).isEmpty()) {
             password.setEnabled(false);
             savePassword.setSelected(false);
-        }
-        else {
+        } else {
             password.setText(UserManager.getPassword(editingName));
             savePassword.setSelected(true);
         }
@@ -98,8 +97,7 @@ public class ProfileEditorDialog extends JDialog {
                         if (password.getPassword().length > 1) {
                             UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
                         }
-                    }
-                    else {
+                    } else {
                         UserManager.updateUser(editingName, username.getText(), "", name.getText());
                     }
                     LaunchFrame.writeUsers(name.getText());

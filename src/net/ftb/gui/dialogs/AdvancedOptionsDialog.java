@@ -119,8 +119,7 @@ public class AdvancedOptionsDialog extends JDialog {
         if (!DownloadUtils.serversLoaded) {
             Logger.logWarn("Servers not loaded yet.");
             return new String[] { "Automatic" };
-        }
-        else {
+        } else {
             String[] out = new String[DownloadUtils.downloadServers.size()];
             for (int i = 0; i < out.length; i++) {
                 out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);

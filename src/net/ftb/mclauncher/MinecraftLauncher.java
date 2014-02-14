@@ -53,19 +53,16 @@ public class MinecraftLauncher {
                             if (!new File(instModsDir, forgename).equals(new File(instModsDir, name))) {
                                 new File(instModsDir, name).delete();
                             }
-                        }
-                        else {
+                        } else {
                             new File(instModsDir, name).renameTo(new File(instModsDir, forgename));
                         }
-                    }
-                    else if (!name.equalsIgnoreCase(forgename) && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
+                    } else if (!name.equalsIgnoreCase(forgename) && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
                         cpb.append(OSUtils.getJavaDelimiter());
                         cpb.append(new File(instModsDir, name).getAbsolutePath());
                     }
                 }
             }
-        }
-        else {
+        } else {
             Logger.logInfo("Not loading any instMods (minecraft jar mods), as the directory does not exist.");
         }
 
@@ -96,8 +93,7 @@ public class MinecraftLauncher {
         //arguments.add("-XX:+CMSClassUnloadingEnabled");
         if (maxPermSize.isEmpty()) {
             arguments.add("-XX:PermSize=128m");
-        }
-        else {
+        } else {
             arguments.add("-XX:PermSize=" + maxPermSize);
         }
 
@@ -139,8 +135,7 @@ public class MinecraftLauncher {
                 Logger.logInfo("Setting MaxMemory to " + rmax);
                 memorySet = true;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Error parsing memory settings", e);
         }
         if (!memorySet) {
@@ -181,8 +176,7 @@ public class MinecraftLauncher {
             for (int i = 0; i < classPathFiles.size(); i++) {
                 try {
                     urls[i] = classPathFiles.get(i).toURI().toURL();
-                }
-                catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 System.out.println("Added URL to classpath: " + urls[i].toString());
@@ -229,13 +223,11 @@ public class MinecraftLauncher {
                 Applet mcappl = (Applet) MCAppletClass.newInstance();
                 MinecraftFrame mcWindow = new MinecraftFrame(modPackName, modPackImageName, animationname);
                 mcWindow.start(mcappl, username, password);
-            }
-            catch (InstantiationException e) {
+            } catch (InstantiationException e) {
                 Logger.log("Applet wrapper failed! Falling back to compatibility mode.", LogLevel.WARN, e);
                 mc.getMethod("main", String[].class).invoke(null, (Object) new String[] { username, password });
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             Logger.logError("Unhandled error launching minecraft", t);
         }
     }

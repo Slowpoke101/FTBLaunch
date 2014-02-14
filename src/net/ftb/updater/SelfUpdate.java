@@ -45,8 +45,7 @@ public class SelfUpdate {
         processBuilder.command(arguments);
         try {
             processBuilder.start();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Failed to start self-update process", e);
         }
         System.exit(0);
@@ -57,8 +56,7 @@ public class SelfUpdate {
             if (OSUtils.getCurrentOS() != OSUtils.OS.UNIX) {
                 Thread.sleep(4000);
             }
-        }
-        catch (InterruptedException ignored) {
+        } catch (InterruptedException ignored) {
             Logger.logError(ignored.getMessage(), ignored);
         }
         String launcherPath = args[0];
@@ -68,8 +66,7 @@ public class SelfUpdate {
         try {
             FileUtils.delete(launcher);
             FileUtils.copyFile(temporaryUpdate, launcher);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Auto Updating Failed", e);
         }
 
@@ -85,8 +82,7 @@ public class SelfUpdate {
         processBuilder.command(arguments);
         try {
             processBuilder.start();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logError("Failed to start launcher process after updating", e);
         }
     }

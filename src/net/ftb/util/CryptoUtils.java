@@ -24,8 +24,7 @@ public class CryptoUtils {
         BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, key));
         try {
             return new String(in.toByteArray(), "utf8");
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return "";
         }
     }
@@ -34,8 +33,7 @@ public class CryptoUtils {
         BigInteger str2;
         try {
             str2 = new BigInteger(str.getBytes("utf8")).xor(new BigInteger(1, key));
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return "";
         }
         return String.format("%040x", str2);

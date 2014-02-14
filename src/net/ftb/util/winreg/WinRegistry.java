@@ -64,8 +64,7 @@ public class WinRegistry {
             regDeleteValue.setAccessible(true);
             regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", new Class[] { int.class, byte[].class });
             regDeleteKey.setAccessible(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -89,11 +88,9 @@ public class WinRegistry {
     public static String readString (int hkey, String key, String valueName, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (hkey == HKEY_LOCAL_MACHINE) {
             return readString(systemRoot, hkey, key, valueName, wow64);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             return readString(userRoot, hkey, key, valueName, wow64);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
@@ -113,11 +110,9 @@ public class WinRegistry {
     public static Map<String, String> readStringValues (int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (hkey == HKEY_LOCAL_MACHINE) {
             return readStringValues(systemRoot, hkey, key, wow64);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             return readStringValues(userRoot, hkey, key, wow64);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
@@ -137,11 +132,9 @@ public class WinRegistry {
     public static List<String> readStringSubKeys (int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (hkey == HKEY_LOCAL_MACHINE) {
             return readStringSubKeys(systemRoot, hkey, key, wow64);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             return readStringSubKeys(userRoot, hkey, key, wow64);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
@@ -159,12 +152,10 @@ public class WinRegistry {
         if (hkey == HKEY_LOCAL_MACHINE) {
             ret = createKey(systemRoot, hkey, key);
             regCloseKey.invoke(systemRoot, new Object[] { new Integer(ret[0]) });
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             ret = createKey(userRoot, hkey, key);
             regCloseKey.invoke(userRoot, new Object[] { new Integer(ret[0]) });
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
         if (ret[1] != REG_SUCCESS) {
@@ -188,11 +179,9 @@ public class WinRegistry {
     public static void writeStringValue (int hkey, String key, String valueName, String value, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (hkey == HKEY_LOCAL_MACHINE) {
             writeStringValue(systemRoot, hkey, key, valueName, value, wow64);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             writeStringValue(userRoot, hkey, key, valueName, value, wow64);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
@@ -209,8 +198,7 @@ public class WinRegistry {
         int rc = -1;
         if (hkey == HKEY_LOCAL_MACHINE) {
             rc = deleteKey(systemRoot, hkey, key);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             rc = deleteKey(userRoot, hkey, key);
         }
         if (rc != REG_SUCCESS) {
@@ -234,8 +222,7 @@ public class WinRegistry {
         int rc = -1;
         if (hkey == HKEY_LOCAL_MACHINE) {
             rc = deleteValue(systemRoot, hkey, key, value, wow64);
-        }
-        else if (hkey == HKEY_CURRENT_USER) {
+        } else if (hkey == HKEY_CURRENT_USER) {
             rc = deleteValue(userRoot, hkey, key, value, wow64);
         }
         if (rc != REG_SUCCESS) {

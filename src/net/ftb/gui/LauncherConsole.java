@@ -187,12 +187,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
                     Desktop desktop = Desktop.getDesktop();
                     try {
                         desktop.browse(new URI("http://desk.feed-the-beast.com/"));
-                    }
-                    catch (Exception exc) {
+                    } catch (Exception exc) {
                         Logger.logError("Could not open url: " + exc.getMessage());
                     }
-                }
-                else {
+                } else {
                     Logger.logWarn("Could not open url, not supported");
                 }
             }
@@ -217,8 +215,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         try {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
-        }
-        catch (IOException e1) {
+        } catch (IOException e1) {
             Logger.logError(e1.getMessage(), e1);
         }
     }
@@ -240,11 +237,9 @@ public class LauncherConsole extends JFrame implements ILogListener {
         synchronized (kit) {
             try {
                 kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
-            }
-            catch (BadLocationException ignored) {
+            } catch (BadLocationException ignored) {
                 Logger.logError(ignored.getMessage(), ignored);
-            }
-            catch (IOException ignored) {
+            } catch (IOException ignored) {
                 Logger.logError(ignored.getMessage(), ignored);
             }
             displayArea.setCaretPosition(displayArea.getDocument().getLength());

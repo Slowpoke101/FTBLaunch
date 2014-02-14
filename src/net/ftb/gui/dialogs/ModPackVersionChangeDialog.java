@@ -79,8 +79,7 @@ public class ModPackVersionChangeDialog extends JDialog {
         if (Integer.parseInt(onlineVersion.replace(".", "")) > (storedVersion == "" ? 0 : Integer.parseInt(storedVersion.replace(".", "")))) {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
             updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-        }
-        else {
+        } else {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_DOWNGRADE"));
             updateLbl = new JLabel(I18N.getLocaleString("UPDATE_DOWNGRADE"));
         }

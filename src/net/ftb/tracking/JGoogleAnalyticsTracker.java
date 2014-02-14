@@ -230,8 +230,7 @@ public class JGoogleAnalyticsTracker {
                 if ((m.groupCount() >= 4) && (!m.group(4).isEmpty())) {
                     proxyPort = Integer.parseInt(m.group(4));
                 }
-            }
-            finally {
+            } finally {
                 s.close();
             }
             if (proxyAddr != null) {
@@ -264,8 +263,7 @@ public class JGoogleAnalyticsTracker {
             }
             try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 break;
             }
         }
@@ -418,8 +416,7 @@ public class JGoogleAnalyticsTracker {
                     }
                     try {
                         dispatchRequest(url);
-                    }
-                    finally {
+                    } finally {
                         synchronized (JGoogleAnalyticsTracker.class) {
                             asyncThreadsRunning--;
                         }
@@ -458,8 +455,7 @@ public class JGoogleAnalyticsTracker {
             //			else {
             //				Logger.logInfo("JGoogleAnalyticsTracker: Tracking success");
             //			}
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.logError("Error making tracking request", e);
         }
     }
@@ -500,16 +496,14 @@ public class JGoogleAnalyticsTracker {
                             if (url != null) {
                                 try {
                                     dispatchRequest(url);
-                                }
-                                finally {
+                                } finally {
                                     // Now that we have completed the HTTP request to GA, remove the element from the FIFO.
                                     synchronized (fifo) {
                                         fifo.removeFirst();
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             Logger.logError("Got exception from dispatch thread", e);
                         }
                     }
@@ -536,8 +530,7 @@ public class JGoogleAnalyticsTracker {
         if ((backgroundThread != null) && (timeoutMillis > 0)) {
             try {
                 backgroundThread.join(timeoutMillis);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
             backgroundThread = null;
         }

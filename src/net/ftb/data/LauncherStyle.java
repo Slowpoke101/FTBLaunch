@@ -67,11 +67,9 @@ public class LauncherStyle extends Properties {
         if (new File(baseStylePath, file).exists()) {
             try {
                 this.load(new FileReader(filename));
-            }
-            catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 Logger.logWarn("Could not load style", e);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logWarn("Could not load style", e);
             }
         }
@@ -90,11 +88,9 @@ public class LauncherStyle extends Properties {
 
         try {
             this.store(new FileOutputStream(filename), "FTB Style File");
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Logger.logWarn("Could not save style", e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Logger.logWarn("Could not save style", e);
         }
     }

@@ -58,8 +58,7 @@ public class MinecraftVersionDetector {
                 ent = file.getNextEntry();
             }
             file.close();
-        }
-        catch (IOException e1) {
+        } catch (IOException e1) {
             Logger.logError(e1.getMessage(), e1);
             return "unknown";
         }
@@ -82,8 +81,7 @@ public class MinecraftVersionDetector {
                 in = new BufferedReader(new FileReader(mcVersion));
                 requiredVersion = in.readLine();
                 in.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
             }
         }
         Logger.logInfo("Current: " + version);

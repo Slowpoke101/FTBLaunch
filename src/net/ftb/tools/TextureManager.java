@@ -92,8 +92,7 @@ public class TextureManager extends JDialog {
                     oldFile.delete();
                 }
                 return downloadTexturePack(texturePack.getUrl(), texturePack.getName(), compDir, packVer);
-            }
-            else {
+            } else {
                 ErrorUtils.tossError("Error: Texture Pack not found for selected mod pack's version!");
                 return false;
             }
@@ -130,22 +129,18 @@ public class TextureManager extends JDialog {
                         });
                     }
                 }
-            }
-            catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 Logger.logError("Texture Download Error", e);
                 return false;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Logger.logError("Texture Download Error", e);
                 return false;
-            }
-            finally {
+            } finally {
                 try {
                     in.close();
                     fout.flush();
                     fout.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -185,8 +180,7 @@ public class TextureManager extends JDialog {
     public static String getTPDirectory (int MCVersion) {
         if (MCVersion < 160) {
             return "texturepacks";
-        }
-        else {
+        } else {
             return "resourcepacks";
         }
     }
@@ -259,8 +253,7 @@ public class TextureManager extends JDialog {
                                     man.setVisible(true);
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             installedTextures.remove(tp.getName().toLowerCase());
                             removed = true;
                         }
@@ -285,8 +278,7 @@ public class TextureManager extends JDialog {
         File textureVersionFile = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
         if (installedTextures != null) {
             installedTextures.clear();
-        }
-        else {
+        } else {
             installedTextures = new HashMap<String, String>();
         }
         if (textureVersionFile.exists()) {
@@ -300,8 +292,7 @@ public class TextureManager extends JDialog {
                     }
                 }
                 in.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Logger.logError("Error populating installed textures.", e);
             }
         }

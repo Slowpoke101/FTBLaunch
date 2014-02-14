@@ -22,8 +22,7 @@ public class AuthlibHelper {
             if (!authentication.isLoggedIn()) {
                 try {
                     authentication.logIn();
-                }
-                catch (AuthenticationException e) {
+                } catch (AuthenticationException e) {
                     e.printStackTrace();
                 }
             }
@@ -33,8 +32,7 @@ public class AuthlibHelper {
                 if (!authentication.isLoggedIn()) {
                     try {
                         authentication.logIn();
-                    }
-                    catch (AuthenticationException e) {
+                    } catch (AuthenticationException e) {
                         e.printStackTrace();
                     }
                 }

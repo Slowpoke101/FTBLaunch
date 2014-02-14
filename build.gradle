@@ -32,6 +32,7 @@ buildscript {
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'shadow'
 apply plugin: 'launch4j'
 

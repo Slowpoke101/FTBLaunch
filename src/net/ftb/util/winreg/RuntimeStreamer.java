@@ -38,8 +38,7 @@ class RuntimeStreamer extends Thread {
             while ((line = br.readLine()) != null) {
                 this.lines += line + "\n";
             }
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
@@ -58,8 +57,7 @@ class RuntimeStreamer extends Thread {
             errorStreamer.start();
             proc.waitFor();
             return outputStreamer.contents() + errorStreamer.contents();
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
         }
         return null;
