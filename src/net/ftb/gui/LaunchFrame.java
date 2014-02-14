@@ -289,6 +289,8 @@ public class LaunchFrame extends JFrame
 				instance = frame;
 				frame.setVisible(true);
 
+				AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath()+ File.separator + "authlib" + File.separator ,"1.4.2"){};
+
 				Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 					@Override
 					public void uncaughtException(Thread t, Throwable e) {
@@ -310,8 +312,6 @@ public class LaunchFrame extends JFrame
 					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 					p.setVisible(true);
 				}
-				AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath()+ File.separator + "authlib" + File.separator ,"1.4.2"){
-				};
 	            
             };
 		});

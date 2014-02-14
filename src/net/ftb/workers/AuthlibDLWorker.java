@@ -136,7 +136,9 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         {
             try
             {
-                fileSizes[i] = jarURLs.openConnection().getContentLength();
+            	HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
+                fileSizes[i] = conn.getContentLength();
+                conn.disconnect();
                 totalDownloadSize += fileSizes[i];
             }
             catch (IOException e)
