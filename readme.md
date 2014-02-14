@@ -18,13 +18,16 @@ limitations under the License.
 
 ##Compiling
 * Download the source from this repo, either with git or as a zip/tarball.
-* Install maven or Eclipse
-* If using maven, run `mvn` in the directory you installed it to.
-* With Eclipse, open as a project and build as usual
+* Install Eclipse or IDEA
+* To build a jar/exe using gradle run 'gradlew build' to generate the .exe version add 'launch4j' to the end after installing launch4j
+* To generate IDE project with dependencies using gradle run 'gradlew eclipse' or 'gradlew idea' after running a build.
+
+* With Eclipse/idea, import generated project/module and build as usual.
 
 ##Pull Request Standards
-* Indent with tabs
+* Indent with spaces(4)
 * Avoid trailing whitespace
+* If using eclipse: Use formatter located at eclipse_formatter.xml
 * Sign-off your commits
 * Avoid merge commits in pull requests
 * Squash your commits - have at most one commit per major change

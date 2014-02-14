@@ -29,95 +29,99 @@ import net.ftb.util.OSUtils;
 
 public class LauncherStyle extends Properties {
 
-	private static final long serialVersionUID = 6370446700503387209L;
-	
-	private static LauncherStyle currentStyle;
-	
-	private static File baseStylePath;
-	
-	static {
-		baseStylePath = new File(OSUtils.getDynamicStorageLocation(), "launcher_styles");
-		
-		if (!baseStylePath.exists()) {
-			baseStylePath.mkdir();
-		}
-		
-		currentStyle = new LauncherStyle();
-		currentStyle.load();
-	}
-	
-	public Color control = new Color(40, 40, 40);
-	public Color text = new Color(40, 40, 40).brighter().brighter().brighter().brighter().brighter();
-	public Color nimbusBase = new Color(0, 0, 0);
-	public Color nimbusFocus = new Color(40, 40, 40);
-	public Color nimbusBorder = new Color(40, 40, 40);
-	public Color nimbusLightBackground = new Color(40, 40, 40);
-	public Color info = new Color(40, 40, 40).brighter().brighter();
-	public Color nimbusSelectionBackground = new Color(40, 40, 40).brighter().brighter();
-	public Color footerColor = new Color(25, 25, 25);
-	public Color filterTextColor = new Color(243, 119, 31);
-	public Color filterInnerTextColor = new Color(255, 255, 255);
+    private static final long serialVersionUID = 6370446700503387209L;
 
-	public void load() {
-		this.load(Settings.getSettings().getStyle());
-	}
-	
-	public void load(String file) {
-		File filename = new File(baseStylePath, file);
-		if (new File(baseStylePath, file).exists()) {
-			try {
-				this.load(new FileReader(filename));
-			} catch (FileNotFoundException e) {
-				Logger.logWarn("Could not load style", e);
-			} catch (IOException e) {
-				Logger.logWarn("Could not load style", e);
-			}
-		}
-		
-		this.control = loadColor("control", this.control);
-		this.text = loadColor("text", this.text);
-		this.nimbusBase = loadColor("nimbusBase", this.nimbusBase);
-		this.nimbusFocus = loadColor("nimbusFocus", this.nimbusFocus);
-		this.nimbusBorder = loadColor("nimbusBorder", this.nimbusBorder);
-		this.nimbusLightBackground = loadColor("nimbusLightBackground", this.nimbusLightBackground);
-		this.info = loadColor("info", this.info);
-		this.nimbusSelectionBackground = loadColor("nimbusSelectionBackground", this.nimbusSelectionBackground);
-		this.footerColor = loadColor("footerColor", this.footerColor);
-		this.filterTextColor = loadColor("filterTextColor", this.filterTextColor);
-		this.filterInnerTextColor = loadColor("filterInnerTextColor", this.filterInnerTextColor);
-		
-		try {
-			this.store(new FileOutputStream(filename), "FTB Style File");
-		} catch (FileNotFoundException e) {
-			Logger.logWarn("Could not save style", e);
-		} catch (IOException e) {
-			Logger.logWarn("Could not save style", e);
-		}
-	}
-	
-	public static String getColorAsString(Color col) {
-		return col.getRed() + "," + col.getGreen() + "," + col.getBlue();
-	}
-	
-	public static Color getStringAsColor(String str) {
-		String[] tokens = str.split(",");
-		return new Color(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
-	}
+    private static LauncherStyle currentStyle;
 
-	private Color loadColor(String string, Color defaultColor) {
-		String defaultColorStr = getColorAsString(defaultColor);
-		if (!this.containsKey(string)) {
-			this.setProperty(string, defaultColorStr);
-		}
-		return getStringAsColor(this.getProperty(string, defaultColorStr));
-	}
+    private static File baseStylePath;
 
-	public static LauncherStyle getCurrentStyle() {
-		return currentStyle;
-	}
+    static {
+        baseStylePath = new File(OSUtils.getDynamicStorageLocation(), "launcher_styles");
 
-	public static void setCurrentStyle(LauncherStyle currentStyle) {
-		LauncherStyle.currentStyle = currentStyle;
-	}
-	
+        if (!baseStylePath.exists()) {
+            baseStylePath.mkdir();
+        }
+
+        currentStyle = new LauncherStyle();
+        currentStyle.load();
+    }
+
+    public Color control = new Color(40, 40, 40);
+    public Color text = new Color(40, 40, 40).brighter().brighter().brighter().brighter().brighter();
+    public Color nimbusBase = new Color(0, 0, 0);
+    public Color nimbusFocus = new Color(40, 40, 40);
+    public Color nimbusBorder = new Color(40, 40, 40);
+    public Color nimbusLightBackground = new Color(40, 40, 40);
+    public Color info = new Color(40, 40, 40).brighter().brighter();
+    public Color nimbusSelectionBackground = new Color(40, 40, 40).brighter().brighter();
+    public Color footerColor = new Color(25, 25, 25);
+    public Color filterTextColor = new Color(243, 119, 31);
+    public Color filterInnerTextColor = new Color(255, 255, 255);
+
+    public void load () {
+        this.load(Settings.getSettings().getStyle());
+    }
+
+    public void load (String file) {
+        File filename = new File(baseStylePath, file);
+        if (new File(baseStylePath, file).exists()) {
+            try {
+                this.load(new FileReader(filename));
+            }
+            catch (FileNotFoundException e) {
+                Logger.logWarn("Could not load style", e);
+            }
+            catch (IOException e) {
+                Logger.logWarn("Could not load style", e);
+            }
+        }
+
+        this.control = loadColor("control", this.control);
+        this.text = loadColor("text", this.text);
+        this.nimbusBase = loadColor("nimbusBase", this.nimbusBase);
+        this.nimbusFocus = loadColor("nimbusFocus", this.nimbusFocus);
+        this.nimbusBorder = loadColor("nimbusBorder", this.nimbusBorder);
+        this.nimbusLightBackground = loadColor("nimbusLightBackground", this.nimbusLightBackground);
+        this.info = loadColor("info", this.info);
+        this.nimbusSelectionBackground = loadColor("nimbusSelectionBackground", this.nimbusSelectionBackground);
+        this.footerColor = loadColor("footerColor", this.footerColor);
+        this.filterTextColor = loadColor("filterTextColor", this.filterTextColor);
+        this.filterInnerTextColor = loadColor("filterInnerTextColor", this.filterInnerTextColor);
+
+        try {
+            this.store(new FileOutputStream(filename), "FTB Style File");
+        }
+        catch (FileNotFoundException e) {
+            Logger.logWarn("Could not save style", e);
+        }
+        catch (IOException e) {
+            Logger.logWarn("Could not save style", e);
+        }
+    }
+
+    public static String getColorAsString (Color col) {
+        return col.getRed() + "," + col.getGreen() + "," + col.getBlue();
+    }
+
+    public static Color getStringAsColor (String str) {
+        String[] tokens = str.split(",");
+        return new Color(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+    }
+
+    private Color loadColor (String string, Color defaultColor) {
+        String defaultColorStr = getColorAsString(defaultColor);
+        if (!this.containsKey(string)) {
+            this.setProperty(string, defaultColorStr);
+        }
+        return getStringAsColor(this.getProperty(string, defaultColorStr));
+    }
+
+    public static LauncherStyle getCurrentStyle () {
+        return currentStyle;
+    }
+
+    public static void setCurrentStyle (LauncherStyle currentStyle) {
+        LauncherStyle.currentStyle = currentStyle;
+    }
+
 }

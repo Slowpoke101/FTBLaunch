@@ -39,228 +39,233 @@ import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
 public class FileUtils {
-	/**
-	 * @param sourceFolder - the folder to be moved
-	 * @param destinationFolder - where to move to
-	 * @throws IOException
-	 */
-    public static void copyFolder(File sourceFolder, File destinationFolder) throws IOException {
+    /**
+     * @param sourceFolder - the folder to be moved
+     * @param destinationFolder - where to move to
+     * @throws IOException
+     */
+    public static void copyFolder (File sourceFolder, File destinationFolder) throws IOException {
         copyFolder(sourceFolder, destinationFolder, true);
     }
-    public static void copyFolder(File sourceFolder, File destinationFolder, boolean overwrite) throws IOException {
-		if (sourceFolder.isDirectory()) {
-			if (!destinationFolder.exists()) {
-				destinationFolder.mkdirs();
-			}
-			String files[] = sourceFolder.list();
-			for (String file : files) {
-				File srcFile = new File(sourceFolder, file);
-				File destFile = new File(destinationFolder, file);
-				copyFolder(srcFile, destFile, overwrite);
-			}
-		} else {
-			copyFile(sourceFolder, destinationFolder, overwrite);
-		}
-	}
 
-	/**
-	 * @param sourceFile - the file to be moved
-	 * @param destinationFile - where to move to
-	 * @throws IOException
-	 */
-    public static void copyFile(File sourceFile, File destinationFile) throws IOException {
+    public static void copyFolder (File sourceFolder, File destinationFolder, boolean overwrite) throws IOException {
+        if (sourceFolder.isDirectory()) {
+            if (!destinationFolder.exists()) {
+                destinationFolder.mkdirs();
+            }
+            String files[] = sourceFolder.list();
+            for (String file : files) {
+                File srcFile = new File(sourceFolder, file);
+                File destFile = new File(destinationFolder, file);
+                copyFolder(srcFile, destFile, overwrite);
+            }
+        }
+        else {
+            copyFile(sourceFolder, destinationFolder, overwrite);
+        }
+    }
+
+    /**
+     * @param sourceFile - the file to be moved
+     * @param destinationFile - where to move to
+     * @throws IOException
+     */
+    public static void copyFile (File sourceFile, File destinationFile) throws IOException {
         copyFile(sourceFile, destinationFile, true);
     }
-    public static void copyFile(File sourceFile, File destinationFile, boolean overwrite) throws IOException {
-		if (sourceFile.exists()) {
-			if(!destinationFile.exists()) {
-			    destinationFile.getParentFile().mkdirs();
-				destinationFile.createNewFile();
-			} 
-			else if (!overwrite) return;
-			FileChannel sourceStream = null, destinationStream = null;
-			try {
-				sourceStream = new FileInputStream(sourceFile).getChannel();
-				destinationStream = new FileOutputStream(destinationFile).getChannel();
-				destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
-			} finally {
-				if(sourceStream != null) {
-					sourceStream.close();
-				}
-				if(destinationStream != null) {
-					destinationStream.close();
-				}
-			}
-		}
-	}
 
-	/**
-	 * @param resource - the resource to delete
-	 * @return whether deletion was successful
-	 * @throws IOException
-	 */
-	public static boolean delete(File resource) throws IOException {
-		if (resource.isDirectory()) {
-			File[] childFiles = resource.listFiles();
-			for (File child : childFiles) {
-				delete(child);
-			}
-		}
-		return resource.delete();
-	}
+    public static void copyFile (File sourceFile, File destinationFile, boolean overwrite) throws IOException {
+        if (sourceFile.exists()) {
+            if (!destinationFile.exists()) {
+                destinationFile.getParentFile().mkdirs();
+                destinationFile.createNewFile();
+            }
+            else if (!overwrite)
+                return;
+            FileChannel sourceStream = null, destinationStream = null;
+            try {
+                sourceStream = new FileInputStream(sourceFile).getChannel();
+                destinationStream = new FileOutputStream(destinationFile).getChannel();
+                destinationStream.transferFrom(sourceStream, 0, sourceStream.size());
+            }
+            finally {
+                if (sourceStream != null) {
+                    sourceStream.close();
+                }
+                if (destinationStream != null) {
+                    destinationStream.close();
+                }
+            }
+        }
+    }
 
-	/**
-	 * Extracts given zip to given location
-	 * @param zipLocation - the location of the zip to be extracted
-	 * @param outputLocation - location to extract to
-	 */
-	public static void extractZipTo(String zipLocation, String outputLocation) {
-		ZipInputStream zipinputstream = null;
-		try {
-			byte[] buf = new byte[1024];
-			zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
-			ZipEntry zipentry = zipinputstream.getNextEntry();
-			while (zipentry != null) { 
-				String entryName = zipentry.getName();
-				int n;
-				if(!zipentry.isDirectory() && !entryName.equalsIgnoreCase("minecraft") && !entryName.equalsIgnoreCase(".minecraft") && !entryName.equalsIgnoreCase("instMods")) {
-					new File(outputLocation + File.separator + entryName).getParentFile().mkdirs();
-					FileOutputStream fileoutputstream = new FileOutputStream(outputLocation + File.separator + entryName);             
-					while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-						fileoutputstream.write(buf, 0, n);
-					}
-					fileoutputstream.close();
-				}
-				zipinputstream.closeEntry();
-				zipentry = zipinputstream.getNextEntry();
-			}
-		} catch (Exception e) {
-			Logger.logError(e.getMessage(), e);
-			backupExtract(zipLocation, outputLocation);
-		} finally {
-			try {
-				zipinputstream.close();
-			} catch (IOException e) { }
-		}
-	}
+    /**
+     * @param resource - the resource to delete
+     * @return whether deletion was successful
+     * @throws IOException
+     */
+    public static boolean delete (File resource) throws IOException {
+        if (resource.isDirectory()) {
+            File[] childFiles = resource.listFiles();
+            for (File child : childFiles) {
+                delete(child);
+            }
+        }
+        return resource.delete();
+    }
 
-	public static void backupExtract(String zipLocation, String outputLocation){
-		Logger.logInfo("Extracting (Backup way)");
-		byte[] buffer = new byte[1024];
-		ZipInputStream zis = null;
-		ZipEntry ze = null;
-		try{
-			File folder = new File(outputLocation);
-			if(!folder.exists()){
-				folder.mkdir();
-			}
-			zis = new ZipInputStream(new FileInputStream(zipLocation));
-			ze = zis.getNextEntry();
-			while(ze != null){
-				File newFile = new File(outputLocation, ze.getName());
-				newFile.getParentFile().mkdirs();
-				if(!ze.isDirectory()) {
-					FileOutputStream fos = new FileOutputStream(newFile);
-					int len;
-					while ((len = zis.read(buffer)) > 0) {
-						fos.write(buffer, 0, len);
-					}
-					fos.flush();
-					fos.close();
-				}
-				ze = zis.getNextEntry();
-			}
-		} catch(IOException ex) {
-			Logger.logError(ex.getMessage(), ex);
-		} finally {
-			try {
-				zis.closeEntry();
-				zis.close();
-			} catch (IOException e) { }	
-		}
-	}    
+    /**
+     * Extracts given zip to given location
+     * @param zipLocation - the location of the zip to be extracted
+     * @param outputLocation - location to extract to
+     */
+    public static void extractZipTo (String zipLocation, String outputLocation) {
+        ZipInputStream zipinputstream = null;
+        try {
+            byte[] buf = new byte[1024];
+            zipinputstream = new ZipInputStream(new FileInputStream(zipLocation));
+            ZipEntry zipentry = zipinputstream.getNextEntry();
+            while (zipentry != null) {
+                String entryName = zipentry.getName();
+                int n;
+                if (!zipentry.isDirectory() && !entryName.equalsIgnoreCase("minecraft") && !entryName.equalsIgnoreCase(".minecraft") && !entryName.equalsIgnoreCase("instMods")) {
+                    new File(outputLocation + File.separator + entryName).getParentFile().mkdirs();
+                    FileOutputStream fileoutputstream = new FileOutputStream(outputLocation + File.separator + entryName);
+                    while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+                        fileoutputstream.write(buf, 0, n);
+                    }
+                    fileoutputstream.close();
+                }
+                zipinputstream.closeEntry();
+                zipentry = zipinputstream.getNextEntry();
+            }
+        }
+        catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+            backupExtract(zipLocation, outputLocation);
+        }
+        finally {
+            try {
+                zipinputstream.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
 
-	/**
-	 * deletes the META-INF
-	 */
-	public static void killMetaInf() {
-		File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar");
-		File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar.tmp");
-		try {
-			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
-			JarEntry entry;
+    public static void backupExtract (String zipLocation, String outputLocation) {
+        Logger.logInfo("Extracting (Backup way)");
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = null;
+        ZipEntry ze = null;
+        try {
+            File folder = new File(outputLocation);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            zis = new ZipInputStream(new FileInputStream(zipLocation));
+            ze = zis.getNextEntry();
+            while (ze != null) {
+                File newFile = new File(outputLocation, ze.getName());
+                newFile.getParentFile().mkdirs();
+                if (!ze.isDirectory()) {
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.flush();
+                    fos.close();
+                }
+                ze = zis.getNextEntry();
+            }
+        }
+        catch (IOException ex) {
+            Logger.logError(ex.getMessage(), ex);
+        }
+        finally {
+            try {
+                zis.closeEntry();
+                zis.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
 
-			while ((entry = input.getNextJarEntry()) != null) {
-				if (entry.getName().contains("META-INF")) {
-					continue;
-				}
-				output.putNextEntry(entry);
-				byte buffer[] = new byte[1024];
-				int amo;
-				while ((amo = input.read(buffer, 0, 1024)) != -1) {
-					output.write(buffer, 0, amo);
-				}
-				output.closeEntry();
-			}
+    /**
+     * deletes the META-INF
+     */
+    public static void killMetaInf () {
+        File inputFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar");
+        File outputTmpFile = new File(Settings.getSettings().getInstallPath() + "/" + ModPack.getSelectedPack().getDir() + "/minecraft/bin", "minecraft.jar.tmp");
+        try {
+            JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
+            JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
+            JarEntry entry;
 
-			input.close();
-			output.close();
+            while ((entry = input.getNextJarEntry()) != null) {
+                if (entry.getName().contains("META-INF")) {
+                    continue;
+                }
+                output.putNextEntry(entry);
+                byte buffer[] = new byte[1024];
+                int amo;
+                while ((amo = input.read(buffer, 0, 1024)) != -1) {
+                    output.write(buffer, 0, amo);
+                }
+                output.closeEntry();
+            }
 
-			if(!inputFile.delete()) {
-				Logger.logError("Failed to delete Minecraft.jar.");
-				return;
-			}
-			outputTmpFile.renameTo(inputFile);
-		} catch (FileNotFoundException e) { 
-			Logger.logError(e.getMessage(), e);
-		} catch (IOException e) {
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+            input.close();
+            output.close();
 
+            if (!inputFile.delete()) {
+                Logger.logError("Failed to delete Minecraft.jar.");
+                return;
+            }
+            outputTmpFile.renameTo(inputFile);
+        }
+        catch (FileNotFoundException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+        catch (IOException e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
 
-	public static List<File> listDirs(File path)
-	{
-	    List<File> ret = new ArrayList<File>();
-	    if (path.exists()) listDirs(path, ret);
-	    Collections.sort(ret, new Comparator<File>()
-        {
+    public static List<File> listDirs (File path) {
+        List<File> ret = new ArrayList<File>();
+        if (path.exists())
+            listDirs(path, ret);
+        Collections.sort(ret, new Comparator<File>() {
             @Override
-            public int compare(File o1, File o2)
-            {
+            public int compare (File o1, File o2) {
                 return o2.compareTo(o1);
             }
         });
-	    return ret;
-	}
+        return ret;
+    }
 
-    private static void listDirs(File path, List<File> list)
-    {
-        for (File f : path.listFiles())
-        {
-            if (f.isDirectory())
-            {
+    private static void listDirs (File path, List<File> list) {
+        for (File f : path.listFiles()) {
+            if (f.isDirectory()) {
                 listDirs(f, list);
                 list.add(f);
             }
         }
     }
 
-	public static Set<File> listFiles(File path)
-	{
-	    Set<File> set = new HashSet<File>();
-	    if (path.exists())
-	    {
-	        listFiles(path, set);
-	    }
-	    return set;
-	}
+    public static Set<File> listFiles (File path) {
+        Set<File> set = new HashSet<File>();
+        if (path.exists()) {
+            listFiles(path, set);
+        }
+        return set;
+    }
 
-	private static void listFiles(File path, Set<File> set)
-    {
-        for (File f : path.listFiles())
-        {
+    private static void listFiles (File path, Set<File> set) {
+        for (File f : path.listFiles()) {
             if (f.isDirectory())
                 listFiles(f, set);
             else

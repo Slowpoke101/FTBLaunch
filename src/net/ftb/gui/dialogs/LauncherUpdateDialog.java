@@ -34,122 +34,122 @@ import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
 
 public class LauncherUpdateDialog extends JDialog {
-	private JLabel messageLbl;
-	private JLabel updateLbl;
-	private JButton showChangeLog;
-	private JButton update;
-	private JButton abort;
+    private JLabel messageLbl;
+    private JLabel updateLbl;
+    private JButton showChangeLog;
+    private JButton update;
+    private JButton abort;
 
-	public LauncherUpdateDialog(final UpdateChecker updateChecker) {
-		super(LaunchFrame.getInstance(), true);
+    public LauncherUpdateDialog(final UpdateChecker updateChecker) {
+        super(LaunchFrame.getInstance(), true);
 
-		setupGui();
+        setupGui();
 
-		showChangeLog.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Call new frame containing html page?
-				OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + LaunchFrame.buildNumber);
-			}
-		});
+        showChangeLog.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                // TODO: Call new frame containing html page?
+                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + LaunchFrame.buildNumber);
+            }
+        });
 
-		update.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-				updateChecker.update();
-			}
-		});
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                setVisible(false);
+                updateChecker.update();
+            }
+        });
 
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-			}
-		});
-	}
+        abort.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                setVisible(false);
+            }
+        });
+    }
 
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
-		setResizable(false);
+    private void setupGui () {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
+        setResizable(false);
 
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		panel.setLayout(layout);
+        Container panel = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
 
-		messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
-		JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-		showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
-		update = new JButton(I18N.getLocaleString("MAIN_YES"));
-		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+        messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
+        JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+        showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
+        update = new JButton(I18N.getLocaleString("MAIN_YES"));
+        abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
-		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-		panel.add(messageLbl);
-		panel.add(showChangeLog);
-		panel.add(updateLbl);
-		panel.add(update);
-		panel.add(abort);
+        panel.add(messageLbl);
+        panel.add(showChangeLog);
+        panel.add(updateLbl);
+        panel.add(update);
+        panel.add(abort);
 
-		Spring hSpring;
-		Spring columnWidth;
+        Spring hSpring;
+        Spring columnWidth;
 
-		hSpring = Spring.constant(10);
+        hSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(messageLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(showChangeLog));
-		columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
+        columnWidth = Spring.width(messageLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(showChangeLog));
+        columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, updateLbl,  hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, showChangeLog,  0, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.EAST,              update,        -5, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.WEST,              abort,          5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, showChangeLog, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
 
-		Spring vSpring;
-		Spring rowHeight;
+        Spring vSpring;
+        Spring rowHeight;
 
-		vSpring = Spring.constant(10);
+        vSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, showChangeLog, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, showChangeLog, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(showChangeLog));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(showChangeLog));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
-		layout.putConstraint(SpringLayout.NORTH, abort,  vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(update);
-		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+        rowHeight = Spring.height(update);
+        rowHeight = Spring.max(rowHeight, Spring.height(abort));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
 }

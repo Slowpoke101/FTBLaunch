@@ -42,284 +42,285 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
-	private JButton exit;
-	private JLabel downloadLocationLbl;
-	private static JComboBox downloadLocation;
-	private JLabel additionalJavaOptionsLbl;
-	private JTextField additionalJavaOptions;
-	private JLabel mcWindowSizeLbl;
-	private JTextField mcWindowSizeWidth;
-	private JLabel mcWindowSizeSepLbl;
-	private JTextField mcWindowSizeHeight;
-	private JLabel mcWindowPosLbl;
-	private JTextField mcWindowPosX;
-	private JLabel mcWindowPosSepLbl;
-	private JTextField mcWindowPosY;
-	private JCheckBox autoMaxCheck;
-	private JCheckBox snooper;
-	private JCheckBox debugLauncherVerbose;
+    private JButton exit;
+    private JLabel downloadLocationLbl;
+    private static JComboBox downloadLocation;
+    private JLabel additionalJavaOptionsLbl;
+    private JTextField additionalJavaOptions;
+    private JLabel mcWindowSizeLbl;
+    private JTextField mcWindowSizeWidth;
+    private JLabel mcWindowSizeSepLbl;
+    private JTextField mcWindowSizeHeight;
+    private JLabel mcWindowPosLbl;
+    private JTextField mcWindowPosX;
+    private JLabel mcWindowPosSepLbl;
+    private JTextField mcWindowPosY;
+    private JCheckBox autoMaxCheck;
+    private JCheckBox snooper;
+    private JCheckBox debugLauncherVerbose;
 
-	private final Settings settings = Settings.getSettings();
+    private final Settings settings = Settings.getSettings();
 
-	public AdvancedOptionsDialog() {
-		super(LaunchFrame.getInstance(), true);
-		setupGui();
+    public AdvancedOptionsDialog() {
+        super(LaunchFrame.getInstance(), true);
+        setupGui();
 
-		if(DownloadUtils.serversLoaded) {
-			if(DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
-				downloadLocation.setSelectedItem(settings.getDownloadServer());
-			}
-		}
+        if (DownloadUtils.serversLoaded) {
+            if (DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
+                downloadLocation.setSelectedItem(settings.getDownloadServer());
+            }
+        }
 
-		mcWindowSizeWidth.setText(Integer.toString(settings.getLastDimension().width));
-		mcWindowSizeHeight.setText(Integer.toString(settings.getLastDimension().height));
-		mcWindowPosX.setText(Integer.toString(settings.getLastPosition().x));
-		mcWindowPosY.setText(Integer.toString(settings.getLastPosition().y));
-		autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
-		snooper.setSelected(settings.getSnooper());
-		debugLauncherVerbose.setSelected(settings.getDebugLauncher());
+        mcWindowSizeWidth.setText(Integer.toString(settings.getLastDimension().width));
+        mcWindowSizeHeight.setText(Integer.toString(settings.getLastDimension().height));
+        mcWindowPosX.setText(Integer.toString(settings.getLastPosition().x));
+        mcWindowPosY.setText(Integer.toString(settings.getLastPosition().y));
+        autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
+        snooper.setSelected(settings.getSnooper());
+        debugLauncherVerbose.setSelected(settings.getDebugLauncher());
 
-		FocusAdapter settingsChangeListener = new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				saveSettingsInto(settings);
-			}
-		};
+        FocusAdapter settingsChangeListener = new FocusAdapter() {
+            @Override
+            public void focusLost (FocusEvent e) {
+                saveSettingsInto(settings);
+            }
+        };
 
-		downloadLocation.addFocusListener(settingsChangeListener);
-		additionalJavaOptions.addFocusListener(settingsChangeListener);
-		mcWindowSizeWidth.addFocusListener(settingsChangeListener);
-		mcWindowSizeHeight.addFocusListener(settingsChangeListener);
-		mcWindowPosX.addFocusListener(settingsChangeListener);
-		mcWindowPosY.addFocusListener(settingsChangeListener);
-		autoMaxCheck.addFocusListener(settingsChangeListener);
-		snooper.addFocusListener(settingsChangeListener);
-		debugLauncherVerbose.addFocusListener(settingsChangeListener);
+        downloadLocation.addFocusListener(settingsChangeListener);
+        additionalJavaOptions.addFocusListener(settingsChangeListener);
+        mcWindowSizeWidth.addFocusListener(settingsChangeListener);
+        mcWindowSizeHeight.addFocusListener(settingsChangeListener);
+        mcWindowPosX.addFocusListener(settingsChangeListener);
+        mcWindowPosY.addFocusListener(settingsChangeListener);
+        autoMaxCheck.addFocusListener(settingsChangeListener);
+        snooper.addFocusListener(settingsChangeListener);
+        debugLauncherVerbose.addFocusListener(settingsChangeListener);
 
-		exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
-	}
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                setVisible(false);
+            }
+        });
+    }
 
-	public static void setDownloadServers() {
-		String downloadserver = Settings.getSettings().getDownloadServer();
-		downloadLocation.removeAllItems();
-		for(String server : DownloadUtils.downloadServers.keySet()) {
-			downloadLocation.addItem(server);
-		}
-		if(DownloadUtils.downloadServers.containsKey(downloadserver)) {
-			downloadLocation.setSelectedItem(downloadserver);
-		}
-	}
+    public static void setDownloadServers () {
+        String downloadserver = Settings.getSettings().getDownloadServer();
+        downloadLocation.removeAllItems();
+        for (String server : DownloadUtils.downloadServers.keySet()) {
+            downloadLocation.addItem(server);
+        }
+        if (DownloadUtils.downloadServers.containsKey(downloadserver)) {
+            downloadLocation.setSelectedItem(downloadserver);
+        }
+    }
 
-	public String[] getDownloadServerNames() {
-		if(!DownloadUtils.serversLoaded) {
-			Logger.logWarn("Servers not loaded yet.");
-			return new String[] { "Automatic" };
-		} else {
-			String[] out = new String[DownloadUtils.downloadServers.size()];
-			for(int i = 0; i < out.length; i++) {
-				out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
-			}
-			return out;
-		}
-	}
+    public String[] getDownloadServerNames () {
+        if (!DownloadUtils.serversLoaded) {
+            Logger.logWarn("Servers not loaded yet.");
+            return new String[] { "Automatic" };
+        }
+        else {
+            String[] out = new String[DownloadUtils.downloadServers.size()];
+            for (int i = 0; i < out.length; i++) {
+                out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
+            }
+            return out;
+        }
+    }
 
-	public void saveSettingsInto(Settings settings) {
-		settings.setDownloadServer(String.valueOf(downloadLocation.getItemAt(downloadLocation.getSelectedIndex())));
-		settings.setLastDimension(new Dimension(Integer.parseInt(mcWindowSizeWidth.getText()), Integer.parseInt(mcWindowSizeHeight.getText())));
-		int lastExtendedState = settings.getLastExtendedState();
-		settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
-		settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-		settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
-		settings.setSnooper(snooper.isSelected());
-		settings.setDebugLauncher(debugLauncherVerbose.isSelected());
-		settings.save();
-	}
+    public void saveSettingsInto (Settings settings) {
+        settings.setDownloadServer(String.valueOf(downloadLocation.getItemAt(downloadLocation.getSelectedIndex())));
+        settings.setLastDimension(new Dimension(Integer.parseInt(mcWindowSizeWidth.getText()), Integer.parseInt(mcWindowSizeHeight.getText())));
+        int lastExtendedState = settings.getLastExtendedState();
+        settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
+        settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
+        settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
+        settings.setSnooper(snooper.isSelected());
+        settings.setDebugLauncher(debugLauncherVerbose.isSelected());
+        settings.save();
+    }
 
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
-		setResizable(true); // false
+    private void setupGui () {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
+        setResizable(true); // false
 
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		getContentPane().setLayout(layout);
+        Container panel = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        getContentPane().setLayout(layout);
 
-		downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
-		downloadLocation = new JComboBox(getDownloadServerNames());
-		additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
-		additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
-		mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
-		mcWindowSizeWidth = new JTextField(4);
-		mcWindowSizeSepLbl = new JLabel("x");
-		mcWindowSizeHeight = new JTextField(4);
-		mcWindowPosLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
-		mcWindowPosX = new JTextField(4);
-		mcWindowPosSepLbl = new JLabel("x");
-		mcWindowPosY = new JTextField(4);
-		autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
-		snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
-		debugLauncherVerbose = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE"));
-		exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
+        downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
+        downloadLocation = new JComboBox(getDownloadServerNames());
+        additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
+        additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
+        mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
+        mcWindowSizeWidth = new JTextField(4);
+        mcWindowSizeSepLbl = new JLabel("x");
+        mcWindowSizeHeight = new JTextField(4);
+        mcWindowPosLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_POS"));
+        mcWindowPosX = new JTextField(4);
+        mcWindowPosSepLbl = new JLabel("x");
+        mcWindowPosY = new JTextField(4);
+        autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
+        snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
+        debugLauncherVerbose = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE"));
+        exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
 
-		downloadLocationLbl.setLabelFor(downloadLocation);
+        downloadLocationLbl.setLabelFor(downloadLocation);
 
-		add(downloadLocationLbl);
-		add(downloadLocation);
-		add(additionalJavaOptionsLbl);
-		add(additionalJavaOptions);
-		add(mcWindowSizeLbl);
-		add(mcWindowSizeWidth);
-		add(mcWindowSizeSepLbl);
-		add(mcWindowSizeHeight);
-		add(mcWindowPosLbl);
-		add(mcWindowPosX);
-		add(mcWindowPosSepLbl);
-		add(mcWindowPosY);
-		add(autoMaxCheck);
-		add(snooper);
-		add(debugLauncherVerbose);
-		add(exit);
+        add(downloadLocationLbl);
+        add(downloadLocation);
+        add(additionalJavaOptionsLbl);
+        add(additionalJavaOptions);
+        add(mcWindowSizeLbl);
+        add(mcWindowSizeWidth);
+        add(mcWindowSizeSepLbl);
+        add(mcWindowSizeHeight);
+        add(mcWindowPosLbl);
+        add(mcWindowPosX);
+        add(mcWindowPosSepLbl);
+        add(mcWindowPosY);
+        add(autoMaxCheck);
+        add(snooper);
+        add(debugLauncherVerbose);
+        add(exit);
 
-		Spring hSpring;
-		Spring columnWidth;
+        Spring hSpring;
+        Spring columnWidth;
 
-		hSpring = Spring.constant(10);
+        hSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.WEST, downloadLocationLbl,      hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, additionalJavaOptionsLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowSizeLbl,          hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowPosLbl,           hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, autoMaxCheck,             hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, snooper,                  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose,     hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, downloadLocationLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, additionalJavaOptionsLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowSizeLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowPosLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, autoMaxCheck, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, snooper, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(downloadLocationLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(additionalJavaOptionsLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(mcWindowSizeLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosLbl));
+        columnWidth = Spring.width(downloadLocationLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(additionalJavaOptionsLbl));
+        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowSizeLbl));
+        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosLbl));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.WEST, downloadLocation,      hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowSizeWidth,     hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowPosX,          hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, downloadLocation, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowPosX, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(mcWindowSizeWidth);
-		columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosX));
+        columnWidth = Spring.width(mcWindowSizeWidth);
+        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosX));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, mcWindowPosX,      hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, mcWindowPosX, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(5));
+        hSpring = Spring.sum(hSpring, Spring.constant(5));
 
-		layout.putConstraint(SpringLayout.WEST, mcWindowSizeSepLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowPosSepLbl,  hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowSizeSepLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowPosSepLbl, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(mcWindowSizeSepLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosSepLbl));
+        columnWidth = Spring.width(mcWindowSizeSepLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosSepLbl));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(5));
+        hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, Spring.constant(5));
 
-		layout.putConstraint(SpringLayout.WEST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, mcWindowPosY,       hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, mcWindowPosY, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(mcWindowSizeHeight);
-		columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosY));
+        columnWidth = Spring.width(mcWindowSizeHeight);
+        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosY));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, downloadLocation,      hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, mcWindowSizeHeight,    hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, mcWindowPosY,          hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, downloadLocation, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, mcWindowPosY, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, exit, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, exit, 0, SpringLayout.HORIZONTAL_CENTER, panel);
 
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-		Spring vSpring;
-		Spring rowHeight;
+        Spring vSpring;
+        Spring rowHeight;
 
-		vSpring = Spring.constant(10);
+        vSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.BASELINE, downloadLocationLbl,       0, SpringLayout.BASELINE, downloadLocation);
-		layout.putConstraint(SpringLayout.NORTH,    downloadLocation,    vSpring, SpringLayout.NORTH,    panel);
-		rowHeight = Spring.height(downloadLocationLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
+        layout.putConstraint(SpringLayout.BASELINE, downloadLocationLbl, 0, SpringLayout.BASELINE, downloadLocation);
+        layout.putConstraint(SpringLayout.NORTH, downloadLocation, vSpring, SpringLayout.NORTH, panel);
+        rowHeight = Spring.height(downloadLocationLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.BASELINE, additionalJavaOptionsLbl,       0, SpringLayout.BASELINE, additionalJavaOptions);
-		layout.putConstraint(SpringLayout.NORTH,    additionalJavaOptions,    vSpring, SpringLayout.NORTH,    panel);
+        layout.putConstraint(SpringLayout.BASELINE, additionalJavaOptionsLbl, 0, SpringLayout.BASELINE, additionalJavaOptions);
+        layout.putConstraint(SpringLayout.NORTH, additionalJavaOptions, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(additionalJavaOptionsLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(additionalJavaOptions));
+        rowHeight = Spring.height(additionalJavaOptionsLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(additionalJavaOptions));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeLbl,          0, SpringLayout.BASELINE, mcWindowSizeWidth);
-		layout.putConstraint(SpringLayout.NORTH,    mcWindowSizeWidth,  vSpring, SpringLayout.NORTH,    panel);
-		layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeSepLbl,       0, SpringLayout.BASELINE, mcWindowSizeWidth);
-		layout.putConstraint(SpringLayout.NORTH,    mcWindowSizeHeight, vSpring, SpringLayout.NORTH,    panel);
+        layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
+        layout.putConstraint(SpringLayout.NORTH, mcWindowSizeWidth, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeSepLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
+        layout.putConstraint(SpringLayout.NORTH, mcWindowSizeHeight, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(mcWindowSizeLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeWidth));
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeSepLbl));
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeHeight));
+        rowHeight = Spring.height(mcWindowSizeLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeWidth));
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeSepLbl));
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeHeight));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.BASELINE, mcWindowPosLbl,          0, SpringLayout.BASELINE, mcWindowPosX);
-		layout.putConstraint(SpringLayout.NORTH,    mcWindowPosX,      vSpring, SpringLayout.NORTH,    panel);
-		layout.putConstraint(SpringLayout.BASELINE, mcWindowPosSepLbl,       0, SpringLayout.BASELINE, mcWindowPosX);
-		layout.putConstraint(SpringLayout.NORTH,    mcWindowPosY,      vSpring, SpringLayout.NORTH,    panel);
+        layout.putConstraint(SpringLayout.BASELINE, mcWindowPosLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
+        layout.putConstraint(SpringLayout.NORTH, mcWindowPosX, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.BASELINE, mcWindowPosSepLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
+        layout.putConstraint(SpringLayout.NORTH, mcWindowPosY, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(mcWindowPosLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosX));
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosSepLbl));
-		rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosY));
+        rowHeight = Spring.height(mcWindowPosLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosX));
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosSepLbl));
+        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosY));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, autoMaxCheck, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, autoMaxCheck, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(autoMaxCheck));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(autoMaxCheck));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, snooper, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, snooper, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(snooper));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(snooper));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, debugLauncherVerbose, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, debugLauncherVerbose, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(debugLauncherVerbose));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(debugLauncherVerbose));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(exit));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(exit));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
 }

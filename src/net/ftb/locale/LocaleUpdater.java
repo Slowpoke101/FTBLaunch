@@ -32,83 +32,89 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class LocaleUpdater extends Thread {
-	private final String root = OSUtils.getDynamicStorageLocation();
-	private File local = new File(root, "locale" + File.separator + "version");
-	private File archive = new File(root, "locales.zip");
-	private int remoteVer;
+    private final String root = OSUtils.getDynamicStorageLocation();
+    private File local = new File(root, "locale" + File.separator + "version");
+    private File archive = new File(root, "locales.zip");
+    private int remoteVer;
 
-	public LocaleUpdater() {
-		setName("Locale Updater");
-		setPriority(MIN_PRIORITY);
-	}
+    public LocaleUpdater() {
+        setName("Locale Updater");
+        setPriority(MIN_PRIORITY);
+    }
 
-	private void updateFiles() {
-		Logger.logInfo("[i18n] Downloading locale files ...");
-		try {
-			DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
-			Logger.logInfo("[i18n] Moving files into place ...");
-			if(local.getParentFile().exists()) {
-				FileUtils.delete(local.getParentFile());
-			}
-			FileUtils.extractZipTo(archive.getAbsolutePath(), local.getParentFile().getPath());
-			if(!local.exists()) {
-				local.createNewFile();
-			}
-			Writer wr = new FileWriter(local);
-			wr.write(String.valueOf(remoteVer));
-			wr.close();
-			cleanUpFiles();
-		} catch (Exception e) {
-			Logger.logWarn("[i18n] Update IOException", e);
-		}
-	}
+    private void updateFiles () {
+        Logger.logInfo("[i18n] Downloading locale files ...");
+        try {
+            DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
+            Logger.logInfo("[i18n] Moving files into place ...");
+            if (local.getParentFile().exists()) {
+                FileUtils.delete(local.getParentFile());
+            }
+            FileUtils.extractZipTo(archive.getAbsolutePath(), local.getParentFile().getPath());
+            if (!local.exists()) {
+                local.createNewFile();
+            }
+            Writer wr = new FileWriter(local);
+            wr.write(String.valueOf(remoteVer));
+            wr.close();
+            cleanUpFiles();
+        }
+        catch (Exception e) {
+            Logger.logWarn("[i18n] Update IOException", e);
+        }
+    }
 
-	public void run() {
-		Logger.logInfo("[i18n] Checking for updates ...");
-		File dir = new File(root);
-		File tmp = new File(dir, "locale");
+    public void run () {
+        Logger.logInfo("[i18n] Checking for updates ...");
+        File dir = new File(root);
+        File tmp = new File(dir, "locale");
 
-		if (!dir.exists() || !tmp.exists()) {
-			dir.mkdirs();
-			tmp.mkdirs();
-		}
-		cleanUpFiles();
-		try {
-			URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
-			Scanner scanner = new Scanner(connection.getInputStream());
-			remoteVer = scanner.nextInt();
-			Logger.logInfo("[i18n] remoteVer = " + remoteVer);
-			scanner.close();
-		} catch (MalformedURLException e1) {
-			Logger.logError(e1.getMessage(), e1);
-		} catch (IOException e1) {
-			Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
-			return;
-		}
-		if (local.exists()) {
-			try {
-				int localVer;
-				Scanner scanner = new Scanner(local);
-				localVer = scanner.nextInt();
-				Logger.logInfo("[i18n] localVer = " + localVer);
-				scanner.close();
-				if (localVer < remoteVer) {
-					updateFiles();
-				} else {
-					Logger.logInfo("[i18n] Files are up to date");
-				}
-			} catch (FileNotFoundException e1) {
-				Logger.logInfo("[i18n] Could not read version file", e1);
-			}
-		} else {
-			updateFiles();
-		}
-		I18N.addFiles();
-	}
+        if (!dir.exists() || !tmp.exists()) {
+            dir.mkdirs();
+            tmp.mkdirs();
+        }
+        cleanUpFiles();
+        try {
+            URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
+            Scanner scanner = new Scanner(connection.getInputStream());
+            remoteVer = scanner.nextInt();
+            Logger.logInfo("[i18n] remoteVer = " + remoteVer);
+            scanner.close();
+        }
+        catch (MalformedURLException e1) {
+            Logger.logError(e1.getMessage(), e1);
+        }
+        catch (IOException e1) {
+            Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
+            return;
+        }
+        if (local.exists()) {
+            try {
+                int localVer;
+                Scanner scanner = new Scanner(local);
+                localVer = scanner.nextInt();
+                Logger.logInfo("[i18n] localVer = " + localVer);
+                scanner.close();
+                if (localVer < remoteVer) {
+                    updateFiles();
+                }
+                else {
+                    Logger.logInfo("[i18n] Files are up to date");
+                }
+            }
+            catch (FileNotFoundException e1) {
+                Logger.logInfo("[i18n] Could not read version file", e1);
+            }
+        }
+        else {
+            updateFiles();
+        }
+        I18N.addFiles();
+    }
 
-	private void cleanUpFiles() {
-		if (archive.exists()) {
-			archive.delete();
-		}
-	}
+    private void cleanUpFiles () {
+        if (archive.exists()) {
+            archive.delete();
+        }
+    }
 }

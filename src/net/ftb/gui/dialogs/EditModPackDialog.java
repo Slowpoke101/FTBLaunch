@@ -50,347 +50,350 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 public class EditModPackDialog extends JDialog {
-	private JTabbedPane tabbedPane;
+    private JTabbedPane tabbedPane;
 
-	private JPanel formPnl;
+    private JPanel formPnl;
 
-	private JButton openFolder;
-	private JButton addMod;
-	private JButton disableMod;
-	private JButton enableMod;
+    private JButton openFolder;
+    private JButton addMod;
+    private JButton disableMod;
+    private JButton enableMod;
 
-	private JLabel enabledModsLbl;
-	private JLabel disabledModsLbl;
+    private JLabel enabledModsLbl;
+    private JLabel disabledModsLbl;
 
-	private JScrollPane enabledModsScl;
-	private JScrollPane disabledModsScl;
+    private JScrollPane enabledModsScl;
+    private JScrollPane disabledModsScl;
 
-	private JList enabledModsLst;
-	private JList disabledModsLst;
+    private JList enabledModsLst;
+    private JList disabledModsLst;
 
-	private List<String> enabledMods;
-	private List<String> disabledMods;
-	private int mcversion = 000;
+    private List<String> enabledMods;
+    private List<String> disabledMods;
+    private int mcversion = 000;
 
-	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
-	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
-	private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "instMods");
-	public File folder = modsFolder;
+    private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
+    private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
+    private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "instMods");
+    public File folder = modsFolder;
 
-	private Tab currentTab = Tab.MODS;
+    private Tab currentTab = Tab.MODS;
 
-	public enum Tab {
-		MODS,
-		JARMODS,
-		COREMODS,
-		OLD_VERSIONS
-	}
+    public enum Tab {
+        MODS, JARMODS, COREMODS, OLD_VERSIONS
+    }
 
-	public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
-		super(instance, true);
-		if (modPack != null && modPack.getMcVersion() != null)
-		    mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
-		Logger.logInfo("MCVersion: " + mcversion);
-		modsFolder.mkdirs();
-		coreModsFolder.mkdirs();
-		jarModsFolder.mkdirs();
+    public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
+        super(instance, true);
+        if (modPack != null && modPack.getMcVersion() != null)
+            mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
+        Logger.logInfo("MCVersion: " + mcversion);
+        modsFolder.mkdirs();
+        coreModsFolder.mkdirs();
+        jarModsFolder.mkdirs();
 
-		setupGui();
+        setupGui();
 
-		enabledMods = new ArrayList<String>();
-		disabledMods = new ArrayList<String>();
+        enabledMods = new ArrayList<String>();
+        disabledMods = new ArrayList<String>();
 
-		tabbedPane.setSelectedIndex(0);
+        tabbedPane.setSelectedIndex(0);
 
-		enabledModsLst.setListData(getEnabled());
-		disabledModsLst.setListData(getDisabled());
+        enabledModsLst.setListData(getEnabled());
+        disabledModsLst.setListData(getDisabled());
 
-		addMod.addActionListener(new ChooseDir(this));
+        addMod.addActionListener(new ChooseDir(this));
 
-		tabbedPane.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				currentTab = Tab.values()[tabbedPane.getSelectedIndex()];
-				switch(currentTab) {
-				case MODS:
-					folder = modsFolder;
-					break;
-				case COREMODS:
-					folder = coreModsFolder;
-					break;
-				case JARMODS:
-					folder = jarModsFolder;
-					break;
-				default: 
-					return;
-				}
-				((JPanel)tabbedPane.getSelectedComponent()).add(formPnl);
-				updateLists();
-			}
-		});
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged (ChangeEvent arg0) {
+                currentTab = Tab.values()[tabbedPane.getSelectedIndex()];
+                switch (currentTab) {
+                case MODS:
+                    folder = modsFolder;
+                    break;
+                case COREMODS:
+                    folder = coreModsFolder;
+                    break;
+                case JARMODS:
+                    folder = jarModsFolder;
+                    break;
+                default:
+                    return;
+                }
+                ((JPanel) tabbedPane.getSelectedComponent()).add(formPnl);
+                updateLists();
+            }
+        });
 
-		openFolder.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				OSUtils.open(folder);
-			}
-		});
+        openFolder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent event) {
+                OSUtils.open(folder);
+            }
+        });
 
-		disableMod.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(enabledModsLst.getSelectedIndices().length > 1) {
-					for(int i = 0; i < enabledModsLst.getSelectedIndices().length; i++) {
-						String name = enabledMods.get(enabledModsLst.getSelectedIndices()[i]);
-						new File(folder, name).renameTo(new File(folder, name + ".disabled"));
-					}
-					updateLists();
-				} else {
-					if(enabledModsLst.getSelectedIndex() >= 0) {
-						String name = enabledMods.get(enabledModsLst.getSelectedIndex());
-						new File(folder, name).renameTo(new File(folder, name + ".disabled"));
-					}
-					updateLists();
-				}
-			}
-		});
+        disableMod.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                if (enabledModsLst.getSelectedIndices().length > 1) {
+                    for (int i = 0; i < enabledModsLst.getSelectedIndices().length; i++) {
+                        String name = enabledMods.get(enabledModsLst.getSelectedIndices()[i]);
+                        new File(folder, name).renameTo(new File(folder, name + ".disabled"));
+                    }
+                    updateLists();
+                }
+                else {
+                    if (enabledModsLst.getSelectedIndex() >= 0) {
+                        String name = enabledMods.get(enabledModsLst.getSelectedIndex());
+                        new File(folder, name).renameTo(new File(folder, name + ".disabled"));
+                    }
+                    updateLists();
+                }
+            }
+        });
 
-		enableMod.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(disabledModsLst.getSelectedIndices().length > 1) {
-					for(int i = 0; i < disabledModsLst.getSelectedIndices().length; i++) {
-						String name = disabledMods.get(disabledModsLst.getSelectedIndices()[i]);
-						new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
-					}
-					updateLists();
-				} else {
-					if(disabledModsLst.getSelectedIndex() >= 0) {
-						String name = disabledMods.get(disabledModsLst.getSelectedIndex());
-						new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
-					}
-					updateLists();
-				}
-			}
-		});
-	}
+        enableMod.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                if (disabledModsLst.getSelectedIndices().length > 1) {
+                    for (int i = 0; i < disabledModsLst.getSelectedIndices().length; i++) {
+                        String name = disabledMods.get(disabledModsLst.getSelectedIndices()[i]);
+                        new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
+                    }
+                    updateLists();
+                }
+                else {
+                    if (disabledModsLst.getSelectedIndex() >= 0) {
+                        String name = disabledMods.get(disabledModsLst.getSelectedIndex());
+                        new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
+                    }
+                    updateLists();
+                }
+            }
+        });
+    }
 
-	private String[] getEnabled() {
-		enabledMods.clear();
-		if(folder.exists()) {
-			for(String name : folder.list()) {
-				if(name.toLowerCase().endsWith(".zip")) {
-					enabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".jar")) {
-					enabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".litemod")) {
-					enabledMods.add(name);
-				}
-			}
-		}
-		String[] enabledList = new String[enabledMods.size()];
-		for(int i = 0; i < enabledMods.size(); i++) {
-			enabledList[i] = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
-		}
-		return enabledList;
-	}
-
-	private String[] getDisabled() {
-		disabledMods.clear();
-		if(folder.exists()) {
-			for(String name : folder.list()) {
-				if(name.toLowerCase().endsWith(".zip.disabled")) {
-					disabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".jar.disabled")) {
-					disabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".litemod.disabled")) {
-					disabledMods.add(name);
-				}
-			}
-		}
-		String[] enabledList = new String[disabledMods.size()];
-		for(int i = 0; i < disabledMods.size(); i++) {
-			enabledList[i] = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
-		}
-		return enabledList;
-	}
-
-	public void updateLists() {
-		enabledModsLst.setListData(getEnabled());
-		disabledModsLst.setListData(getDisabled());
-	}
-
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
-		setResizable(false);
-
-		Container panel;
-		panel = getContentPane();
-		panel.setLayout(new BorderLayout());
-
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
-		formPnl = new JPanel();
-
-		enabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL"));
-		disabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL"));
-
-		openFolder = new JButton(I18N.getLocaleString("MODS_EDIT_OPEN_FOLDER"));
-		addMod = new JButton(I18N.getLocaleString("MODS_EDIT_ADD_MOD"));
-		disableMod = new JButton(I18N.getLocaleString("MODS_EDIT_DISABLE_MOD"));
-		enableMod = new JButton(I18N.getLocaleString("MODS_EDIT_ENABLE_MOD"));
-
-		enabledModsLst = new JList();
-		disabledModsLst = new JList();
-
-		enabledModsScl = new JScrollPane(enabledModsLst);
-		disabledModsScl = new JScrollPane(disabledModsLst);
-
-		panel.add(tabbedPane);
-
-		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
-		if(mcversion <= 152){
-		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
-		tabbedPane.addTab(null, new JPanel(new BorderLayout()));
-		}
-		JLabel tabLabel;
-		tabLabel = new JLabel("Mods");
-		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
-		tabbedPane.setTabComponentAt(0, tabLabel);
-        if(mcversion <= 152){
-		tabLabel = new JLabel("JarMods");
-		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
-		tabbedPane.setTabComponentAt(1, tabLabel);
-
-		tabLabel = new JLabel("CoreMods");
-		tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
-		tabbedPane.setTabComponentAt(2, tabLabel);
+    private String[] getEnabled () {
+        enabledMods.clear();
+        if (folder.exists()) {
+            for (String name : folder.list()) {
+                if (name.toLowerCase().endsWith(".zip")) {
+                    enabledMods.add(name);
+                }
+                else if (name.toLowerCase().endsWith(".jar")) {
+                    enabledMods.add(name);
+                }
+                else if (name.toLowerCase().endsWith(".litemod")) {
+                    enabledMods.add(name);
+                }
+            }
         }
-		enabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		disabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        String[] enabledList = new String[enabledMods.size()];
+        for (int i = 0; i < enabledMods.size(); i++) {
+            enabledList[i] = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
+        }
+        return enabledList;
+    }
 
-		enabledModsLbl.setFont(enabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
-		disabledModsLbl.setFont(disabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
+    private String[] getDisabled () {
+        disabledMods.clear();
+        if (folder.exists()) {
+            for (String name : folder.list()) {
+                if (name.toLowerCase().endsWith(".zip.disabled")) {
+                    disabledMods.add(name);
+                }
+                else if (name.toLowerCase().endsWith(".jar.disabled")) {
+                    disabledMods.add(name);
+                }
+                else if (name.toLowerCase().endsWith(".litemod.disabled")) {
+                    disabledMods.add(name);
+                }
+            }
+        }
+        String[] enabledList = new String[disabledMods.size()];
+        for (int i = 0; i < disabledMods.size(); i++) {
+            enabledList[i] = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
+        }
+        return enabledList;
+    }
 
-		enabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
-		disabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
+    public void updateLists () {
+        enabledModsLst.setListData(getEnabled());
+        disabledModsLst.setListData(getDisabled());
+    }
 
-		enabledModsScl.setViewportView(enabledModsLst);
-		disabledModsScl.setViewportView(disabledModsLst);
+    private void setupGui () {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
+        setResizable(false);
 
-		SpringLayout layout = new SpringLayout();
-		formPnl.setLayout(layout);
+        Container panel;
+        panel = getContentPane();
+        panel.setLayout(new BorderLayout());
 
-		formPnl.add(enabledModsLbl);
-		formPnl.add(disabledModsLbl);
-		formPnl.add(enabledModsScl);
-		formPnl.add(disabledModsScl);
-		formPnl.add(disableMod);
-		formPnl.add(enableMod);
-		formPnl.add(addMod);
-		formPnl.add(openFolder);
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-		Spring vSpring;
-		Spring rowHeight;
-		Spring buttonRowHeight;
+        formPnl = new JPanel();
 
-		vSpring = Spring.constant(10);
+        enabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL"));
+        disabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL"));
 
-		layout.putConstraint(SpringLayout.NORTH, enabledModsLbl,  vSpring, SpringLayout.NORTH, formPnl);
-		layout.putConstraint(SpringLayout.NORTH, disabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
+        openFolder = new JButton(I18N.getLocaleString("MODS_EDIT_OPEN_FOLDER"));
+        addMod = new JButton(I18N.getLocaleString("MODS_EDIT_ADD_MOD"));
+        disableMod = new JButton(I18N.getLocaleString("MODS_EDIT_DISABLE_MOD"));
+        enableMod = new JButton(I18N.getLocaleString("MODS_EDIT_ENABLE_MOD"));
 
-		rowHeight = Spring.height(enabledModsLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(disabledModsLbl));
+        enabledModsLst = new JList();
+        disabledModsLst = new JList();
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        enabledModsScl = new JScrollPane(enabledModsLst);
+        disabledModsScl = new JScrollPane(disabledModsLst);
 
-		layout.putConstraint(SpringLayout.NORTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
-		layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+        panel.add(tabbedPane);
 
-		rowHeight = Spring.constant(320);
+        tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+        if (mcversion <= 152) {
+            tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+            tabbedPane.addTab(null, new JPanel(new BorderLayout()));
+        }
+        JLabel tabLabel;
+        tabLabel = new JLabel("Mods");
+        tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+        tabbedPane.setTabComponentAt(0, tabLabel);
+        if (mcversion <= 152) {
+            tabLabel = new JLabel("JarMods");
+            tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+            tabbedPane.setTabComponentAt(1, tabLabel);
 
-		buttonRowHeight = Spring.scale(rowHeight, .5f);
-		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.height(enableMod)));
-		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.constant(5)));
+            tabLabel = new JLabel("CoreMods");
+            tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
+            tabbedPane.setTabComponentAt(2, tabLabel);
+        }
+        enabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        disabledModsLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-		layout.putConstraint(SpringLayout.SOUTH, enableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
+        enabledModsLbl.setFont(enabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
+        disabledModsLbl.setFont(disabledModsLbl.getFont().deriveFont(Font.BOLD, 22.0f));
 
-		buttonRowHeight = Spring.sum(buttonRowHeight, Spring.constant(10));
+        enabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
+        disabledModsLst.setBackground(UIManager.getColor("control").darker().darker());
 
-		layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
+        enabledModsScl.setViewportView(enabledModsLst);
+        disabledModsScl.setViewportView(disabledModsLst);
 
-		vSpring = Spring.sum(vSpring, rowHeight);
+        SpringLayout layout = new SpringLayout();
+        formPnl.setLayout(layout);
 
-		layout.putConstraint(SpringLayout.SOUTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
-		layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+        formPnl.add(enabledModsLbl);
+        formPnl.add(disabledModsLbl);
+        formPnl.add(enabledModsScl);
+        formPnl.add(disabledModsScl);
+        formPnl.add(disableMod);
+        formPnl.add(enableMod);
+        formPnl.add(addMod);
+        formPnl.add(openFolder);
 
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        Spring vSpring;
+        Spring rowHeight;
+        Spring buttonRowHeight;
 
-		layout.putConstraint(SpringLayout.NORTH, addMod,     vSpring, SpringLayout.NORTH, formPnl);
-		layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
+        vSpring = Spring.constant(10);
 
-		rowHeight = Spring.height(addMod);
-		rowHeight = Spring.max(rowHeight, Spring.height(openFolder));
+        layout.putConstraint(SpringLayout.NORTH, enabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
+        layout.putConstraint(SpringLayout.NORTH, disabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        rowHeight = Spring.height(enabledModsLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(disabledModsLbl));
 
-		layout.putConstraint(SpringLayout.SOUTH, formPnl, vSpring, SpringLayout.NORTH, formPnl);
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		Spring hSpring;
-		Spring columnWidth;
-		Spring buttonColumnWidth;
+        layout.putConstraint(SpringLayout.NORTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+        layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 
-		hSpring = Spring.constant(10);
+        rowHeight = Spring.constant(320);
 
-		layout.putConstraint(SpringLayout.WEST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
+        buttonRowHeight = Spring.scale(rowHeight, .5f);
+        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.height(enableMod)));
+        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.constant(5)));
 
-		columnWidth = Spring.width(enabledModsLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(disabledModsLbl));
-		columnWidth = Spring.max(columnWidth, Spring.constant(260));
+        layout.putConstraint(SpringLayout.SOUTH, enableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.EAST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, openFolder, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
 
-		layout.putConstraint(SpringLayout.WEST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.SOUTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
+        layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 
-		buttonColumnWidth = Spring.width(enableMod);
-		buttonColumnWidth = Spring.max(buttonColumnWidth, Spring.width(disableMod));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		hSpring = Spring.sum(hSpring, buttonColumnWidth);
+        layout.putConstraint(SpringLayout.NORTH, addMod, vSpring, SpringLayout.NORTH, formPnl);
+        layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
 
-		layout.putConstraint(SpringLayout.EAST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+        rowHeight = Spring.height(addMod);
+        rowHeight = Spring.max(rowHeight, Spring.height(openFolder));
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.WEST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.SOUTH, formPnl, vSpring, SpringLayout.NORTH, formPnl);
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        Spring hSpring;
+        Spring columnWidth;
+        Spring buttonColumnWidth;
 
-		layout.putConstraint(SpringLayout.EAST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+        hSpring = Spring.constant(10);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        layout.putConstraint(SpringLayout.WEST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.WEST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
 
-		layout.putConstraint(SpringLayout.EAST, formPnl, hSpring, SpringLayout.WEST, formPnl);
+        columnWidth = Spring.width(enabledModsLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(disabledModsLbl));
+        columnWidth = Spring.max(columnWidth, Spring.constant(260));
 
-		((JPanel)tabbedPane.getComponent(0)).add(formPnl);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+        layout.putConstraint(SpringLayout.EAST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.EAST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.EAST, openFolder, hSpring, SpringLayout.WEST, formPnl);
+
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.WEST, enableMod, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+
+        buttonColumnWidth = Spring.width(enableMod);
+        buttonColumnWidth = Spring.max(buttonColumnWidth, Spring.width(disableMod));
+
+        hSpring = Spring.sum(hSpring, buttonColumnWidth);
+
+        layout.putConstraint(SpringLayout.EAST, enableMod, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.EAST, disableMod, hSpring, SpringLayout.WEST, formPnl);
+
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.WEST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.WEST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.WEST, addMod, hSpring, SpringLayout.WEST, formPnl);
+
+        hSpring = Spring.sum(hSpring, columnWidth);
+
+        layout.putConstraint(SpringLayout.EAST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.EAST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
+        layout.putConstraint(SpringLayout.EAST, addMod, hSpring, SpringLayout.WEST, formPnl);
+
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.EAST, formPnl, hSpring, SpringLayout.WEST, formPnl);
+
+        ((JPanel) tabbedPane.getComponent(0)).add(formPnl);
+
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
 }

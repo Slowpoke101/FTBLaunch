@@ -30,51 +30,41 @@ import net.ftb.util.ErrorUtils;
 /**
  * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.
  */
-public class LoginWorker extends SwingWorker<String, Void>
-{
+public class LoginWorker extends SwingWorker<String, Void> {
     private String username, password;
 
-    public LoginWorker(String username, String password)
-    {
+    public LoginWorker(String username, String password) {
         super();
         this.username = username;
         this.password = password;
     }
 
     @Override
-    protected String doInBackground ()
-    {
-        try
-        {
+    protected String doInBackground () {
+        try {
             String authlibreturn = new String();
-            if (LaunchFrame.canUseAuthlib)
-            {
-                try
-                {
-                  authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
+            if (LaunchFrame.canUseAuthlib) {
+                try {
+                    authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Logger.logError("Error using authlib");
                 }
             }
-            if (!authlibreturn.equals(null) && !authlibreturn.isEmpty())
-            {
+            if (!authlibreturn.equals(null) && !authlibreturn.isEmpty()) {
                 Logger.logInfo("using Authlib authentication data");
                 return "A:" + authlibreturn;
             }
             else
                 Logger.logError("Failed to use Mojang's authentication library, falling back on old method.");
-            return "O:" + AppUtils.downloadString(new URL("https://login.minecraft.net/?user=" + URLEncoder.encode(username, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&version=13"));
+            return "O:"
+                    + AppUtils
+                            .downloadString(new URL("https://login.minecraft.net/?user=" + URLEncoder.encode(username, "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8") + "&version=13"));
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             ErrorUtils.tossError("IOException, minecraft servers might be down. Check @ help.mojang.com");
             return "";
         }
     }
-
-   
-      
 
 }

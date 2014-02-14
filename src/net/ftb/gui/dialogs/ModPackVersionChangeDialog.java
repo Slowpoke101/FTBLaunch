@@ -33,145 +33,145 @@ import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.tools.ModManager;
 
 @SuppressWarnings("serial")
 public class ModPackVersionChangeDialog extends JDialog {
-	private JLabel messageLbl;
-	private JLabel updateLbl;
-	private JTextArea versionLbl;
-	
-	private JButton update;
-	private JButton abort;
-	private JCheckBox backup;
+    private JLabel messageLbl;
+    private JLabel updateLbl;
+    private JTextArea versionLbl;
 
-	public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, String storedVersion, String onlineVersion) {
-		super(instance, modal);
+    private JButton update;
+    private JButton abort;
+    private JCheckBox backup;
 
-		setupGui(storedVersion, onlineVersion);
+    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, String storedVersion, String onlineVersion) {
+        super(instance, modal);
 
-		update.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				LaunchFrame.allowVersionChange = true;
-				LaunchFrame.doVersionBackup = backup.isSelected();
-				setVisible(false);
-			}
-		});
+        setupGui(storedVersion, onlineVersion);
 
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				LaunchFrame.allowVersionChange = false;
-				setVisible(false);
-			}
-		});
-	}
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.allowVersionChange = true;
+                LaunchFrame.doVersionBackup = backup.isSelected();
+                setVisible(false);
+            }
+        });
 
-	private void setupGui(String storedVersion, String onlineVersion) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
-		setResizable(false);
+        abort.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.allowVersionChange = false;
+                setVisible(false);
+            }
+        });
+    }
 
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		panel.setLayout(layout);
+    private void setupGui (String storedVersion, String onlineVersion) {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
+        setResizable(false);
 
-		if(Integer.parseInt(onlineVersion.replace(".","")) > (storedVersion == "" ? 0 : Integer.parseInt(storedVersion.replace(".","")))) {
-			messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
-			updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-		} else {
-			messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_DOWNGRADE"));
-			updateLbl = new JLabel(I18N.getLocaleString("UPDATE_DOWNGRADE"));
-		}
-		
-		versionLbl = new JTextArea(I18N.getLocaleString("UPDATEMODPACK_FROM_TO_VERSION").replace("%LOCALVER%", storedVersion).replace("%ONLINEVER%", onlineVersion));
-		versionLbl.setEditable(false);
-		versionLbl.setHighlighter(null);
-		versionLbl.setBorder(BorderFactory.createEmptyBorder());
-		
-		update = new JButton(I18N.getLocaleString("MAIN_YES"));
-		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
-		backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
+        Container panel = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
 
-		messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		backup.setHorizontalAlignment(SwingConstants.CENTER);
+        if (Integer.parseInt(onlineVersion.replace(".", "")) > (storedVersion == "" ? 0 : Integer.parseInt(storedVersion.replace(".", "")))) {
+            messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
+            updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+        }
+        else {
+            messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_DOWNGRADE"));
+            updateLbl = new JLabel(I18N.getLocaleString("UPDATE_DOWNGRADE"));
+        }
 
-		panel.add(messageLbl);
-		panel.add(versionLbl);
-		panel.add(updateLbl);
-		panel.add(backup);
-		panel.add(update);
-		panel.add(abort);
+        versionLbl = new JTextArea(I18N.getLocaleString("UPDATEMODPACK_FROM_TO_VERSION").replace("%LOCALVER%", storedVersion).replace("%ONLINEVER%", onlineVersion));
+        versionLbl.setEditable(false);
+        versionLbl.setHighlighter(null);
+        versionLbl.setBorder(BorderFactory.createEmptyBorder());
 
-		Spring hSpring;
-		Spring columnWidth;
+        update = new JButton(I18N.getLocaleString("MAIN_YES"));
+        abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+        backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
 
-		hSpring = Spring.constant(10);
+        messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        backup.setHorizontalAlignment(SwingConstants.CENTER);
 
-		layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, updateLbl,  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, versionLbl,  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, backup,     hSpring, SpringLayout.WEST, panel);
+        panel.add(messageLbl);
+        panel.add(versionLbl);
+        panel.add(updateLbl);
+        panel.add(backup);
+        panel.add(update);
+        panel.add(abort);
 
-		columnWidth = Spring.width(messageLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(versionLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(backup));
+        Spring hSpring;
+        Spring columnWidth;
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, updateLbl,  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, versionLbl,  hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, backup,     hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, versionLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, backup, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        columnWidth = Spring.width(messageLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
+        columnWidth = Spring.max(columnWidth, Spring.width(versionLbl));
+        columnWidth = Spring.max(columnWidth, Spring.width(backup));
 
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backup, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.WEST, abort,   5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, versionLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, backup, hSpring, SpringLayout.WEST, panel);
 
-		Spring vSpring;
-		Spring rowHeight;
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		vSpring = Spring.constant(10);
+        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-		layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
-		vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-		
-		vSpring = Spring.sum(vSpring, Spring.constant(15));
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backup, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
 
-		layout.putConstraint(SpringLayout.NORTH, versionLbl, vSpring, SpringLayout.NORTH, panel);
-		vSpring = Spring.sum(vSpring, Spring.height(versionLbl));
-		
-		vSpring = Spring.sum(vSpring, Spring.constant(15));
-		
-		layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
-		vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
+        Spring vSpring;
+        Spring rowHeight;
 
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.NORTH, backup, vSpring, SpringLayout.NORTH, panel);
-		vSpring = Spring.sum(vSpring, Spring.height(backup));
-		
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
 
-		layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
-		layout.putConstraint(SpringLayout.NORTH, abort,  vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.constant(15));
 
-		rowHeight = Spring.height(update);
-		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+        layout.putConstraint(SpringLayout.NORTH, versionLbl, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.height(versionLbl));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.constant(15));
 
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
 
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.NORTH, backup, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.height(backup));
+
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
+
+        rowHeight = Spring.height(update);
+        rowHeight = Spring.max(rowHeight, Spring.height(abort));
+
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
 }

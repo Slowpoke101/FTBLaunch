@@ -9,51 +9,41 @@ import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
-public class AuthlibHelper
-{
+public class AuthlibHelper {
 
-    protected static String authenticateWithAuthlib (String user, String pass)
-    {
+    protected static String authenticateWithAuthlib (String user, String pass) {
         String ID, displayName;
-        if (user != null)
-        {
+        if (user != null) {
             Logger.logInfo("Beginning authlib authentication attempt");
             YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
             authentication.setPassword(pass);
-            if (!authentication.isLoggedIn())
-            {
-                try
-                {
+            if (!authentication.isLoggedIn()) {
+                try {
                     authentication.logIn();
                 }
-                catch (AuthenticationException e)
-                {
+                catch (AuthenticationException e) {
                     e.printStackTrace();
                 }
             }
-            if (isValid(authentication))
-            {
+            if (isValid(authentication)) {
                 ID = authentication.getSelectedProfile().getId();
                 displayName = authentication.getSelectedProfile().getName();
-                if (!authentication.isLoggedIn())
-                {
-                    try
-                    {
+                if (!authentication.isLoggedIn()) {
+                    try {
                         authentication.logIn();
                     }
-                    catch (AuthenticationException e)
-                    {
+                    catch (AuthenticationException e) {
                         e.printStackTrace();
                     }
                 }
-                if ((authentication.isLoggedIn()) && (authentication.canPlayOnline()))
-                {
-                    if ((authentication instanceof YggdrasilUserAuthentication))
-                    {                        
-                        
-                        return String.format("%s:token:%s:%s:%s", new Object[] {authentication.getAgent().getVersion(), authentication.getAvailableProfiles()[0].getName(), authentication.getAuthenticatedToken(), authentication.getSelectedProfile().getId()});
+                if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
+                    if ((authentication instanceof YggdrasilUserAuthentication)) {
+
+                        return String.format("%s:token:%s:%s:%s",
+                                new Object[] { authentication.getAgent().getVersion(), authentication.getAvailableProfiles()[0].getName(), authentication.getAuthenticatedToken(),
+                                        authentication.getSelectedProfile().getId() });
                     }
                 }
             }
@@ -63,8 +53,7 @@ public class AuthlibHelper
 
     }
 
-    private static boolean isValid (YggdrasilUserAuthentication authentication)
-    {
+    private static boolean isValid (YggdrasilUserAuthentication authentication) {
         return ((authentication.isLoggedIn()) && (authentication.getAuthenticatedToken() != null) && (authentication.getSelectedProfile() != null));
     }
 

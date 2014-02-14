@@ -37,201 +37,201 @@ import net.ftb.gui.panes.MapsPane;
 import net.ftb.locale.I18N;
 
 public class MapFilterDialog extends JDialog {
-	private JLabel typeLbl;
-	private JComboBox type;
-	private JLabel originLbl;
-	private JComboBox origin;
-	private JLabel compatiblePackLbl;
-	private JComboBox compatiblePack;
-	private JButton apply;
-	private JButton cancel;
-	private JButton search;
+    private JLabel typeLbl;
+    private JComboBox type;
+    private JLabel originLbl;
+    private JComboBox origin;
+    private JLabel compatiblePackLbl;
+    private JComboBox compatiblePack;
+    private JButton apply;
+    private JButton cancel;
+    private JButton search;
 
-	private MapsPane pane;
+    private MapsPane pane;
 
-	public MapFilterDialog(MapsPane instance) {
-		super(LaunchFrame.getInstance(), true);
-		this.pane = instance;
+    public MapFilterDialog(MapsPane instance) {
+        super(LaunchFrame.getInstance(), true);
+        this.pane = instance;
 
-		setupGui();
+        setupGui();
 
-		getRootPane().setDefaultButton(apply);
+        getRootPane().setDefaultButton(apply);
 
-		this.pane = instance;
+        this.pane = instance;
 
-		type.setSelectedItem(pane.type);
-		origin.setSelectedItem(pane.origin);
-		compatiblePack.setSelectedItem(pane.compatible);
+        type.setSelectedItem(pane.type);
+        origin.setSelectedItem(pane.origin);
+        compatiblePack.setSelectedItem(pane.compatible);
 
-		ArrayList<String> packs = new ArrayList<String>();
-		compatiblePack.addItem("All");
-		packs.add("All");
-		for(int i = 0; i < Map.getMapArray().size(); i++) {
-			String[] compat = Map.getMap(i).getCompatible();
-			for(String compatable : compat) {
-				if(!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName())) {
-					packs.add(ModPack.getPack(compatable.trim()).getName());
-					compatiblePack.addItem(ModPack.getPack(compatable.trim()).getName());
-				}
-			}
-		}
+        ArrayList<String> packs = new ArrayList<String>();
+        compatiblePack.addItem("All");
+        packs.add("All");
+        for (int i = 0; i < Map.getMapArray().size(); i++) {
+            String[] compat = Map.getMap(i).getCompatible();
+            for (String compatable : compat) {
+                if (!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName())) {
+                    packs.add(ModPack.getPack(compatable.trim()).getName());
+                    compatiblePack.addItem(ModPack.getPack(compatable.trim()).getName());
+                }
+            }
+        }
 
-		type.setModel(new DefaultComboBoxModel(new String[] {"Client", "Server"}));
-		origin.setModel(new DefaultComboBoxModel(new String[] {I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY")}));
-		compatiblePack.setModel(new DefaultComboBoxModel(packs.toArray()));
+        type.setModel(new DefaultComboBoxModel(new String[] { "Client", "Server" }));
+        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
+        compatiblePack.setModel(new DefaultComboBoxModel(packs.toArray()));
 
-		apply.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				pane.compatible = (String)compatiblePack.getSelectedItem();
-				pane.type = (String)type.getSelectedItem();
-				pane.origin = (String)origin.getSelectedItem();
-				pane.updateFilter();
-				setVisible(false);
-			}
-		});
+        apply.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                pane.compatible = (String) compatiblePack.getSelectedItem();
+                pane.type = (String) type.getSelectedItem();
+                pane.origin = (String) origin.getSelectedItem();
+                pane.updateFilter();
+                setVisible(false);
+            }
+        });
 
-		cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                setVisible(false);
+            }
+        });
 
-		search.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				SearchDialog sd = new SearchDialog(pane);
-				sd.setVisible(true);
-				setVisible(false);
-			}
-		});
-	}
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                SearchDialog sd = new SearchDialog(pane);
+                sd.setVisible(true);
+                setVisible(false);
+            }
+        });
+    }
 
-	private void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle(I18N.getLocaleString("FILTER_TITLE"));
-		setResizable(false);
+    private void setupGui () {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle(I18N.getLocaleString("FILTER_TITLE"));
+        setResizable(false);
 
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		panel.setLayout(layout);
+        Container panel = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
 
-		originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
-		typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
-		compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
-		origin = new JComboBox();
-		type = new JComboBox();
-		compatiblePack = new JComboBox();
-		apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
-		cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
-		search = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
+        originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
+        typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));
+        compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
+        origin = new JComboBox();
+        type = new JComboBox();
+        compatiblePack = new JComboBox();
+        apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
+        cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
+        search = new JButton(I18N.getLocaleString("FILTER_SEARCHMAP"));
 
-		origin.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
-		type.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
-		compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
+        origin.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
+        type.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
+        compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
 
-		panel.add(typeLbl);
-		panel.add(type);
-		panel.add(originLbl);
-		panel.add(origin);
-		panel.add(compatiblePackLbl);
-		panel.add(compatiblePack);
-		panel.add(apply);
-		panel.add(cancel);
-		panel.add(search);
+        panel.add(typeLbl);
+        panel.add(type);
+        panel.add(originLbl);
+        panel.add(origin);
+        panel.add(compatiblePackLbl);
+        panel.add(compatiblePack);
+        panel.add(apply);
+        panel.add(cancel);
+        panel.add(search);
 
-		Spring hSpring;
-		Spring columnWidth;
+        Spring hSpring;
+        Spring columnWidth;
 
-		hSpring = Spring.constant(10);
+        hSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.WEST, typeLbl,           hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, originLbl,         hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, typeLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, originLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(typeLbl);
-		columnWidth = Spring.max(columnWidth, Spring.width(originLbl));
-		columnWidth = Spring.max(columnWidth, Spring.width(compatiblePackLbl));
+        columnWidth = Spring.width(typeLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(originLbl));
+        columnWidth = Spring.max(columnWidth, Spring.width(compatiblePackLbl));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.WEST, type,           hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, origin,         hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, type, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, origin, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
 
-		columnWidth = Spring.width(type);
-		columnWidth = Spring.max(columnWidth, Spring.width(origin));
-		columnWidth = Spring.max(columnWidth, Spring.width(compatiblePack));
+        columnWidth = Spring.width(type);
+        columnWidth = Spring.max(columnWidth, Spring.width(origin));
+        columnWidth = Spring.max(columnWidth, Spring.width(compatiblePack));
 
-		hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, type,           hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, origin,         hSpring, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, compatiblePack, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, type, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, origin, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, compatiblePack, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-		layout.putConstraint(SpringLayout.WEST, search,  10, SpringLayout.WEST,              panel);
-		layout.putConstraint(SpringLayout.EAST, search,  -5, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.WEST, cancel,   5, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST,              panel);
+        layout.putConstraint(SpringLayout.WEST, search, 10, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, search, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.WEST, cancel, 5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST, panel);
 
-		layout.putConstraint(SpringLayout.WEST, apply,  10, SpringLayout.WEST, panel);
-		layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
+        layout.putConstraint(SpringLayout.WEST, apply, 10, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
 
-		Spring vSpring;
-		Spring rowHeight;
+        Spring vSpring;
+        Spring rowHeight;
 
-		vSpring = Spring.constant(10);
+        vSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.BASELINE, typeLbl,       0, SpringLayout.BASELINE, type);
-		layout.putConstraint(SpringLayout.NORTH,    type,    vSpring, SpringLayout.NORTH,    panel);
+        layout.putConstraint(SpringLayout.BASELINE, typeLbl, 0, SpringLayout.BASELINE, type);
+        layout.putConstraint(SpringLayout.NORTH, type, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(typeLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(type));
+        rowHeight = Spring.height(typeLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(type));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(5));
 
-		layout.putConstraint(SpringLayout.BASELINE, originLbl, 0, SpringLayout.BASELINE, origin);
-		layout.putConstraint(SpringLayout.NORTH, origin, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.BASELINE, originLbl, 0, SpringLayout.BASELINE, origin);
+        layout.putConstraint(SpringLayout.NORTH, origin, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(originLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(origin));
+        rowHeight = Spring.height(originLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(origin));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(5));
 
-		layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl,       0, SpringLayout.BASELINE, compatiblePack);
-		layout.putConstraint(SpringLayout.NORTH,    compatiblePack,    vSpring, SpringLayout.NORTH,    panel);
+        layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl, 0, SpringLayout.BASELINE, compatiblePack);
+        layout.putConstraint(SpringLayout.NORTH, compatiblePack, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(compatiblePackLbl);
-		rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
+        rowHeight = Spring.height(compatiblePackLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
-		layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
 
-		rowHeight = Spring.height(search);
-		rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+        rowHeight = Spring.height(search);
+        rowHeight = Spring.max(rowHeight, Spring.height(cancel));
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(5));
 
-		layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, Spring.height(apply));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = Spring.sum(vSpring, Spring.height(apply));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
-		pack();
-		setLocationRelativeTo(this.getOwner());
-	}
+        pack();
+        setLocationRelativeTo(this.getOwner());
+    }
 }

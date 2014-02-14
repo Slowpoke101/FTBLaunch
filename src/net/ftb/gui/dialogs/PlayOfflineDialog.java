@@ -20,7 +20,6 @@ import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,100 +35,100 @@ import net.ftb.locale.I18N;
 
 @SuppressWarnings("serial")
 public class PlayOfflineDialog extends JDialog {
-	private JTextArea text;
-	private JButton play;
-	private JButton abort;
+    private JTextArea text;
+    private JButton play;
+    private JButton abort;
 
-	public PlayOfflineDialog(String cause, final String username) {
-		super(LaunchFrame.getInstance(), true);
-		setupGui();
+    public PlayOfflineDialog(String cause, final String username) {
+        super(LaunchFrame.getInstance(), true);
+        setupGui();
 
-		play.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ModPack pack = ModPack.getSelectedPack();
-			    if (Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162){
-			    	setVisible(false);
-			    	LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() 
-						+ "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
-			    	
-			    }else{
-			    	setVisible(false);
-			        LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", pack.getMaxPermSize());
-			    }
-			}
-		});
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                ModPack pack = ModPack.getSelectedPack();
+                if (Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162) {
+                    setVisible(false);
+                    LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
 
-		abort.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
-	}
+                }
+                else {
+                    setVisible(false);
+                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", pack.getMaxPermSize());
+                }
+            }
+        });
 
-	public void setupGui() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-		setTitle("Could not log in");
-		setResizable(false);
+        abort.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                setVisible(false);
+            }
+        });
+    }
 
-		Container panel = getContentPane();
-		SpringLayout layout = new SpringLayout();
-		panel.setLayout(layout);
+    public void setupGui () {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setTitle("Could not log in");
+        setResizable(false);
 
-		text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
-		text.setEditable(false);
-		text.setHighlighter(null);
-		text.setBorder(BorderFactory.createEmptyBorder());
-		play = new JButton(I18N.getLocaleString("MAIN_YES"));
-		abort = new JButton(I18N.getLocaleString("MAIN_NO"));
+        Container panel = getContentPane();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
 
-		panel.add(text);
-		panel.add(abort);
-		panel.add(play);
+        text = new JTextArea(I18N.getLocaleString("PLAYOFFLINE_WANNA"));
+        text.setEditable(false);
+        text.setHighlighter(null);
+        text.setBorder(BorderFactory.createEmptyBorder());
+        play = new JButton(I18N.getLocaleString("MAIN_YES"));
+        abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
-		Spring hSpring;
-		Spring columnWidth;
+        panel.add(text);
+        panel.add(abort);
+        panel.add(play);
 
-		hSpring = Spring.constant(10);
+        Spring hSpring;
+        Spring columnWidth;
 
-		layout.putConstraint(SpringLayout.WEST, text, hSpring, SpringLayout.WEST, panel);
+        hSpring = Spring.constant(10);
 
-		columnWidth = Spring.width(play);
-		columnWidth = Spring.sum(columnWidth, Spring.constant(10));
-		columnWidth = Spring.sum(columnWidth, Spring.width(abort));
-		columnWidth = Spring.max(columnWidth, Spring.width(text));
+        layout.putConstraint(SpringLayout.WEST, text, hSpring, SpringLayout.WEST, panel);
 
-		hSpring = Spring.sum(hSpring, columnWidth);
-		hSpring = Spring.sum(hSpring, Spring.constant(10));
+        columnWidth = Spring.width(play);
+        columnWidth = Spring.sum(columnWidth, Spring.constant(10));
+        columnWidth = Spring.sum(columnWidth, Spring.width(abort));
+        columnWidth = Spring.max(columnWidth, Spring.width(text));
 
-		layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        hSpring = Spring.sum(hSpring, columnWidth);
+        hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.EAST, play, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-		layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-		Spring vSpring;
-		Spring rowHeight;
+        layout.putConstraint(SpringLayout.EAST, play, -5, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
 
-		vSpring = Spring.constant(10);
+        Spring vSpring;
+        Spring rowHeight;
 
-		layout.putConstraint(SpringLayout.NORTH, text, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.constant(10);
 
-		vSpring = Spring.sum(vSpring, Spring.height(text));
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        layout.putConstraint(SpringLayout.NORTH, text, vSpring, SpringLayout.NORTH, panel);
 
-		layout.putConstraint(SpringLayout.NORTH, play,  vSpring, SpringLayout.NORTH, panel);
-		layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, Spring.height(text));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		rowHeight = Spring.height(play);
-		rowHeight = Spring.max(rowHeight, Spring.height(abort));
+        layout.putConstraint(SpringLayout.NORTH, play, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
 
-		vSpring = Spring.sum(vSpring, rowHeight);
-		vSpring = Spring.sum(vSpring, Spring.constant(10));
+        rowHeight = Spring.height(play);
+        rowHeight = Spring.max(rowHeight, Spring.height(abort));
 
-		layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		pack();
-		setLocationRelativeTo(getOwner());
-	}
+        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
 }

@@ -8,13 +8,14 @@ import java.util.Date;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Version;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
-public class JsonFactory
-{
+public class JsonFactory {
     public static final Gson GSON;
-    static
-    {
+    static {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
         builder.registerTypeAdapter(Date.class, new DateAdapter());
@@ -24,13 +25,11 @@ public class JsonFactory
         GSON = builder.create();
     }
 
-    public static Version loadVersion(File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException
-    {
+    public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
         return GSON.fromJson(new FileReader(json), Version.class);
     }
 
-    public static AssetIndex loadAssetIndex(File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException
-    {
+    public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
         return GSON.fromJson(new FileReader(json), AssetIndex.class);
     }
 }

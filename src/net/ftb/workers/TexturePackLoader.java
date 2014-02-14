@@ -30,32 +30,33 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class TexturePackLoader extends Thread {
-	private static String TEXTUREPACKFILE;
+    private static String TEXTUREPACKFILE;
 
-	public TexturePackLoader() { }
+    public TexturePackLoader() {
+    }
 
-	@Override
-	public void run() {
-		try {
-			Logger.logInfo("loading texture pack information...");
-			TEXTUREPACKFILE = DownloadUtils.getStaticCreeperhostLink("texturepack.xml");
-			Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
-			if(doc == null) {
-				Logger.logError("Error: Could not load texture pack data!");
-			}
-			NodeList texturePacks = doc.getElementsByTagName("texturepack");
-			for(int i = 0; i < texturePacks.getLength(); i++) {
-				Node texturePack = texturePacks.item(i);
-				NamedNodeMap textureAttr = texturePack.getAttributes();
-				TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(),
-						textureAttr.getNamedItem("version").getTextContent(), textureAttr.getNamedItem("url").getTextContent(),
-						textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
-						textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), 
-						textureAttr.getNamedItem("description").getTextContent(),textureAttr.getNamedItem("resolution").getTextContent(), i));
-			}
-			TexturepackPane.loaded = true;
-		} catch (Exception e) { 
-			Logger.logError(e.getMessage(), e);
-		}
-	}
+    @Override
+    public void run () {
+        try {
+            Logger.logInfo("loading texture pack information...");
+            TEXTUREPACKFILE = DownloadUtils.getStaticCreeperhostLink("texturepack.xml");
+            Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
+            if (doc == null) {
+                Logger.logError("Error: Could not load texture pack data!");
+            }
+            NodeList texturePacks = doc.getElementsByTagName("texturepack");
+            for (int i = 0; i < texturePacks.getLength(); i++) {
+                Node texturePack = texturePacks.item(i);
+                NamedNodeMap textureAttr = texturePack.getAttributes();
+                TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(), textureAttr.getNamedItem("version")
+                        .getTextContent(), textureAttr.getNamedItem("url").getTextContent(), textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
+                        textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), textureAttr.getNamedItem("description").getTextContent(),
+                        textureAttr.getNamedItem("resolution").getTextContent(), i));
+            }
+            TexturepackPane.loaded = true;
+        }
+        catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
 }

@@ -53,8 +53,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 @SuppressWarnings("serial")
-public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener
-{
+public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
     private static JPanel texturePacks;
     public static ArrayList<JPanel> texturePackPanels;
     private static JScrollPane texturePacksScroll;
@@ -72,8 +71,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     public static boolean loaded = false;
 
-    public TexturepackPane()
-    {
+    public TexturepackPane() {
         super();
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
@@ -91,11 +89,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         filter.setBounds(5, 5, 105, 25);
-        filter.addActionListener(new ActionListener()
-        {
+        filter.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed (ActionEvent arg0)
-            {
+            public void actionPerformed (ActionEvent arg0) {
                 TexturePackFilterDialog filter = new TexturePackFilterDialog(instance);
                 filter.setVisible(true);
             }
@@ -139,13 +135,10 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         textureInfo = new JEditorPane();
         textureInfo.setEditable(false);
         textureInfo.setContentType("text/html");
-        textureInfo.addHyperlinkListener(new HyperlinkListener()
-        {
+        textureInfo.addHyperlinkListener(new HyperlinkListener() {
             @Override
-            public void hyperlinkUpdate (HyperlinkEvent event)
-            {
-                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-                {
+            public void hyperlinkUpdate (HyperlinkEvent event) {
+                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
                     OSUtils.browse(event.getURL().toString());
                 }
             }
@@ -165,18 +158,15 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     }
 
     @Override
-    public void onVisible ()
-    {
+    public void onVisible () {
         updateFilter();
     }
 
     /*
      * GUI Code to add a texture pack to the selection
      */
-    public static void addTexturePack (TexturePack texturePack)
-    {
-        if (!texturePacksAdded)
-        {
+    public static void addTexturePack (TexturePack texturePack) {
+        if (!texturePacksAdded) {
             texturePacksAdded = true;
             texturePacks.removeAll();
         }
@@ -190,12 +180,10 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
         String info = "";
-        if (texturePack.getInfo().length() > 60)
-        {
+        if (texturePack.getInfo().length() > 60) {
             info = texturePack.getInfo().substring(0, 59) + "...";
         }
-        else
-        {
+        else {
             info = texturePack.getInfo();
         }
         JTextArea filler = new JTextArea(texturePack.getName() + " : " + texturePack.getAuthor() + "\n" + info);
@@ -204,11 +192,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         filler.setForeground(Color.white);
         filler.setBounds(58, 6, 378, 42);
         filler.setBackground(new Color(255, 255, 255, 0));
-        MouseAdapter lin = new MouseAdapter()
-        {
+        MouseAdapter lin = new MouseAdapter() {
             @Override
-            public void mouseClicked (MouseEvent e)
-            {
+            public void mouseClicked (MouseEvent e) {
                 selectedTexturePack = texturePackIndex;
                 updateTexturePacks();
             }
@@ -220,13 +206,11 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         p.add(logo);
         texturePackPanels.add(p);
         texturePacks.add(p);
-        if (compatible.equalsIgnoreCase("all") && resolution.equalsIgnoreCase("all"))
-        {
+        if (compatible.equalsIgnoreCase("all") && resolution.equalsIgnoreCase("all")) {
             texturePacks.setMinimumSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
             texturePacks.setPreferredSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
         }
-        else
-        {
+        else {
             texturePacks.setMinimumSize(new Dimension(420, (currentTexturePacks.size()) * 55));
             texturePacks.setPreferredSize(new Dimension(420, (currentTexturePacks.size()) * 55));
         }
@@ -234,15 +218,13 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     }
 
     @Override
-    public void onTexturePackAdded (TexturePack texturePack)
-    {
+    public void onTexturePackAdded (TexturePack texturePack) {
         addTexturePack(texturePack);
         Logger.logInfo("Adding texture pack " + getTexturePackNum() + " (" + texturePack.getName() + ")");
         updateTexturePacks();
     }
 
-    public static void sortTexturePacks ()
-    {
+    public static void sortTexturePacks () {
         texturePackPanels.clear();
         texturePacks.removeAll();
         currentTexturePacks.clear();
@@ -252,21 +234,17 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         HashMap<Integer, List<TexturePack>> sorted = new HashMap<Integer, List<TexturePack>>();
         sorted.put(0, new ArrayList<TexturePack>());
         sorted.put(1, new ArrayList<TexturePack>());
-        for (TexturePack texturePack : TexturePack.getTexturePackArray())
-        {
-            if (compatibilityCheck(texturePack) && resolutionCheck(texturePack) && textSearch(texturePack))
-            {
+        for (TexturePack texturePack : TexturePack.getTexturePackArray()) {
+            if (compatibilityCheck(texturePack) && resolutionCheck(texturePack) && textSearch(texturePack)) {
                 sorted.get((texturePack.isCompatible(ModPack.getSelectedPack().getDir())) ? 1 : 0).add(texturePack);
             }
         }
-        for (TexturePack tp : sorted.get(1))
-        {
+        for (TexturePack tp : sorted.get(1)) {
             addTexturePack(tp);
             currentTexturePacks.put(counter, tp);
             counter++;
         }
-        for (TexturePack tp : sorted.get(0))
-        {
+        for (TexturePack tp : sorted.get(0)) {
             addTexturePack(tp);
             currentTexturePacks.put(counter, tp);
             counter++;
@@ -274,15 +252,13 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         updateTexturePacks();
     }
 
-    private static void updateTexturePacks (){
-        for (int i = 0; i < texturePackPanels.size(); i++){
-            if (selectedTexturePack == i){
+    private static void updateTexturePacks () {
+        for (int i = 0; i < texturePackPanels.size(); i++) {
+            if (selectedTexturePack == i) {
                 String packs = "";
-                if (TexturePack.getTexturePack(getIndex()).getCompatible() != null)
-                {
+                if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
                     packs += "<p>This texture pack works with the following packs:</p><ul>";
-                    for (String name : TexturePack.getTexturePack(getIndex()).getCompatible())
-                    {
+                    for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
                         packs += "<li>" + ModPack.getPack(name).getName() + "</li>";
                     }
                     packs += "</ul>";
@@ -294,18 +270,19 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 textureInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + TexturePack.getTexturePack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + TexturePack.getTexturePack(getIndex()).getInfo() + packs);
                 textureInfo.setCaretPosition(0);
-            }else{
+            }
+            else {
                 texturePackPanels.get(i).setBackground(UIManager.getColor("control"));
                 texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
     }
 
-    public static int getSelectedTexturePackIndex (){
+    public static int getSelectedTexturePackIndex () {
         return texturePacksAdded ? getIndex() : -1;
     }
 
-    public static void updateFilter (){
+    public static void updateFilter () {
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -321,33 +298,32 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         LaunchFrame.getInstance().updateFooter();
     }
 
-    private static int getIndex ()
-    {
+    private static int getIndex () {
         return (currentTexturePacks.size() > 0) ? currentTexturePacks.get(selectedTexturePack).getIndex() : selectedTexturePack;
     }
 
-    private static int getTexturePackNum (){
-        if (currentTexturePacks.size() > 0){
-            if (!compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || !resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))){
+    private static int getTexturePackNum () {
+        if (currentTexturePacks.size() > 0) {
+            if (!compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || !resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
                 return currentTexturePacks.get((texturePackPanels.size() - 1)).getIndex();
             }
         }
         return texturePackPanels.size();
     }
 
-    public void updateLocale (){
+    public void updateLocale () {
         filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
     }
 
-    private static boolean compatibilityCheck (TexturePack tp){
+    private static boolean compatibilityCheck (TexturePack tp) {
         return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.isCompatible(compatible));
     }
 
-    private static boolean resolutionCheck (TexturePack tp){
+    private static boolean resolutionCheck (TexturePack tp) {
         return (resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.getResolution().equalsIgnoreCase(resolution));
     }
 
-    private static boolean textSearch (TexturePack tp){
+    private static boolean textSearch (TexturePack tp) {
         String searchString = SearchDialog.lastTextureSearch.toLowerCase();
         return ((searchString.isEmpty()) || tp.getName().toLowerCase().contains(searchString) || tp.getAuthor().toLowerCase().contains(searchString));
     }

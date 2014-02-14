@@ -37,8 +37,7 @@ import net.ftb.log.Logger;
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
  * fails.
  */
-public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
-{
+public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
     protected String status, reqVersion;
     protected File binDir;
     protected String authlibVersion;
@@ -46,8 +45,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
     protected boolean debugVerbose = Settings.getSettings().getDebugLauncher();
     protected String debugTag = "debug: AuthlibDLWorker: ";
 
-    public AuthlibDLWorker(String DLFolder, String authver)
-    {
+    public AuthlibDLWorker(String DLFolder, String authver) {
         this.binDir = new File(DLFolder);
         this.authlibVersion = authver;
         this.status = "";
@@ -55,17 +53,14 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
     }
 
     @Override
-    protected Boolean doInBackground ()
-    {
-        if (debugVerbose)
-        {
+    protected Boolean doInBackground () {
+        if (debugVerbose) {
             Logger.logInfo(debugTag + "Loading Authlib...");
         }
         if (!binDir.exists())
             binDir.mkdirs();
         Logger.logInfo("Downloading Jars");
-        if (!downloadJars())
-        {
+        if (!downloadJars()) {
             Logger.logError("Download Failed");
             return false;
         }
@@ -74,13 +69,10 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
     }
 
-    protected boolean addToClasspath (String location)
-    {
+    protected boolean addToClasspath (String location) {
         File f = new File(location);
-        try
-        {
-            if (f.exists())
-            {
+        try {
+            if (f.exists()) {
                 URL urls[] = { f.toURI().toURL() };
                 addURL(f.toURI().toURL());
                 Class C = this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
@@ -88,13 +80,11 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
                 Class C3 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
                 Class C4 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
             }
-            else
-            {
+            else {
                 Logger.logError("Authlib file does not exist");
             }
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             t.printStackTrace(System.err);
             return false;
         }
@@ -102,47 +92,38 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         return true;
     }
 
-    public void addURL (URL u) throws IOException
-    {
+    public void addURL (URL u) throws IOException {
         URLClassLoader sysloader = (URLClassLoader) this.getClass().getClassLoader();
         Class sysclass = URLClassLoader.class;
-        try
-        {
+        try {
             Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
             method.invoke(sysloader, new Object[] { u });
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             t.printStackTrace();
             throw new IOException("Error, could not add URL to system classloader");
         }
     }
 
-    protected boolean downloadJars ()
-    {
-        try
-        {
+    protected boolean downloadJars () {
+        try {
             jarURLs = new URL("https://libraries.minecraft.net/com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
         }
-        catch (MalformedURLException e)
-        {
+        catch (MalformedURLException e) {
             Logger.logError(e.getMessage(), e);
             return false;
         }
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[1];
-        for (int i = 0; i < 1; i++)
-        {
-            try
-            {
-            	HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
+        for (int i = 0; i < 1; i++) {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
@@ -152,24 +133,19 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
         final int attempts = 5;
         int lastfile = -1;
         boolean downloadSuccess = false;
-        while (!downloadSuccess && (attempt < attempts))
-        {
-            try
-            {
+        while (!downloadSuccess && (attempt < attempts)) {
+            try {
                 attempt++;
-                if (debugVerbose)
-                {
+                if (debugVerbose) {
                     Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs.toURI());
                 }
                 URLConnection dlConnection = jarURLs.openConnection();
-                if (dlConnection instanceof HttpURLConnection)
-                {
+                if (dlConnection instanceof HttpURLConnection) {
                     dlConnection.setRequestProperty("Cache-Control", "no-cache");
                     dlConnection.connect();
                 }
                 String jarFileName = getFilename(jarURLs);
-                if (new File(binDir, jarFileName).exists())
-                {
+                if (new File(binDir, jarFileName).exists()) {
                     new File(binDir, jarFileName).delete();
                 }
                 InputStream dlStream = dlConnection.getInputStream();
@@ -178,62 +154,52 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
                 byte[] buffer = new byte[24000];
                 int readLen;
                 int currentDLSize = 0;
-                while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1)
-                {
+                while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {
                     outStream.write(buffer, 0, readLen);
                     currentDLSize += readLen;
                     totalDownloadedSize += readLen;
                     int prog = (int) ((totalDownloadedSize / totalDownloadSize) * 100);
-                    if (prog > 100)
-                    {
+                    if (prog > 100) {
                         prog = 100;
                     }
-                    else if (prog < 0)
-                    {
+                    else if (prog < 0) {
                         prog = 0;
                     }
                     setProgress(prog);
                 }
                 dlStream.close();
                 outStream.close();
-                if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[0] || fileSizes[0] <= 0))
-                {
+                if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[0] || fileSizes[0] <= 0)) {
                     downloadSuccess = true;
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 downloadSuccess = false;
                 e.printStackTrace();
                 Logger.logWarn("Connection failed, trying again");
             }
         }
-        if (!downloadSuccess)
-        {
+        if (!downloadSuccess) {
             return false;
         }
         return true;
     }
 
-    protected String getFilename (URL url)
-    {
+    protected String getFilename (URL url) {
         String string = url.getFile();
-        if (string.contains("?"))
-        {
+        if (string.contains("?")) {
             string = string.substring(0, string.indexOf('?'));
         }
         return string.substring(string.lastIndexOf('/') + 1);
     }
 
-    protected void setStatus (String newStatus)
-    {
+    protected void setStatus (String newStatus) {
         String oldStatus = status;
         status = newStatus;
         firePropertyChange("status", oldStatus, newStatus);
     }
 
-    public String getStatus ()
-    {
+    public String getStatus () {
         return status;
     }
 }
