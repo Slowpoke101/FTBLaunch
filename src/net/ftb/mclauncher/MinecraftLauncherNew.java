@@ -104,6 +104,13 @@ public class MinecraftLauncherNew {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
+        //Due to this being bugged in vanilla, and likely to cause crashes,
+        //this will not be enabled until it can be tested with the first 1.7.x test packs
+        /* if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+             arguments.add("--fullscreen true");
+             Logger.logInfo("fullscreen");
+         }*/
+
         arguments.add("-cp");
         arguments.add(System.getProperty("java.class.path") + cpb.toString());
 
