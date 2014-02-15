@@ -11,6 +11,9 @@ PROFILE_CREATE = Profil erstellen
 PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
 
+#Console
+CONSOLE_COPYCLIP = Bericht in Zwischenablage kopieren
+CONSOLE_CLIP_CONFIRM = Möchtest du den gesamten Bericht in deine Zwischenablage kopieren?
 # Map Tab
 INSTALL_MAP = Map installieren
 DOWNLOAD_MAP_SERVER = Server-Map downloaden
@@ -26,6 +29,9 @@ LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
 REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
 ADVANCED_OPTIONS = Erweiterte Optionen
+INSTALL_FIRSTUSE = Da dies das erste Mal ist, dass du diesen Launcher verwendest, empfehlen wir, das Installationsverzeichnis zu bestimmen.
+DOWNLOAD_JAVA64 = Java 64-bit herunterladen
+JAVA_32BIT_WARNING = Dein System verwendet eine 32-bit-Version von Java. Dies wird Minecraft auf 1.5GB Arbeitsspeicher begrenzen.
 
 # Shared strings
 FILTER_SETTINGS = Filtern
@@ -49,7 +55,6 @@ MAPS_WAIT_WHILE_LOADING = Bitte warten während die Maps geladen werden...
 # Texturepacks pane
 TEXTURE_WAIT_WHILE_LOADING = Bitte warten während die Texture Packs geladen werden...
 
-
 # Advanced  Options
 ADVANCED_OPTIONS_TITLE = Erweiterte Einstellungen
 ADVANCED_OPTIONS_DLLOCATION = Downloadort:
@@ -58,9 +63,11 @@ ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher-Debugging
 
 # Update
-UPDATE_WICHUPDATE = Wilst du updaten?
+UPDATE_WICHUPDATE = Möchtest du updaten?
+UPDATE_DOWNGRADE = Möchtest du downgraden?
 
 # LUNCHERUPDATE
 LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist verfügbar.
@@ -71,11 +78,13 @@ LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
 UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist verfügbar!
 UPDATEMODPACK_BACKUP = Einstellungen Sichern?
 UPDATEMODPACK_TITLE = Modpack Update ist verfügbar
+UPDATEMODPACK_DOWNGRADE = Installierte Version ist neuer als gewählte Version
+UPDATEMODPACK_FROM_TO_VERSION = Aktuelle Version: %LOCALVER%\nGewählte Version: %ONLINEVER%
 
 # Private Pack
 PRIVATEPACK_TITLE = Private Pack Interface
 PRIVATEPACK_ERROR = Ungültiges Private Pack.
-PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen willst, gib einfach den Code nochmal ein und klicke entfernen.
+PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen möchtest, gib einfach den Code nochmal ein und klicke entfernen.
 PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
 PRIVATEPACK_NOTEXISTS = Falscher Pack Name.
 
@@ -93,15 +102,18 @@ FILTER_MODPACKAVALIABILITY = Mod Pack Verfügbarkeit:
 FILTER_MCVERSION = Minecraft Version:
 FILTER_RESULUTION = Mod Pack Auflösung:
 FILTER_TEXSEARCH = Suche Packs
+FILTER_SEARCHPACK = Suchen
 
 # Play Offline
-PLAYOFFLINE_WANNA = Etwas stimmt nicht..\nWillst du offline spielen?
+PLAYOFFLINE_WANNA = Etwas stimmt nicht..\nMöchtest du offline spielen?
 
 # Password
 PASSWORD_PASSLABEL = Passwort: 
 PASSWORD_TITLE = Bitte gib dein Passwort ein
 
 # Profile
+OLDCREDS = Veraltete Login-Daten gefunden oder Login-Daten fehlen: Bitte erneuern.
+CHANGEDUUID = Eine Änderung in der Hardware des Nutzers, die den Launcher am Zugriff auf deine Daten hindern, wurde erkannt, bitte gib diese erneut ein.
 PROFILEADDER_USERNAME = Nutzername:
 PROFILEADDER_PASSWORD = Passwort:
 PROFILEADDER_NAME = Profilname:
@@ -113,7 +125,7 @@ PROFILEDITOR_TITLE = Profileditor
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warnung! Es exististiert bereits eine Map mit diesem Namen!
-MAPOVERRIDE_WISHOVERRIDE = Willst du sie überschreiben?
+MAPOVERRIDE_WISHOVERRIDE = Möchtest du sie überschreiben?
 
 # Main
 MAIN_EXIT = Schließen
