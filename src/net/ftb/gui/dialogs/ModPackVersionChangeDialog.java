@@ -33,6 +33,7 @@ import javax.swing.SwingConstants;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 
 @SuppressWarnings("serial")
 public class ModPackVersionChangeDialog extends JDialog {
@@ -76,7 +77,7 @@ public class ModPackVersionChangeDialog extends JDialog {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        if (Integer.parseInt(onlineVersion.replace(".", "")) > (storedVersion == "" ? 0 : Integer.parseInt(storedVersion.replace(".", "")))) {
+        if (isNewer(onlineVersion, storedVersion)) {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
             updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
         } else {
@@ -172,5 +173,27 @@ public class ModPackVersionChangeDialog extends JDialog {
 
         pack();
         setLocationRelativeTo(getOwner());
+    }
+
+    public boolean isNewer (String onlineVersion, String storedVersion) {
+        if (storedVersion == null || storedVersion.isEmpty())
+            return true;
+        String[] oV = onlineVersion.split("[._-]");
+        String[] sV = storedVersion.split("[._-]");
+        Logger.logInfo(onlineVersion + " " + storedVersion);
+        for (int i = 0; i < oV.length; i++) {
+            if (sV.length > i) {
+                if (Integer.parseInt(oV[i]) > Integer.parseInt(sV[i])) {
+                    Logger.logInfo(oV[i] + ">" + sV[i]);
+                    Logger.logInfo("ret true");
+                    return true;
+                } else if (Integer.parseInt(oV[i]) < Integer.parseInt(sV[i])) {
+                    return false;
+                    //stored would be older in this case
+                }
+            }
+        }
+        Logger.logInfo("ret False");
+        return false;
     }
 }
