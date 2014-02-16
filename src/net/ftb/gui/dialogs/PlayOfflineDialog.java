@@ -53,7 +53,7 @@ public class PlayOfflineDialog extends JDialog {
 
                 } else {
                     setVisible(false);
-                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", pack.getMaxPermSize());
+                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", pack.getMaxPermSize(), "1234567890");
                 }
             }
         });

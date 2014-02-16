@@ -777,7 +777,7 @@ public class LaunchFrame extends JFrame {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+                            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
@@ -792,7 +792,7 @@ public class LaunchFrame extends JFrame {
 
             downloader.execute();
         } else {
-            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
+            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
         }
     }
 
@@ -1101,7 +1101,7 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    public void launchMinecraftNew (String installDir, ModPack pack, String username, String password, String maxPermSize) {
+    public void launchMinecraftNew (String installDir, ModPack pack, String username, String password, String maxPermSize, String UUID) {
         try {
             File packDir = new File(installDir, pack.getDir());
             File gameDir = new File(packDir, "minecraft");
@@ -1164,7 +1164,7 @@ public class LaunchFrame extends JFrame {
 
             Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(gameDir, assetDir, natDir, classpath, username, password, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
                     packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings()
-                            .getRamMax(), maxPermSize, pack.getMcVersion());
+                            .getRamMax(), maxPermSize, pack.getMcVersion(), UUID);
 
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());

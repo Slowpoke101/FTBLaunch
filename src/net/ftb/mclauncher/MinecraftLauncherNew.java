@@ -47,7 +47,7 @@ import com.google.gson.JsonSyntaxException;
 
 public class MinecraftLauncherNew {
     public static Process launchMinecraft (File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args, String assetIndex,
-            String rmax, String maxPermSize, String version) throws IOException {
+            String rmax, String maxPermSize, String version, String auth_UUID) throws IOException {
 
         assetDir = syncAssets(assetDir, assetIndex);
 
@@ -123,7 +123,7 @@ public class MinecraftLauncherNew {
         for (String s : args.split(" ")) {
             if (s.equals("${auth_player_name}"))
                 arguments.add(username);
-            else if (s.equals("${auth_session}"))
+            else if (s.equals("${auth_session}") || s.equals("${auth_access_token}"))
                 arguments.add(password);
             else if (s.equals("${version_name}"))
                 arguments.add(version);
@@ -131,6 +131,9 @@ public class MinecraftLauncherNew {
                 arguments.add(gameDir.getAbsolutePath());
             else if (s.equals("${game_assets}"))
                 arguments.add(assetDir.getAbsolutePath());
+            else if (s.equals("${auth_uuid}"))
+                arguments.add(auth_UUID);
+
             else
                 arguments.add(s);
         }
