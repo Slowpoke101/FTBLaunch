@@ -1,0 +1,139 @@
+LOCALE_NAME = 简体中文
+LOCALE_LOADED = 简体中文语言文件已载入!
+
+# Footer #
+DONATE_BUTTON = 捐献
+
+# Main Tab
+EDIT_BUTTON = 编辑
+LAUNCH_BUTTON = 登陆
+PROFILE_CREATE = 建立档案
+PROFILE_SELECT = 选择档案
+DOWNLOAD_SERVER_PACK = 下载整合包服务端
+
+#Console
+CONSOLE_COPYCLIP = 将日志复制到剪切板
+CONSOLE_CLIP_CONFIRM = 你想要把全部日志复制到剪切板吗?
+# Map Tab
+INSTALL_MAP = 安装地图
+DOWNLOAD_MAP_SERVER = 下载服务端地图
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = 安装材质包
+
+# Options pane
+INSTALL_FOLDER = 安装至文件夹...
+FORCE_UPDATE = 强制升级?
+RAM_MAX = 最大内存(MB)
+LANGUAGE = 语言
+SHOW_CONSOLE = 显示控制台?
+REOPEN_LAUNCHER = 退出minecraft后重启登陆器?
+ADVANCED_OPTIONS = 高级选项
+INSTALL_FIRSTUSE = 由于这是你初次使用登陆器,我们建议你配置安装路径.
+DOWNLOAD_JAVA64 = 下载64位Java
+JAVA_32BIT_WARNING = 你的系统在使用32位Java. 这将限制Minecraft只能最多使用1.5gb内存.
+
+# Shared strings
+FILTER_SETTINGS = 过滤设置
+
+# Modpacks pane
+MODS_EDIT_PACK = 编辑整合包
+MODS_WAIT_WHILE_LOADING = 模组正被载入请等待...
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = 启用模组
+MODS_EDIT_DISABLED_LABEL = 禁用模组
+MODS_EDIT_OPEN_FOLDER = 打开文件夹
+MODS_EDIT_ADD_MOD = 添加模组
+MODS_EDIT_ENABLE_MOD = << 启用
+MODS_EDIT_DISABLE_MOD = 禁用 >>
+MODS_EDIT_TITLE = 整合包编辑
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = 地图正被载入请等待...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = 材质包正被载入请等待...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = 高级选项
+ADVANCED_OPTIONS_DLLOCATION = 下载位置:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft窗口大小:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft窗口位置:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 自动最大化?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 禁用谷歌分析追踪
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = 额外java参数:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 额外启动调试
+
+# Update
+UPDATE_WICHUPDATE = 你想要升级吗?
+UPDATE_DOWNGRADE = 你想要降级吗?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = 的登陆器可用.
+LUNCHERUPDATE_CHANGELOG = 浏览日志
+LUNCHERUPDATE_ISAVAILABLETITLE = 登陆器升级可用
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = 模组整合包新版本可用!
+UPDATEMODPACK_BACKUP = 备份配置(config)文件?
+UPDATEMODPACK_TITLE = 模组整合包升级可用
+UPDATEMODPACK_DOWNGRADE = 已安装版本比选定版本更新
+UPDATEMODPACK_FROM_TO_VERSION = 当前版本: %LOCALVER%\n选中版本: %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = 私人整合包接口
+PRIVATEPACK_ERROR = 无效私人整合包.
+PRIVATEPACK_TEXT = 输入从私人整合包拥有者那里得到的私人分享码,点击以向整合包列表中添加该整合包. 启动时它会自动被载入. 如果你想移除该整合包,再次输入分享码,点击移除即可.
+PRIVATEPACK_SECCESS = 已成功移除.
+PRIVATEPACK_NOTEXISTS = 不正确的整合包名称.
+
+# Filter
+FILTER_PACKTYPE = 模组整合包类型:
+FILTER_ORIGIN = 模组整合包起源:
+FILTER_COMPERTIBLEPACK = 兼容包:
+FILTER_3THPARTY = 第三方
+FILTER_APPLY = 应用过滤
+FILTER_SEARCHMAP = 搜索地图
+FILTER_TITLE = 过滤
+FILTER_PUBLIC = 公开
+FILTER_PRIVATE = 私人
+FILTER_MODPACKAVALIABILITY = 模组整合包可用性:
+FILTER_MCVERSION = Minecraft版本:
+FILTER_RESULUTION = 分辨率:
+FILTER_TEXSEARCH = 搜索整合包
+FILTER_SEARCHPACK = 搜索
+
+# Play Offline
+PLAYOFFLINE_WANNA = 出问题了..\n你想离线玩吗?
+
+# Password
+PASSWORD_PASSLABEL = 密码: 
+PASSWORD_TITLE = 请输入密码
+
+# Profile
+OLDCREDS = 安装登录文件已过期或遗失:请升级.
+CHANGEDUUID = 检测到用户硬件变动阻止登录器访问证书,请重新输入它们.
+PROFILEADDER_USERNAME = 用户名:
+PROFILEADDER_PASSWORD = 密码:
+PROFILEADDER_NAME = 档案名:
+PROFILEADDER_SAVEPASSWORD = 记住密码
+PROFILEADDER_TITLE = 创建档案
+PROFILADDER_ERROR = 无法创建档案.
+PROFILEADDER_UPDATE = 升级
+PROFILEDITOR_TITLE = 编辑档案
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = 警告! 已经有同名地图!
+MAPOVERRIDE_WISHOVERRIDE = 你想要重写吗?
+
+# Main
+MAIN_EXIT = 推出
+MAIN_APPLY = 应用
+MAIN_YES = 是
+MAIN_NO = 否
+MAIN_ALL = 全部
+MAIN_CANCEL = 取消
+MAIN_SUBMIT = 提交
+MAIN_REMOVE = 移除
+MAIN_ADD = 添加
