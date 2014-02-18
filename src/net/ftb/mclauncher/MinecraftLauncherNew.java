@@ -46,7 +46,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 public class MinecraftLauncherNew {
-    public static Process launchMinecraft (File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args, String assetIndex,
+    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args, String assetIndex,
             String rmax, String maxPermSize, String version, String auth_UUID) throws IOException {
 
         assetDir = syncAssets(assetDir, assetIndex);
@@ -59,14 +59,8 @@ public class MinecraftLauncherNew {
 
         List<String> arguments = new ArrayList<String>();
 
-        String separator = System.getProperty("file.separator");
-        String path = new String();
-        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
-            path = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
-        else
-            path = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
-        Logger.logInfo("Java Path: " + path);
-        arguments.add(path);
+        Logger.logInfo("Java Path: " + javaPath);
+        arguments.add(javaPath);
 
         setMemory(arguments, rmax);
 

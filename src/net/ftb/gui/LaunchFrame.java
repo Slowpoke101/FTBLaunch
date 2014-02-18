@@ -1064,7 +1064,7 @@ public class LaunchFrame extends JFrame {
      */
     public void launchMinecraft (String workingDir, String username, String password, String maxPermSize) {
         try {
-            Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
+            Process minecraftProcess = MinecraftLauncher.launchMinecraft( Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1162,7 +1162,7 @@ public class LaunchFrame extends JFrame {
                 classpath.add(new File(libDir, lib.getPath()));
             }
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(gameDir, assetDir, natDir, classpath, username, password, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, username, password, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
                     packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings()
                             .getRamMax(), maxPermSize, pack.getMcVersion(), UUID);
 
