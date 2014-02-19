@@ -39,7 +39,7 @@ import net.ftb.util.winreg.JavaFinder;
 
 public class MinecraftLauncher {
 
-    public static Process launchMinecraft (String workingDir, String username, String password, String forgename, String rmax, String maxPermSize) throws IOException {
+    public static Process launchMinecraft (String javaPath, String workingDir, String username, String password, String forgename, String rmax, String maxPermSize) throws IOException {
         String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
         StringBuilder cpb = new StringBuilder("");
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
@@ -77,13 +77,8 @@ public class MinecraftLauncher {
         List<String> arguments = new ArrayList<String>();
 
         String separator = System.getProperty("file.separator");
-        String path = new String();
-        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
-            path = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
-        else
-            path = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
-        Logger.logInfo("Java Path: " + path);
-        arguments.add(path);
+        Logger.logInfo("Java Path: " + javaPath);
+        arguments.add(javaPath);
 
         setMemory(arguments, rmax);
 

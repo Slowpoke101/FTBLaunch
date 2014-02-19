@@ -45,6 +45,8 @@ public class AdvancedOptionsDialog extends JDialog {
     private JButton exit;
     private JLabel downloadLocationLbl;
     private static JComboBox downloadLocation;
+    private JLabel javaPathLbl;
+    private JTextField javaPath;
     private JLabel additionalJavaOptionsLbl;
     private JTextField additionalJavaOptions;
     private JLabel mcWindowSizeLbl;
@@ -87,6 +89,7 @@ public class AdvancedOptionsDialog extends JDialog {
         };
 
         downloadLocation.addFocusListener(settingsChangeListener);
+        javaPath.addFocusListener(settingsChangeListener);
         additionalJavaOptions.addFocusListener(settingsChangeListener);
         mcWindowSizeWidth.addFocusListener(settingsChangeListener);
         mcWindowSizeHeight.addFocusListener(settingsChangeListener);
@@ -134,6 +137,7 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
+        settings.setJavaPath(javaPath.getText());
         settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
         settings.setSnooper(snooper.isSelected());
         settings.setDebugLauncher(debugLauncherVerbose.isSelected());
@@ -151,6 +155,8 @@ public class AdvancedOptionsDialog extends JDialog {
 
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
+        javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
+        javaPath = new JTextField(settings.getJavaPath());
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
         additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
@@ -170,6 +176,8 @@ public class AdvancedOptionsDialog extends JDialog {
 
         add(downloadLocationLbl);
         add(downloadLocation);
+        add(javaPathLbl);
+        add(javaPath);
         add(additionalJavaOptionsLbl);
         add(additionalJavaOptions);
         add(mcWindowSizeLbl);
@@ -191,6 +199,7 @@ public class AdvancedOptionsDialog extends JDialog {
         hSpring = Spring.constant(10);
 
         layout.putConstraint(SpringLayout.WEST, downloadLocationLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, javaPathLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, additionalJavaOptionsLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, mcWindowSizeLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, mcWindowPosLbl, hSpring, SpringLayout.WEST, panel);
@@ -199,6 +208,7 @@ public class AdvancedOptionsDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(downloadLocationLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(javaPathLbl));
         columnWidth = Spring.max(columnWidth, Spring.width(additionalJavaOptionsLbl));
         columnWidth = Spring.max(columnWidth, Spring.width(mcWindowSizeLbl));
         columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosLbl));
@@ -207,6 +217,7 @@ public class AdvancedOptionsDialog extends JDialog {
         hSpring = Spring.sum(hSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, downloadLocation, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, javaPath, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, mcWindowPosX, hSpring, SpringLayout.WEST, panel);
@@ -239,6 +250,7 @@ public class AdvancedOptionsDialog extends JDialog {
         hSpring = Spring.sum(hSpring, columnWidth);
 
         layout.putConstraint(SpringLayout.EAST, downloadLocation, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, javaPath, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, mcWindowPosY, hSpring, SpringLayout.WEST, panel);
@@ -258,6 +270,15 @@ public class AdvancedOptionsDialog extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, downloadLocation, vSpring, SpringLayout.NORTH, panel);
         rowHeight = Spring.height(downloadLocationLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
+
+        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.BASELINE, javaPathLbl, 0, SpringLayout.BASELINE, javaPath);
+        layout.putConstraint(SpringLayout.NORTH, javaPath, vSpring, SpringLayout.NORTH, panel);
+
+        rowHeight = Spring.height(javaPathLbl);
+        rowHeight = Spring.max(rowHeight, Spring.height(javaPath));
 
         vSpring = Spring.sum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(10));

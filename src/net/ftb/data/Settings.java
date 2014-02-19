@@ -35,9 +35,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
+import net.ftb.util.winreg.JavaFinder;
 
 @SuppressWarnings("serial")
 public class Settings extends Properties {
@@ -97,6 +99,29 @@ public class Settings extends Properties {
     public void setInstallPath (String path) {
         setProperty("installPath", path);
     }
+
+    public String getJavaPath () {
+        return getProperty("javaPath", getDefaultJavaPath());
+    }
+
+    private String getDefaultJavaPath() {
+        String separator = System.getProperty("file.separator");
+        String defaultPath = null;
+        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
+            defaultPath = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
+        else
+            defaultPath = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
+        return defaultPath;
+    }
+
+    public void setJavaPath (String path) {
+        if( getDefaultJavaPath().equals(path) ) {
+            remove("javaPath");
+        } else {
+            setProperty("javaPath", path);
+        }
+    }
+
 
     public String getStyle () {
         return getProperty("style", "defaultStyle.cfg");
