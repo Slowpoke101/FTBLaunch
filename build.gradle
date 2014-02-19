@@ -78,7 +78,7 @@ task deleteShadow(type: Delete) {
 	}
 task zipApp(type: Zip) {
     from "${project.buildDir}/macApp/"
-    destinationDir = file("${project.buildDir}\\libs")
+    destinationDir = file("${project.buildDir}/libs")
     classifier = 'app'	
 }
 apply plugin: 'macAppBundle'
@@ -103,7 +103,9 @@ afterEvaluate {
 }
 
 macAppBundle {
+    appName = "Feed The Beast"
     mainClassName = project.mainClass
+    icon = "res/app/icon.icns"
 }
 
 //}
