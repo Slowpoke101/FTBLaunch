@@ -25,49 +25,49 @@ public class AuthlibHelper {
             authentication.setPassword(pass);
             if (!authentication.isLoggedIn()) {
                 try {
-                    authentication.logIn();
-                } catch (AuthenticationException e) {
-                    e.printStackTrace();
+                    try {
+                        try {
+                            try {
+                                try {
+                                    authentication.logIn();
+                                } catch (UserMigratedException e) {
+                                    Logger.logError(e.toString());
+                                    ErrorUtils.tossError("Invalid credentials, please make sure to login with your Mojang account.");
+                                    return null;
+                                }
+                            } catch (InvalidCredentialsException e) {
+
+                                Logger.logError("Invalid credentials recieved for user: " + user);
+                                Logger.logError(e.toString());
+                                ErrorUtils.tossError("Invalid username or password.");
+                                return null;
+
+                            }
+                        } catch (AuthenticationUnavailableException e) {
+                            Logger.logError(e.toString());
+                            return null;
+                        }
+                    } catch (AuthenticationException e) {
+                        Logger.logError("Unkown error from authlib:");
+                        if (e.getMessage() == null) {
+                            e.printStackTrace();
+                        } else {
+                            Logger.logError(e.getMessage());
+                        }
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage() == null) {
+                        Logger.logError("Unknown authentication error occurred");
+                        e.printStackTrace();
+                    } else {
+                        Logger.logError(e.getMessage());
+                    }
+                    //e.printStackTrace();
                 }
             }
             if (isValid(authentication)) {
                 ID = authentication.getSelectedProfile().getId();
                 displayName = authentication.getSelectedProfile().getName();
-                if (!authentication.isLoggedIn()) {
-                    try {
-                        authentication.logIn();
-                    } catch (Exception e) {
-                        if (e instanceof InvalidCredentialsException) {
-                            Logger.logError("Invalid credentials recieved for user: " + authentication.getUserID() == null ? "" : authentication.getUserID());
-                            Logger.logError(e.getMessage());
-                            ErrorUtils.tossError("Invalid username or password.");
-                            return null;
-                        }
-                        //offline mode??
-                        if (e instanceof AuthenticationUnavailableException) {
-                            Logger.logError(e.getMessage());
-                        }
-                        if (e instanceof UserMigratedException) {
-                            Logger.logError(e.getMessage());
-                            ErrorUtils.tossError("Invalid credentials, please make sure to login with your Mojang account.");
-                        }
-                        if (e instanceof AuthenticationException) {
-                            Logger.logError("Unkown error from authlib:");
-                            if (e.getMessage() == null) {
-                                e.printStackTrace();
-                            } else {
-                                Logger.logError(e.getMessage());
-                            }
-                        }
-                        if (e.getMessage() == null) {
-                            Logger.logError("Unknown authentication error occurred");
-                            e.printStackTrace();
-                        } else {
-                            Logger.logError(e.getMessage());
-                        }
-                        //e.printStackTrace();
-                    }
-                }
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
                     if ((authentication instanceof YggdrasilUserAuthentication)) {
 
