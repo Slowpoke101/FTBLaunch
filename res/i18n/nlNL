@@ -11,6 +11,10 @@ PROFILE_CREATE = Maak Profiel
 PROFILE_SELECT = Kies Profiel
 DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
 
+#Console
+CONSOLE_COPYCLIP = Kopieer log naar het klembord
+CONSOLE_CLIP_CONFIRM = Wil je de volledige log te kopiëren naar het klembord?
+
 # Map Tab
 INSTALL_MAP = Installeer Kaart
 DOWNLOAD_MAP_SERVER = Download Serverkaart
