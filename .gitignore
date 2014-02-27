@@ -1,20 +1,56 @@
-*~
-bin/
-.metadata/
-*.jardesc
-ftblaunch.cfg
-target/
-/target/
-#eclipse
-/.settings/
-.project
-.classpath
-/bin/
+# templates from https://github.com/github/gitignore concatenated
 
-#idea
-/.idea
-*.iml
+##########
+# Gradle.gitignore
+.gradle
+build/
+
+
+##########
+# Eclipse.gitignore
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+
+##########
+# Intellij IDEA
 .idea/
-#gradle
-/build
-/.gradle
+*.iml
+*.iws
+
+
+##########
+# Linux.gitignore
+*~
+
+
+##########
+# OSX.gitignore
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+
+##########
+# Windows.gitignore
+Thumbs.db
+ehthumbs.db
+
+
+##########
+# project specific
+ftblaunch.cfg
+*.jardesc
