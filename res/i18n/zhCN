@@ -14,6 +14,7 @@ DOWNLOAD_SERVER_PACK = 下载整合包服务端
 #Console
 CONSOLE_COPYCLIP = 将日志复制到剪切板
 CONSOLE_CLIP_CONFIRM = 你想要把全部日志复制到剪切板吗?
+
 # Map Tab
 INSTALL_MAP = 安装地图
 DOWNLOAD_MAP_SERVER = 下载服务端地图
