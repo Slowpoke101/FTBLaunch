@@ -1,7 +1,7 @@
 LOCALE_NAME = 简体中文
 LOCALE_LOADED = 简体中文语言文件已载入!
 
-# Footer #
+# Footer
 DONATE_BUTTON = 捐献
 
 # Main Tab
@@ -11,7 +11,7 @@ PROFILE_CREATE = 建立档案
 PROFILE_SELECT = 选择档案
 DOWNLOAD_SERVER_PACK = 下载整合包服务端
 
-#Console
+# Console
 CONSOLE_COPYCLIP = 将日志复制到剪切板
 CONSOLE_CLIP_CONFIRM = 你想要把全部日志复制到剪切板吗?
 
