@@ -1,7 +1,7 @@
 LOCALE_NAME = Deutsch
 LOCALE_LOADED = Deutsche Sprachdatei geladen!
 
-# Footer #
+# Footer
 DONATE_BUTTON = Spenden
 
 # Main Tab
@@ -11,7 +11,7 @@ PROFILE_CREATE = Profil erstellen
 PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
 
-#Console
+# Console
 CONSOLE_COPYCLIP = Bericht in Zwischenablage kopieren
 CONSOLE_CLIP_CONFIRM = Möchtest du den gesamten Bericht in deine Zwischenablage kopieren?
 
