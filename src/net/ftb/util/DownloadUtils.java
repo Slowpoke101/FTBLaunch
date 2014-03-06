@@ -318,7 +318,12 @@ public class DownloadUtils extends Thread {
                 }
             }
         }
-
+        
+        if(downloadServers.size() == 0) {
+            Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
+            downloadServers.put("Automatic", "new.creeperrepo.net");
+        }
+/*
         // Backup md5 servers
         try {
             in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
@@ -339,7 +344,8 @@ public class DownloadUtils extends Thread {
                 } catch (IOException e) {
                 }
             }
-        }
+        } */
+        
         serversLoaded = true;
         if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
             AdvancedOptionsDialog.setDownloadServers();
