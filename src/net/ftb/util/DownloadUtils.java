@@ -275,6 +275,8 @@ public class DownloadUtils extends Thread {
         } catch (IOException e) {
             downloadServers.clear();
             
+            Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
+            
             //If fetching edges.json failed, assume new. is inaccessible
             //downloadServers.put("Automatic", "new.creeperrepo.net");
             
@@ -293,7 +295,9 @@ public class DownloadUtils extends Thread {
                                 in.close();
                                 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
-                            } catch (Exception e) {}
+                            } catch (Exception e) {
+                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring.");
+                            }
                         }
                     }
                 }
@@ -308,7 +312,7 @@ public class DownloadUtils extends Thread {
                     downloadServers.put("Automatic", defaultServer);
                 }
             } catch (IOException e1) {
-                Logger.logError("Failed to use backup edges.json: " + e1.getMessage());
+                Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
             }
         } finally {
             if (in != null) {
