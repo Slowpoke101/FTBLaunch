@@ -287,7 +287,13 @@ public class DownloadUtils extends Thread {
                     for (String entry : splitString) {
                         String[] splitEntry = entry.split(":");
                         if (splitEntry.length == 2) {
-                            downloadServers.put(splitEntry[0], splitEntry[1]);
+                            try {
+                                in = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
+                                in.readLine();
+                                in.close();
+                                
+                                downloadServers.put(splitEntry[0], splitEntry[1]);
+                            } catch (Exception e) {}
                         }
                     }
                 }
