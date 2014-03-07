@@ -28,8 +28,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import net.ftb.data.Settings;
@@ -271,7 +273,47 @@ public class DownloadUtils extends Thread {
             }
             in.close();
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            downloadServers.clear();
+            
+            Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
+            
+            //If fetching edges.json failed, assume new. is inaccessible
+            //downloadServers.put("Automatic", "new.creeperrepo.net");
+            
+            try {
+                in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    line = line.replace("{", "").replace("}", "").replace("\"", "");
+                    String[] splitString = line.split(",");
+                    for (String entry : splitString) {
+                        String[] splitEntry = entry.split(":");
+                        if (splitEntry.length == 2) {
+                            try {
+                                in = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
+                                in.readLine();
+                                in.close();
+                                
+                                downloadServers.put(splitEntry[0], splitEntry[1]);
+                            } catch (Exception e) {
+                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring.");
+                            }
+                        }
+                    }
+                }
+                in.close();
+                
+                // Use a random server from edges.json as the Automatic server instead
+                if(!downloadServers.containsKey("Automatic")) {
+                    int index = (int)(Math.random() * downloadServers.size());
+                    List<String> keys = new ArrayList<String>(downloadServers.keySet());
+                    String defaultServer = downloadServers.get(keys.get(index));
+                    
+                    downloadServers.put("Automatic", defaultServer);
+                }
+            } catch (IOException e1) {
+                Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
+            }
         } finally {
             if (in != null) {
                 try {
@@ -280,7 +322,12 @@ public class DownloadUtils extends Thread {
                 }
             }
         }
-
+        
+        if(downloadServers.size() == 0) {
+            Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
+            downloadServers.put("Automatic", "new.creeperrepo.net");
+        }
+/*
         // Backup md5 servers
         try {
             in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
@@ -301,7 +348,8 @@ public class DownloadUtils extends Thread {
                 } catch (IOException e) {
                 }
             }
-        }
+        } */
+        
         serversLoaded = true;
         if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
             AdvancedOptionsDialog.setDownloadServers();
