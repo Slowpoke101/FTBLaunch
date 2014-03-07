@@ -295,7 +295,7 @@ public class DownloadUtils extends Thread {
                                 in.close();
                                 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
-                            } catch (Exception e) {
+                            } catch (Exception ex) {
                                 Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring.");
                             }
                         }
