@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
@@ -310,6 +312,7 @@ public class DownloadUtils extends Thread {
                     String defaultServer = downloadServers.get(keys.get(index));
                     
                     downloadServers.put("Automatic", defaultServer);
+                    Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
                 }
             } catch (IOException e1) {
                 Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
@@ -351,8 +354,43 @@ public class DownloadUtils extends Thread {
         } */
         
         serversLoaded = true;
-        if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
-            AdvancedOptionsDialog.setDownloadServers();
+        try {
+            if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
+                AdvancedOptionsDialog.setDownloadServers();
+            }
+        } catch(Exception e) {
+            Logger.logError("Unknown error setting download servers: " + e.getMessage());
         }
+        
+        String selectedMirror = Settings.getSettings().getDownloadServer();
+        String selectedHost = downloadServers.get(selectedMirror);
+        String resolvedIP = "UNKNOWN";
+        String resolvedHost = "UNKNOWN";
+        String resolvedMirror = "UNKNOWN";
+        
+        try {
+            InetAddress ipAddress = InetAddress.getByName(selectedHost);
+            resolvedIP = ipAddress.getHostAddress();
+        } catch (UnknownHostException e) {
+            Logger.logError("Failed to resolve selected mirror: " + e.getMessage());
+        }
+        
+        try {
+            for (String key : downloadServers.keySet()) {
+                if(key == "Automatic") continue;
+                
+                InetAddress host = InetAddress.getByName(downloadServers.get(key));
+
+                if(resolvedIP.equalsIgnoreCase(host.getHostAddress())) {
+                    resolvedMirror = key;
+                    resolvedHost = downloadServers.get(key);
+                    break;
+                }
+            }
+        } catch (UnknownHostException e) {
+            Logger.logError("Failed to resolve mirror: " + e.getMessage());
+        }
+        
+        Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
     }
 }
