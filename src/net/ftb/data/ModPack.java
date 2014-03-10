@@ -40,11 +40,11 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {
-    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
+    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml, hasBundledMap;
     private String[] mods, oldVersions;
     private Image logo, image;
     private int index;
-    private boolean updated = false;
+    private boolean updated = false, hasCustomTP;
     private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
     private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
     private boolean privatePack;
@@ -154,11 +154,13 @@ public class ModPack {
      * @param oldVersions - string containing all available old versions of the ModPack
      * @param animation - the animation to display before minecraft launches
      * @param idx - the actual position of the modpack in the index
+     * @param bundledMap - pack has map bundled inside it
+     * @param customTP - pack does not use primary TP's for MC version
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-            String animation, String maxPermSize, int idx, boolean privatePack, String xml) throws IOException, NoSuchAlgorithmException {
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, String bundledMap, boolean customTP) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -170,6 +172,8 @@ public class ModPack {
         this.privatePack = privatePack;
         this.xml = xml;
         this.maxPermSize = maxPermSize;
+        this.hasBundledMap = bundledMap;
+        this.hasCustomTP = customTP;
         if (!animation.isEmpty()) {
             this.animation = animation;
         } else {
@@ -441,5 +445,13 @@ public class ModPack {
 
     public String getMaxPermSize () {
         return maxPermSize;
+    }
+
+    public String getBundledMap () {
+        return hasBundledMap;
+    }
+
+    public boolean hasCustomTP () {
+        return hasCustomTP;
     }
 }
