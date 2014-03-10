@@ -94,6 +94,9 @@ deleteOrig.dependsOn(shadowJar)
 
 afterEvaluate {
 	launch4j {
+		if(System.getenv().l4j_special != null){
+			launch4jCmd = "downloads/launch4j --l4j-no-splash"
+		}
 		icon = file("res/exe/icon.ico").getCanonicalPath()
 		jreMinVersion = '1.6.0'
 		jar = project.tasks.jar.getArchivePath().getPath()
