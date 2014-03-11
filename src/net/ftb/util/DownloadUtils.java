@@ -45,6 +45,8 @@ public class DownloadUtils extends Thread {
     public static boolean serversLoaded = false;
     public static HashMap<String, String> downloadServers = new HashMap<String, String>();
     public static HashMap<String, String> backupServers = new HashMap<String, String>();
+    public static final String masterRepo = new String("http://new.creeperrepo.net");
+    public static final String masterRepoNoHTTP = new String("new.creeperrepo.net");
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
@@ -52,8 +54,7 @@ public class DownloadUtils extends Thread {
      * @throws NoSuchAlgorithmException - see md5
      */
     public static String getCreeperhostLink (String file) throws NoSuchAlgorithmException {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
-                : "http://new.creeperrepo.net";
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
         try {
@@ -77,8 +78,7 @@ public class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getStaticCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
-                : "http://new.creeperrepo.net";
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
         try {
@@ -118,7 +118,7 @@ public class DownloadUtils extends Thread {
      */
     public static boolean fileExists (String file) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/FTB2/" + file).openStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/FTB2/" + file).openStream()));
             return !reader.readLine().toLowerCase().contains("not found");
         } catch (Exception e) {
             return false;
@@ -172,8 +172,7 @@ public class DownloadUtils extends Thread {
         Logger.logInfo("Issue with new md5 method, attempting to use backup method.");
         String content = null;
         Scanner scanner = null;
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
-                : "http://new.creeperrepo.net";
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
         resolved += "/md5/FTB2/" + url;
         HttpURLConnection connection = null;
         try {
@@ -257,11 +256,11 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
-        downloadServers.put("Automatic", "new.creeperrepo.net");
+        downloadServers.put("Automatic", masterRepoNoHTTP);
         BufferedReader in = null;
         // New Servers
         try {
-            in = new BufferedReader(new InputStreamReader(new URL("http://new.creeperrepo.net/edges.json").openStream()));
+            in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
             String line;
             while ((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
                 line = line.replace("{", "").replace("}", "").replace("\"", "");
@@ -276,12 +275,12 @@ public class DownloadUtils extends Thread {
             in.close();
         } catch (IOException e) {
             downloadServers.clear();
-            
+
             Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-            
+
             //If fetching edges.json failed, assume new. is inaccessible
             //downloadServers.put("Automatic", "new.creeperrepo.net");
-            
+
             try {
                 in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
                 String line;
@@ -295,7 +294,7 @@ public class DownloadUtils extends Thread {
                                 in = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
                                 in.readLine();
                                 in.close();
-                                
+
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
                             } catch (Exception ex) {
                                 Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring.");
@@ -304,13 +303,13 @@ public class DownloadUtils extends Thread {
                     }
                 }
                 in.close();
-                
+
                 // Use a random server from edges.json as the Automatic server instead
-                if(!downloadServers.containsKey("Automatic")) {
-                    int index = (int)(Math.random() * downloadServers.size());
+                if (!downloadServers.containsKey("Automatic")) {
+                    int index = (int) (Math.random() * downloadServers.size());
                     List<String> keys = new ArrayList<String>(downloadServers.keySet());
                     String defaultServer = downloadServers.get(keys.get(index));
-                    
+
                     downloadServers.put("Automatic", defaultServer);
                     Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
                 }
@@ -325,63 +324,64 @@ public class DownloadUtils extends Thread {
                 }
             }
         }
-        
-        if(downloadServers.size() == 0) {
+
+        if (downloadServers.size() == 0) {
             Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
-            downloadServers.put("Automatic", "new.creeperrepo.net");
+            downloadServers.put("Automatic", masterRepoNoHTTP);
         }
-/*
-        // Backup md5 servers
-        try {
-            in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                String[] splitString = line.split(",");
-                if (splitString.length == 2) {
-                    backupServers.put(splitString[0], splitString[1]);
-                }
-            }
-            in.close();
-        } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
-        } finally {
-            if (in != null) {
+        /*
+                // Backup md5 servers
                 try {
+                    in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        String[] splitString = line.split(",");
+                        if (splitString.length == 2) {
+                            backupServers.put(splitString[0], splitString[1]);
+                        }
+                    }
                     in.close();
                 } catch (IOException e) {
-                }
-            }
-        } */
-        
+                    Logger.logError(e.getMessage(), e);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                        }
+                    }
+                } */
+
         serversLoaded = true;
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
                 AdvancedOptionsDialog.setDownloadServers();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.logError("Unknown error setting download servers: " + e.getMessage());
         }
-        
+
         String selectedMirror = Settings.getSettings().getDownloadServer();
         String selectedHost = downloadServers.get(selectedMirror);
         String resolvedIP = "UNKNOWN";
         String resolvedHost = "UNKNOWN";
         String resolvedMirror = "UNKNOWN";
-        
+
         try {
             InetAddress ipAddress = InetAddress.getByName(selectedHost);
             resolvedIP = ipAddress.getHostAddress();
         } catch (UnknownHostException e) {
             Logger.logError("Failed to resolve selected mirror: " + e.getMessage());
         }
-        
+
         try {
             for (String key : downloadServers.keySet()) {
-                if(key == "Automatic") continue;
-                
+                if (key == "Automatic")
+                    continue;
+
                 InetAddress host = InetAddress.getByName(downloadServers.get(key));
 
-                if(resolvedIP.equalsIgnoreCase(host.getHostAddress())) {
+                if (resolvedIP.equalsIgnoreCase(host.getHostAddress())) {
                     resolvedMirror = key;
                     resolvedHost = downloadServers.get(key);
                     break;
@@ -390,7 +390,7 @@ public class DownloadUtils extends Thread {
         } catch (UnknownHostException e) {
             Logger.logError("Failed to resolve mirror: " + e.getMessage());
         }
-        
+
         Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
     }
 }
