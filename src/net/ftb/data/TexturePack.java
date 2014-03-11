@@ -142,7 +142,7 @@ public class TexturePack {
             }
             BufferedReader in = new BufferedReader(new FileReader(verFile));
             String line;
-            if ((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) > Integer.parseInt(line.replace(".", ""))) {
+            if ((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) != Integer.parseInt(line.replace(".", ""))) {
                 BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
                 out.write(version);
                 out.flush();
