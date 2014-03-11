@@ -297,22 +297,12 @@ public class DownloadUtils extends Thread {
 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
                             } catch (Exception ex) {
-                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring.");
+                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring." + ex.getMessage());
                             }
                         }
                     }
                 }
                 in.close();
-
-                // Use a random server from edges.json as the Automatic server instead
-                if (!downloadServers.containsKey("Automatic")) {
-                    int index = (int) (Math.random() * downloadServers.size());
-                    List<String> keys = new ArrayList<String>(downloadServers.keySet());
-                    String defaultServer = downloadServers.get(keys.get(index));
-
-                    downloadServers.put("Automatic", defaultServer);
-                    Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
-                }
             } catch (IOException e1) {
                 Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
             }
@@ -323,6 +313,16 @@ public class DownloadUtils extends Thread {
                 } catch (IOException e) {
                 }
             }
+        }
+
+        // Use a random server from edges.json as the Automatic server instead
+        if (!downloadServers.containsKey("Automatic")) {
+            int index = (int) (Math.random() * downloadServers.size());
+            List<String> keys = new ArrayList<String>(downloadServers.keySet());
+            String defaultServer = downloadServers.get(keys.get(index));
+
+            downloadServers.put("Automatic", defaultServer);
+            Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
         }
 
         if (downloadServers.size() == 0) {
