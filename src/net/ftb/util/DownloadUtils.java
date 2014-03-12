@@ -42,7 +42,7 @@ import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.log.Logger;
 
 public class DownloadUtils extends Thread {
-    public static boolean serversLoaded = false;
+    public volatile static boolean serversLoaded = false;
     public static HashMap<String, String> downloadServers = new HashMap<String, String>();
     public static HashMap<String, String> backupServers = new HashMap<String, String>();
     public static final String masterRepo = new String("http://new.creeperrepo.net");
