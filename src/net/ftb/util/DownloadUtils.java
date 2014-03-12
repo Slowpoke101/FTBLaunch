@@ -284,25 +284,25 @@ public class DownloadUtils extends Thread {
             try {
                 in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
                 String line;
-                while ((line = in.readLine()) != null) {
+                while (in.ready() && (line = in.readLine()) != null) {
                     line = line.replace("{", "").replace("}", "").replace("\"", "");
                     String[] splitString = line.split(",");
                     for (String entry : splitString) {
                         String[] splitEntry = entry.split(":");
                         if (splitEntry.length == 2) {
                             try {
-                                in = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
-                                in.readLine();
-                                in.close();
+                                Logger.logInfo("Testing CreeperHost:" + splitEntry[0]);
+                                BufferedReader in1 = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
+                                in1.readLine();
+                                in1.close();
 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
                             } catch (Exception ex) {
-                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring." + ex.getMessage());
+                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
                             }
                         }
                     }
                 }
-                in.close();
             } catch (IOException e1) {
                 Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
             }
