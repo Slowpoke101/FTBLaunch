@@ -19,6 +19,7 @@ package net.ftb.workers;
 import java.net.URL;
 
 import net.ftb.data.Map;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -54,6 +55,7 @@ public class MapLoader extends Thread {
                         i));
             }
             MapsPane.loaded = true;
+            LaunchFrame.instance.checkDoneLoading();
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }

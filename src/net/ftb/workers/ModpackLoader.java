@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -106,6 +107,7 @@ public class ModpackLoader extends Thread {
         }
         if (!ModpacksPane.loaded) {
             ModpacksPane.loaded = true;
+            LaunchFrame.instance.checkDoneLoading();
             Map.loadAll();
             TexturePack.loadAll();
         }

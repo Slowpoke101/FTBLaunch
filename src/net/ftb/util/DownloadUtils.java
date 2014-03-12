@@ -39,6 +39,7 @@ import java.util.Scanner;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
+import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
 public class DownloadUtils extends Thread {
@@ -258,6 +259,9 @@ public class DownloadUtils extends Thread {
     public void run () {
         downloadServers.put("Automatic", masterRepoNoHTTP);
         BufferedReader in = null;
+        int i = 10;
+        LoadingDialog.setProgress(i);
+        
         // New Servers
         try {
             in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
@@ -273,11 +277,13 @@ public class DownloadUtils extends Thread {
                 }
             }
             in.close();
+            LoadingDialog.setProgress(80);
         } catch (IOException e) {
             downloadServers.clear();
 
             Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-
+            LoadingDialog.setProgress(i);
+            
             //If fetching edges.json failed, assume new. is inaccessible
             //downloadServers.put("Automatic", "new.creeperrepo.net");
 
@@ -297,6 +303,10 @@ public class DownloadUtils extends Thread {
                                 in1.close();
 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
+                                
+                                i += 10;
+                                if(i > 90) i = 90;
+                                LoadingDialog.setProgress(i);
                             } catch (Exception ex) {
                                 Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
                             }
@@ -315,6 +325,8 @@ public class DownloadUtils extends Thread {
             }
         }
 
+        LoadingDialog.setProgress(90);
+        
         // Use a random server from edges.json as the Automatic server instead
         if (!downloadServers.containsKey("Automatic")) {
             int index = (int) (Math.random() * downloadServers.size());
@@ -352,7 +364,22 @@ public class DownloadUtils extends Thread {
                     }
                 } */
 
+        LoadingDialog.setProgress(100);
         serversLoaded = true;
+        
+        while(LaunchFrame.loader == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+        
+        LaunchFrame.loader.setVisible(false);
+        LaunchFrame.loader.setModal(false);
+        LaunchFrame.loader.setVisible(true);
+        LaunchFrame.loader.toFront();
+        LaunchFrame.loader.repaint();
+        
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
                 AdvancedOptionsDialog.setDownloadServers();

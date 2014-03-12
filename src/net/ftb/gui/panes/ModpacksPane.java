@@ -60,9 +60,9 @@ import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
-    private static JPanel packs;
+    public static JPanel packs;
     public static ArrayList<JPanel> packPanels;
-    private static JScrollPane packsScroll;
+    public static JScrollPane packsScroll;
 
     private static JLabel typeLbl;
     private JButton filter, editModPack;
@@ -272,7 +272,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(Color.white);
-        filler.setBounds(58, 6, 378, 42);
+        filler.setBounds(58, 6, 362, 42);
         filler.setBackground(new Color(255, 255, 255, 0));
         MouseAdapter lin = new MouseAdapter() {
             @Override

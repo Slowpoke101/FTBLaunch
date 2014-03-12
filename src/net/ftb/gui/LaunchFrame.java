@@ -79,6 +79,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
+import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
@@ -135,7 +136,7 @@ public class LaunchFrame extends JFrame {
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
-    private static LaunchFrame instance = null;
+    public static LaunchFrame instance = null;
     private static String version = "1.3.7";
     public static boolean canUseAuthlib;
 
@@ -156,7 +157,8 @@ public class LaunchFrame extends JFrame {
     public static String tempPass = "";
     public static Panes currentPane = Panes.MODPACK;
     public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-37330489-2"), GoogleAnalyticsVersion.V_4_7_2);
-
+    public static LoadingDialog loader;
+    
     public static final String FORGENAME = "MinecraftForge.zip";
 
     protected enum Panes {
@@ -196,14 +198,6 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
-        while(!DownloadUtils.serversLoaded) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run () {
@@ -221,14 +215,22 @@ public class LaunchFrame extends JFrame {
                     } catch (Exception e1) {
                     }
                 }
+                
+                loader = new LoadingDialog();
+                loader.setVisible(true);
+
                 I18N.setupLocale();
                 I18N.setLocale(Settings.getSettings().getLocale());
 
+                LoadingDialog.setProgress(110);
+                
                 if (noConfig) {
                     InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
                     installDialog.setVisible(true);
                 }
 
+                LoadingDialog.setProgress(120);
+                
                 File installDir = new File(Settings.getSettings().getInstallPath());
                 if (!installDir.exists()) {
                     installDir.mkdirs();
@@ -237,13 +239,15 @@ public class LaunchFrame extends JFrame {
                 if (!dynamicDir.exists()) {
                     dynamicDir.mkdirs();
                 }
+                
+                LoadingDialog.setProgress(130);
 
                 userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+                
+                LoadingDialog.setProgress(140);
+                
                 con = new LauncherConsole();
-                if (Settings.getSettings().getConsoleActive()) {
-                    con.setVisible(true);
-                }
-
+                
                 File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
 
                 try {
@@ -274,7 +278,9 @@ public class LaunchFrame extends JFrame {
 
                         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
                     }
-
+                    
+                    LoadingDialog.setProgress(150);
+                    
                     if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
                         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
                         Settings.getSettings().setLoaded(true);
@@ -285,13 +291,16 @@ public class LaunchFrame extends JFrame {
                 } catch (IOException e1) {
                     Logger.logError(e1.getMessage());
                 }
+                
+                LoadingDialog.setProgress(160);
 
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
-                frame.setVisible(true);
 
                 AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.4.2") {
                 };
+                
+                LoadingDialog.setProgress(170);
 
                 Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                     @Override
@@ -299,10 +308,13 @@ public class LaunchFrame extends JFrame {
                         Logger.logError("Unhandled exception in " + t.toString(), e);
                     }
                 });
+                
+                instance.setVisible(true);
+                instance.toBack();
 
                 ModPack.addListener(frame.modPacksPane);
                 ModPack.loadXml(getXmls());
-
+                
                 Map.addListener(frame.mapsPane);
                 //				Map.loadAll();
 
@@ -314,9 +326,30 @@ public class LaunchFrame extends JFrame {
                     LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
                     p.setVisible(true);
                 }
-
+                
+                LoadingDialog.setProgress(180);
             };
         });
+    }
+    
+    public void checkDoneLoading() {
+        int i = 180;
+        con.setVisible(Settings.getSettings().getConsoleActive());
+        con.scrollToBottom();
+        
+        if(ModpacksPane.loaded) {
+            i += 10;
+            if(MapsPane.loaded) {
+                i += 10;
+                if(TexturepackPane.loaded) {
+                    loader.setVisible(false);
+                    instance.setVisible(true);
+                    instance.toFront();
+                }
+            }
+        }
+        
+        LoadingDialog.setProgress(i);
     }
 
     /**
@@ -777,7 +810,7 @@ public class LaunchFrame extends JFrame {
         if (assets.size() > 0) {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
 
-            final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100); //Not sure why this isnt showing...
+            final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100);
             final AssetDownloader downloader = new AssetDownloader(prog, assets) {
                 @Override
                 public void done () {
