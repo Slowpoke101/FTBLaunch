@@ -28,8 +28,37 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
+import org.apache.commons.io.IOUtils;
+
 public class MinecraftVersionDetector {
     public MinecraftVersionDetector() {
+    }
+
+    /**
+     * Finds the version string from the given input stream.
+     * @param file The minecraft.jar file ready to read Minecraft.class
+     * @return Minecraft version as a string.
+     */
+    private String findVersionString (ZipInputStream file) throws IOException {
+        String data = IOUtils.toString(file);
+        String search = "Minecraft 1";
+        return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
+    }
+
+    /**
+     * Seeks to the minecraft.class file contained in the zip.
+     * @param file The Minecraft.jar file
+     * @return Whether the Minecraft.class was found
+     */
+    private boolean seekToMinecraftClass (ZipInputStream file) throws IOException {
+        ZipEntry ent;
+        while ((ent = file.getNextEntry()) != null) {
+            if (ent.getName().contains("Minecraft.class")) {
+                return true;
+            }
+            file.closeEntry();
+        }
+        return false;
     }
 
     /**
@@ -39,25 +68,19 @@ public class MinecraftVersionDetector {
      */
     public String getMinecraftVersion (String jarFilePath) {
         try {
-            ZipInputStream file = new ZipInputStream(new FileInputStream(new File(jarFilePath, "bin/" + "minecraft.jar")));
-            ZipEntry ent;
-            ent = file.getNextEntry();
-            while (ent != null) {
-                if (ent.getName().contains("Minecraft.class")) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int c = file.read(); c != -1; c = file.read()) {
-                        sb.append((char) c);
-                    }
-                    String data = sb.toString();
-                    String search = "Minecraft 1";
+            ZipInputStream file = null;
+            ZipEntry ent = null;
+            try {
+                file = new ZipInputStream(new FileInputStream(new File(jarFilePath, "bin/minecraft.jar")));
+                if (seekToMinecraftClass(file)) {
+                    return findVersionString(file);
+                }
+            } finally {
+                if (file != null) {
                     file.closeEntry();
                     file.close();
-                    return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
                 }
-                file.closeEntry();
-                ent = file.getNextEntry();
             }
-            file.close();
         } catch (IOException e1) {
             Logger.logError(e1.getMessage(), e1);
             return "unknown";
@@ -76,11 +99,14 @@ public class MinecraftVersionDetector {
         }
         File mcVersion = new File(jarFilePath, "bin/version");
         if (mcVersion.exists()) {
-            BufferedReader in;
             try {
-                in = new BufferedReader(new FileReader(mcVersion));
-                requiredVersion = in.readLine();
-                in.close();
+                BufferedReader in = null;
+                try {
+                    in = new BufferedReader(new FileReader(mcVersion));
+                    requiredVersion = in.readLine();
+                } finally {
+                    if (in != null) { in.close(); }
+                }
             } catch (IOException e) {
             }
         }
