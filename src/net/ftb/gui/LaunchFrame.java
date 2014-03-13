@@ -136,7 +136,7 @@ public class LaunchFrame extends JFrame {
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
-    public static LaunchFrame instance = null;
+    private static LaunchFrame instance = null;
     private static String version = "1.3.7";
     public static boolean canUseAuthlib;
 
@@ -144,7 +144,7 @@ public class LaunchFrame extends JFrame {
 
     protected static UserManager userManager;
 
-    public static ModpacksPane modPacksPane;
+    public ModpacksPane modPacksPane;
     public MapsPane mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
@@ -197,7 +197,7 @@ public class LaunchFrame extends JFrame {
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
-
+        
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run () {
@@ -223,14 +223,14 @@ public class LaunchFrame extends JFrame {
                 I18N.setLocale(Settings.getSettings().getLocale());
 
                 LoadingDialog.setProgress(110);
-                
+
                 if (noConfig) {
                     InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
                     installDialog.setVisible(true);
                 }
 
                 LoadingDialog.setProgress(120);
-                
+
                 File installDir = new File(Settings.getSettings().getInstallPath());
                 if (!installDir.exists()) {
                     installDir.mkdirs();
@@ -239,15 +239,15 @@ public class LaunchFrame extends JFrame {
                 if (!dynamicDir.exists()) {
                     dynamicDir.mkdirs();
                 }
-                
+
                 LoadingDialog.setProgress(130);
 
                 userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
-                
+
                 LoadingDialog.setProgress(140);
-                
+
                 con = new LauncherConsole();
-                
+
                 File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
 
                 try {
@@ -278,9 +278,9 @@ public class LaunchFrame extends JFrame {
 
                         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
                     }
-                    
+
                     LoadingDialog.setProgress(150);
-                    
+
                     if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
                         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
                         Settings.getSettings().setLoaded(true);
@@ -291,7 +291,7 @@ public class LaunchFrame extends JFrame {
                 } catch (IOException e1) {
                     Logger.logError(e1.getMessage());
                 }
-                
+
                 LoadingDialog.setProgress(160);
 
                 LaunchFrame frame = new LaunchFrame(2);
@@ -299,7 +299,7 @@ public class LaunchFrame extends JFrame {
 
                 AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.4.2") {
                 };
-                
+
                 LoadingDialog.setProgress(170);
 
                 Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -309,12 +309,19 @@ public class LaunchFrame extends JFrame {
                     }
                 });
                 
+                /*
+                 * Show the main form but hide it behind any active windows until
+                 * loading is complete to prevent display issues.
+                 * 
+                 * @TODO ModpacksPane has a display issue with packScroll if the  
+                 * main form is not visible when constructed.
+                 */
                 instance.setVisible(true);
                 instance.toBack();
 
                 ModPack.addListener(frame.modPacksPane);
                 ModPack.loadXml(getXmls());
-                
+
                 Map.addListener(frame.mapsPane);
                 //				Map.loadAll();
 
@@ -326,32 +333,12 @@ public class LaunchFrame extends JFrame {
                     LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
                     p.setVisible(true);
                 }
-                
+
                 LoadingDialog.setProgress(180);
             };
         });
     }
     
-    public void checkDoneLoading() {
-        int i = 180;
-        con.setVisible(Settings.getSettings().getConsoleActive());
-        con.scrollToBottom();
-        
-        if(ModpacksPane.loaded) {
-            i += 10;
-            if(MapsPane.loaded) {
-                i += 10;
-                if(TexturepackPane.loaded) {
-                    loader.setVisible(false);
-                    instance.setVisible(true);
-                    instance.toFront();
-                }
-            }
-        }
-        
-        LoadingDialog.setProgress(i);
-    }
-
     /**
      * Create the frame.
      */
@@ -585,6 +572,34 @@ public class LaunchFrame extends JFrame {
                 }
             }
         });
+    }
+    
+    public static void downloadServersReady() {
+        // Release modal from the loading screen, so the main thread can continue
+        loader.setVisible(false);
+        loader.setModal(false);
+        loader.setVisible(true);
+        loader.toFront();
+        loader.repaint();
+    }
+    
+    public static void checkDoneLoading() {
+        con.setVisible(Settings.getSettings().getConsoleActive());
+        con.scrollToBottom();
+        
+        if(ModpacksPane.loaded) {
+            LoadingDialog.setProgress(190);
+            
+            if(MapsPane.loaded) {
+                LoadingDialog.setProgress(200);
+                
+                if(TexturepackPane.loaded) {
+                    loader.setVisible(false);
+                    instance.setVisible(true);
+                    instance.toFront();
+                }
+            }
+        }
     }
 
     public void setNewsIcon () {

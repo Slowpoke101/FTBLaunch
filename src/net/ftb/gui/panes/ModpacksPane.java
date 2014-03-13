@@ -60,9 +60,9 @@ import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
-    public static JPanel packs;
+    private static JPanel packs;
     public static ArrayList<JPanel> packPanels;
-    public static JScrollPane packsScroll;
+    private static JScrollPane packsScroll;
 
     private static JLabel typeLbl;
     private JButton filter, editModPack;
@@ -199,7 +199,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-                    if (LaunchFrame.modPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
+                    if (ModpacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
                         try {
                             if (!ModPack.getSelectedPack().getServerUrl().equals("") && ModPack.getSelectedPack().getServerUrl() != null) {
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack

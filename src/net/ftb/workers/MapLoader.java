@@ -55,7 +55,7 @@ public class MapLoader extends Thread {
                         i));
             }
             MapsPane.loaded = true;
-            LaunchFrame.instance.checkDoneLoading();
+            LaunchFrame.checkDoneLoading();
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }

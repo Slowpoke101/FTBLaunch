@@ -259,8 +259,6 @@ public class DownloadUtils extends Thread {
     public void run () {
         downloadServers.put("Automatic", masterRepoNoHTTP);
         BufferedReader in = null;
-        int i = 10;
-        LoadingDialog.setProgress(i);
         
         // New Servers
         try {
@@ -279,13 +277,14 @@ public class DownloadUtils extends Thread {
             in.close();
             LoadingDialog.setProgress(80);
         } catch (IOException e) {
+            int i = 10;
+            
             downloadServers.clear();
 
             Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
             LoadingDialog.setProgress(i);
             
             //If fetching edges.json failed, assume new. is inaccessible
-            //downloadServers.put("Automatic", "new.creeperrepo.net");
 
             try {
                 in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
@@ -304,8 +303,7 @@ public class DownloadUtils extends Thread {
 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
                                 
-                                i += 10;
-                                if(i > 90) i = 90;
+                                if(i < 90) i += 10;
                                 LoadingDialog.setProgress(i);
                             } catch (Exception ex) {
                                 Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
@@ -327,8 +325,13 @@ public class DownloadUtils extends Thread {
 
         LoadingDialog.setProgress(90);
         
-        // Use a random server from edges.json as the Automatic server instead
-        if (!downloadServers.containsKey("Automatic")) {
+        if (downloadServers.size() == 0) {
+            Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
+
+            // Fall back to new. (old system) on critical failure
+            downloadServers.put("Automatic", masterRepoNoHTTP);
+        } else if (!downloadServers.containsKey("Automatic")) {
+            // Use a random server from edges.json as the Automatic server instead
             int index = (int) (Math.random() * downloadServers.size());
             List<String> keys = new ArrayList<String>(downloadServers.keySet());
             String defaultServer = downloadServers.get(keys.get(index));
@@ -337,48 +340,10 @@ public class DownloadUtils extends Thread {
             Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
         }
 
-        if (downloadServers.size() == 0) {
-            Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
-            downloadServers.put("Automatic", masterRepoNoHTTP);
-        }
-        /*
-                // Backup md5 servers
-                try {
-                    in = new BufferedReader(new InputStreamReader(new URL("http://www.creeperrepo.net/mirrors").openStream()));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        String[] splitString = line.split(",");
-                        if (splitString.length == 2) {
-                            backupServers.put(splitString[0], splitString[1]);
-                        }
-                    }
-                    in.close();
-                } catch (IOException e) {
-                    Logger.logError(e.getMessage(), e);
-                } finally {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException e) {
-                        }
-                    }
-                } */
-
         LoadingDialog.setProgress(100);
         serversLoaded = true;
         
-        while(LaunchFrame.loader == null) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
-        }
-        
-        LaunchFrame.loader.setVisible(false);
-        LaunchFrame.loader.setModal(false);
-        LaunchFrame.loader.setVisible(true);
-        LaunchFrame.loader.toFront();
-        LaunchFrame.loader.repaint();
+        LaunchFrame.downloadServersReady();
         
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {

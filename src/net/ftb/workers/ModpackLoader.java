@@ -107,7 +107,7 @@ public class ModpackLoader extends Thread {
         }
         if (!ModpacksPane.loaded) {
             ModpacksPane.loaded = true;
-            LaunchFrame.instance.checkDoneLoading();
+            LaunchFrame.checkDoneLoading();
             Map.loadAll();
             TexturePack.loadAll();
         }
