@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -201,7 +202,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
         displayArea.setEditable(false);
         kit = new HTMLEditorKit();
         displayArea.setEditorKit(kit);
-
+        
+        DefaultCaret caret = (DefaultCaret)displayArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        
         JScrollPane scrollPane = new JScrollPane(displayArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -246,6 +250,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
         }
     }
 
+    public void scrollToBottom() {
+        displayArea.setCaretPosition(displayArea.getDocument().getLength());
+    }
+    
     private String getMessage (LogEntry entry) {
         String color = "white";
         switch (entry.level) {
