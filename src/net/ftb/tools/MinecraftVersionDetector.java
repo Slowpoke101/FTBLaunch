@@ -37,12 +37,17 @@ public class MinecraftVersionDetector {
     /**
      * Finds the version string from the given input stream.
      * @param file The minecraft.jar file ready to read Minecraft.class
-     * @return Minecraft version as a string.
+     * @return Minecraft version as a string or "unknown" if an exception occurs
      */
-    private String findVersionString (ZipInputStream file) throws IOException {
-        String data = IOUtils.toString(file);
-        String search = "Minecraft 1";
-        return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
+    private String findVersionString (ZipInputStream file) {
+        try {
+            String data = IOUtils.toString(file);
+            String search = "Minecraft 1";
+            return data.substring(data.indexOf(search) + 10, data.indexOf(search) + search.length() + 4);
+        } catch (IOException e) {
+            Logger.logError(e.getMessage(), e);
+            return "unknown";
+        }
     }
 
     /**
@@ -50,15 +55,20 @@ public class MinecraftVersionDetector {
      * @param file The Minecraft.jar file
      * @return Whether the Minecraft.class was found
      */
-    private boolean seekToMinecraftClass (ZipInputStream file) throws IOException {
-        ZipEntry ent;
-        while ((ent = file.getNextEntry()) != null) {
-            if (ent.getName().contains("Minecraft.class")) {
-                return true;
+    private boolean seekToMinecraftClass (ZipInputStream file) {
+        try {
+            ZipEntry ent;
+            while ((ent = file.getNextEntry()) != null) {
+                if (ent.getName().contains("Minecraft.class")) {
+                    return true;
+                }
+                file.closeEntry();
             }
-            file.closeEntry();
+            return false;
+        } catch (IOException e) {
+            Logger.logError(e.getMessage(), e);
+            return false;
         }
-        return false;
     }
 
     /**
