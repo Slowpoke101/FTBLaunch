@@ -21,6 +21,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -59,14 +62,14 @@ public class ModPackFilterDialog extends JDialog {
         this.pane = instance;
 
         ArrayList<String> mcVersions = new ArrayList<String>();
-        mcVersion.addItem("All");
         mcVersions.add("All");
         for (ModPack pack : ModPack.getPackArray()) {
             if (!mcVersions.contains(pack.getMcVersion())) {
                 mcVersions.add(pack.getMcVersion());
-                mcVersion.addItem(pack.getMcVersion());
             }
         }
+
+        sortMcVersions(mcVersions);
 
         mcVersion.setModel(new DefaultComboBoxModel(mcVersions.toArray()));
         origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
@@ -102,6 +105,49 @@ public class ModPackFilterDialog extends JDialog {
                 SearchDialog sd = new SearchDialog(pane);
                 sd.setVisible(true);
                 setVisible(false);
+            }
+        });
+    }
+
+    /**
+     * Sorts the list of Minecraft versions from newest to oldest
+     * with option "All" being on top.
+     */
+    private void sortMcVersions(List<String> mcVersions) {
+        Collections.sort(mcVersions, new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                // All is always first
+                if ("All".equals(s1)) {
+                    return -1;
+                }
+                if ("All".equals(s2)) {
+                    return 1;
+                }
+
+                // We assume the versions have three parts. This has been true for
+                // ages and it shouldn't change any time soon.
+                String[] split1 = s1.split("\\."), split2 = s2.split("\\.");
+                int[] parts1 = new int[] {
+                    Integer.parseInt(split1[0]),
+                    Integer.parseInt(split1[1]),
+                    Integer.parseInt(split1[2])
+                };
+                int[] parts2 = new int[] {
+                    Integer.parseInt(split2[0]),
+                    Integer.parseInt(split2[1]),
+                    Integer.parseInt(split2[2])
+                };
+
+
+                if (parts1[0] != parts2[0]) {
+                    return parts2[0] - parts1[0];
+                }
+
+                if (parts1[1] != parts2[1]) {
+                    return parts2[1] - parts1[1];
+                }
+
+                return parts2[2] - parts1[2];
             }
         });
     }
