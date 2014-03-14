@@ -64,6 +64,11 @@ public class DownloadUtils extends Thread {
                 if (connection.getResponseCode() != 200) {
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    if (Settings.getSettings().getSnooper())
+                        connection.setRequestProperty("User-Agent", "FTB " + LaunchFrame.buildNumber + " OS " + System.getProperty("os.name").toLowerCase() + "-"
+                                + System.getProperty("os.version").toLowerCase() + "-" + System.getProperty("os.arch").toLowerCase() + " java " + System.getProperty("java.vendor").toLowerCase()
+                                + " - " + System.getProperty("java.version").toLowerCase());
+
                 } else {
                     break;
                 }
@@ -84,6 +89,11 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            if (Settings.getSettings().getSnooper())
+                connection.setRequestProperty("User-Agent", "FTB " + LaunchFrame.buildNumber + " OS " + System.getProperty("os.name").toLowerCase() + "-"
+                        + System.getProperty("os.version").toLowerCase() + "-" + System.getProperty("os.arch").toLowerCase() + " java " + System.getProperty("java.vendor").toLowerCase() + " - "
+                        + System.getProperty("java.version").toLowerCase());
+
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
@@ -178,6 +188,11 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            if (Settings.getSettings().getSnooper())
+                connection.setRequestProperty("User-Agent", "FTB " + LaunchFrame.buildNumber + " OS " + System.getProperty("os.name").toLowerCase() + "-"
+                        + System.getProperty("os.version").toLowerCase() + "-" + System.getProperty("os.arch").toLowerCase() + " java " + System.getProperty("java.vendor").toLowerCase() + " - "
+                        + System.getProperty("java.version").toLowerCase());
+
             int response = connection.getResponseCode();
             if (response == 200) {
                 scanner = new Scanner(connection.getInputStream());
@@ -188,6 +203,11 @@ public class DownloadUtils extends Thread {
                 for (String server : backupServers.values()) {
                     resolved = "http://" + server + "/md5/FTB2/" + url.replace("/", "%5E");
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    if (Settings.getSettings().getSnooper())
+
+                        connection.setRequestProperty("User-Agent", "FTB " + LaunchFrame.buildNumber + " OS " + System.getProperty("os.name").toLowerCase() + "-"
+                                + System.getProperty("os.version").toLowerCase() + "-" + System.getProperty("os.arch").toLowerCase() + " java " + System.getProperty("java.vendor").toLowerCase()
+                                + " - " + System.getProperty("java.version").toLowerCase());
                     response = connection.getResponseCode();
                     if (response == 200) {
                         scanner = new Scanner(connection.getInputStream());
@@ -259,7 +279,7 @@ public class DownloadUtils extends Thread {
     public void run () {
         downloadServers.put("Automatic", masterRepoNoHTTP);
         BufferedReader in = null;
-        
+
         // New Servers
         try {
             in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
@@ -278,12 +298,12 @@ public class DownloadUtils extends Thread {
             LoadingDialog.setProgress(80);
         } catch (IOException e) {
             int i = 10;
-            
+
             downloadServers.clear();
 
             Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
             LoadingDialog.setProgress(i);
-            
+
             //If fetching edges.json failed, assume new. is inaccessible
 
             try {
@@ -302,8 +322,9 @@ public class DownloadUtils extends Thread {
                                 in1.close();
 
                                 downloadServers.put(splitEntry[0], splitEntry[1]);
-                                
-                                if(i < 90) i += 10;
+
+                                if (i < 90)
+                                    i += 10;
                                 LoadingDialog.setProgress(i);
                             } catch (Exception ex) {
                                 Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
@@ -324,7 +345,7 @@ public class DownloadUtils extends Thread {
         }
 
         LoadingDialog.setProgress(90);
-        
+
         if (downloadServers.size() == 0) {
             Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
 
@@ -342,9 +363,9 @@ public class DownloadUtils extends Thread {
 
         LoadingDialog.setProgress(100);
         serversLoaded = true;
-        
+
         LaunchFrame.downloadServersReady();
-        
+
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
                 AdvancedOptionsDialog.setDownloadServers();

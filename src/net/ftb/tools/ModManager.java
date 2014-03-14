@@ -253,7 +253,33 @@ public class ModManager extends JDialog {
                     if (debugVerbose) {
                         Logger.logInfo(debugTag + "Extracting pack.");
                     }
+                    if (pack.hasBundledMap()) {
+                        try {
+                            File f = new File(baseDynamic.getPath() + sep + modPackName + "minecraft" + sep + "saves");
+                            if (f.exists())
+                                f.renameTo(new File(baseDynamic.getPath() + sep + modPackName + "minecraft" + sep + "saves.ftbtmp"));
+                        } catch (Exception e) {
+                            Logger.logError("Error backing up map before replacement");
+                            Logger.logError(e.getMessage(), e);
+                        }
+                    }
+
                     FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+                    if (pack.hasBundledMap()) {
+                        File f = new File(baseDynamic.getPath() + sep + modPackName + "minecraft" + sep + "saves.ftbtmp");
+                        if (f.exists()) {
+                            try {
+                                File f2 = new File(baseDynamic.getPath() + sep + modPackName + "minecraft" + sep + "saves");
+                                if (f2.exists())
+                                    FileUtils.delete(f2);
+                                f.renameTo(f2);
+                            } catch (Exception e) {
+                                Logger.logError("Error restoring up map before replacement");
+                                Logger.logError(e.getMessage(), e);
+                            }
+
+                        }
+                    }
                     File version = new File(installPath, dir + sep + "version");
                     BufferedWriter out = new BufferedWriter(new FileWriter(version));
                     out.write(curVersion.replace("_", "."));

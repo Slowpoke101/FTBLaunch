@@ -40,11 +40,11 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 public class ModPack {
-    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml, hasBundledMap;
+    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
     private String[] mods, oldVersions;
     private Image logo, image;
     private int index;
-    private boolean updated = false, hasCustomTP;
+    private boolean updated = false, hasCustomTP, hasBundledMap;
     private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
     private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
     private boolean privatePack;
@@ -160,7 +160,7 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-            String animation, String maxPermSize, int idx, boolean privatePack, String xml, String bundledMap, boolean customTP) throws IOException, NoSuchAlgorithmException {
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -447,7 +447,7 @@ public class ModPack {
         return maxPermSize;
     }
 
-    public String getBundledMap () {
+    public boolean hasBundledMap () {
         return hasBundledMap;
     }
 

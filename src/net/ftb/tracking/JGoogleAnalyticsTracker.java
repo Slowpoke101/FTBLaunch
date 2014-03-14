@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 /**
@@ -445,6 +446,8 @@ public class JGoogleAnalyticsTracker {
         try {
             URL url = new URL(argURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+            connection.setRequestProperty("UserAgent", "FTB " + LaunchFrame.buildNumber + " OS " + System.getProperty("os.name").toLowerCase() + "-" + System.getProperty("os.version").toLowerCase()
+                    + "-" + System.getProperty("os.arch").toLowerCase() + " java " + System.getProperty("java.vendor").toLowerCase() + " - " + System.getProperty("java.version").toLowerCase());
             connection.setRequestMethod("GET");
             connection.setInstanceFollowRedirects(true);
             connection.connect();
