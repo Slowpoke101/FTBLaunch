@@ -156,6 +156,23 @@ public class OSUtils {
     }
 
     /**
+     * Used to get the OS name for use in google analytics
+     * @return Linux/OSX/Windows/other/
+     */
+    public static String getOSString () {
+        String osString = System.getProperty("os.name").toLowerCase();
+        if (osString.contains("win")) {
+            return "Windows";
+        } else if (osString.contains("linux")) {
+            return "linux";
+        } else if (osString.contains("mac")) {
+            return "OSX";
+        } else {
+            return osString;
+        }
+    }
+
+    /**
      * sees if the hash of the UUID matches the one stored in the config
      * @return true if UUID matches hash or false if it does not
      */

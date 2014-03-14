@@ -172,6 +172,14 @@ public class LaunchFrame extends JFrame {
     public static void main (String[] args) {
         tracker.setEnabled(true);
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
+        if (!new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").exists()) {
+            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + version + " OS " + OSUtils.getOSString());
+            try {
+                new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").createNewFile();
+            } catch (IOException e) {
+                Logger.logError("Error creating os cache text file");
+            }
+        }
 
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
@@ -198,6 +206,15 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
         
+
+        while (!DownloadUtils.serversLoaded) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run () {
@@ -1120,7 +1137,8 @@ public class LaunchFrame extends JFrame {
      */
     public void launchMinecraft (String workingDir, String username, String password, String maxPermSize) {
         try {
-            Process minecraftProcess = MinecraftLauncher.launchMinecraft( Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(), maxPermSize);
+            Process minecraftProcess = MinecraftLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(),
+                    maxPermSize);
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1218,9 +1236,9 @@ public class LaunchFrame extends JFrame {
                 classpath.add(new File(libDir, lib.getPath()));
             }
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, username, password, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
-                    packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings()
-                            .getRamMax(), maxPermSize, pack.getMcVersion(), UUID);
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, username, password,
+                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), maxPermSize, pack.getMcVersion(), UUID);
 
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
