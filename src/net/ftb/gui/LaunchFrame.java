@@ -205,15 +205,6 @@ public class LaunchFrame extends JFrame {
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
-        
-
-        while (!DownloadUtils.serversLoaded) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
         EventQueue.invokeLater(new Runnable() {
             @Override
