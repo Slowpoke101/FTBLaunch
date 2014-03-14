@@ -586,6 +586,14 @@ public class LaunchFrame extends JFrame {
     }
     
     public static void downloadServersReady() {
+        // Prevent a possible race condition with fast internet connections
+        while(loader == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+        
         // Release modal from the loading screen, so the main thread can continue
         loader.setVisible(false);
         loader.setModal(false);
