@@ -327,6 +327,9 @@ public class LaunchFrame extends JFrame {
                 instance.setVisible(true);
                 instance.toBack();
 
+                con.setVisible(Settings.getSettings().getConsoleActive());
+                con.scrollToBottom();
+
                 ModPack.addListener(frame.modPacksPane);
                 ModPack.loadXml(getXmls());
 
@@ -592,9 +595,6 @@ public class LaunchFrame extends JFrame {
     }
     
     public static void checkDoneLoading() {
-        con.setVisible(Settings.getSettings().getConsoleActive());
-        con.scrollToBottom();
-        
         if(ModpacksPane.loaded) {
             LoadingDialog.setProgress(190);
             
