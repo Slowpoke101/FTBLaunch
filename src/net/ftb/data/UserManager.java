@@ -113,7 +113,7 @@ public class UserManager {
     public static ArrayList<String> getUsernames () {
         ArrayList<String> ret = new ArrayList<String>();
         for (User user : _users) {
-            ret.add(user.getName());
+            ret.add(user.getUsername());
         }
         return ret;
     }
