@@ -175,10 +175,6 @@ public class LaunchFrame extends JFrame {
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
-        if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS: " + System.getProperty("os.name") + System.getProperty("os.arch"));
-            Settings.getSettings().setLoaded(true);
-        }
         if (!new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").exists()) {
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + version + " OS " + OSUtils.getOSString());
             try {
@@ -297,6 +293,7 @@ public class LaunchFrame extends JFrame {
                     LoadingDialog.setProgress(150);
 
                     if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
+                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS: " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
                         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
                         Settings.getSettings().setLoaded(true);
                     }
