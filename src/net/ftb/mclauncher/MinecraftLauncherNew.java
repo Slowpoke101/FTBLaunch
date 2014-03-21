@@ -34,13 +34,13 @@ import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
 import net.feed_the_beast.launcher.json.versions.OS;
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.winreg.JavaFinder;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -60,6 +60,7 @@ public class MinecraftLauncherNew {
         List<String> arguments = new ArrayList<String>();
 
         Logger.logInfo("Java Path: " + javaPath);
+        Logger.logInfo("Pack: " + ModPack.getSelectedPack().getName() + " " + ModPack.getSelectedPack().getVersion());
         arguments.add(javaPath);
 
         setMemory(arguments, rmax);

@@ -29,13 +29,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
-import net.ftb.util.winreg.JavaFinder;
 
 public class MinecraftLauncher {
 
@@ -78,6 +76,7 @@ public class MinecraftLauncher {
 
         String separator = System.getProperty("file.separator");
         Logger.logInfo("Java Path: " + javaPath);
+        Logger.logInfo("Pack: " + ModPack.getSelectedPack().getName() + " " + ModPack.getSelectedPack().getVersion());
         arguments.add(javaPath);
 
         setMemory(arguments, rmax);
