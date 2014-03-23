@@ -60,6 +60,15 @@ public class LoadingDialog extends JDialog {
             instance.repaint();
         }
     }
+    
+    public void releaseModal() {
+        // Release modal from the loading screen, so the main thread can continue
+        this.setVisible(false);
+        this.setModal(false);
+        this.setVisible(true);
+        this.toFront();
+        this.repaint();
+    }
 
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
