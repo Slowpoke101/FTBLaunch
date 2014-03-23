@@ -369,9 +369,6 @@ public class LaunchFrame extends JFrame {
                 instance.setVisible(true);
                 instance.toBack();
 
-                con.setVisible(Settings.getSettings().getConsoleActive());
-                con.scrollToBottom();
-
                 ModPack.addListener(frame.modPacksPane);
                 ModPack.loadXml(getXmls());
 
@@ -628,20 +625,33 @@ public class LaunchFrame extends JFrame {
     }
     
     public static void downloadServersReady() {
-        // Prevent a possible race condition with fast internet connections
-        while(loader == null) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
+        if(loader != null) {
+            loader.releaseModal();
+        } else {
+            // Download server has been found before the window could be painted
+            // Wait until it's ready
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run () {
+                    if(con != null) {
+                        // Should be impossible to hit this...
+                        con.setVisible(Settings.getSettings().getConsoleActive());
+                        con.scrollToBottom();
+                    }
+    
+                    while(loader == null) {
+                        // Pretty much impossible to hit this, unless loading UI styles takes 
+                        // longer than finding and testing a download server... 
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+            
+                    loader.releaseModal();
+                }
+            });
         }
-        
-        // Release modal from the loading screen, so the main thread can continue
-        loader.setVisible(false);
-        loader.setModal(false);
-        loader.setVisible(true);
-        loader.toFront();
-        loader.repaint();
     }
     
     public static void checkDoneLoading() {

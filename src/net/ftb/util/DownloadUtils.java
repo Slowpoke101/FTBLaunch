@@ -260,89 +260,98 @@ public class DownloadUtils extends Thread {
         downloadServers.put("Automatic", masterRepoNoHTTP);
         BufferedReader in = null;
         
-        // New Servers
-        try {
-            in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
-            String line;
-            while ((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-                line = line.replace("{", "").replace("}", "").replace("\"", "");
-                String[] splitString = line.split(",");
-                for (String entry : splitString) {
-                    String[] splitEntry = entry.split(":");
-                    if (splitEntry.length == 2) {
-                        downloadServers.put(splitEntry[0], splitEntry[1]);
-                    }
-                }
-            }
-            in.close();
-            LoadingDialog.setProgress(80);
-        } catch (IOException e) {
-            int i = 10;
-            
-            downloadServers.clear();
-
-            Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-            LoadingDialog.setProgress(i);
-            
-            //If fetching edges.json failed, assume new. is inaccessible
-
+        try { // Super catch-all to ensure the launcher always renders
             try {
-                in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
+                // Fetch servers using edges.json first
+                in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
                 String line;
-                while (in.ready() && (line = in.readLine()) != null) {
+                while ((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
                     line = line.replace("{", "").replace("}", "").replace("\"", "");
                     String[] splitString = line.split(",");
                     for (String entry : splitString) {
                         String[] splitEntry = entry.split(":");
                         if (splitEntry.length == 2) {
-                            try {
-                                Logger.logInfo("Testing CreeperHost:" + splitEntry[0]);
-                                BufferedReader in1 = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
-                                in1.readLine();
-                                in1.close();
-
-                                downloadServers.put(splitEntry[0], splitEntry[1]);
-                                
-                                if(i < 90) i += 10;
-                                LoadingDialog.setProgress(i);
-                            } catch (Exception ex) {
-                                Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
-                            }
+                            downloadServers.put(splitEntry[0], splitEntry[1]);
                         }
                     }
                 }
-            } catch (IOException e1) {
-                Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
-            }
-        } finally {
-            if (in != null) {
+                in.close();
+                LoadingDialog.setProgress(80);
+            } catch (IOException e) {
+                int i = 10;
+
+                // If fetching edges.json failed, assume new. is inaccessible
+                // Try alternate mirrors from the cached server list in resources
+                
+                downloadServers.clear();
+    
+                Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
+                LoadingDialog.setProgress(i);
+                
                 try {
-                    in.close();
-                } catch (IOException e) {
+                    in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
+                    String line;
+                    while (in.ready() && (line = in.readLine()) != null) {
+                        line = line.replace("{", "").replace("}", "").replace("\"", "");
+                        String[] splitString = line.split(",");
+                        for (String entry : splitString) {
+                            String[] splitEntry = entry.split(":");
+                            if (splitEntry.length == 2) {
+                                try {
+                                    Logger.logInfo("Testing CreeperHost:" + splitEntry[0]);
+                                    BufferedReader in1 = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
+                                    in1.readLine();
+                                    in1.close();
+    
+                                    downloadServers.put(splitEntry[0], splitEntry[1]);
+                                    
+                                    if(i < 90) i += 10;
+                                    LoadingDialog.setProgress(i);
+                                } catch (Exception ex) {
+                                    Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException e1) {
+                    Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
+                }
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                    }
                 }
             }
-        }
 
-        LoadingDialog.setProgress(90);
+            LoadingDialog.setProgress(90);
         
-        if (downloadServers.size() == 0) {
-            Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
-
-            // Fall back to new. (old system) on critical failure
+            if (downloadServers.size() == 0) {
+                Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
+    
+                // Fall back to new. (old system) on critical failure
+                downloadServers.put("Automatic", masterRepoNoHTTP);
+            } else if (!downloadServers.containsKey("Automatic")) {
+                // Use a random server from edges.json as the Automatic server
+                int index = (int) (Math.random() * downloadServers.size());
+                List<String> keys = new ArrayList<String>(downloadServers.keySet());
+                String defaultServer = downloadServers.get(keys.get(index));
+    
+                downloadServers.put("Automatic", defaultServer);
+                Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
+            }
+        } catch(Exception e) {
+            Logger.logError(e.getMessage());
+            downloadServers.clear();
             downloadServers.put("Automatic", masterRepoNoHTTP);
-        } else if (!downloadServers.containsKey("Automatic")) {
-            // Use a random server from edges.json as the Automatic server instead
-            int index = (int) (Math.random() * downloadServers.size());
-            List<String> keys = new ArrayList<String>(downloadServers.keySet());
-            String defaultServer = downloadServers.get(keys.get(index));
-
-            downloadServers.put("Automatic", defaultServer);
-            Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
         }
 
         LoadingDialog.setProgress(100);
         serversLoaded = true;
         
+        // This line absolutely must be hit, or the console will not be shown
+        // and the user/we will not even know why an error has occurred. 
         LaunchFrame.downloadServersReady();
         
         try {
