@@ -1,7 +1,7 @@
 LOCALE_NAME = Magyar
 LOCALE_LOADED = Magyar nyelv fájl betöltés!
 
-# Footer #
+# Footer
 DONATE_BUTTON = Adományoz
 
 # Main Tab

@@ -1,7 +1,7 @@
 LOCALE_NAME = Nederlands
 LOCALE_LOADED = Nederlands taalbestand geladen!
 
-# Footer #
+# Footer
 DONATE_BUTTON = Doneer
 
 # Main Tab
@@ -11,7 +11,7 @@ PROFILE_CREATE = Maak Profiel
 PROFILE_SELECT = Kies Profiel
 DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
 
-#Console
+# Console
 CONSOLE_COPYCLIP = Kopieer log naar het klembord
 CONSOLE_CLIP_CONFIRM = Wil je de volledige log te kopiëren naar het klembord?
 
