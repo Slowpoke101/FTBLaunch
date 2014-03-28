@@ -129,6 +129,7 @@ dependencies {
 	compile 'com.mojang:authlib:1.4.2'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+	compile 'org.projectlombok:lombok:1.12.6'
 	//commons lang3 via authlib
     //commons io via authlib
 	}

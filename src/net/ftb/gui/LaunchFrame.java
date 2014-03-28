@@ -1266,7 +1266,7 @@ public class LaunchFrame extends JFrame {
                         }
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
-                        ErrorUtils.tossError("Error extracitng natives: " + e.getMessage());
+                        ErrorUtils.tossError("Error extracting natives: " + e.getMessage());
                     } finally {
                         try {
                             input.close();

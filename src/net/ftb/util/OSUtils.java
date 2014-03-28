@@ -28,19 +28,29 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.Enumeration;
 
+import lombok.Getter;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public class OSUtils {
     private static byte[] cachedMacAddress;
     private static String cachedUserHome;
-    private static int numCores = Runtime.getRuntime().availableProcessors();
+
+    /**
+     * gets the number of cores for use in DL threading
+     * 
+     * @return number of cores on the system
+     */
+    @Getter
+    private static int numCores;
+
     public static enum OS {
         WINDOWS, UNIX, MACOSX, OTHER,
     }
 
     static {
         cachedUserHome = System.getProperty("user.home");
+        numCores = Runtime.getRuntime().availableProcessors();
     }
 
     /**
@@ -228,13 +238,6 @@ public class OSUtils {
         }
     }
 
-    /**
-     * gets the number of cores for use in DL threading
-     * @return number of cores on the system
-     */
-    public static int getNumCores () {
-        return numCores;
-    }
     /**
      * Opens the given path with the default application
      * @param path The path
