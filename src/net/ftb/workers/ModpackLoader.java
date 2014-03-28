@@ -47,6 +47,7 @@ public class ModpackLoader extends Thread {
 
     @Override
     public void run () {
+        //TODO ASAP thread this
         for (String xmlFile : xmlFiles) {
             boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
             File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);

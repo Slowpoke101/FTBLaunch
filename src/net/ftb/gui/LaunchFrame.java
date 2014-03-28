@@ -967,6 +967,7 @@ public class LaunchFrame extends JFrame {
         }
     }
 
+    //TODO ASAP thread all of these DL's
     private static class AssetDownloader extends SwingWorker<Boolean, Void> {
         private List<DownloadInfo> downloads;
         private final ProgressMonitor monitor;

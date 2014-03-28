@@ -103,6 +103,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         }
     }
 
+    //TODO ASAP check hash of remote file against local file to avoid DL of file when possible
     protected boolean downloadJars () {
         try {
             jarURLs = new URL("https://libraries.minecraft.net/com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");

@@ -38,7 +38,7 @@ public class TexturePackLoader extends Thread {
 
     @Override
     public void run () {
-        try {
+        try {//TODO ASAP thread this!!!
             Logger.logInfo("loading texture pack information...");
             TEXTUREPACKFILE = DownloadUtils.getStaticCreeperhostLink("texturepack.xml");
             Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));

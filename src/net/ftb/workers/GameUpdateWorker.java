@@ -109,6 +109,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
         return true;
     }
 
+    //TODO ASAP- thread this!!!!
     protected boolean downloadJars () {
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[jarURLs.length];

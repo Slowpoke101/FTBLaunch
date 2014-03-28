@@ -38,7 +38,7 @@ public class MapLoader extends Thread {
 
     @Override
     public void run () {
-        try {
+        try {//TODO ASAP THREAD THIS!!!
             Logger.logInfo("loading map information...");
             MAPFILE = DownloadUtils.getStaticCreeperhostLink("maps.xml");
             Document doc = AppUtils.downloadXML(new URL(MAPFILE));
