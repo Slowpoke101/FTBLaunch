@@ -101,7 +101,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     }
 
     public LauncherConsole() {
-        setTitle("Console");
+        setTitle(I18N.getLocaleString("CONSOLE_TITLE"));
         setMinimumSize(new Dimension(800, 400));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         getContentPane().setLayout(new BorderLayout(0, 0));
