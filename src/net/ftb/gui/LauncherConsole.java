@@ -101,7 +101,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     }
 
     public LauncherConsole() {
-        setTitle("Console");
+        setTitle(I18N.getLocaleString("CONSOLE_TITLE"));
         setMinimumSize(new Dimension(800, 400));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         getContentPane().setLayout(new BorderLayout(0, 0));
@@ -111,7 +111,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         getContentPane().add(panel, BorderLayout.SOUTH);
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-        JButton pastebin = new JButton("Paste my log to pastebin.com");
+        JButton pastebin = new JButton(I18N.getLocaleString("CONSOLE_PASTEBIN"));
         pastebin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -180,14 +180,14 @@ public class LauncherConsole extends JFrame implements ILogListener {
         });
         panel.add(logSourceComboBox);
 
-        JButton ircButton = new JButton("Need support? Click me!");
+        JButton ircButton = new JButton(I18N.getLocaleString("CONSOLE_SUPPORT"));
         ircButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 if (Desktop.isDesktopSupported()) {
                     Desktop desktop = Desktop.getDesktop();
                     try {
-                        desktop.browse(new URI("http://desk.feed-the-beast.com/"));
+                        desktop.browse(new URI("http://support.feed-the-beast.com/"));
                     } catch (Exception exc) {
                         Logger.logError("Could not open url: " + exc.getMessage());
                     }
