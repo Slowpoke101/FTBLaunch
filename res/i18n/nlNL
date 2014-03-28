@@ -12,6 +12,7 @@ PROFILE_SELECT = Kies Profiel
 DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
 
 # Console
+CONSOLE_TITLE = Bedieningspaneel
 CONSOLE_COPYCLIP = Kopieer log naar het klembord
 CONSOLE_CLIP_CONFIRM = Wil je de volledige log te kopiëren naar het klembord?
 CONSOLE_PASTEBIN = Plak mijn formulier bezorgen aan pastebin.com
