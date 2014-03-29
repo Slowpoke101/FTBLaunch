@@ -46,8 +46,8 @@ public class DownloadUtils extends Thread {
     public volatile static boolean serversLoaded = false;
     public static HashMap<String, String> downloadServers = new HashMap<String, String>();
     public static HashMap<String, String> backupServers = new HashMap<String, String>();
-    public static final String masterRepo = new String("http://new.creeperrepo.net");
-    public static final String masterRepoNoHTTP = new String("new.creeperrepo.net");
+    public static final String masterRepo = new String("http://ftbcompserver");
+    public static final String masterRepoNoHTTP = new String("ftbcompserver");
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
@@ -57,6 +57,9 @@ public class DownloadUtils extends Thread {
     public static String getCreeperhostLink (String file) throws NoSuchAlgorithmException {
         String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
         resolved += "/FTB2/" + file;
+        if(!resolved.contains("creeper")){
+            resolved.replaceAll("%5E", "/");
+        }
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();

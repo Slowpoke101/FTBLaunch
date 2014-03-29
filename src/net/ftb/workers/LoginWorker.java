@@ -22,7 +22,6 @@ import java.net.URLEncoder;
 
 import javax.swing.SwingWorker;
 
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.ErrorUtils;
@@ -43,7 +42,7 @@ public class LoginWorker extends SwingWorker<String, Void> {
     protected String doInBackground () {
         try {
             String authlibreturn = new String();
-            if (LaunchFrame.canUseAuthlib) {
+            if (true) {
                 try {
                     authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
                 } catch (Exception e) {

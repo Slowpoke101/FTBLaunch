@@ -29,12 +29,10 @@ import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -174,16 +172,6 @@ public class LaunchFrame extends JFrame {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
-        if (!new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + version + " OS " + OSUtils.getOSString());
-            try {
-                new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").createNewFile();
-            } catch (IOException e) {
-                Logger.logError("Error creating os cache text file");
-            }
-        }
-
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
         }
@@ -195,7 +183,7 @@ public class LaunchFrame extends JFrame {
         DownloadUtils thread = new DownloadUtils();
         thread.start();
 
-        Logger.logInfo("FTBLaunch starting up (version " + version + ")");
+        Logger.logInfo("FTBLaunch PAXEAST2014 starting up based on launcher (version " + version + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));
@@ -258,89 +246,7 @@ public class LaunchFrame extends JFrame {
                 LoadingDialog.setProgress(140);
 
                 con = new LauncherConsole();
-
-                File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
-
-                try {
-                    if (!credits.exists()) {
-                        FileOutputStream fos = new FileOutputStream(credits);
-                        OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                        osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
-                        osw.write("-------------------------------" + System.getProperty("line.separator"));
-                        osw.write("Launcher Developers:" + System.getProperty("line.separator"));
-                        osw.write("jjw123" + System.getProperty("line.separator"));
-                        osw.write("unv_annihilator" + System.getProperty("line.separator"));
-                        osw.write("ProgWML6" + System.getProperty("line.separator"));
-                        osw.write("Major Launcher Dev Contributors" + System.getProperty("line.separator"));
-                        osw.write("LexManos" + System.getProperty("line.separator"));
-                        osw.write("Viper-7" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Web Developers:" + System.getProperty("line.separator"));
-                        osw.write("Captainnana" + System.getProperty("line.separator"));
-                        osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Modpack Team:" + System.getProperty("line.separator"));
-                        osw.write("Lathanael" + System.getProperty("line.separator"));
-                        osw.write("Watchful11" + System.getProperty("line.separator"));
-                        osw.write("Jadedcat" + System.getProperty("line.separator"));
-                        osw.write("Eyamaz" + System.getProperty("line.separator"));
-
-                        osw.flush();
-
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
-                    }
-
-                    LoadingDialog.setProgress(150);
-
-                    if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS: " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
-                        Settings.getSettings().setLoaded(true);
-                    }
-
-                } catch (FileNotFoundException e1) {
-                    Logger.logError(e1.getMessage());
-                } catch (IOException e1) {
-                    Logger.logError(e1.getMessage());
-                }
-                File stamp = new File(OSUtils.getDynamicStorageLocation(), "stamp");
-                long unixTime = System.currentTimeMillis() / 1000L;
-                try {
-                    if (!stamp.exists()) {
-                        FileOutputStream fos = new FileOutputStream(stamp);
-                        OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                        osw.write(String.valueOf(unixTime));
-                        osw.flush();
-                        Logger.logInfo("Reporting daily use");
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-                    }else{
-                        FileInputStream fis = new FileInputStream(stamp);
-                        int content;
-                        StringBuilder timeBuilder = new StringBuilder();
-                        while ((content = fis.read()) != -1) {
-                            char c = (char) content;
-                            timeBuilder.append(String.valueOf(c));
-                        }
-                        String time = timeBuilder.toString();
-                        long unixts = Long.valueOf(time);
-                        unixts = unixts + (24*60*60);
-                        if(unixts < unixTime){
-                            FileOutputStream fos = new FileOutputStream(stamp);
-                            OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                            osw.write(String.valueOf(unixTime));
-                            osw.flush();
-                            Logger.logInfo("Reporting daily use");
-                            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-
-                        }
-                    }
-                } catch (FileNotFoundException e1) {
-                    Logger.logError(e1.getMessage());
-                } catch (IOException e1) {
-                    Logger.logError(e1.getMessage());
-                }
+                con.setVisible(true);
 
                 LoadingDialog.setProgress(160);
 
