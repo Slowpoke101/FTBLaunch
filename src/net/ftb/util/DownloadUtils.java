@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import net.ftb.data.Settings;
@@ -46,8 +47,11 @@ public class DownloadUtils extends Thread {
     public volatile static boolean serversLoaded = false;
     public static HashMap<String, String> downloadServers = new HashMap<String, String>();
     public static HashMap<String, String> backupServers = new HashMap<String, String>();
-    public static final String masterRepo = new String("http://new.creeperrepo.net");
-    public static final String masterRepoNoHTTP = new String("new.creeperrepo.net");
+    public static final String chRepo = new String("http://new.creeperrepo.net");
+    public static final String curseRepo = new String("http://ftb.cursecdn.com");
+    public static String masterRepo = new String("http://new.creeperrepo.net");
+    public static String masterRepoNoHTTP = new String("new.creeperrepo.net");
+    public static boolean primaryCH = true;
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
@@ -62,6 +66,10 @@ public class DownloadUtils extends Thread {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
+                    if (!server.contains("creeper")) {
+                        file = file.replaceAll("%5E", "/");
+                    }
+
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                 } else {
@@ -258,12 +266,36 @@ public class DownloadUtils extends Thread {
     @Override
     public void run () {
         downloadServers.put("Automatic", masterRepoNoHTTP);
+        BufferedReader inBal = null;
         BufferedReader in = null;
-        
+        Random r = new Random();
+        double choice = r.nextDouble();
+        Logger.logInfo("random " + choice);
         try { // Super catch-all to ensure the launcher always renders
             try {
+                // Fetch the percentage json first
+                inBal = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/FTB2/balance.json").openStream()));
+                String ln;
+                while ((ln = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
+                    ln = ln.replace("{", "").replace("}", "").replace("\"", "");
+                    String[] splitString = ln.split(",");
+                    for (String entry : splitString) {
+                        String[] splitEntry = entry.split(":");
+                        if (splitEntry.length == 2) {
+                            if (splitEntry[0].equals("repoSplitCurse") && Double.parseDouble(splitEntry[1]) > choice) {
+                                this.masterRepoNoHTTP = curseRepo.replaceAll("http://", "");
+                                this.masterRepo = curseRepo;
+                                this.primaryCH = false;
+                                downloadServers.remove("Automatic");
+                                downloadServers.put("Automatic", masterRepoNoHTTP);
+                            }
+                        }
+                    }
+                }
+                inBal.close();
+
                 // Fetch servers using edges.json first
-                in = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/edges.json").openStream()));
+                in = new BufferedReader(new InputStreamReader(new URL(chRepo + "/edges.json").openStream()));
                 String line;
                 while ((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
                     line = line.replace("{", "").replace("}", "").replace("\"", "");
@@ -276,18 +308,33 @@ public class DownloadUtils extends Thread {
                     }
                 }
                 in.close();
+                // Fetch servers using edges.json first
+                in = new BufferedReader(new InputStreamReader(new URL(curseRepo + "/edges.json").openStream()));
+                String cln;
+                while ((cln = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
+                    cln = line.replace("{", "").replace("}", "").replace("\"", "");
+                    String[] splitString = cln.split(",");
+                    for (String entry : splitString) {
+                        String[] splitEntry = entry.split(":");
+                        if (splitEntry.length == 2) {
+                            if (!downloadServers.containsKey(splitEntry[0]))
+                                downloadServers.put(splitEntry[0], splitEntry[1]);
+                        }
+                    }
+                }
+                in.close();
                 LoadingDialog.setProgress(80);
             } catch (IOException e) {
                 int i = 10;
 
                 // If fetching edges.json failed, assume new. is inaccessible
                 // Try alternate mirrors from the cached server list in resources
-                
+
                 downloadServers.clear();
-    
+
                 Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
                 LoadingDialog.setProgress(i);
-                
+
                 try {
                     in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
                     String line;
@@ -298,17 +345,18 @@ public class DownloadUtils extends Thread {
                             String[] splitEntry = entry.split(":");
                             if (splitEntry.length == 2) {
                                 try {
-                                    Logger.logInfo("Testing CreeperHost:" + splitEntry[0]);
+                                    Logger.logInfo("Testing Server:" + splitEntry[0]);
                                     BufferedReader in1 = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
                                     in1.readLine();
                                     in1.close();
-    
+
                                     downloadServers.put(splitEntry[0], splitEntry[1]);
-                                    
-                                    if(i < 90) i += 10;
+
+                                    if (i < 90)
+                                        i += 10;
                                     LoadingDialog.setProgress(i);
                                 } catch (Exception ex) {
-                                    Logger.logWarn("Server CreeperHost:" + splitEntry[0] + " was not accessible, ignoring. " + ex.getMessage());
+                                    Logger.logWarn(splitEntry[1].contains("creeper") ? "CreeperHost" : "Curse" + " Server: " + splitEntry[0] + " was not accessible, ignoring." + ex.getMessage());
                                 }
                             }
                         }
@@ -326,10 +374,10 @@ public class DownloadUtils extends Thread {
             }
 
             LoadingDialog.setProgress(90);
-        
+
             if (downloadServers.size() == 0) {
                 Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
-    
+
                 // Fall back to new. (old system) on critical failure
                 downloadServers.put("Automatic", masterRepoNoHTTP);
             } else if (!downloadServers.containsKey("Automatic")) {
@@ -337,11 +385,11 @@ public class DownloadUtils extends Thread {
                 int index = (int) (Math.random() * downloadServers.size());
                 List<String> keys = new ArrayList<String>(downloadServers.keySet());
                 String defaultServer = downloadServers.get(keys.get(index));
-    
+
                 downloadServers.put("Automatic", defaultServer);
                 Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage());
             downloadServers.clear();
             downloadServers.put("Automatic", masterRepoNoHTTP);
@@ -349,11 +397,11 @@ public class DownloadUtils extends Thread {
 
         LoadingDialog.setProgress(100);
         serversLoaded = true;
-        
+
         // This line absolutely must be hit, or the console will not be shown
         // and the user/we will not even know why an error has occurred. 
         LaunchFrame.downloadServersReady();
-        
+
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
                 AdvancedOptionsDialog.setDownloadServers();
