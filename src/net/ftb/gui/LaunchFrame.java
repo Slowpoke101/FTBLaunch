@@ -258,6 +258,8 @@ public class LaunchFrame extends JFrame {
                 LoadingDialog.setProgress(140);
 
                 con = new LauncherConsole();
+                con.setVisible(Settings.getSettings().getConsoleActive());
+                con.scrollToBottom();
 
                 File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
 
@@ -634,7 +636,7 @@ public class LaunchFrame extends JFrame {
                 @Override
                 public void run () {
                     if(con != null) {
-                        // Should be impossible to hit this...
+                        // Should be always be hit or the console will never show
                         con.setVisible(Settings.getSettings().getConsoleActive());
                         con.scrollToBottom();
                     }

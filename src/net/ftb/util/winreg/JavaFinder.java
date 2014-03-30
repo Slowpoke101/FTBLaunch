@@ -37,7 +37,7 @@ public class JavaFinder {
                 }
             }
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.logError("Error Searching windows registry for java versions", t);
         }
         return result;
     }

@@ -403,6 +403,7 @@ public class DownloadUtils extends Thread {
                     if (testEntries) {
                         try {
                             Logger.logInfo("Testing Server:" + e.getKey());
+                            //test that the server will properly handle file DL's if it doesn't throw an error the web daemon should be functional
                             IOUtils.toString(new URL("http://" + e.getValue().getAsString() + "/" + location));
                             h.put(e.getKey(), e.getValue().getAsString());
                         } catch (Exception ex) {

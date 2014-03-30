@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
+import net.ftb.log.Logger;
+
 public class WinRegistry {
     public static final int HKEY_CURRENT_USER = 0x80000001;
     public static final int HKEY_LOCAL_MACHINE = 0x80000002;
@@ -65,7 +67,7 @@ public class WinRegistry {
             regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", new Class[] { int.class, byte[].class });
             regDeleteKey.setAccessible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.logError("Error accessing windows registry classes", e);
         }
     }
 
