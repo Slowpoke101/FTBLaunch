@@ -18,6 +18,7 @@ package net.ftb.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +46,7 @@ import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.JsonElement;
@@ -173,6 +175,7 @@ public class DownloadUtils extends Thread {
      */
     public static boolean isValid (File file, String md5) throws IOException {
         String result = fileMD5(file);
+        // Logger.logInfo("OLDHASHING: " + fileHash(file, "md5"));
         Logger.logInfo("Local: " + result.toUpperCase());
         Logger.logInfo("Remote: " + md5.toUpperCase());
         return md5.equalsIgnoreCase(result);
@@ -223,6 +226,7 @@ public class DownloadUtils extends Thread {
             }
         }
         String result = fileMD5(file);
+        //  Logger.logInfo("OLDHASHING: " + fileHash(file, "md5"));
         Logger.logInfo("Local: " + result.toUpperCase());
         Logger.logInfo("Remote: " + content.toUpperCase());
         return content.equalsIgnoreCase(result);
@@ -235,14 +239,24 @@ public class DownloadUtils extends Thread {
      * @throws IOException 
      */
     public static String fileMD5 (File file) throws IOException {
-        return fileHash(file, "md5");
+        if (file.exists())
+            return DigestUtils.md5Hex(new FileInputStream(file));
+        else
+            return "";
+
+        //return fileHash(file, "md5");
     }
 
     public static String fileSHA (File file) throws IOException {
-        return fileHash(file, "sha1").toLowerCase();
+        if (file.exists())
+            return DigestUtils.sha1Hex(new FileInputStream(file)).toLowerCase();
+        else
+            return "";
+        //return fileHash(file, "sha1").toLowerCase();
     }
 
     public static String fileHash (File file, String type) throws IOException {
+
         if (!file.exists()) {
             return "";
         }
@@ -350,7 +364,6 @@ public class DownloadUtils extends Thread {
 
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
-                Logger.logInfo("setDL");
                 AdvancedOptionsDialog.setDownloadServers();
             }
         } catch (Exception e) {

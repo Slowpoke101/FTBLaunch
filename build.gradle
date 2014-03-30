@@ -56,6 +56,7 @@ shadow {
 		include 'org.apache.logging.log4j'
 		include 'commons-io'
 		include 'org.apache.commons'
+		include 'commons-codec'
 
     }
 }
