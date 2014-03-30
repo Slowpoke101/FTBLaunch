@@ -395,6 +395,6 @@ public class DownloadUtils extends Thread {
             Logger.logError("Failed to resolve mirror: " + e.getMessage());
         }
 
-        Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
+        Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (<SECRET_IP>)");
     }
 }
