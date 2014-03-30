@@ -276,7 +276,7 @@ public class DownloadUtils extends Thread {
                 // Fetch the percentage json first
                 inBal = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/FTB2/balance.json").openStream()));
                 String ln;
-                while ((ln = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
+                while ((ln = inBal.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
                     ln = ln.replace("{", "").replace("}", "").replace("\"", "");
                     String[] splitString = ln.split(",");
                     for (String entry : splitString) {
@@ -312,7 +312,7 @@ public class DownloadUtils extends Thread {
                 in = new BufferedReader(new InputStreamReader(new URL(curseRepo + "/edges.json").openStream()));
                 String cln;
                 while ((cln = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-                    cln = line.replace("{", "").replace("}", "").replace("\"", "");
+                    cln = cln.replace("{", "").replace("}", "").replace("\"", "");
                     String[] splitString = cln.split(",");
                     for (String entry : splitString) {
                         String[] splitEntry = entry.split(":");
@@ -390,7 +390,7 @@ public class DownloadUtils extends Thread {
                 Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage());
+            Logger.logError(e.getMessage(), e);
             downloadServers.clear();
             downloadServers.put("Automatic", masterRepoNoHTTP);
         }
