@@ -34,14 +34,22 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 
+import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
+
+import org.apache.commons.io.IOUtils;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class DownloadUtils extends Thread {
     public volatile static boolean serversLoaded = false;
@@ -266,113 +274,50 @@ public class DownloadUtils extends Thread {
     @Override
     public void run () {
         downloadServers.put("Automatic", masterRepoNoHTTP);
-        BufferedReader inBal = null;
-        BufferedReader in = null;
         Random r = new Random();
         double choice = r.nextDouble();
-        Logger.logInfo("random " + choice);
         try { // Super catch-all to ensure the launcher always renders
             try {
                 // Fetch the percentage json first
-                inBal = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/FTB2/balance.json").openStream()));
-                String ln;
-                while ((ln = inBal.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-                    ln = ln.replace("{", "").replace("}", "").replace("\"", "");
-                    String[] splitString = ln.split(",");
-                    for (String entry : splitString) {
-                        String[] splitEntry = entry.split(":");
-                        if (splitEntry.length == 2) {
-                            if (splitEntry[0].equals("repoSplitCurse") && Double.parseDouble(splitEntry[1]) > choice) {
-                                this.masterRepoNoHTTP = curseRepo.replaceAll("http://", "");
-                                this.masterRepo = curseRepo;
-                                this.primaryCH = false;
-                                downloadServers.remove("Automatic");
-                                downloadServers.put("Automatic", masterRepoNoHTTP);
-                            }
-                        }
-                    }
-                }
-                inBal.close();
+                String json = IOUtils.toString(new URL(masterRepo + "/FTB2/balance.json"));
+                JsonElement element = new JsonParser().parse(json);
 
-                // Fetch servers using edges.json first
-                in = new BufferedReader(new InputStreamReader(new URL(chRepo + "/edges.json").openStream()));
-                String line;
-                while ((line = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-                    line = line.replace("{", "").replace("}", "").replace("\"", "");
-                    String[] splitString = line.split(",");
-                    for (String entry : splitString) {
-                        String[] splitEntry = entry.split(":");
-                        if (splitEntry.length == 2) {
-                            downloadServers.put(splitEntry[0], splitEntry[1]);
+                if (element != null && element.isJsonObject()) {
+                    JsonObject jso = element.getAsJsonObject();
+                    if (jso != null && jso.get("repoSplitCurse") != null) {
+                        JsonElement e = jso.get("repoSplitCurse");
+                        if (Settings.getSettings().getDebugLauncher()) {
+                            Logger.logInfo("Balance Settings: " + e.getAsDouble() + " > " + choice);
+                        }
+                        if (e != null && e.getAsDouble() > choice) {
+                            Logger.logInfo("Balance has selected Automatic:CurseCDN");
+                            masterRepoNoHTTP = curseRepo.replaceAll("http://", "");
+                            masterRepo = curseRepo;
+                            primaryCH = false;
+                            downloadServers.remove("Automatic");
+                            downloadServers.put("Automatic", masterRepoNoHTTP);
+                        } else {
+                            Logger.logInfo("Balance has selected Automatic:CreeperRepo");
                         }
                     }
                 }
-                in.close();
-                // Fetch servers using edges.json first
-                in = new BufferedReader(new InputStreamReader(new URL(curseRepo + "/edges.json").openStream()));
-                String cln;
-                while ((cln = in.readLine()) != null) { // Hacky JSON parsing because this will all be gone soon (TM)
-                    cln = cln.replace("{", "").replace("}", "").replace("\"", "");
-                    String[] splitString = cln.split(",");
-                    for (String entry : splitString) {
-                        String[] splitEntry = entry.split(":");
-                        if (splitEntry.length == 2) {
-                            if (!downloadServers.containsKey(splitEntry[0]))
-                                downloadServers.put(splitEntry[0], splitEntry[1]);
-                        }
-                    }
-                }
-                in.close();
+
+                // Fetch servers from creeperhost using edges.json first
+                parseJSONtoMap(new URL(chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
+                // Fetch servers list from curse using edges.json second
+                parseJSONtoMap(new URL(curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
                 LoadingDialog.setProgress(80);
             } catch (IOException e) {
                 int i = 10;
 
                 // If fetching edges.json failed, assume new. is inaccessible
                 // Try alternate mirrors from the cached server list in resources
-
                 downloadServers.clear();
 
                 Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
                 LoadingDialog.setProgress(i);
-
-                try {
-                    in = new BufferedReader(new InputStreamReader(this.getClass().getResource("/edges.json").openStream()));
-                    String line;
-                    while (in.ready() && (line = in.readLine()) != null) {
-                        line = line.replace("{", "").replace("}", "").replace("\"", "");
-                        String[] splitString = line.split(",");
-                        for (String entry : splitString) {
-                            String[] splitEntry = entry.split(":");
-                            if (splitEntry.length == 2) {
-                                try {
-                                    Logger.logInfo("Testing Server:" + splitEntry[0]);
-                                    BufferedReader in1 = new BufferedReader(new InputStreamReader(new URL("http://" + splitEntry[1] + "/edges.json").openStream()));
-                                    in1.readLine();
-                                    in1.close();
-
-                                    downloadServers.put(splitEntry[0], splitEntry[1]);
-
-                                    if (i < 90)
-                                        i += 10;
-                                    LoadingDialog.setProgress(i);
-                                } catch (Exception ex) {
-                                    Logger.logWarn(splitEntry[1].contains("creeper") ? "CreeperHost" : "Curse" + " Server: " + splitEntry[0] + " was not accessible, ignoring." + ex.getMessage());
-                                }
-                            }
-                        }
-                    }
-                } catch (IOException e1) {
-                    Logger.logError("Failed to use bundled edges.json: " + e1.getMessage());
-                }
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                    }
-                }
+                parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
             }
-
             LoadingDialog.setProgress(90);
 
             if (downloadServers.size() == 0) {
@@ -400,10 +345,12 @@ public class DownloadUtils extends Thread {
 
         // This line absolutely must be hit, or the console will not be shown
         // and the user/we will not even know why an error has occurred. 
+        Logger.logInfo("DL ready");
         LaunchFrame.downloadServersReady();
 
         try {
             if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
+                Logger.logInfo("setDL");
                 AdvancedOptionsDialog.setDownloadServers();
             }
         } catch (Exception e) {
@@ -441,5 +388,38 @@ public class DownloadUtils extends Thread {
         }
 
         Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
+    }
+
+    @NonNull
+    public void parseJSONtoMap (URL u, String name, HashMap<String, String> h, boolean testEntries, String location) {
+        try {
+            String json = IOUtils.toString(u);
+            JsonElement element = new JsonParser().parse(json);
+            int i = 10;
+            if (element.isJsonObject()) {
+                JsonObject jso = element.getAsJsonObject();
+                for (Entry<String, JsonElement> e : jso.entrySet()) {
+                    h.put(e.getKey(), e.getValue().getAsString());
+                    if (testEntries) {
+                        try {
+                            Logger.logInfo("Testing Server:" + e.getKey());
+                            IOUtils.toString(new URL("http://" + e.getValue().getAsString() + "/" + location));
+                            h.put(e.getKey(), e.getValue().getAsString());
+                        } catch (Exception ex) {
+                            Logger.logWarn(e.getValue().getAsString().contains("creeper") ? "CreeperHost" : "Curse" + " Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());
+                        }
+
+                        if (i < 90)
+                            i += 10;
+                        LoadingDialog.setProgress(i);
+                    } else {
+                        h.put(e.getKey(), e.getValue().getAsString());
+                    }
+
+                }
+            }
+        } catch (Exception e2) {
+            Logger.logError("Error parsing JSON " + name + " " + location, e2);
+        }
     }
 }
