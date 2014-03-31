@@ -16,6 +16,9 @@
  */
 package net.ftb.util;
 
+import static net.ftb.download.Locations.backupServers;
+import static net.ftb.download.Locations.downloadServers;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +44,7 @@ import java.util.Scanner;
 
 import lombok.NonNull;
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -54,14 +58,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class DownloadUtils extends Thread {
-    public volatile static boolean serversLoaded = false;
-    public static HashMap<String, String> downloadServers = new HashMap<String, String>();
-    public static HashMap<String, String> backupServers = new HashMap<String, String>();
-    public static final String chRepo = new String("http://new.creeperrepo.net");
-    public static final String curseRepo = new String("http://ftb.cursecdn.com");
-    public static String masterRepo = new String("http://new.creeperrepo.net");
-    public static String masterRepoNoHTTP = new String("new.creeperrepo.net");
-    public static boolean primaryCH = true;
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
@@ -69,7 +65,8 @@ public class DownloadUtils extends Thread {
      * @throws NoSuchAlgorithmException - see md5
      */
     public static String getCreeperhostLink (String file) throws NoSuchAlgorithmException {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+                : Locations.masterRepo;
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
         try {
@@ -97,7 +94,8 @@ public class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getStaticCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+                : Locations.masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
         try {
@@ -137,7 +135,7 @@ public class DownloadUtils extends Thread {
      */
     public static boolean fileExists (String file) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(masterRepo + "/FTB2/" + file).openStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Locations.masterRepo + "/FTB2/" + file).openStream()));
             return !reader.readLine().toLowerCase().contains("not found");
         } catch (Exception e) {
             return false;
@@ -192,7 +190,8 @@ public class DownloadUtils extends Thread {
         Logger.logInfo("Issue with new md5 method, attempting to use backup method.");
         String content = null;
         Scanner scanner = null;
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : masterRepo;
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+                : Locations.masterRepo;
         resolved += "/md5/FTB2/" + url;
         HttpURLConnection connection = null;
         try {
@@ -287,120 +286,123 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
-        downloadServers.put("Automatic", masterRepoNoHTTP);
-        Random r = new Random();
-        double choice = r.nextDouble();
-        try { // Super catch-all to ensure the launcher always renders
-            try {
-                // Fetch the percentage json first
-                String json = IOUtils.toString(new URL(masterRepo + "/FTB2/balance.json"));
-                JsonElement element = new JsonParser().parse(json);
+        if (!Locations.hasDLInitialized) {
+            downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
+            Random r = new Random();
+            double choice = r.nextDouble();
+            try { // Super catch-all to ensure the launcher always renders
+                try {
+                    // Fetch the percentage json first
+                    String json = IOUtils.toString(new URL(Locations.masterRepo + "/FTB2/balance.json"));
+                    JsonElement element = new JsonParser().parse(json);
 
-                if (element != null && element.isJsonObject()) {
-                    JsonObject jso = element.getAsJsonObject();
-                    if (jso != null && jso.get("repoSplitCurse") != null) {
-                        JsonElement e = jso.get("repoSplitCurse");
-                        if (Settings.getSettings().getDebugLauncher()) {
-                            Logger.logInfo("Balance Settings: " + e.getAsDouble() + " > " + choice);
-                        }
-                        if (e != null && e.getAsDouble() > choice) {
-                            Logger.logInfo("Balance has selected Automatic:CurseCDN");
-                            masterRepoNoHTTP = curseRepo.replaceAll("http://", "");
-                            masterRepo = curseRepo;
-                            primaryCH = false;
-                            downloadServers.remove("Automatic");
-                            downloadServers.put("Automatic", masterRepoNoHTTP);
-                        } else {
-                            Logger.logInfo("Balance has selected Automatic:CreeperRepo");
+                    if (element != null && element.isJsonObject()) {
+                        JsonObject jso = element.getAsJsonObject();
+                        if (jso != null && jso.get("repoSplitCurse") != null) {
+                            JsonElement e = jso.get("repoSplitCurse");
+                            if (Settings.getSettings().getDebugLauncher()) {
+                                Logger.logInfo("Balance Settings: " + e.getAsDouble() + " > " + choice);
+                            }
+                            if (e != null && e.getAsDouble() > choice) {
+                                Logger.logInfo("Balance has selected Automatic:CurseCDN");
+                                Locations.masterRepoNoHTTP = Locations.curseRepo.replaceAll("http://", "");
+                                Locations.masterRepo = Locations.curseRepo;
+                                Locations.primaryCH = false;
+                                downloadServers.remove("Automatic");
+                                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
+                            } else {
+                                Logger.logInfo("Balance has selected Automatic:CreeperRepo");
+                            }
                         }
                     }
+
+                    // Fetch servers from creeperhost using edges.json first
+                    parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
+                    // Fetch servers list from curse using edges.json second
+                    parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
+                    LoadingDialog.setProgress(80);
+                } catch (IOException e) {
+                    int i = 10;
+
+                    // If fetching edges.json failed, assume new. is inaccessible
+                    // Try alternate mirrors from the cached server list in resources
+                    downloadServers.clear();
+
+                    Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
+                    LoadingDialog.setProgress(i);
+                    parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
                 }
+                LoadingDialog.setProgress(90);
 
-                // Fetch servers from creeperhost using edges.json first
-                parseJSONtoMap(new URL(chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
-                // Fetch servers list from curse using edges.json second
-                parseJSONtoMap(new URL(curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
-                LoadingDialog.setProgress(80);
-            } catch (IOException e) {
-                int i = 10;
+                if (downloadServers.size() == 0) {
+                    Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
 
-                // If fetching edges.json failed, assume new. is inaccessible
-                // Try alternate mirrors from the cached server list in resources
+                    // Fall back to new. (old system) on critical failure
+                    downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
+                } else if (!downloadServers.containsKey("Automatic")) {
+                    // Use a random server from edges.json as the Automatic server
+                    int index = (int) (Math.random() * downloadServers.size());
+                    List<String> keys = new ArrayList<String>(downloadServers.keySet());
+                    String defaultServer = downloadServers.get(keys.get(index));
+
+                    downloadServers.put("Automatic", defaultServer);
+                    Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
+                }
+            } catch (Exception e) {
+                Logger.logError(e.getMessage(), e);
                 downloadServers.clear();
-
-                Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-                LoadingDialog.setProgress(i);
-                parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
+                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             }
-            LoadingDialog.setProgress(90);
 
-            if (downloadServers.size() == 0) {
-                Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
+            LoadingDialog.setProgress(100);
+            Locations.serversLoaded = true;
 
-                // Fall back to new. (old system) on critical failure
-                downloadServers.put("Automatic", masterRepoNoHTTP);
-            } else if (!downloadServers.containsKey("Automatic")) {
-                // Use a random server from edges.json as the Automatic server
-                int index = (int) (Math.random() * downloadServers.size());
-                List<String> keys = new ArrayList<String>(downloadServers.keySet());
-                String defaultServer = downloadServers.get(keys.get(index));
+            // This line absolutely must be hit, or the console will not be shown
+            // and the user/we will not even know why an error has occurred. 
+            Logger.logInfo("DL ready");
+            LaunchFrame.downloadServersReady();
 
-                downloadServers.put("Automatic", defaultServer);
-                Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
-            }
-        } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
-            downloadServers.clear();
-            downloadServers.put("Automatic", masterRepoNoHTTP);
-        }
-
-        LoadingDialog.setProgress(100);
-        serversLoaded = true;
-
-        // This line absolutely must be hit, or the console will not be shown
-        // and the user/we will not even know why an error has occurred. 
-        Logger.logInfo("DL ready");
-        LaunchFrame.downloadServersReady();
-
-        try {
-            if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
-                AdvancedOptionsDialog.setDownloadServers();
-            }
-        } catch (Exception e) {
-            Logger.logError("Unknown error setting download servers: " + e.getMessage());
-        }
-
-        String selectedMirror = Settings.getSettings().getDownloadServer();
-        String selectedHost = downloadServers.get(selectedMirror);
-        String resolvedIP = "UNKNOWN";
-        String resolvedHost = "UNKNOWN";
-        String resolvedMirror = "UNKNOWN";
-
-        try {
-            InetAddress ipAddress = InetAddress.getByName(selectedHost);
-            resolvedIP = ipAddress.getHostAddress();
-        } catch (UnknownHostException e) {
-            Logger.logError("Failed to resolve selected mirror: " + e.getMessage());
-        }
-
-        try {
-            for (String key : downloadServers.keySet()) {
-                if (key == "Automatic")
-                    continue;
-
-                InetAddress host = InetAddress.getByName(downloadServers.get(key));
-
-                if (resolvedIP.equalsIgnoreCase(host.getHostAddress())) {
-                    resolvedMirror = key;
-                    resolvedHost = downloadServers.get(key);
-                    break;
+            try {
+                if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
+                    AdvancedOptionsDialog.setDownloadServers();
                 }
+            } catch (Exception e) {
+                Logger.logError("Unknown error setting download servers: " + e.getMessage());
             }
-        } catch (UnknownHostException e) {
-            Logger.logError("Failed to resolve mirror: " + e.getMessage());
-        }
 
-        Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
+            String selectedMirror = Settings.getSettings().getDownloadServer();
+            String selectedHost = downloadServers.get(selectedMirror);
+            String resolvedIP = "UNKNOWN";
+            String resolvedHost = "UNKNOWN";
+            String resolvedMirror = "UNKNOWN";
+
+            try {
+                InetAddress ipAddress = InetAddress.getByName(selectedHost);
+                resolvedIP = ipAddress.getHostAddress();
+            } catch (UnknownHostException e) {
+                Logger.logError("Failed to resolve selected mirror: " + e.getMessage());
+            }
+
+            try {
+                for (String key : downloadServers.keySet()) {
+                    if (key == "Automatic")
+                        continue;
+
+                    InetAddress host = InetAddress.getByName(downloadServers.get(key));
+
+                    if (resolvedIP.equalsIgnoreCase(host.getHostAddress())) {
+                        resolvedMirror = key;
+                        resolvedHost = downloadServers.get(key);
+                        break;
+                    }
+                }
+            } catch (UnknownHostException e) {
+                Logger.logError("Failed to resolve mirror: " + e.getMessage());
+            }
+
+            Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
+        }
+        Locations.hasDLInitialized = true;
     }
 
     @NonNull

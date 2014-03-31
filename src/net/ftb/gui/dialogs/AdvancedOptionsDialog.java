@@ -36,10 +36,10 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
     private JButton exit;
@@ -67,8 +67,8 @@ public class AdvancedOptionsDialog extends JDialog {
         super(LaunchFrame.getInstance(), true);
         setupGui();
 
-        if (DownloadUtils.serversLoaded) {
-            if (DownloadUtils.downloadServers.containsKey(settings.getDownloadServer())) {
+        if (Locations.serversLoaded) {
+            if (Locations.downloadServers.containsKey(settings.getDownloadServer())) {
                 downloadLocation.setSelectedItem(settings.getDownloadServer());
             }
         }
@@ -110,22 +110,22 @@ public class AdvancedOptionsDialog extends JDialog {
     public static void setDownloadServers () {
         String downloadserver = Settings.getSettings().getDownloadServer();
         downloadLocation.removeAllItems();
-        for (String server : DownloadUtils.downloadServers.keySet()) {
+        for (String server : Locations.downloadServers.keySet()) {
             downloadLocation.addItem(server);
         }
-        if (DownloadUtils.downloadServers.containsKey(downloadserver)) {
+        if (Locations.downloadServers.containsKey(downloadserver)) {
             downloadLocation.setSelectedItem(downloadserver);
         }
     }
 
     public String[] getDownloadServerNames () {
-        if (!DownloadUtils.serversLoaded) {
+        if (!Locations.serversLoaded) {
             Logger.logWarn("Servers not loaded yet.");
             return new String[] { "Automatic" };
         } else {
-            String[] out = new String[DownloadUtils.downloadServers.size()];
+            String[] out = new String[Locations.downloadServers.size()];
             for (int i = 0; i < out.length; i++) {
-                out[i] = String.valueOf(DownloadUtils.downloadServers.keySet().toArray()[i]);
+                out[i] = String.valueOf(Locations.downloadServers.keySet().toArray()[i]);
             }
             return out;
         }
