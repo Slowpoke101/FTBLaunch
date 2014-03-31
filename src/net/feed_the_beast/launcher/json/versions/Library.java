@@ -3,6 +3,8 @@ package net.feed_the_beast.launcher.json.versions;
 import java.util.List;
 import java.util.Map;
 
+import net.ftb.util.DownloadUtils;
+
 public class Library {
     public String name;
     public List<OSRule> rules;
@@ -46,7 +48,7 @@ public class Library {
     }
 
     public String getUrl () {
-        return url == null ? "https://libraries.minecraft.net/" : url;
+        return url == null ? DownloadUtils.masterRepo + "/mojang/libraries/" : url;
     }
 
     @Override

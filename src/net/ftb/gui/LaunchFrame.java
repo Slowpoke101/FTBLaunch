@@ -968,46 +968,13 @@ public class LaunchFrame extends JFrame {
     private List<DownloadInfo> gatherAssets (File root, String mcVersion) {
         try {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
-            /*
-            String baseUrl = "http://resources.download.minecraft.net/";
-            Document doc = DocumentBuilderFactory.newInstance()
-                           .newDocumentBuilder()
-                           .parse(new URL(baseUrl).openConnection().getInputStream());
-
-            File assetsDir = new File(root, "assets");
-            NodeList nodes = doc.getElementsByTagName("Contents");
-            for (int x = 0; x < nodes.getLength(); x++)
-            {
-                if (nodes.item(x).getNodeType() == Node.ELEMENT_NODE)
-                {
-                    AssetInfo asset = new AssetInfo(assetsDir, (Element)nodes.item(x));
-                    if (!asset.name.isEmpty() && !asset.name.endsWith("/"))
-                    {
-                        File local = new File(assetsDir, asset.name);
-                        if (!local.exists())
-                        {
-                            list.add(asset);
-                        }
-                        else if (!asset.etag.isEmpty() && !DownloadUtils.fileMD5(local).equalsIgnoreCase(asset.etag))
-                        {
-                            local.delete();
-                            list.add(asset);
-                        }
-                        else if (asset.etag.isEmpty())
-                        {
-                            list.add(asset);
-                        }
-                    }
-                }
-            }
-            */
 
             File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
             if (!local.exists()) {
-                list.add(new DownloadInfo(new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local, local.getName()));
+                list.add(new DownloadInfo(new URL(DownloadUtils.masterRepo + "/mojang/mc.dl/versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local, local.getName()));
             }
 
-            URL url = new URL("https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+            URL url = new URL(DownloadUtils.masterRepo + "/mojang/mc.dl/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
             DownloadUtils.downloadToFile(url, json);
             Version version = JsonFactory.loadVersion(json);
@@ -1061,7 +1028,7 @@ public class LaunchFrame extends JFrame {
                 }
             }
 
-            url = new URL("https://s3.amazonaws.com/Minecraft.Download/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
+            url = new URL(DownloadUtils.masterRepo + "/mojang/mc.dl/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             DownloadUtils.downloadToFile(url, json);
             AssetIndex index = JsonFactory.loadAssetIndex(json);
@@ -1077,7 +1044,7 @@ public class LaunchFrame extends JFrame {
                 }
 
                 if (!local.exists()) {
-                    list.add(new DownloadInfo(new URL("http://resources.download.minecraft.net/" + path), local, name, asset.hash, "sha1"));
+                    list.add(new DownloadInfo(new URL(DownloadUtils.masterRepo + "/mojang/resources/" + path), local, name, asset.hash, "sha1"));
                 }
             }
             return list;
