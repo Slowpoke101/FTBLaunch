@@ -19,11 +19,8 @@ package net.ftb.locale;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Scanner;
 
 import net.ftb.log.Logger;
@@ -73,18 +70,18 @@ public class LocaleUpdater extends Thread {
             tmp.mkdirs();
         }
         cleanUpFiles();
-        try {
-            URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
-            Scanner scanner = new Scanner(connection.getInputStream());
-            remoteVer = scanner.nextInt();
-            Logger.logInfo("[i18n] remoteVer = " + remoteVer);
-            scanner.close();
-        } catch (MalformedURLException e1) {
-            Logger.logError(e1.getMessage(), e1);
-        } catch (IOException e1) {
-            Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
-            return;
-        }
+        /* try {
+             URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
+             Scanner scanner = new Scanner(connection.getInputStream());
+             remoteVer = scanner.nextInt();
+             Logger.logInfo("[i18n] remoteVer = " + remoteVer);
+             scanner.close();
+         } catch (MalformedURLException e1) {
+             Logger.logError(e1.getMessage(), e1);
+         } catch (IOException e1) {
+             Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
+             return;
+         }*/
         if (local.exists()) {
             try {
                 int localVer;
