@@ -160,7 +160,7 @@ public class MinecraftLauncherNew {
             arguments.add("-Xms" + 256 + "M");
             Logger.logInfo("Defaulting MinMemory to " + 256);
             arguments.add("-Xmx" + 1024 + "M");
-            Logger.logInfo("Defaulting MaxMemory to " + 1024);
+            Logger.logInfo("Defaulting MaxMemory to " + 2048);
         }
     }
 

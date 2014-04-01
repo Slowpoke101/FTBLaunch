@@ -28,8 +28,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
@@ -38,15 +36,11 @@ import net.ftb.util.ErrorUtils;
 
 @SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
-    private String updatecreds = new String("");
     private JLabel usernameLbl;
     private JTextField username;
     private JLabel passwordLbl;
     private JPasswordField password;
-    private JLabel nameLbl;
-    private JTextField name;
     private JButton add;
-    private JLabel messageLbl;
 
     public ProfileAdderDialog(LaunchFrame instance, String unlocalizedMessage, boolean modal) {
         super(instance, modal);
@@ -66,29 +60,12 @@ public class ProfileAdderDialog extends JDialog {
         getRootPane().setDefaultButton(add);
 
 
-        username.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void removeUpdate (DocumentEvent arg0) {
-                name.setText(username.getText());
-            }
-
-            @Override
-            public void insertUpdate (DocumentEvent arg0) {
-                name.setText(username.getText());
-            }
-
-            @Override
-            public void changedUpdate (DocumentEvent e) {
-            }
-        });
-
-
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                    if (validate(name.getText(), username.getText())) {
-                        UserManager.addUser(username.getText(), "", name.getText());
-                        LaunchFrame.writeUsers(name.getText());
+                if (validate(username.getText(), username.getText())) {
+                    UserManager.addUser(username.getText(), password.getText(), username.getText());
+                    LaunchFrame.writeUsers(username.getText());
                         setVisible(false);
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
@@ -98,30 +75,18 @@ public class ProfileAdderDialog extends JDialog {
     }
 
     public void setUnlocalizedMessage (String editingName) {
-        if (editingName.equals("CHANGEDUUID")) {
-            updatecreds = I18N.getLocaleString(editingName);
-            password.setEnabled(false);
-        } else if (editingName.equals("OLDCREDS")) {
-            updatecreds = I18N.getLocaleString(editingName);
-            password.setEnabled(false);
-        }
-
     }
 
     private boolean validate (String name, String user, char[] pass) {
         if (!name.isEmpty() && !user.isEmpty() && pass.length > 1) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
                 return true;
-            }
         }
         return false;
     }
 
     private boolean validate (String name, String user) {
         if (!name.isEmpty() && !user.isEmpty()) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
                 return true;
-            }
         }
         return false;
     }
@@ -139,24 +104,15 @@ public class ProfileAdderDialog extends JDialog {
         username = new JTextField(16);
         passwordLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_PASSWORD"));
         password = new JPasswordField(16);
-        nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
-        name = new JTextField(16);
         add = new JButton(I18N.getLocaleString("MAIN_ADD"));
 
         usernameLbl.setLabelFor(username);
         passwordLbl.setLabelFor(password);
-        nameLbl.setLabelFor(name);
 
-        if (!updatecreds.equals("")) {
-            messageLbl = new JLabel(updatecreds);
-            panel.add(messageLbl);
-        }
         panel.add(usernameLbl);
         panel.add(username);
         panel.add(passwordLbl);
         panel.add(password);
-        panel.add(nameLbl);
-        panel.add(name);
         panel.add(add);
 
         Spring hSpring;
@@ -166,27 +122,18 @@ public class ProfileAdderDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.WEST, usernameLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, passwordLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, nameLbl, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(usernameLbl);
-        if (!updatecreds.equals("")) {
-            layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-            columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
-
-        }
         columnWidth = Spring.max(columnWidth, Spring.width(passwordLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(nameLbl));
 
         hSpring = Spring.sum(hSpring, columnWidth);
         hSpring = Spring.sum(hSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, username, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, name, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(username);
         columnWidth = Spring.max(columnWidth, Spring.width(password));
-        columnWidth = Spring.max(columnWidth, Spring.width(name));
 
         hSpring = Spring.sum(hSpring, columnWidth);
         hSpring = Spring.sum(hSpring, Spring.constant(10));
@@ -217,12 +164,6 @@ public class ProfileAdderDialog extends JDialog {
 
         vSpring = Spring.sum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, nameLbl, 0, SpringLayout.BASELINE, name);
-        layout.putConstraint(SpringLayout.NORTH, name, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(nameLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(name));
 
         vSpring = Spring.sum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(5));

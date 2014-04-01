@@ -1452,7 +1452,7 @@ public class LaunchFrame extends JFrame {
         if (userManager._users.size() >= 1 && ModPack.getSelectedPack() != null) {
             Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
             saveSettings();
-            doLogin(UserManager._users.get(0).getUsername(), UserManager._users.get(0).getPassword());
+            doLogin(UserManager.getUsernames().get(0), UserManager.getPassword(UserManager.getUsernames().get(0)));
         } else if (userManager._users.size() < 1) {
             ErrorUtils.tossError("Please select a profile!");
         }
