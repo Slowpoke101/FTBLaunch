@@ -16,94 +16,30 @@
  */
 package net.ftb.data;
 
-import java.io.BufferedReader;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
-import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
-import net.ftb.util.CryptoUtils;
-import net.ftb.util.OSUtils;
 
 public class UserManager {
     public final static ArrayList<User> _users = new ArrayList<User>();
-    private File _file;
 
-    public UserManager(File file) {
-        _file = file;
-        read();
+    public UserManager() {
     }
 
     public void write () throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(_file);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        try {
-            for (User user : _users) {
-                objectOutputStream.writeObject(user);
-            }
-        } finally {
-            objectOutputStream.close();
-            fileOutputStream.close();
-        }
+        //we don't want this info stored at all!
     }
 
     public void read () {
-        if (!_file.exists()) {
-            return;
-        }
         _users.clear();
-        if (!OSUtils.verifyUUID()) {
-            Logger.logError(I18N.getLocaleString("CHANGEDUUID"));
-            ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "CHANGEDUUID", true);
+        if (true) {
+            ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), true);
             p.setVisible(true);
             return;
         }
-        try {
-            FileInputStream fileInputStream = new FileInputStream(_file);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            try {
-                Object obj;
-                while ((obj = objectInputStream.readObject()) != null) {
-                    if (obj instanceof User) {
-                        _users.add((User) obj);
-                    }
-                }
-            } catch (EOFException ignored) {
-            } finally {
-                objectInputStream.close();
-                fileInputStream.close();
-            }
-        } catch (Exception e) {
-            Logger.logError("Failed to decode logindata", e);
-        }
 
-        // TODO: Remove this in a while once people are unlikely to have old format saved logindata
-        if (_users.isEmpty()) {
-            //Logger.logError(I18N.getLocaleString("OLDCREDS"));
-            // ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "OLDCREDS", true);
-            // p.setVisible(true);
-
-            try {
-                BufferedReader read = new BufferedReader(new FileReader(_file));
-                String str;
-                while ((str = read.readLine()) != null) {
-                    str = CryptoUtils.decrypt(str, OSUtils.getMacAddress());
-                    _users.add(new User(str));
-                }
-                read.close();
-            } catch (Exception ex) {
-                Logger.logError(ex.getMessage(), ex);
-            }
-        }
     }
 
     public static void addUser (String username, String password, String name) {

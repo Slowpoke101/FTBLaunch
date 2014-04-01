@@ -81,8 +81,6 @@ import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
-import net.ftb.gui.dialogs.ProfileAdderDialog;
-import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.ILauncherPane;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -129,11 +127,10 @@ public class LaunchFrame extends JFrame {
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
     private JLabel tpInstallLocLbl = new JLabel();
-    private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+    private JButton launch = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
             tpInstall = new JButton();
 
-    private static String[] dropdown_ = { "Select Profile", "Create Profile" };
-    private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static JComboBox tpInstallLocation, mapInstallLocation;
     private static LaunchFrame instance = null;
     private static String version = "1.3.8";
     public static boolean canUseAuthlib;
@@ -157,7 +154,7 @@ public class LaunchFrame extends JFrame {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
-    
+
     public static final String FORGENAME = "MinecraftForge.zip";
 
     protected enum Panes {
@@ -196,7 +193,6 @@ public class LaunchFrame extends JFrame {
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
-
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run () {
@@ -214,7 +210,7 @@ public class LaunchFrame extends JFrame {
                     } catch (Exception e1) {
                     }
                 }
-                
+
                 loader = new LoadingDialog();
                 loader.setVisible(true);
 
@@ -241,7 +237,7 @@ public class LaunchFrame extends JFrame {
 
                 LoadingDialog.setProgress(130);
 
-                userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+                userManager = new UserManager();
 
                 LoadingDialog.setProgress(140);
 
@@ -264,7 +260,7 @@ public class LaunchFrame extends JFrame {
                         Logger.logError("Unhandled exception in " + t.toString(), e);
                     }
                 });
-                
+
                 /*
                  * Show the main form but hide it behind any active windows until
                  * loading is complete to prevent display issues.
@@ -294,7 +290,7 @@ public class LaunchFrame extends JFrame {
             };
         });
     }
-    
+
     /**
      * Create the frame.
      */
@@ -339,57 +335,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
-        dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-        String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
-        users = new JComboBox(dropdown);
-        if (Settings.getSettings().getLastUser() != null) {
-            for (int i = 0; i < dropdown.length; i++) {
-                if (dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
-                    users.setSelectedIndex(i);
-                }
-            }
-        }
-
-        donate = new JButton(I18N.getLocaleString("DONATE_BUTTON"));
-        donate.setBounds(390, 20, 80, 30);
-        donate.setEnabled(false);
-        donate.setToolTipText("Coming Soon...");
-        donate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-            }
-        });
-
-        users.setBounds(550, 20, 150, 30);
-        users.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                if (users.getSelectedIndex() == 1) {
-                    ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
-                    users.setSelectedIndex(0);
-                    p.setVisible(true);
-                }
-                edit.setEnabled(users.getSelectedIndex() > 1);
-            }
-        });
-
-        edit = new JButton(I18N.getLocaleString("EDIT_BUTTON"));
-        edit.setBounds(480, 20, 60, 30);
-        edit.setVisible(true);
-        edit.setEnabled(users.getSelectedIndex() > 1);
-        edit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                if (users.getSelectedIndex() > 1) {
-                    ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String) users.getSelectedItem(), true);
-                    users.setSelectedIndex(0);
-                    p.setVisible(true);
-                }
-                edit.setEnabled(users.getSelectedIndex() > 1);
-            }
-        });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         launch.setBounds(711, 20, 100, 30);
@@ -403,27 +349,7 @@ public class LaunchFrame extends JFrame {
         serverbutton.setBounds(480, 20, 330, 30);
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
-        serverbutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-                    if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-                        try {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                    .getSelectedPack().getVersion().replace(".", "_")
-                                    : Settings.getSettings().getPackVer().replace(".", "_");
-                            if (ModPack.getSelectedPack().isPrivatePack()) {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                            } else {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                            }
-                            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-                        } catch (NoSuchAlgorithmException e) {
-                        }
-                    }
-                }
-            }
-        });
+
 
         mapInstall.setBounds(650, 20, 160, 30);
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
@@ -482,12 +408,9 @@ public class LaunchFrame extends JFrame {
         tpInstallLocLbl.setBounds(480, 20, 80, 30);
         tpInstallLocLbl.setVisible(false);
 
-        footer.add(edit);
-        footer.add(users);
         footer.add(footerLogo);
         footer.add(footerCreeper);
         footer.add(launch);
-        footer.add(donate);
         footer.add(serverbutton);
         footer.add(mapInstall);
         footer.add(mapInstallLocation);
@@ -527,9 +450,9 @@ public class LaunchFrame extends JFrame {
             }
         });
     }
-    
-    public static void downloadServersReady() {
-        if(loader != null) {
+
+    public static void downloadServersReady () {
+        if (loader != null) {
             loader.releaseModal();
         } else {
             // Download server has been found before the window could be painted
@@ -537,13 +460,13 @@ public class LaunchFrame extends JFrame {
             EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run () {
-                    if(con != null) {
+                    if (con != null) {
                         // Should be impossible to hit this...
                         con.setVisible(Settings.getSettings().getConsoleActive());
                         con.scrollToBottom();
                     }
-    
-                    while(loader == null) {
+
+                    while (loader == null) {
                         // Pretty much impossible to hit this, unless loading UI styles takes 
                         // longer than finding and testing a download server... 
                         try {
@@ -551,21 +474,21 @@ public class LaunchFrame extends JFrame {
                         } catch (InterruptedException e) {
                         }
                     }
-            
+
                     loader.releaseModal();
                 }
             });
         }
     }
-    
-    public static void checkDoneLoading() {
-        if(ModpacksPane.loaded) {
+
+    public static void checkDoneLoading () {
+        if (ModpacksPane.loaded) {
             LoadingDialog.setProgress(190);
-            
-            if(MapsPane.loaded) {
+
+            if (MapsPane.loaded) {
                 LoadingDialog.setProgress(200);
-                
-                if(TexturepackPane.loaded) {
+
+                if (TexturepackPane.loaded) {
                     loader.setVisible(false);
                     instance.setVisible(true);
                     instance.toFront();
@@ -608,8 +531,6 @@ public class LaunchFrame extends JFrame {
         tabbedPane.getSelectedComponent().setEnabled(false);
 
         launch.setEnabled(false);
-        users.setEnabled(false);
-        edit.setEnabled(false);
         serverbutton.setEnabled(false);
         mapInstall.setEnabled(false);
         mapInstallLocation.setEnabled(false);
@@ -1236,7 +1157,7 @@ public class LaunchFrame extends JFrame {
      * "Saves" the settings from the GUI controls into the settings class.
      */
     public void saveSettings () {
-        Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
+        //  Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
         instance.optionsPane.saveSettingsInto(Settings.getSettings());
     }
 
@@ -1244,18 +1165,6 @@ public class LaunchFrame extends JFrame {
      * @param user - user added/edited
      */
     public static void writeUsers (String user) {
-        try {
-            userManager.write();
-        } catch (IOException e) {
-        }
-        String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
-        users.removeAllItems();
-        for (int i = 0; i < usernames.length; i++) {
-            users.addItem(usernames[i]);
-            if (usernames[i].equals(user)) {
-                users.setSelectedIndex(i);
-            }
-        }
     }
 
     /**
@@ -1363,7 +1272,6 @@ public class LaunchFrame extends JFrame {
         serverMap.setEnabled(true);
         tpInstall.setEnabled(true);
         launch.setEnabled(true);
-        users.setEnabled(true);
         serverbutton.setEnabled(true);
         tpInstallLocation.setEnabled(true);
         TextureManager.updating = false;
@@ -1407,8 +1315,6 @@ public class LaunchFrame extends JFrame {
     public void disableMainButtons () {
         serverbutton.setVisible(false);
         launch.setVisible(false);
-        edit.setVisible(false);
-        users.setVisible(false);
     }
 
     /**
@@ -1450,9 +1356,6 @@ public class LaunchFrame extends JFrame {
             break;
         default:
             launch.setVisible(true);
-            edit.setEnabled(users.getSelectedIndex() > 1);
-            edit.setVisible(true);
-            users.setVisible(true);
             serverbutton.setVisible(false);
             disableMapButtons();
             disableTextureButtons();
@@ -1466,16 +1369,12 @@ public class LaunchFrame extends JFrame {
      */
     public void updateLocale () {
         if (I18N.currentLocale == Locale.deDE) {
-            edit.setBounds(420, 20, 120, 30);
-            donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
             mapInstallLocation.setBounds(420, 20, 190, 30);
             serverbutton.setBounds(420, 20, 390, 30);
             tpInstallLocation.setBounds(420, 20, 190, 30);
             tpInstall.setBounds(620, 20, 190, 30);
         } else {
-            edit.setBounds(480, 20, 60, 30);
-            donate.setBounds(390, 20, 80, 30);
             mapInstall.setBounds(650, 20, 160, 30);
             mapInstallLocation.setBounds(480, 20, 160, 30);
             serverbutton.setBounds(480, 20, 330, 30);
@@ -1483,15 +1382,10 @@ public class LaunchFrame extends JFrame {
             tpInstall.setBounds(650, 20, 160, 30);
         }
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
-        edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
-        dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
-        dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
-        writeUsers((String) users.getSelectedItem());
         optionsPane.updateLocale();
         modPacksPane.updateLocale();
         mapsPane.updateLocale();
@@ -1554,11 +1448,12 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
+        userManager.read();
+        if (userManager._users.size() >= 1 && ModPack.getSelectedPack() != null) {
             Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
             saveSettings();
-            doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-        } else if (users.getSelectedIndex() <= 1) {
+            doLogin(UserManager._users.get(0).getUsername(), UserManager._users.get(0).getPassword());
+        } else if (userManager._users.size() < 1) {
             ErrorUtils.tossError("Please select a profile!");
         }
     }
