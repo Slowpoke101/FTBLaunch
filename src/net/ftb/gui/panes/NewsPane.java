@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 
 import net.ftb.data.Settings;
@@ -52,13 +51,6 @@ public class NewsPane extends JPanel implements ILauncherPane {
         news.addHyperlinkListener(new HyperlinkListener() {
             @Override
             public void hyperlinkUpdate (HyperlinkEvent arg0) {
-                if (arg0.getEventType() == EventType.ACTIVATED) {
-                    try {
-                        OSUtils.browse(arg0.getURL().toString());
-                    } catch (Exception e) {
-                        Logger.logError(e.getMessage(), e);
-                    }
-                }
             }
         });
         newsPanel = new JScrollPane(news);
@@ -70,7 +62,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
     @Override
     public void onVisible () {
         try {
-            news.setPage("http://launcher.feed-the-beast.com/news.php");
+            news.setPage("http://ftbcompserver/launcher/news.html");
             Settings.getSettings().setNewsDate();
             Settings.getSettings().save();
             LaunchFrame.getInstance().setNewsIcon();
