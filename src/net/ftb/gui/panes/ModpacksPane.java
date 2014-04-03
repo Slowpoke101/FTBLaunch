@@ -49,7 +49,6 @@ import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
-import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
@@ -69,7 +68,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
     private static JButton server;
 
-    private JButton privatePack;
     private static JComboBox version;
     private static int selectedPack = 0;
     private static boolean modPacksAdded = false;
@@ -234,17 +232,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         version.setToolTipText("Modpack Versions");
         add(version);
 
-        privatePack = new JButton("Pack Codes");
-        privatePack.setBounds(700, 5, 120, 25);
-        privatePack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                PrivatePackDialog ap = new PrivatePackDialog();
-                ap.setVisible(true);
-            }
-        });
-
-        add(privatePack);
     }
 
     @Override

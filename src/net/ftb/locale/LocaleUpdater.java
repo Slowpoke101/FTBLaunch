@@ -18,13 +18,9 @@ package net.ftb.locale;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.net.URL;
 import java.util.Scanner;
 
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
@@ -42,18 +38,18 @@ public class LocaleUpdater extends Thread {
     private void updateFiles () {
         Logger.logInfo("[i18n] Downloading locale files ...");
         try {
-            DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
+            //DownloadUtils.downloadToFile(new URL(DownloadUtils.getCreeperhostLink("locales.zip")), archive);
             Logger.logInfo("[i18n] Moving files into place ...");
             if (local.getParentFile().exists()) {
                 FileUtils.delete(local.getParentFile());
             }
-            FileUtils.extractZipTo(archive.getAbsolutePath(), local.getParentFile().getPath());
-            if (!local.exists()) {
-                local.createNewFile();
-            }
-            Writer wr = new FileWriter(local);
-            wr.write(String.valueOf(remoteVer));
-            wr.close();
+            // FileUtils.extractZipTo(archive.getAbsolutePath(), local.getParentFile().getPath());
+            /* if (!local.exists()) {
+                 local.createNewFile();
+             }
+             Writer wr = new FileWriter(local);
+             wr.write(String.valueOf(remoteVer));
+             wr.close();*/
             cleanUpFiles();
         } catch (Exception e) {
             Logger.logWarn("[i18n] Update IOException", e);
@@ -100,7 +96,7 @@ public class LocaleUpdater extends Thread {
         } else {
             updateFiles();
         }
-        I18N.addFiles();
+        // I18N.addFiles();
     }
 
     private void cleanUpFiles () {

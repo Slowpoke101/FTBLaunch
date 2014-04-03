@@ -77,7 +77,7 @@ public class Settings extends Properties {
     }
 
     public String getRamMax () {
-        return getProperty("ramMax", Integer.toString(1024));
+        return getProperty("ramMax", Integer.toString(2048));
     }
 
     public void setRamMax (String max) {

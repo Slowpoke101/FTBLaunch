@@ -127,8 +127,7 @@ public class LaunchFrame extends JFrame {
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
     private JLabel tpInstallLocLbl = new JLabel();
-    private JButton launch = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
-            tpInstall = new JButton();
+    private JButton launch = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
 
     private static JComboBox tpInstallLocation, mapInstallLocation;
     private static LaunchFrame instance = null;
@@ -242,7 +241,9 @@ public class LaunchFrame extends JFrame {
                 LoadingDialog.setProgress(140);
 
                 con = new LauncherConsole();
-                con.setVisible(true);
+                if (Settings.getSettings().getConsoleActive()) {
+                    con.setVisible(true);
+                }
 
                 LoadingDialog.setProgress(160);
 
@@ -335,8 +336,6 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-
-
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
@@ -349,7 +348,6 @@ public class LaunchFrame extends JFrame {
         serverbutton.setBounds(480, 20, 330, 30);
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
-
 
         mapInstall.setBounds(650, 20, 160, 30);
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
