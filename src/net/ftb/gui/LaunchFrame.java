@@ -126,6 +126,7 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+    private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_curse.png")));
     private JLabel tpInstallLocLbl = new JLabel();
     private JButton launch = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
 
@@ -336,6 +337,14 @@ public class LaunchFrame extends JFrame {
             }
         });
 
+        footerCurse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerCurse.setBounds(72 + 123 + 15, 15, 132, 42);
+        footerCurse.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+            }
+        });
+
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
@@ -408,6 +417,7 @@ public class LaunchFrame extends JFrame {
 
         footer.add(footerLogo);
         footer.add(footerCreeper);
+        footer.add(footerCurse);
         footer.add(launch);
         footer.add(serverbutton);
         footer.add(mapInstall);
