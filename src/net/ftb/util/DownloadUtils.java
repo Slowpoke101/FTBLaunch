@@ -293,7 +293,7 @@ public class DownloadUtils extends Thread {
             try { // Super catch-all to ensure the launcher always renders
                 try {
                     // Fetch the percentage json first
-                    String json = IOUtils.toString(new URL(Locations.masterRepo + "/FTB2/balance.json"));
+                    String json = IOUtils.toString(new URL(Locations.masterRepo + "/FTB2/static/balance.json"));
                     JsonElement element = new JsonParser().parse(json);
 
                     if (element != null && element.isJsonObject()) {
