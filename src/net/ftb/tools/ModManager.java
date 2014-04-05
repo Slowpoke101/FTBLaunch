@@ -250,10 +250,36 @@ public class ModManager extends JDialog {
                     clearModsFolder(pack);
                     FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
                     FileUtils.delete(new File(installPath, dir + "/instMods/"));
+                    boolean saveExists = false;
+                    if (pack.getBundledMap()) {
+                        try {
+                            if (new File(installPath, dir + "/minecraft/saves").exists()) {
+                                saveExists = true;
+                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
+                                FileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves"), new File(installPath, dir + "/minecraft/saves.ftbtmp"), true);
+                            }
+                        } catch (Exception e) {
+                            Logger.logError("error backing up map", e);
+                        }
+                    }
+
                     if (debugVerbose) {
                         Logger.logInfo(debugTag + "Extracting pack.");
                     }
                     FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+                    if (pack.getBundledMap() && saveExists) {
+                        try {
+                            if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
+                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
+                            if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
+                                FileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
+                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
+                            }
+                        } catch (Exception e) {
+                            Logger.logError("error restoring map", e);
+                        }
+                    }
+
                     File version = new File(installPath, dir + sep + "version");
                     BufferedWriter out = new BufferedWriter(new FileWriter(version));
                     out.write(curVersion.replace("_", "."));
