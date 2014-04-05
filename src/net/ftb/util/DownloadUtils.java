@@ -414,7 +414,6 @@ public class DownloadUtils extends Thread {
             if (element.isJsonObject()) {
                 JsonObject jso = element.getAsJsonObject();
                 for (Entry<String, JsonElement> e : jso.entrySet()) {
-                    h.put(e.getKey(), e.getValue().getAsString());
                     if (testEntries) {
                         try {
                             Logger.logInfo("Testing Server:" + e.getKey());
@@ -431,7 +430,6 @@ public class DownloadUtils extends Thread {
                     } else {
                         h.put(e.getKey(), e.getValue().getAsString());
                     }
-
                 }
             }
         } catch (Exception e2) {
