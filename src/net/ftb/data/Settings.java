@@ -115,7 +115,7 @@ public class Settings extends Properties {
     }
 
     public void setJavaPath (String path) {
-        if( getDefaultJavaPath().equals(path) ) {
+        if( getDefaultJavaPath().equals(path) || path == "" ) {
             remove("javaPath");
         } else {
             setProperty("javaPath", path);
