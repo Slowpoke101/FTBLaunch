@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.ftb.download.Locations;
+import net.ftb.util.DownloadUtils;
 
 public class Library {
     public String name;
@@ -11,6 +12,7 @@ public class Library {
     public Map<OS, String> natives;
     public ExtractRule extract;
     public String url;
+    public boolean localRepo;//when true the DL will be grabbed from the FTB Repo's
 
     private Action _applies = null;
 
@@ -48,7 +50,7 @@ public class Library {
     }
 
     public String getUrl () {
-        return url == null ? Locations.mc_libs : url;
+        return (url == null ? (localRepo ? DownloadUtils.getStaticCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs) : url);
     }
 
     @Override

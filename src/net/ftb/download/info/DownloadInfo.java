@@ -1,4 +1,4 @@
-package net.ftb.download;
+package net.ftb.download.info;
 
 import java.io.File;
 import java.net.URL;
@@ -21,6 +21,14 @@ public class DownloadInfo {
     private DLType backupDLType = DLType.NONE;
 
     public DownloadInfo() {
+    }
+
+    public DownloadInfo(URL url, File local, String name, Boolean ftbServers) {
+        this(url, local, name, null, "md5");
+        if (ftbServers) {
+            primaryDLType = DLType.ContentMD5;
+            backupDLType = DLType.FTBBackup;
+        }
     }
 
     public DownloadInfo(URL url, File local, String name) {

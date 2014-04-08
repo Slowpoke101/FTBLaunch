@@ -10,6 +10,8 @@ public class Locations {
     public final static String mc_res = "http://resources.download.minecraft.net/";
     //location of them Mojang server that hosts the Minecraft Maven host
     public final static String mc_libs = "https://libraries.minecraft.net/";
+    //location of the FTB maven repo within the FTB2/static part of the repository
+    public final static String ftb_maven = "maven/";
 
     public static final String chRepo = new String("http://new.creeperrepo.net");
     public static final String curseRepo = new String("http://ftb.cursecdn.com");

@@ -32,13 +32,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +55,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
@@ -77,8 +73,9 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
-import net.ftb.download.DownloadInfo;
 import net.ftb.download.Locations;
+import net.ftb.download.info.DownloadInfo;
+import net.ftb.download.workers.AssetDownloader;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -121,9 +118,6 @@ import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
     private LoginResponse RESPONSE;
@@ -139,7 +133,7 @@ public class LaunchFrame extends JFrame {
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
     private static LaunchFrame instance = null;
-    private static String version = "1.3.8";
+    private static String version = "1.3.9";
     public static boolean canUseAuthlib;
 
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -151,7 +145,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
-    public static int buildNumber = 138;
+    public static int buildNumber = 139;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -924,121 +918,6 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    private static final class AssetInfo extends DownloadInfo {
-        public final String etag;
-
-        private AssetInfo(File root, Element node) throws MalformedURLException {
-            url = new URL(Locations.mc_res + getText(node, "Key", null));
-            name = getText(node, "Key", "");
-            etag = getText(node, "ETag", "").replace("\"", "");
-            size = Long.parseLong(getText(node, "Size", "0"));
-            local = new File(root, name);
-        }
-
-        private String getText (Element node, String name, String def) {
-            NodeList lst = node.getElementsByTagName(name);
-            if (lst == null)
-                return def;
-            return lst.item(0).getChildNodes().item(0).getNodeValue();
-        }
-
-        public String toString () {
-            return etag + " " + name + " " + size;
-        }
-    }
-
-    //TODO ASAP thread all of these DL's
-    private static class AssetDownloader extends SwingWorker<Boolean, Void> {
-        private List<DownloadInfo> downloads;
-        private final ProgressMonitor monitor;
-        private String status;
-        private int progressIndex = 0;
-
-        private AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
-            this.downloads = downloads;
-            this.monitor = monitor;
-
-            monitor.setMaximum(downloads.size() * 100);
-
-            addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange (PropertyChangeEvent evt) {
-                    if (monitor.isCanceled())
-                        AssetDownloader.this.cancel(false);
-                }
-            });
-        }
-
-        @Override
-        protected Boolean doInBackground () throws Exception {
-            boolean allDownloaded = true;
-
-            byte[] buffer = new byte[24000];
-            for (int x = 0; x < downloads.size(); x++) {
-                DownloadInfo asset = downloads.get(x);
-                int attempt = 0;
-                final int attempts = 5;
-                boolean downloadSuccess = false;
-                while (!downloadSuccess && (attempt < attempts)) {
-                    try {
-                        if (attempt++ > 0) {
-                            Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
-                        }
-                        URLConnection con = asset.url.openConnection();
-                        if (con instanceof HttpURLConnection) {
-                            con.setRequestProperty("Cache-Control", "no-cache");
-                            con.connect();
-                        }
-                        this.status = "Downloading " + asset.name + "...";
-                        asset.local.getParentFile().mkdirs();
-                        InputStream input = con.getInputStream();
-                        FileOutputStream output = new FileOutputStream(asset.local);
-                        int readLen;
-                        int currentSize = 0;
-                        int size = Integer.parseInt(con.getHeaderField("Content-Length"));
-                        setProgress(0);
-                        while ((readLen = input.read(buffer, 0, buffer.length)) != -1) {
-                            output.write(buffer, 0, readLen);
-                            currentSize += readLen;
-                            int prog = (int) ((currentSize / size) * 100);
-                            if (prog > 100)
-                                prog = 100;
-                            if (prog < 0)
-                                prog = 0;
-
-                            setProgress(prog);
-
-                            prog = (progressIndex * 100) + prog;
-
-                            monitor.setProgress(prog);
-                            monitor.setNote(this.status);
-                        }
-                        input.close();
-                        output.close();
-                        String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
-                        if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0)) {
-                            if (asset.hash != null && !asset.hash.toLowerCase().equals(hash)) {
-                                asset.local.delete();
-                            } else {
-                                downloadSuccess = true;
-                            }
-                        }
-                        progressIndex += 1;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        downloadSuccess = false;
-                        Logger.logWarn("Connection failed, trying again");
-                    }
-                }
-                if (!downloadSuccess) {
-                    allDownloaded = false;
-                }
-            }
-            status = allDownloaded ? "Success" : "Downloads failed";
-            return allDownloaded;
-        }
-    }
-
     private List<DownloadInfo> gatherAssets (File root, String mcVersion) {
         try {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
@@ -1056,7 +935,12 @@ public class LaunchFrame extends JFrame {
                 if (lib.natives == null) {
                     local = new File(root, "libraries/" + lib.getPath());
                     if (!local.exists()) {
-                        list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                        if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                        } else {
+                            list.add(new DownloadInfo(new URL(DownloadUtils.getStaticCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
+
+                        }
                     }
                 } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
