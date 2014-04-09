@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 /**
  * Windows-specific java versions finder
@@ -77,9 +78,7 @@ public class JavaFinder {
      * (or null if no matching java is found)
      ****************************************************************************/
     public static String getOSBitnessJava () {
-        String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-        String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-        boolean isOS64 = arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64"));
+        boolean isOS64 = OSUtils.is64BitWindows();
 
         List<JavaInfo> javas = JavaFinder.findJavas();
         for (int i = 0; i < javas.size(); i++) {

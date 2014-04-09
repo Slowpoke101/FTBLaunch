@@ -192,15 +192,24 @@ public class LaunchFrame extends JFrame {
         thread.start();
 
         Logger.logInfo("FTBLaunch starting up (version " + version + ")");
-        Logger.logInfo("Java version: " + System.getProperty("java.version"));
+        Logger.logInfo("Java version: " + System.getProperty("java.version") + " (" + (OSUtils.is64BitOS()?"64-bit":"32-bit") +")");
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));
         Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " + System.getProperty("java.vm.specification.version") + " by "
                 + System.getProperty("java.vm.specification.vendor"));
         Logger.logInfo("Java vm: " + System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
-        Logger.logInfo("OS: " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+        Logger.logInfo("OS: " + (OSUtils.is64BitOS()?"64-bit":"32-bit") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
         Logger.logInfo("Launcher Install Dir: " + Settings.getSettings().getInstallPath());
         Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
+
+        if (!OSUtils.is64BitOS()) {
+            Logger.logInfo("Warning: 32 Bit operating system. 64 Bit is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+        }
+
+        if (OSUtils.is64BitOS() && !OSUtils.is64BitVM()) {
+            Logger.logInfo("Warning: 32 Bit Java in 64 Bit operating system. 64 Bit Java is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+        }
+
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");

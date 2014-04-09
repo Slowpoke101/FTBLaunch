@@ -112,16 +112,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         ramMaximum.setMajorTickSpacing(256);
         ramMaximum.setMinorTickSpacing(256);
         ramMaximum.setMinimum(256);
-        String vmType = new String();
-        if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null) {
-            vmType = JavaFinder.parseWinJavaVersion().is64bits ? "64" : "32";
-        } else {
-            vmType = System.getProperty("sun.arch.data.model");
-        }
-        if (vmType != null) {
-            if (vmType.equals("64")) {
+
+        Boolean vm64Bits = OSUtils.is64BitVM();
+        if (vm64Bits != null) {
+            if (vm64Bits) {
                 ramMaximum.setMaximum((int) ram);
-            } else if (vmType.equals("32")) {
+            } else {
                 if (ram < 1024) {
                     ramMaximum.setMaximum((int) ram);
                 } else {
@@ -178,18 +174,14 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(locale);
 
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM 
-        if (vmType.equals("32")) {
+        if (!OSUtils.is64BitVM()) {
             lbl32BitWarning = new JLabel(I18N.getLocaleString("JAVA_32BIT_WARNING"));
             lbl32BitWarning.setBounds(190, 170, 500, 25);
             lbl32BitWarning.setForeground(Color.red);
             add(lbl32BitWarning);
 
             if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
-                // Detect if OS is 64 or 32 bit
-                String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-                String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-
-                if (arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64"))) {
+                if (OSUtils.is64BitWindows()) {
                     btnInstallJava = new JButton(I18N.getLocaleString("DOWNLOAD_JAVA64"));
                     btnInstallJava.addActionListener(new ActionListener() {
                         @Override
