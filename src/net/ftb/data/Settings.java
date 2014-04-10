@@ -259,11 +259,11 @@ public class Settings extends Properties {
     }
 
     public void setKeepLauncherOpen (boolean state) {
-        setProperty("keepLauncherOpen", String.valueOf(state));
+        setProperty("keepLauncherOpen", "true");
     }
 
     public boolean getKeepLauncherOpen () {
-        return Boolean.parseBoolean(getProperty("keepLauncherOpen", "false"));
+        return true;
     }
 
     public void setSnooper (boolean state) {

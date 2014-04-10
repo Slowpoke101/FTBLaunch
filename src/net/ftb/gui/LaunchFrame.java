@@ -127,12 +127,15 @@ public class LaunchFrame extends JFrame {
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
     private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_curse.png")));
+    private JLabel footerTwitch = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_twitch.png")));
+    private JLabel footerSteel = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_steelseries.png")));
+
     private JLabel tpInstallLocLbl = new JLabel();
     private JButton launch = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
 
     private static JComboBox tpInstallLocation, mapInstallLocation;
     private static LaunchFrame instance = null;
-    private static String version = "1.3.8";
+    private static String version = "1.3.9";
     public static boolean canUseAuthlib;
 
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -144,7 +147,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
-    public static int buildNumber = 138;
+    public static int buildNumber = 139;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -180,7 +183,7 @@ public class LaunchFrame extends JFrame {
         DownloadUtils thread = new DownloadUtils();
         thread.start();
 
-        Logger.logInfo("FTBLaunch PAXEAST2014 starting up based on launcher (version " + version + ")");
+        Logger.logInfo("FTBLaunch PAXEAST2014 " + version + " starting up based on launcher (version " + "1.3.7" + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));
@@ -345,6 +348,16 @@ public class LaunchFrame extends JFrame {
             }
         });
 
+        footerTwitch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerTwitch.setBounds(72 + 123 + 15 + 132 + 5, 25, 120, 32);
+        footerTwitch.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+            }
+        });
+        footerSteel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerSteel.setBounds(72 + 123 + 15 + 132 + 5 + 120 + 5, 15, 194, 42);
+
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
@@ -418,6 +431,8 @@ public class LaunchFrame extends JFrame {
         footer.add(footerLogo);
         footer.add(footerCreeper);
         footer.add(footerCurse);
+        footer.add(footerSteel);
+        footer.add(footerTwitch);
         footer.add(launch);
         footer.add(serverbutton);
         footer.add(mapInstall);
