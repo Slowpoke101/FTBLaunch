@@ -385,7 +385,7 @@ public class DownloadUtils extends Thread {
 
             try {
                 for (String key : downloadServers.keySet()) {
-                    if (key == "Automatic")
+                    if (key.equals("Automatic"))
                         continue;
 
                     InetAddress host = InetAddress.getByName(downloadServers.get(key));

@@ -762,7 +762,7 @@ public class LaunchFrame extends JFrame {
         String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
                 .getVersion() : Settings.getSettings().getPackVer();
 
-        if (storedVersion == "") {
+        if (storedVersion.isEmpty()) {
             // Always allow updates from a version that isn't installed at all
             allowVersionChange = true;
             return true;
@@ -770,7 +770,7 @@ public class LaunchFrame extends JFrame {
             ModPackVersionChangeDialog verDialog = new ModPackVersionChangeDialog(this, true, storedVersion, onlineVersion);
             verDialog.setVisible(true);
         }
-        return allowVersionChange & (storedVersion != onlineVersion);
+        return allowVersionChange & (!storedVersion.equals(onlineVersion));
     }
 
     /**
