@@ -23,7 +23,7 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
-		classpath 'edu.sc.seis.gradle:macappbundle:1.0.9'
+		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
 
     }
 
@@ -104,9 +104,10 @@ afterEvaluate {
 }
 
 macAppBundle {
-    appName = "Feed The Beast"
     mainClassName = project.mainClass
+    appName = "Feed The Beast"
     icon = "res/app/icon.icns"
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }
 
 //}
