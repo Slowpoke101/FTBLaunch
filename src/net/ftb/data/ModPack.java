@@ -237,7 +237,7 @@ public class ModPack {
     private boolean upToDate (File verFile) {
         String storedVersion = getStoredVersion(verFile).replace(".", "");
 
-        if (storedVersion == "" || Integer.parseInt(storedVersion) != Integer.parseInt(version.replace(".", ""))) {
+        if (storedVersion.isEmpty() || Integer.parseInt(storedVersion) != Integer.parseInt(version.replace(".", ""))) {
             try {
                 if (!verFile.exists()) {
                     verFile.getParentFile().mkdirs();
