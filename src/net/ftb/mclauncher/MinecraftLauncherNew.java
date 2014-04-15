@@ -111,7 +111,19 @@ public class MinecraftLauncherNew {
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
+            Logger.logInfo("Additional java parameters: " + additionalOptions);
             Collections.addAll(arguments, additionalOptions.split("\\s+"));
+        }
+
+        //Undocumented environment variable to control JVM
+        String additionalEnvVar = System.getenv("_JAVA_OPTIONS");
+        if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
+            Logger.logInfo("_JAVA_OPTIONS defined: " + additionalEnvVar);
+        }
+        //Documented environment variable to control JVM
+        additionalEnvVar = System.getenv("JAVA_TOOL_OPTIONS");
+        if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
+            Logger.logInfo("JAVA_TOOL_OPTIONS defined: " + additionalEnvVar);
         }
 
         arguments.add(mainClass);
