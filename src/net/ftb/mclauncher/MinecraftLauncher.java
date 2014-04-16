@@ -115,6 +115,7 @@ public class MinecraftLauncher {
 
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         processBuilder.redirectErrorStream(true);
+        OSUtils.cleanEnvVars(processBuilder.environment());
         return processBuilder.start();
     }
 

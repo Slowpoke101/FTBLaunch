@@ -151,6 +151,7 @@ public class MinecraftLauncherNew {
         //Logger.logInfo("Launching: " + tmp.toString());		
         builder.directory(gameDir);
         builder.redirectErrorStream(true);
+        OSUtils.cleanEnvVars(builder.environment());
         return builder.start();
     }
 

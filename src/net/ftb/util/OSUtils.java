@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.Enumeration;
+import java.util.Map;
 
 import lombok.Getter;
 import net.ftb.gui.LaunchFrame;
@@ -258,5 +259,13 @@ public class OSUtils {
         } catch (Exception e) {
             Logger.logError("Could not open file", e);
         }
+    }
+
+    /**
+     * Removes environment variables which may cause faulty JVM memory allocations
+     */
+    public static void cleanEnvVars(Map<String, String> environment) {
+        environment.remove("_JAVA_OPTIONS");
+        environment.remove("JAVA_TOOL_OPTIONS");
     }
 }
