@@ -66,9 +66,7 @@ public class MinecraftLauncherNew {
         setMemory(arguments, rmax);
 
         if (OSUtils.getCurrentOS().equals(OSUtils.OS.WINDOWS)) {
-            String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-            String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-            if (!(arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")))) {
+            if (!OSUtils.is64BitWindows()) {
                 if (maxPermSize == null || maxPermSize.isEmpty()) {
                     if (OSUtils.getOSTotalMemory() > 2046) {
                         maxPermSize = "192m";
