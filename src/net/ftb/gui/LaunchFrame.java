@@ -135,9 +135,10 @@ public class LaunchFrame extends JFrame {
 
     private static JComboBox tpInstallLocation, mapInstallLocation;
     private static LaunchFrame instance = null;
-    private static String version = "1.3.9";
+    private static String version = "1.4.0";
     public static boolean canUseAuthlib;
-
+    public static boolean bypasslaunch;
+    public static boolean forcedl;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
     protected static UserManager userManager;
@@ -147,7 +148,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
-    public static int buildNumber = 139;
+    public static int buildNumber = 140;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -225,6 +226,7 @@ public class LaunchFrame extends JFrame {
                 if (noConfig) {
                     InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
                     installDialog.setVisible(true);
+                    forcedl = true;
                 }
 
                 LoadingDialog.setProgress(120);
@@ -515,6 +517,8 @@ public class LaunchFrame extends JFrame {
                     loader.setVisible(false);
                     instance.setVisible(true);
                     instance.toFront();
+                    if (LaunchFrame.forcedl)
+                        forcedl();
                 }
             }
         }
@@ -749,7 +753,10 @@ public class LaunchFrame extends JFrame {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
+                            if (!bypasslaunch) {
+                                bypasslaunch = false;
+                                launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
+                            }
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
@@ -796,7 +803,7 @@ public class LaunchFrame extends JFrame {
         public final String etag;
 
         private AssetInfo(File root, Element node) throws MalformedURLException {
-            url = new URL("http://resources.download.minecraft.net/" + getText(node, "Key", null));
+            url = new URL(DownloadUtils.masterRepo + "/mojang/resources/" + getText(node, "Key", null));
             name = getText(node, "Key", "");
             etag = getText(node, "ETag", "").replace("\"", "");
             size = Long.parseLong(getText(node, "Size", "0"));
@@ -1468,6 +1475,14 @@ public class LaunchFrame extends JFrame {
         }
 
         return i;
+    }
+
+    public static void forcedl () {
+        if (ModPack.getSelectedPack() != null) {
+            bypasslaunch = true;
+            instance.runGameUpdater(new LoginResponse("A:1:token:progwml6:b6e3d27b070240cda22adb9f61077027:83898b2861184900913741ffc46b6e10"));
+        }
+
     }
 
     public void doLaunch () {
