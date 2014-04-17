@@ -18,12 +18,11 @@ package net.ftb.util;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
-import java.lang.Runtime;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URI;
@@ -182,10 +181,10 @@ public class OSUtils {
     }
 
     /**
-     * Used to check if Linux is 64-bit
-     * @return true if 64-bit Linux
+     * Used to check if a posix OS is 64-bit
+     * @return true if 64-bit Posix OS
      */
-    public static boolean is64BitLinux() {
+    public static boolean is64BitPosix () {
         String line, result="";
         try {
             Process command = Runtime.getRuntime().exec("uname -m");
@@ -209,9 +208,9 @@ public class OSUtils {
         case WINDOWS:
             return is64BitWindows();
         case UNIX:
-            return is64BitLinux();
+            return is64BitPosix();
         case MACOSX:
-            return is64BitLinux();
+            return is64BitPosix();
         case OTHER:
             return true;
         default:
@@ -335,5 +334,6 @@ public class OSUtils {
     public static void cleanEnvVars(Map<String, String> environment) {
         environment.remove("_JAVA_OPTIONS");
         environment.remove("JAVA_TOOL_OPTIONS");
+        environment.remove("JAVA_OPTIONS");
     }
 }
