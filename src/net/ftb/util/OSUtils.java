@@ -17,10 +17,13 @@
 package net.ftb.util;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
+import java.lang.Runtime;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URI;
@@ -32,6 +35,8 @@ import java.util.Map;
 import lombok.Getter;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.winreg.JavaFinder;
+
 
 public class OSUtils {
     private static byte[] cachedMacAddress;
@@ -165,6 +170,69 @@ public class OSUtils {
             return OS.OTHER;
         }
     }
+
+    /**
+     * Used to check if Windows is 64-bit
+     * @return true if 64-bit Windows
+     */
+    public static boolean is64BitWindows() {
+        String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+        String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
+        return (arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")));
+    }
+
+    /**
+     * Used to check if Linux is 64-bit
+     * @return true if 64-bit Linux
+     */
+    public static boolean is64BitLinux() {
+        String line, result="";
+        try {
+            Process command = Runtime.getRuntime().exec("uname -m");
+            BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
+            while ((line = in.readLine()) != null) {
+                result += (line + "\n");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
+        return (result.contains("_64"));
+    }
+
+    /**
+     * Used to check if operating system is 64-bit
+     * @return true if 64-bit operating system
+     */
+    public static boolean is64BitOS() {
+        switch (getCurrentOS()) {
+        case WINDOWS:
+            return is64BitWindows();
+        case UNIX:
+            return is64BitLinux();
+        case MACOSX:
+            return is64BitLinux();
+        case OTHER:
+            return true;
+        default:
+            return true;
+        }
+    }
+
+    /**
+     * Used to get check if JVM is 64-bit
+     * @return true if 64-bit JVM
+     */
+    public static Boolean is64BitVM() {
+        Boolean bits64;
+        if (getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null) {
+            bits64 = JavaFinder.parseWinJavaVersion().is64bits;
+        } else {
+           bits64 = System.getProperty("sun.arch.data.model").equals("64");
+        }
+        return bits64;
+    }
+
 
     /**
      * Used to get the OS name for use in google analytics
