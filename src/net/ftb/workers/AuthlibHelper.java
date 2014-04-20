@@ -16,7 +16,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 public class AuthlibHelper {
 
     protected static String authenticateWithAuthlib (String user, String pass) {
-        String ID, displayName;
+        String displayName;
         if (user != null) {
             Logger.logInfo("Beginning authlib authentication attempt");
             YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
@@ -66,7 +66,6 @@ public class AuthlibHelper {
                 }
             }
             if (isValid(authentication)) {
-                ID = authentication.getSelectedProfile().getId();
                 displayName = authentication.getSelectedProfile().getName();
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
                     if ((authentication instanceof YggdrasilUserAuthentication)) {

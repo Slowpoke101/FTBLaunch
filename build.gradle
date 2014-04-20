@@ -53,6 +53,7 @@ shadow {
 	destinationDir = "${buildDir}/libs/"
 	artifactSet {
         include 'com.google.code.gson'
+		include 'com.google.guava'
 		include 'org.apache.logging.log4j'
 		include 'commons-io'
 		include 'org.apache.commons'
@@ -128,10 +129,11 @@ repositories {
 dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.google.code.gson:gson:2.2.4'
-	compile 'com.mojang:authlib:1.4.2'
+	compile 'com.mojang:authlib:1.5.5'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
+	compile 'com.google.guava:guava:16.0.1'
 	//commons lang3 via authlib
     //commons io via authlib
 	}

@@ -114,7 +114,6 @@ public class TexturePack {
             }
         }
         for (ModPack p : ModPack.getPackArray()) {
-            Logger.logInfo(p.getName() + " " + p.getDir() + " " + p.getMcVersion().replace(".", "_") + " " + (!p.hasCustomTP() ? "true" : "false"));
             if (!p.hasCustomTP() && !this.compatible.contains(p.getDir()) && masters.contains(p.getMcVersion().replace(".", "_")))
                 this.compatible.add(p.getDir());
         }
