@@ -13,9 +13,9 @@ DOWNLOAD_SERVER_PACK = Download Server ModPack
 
 # Console
 CONSOLE_TITLE = Console
-CONSOLE_COPYCLIP = Copy log to clipboard
+CONSOLE_COPYCLIP = Copy to clipboard
 CONSOLE_CLIP_CONFIRM = Do you want to copy the full log to your clipboard?
-CONSOLE_PASTEBIN = Paste my log to pastebin.com
+CONSOLE_PASTEBIN = Paste to pastebin.com
 CONSOLE_SUPPORT = Need support? Click me!
 
 # Map Tab
@@ -131,6 +131,12 @@ PROFILEDITOR_TITLE = Profile Editor
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warning! There is already a map by that name!
 MAPOVERRIDE_WISHOVERRIDE = Do you want to overwrite?
+
+# Force Kill MC
+KILL_MC = Kill Minecraft
+KILL_MC_TITLE = Kill Minecraft?
+KILL_MC_MESSAGE = Warning! This can cause corruption, and should only be used if the game is frozen!
+KILL_MC_CONFIRM = Are you sure you want to Kill the Minecraft Process?
 
 # Main
 MAIN_EXIT = EXIT

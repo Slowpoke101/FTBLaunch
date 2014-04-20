@@ -154,6 +154,7 @@ public class LaunchFrame extends JFrame {
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
+    public static boolean MCRunning = false;
     public static LauncherConsole con;
     public static String tempPass = "";
     public static Panes currentPane = Panes.MODPACK;
@@ -162,6 +163,9 @@ public class LaunchFrame extends JFrame {
     public static LoadingDialog loader;
 
     public static final String FORGENAME = "MinecraftForge.zip";
+
+    @Getter
+    private static ProcessMonitor procMonitor;
 
     protected enum Panes {
         NEWS, OPTIONS, MODPACK, MAPS, TEXTURE
@@ -354,7 +358,7 @@ public class LaunchFrame extends JFrame {
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
 
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.4.2") {
+                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.5") {
                 };
 
                 LoadingDialog.setProgress(170);
@@ -1036,6 +1040,7 @@ public class LaunchFrame extends JFrame {
         try {
             Process minecraftProcess = MinecraftLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(),
                     maxPermSize);
+            MCRunning = true;
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1046,7 +1051,7 @@ public class LaunchFrame extends JFrame {
                 minecraftProcess.exitValue();
             } catch (IllegalThreadStateException e) {
                 this.setVisible(false);
-                ProcessMonitor.create(minecraftProcess, new Runnable() {
+                procMonitor = ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
                     public void run () {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
@@ -1065,6 +1070,7 @@ public class LaunchFrame extends JFrame {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
+                        MCRunning = false;
                     }
                 });
             }
@@ -1137,7 +1143,7 @@ public class LaunchFrame extends JFrame {
             Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, resp.getUsername(), resp.getSessionID(),
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getUUID());
-
+            MCRunning = true;
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1148,7 +1154,7 @@ public class LaunchFrame extends JFrame {
                 minecraftProcess.exitValue();
             } catch (IllegalThreadStateException e) {
                 this.setVisible(false);
-                ProcessMonitor.create(minecraftProcess, new Runnable() {
+                procMonitor = ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
                     public void run () {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
@@ -1167,6 +1173,7 @@ public class LaunchFrame extends JFrame {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
+                        MCRunning = false;
                     }
                 });
             }

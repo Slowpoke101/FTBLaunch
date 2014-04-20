@@ -46,4 +46,10 @@ public class ProcessMonitor implements Runnable {
         monitorThread.start();
         return processMonitor;
     }
+
+    public void stop () {
+        if (proc != null)
+            proc.destroy();
+    }
+
 }
