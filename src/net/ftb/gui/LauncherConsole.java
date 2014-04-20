@@ -235,6 +235,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         getContentPane().add(scrollPane);
+        pack();
 
         refreshLogs();
         Logger.addListener(this);
