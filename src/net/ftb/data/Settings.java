@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
@@ -43,9 +45,12 @@ import net.ftb.util.winreg.JavaFinder;
 
 @SuppressWarnings("serial")
 public class Settings extends Properties {
+    @Getter
     private static Settings settings;
     private File configFile;
-    private boolean forceUpdate = false;
+    @Getter
+    @Setter
+    private boolean forceUpdateEnabled = false;
 
     static {
         try {
@@ -53,10 +58,6 @@ public class Settings extends Properties {
         } catch (IOException e) {
             Logger.logError("Failed to load settings", e);
         }
-    }
-
-    public static Settings getSettings () {
-        return settings;
     }
 
     public Settings(File file) throws IOException {
@@ -104,7 +105,7 @@ public class Settings extends Properties {
         return getProperty("javaPath", getDefaultJavaPath());
     }
 
-    private String getDefaultJavaPath() {
+    private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
         if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
@@ -115,13 +116,12 @@ public class Settings extends Properties {
     }
 
     public void setJavaPath (String path) {
-        if( getDefaultJavaPath().equals(path) || path.isEmpty() ) {
+        if (getDefaultJavaPath().equals(path) || path.isEmpty()) {
             remove("javaPath");
         } else {
             setProperty("javaPath", path);
         }
     }
-
 
     public String getStyle () {
         return getProperty("style", "defaultStyle.cfg");
@@ -129,14 +129,6 @@ public class Settings extends Properties {
 
     public void setStyle (String path) {
         setProperty("style", path);
-    }
-
-    public boolean getForceUpdate () {
-        return forceUpdate;
-    }
-
-    public void setForceUpdate (boolean force) {
-        forceUpdate = force;
     }
 
     public void setConfigFile (File path) {

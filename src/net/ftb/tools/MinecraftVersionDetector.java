@@ -67,7 +67,7 @@ public class MinecraftVersionDetector {
 
     public boolean shouldUpdate (String jarFilePath) {
         String requiredVersion = ModPack.getSelectedPack().getMcVersion();
-        if (Settings.getSettings().getForceUpdate()) {
+        if (Settings.getSettings().isForceUpdateEnabled()) {
             return true;
         }
         String version = getMinecraftVersion(jarFilePath);

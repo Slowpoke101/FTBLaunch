@@ -91,6 +91,44 @@ public class DownloadUtils extends Thread {
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
+     * @param backupLink - the link of the location to backup to if the repo copy isn't found
+     * @return - the direct static link or the backup link if the file isn't found
+     */
+    public static String getStaticCreeperhostLinkOrBackup (String file, String backupLink) {
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+                : Locations.masterRepo;
+        resolved += "/FTB2/static/" + file;
+        HttpURLConnection connection = null;
+        boolean good = false;
+        try {
+            connection = (HttpURLConnection) new URL(resolved).openConnection();
+            if (connection.getResponseCode() != 200) {
+                for (String server : downloadServers.values()) {
+                    if (connection.getResponseCode() != 200) {
+                        resolved = "http://" + server + "/FTB2/static/" + file;
+                        connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    } else {
+                        if (connection.getResponseCode() == 200)
+                            good = true;
+                        break;
+                    }
+                }
+            } else if (connection.getResponseCode() == 200) {
+                good = true;
+            }
+        } catch (IOException e) {
+        }
+        connection.disconnect();
+        if (good)
+            return resolved;
+        else {
+            Logger.logWarn("Using backupLink for " + file);
+            return backupLink;
+        }
+    }
+
+    /**
+     * @param file - the name of the file, as saved to the repo (including extension)
      * @return - the direct link
      */
     public static String getStaticCreeperhostLink (String file) {

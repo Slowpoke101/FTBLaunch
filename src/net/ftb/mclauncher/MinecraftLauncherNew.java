@@ -33,7 +33,6 @@ import java.util.Set;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
-import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.LogLevel;
@@ -46,8 +45,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 public class MinecraftLauncherNew {
-    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args, String assetIndex,
-            String rmax, String maxPermSize, String version, String auth_UUID) throws IOException {
+    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args,
+            String assetIndex, String rmax, String maxPermSize, String version, String auth_UUID) throws IOException {
 
         assetDir = syncAssets(assetDir, assetIndex);
 

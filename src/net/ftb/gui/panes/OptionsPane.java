@@ -98,7 +98,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 saveSettingsInto(OptionsPane.this.settings);
             }
         });
-        tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
+        tglbtnForceUpdate.getModel().setPressed(settings.isForceUpdateEnabled());
         add(tglbtnForceUpdate);
 
         currentRam = new JLabel();
@@ -225,7 +225,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 aod.setVisible(true);
             }
         });
-        advancedOptionsBtn.getModel().setPressed(settings.getForceUpdate());
+        advancedOptionsBtn.getModel().setPressed(settings.isForceUpdateEnabled());
         add(advancedOptionsBtn);
 
         if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null) {
@@ -242,7 +242,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     public void saveSettingsInto (Settings settings) {
         settings.setInstallPath(installFolderTextField.getText());
-        settings.setForceUpdate(tglbtnForceUpdate.isSelected());
+        settings.setForceUpdateEnabled(tglbtnForceUpdate.isSelected());
         settings.setRamMax(String.valueOf(ramMaximum.getValue()));
         settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
         settings.setConsoleActive(chckbxShowConsole.isSelected());

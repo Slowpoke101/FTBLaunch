@@ -16,6 +16,7 @@ public class Locations {
     public static final String chRepo = new String("http://new.creeperrepo.net");
     public static final String curseRepo = new String("http://ftb.cursecdn.com");
     //this changes based on the primary automatic server in the balancing logic
+    //DO NOT ACCESS UNILL 1st DL thread has finished setting up!!!!
     public static String masterRepo = new String("http://new.creeperrepo.net");
     public static String masterRepoNoHTTP = new String("new.creeperrepo.net");
     // used in mirroring logic

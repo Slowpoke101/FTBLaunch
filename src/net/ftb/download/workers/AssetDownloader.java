@@ -100,7 +100,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
                     }
                     if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0)) {
-                        if ((assetHash != null && !assetHash.toLowerCase().equals(hash))) {
+                        if ((assetHash != null && !assetHash.toLowerCase().equals(remoteHash))) {
                             asset.local.delete();
                         } else {
                             downloadSuccess = true;

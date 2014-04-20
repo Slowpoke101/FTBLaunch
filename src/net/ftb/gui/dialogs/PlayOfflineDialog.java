@@ -28,6 +28,7 @@ import javax.swing.JTextArea;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
+import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
@@ -53,7 +54,9 @@ public class PlayOfflineDialog extends JDialog {
 
                 } else {
                     setVisible(false);
-                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), username, "offlinemods", pack.getMaxPermSize(), "1234567890");
+                    //TODO make sure to cache UUID's for 1.7.9+
+                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
+                            new LoginResponse("A:1:token:" + username + ":offlinemods:1234567890"));
                 }
             }
         });

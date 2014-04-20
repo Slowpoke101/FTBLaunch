@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import lombok.Getter;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
@@ -41,11 +42,17 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
-    private String name, author, version, url, mcversion, logoName, imageName, info, resolution, sep = File.separator;
+    @Getter
+    private String name, author, version, url, mcversion, logoName, imageName, info, resolution;
+    private String sep = File.separator;
+    @Getter
     private Image logo, image;
+    @Getter
     private String[] compatible;
+    @Getter
     private int index;
-    private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
+    @Getter
+    private final static ArrayList<TexturePack> texturePackArray = new ArrayList<TexturePack>();
     private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
 
     public static void addListener (TexturePackListener listener) {
@@ -58,20 +65,16 @@ public class TexturePack {
     }
 
     public static void addTexturePack (TexturePack texturePack) {
-        synchronized (texturePacks) {
-            texturePacks.add(texturePack);
+        synchronized (texturePackArray) {
+            texturePackArray.add(texturePack);
         }
         for (TexturePackListener listener : listeners) {
             listener.onTexturePackAdded(texturePack);
         }
     }
 
-    public static ArrayList<TexturePack> getTexturePackArray () {
-        return texturePacks;
-    }
-
     public static TexturePack getTexturePack (int i) {
-        return texturePacks.get(i);
+        return texturePackArray.get(i);
     }
 
     /**
@@ -154,58 +157,6 @@ public class TexturePack {
             Logger.logError(e.getMessage(), e);
         }
         return result;
-    }
-
-    public int getIndex () {
-        return index;
-    }
-
-    public String getName () {
-        return name;
-    }
-
-    public String getAuthor () {
-        return author;
-    }
-
-    public String getVersion () {
-        return version;
-    }
-
-    public String getUrl () {
-        return url;
-    }
-
-    public Image getLogo () {
-        return logo;
-    }
-
-    public Image getImage () {
-        return image;
-    }
-
-    public String getMcVersion () {
-        return mcversion;
-    }
-
-    public String getInfo () {
-        return info;
-    }
-
-    public String getLogoName () {
-        return logoName;
-    }
-
-    public String getImageName () {
-        return imageName;
-    }
-
-    public String[] getCompatible () {
-        return compatible;
-    }
-
-    public String getResolution () {
-        return resolution;
     }
 
     /**
