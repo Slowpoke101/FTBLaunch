@@ -161,6 +161,7 @@ public class LaunchFrame extends JFrame {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
+    public static boolean downloadServersReady_ = false;
 
     public static final String FORGENAME = "MinecraftForge.zip";
 
@@ -239,7 +240,18 @@ public class LaunchFrame extends JFrame {
                     }
                 }
                 loader = new LoadingDialog();
+                loader.setModal(false);
                 loader.setVisible(true);
+
+                // use basic check and sleep lock
+                // Fix later
+                while (!downloadServersReady_) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                }
+
 
                 I18N.setupLocale();
                 I18N.setLocale(Settings.getSettings().getLocale());
@@ -636,35 +648,7 @@ public class LaunchFrame extends JFrame {
     }
 
     public static void downloadServersReady () {
-        if (loader != null) {
-            loader.releaseModal();
-        } else {
-            // Download server has been found before the window could be painted
-            // Wait until it's ready
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run () {
-                    int tries = 0;
-                    if (con != null) {
-                        // Should be always be hit or the console will never show
-                        con.setVisible(Settings.getSettings().getConsoleActive());
-                        con.scrollToBottom();
-                    }
-
-                    while (loader == null && con == null) {
-                        // Pretty much impossible to hit this, unless loading UI styles takes 
-                        // longer than finding and testing a download server... 
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                        }
-                    }
-
-                    loader.releaseModal();
-                }
-            });
-            thread.start();
-        }
+        downloadServersReady_ = true;
     }
 
     public static void checkDoneLoading () {
