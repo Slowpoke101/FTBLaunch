@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -48,7 +49,10 @@ public class TexturePack {
     @Getter
     private Image logo, image;
     @Getter
-    private String[] compatible;
+    private List<String> compatible = new ArrayList<String>();
+    @Getter
+    private List<String> masters = new ArrayList<String>();
+
     @Getter
     private int index;
     @Getter
@@ -96,9 +100,24 @@ public class TexturePack {
         String installPath = OSUtils.getDynamicStorageLocation();
         logoName = logo;
         imageName = image;
-        this.compatible = compatible.split(",");
+        String[] tmp = compatible.split(",");
+        for (String s : tmp) {
+            this.compatible.add(s);
+        }
         this.info = info;
         this.resolution = resolution;
+        for (Iterator<String> it = this.compatible.iterator(); it.hasNext();) {
+            String s = it.next();
+            if (s.toLowerCase().startsWith("master")) {
+                masters.add(s.replace("master_", ""));
+                it.remove();
+            }
+        }
+        for (ModPack p : ModPack.getPackArray()) {
+            Logger.logInfo(p.getName() + " " + p.getDir() + " " + p.getMcVersion().replace(".", "_") + " " + (!p.hasCustomTP() ? "true" : "false"));
+            if (!p.hasCustomTP() && !this.compatible.contains(p.getDir()) && masters.contains(p.getMcVersion().replace(".", "_")))
+                this.compatible.add(p.getDir());
+        }
         File tempDir = new File(installPath, "TexturePacks" + sep + name);
         File verFile = new File(tempDir, "version");
         URL url_;
@@ -164,7 +183,7 @@ public class TexturePack {
      * @return - the compatible pack based on the selected texture pack
      */
     public String getSelectedCompatible () {
-        return compatible[LaunchFrame.getSelectedTPInstallIndex()].trim();
+        return compatible.get(LaunchFrame.getSelectedTPInstallIndex()).trim();
     }
 
     public boolean isCompatible (String packName) {

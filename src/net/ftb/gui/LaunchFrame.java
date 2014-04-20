@@ -1244,7 +1244,7 @@ public class LaunchFrame extends JFrame {
      * updates the tpInstall to the available ones
      * @param locations - the available locations to install the tp to
      */
-    public static void updateTpInstallLocs (String[] locations) {
+    public static void updateTpInstallLocs (List<String> locations) {
         tpInstallLocation.removeAllItems();
         for (String location : locations) {
             if (!location.isEmpty()) {

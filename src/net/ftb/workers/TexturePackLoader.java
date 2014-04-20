@@ -57,7 +57,7 @@ public class TexturePackLoader extends Thread {
             TexturepackPane.loaded = true;
             LaunchFrame.checkDoneLoading();
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error loading Texture packs", e);
         }
     }
 }

@@ -21,6 +21,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -68,10 +69,10 @@ public class TexturePackFilterDialog extends JDialog {
         ArrayList<String> comp = new ArrayList<String>();
         comp.add("All");
         for (int i = 0; i < textures; i++) {
-            String[] s = TexturePack.getTexturePack(i).getCompatible();
-            for (int j = 0; j < s.length; j++) {
-                if (!comp.contains(ModPack.getPack(s[j].trim()).getName())) {
-                    comp.add(ModPack.getPack(s[j].trim()).getName());
+            List<String> s = TexturePack.getTexturePack(i).getCompatible();
+            for (int j = 0; j < s.size(); j++) {
+                if (!comp.contains(ModPack.getPack(s.get(j).trim()).getName())) {
+                    comp.add(ModPack.getPack(s.get(j).trim()).getName());
                 }
             }
         }
