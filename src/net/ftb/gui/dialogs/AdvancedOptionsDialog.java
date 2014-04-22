@@ -173,7 +173,7 @@ public class AdvancedOptionsDialog extends JDialog {
             public void keyPressed (KeyEvent e) {}
             @Override
             public void keyReleased (KeyEvent e) {
-                if((OS.CURRENT == OS.WINDOWS && !javaPath.getText().endsWith(".exe")) || !new File(javaPath.getText()).isFile())
+                if(!new File(javaPath.getText()).isFile())
                     javaPath.setBackground(Color.RED);
                 else
                     javaPath.setBackground(new Color(40, 40, 40));
