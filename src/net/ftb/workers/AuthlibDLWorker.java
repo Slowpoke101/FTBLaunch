@@ -32,6 +32,7 @@ import javax.swing.SwingWorker;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
 
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
@@ -59,10 +60,11 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         }
         if (!binDir.exists())
             binDir.mkdirs();
-        Logger.logInfo("Downloading Jars");
         if (!downloadJars()) {
-            Logger.logError("Download Failed");
-            return false;
+            Logger.logError("Authlib Download Failed");
+            if (!new File(binDir + File.separator + "authlib-" + authlibVersion + ".jar").exists())
+                return false;
+            Logger.logInfo("Local Authlib copy exists: trying to load it anyway");
         }
         setStatus("Adding Authlib to Classpath");
         Logger.logInfo("Adding Authlib to Classpath");
@@ -103,7 +105,6 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         }
     }
 
-    //TODO ASAP check hash of remote file against local file to avoid DL of file when possible
     protected boolean downloadJars () {
         try {
             jarURLs = new URL("https://libraries.minecraft.net/com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
@@ -113,9 +114,11 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         }
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[1];
+        String hash = "";
         for (int i = 0; i < 1; i++) {
             try {
                 HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
+                hash = conn.getHeaderField("ETag").replace("\"", "");
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
@@ -124,11 +127,18 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 return false;
             }
         }
-
+        boolean downloadSuccess = false;
+        if (hash != null && !hash.equals("") && new File(binDir, getFilename(jarURLs)).exists())
+            try {
+                if (hash.toLowerCase().equals(DownloadUtils.fileMD5(new File(binDir, getFilename(jarURLs))).toLowerCase())) {
+                    Logger.logInfo("Local Authlib Version is good, skipping Download");
+                    return true;
+                }
+            } catch (Exception e1) {
+            }
         int attempt = 0;
         final int attempts = 5;
         int lastfile = -1;
-        boolean downloadSuccess = false;
         while (!downloadSuccess && (attempt < attempts)) {
             try {
                 attempt++;

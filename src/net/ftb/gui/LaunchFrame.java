@@ -140,7 +140,7 @@ public class LaunchFrame extends JFrame {
     private static LaunchFrame instance = null;
     private static String version = "1.3.9";
     public static boolean canUseAuthlib;
-
+    public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
     protected static UserManager userManager;
@@ -400,10 +400,10 @@ public class LaunchFrame extends JFrame {
 
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
-
+                
                 UpdateChecker updateChecker = new UpdateChecker(buildNumber);
                 if (updateChecker.shouldUpdate()) {
-                    LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
+                    LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker, minUsable);
                     p.setVisible(true);
                 }
 

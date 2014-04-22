@@ -336,6 +336,9 @@ public class DownloadUtils extends Thread {
 
                     if (element != null && element.isJsonObject()) {
                         JsonObject jso = element.getAsJsonObject();
+                        if (jso != null && jso.get("minUsableLauncherVersion") != null) {
+                            LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
+                        }
                         if (jso != null && jso.get("repoSplitCurse") != null) {
                             JsonElement e = jso.get("repoSplitCurse");
                             if (Settings.getSettings().getDebugLauncher()) {

@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -35,14 +36,16 @@ import net.ftb.util.OSUtils;
 
 public class LauncherUpdateDialog extends JDialog {
     private JLabel messageLbl;
+    private JLabel extraText;
     private JLabel updateLbl;
     private JButton showChangeLog;
     private JButton update;
     private JButton abort;
+    private boolean usable;
 
-    public LauncherUpdateDialog(final UpdateChecker updateChecker) {
+    public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion) {
         super(LaunchFrame.getInstance(), true);
-
+        this.usable = LaunchFrame.getInstance().buildNumber > deadVersion;
         setupGui();
 
         showChangeLog.addActionListener(new ActionListener() {
@@ -79,6 +82,8 @@ public class LauncherUpdateDialog extends JDialog {
         panel.setLayout(layout);
 
         messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
+        extraText = new JLabel(!usable ? I18N.getLocaleString("LUNCHERUPDATE_CURRENTDEAD") : "");
+        extraText.setForeground(Color.red);
         JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
         showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
         update = new JButton(I18N.getLocaleString("MAIN_YES"));
@@ -88,6 +93,7 @@ public class LauncherUpdateDialog extends JDialog {
         updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
         panel.add(messageLbl);
+        panel.add(extraText);
         panel.add(showChangeLog);
         panel.add(updateLbl);
         panel.add(update);
@@ -99,15 +105,17 @@ public class LauncherUpdateDialog extends JDialog {
         hSpring = Spring.constant(10);
 
         layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, extraText, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
-
         columnWidth = Spring.width(messageLbl);
+        columnWidth = Spring.max(columnWidth, Spring.width(extraText));
         columnWidth = Spring.max(columnWidth, Spring.width(showChangeLog));
         columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
         layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, extraText, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
 
         hSpring = Spring.sum(hSpring, Spring.constant(10));
@@ -126,6 +134,11 @@ public class LauncherUpdateDialog extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
 
         vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.NORTH, extraText, vSpring, SpringLayout.NORTH, panel);
+
+        vSpring = Spring.sum(vSpring, Spring.height(extraText));
         vSpring = Spring.sum(vSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, showChangeLog, vSpring, SpringLayout.NORTH, panel);

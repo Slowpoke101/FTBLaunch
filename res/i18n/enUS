@@ -78,6 +78,7 @@ UPDATE_DOWNGRADE = Do you wish to downgrade?
 LUNCHERUPDATE_ISAVAILABLE = of the launcher is available.
 LUNCHERUPDATE_CHANGELOG = View Changelog
 LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update Available
+LUNCHERUPDATE_CURRENTDEAD = Your Current Launcher Must be updated for one of the following reasons: \n not being able to properly launch/update minecraft or packs!
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = A new mod pack version is available!
