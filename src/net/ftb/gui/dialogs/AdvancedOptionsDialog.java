@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -24,6 +25,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,6 +39,7 @@ import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
+import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -156,7 +161,24 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
-        javaPath = new JTextField(settings.getJavaPath());
+        javaPath = new JTextField();
+        if(settings.getJavaPath() != null)
+            javaPath.setText(settings.getJavaPath());
+        else
+            javaPath.setBackground(Color.RED);
+        javaPath.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped (KeyEvent e) {}
+            @Override
+            public void keyPressed (KeyEvent e) {}
+            @Override
+            public void keyReleased (KeyEvent e) {
+                if((OS.CURRENT == OS.WINDOWS && !javaPath.getText().endsWith(".exe")) || !new File(javaPath.getText()).isFile())
+                    javaPath.setBackground(Color.RED);
+                else
+                    javaPath.setBackground(new Color(40, 40, 40));
+            }
+        });
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
         additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
