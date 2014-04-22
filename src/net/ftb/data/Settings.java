@@ -40,6 +40,7 @@ import lombok.Setter;
 import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.winreg.JavaFinder;
 
@@ -102,38 +103,22 @@ public class Settings extends Properties {
     }
 
     public String getJavaPath () {
-        if(getProperty("javaPath") != null)
-           return getProperty("javaPath");
-        if(getDefaultJavaPath() != "")
-            return getProperty("javaPath", getDefaultJavaPath());
-        Logger.logError("Unable to find java; point to java in Advanced Options or game will fail to launch.");
-        return null;
+        if(getProperty("javaPath", getDefaultJavaPath()) == null)
+            ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
+        return getProperty("javaPath", getDefaultJavaPath());
     }
 
     private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
-        String defaultPath = "";
-        try{
-            if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
-                defaultPath = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
-            else
-                defaultPath = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
-        } catch(NullPointerException e){
-            Logger.logWarn("Could not find java automatically.");
-        }
+        String defaultPath = null;
+        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null)
+            defaultPath = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
+        else if(System.getProperty("java.home") != null)
+            defaultPath = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
         return defaultPath;
     }
 
     public void setJavaPath (String path) {
-        if(!path.isEmpty()){
-            if((OS.CURRENT == OS.WINDOWS && !path.endsWith(".exe")) || !new File(path).isFile()){
-                if(OS.CURRENT == OS.WINDOWS && !path.endsWith(".exe"))
-                    Logger.logError("\"" + path + "\" is not a .exe; point to java.exe in Advanced Options or the game will not run!");
-                else
-                    Logger.logError("\"" + path + "\" is not a file; point to java in Advanced Options or the game will not run!");
-                return;
-            }
-        }
         if (getDefaultJavaPath().equals(path) || path.isEmpty()) {
             remove("javaPath");
         } else {
