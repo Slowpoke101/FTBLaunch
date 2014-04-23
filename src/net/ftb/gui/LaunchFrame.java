@@ -178,6 +178,11 @@ public class LaunchFrame extends JFrame {
      * @param args - CLI arguments
      */
     public static void main (String[] args) {
+        File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
+        if (!dynamicDir.exists()) {
+            dynamicDir.mkdirs();
+        }
+
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
@@ -268,10 +273,6 @@ public class LaunchFrame extends JFrame {
                 File installDir = new File(Settings.getSettings().getInstallPath());
                 if (!installDir.exists()) {
                     installDir.mkdirs();
-                }
-                File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-                if (!dynamicDir.exists()) {
-                    dynamicDir.mkdirs();
                 }
 
                 LoadingDialog.setProgress(130);
