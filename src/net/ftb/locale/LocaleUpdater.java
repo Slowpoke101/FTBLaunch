@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
@@ -104,6 +105,7 @@ public class LocaleUpdater extends Thread {
             updateFiles();
         }
         I18N.addFiles();
+        LaunchFrame.i18nLoaded = true;
     }
 
     private void cleanUpFiles () {
