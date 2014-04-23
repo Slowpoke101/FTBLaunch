@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -37,10 +38,16 @@ public class LocaleUpdater extends Thread {
     private File local = new File(root, "locale" + File.separator + "version");
     private File archive = new File(root, "locales.zip");
     private int remoteVer;
+    private boolean downloadOnly = false;
 
     public LocaleUpdater() {
         setName("Locale Updater");
         setPriority(MIN_PRIORITY);
+    }
+
+    public LocaleUpdater(boolean b) {
+        this();
+        downloadOnly = b;
     }
 
     private void updateFiles () {
@@ -74,6 +81,15 @@ public class LocaleUpdater extends Thread {
             tmp.mkdirs();
         }
         cleanUpFiles();
+
+        while (!Locations.serversLoaded) {
+            try {
+                Thread.sleep(100);
+                Logger.logInfo("Waiting for Locations.serversLoaded");
+            } catch (InterruptedException e) {
+            }
+        }
+
         try {
             URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
             Scanner scanner = new Scanner(connection.getInputStream());
@@ -104,8 +120,10 @@ public class LocaleUpdater extends Thread {
         } else {
             updateFiles();
         }
-        I18N.addFiles();
-        LaunchFrame.i18nLoaded = true;
+        if (!downloadOnly) {
+            I18N.addFiles();
+            LaunchFrame.i18nLoaded = true;
+        }
     }
 
     private void cleanUpFiles () {

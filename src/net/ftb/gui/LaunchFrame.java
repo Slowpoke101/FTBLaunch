@@ -85,6 +85,7 @@ import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
+import net.ftb.gui.LaunchFrameHelpers;
 import net.ftb.gui.panes.ILauncherPane;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -139,6 +140,7 @@ public class LaunchFrame extends JFrame {
      */
     @Getter
     private static LaunchFrame instance = null;
+    @Getter
     private static String version = "1.3.9";
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
@@ -163,7 +165,6 @@ public class LaunchFrame extends JFrame {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
-    public static boolean downloadServersReady_ = false;
 
     public static final String FORGENAME = "MinecraftForge.zip";
 
@@ -179,23 +180,34 @@ public class LaunchFrame extends JFrame {
      * @param args - CLI arguments
      */
     public static void main (String[] args) {
+        /*
+         *  Create dynamic storage location as soon as possible
+         */
         File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
         if (!dynamicDir.exists()) {
             dynamicDir.mkdirs();
         }
 
+        // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
+        System.setProperty("java.net.preferIPv4Stack", "true");
+
+        /*
+         *  Posts information about OS, JVM and launcher version into Google Analytics
+         */
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
-        if (!new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").exists()) {
+        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + version + ".txt").exists()) {
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + version + " OS " + OSUtils.getOSString());
             try {
-                new File(Settings.getSettings().getInstallPath(), "FTBOSSent" + version + ".txt").createNewFile();
+                new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + version + ".txt").createNewFile();
             } catch (IOException e) {
                 Logger.logError("Error creating os cache text file");
             }
         }
+
+        LaunchFrameHelpers.printInfo();
 
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
@@ -205,32 +217,19 @@ public class LaunchFrame extends JFrame {
             new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
         }
 
+        /*
+         * Resolves servers in background thread
+         */
         DownloadUtils thread = new DownloadUtils();
         thread.start();
 
-        Logger.logInfo("FTBLaunch starting up (version " + version + ")");
-        Logger.logInfo("Java version: " + System.getProperty("java.version") + " (" + (OSUtils.is64BitOS() ? "64-bit" : "32-bit") + ")");
-        Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
-        Logger.logInfo("Java home: " + System.getProperty("java.home"));
-        Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " + System.getProperty("java.vm.specification.version") + " by "
-                + System.getProperty("java.vm.specification.vendor"));
-        Logger.logInfo("Java vm: " + System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
-        Logger.logInfo("OS: " + (OSUtils.is64BitOS() ? "64-bit" : "32-bit") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
-        Logger.logInfo("Launcher Install Dir: " + Settings.getSettings().getInstallPath());
-        Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
-
-        if (!OSUtils.is64BitOS()) {
-            Logger.logWarn("Warning: 32 Bit operating system. 64 Bit is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
-        }
-
-        if (OSUtils.is64BitOS() && !OSUtils.is64BitVM()) {//unfortunately the easy to find DL links are for 32 bit java
-            Logger.logWarn("Warning: 32 Bit Java in 64 Bit operating system. 64 Bit Java is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
-        }
-
-        // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
-        System.setProperty("java.net.preferIPv4Stack", "true");
+        /*
+         * Setup GUI style & create and show Splash screen in EDT
+         * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
+         *  => If this guideline is followed then GUI should work smoothly
+         */
         EventQueue.invokeLater(new Runnable() {
-            @Override
+            @Override 
             public void run () {
                 StyleUtil.loadUiStyles();
                 try {
@@ -250,19 +249,25 @@ public class LaunchFrame extends JFrame {
                 loader.setModal(false);
                 loader.setVisible(true);
 
-                // use basic check and sleep lock
-                // Fix later
-                while (!downloadServersReady_) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
+                if(!noConfig) {
+                    /*
+                     * Setup locales,  set locale and check  for new locales
+                     * in background thread. Download new locales.
+                     * Assume we have locale files already downloaded
+                     */
+                    I18N.setupLocale();
+                    I18N.setLocale(Settings.getSettings().getLocale());
+                    // nothing will set i18nLoaded, but it's ready
+                    i18nLoaded = true;
+                    I18N.downloadLocale();
+
                 }
-
-
-                I18N.setupLocale();
-                I18N.setLocale(Settings.getSettings().getLocale());
-                LoadingDialog.setProgress(110);
+                else {
+                    I18N.setupLocale();
+                    I18N.setLocale(Settings.getSettings().getLocale());
+                    i18nLoaded = true;
+                    I18N.downloadLocale();
+                }
 
                 if (noConfig) {
                     InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
@@ -285,88 +290,8 @@ public class LaunchFrame extends JFrame {
                 con = new LauncherConsole();
                 con.setVisible(Settings.getSettings().getConsoleActive());
                 con.scrollToBottom();
-                File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
 
-                try {
-                    if (!credits.exists()) {
-                        FileOutputStream fos = new FileOutputStream(credits);
-                        OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                        osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
-                        osw.write("-------------------------------" + System.getProperty("line.separator"));
-                        osw.write("Launcher Developers:" + System.getProperty("line.separator"));
-                        osw.write("jjw123" + System.getProperty("line.separator"));
-                        osw.write("unv_annihilator" + System.getProperty("line.separator"));
-                        osw.write("ProgWML6" + System.getProperty("line.separator"));
-                        osw.write("Major Launcher Dev Contributors" + System.getProperty("line.separator"));
-                        osw.write("LexManos" + System.getProperty("line.separator"));
-                        osw.write("Viper-7" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Web Developers:" + System.getProperty("line.separator"));
-                        osw.write("Captainnana" + System.getProperty("line.separator"));
-                        osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                        osw.write("Modpack Team:" + System.getProperty("line.separator"));
-                        osw.write("Lathanael" + System.getProperty("line.separator"));
-                        osw.write("Watchful11" + System.getProperty("line.separator"));
-                        osw.write("Jadedcat" + System.getProperty("line.separator"));
-                        osw.write("Eyamaz" + System.getProperty("line.separator"));
-
-                        osw.flush();
-
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
-                    }
-
-                    LoadingDialog.setProgress(150);
-
-                    if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS: " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
-                        Settings.getSettings().setLoaded(true);
-                    }
-
-                } catch (FileNotFoundException e1) {
-                    Logger.logError(e1.getMessage());
-                } catch (IOException e1) {
-                    Logger.logError(e1.getMessage());
-                }
-                File stamp = new File(OSUtils.getDynamicStorageLocation(), "stamp");
-                long unixTime = System.currentTimeMillis() / 1000L;
-                try {
-                    if (!stamp.exists()) {
-                        FileOutputStream fos = new FileOutputStream(stamp);
-                        OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                        osw.write(String.valueOf(unixTime));
-                        osw.flush();
-                        Logger.logInfo("Reporting daily use");
-                        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-                    } else {
-                        FileInputStream fis = new FileInputStream(stamp);
-                        int content;
-                        StringBuilder timeBuilder = new StringBuilder();
-                        while ((content = fis.read()) != -1) {
-                            char c = (char) content;
-                            timeBuilder.append(String.valueOf(c));
-                        }
-                        String time = timeBuilder.toString();
-                        long unixts = Long.valueOf(time);
-                        unixts = unixts + (24 * 60 * 60);
-                        if (unixts < unixTime) {
-                            FileOutputStream fos = new FileOutputStream(stamp);
-                            OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                            osw.write(String.valueOf(unixTime));
-                            osw.flush();
-                            Logger.logInfo("Reporting daily use");
-                            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-
-                        }
-                    }
-                } catch (FileNotFoundException e1) {
-                    Logger.logError(e1.getMessage());
-                } catch (IOException e1) {
-                    Logger.logError(e1.getMessage());
-                }
+                LaunchFrameHelpers.googleAnalytics();
 
                 LoadingDialog.setProgress(160);
 
@@ -377,13 +302,18 @@ public class LaunchFrame extends JFrame {
                 while (!i18nLoaded) {
                     try {
                         Thread.sleep(100);
+                        Logger.logInfo("Waiting for LaunchFrame.i18nLoaded. BLOCKING GUI!!");
                     } catch (InterruptedException e) {
                     }
                 }
                 
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
-
+                
+                /*
+                 * RFC: does this block? Does not look like a proper swingworker
+                 * A: convert to thread. not allow pressing launch till it's initialized
+                 */
                 AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.5") {
                 };
 
@@ -415,11 +345,18 @@ public class LaunchFrame extends JFrame {
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
                 
+                Logger.logInfo("updateChecker BLOCKING start");
+                /* RFC:
+                 * TODO: This is BAD code. Getting > 60 blocking from here! FIX!
+                 * A: put in own thread
+                 */
+                
                 UpdateChecker updateChecker = new UpdateChecker(buildNumber);
                 if (updateChecker.shouldUpdate()) {
                     LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker, minUsable);
                     p.setVisible(true);
                 }
+                Logger.logInfo("updateChecker BLOCKING end");
 
                 LoadingDialog.setProgress(180);
             };
@@ -642,6 +579,9 @@ public class LaunchFrame extends JFrame {
         tabbedPane.add(modPacksPane, 2);
         tabbedPane.add(mapsPane, 3);
         tabbedPane.add(tpPane, 4);
+        /*
+         * TODO: This will block. Network.
+         */
         setNewsIcon();
         tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
         tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
@@ -659,10 +599,6 @@ public class LaunchFrame extends JFrame {
                 }
             }
         });
-    }
-
-    public static void downloadServersReady () {
-        downloadServersReady_ = true;
     }
 
     public static void checkDoneLoading () {

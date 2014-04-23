@@ -324,7 +324,9 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
+        setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
+            Logger.logInfo("DownloadUtils.run() starting");
             downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             Random r = new Random();
             double choice = r.nextDouble();
@@ -401,9 +403,12 @@ public class DownloadUtils extends Thread {
             // This line absolutely must be hit, or the console will not be shown
             // and the user/we will not even know why an error has occurred. 
             Logger.logInfo("DL ready");
-            LaunchFrame.downloadServersReady();
 
             try {
+                /* 
+                 * TODO: this will need some work. LaunchFrame.getInstance() WAS ALWAYS null and this code
+                 * actually is ecexuted
+                 */
                 if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
                     AdvancedOptionsDialog.setDownloadServers();
                 }

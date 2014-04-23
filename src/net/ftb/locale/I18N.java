@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -67,8 +68,31 @@ public class I18N {
         synchronized (localeIndices) {
             localeIndices.put(0, "enUS");
         }
+        addFiles();
+        LaunchFrame.i18nLoaded = true;
+    }
+
+    /**
+     * Download locales, set available locales and load fallback locale
+     */
+    public static void downloadSetupLocale () {
+        localeFiles.put("enUS", "English");
+        synchronized (localeIndices) {
+            localeIndices.put(0, "enUS");
+        }
         try {
             new LocaleUpdater().start();
+        } catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Download locales
+     */
+    public static void downloadLocale () {
+        try {
+            new LocaleUpdater(true).start();
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }

@@ -32,6 +32,7 @@ public class LogThread extends Thread {
 
     public void run () {
         LogEntry entry;
+        setName("Log dispatcher");
         try {
             while ((entry = logQueue.take()) != null) {
                 if (listeners.isEmpty()) {
