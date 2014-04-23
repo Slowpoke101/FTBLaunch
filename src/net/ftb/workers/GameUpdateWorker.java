@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,6 +35,10 @@ import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
+import org.apache.commons.io.FileUtils;
+
+import com.google.common.collect.Lists;
+
 /**
  * SwingWorker that downloads Minecraft. Returns true if successful, false if it
  * fails.
@@ -41,7 +46,7 @@ import net.ftb.util.OSUtils;
 public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
     protected String status, reqVersion;
     protected File binDir;
-    protected URL[] jarURLs;
+    protected List<URL> jarURLs = Lists.newArrayList();
     protected boolean debugVerbose = Settings.getSettings().getDebugLauncher();
     protected String debugTag = "debug: GameUpdateWorker: ";
 
@@ -82,22 +87,26 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
     protected boolean loadJarURLs () {
         Logger.logInfo("Loading Jar URLs");
-        String[] jarList = { "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
-        jarURLs = new URL[jarList.length + 2];
+        String[] jarList = { "org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar", "org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar", "net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar",
+                "net/sf/jopt-simple/jopt-simple/4.5/jopt-simple-4.5.jar", "net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar" };
         try {
-            jarURLs[0] = new URL("http://assets.minecraft.net/" + reqVersion.replace(".", "_") + "/minecraft.jar");
+            jarURLs.add(new URL("http://assets.minecraft.net/" + reqVersion.replace(".", "_") + "/minecraft.jar"));
             for (int i = 0; i < jarList.length; i++) {
-                jarURLs[i + 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + jarList[i]);
+                Logger.logInfo("https://libraries.minecraft.net/" + jarList[i]);
+                jarURLs.add(new URL("https://libraries.minecraft.net/" + jarList[i]));
             }
             switch (OSUtils.getCurrentOS()) {
             case WINDOWS:
-                jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/windows_natives.jar");
+                jarURLs.add(new URL("https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-windows.jar"));
+                jarURLs.add(new URL("https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-windows.jar"));
                 break;
             case MACOSX:
-                jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/macosx_natives.jar");
+                jarURLs.add(new URL("https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-osx.jar"));
+                jarURLs.add(new URL("https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-osx.jar"));
                 break;
             case UNIX:
-                jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/linux_natives.jar");
+                jarURLs.add(new URL("https://libraries.minecraft.net/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar"));
+                jarURLs.add(new URL("https://libraries.minecraft.net/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-linux.jar"));
                 break;
             default:
                 return false;
@@ -112,17 +121,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
     //TODO ASAP- thread this!!!!
     protected boolean downloadJars () {
         double totalDownloadSize = 0, totalDownloadedSize = 0;
-        int[] fileSizes = new int[jarURLs.length];
-        for (int i = 0; i < jarURLs.length; i++) {
+        int[] fileSizes = new int[jarURLs.size()];
+        for (int i = 0; i < jarURLs.size(); i++) {
             try {
-                fileSizes[i] = jarURLs[i].openConnection().getContentLength();
+                fileSizes[i] = jarURLs.get(i).openConnection().getContentLength();
                 totalDownloadSize += fileSizes[i];
             } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
         }
-        for (int i = 0; i < jarURLs.length; i++) {
+        for (int i = 0; i < jarURLs.size(); i++) {
             int attempt = 0;
             final int attempts = 5;
             int lastfile = -1;
@@ -131,15 +140,15 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                 try {
                     attempt++;
                     if (debugVerbose || lastfile == i) {
-                        Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs[i].toURI());
+                        Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs.get(i).toURI());
                     }
                     lastfile = i;
-                    URLConnection dlConnection = jarURLs[i].openConnection();
+                    URLConnection dlConnection = jarURLs.get(i).openConnection();
                     if (dlConnection instanceof HttpURLConnection) {
                         dlConnection.setRequestProperty("Cache-Control", "no-cache");
                         dlConnection.connect();
                     }
-                    String jarFileName = getFilename(jarURLs[i]);
+                    String jarFileName = getFilename(jarURLs.get(i));
                     if (new File(binDir, jarFileName).exists()) {
                         new File(binDir, jarFileName).delete();
                     }
@@ -175,49 +184,68 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                 return false;
             }
         }
+        for (URL u : jarURLs) {
+            String name = getFilename(u);
+            if (!name.toLowerCase().contains("native") && !name.toLowerCase().equals("minecraft.jar")) {
+                File f = new File(binDir, name);
+                File n = new File(binDir, name.substring(0, name.lastIndexOf("-")) + ".jar");
+                try {
+                    if (n.exists())
+                        n.delete();
+                    FileUtils.copyFile(f, n);
+
+                } catch (IOException e) {
+                    Logger.logError(e.getMessage(), e);
+                }
+            }
+        }
         return true;
     }
 
     protected boolean extractNatives () {
         setStatus("Extracting natives...");
-        File nativesJar = new File(binDir, getFilename(jarURLs[jarURLs.length - 1]));
-        File nativesDir = new File(binDir, "natives");
-        if (!nativesDir.isDirectory()) {
-            nativesDir.mkdirs();
-        }
-        FileInputStream input = null;
-        ZipInputStream zipIn = null;
-        try {
-            input = new FileInputStream(nativesJar);
-            zipIn = new ZipInputStream(input);
-            ZipEntry currentEntry = zipIn.getNextEntry();
-            while (currentEntry != null) {
-                if (currentEntry.getName().contains("META-INF")) {
-                    currentEntry = zipIn.getNextEntry();
-                    continue;
+        for (URL u : jarURLs) {
+            if (u.getFile().toLowerCase().contains("native")) {
+                File nativesJar = new File(binDir, getFilename(u));
+                File nativesDir = new File(binDir, "natives");
+                if (!nativesDir.isDirectory()) {
+                    nativesDir.mkdirs();
                 }
-                setStatus("Extracting " + currentEntry + "...");
-                FileOutputStream outStream = new FileOutputStream(new File(nativesDir, currentEntry.getName()));
-                int readLen;
-                byte[] buffer = new byte[1024];
-                while ((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
-                    outStream.write(buffer, 0, readLen);
+                FileInputStream input = null;
+                ZipInputStream zipIn = null;
+                try {
+                    input = new FileInputStream(nativesJar);
+                    zipIn = new ZipInputStream(input);
+                    ZipEntry currentEntry = zipIn.getNextEntry();
+                    while (currentEntry != null) {
+                        if (currentEntry.getName().contains("META-INF")) {
+                            currentEntry = zipIn.getNextEntry();
+                            continue;
+                        }
+                        setStatus("Extracting " + currentEntry + "...");
+                        FileOutputStream outStream = new FileOutputStream(new File(nativesDir, currentEntry.getName()));
+                        int readLen;
+                        byte[] buffer = new byte[1024];
+                        while ((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
+                            outStream.write(buffer, 0, readLen);
+                        }
+                        outStream.close();
+                        currentEntry = zipIn.getNextEntry();
+                    }
+                } catch (IOException e) {
+                    Logger.logError(e.getMessage(), e);
+                    return false;
+                } finally {
+                    try {
+                        zipIn.close();
+                        input.close();
+                    } catch (IOException e) {
+                        Logger.logError(e.getMessage(), e);
+                    }
                 }
-                outStream.close();
-                currentEntry = zipIn.getNextEntry();
-            }
-        } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
-            return false;
-        } finally {
-            try {
-                zipIn.close();
-                input.close();
-            } catch (IOException e) {
-                Logger.logError(e.getMessage(), e);
+                nativesJar.delete();
             }
         }
-        nativesJar.delete();
         return true;
     }
 
