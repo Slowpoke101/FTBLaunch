@@ -40,6 +40,7 @@ import lombok.Setter;
 import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.winreg.JavaFinder;
 
@@ -102,15 +103,18 @@ public class Settings extends Properties {
     }
 
     public String getJavaPath () {
-        return getProperty("javaPath", getDefaultJavaPath());
+        String javaPath = getProperty("javaPath", getDefaultJavaPath());
+        if(javaPath == null || !new File(javaPath).isFile())
+            ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
+        return javaPath;
     }
 
     private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
-        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion().path != null)
+        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null)
             defaultPath = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
-        else
+        else if(System.getProperty("java.home") != null)
             defaultPath = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
         return defaultPath;
     }
