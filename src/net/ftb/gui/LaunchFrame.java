@@ -155,6 +155,7 @@ public class LaunchFrame extends JFrame {
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
     public static boolean MCRunning = false;
+    public static boolean i18nLoaded = false;
     public static LauncherConsole con;
     public static String tempPass = "";
     public static Panes currentPane = Panes.MODPACK;
@@ -367,6 +368,17 @@ public class LaunchFrame extends JFrame {
 
                 LoadingDialog.setProgress(160);
 
+                /*  Delay startup until the i18n update thread completes it's work
+                 *  and populates the localeIndices, allowing OptionsTab to load
+                 *  correctly.
+                 */
+                while (!i18nLoaded) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
 
