@@ -100,6 +100,9 @@ public class UserManager {
                     _users.add(new User(str));
                 }
                 read.close();
+            } catch (NumberFormatException ex) {
+                // If logindata is new format and empty it will contain bytes 0xae 0xed 0x00 0x05
+                // Catch exception from parseInt => no more stack prints for end users
             } catch (Exception ex) {
                 Logger.logError(ex.getMessage(), ex);
             }
