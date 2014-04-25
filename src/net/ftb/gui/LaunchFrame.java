@@ -121,6 +121,7 @@ import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
+import net.ftb.workers.UnreadNewsWorker;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -610,12 +611,11 @@ public class LaunchFrame extends JFrame {
     }
 
     public void setNewsIcon () {
-        int i = getUnreadNews();
-        if (i > 0 && i < 100) {
-            tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
-        } else {
-            tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-        }
+        /* Call unreadNews swingworker
+         * done() will set news tab icon
+         */
+        UnreadNewsWorker unreadNews = new UnreadNewsWorker();
+        unreadNews.execute();
     }
 
     /**
@@ -1416,40 +1416,6 @@ public class LaunchFrame extends JFrame {
         }
         s.add(0, "modpacks.xml");
         return s;
-    }
-
-    public int getUnreadNews () {
-        int i = 0;
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
-            ArrayList<Long> timeStamps = new ArrayList<Long>();
-            String s = reader.readLine();
-            s = s.trim();
-            String[] str = s.split(",");
-            for (String aStr : str) {
-                if (!timeStamps.contains(Long.parseLong(aStr))) {
-                    timeStamps.add(Long.parseLong(aStr));
-                }
-            }
-            long l;
-            if (Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
-                l = Long.parseLong(Settings.getSettings().getNewsDate());
-            } else {
-                l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
-            }
-            for (Long timeStamp : timeStamps) {
-                long time = timeStamp;
-                if (time > l) {
-                    i++;
-                }
-            }
-
-        } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
-        }
-
-        return i;
     }
 
     public void doLaunch () {
