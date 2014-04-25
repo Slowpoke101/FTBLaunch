@@ -131,7 +131,8 @@ public class LaunchFrame extends JFrame {
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
     private JLabel tpInstallLocLbl = new JLabel();
-    private JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+    @Getter
+    private final JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
             tpInstall = new JButton();
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
@@ -309,11 +310,10 @@ public class LaunchFrame extends JFrame {
                 instance = frame;
                 
                 /*
-                 * RFC: does this block? Does not look like a proper swingworker
-                 * A: convert to thread. not allow pressing launch till it's initialized
+                 * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.5") {
-                };
+                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.5");
+                authworker.execute();
 
                 LoadingDialog.setProgress(170);
 
@@ -420,7 +420,7 @@ public class LaunchFrame extends JFrame {
             }
         }
 
-        donate = new JButton(I18N.getLocaleString("DONATE_BUTTON"));
+        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
         donate.setBounds(390, 20, 80, 30);
         donate.setEnabled(false);
         donate.setToolTipText("Coming Soon...");
@@ -443,7 +443,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        edit = new JButton(I18N.getLocaleString("EDIT_BUTTON"));
+        edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
         edit.setBounds(480, 20, 60, 30);
         edit.setVisible(true);
         edit.setEnabled(users.getSelectedIndex() > 1);
@@ -460,6 +460,7 @@ public class LaunchFrame extends JFrame {
         });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        launch.setEnabled(false);
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
             @Override
