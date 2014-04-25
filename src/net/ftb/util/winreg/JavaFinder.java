@@ -121,7 +121,7 @@ public class JavaFinder {
             if (!javaFile.exists() || !javaFile.canExecute())
                 continue;
             
-            result.add(javaFile);
+            result.add(new JavaInfo(javaPath));
         }
         return result;
     }
