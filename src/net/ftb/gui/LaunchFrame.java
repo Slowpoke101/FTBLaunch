@@ -109,6 +109,7 @@ import net.ftb.tracking.AnalyticsConfigData;
 import net.ftb.tracking.JGoogleAnalyticsTracker;
 import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 import net.ftb.updater.UpdateChecker;
+import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
@@ -263,6 +264,9 @@ public class LaunchFrame extends JFrame {
 
                 }
                 else {
+                    /*
+                     * First run
+                     */
                     I18N.setupLocale();
                     I18N.setLocale(Settings.getSettings().getLocale());
                     i18nLoaded = true;
@@ -299,14 +303,8 @@ public class LaunchFrame extends JFrame {
                  *  and populates the localeIndices, allowing OptionsTab to load
                  *  correctly.
                  */
-                while (!i18nLoaded) {
-                    try {
-                        Thread.sleep(100);
-                        Logger.logInfo("Waiting for LaunchFrame.i18nLoaded. BLOCKING GUI!!");
-                    } catch (InterruptedException e) {
-                    }
-                }
-                
+                AppUtils.waitForLock(i18nLoaded);
+
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
                 

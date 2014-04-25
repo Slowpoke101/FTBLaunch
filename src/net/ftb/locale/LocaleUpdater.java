@@ -29,6 +29,7 @@ import java.util.Scanner;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
@@ -82,13 +83,7 @@ public class LocaleUpdater extends Thread {
         }
         cleanUpFiles();
 
-        while (!Locations.serversLoaded) {
-            try {
-                Thread.sleep(100);
-                Logger.logInfo("Waiting for Locations.serversLoaded");
-            } catch (InterruptedException e) {
-            }
-        }
+        AppUtils.waitForLock(Locations.serversLoaded);
 
         try {
             URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();

@@ -105,20 +105,22 @@ public class I18N {
         int i = 1;
         Properties tmp = new Properties();
         String[] list = dir.list();
-        for (String file : list) {
-            if (file.matches("^\\w{4}$")) {
-                try {
-                    if (!file.equalsIgnoreCase("enUS")) {
-                        tmp.clear();
-                        tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-                        localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-                        synchronized (localeIndices) {
-                            localeIndices.put(i, file);
+        if (list != null ) {
+            for (String file : list) {
+                if (file.matches("^\\w{4}$")) {
+                    try {
+                        if (!file.equalsIgnoreCase("enUS")) {
+                            tmp.clear();
+                            tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
+                            localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
+                            synchronized (localeIndices) {
+                                localeIndices.put(i, file);
+                            }
+                            i++;
                         }
-                        i++;
+                    } catch (IOException e) {
+                        Logger.logWarn("[i18n] Could not load language file", e);
                     }
-                } catch (IOException e) {
-                    Logger.logWarn("[i18n] Could not load language file", e);
                 }
             }
         }
