@@ -343,19 +343,12 @@ public class LaunchFrame extends JFrame {
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
                 
-                Logger.logInfo("updateChecker BLOCKING start");
-                /* RFC:
-                 * TODO: This is BAD code. Getting > 60 blocking from here! FIX!
-                 * A: put in own thread
+                /*
+                 * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                
-                UpdateChecker updateChecker = new UpdateChecker(buildNumber);
-                if (updateChecker.shouldUpdate()) {
-                    LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker, minUsable);
-                    p.setVisible(true);
-                }
-                Logger.logInfo("updateChecker BLOCKING end");
-
+                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable);
+                //UpdateChecker updateChecker = new UpdateChecker(135, minUsable);
+                updateChecker.execute();
                 LoadingDialog.setProgress(180);
             };
         });

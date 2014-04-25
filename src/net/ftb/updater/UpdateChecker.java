@@ -20,7 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.concurrent.ExecutionException;
 
+import javax.swing.SwingWorker;
+
+import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -31,19 +35,39 @@ import net.ftb.util.OSUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 
-public class UpdateChecker {
+public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private int version;
     private int latest;
+    private int  minUsable;
     public static String verString = "";
     private String downloadAddress = "";
 
-    public UpdateChecker(int version) {
+    public UpdateChecker(int version, int minUsable) {
         this.version = version;
+        this.minUsable = minUsable;
+    }
+
+    @Override
+    protected Boolean doInBackground() {
+        //try{Thread.sleep(10000);}catch (Exception e){}
         loadInfo();
         try {
             FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
         } catch (Exception ignored) {
             Logger.logError(ignored.getMessage(), ignored);
+        }
+        return this.shouldUpdate();
+    }
+
+    @Override
+    protected void done() {
+        try {
+            if (get()) {
+                LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
+                p.setVisible(true);
+            }
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
         }
     }
 
@@ -67,7 +91,12 @@ public class UpdateChecker {
     }
 
     public boolean shouldUpdate () {
-        return version < latest;
+        if (version < latest) {
+            Logger.logInfo("New version found. version: " + version + ", latest: " + latest );
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void update () {
