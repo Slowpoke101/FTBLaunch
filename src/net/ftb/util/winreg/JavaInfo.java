@@ -2,6 +2,9 @@ package net.ftb.util.winreg;
 
 import java.util.regex.Pattern;
 
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
+
 /**
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.
  * Needs WinRegistry.java. Get it at: http://stackoverflow.com/questions/62289/read-write-to-windows-registry-using-java
@@ -16,6 +19,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
     public String path; //! Full path to java.exe executable file
     public String version; //! Version string. "Unkown" if the java process returned non-standard version string
     public String origVersion = new String();
+    public boolean supportedVersion = false;
     public boolean is64bits; //! true for 64-bit javas, false for 32
     private int major, minor, revision, build;
     private static String regex = new String("[^\\d_.-]");
@@ -42,13 +46,19 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
 
+        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+            if(this.major == 1 && (this.minor == 7 || this.minor == 6))
+                this.supportedVersion = true;
+        } else {
+            this.supportedVersion = true;
+        }
     }
 
     /**
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
     public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path;
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? " (UNSUPPORTED!)" : "");
     }
 
     public String verToString () {
