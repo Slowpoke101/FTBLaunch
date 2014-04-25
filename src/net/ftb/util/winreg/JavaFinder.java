@@ -117,9 +117,11 @@ public class JavaFinder {
         
         List<JavaInfo> result = new ArrayList<JavaInfo>();
         for (String javaPath : javaExecs) {
-            if (!(new File(javaPath).exists()))
+            File javaFile = new File(javaPath); 
+            if (!javaFile.exists() || !javaFile.canExecute())
                 continue;
-            result.add(new JavaInfo(javaPath));
+            
+            result.add(javaFile);
         }
         return result;
     }
