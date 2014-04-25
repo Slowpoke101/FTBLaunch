@@ -115,7 +115,7 @@ public class JavaFinder {
                     if (!preferred.is64bits || java64.get(i).compareTo(preferred) == 1)
                         preferred = java64.get(i);
                 }
-                for (int i = 0; i < java64.size(); i++) {
+                for (int i = 0; i < java32.size(); i++) {
                     if (!preferred.is64bits && java32.get(i).compareTo(preferred) == 1)
                         preferred = java32.get(i);
                 }
