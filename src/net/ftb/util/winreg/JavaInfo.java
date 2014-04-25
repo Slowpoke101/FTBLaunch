@@ -17,7 +17,7 @@ import net.ftb.util.OSUtils.OS;
  ****************************************************************************/
 public class JavaInfo implements Comparable<JavaInfo> {
     public String path; //! Full path to java.exe executable file
-    public String version; //! Version string. "Unkown" if the java process returned non-standard version string
+    public String version; //! Version string.
     public String origVersion = new String();
     public boolean supportedVersion = false;
     public boolean is64bits; //! true for 64-bit javas, false for 32
@@ -58,7 +58,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
     public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? " (UNSUPPORTED!)" : "");
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
     }
 
     public String verToString () {
