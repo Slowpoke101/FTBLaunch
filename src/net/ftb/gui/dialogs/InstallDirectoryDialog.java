@@ -24,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -36,6 +38,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
 @SuppressWarnings("serial")
@@ -68,7 +71,13 @@ public class InstallDirectoryDialog extends JDialog {
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                setVisible(false);
+                File f = new File(installPath.getText());
+                // TODO: add more tests! (Unicode test, \Program Files*\
+                if (f.isDirectory() && f.canWrite()) {
+                    setVisible(false);
+                } else {
+                    ErrorUtils.tossError("No write access to selected directory. Please, select again");
+                }
             }
         });
     }
