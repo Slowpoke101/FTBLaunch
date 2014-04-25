@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
 /**
  * Windows-specific java versions finder
@@ -54,8 +55,18 @@ public class JavaFinder {
      *   WINDIR\SysWOW64
      ****************************************************************************/
     public static List<JavaInfo> findJavas () {
+        if(OSUtils.getCurrentOS() == OS.MACOSX)
+            return findMacJavas();
+        
+        if(OSUtils.getCurrentOS() == OS.WINDOWS)
+            return findWinJavas();
+        
+        return new ArrayList<JavaInfo>();
+    }
+    
+    protected static List<JavaInfo> findWinJavas() {
         List<String> javaExecs = new ArrayList<String>();
-
+        
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_32KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_64KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistry.KEY_WOW64_32KEY, javaExecs);
@@ -64,6 +75,46 @@ public class JavaFinder {
         javaExecs.add(System.getenv("WINDIR") + "\\system32\\java.exe");
         javaExecs.add(System.getenv("WINDIR") + "\\SysWOW64\\java.exe");
 
+        List<JavaInfo> result = new ArrayList<JavaInfo>();
+        for (String javaPath : javaExecs) {
+            if (!(new File(javaPath).exists()))
+                continue;
+            result.add(new JavaInfo(javaPath));
+        }
+        return result;
+    }
+
+    protected static String getMacJavaPath(String javaVersion) {
+        String versionInfo;
+        
+        versionInfo = RuntimeStreamer.execute(new String[] { "/usr/libexec/java_home", "-v " + javaVersion });
+
+        // Unable to find any JVMs matching version "1.7"
+        if(versionInfo.contains("version \"" + javaVersion + "\"")) {    
+            return null;
+        }
+        
+        return versionInfo.trim();
+    }
+    
+    protected static List<JavaInfo> findMacJavas() {
+        List<String> javaExecs = new ArrayList<String>();
+        String javaVersion;
+        
+        javaVersion = getMacJavaPath("1.6");
+        if(javaVersion != null)
+            javaExecs.add(javaVersion);
+        
+        javaVersion = getMacJavaPath("1.7");
+        if(javaVersion != null)
+            javaExecs.add(javaVersion);
+
+        javaVersion = getMacJavaPath("1.8");
+        if(javaVersion != null)
+            javaExecs.add(javaVersion);
+
+        javaExecs.add("/Library/Internet\\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
+        
         List<JavaInfo> result = new ArrayList<JavaInfo>();
         for (String javaPath : javaExecs) {
             if (!(new File(javaPath).exists()))
@@ -93,7 +144,7 @@ public class JavaFinder {
     /**
      * Standalone testing - lists all Javas in the system
      ****************************************************************************/
-    public static JavaInfo parseWinJavaVersion () {
+    public static JavaInfo parseJavaVersion () {
         if (preferred == null) {
             List<JavaInfo> javas = JavaFinder.findJavas();
             List<JavaInfo> java32 = new ArrayList<JavaInfo>();
@@ -102,12 +153,14 @@ public class JavaFinder {
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (int i = 0; i < javas.size(); i++) {
                 Logger.logInfo(javas.get(i).toString());
-                if (preferred == null && javas.get(i) != null)
-                    preferred = javas.get(i);
-                if (javas.get(i).is64bits)
-                    java64.add(javas.get(i));
-                else
-                    java32.add(javas.get(i));
+                if(javas.get(i).supportedVersion) { 
+                    if (preferred == null && javas.get(i) != null)
+                        preferred = javas.get(i);
+                    if (javas.get(i).is64bits)
+                        java64.add(javas.get(i));
+                    else
+                        java32.add(javas.get(i));
+                }
             }
 
             if (java64.size() > 0) {

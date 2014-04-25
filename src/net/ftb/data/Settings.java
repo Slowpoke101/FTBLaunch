@@ -37,12 +37,13 @@ import java.util.Properties;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("serial")
 public class Settings extends Properties {
@@ -112,11 +113,21 @@ public class Settings extends Properties {
     private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
-        if (OS.CURRENT == OS.WINDOWS && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null)
-            defaultPath = JavaFinder.parseWinJavaVersion().path.replace(".exe", "w.exe");
-        else if(System.getProperty("java.home") != null)
-            defaultPath = System.getProperty("java.home") + ("/bin/java" + (OS.CURRENT == OS.WINDOWS ? "w" : "")).replace("/", separator);
-        return defaultPath;
+        JavaInfo javaVersion;
+        
+        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+            javaVersion = JavaFinder.parseJavaVersion();
+            
+            if(javaVersion != null && javaVersion.path != null)
+                return javaVersion.path;
+        } else if(OSUtils.getCurrentOS() == OS.WINDOWS) { 
+            javaVersion = JavaFinder.parseJavaVersion();
+            
+            if(javaVersion != null && javaVersion.path != null) 
+                return javaVersion.path.replace(".exe", "w.exe");
+        }
+        
+        return System.getProperty("java.home") + ("/bin/java" + (OSUtils.getCurrentOS() == OS.WINDOWS ? "w" : "")).replace("/", separator);
     }
 
     public void setJavaPath (String path) {

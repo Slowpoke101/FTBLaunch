@@ -224,8 +224,8 @@ public class OSUtils {
      */
     public static Boolean is64BitVM() {
         Boolean bits64;
-        if (getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null) {
-            bits64 = JavaFinder.parseWinJavaVersion().is64bits;
+        if ((getCurrentOS() == OS.WINDOWS || getCurrentOS() == OS.MACOSX) && JavaFinder.parseJavaVersion() != null) {
+            bits64 = JavaFinder.parseJavaVersion().is64bits;
         } else {
            bits64 = System.getProperty("sun.arch.data.model").equals("64");
         }

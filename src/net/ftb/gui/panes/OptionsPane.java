@@ -228,8 +228,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         advancedOptionsBtn.getModel().setPressed(settings.isForceUpdateEnabled());
         add(advancedOptionsBtn);
 
-        if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseWinJavaVersion() != null && JavaFinder.parseWinJavaVersion().path != null) {
-            lblJavaVersion = new JLabel("Java version: " + JavaFinder.parseWinJavaVersion().origVersion);
+        if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseJavaVersion() != null && JavaFinder.parseJavaVersion().path != null) {
+            lblJavaVersion = new JLabel("Java version: " + JavaFinder.parseJavaVersion().origVersion);
             lblJavaVersion.setBounds(15, 276, 250, 25);
             add(lblJavaVersion);
         }
