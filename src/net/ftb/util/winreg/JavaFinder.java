@@ -103,15 +103,15 @@ public class JavaFinder {
         
         javaVersion = getMacJavaPath("1.6");
         if(javaVersion != null)
-            javaExecs.add(javaVersion);
+            javaExecs.add(javaVersion + "/bin/java");
         
         javaVersion = getMacJavaPath("1.7");
         if(javaVersion != null)
-            javaExecs.add(javaVersion);
+            javaExecs.add(javaVersion + "/bin/java");
 
         javaVersion = getMacJavaPath("1.8");
         if(javaVersion != null)
-            javaExecs.add(javaVersion);
+            javaExecs.add(javaVersion + "/bin/java");
 
         javaExecs.add("/Library/Internet\\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
         
