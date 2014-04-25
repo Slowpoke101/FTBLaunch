@@ -162,10 +162,17 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
         javaPath = new JTextField();
-        if(settings.getJavaPath() != null)
-            javaPath.setText(settings.getJavaPath());
-        else
+        String javapath = settings.getJavaPath();
+        if (javapath != null) {
+            javaPath.setText(javapath);
+            if (!new File(javapath).isFile())
+                javaPath.setBackground(Color.RED);
+        }
+        else {
+            // this should not happen ever
             javaPath.setBackground(Color.RED);
+        }
+
         javaPath.addKeyListener(new KeyListener(){
             @Override
             public void keyTyped (KeyEvent e) {}
@@ -173,7 +180,7 @@ public class AdvancedOptionsDialog extends JDialog {
             public void keyPressed (KeyEvent e) {}
             @Override
             public void keyReleased (KeyEvent e) {
-                if(!new File(javaPath.getText()).isFile())
+                if( !javaPath.getText().equals("") && !new File(javaPath.getText()).isFile())
                     javaPath.setBackground(Color.RED);
                 else
                     javaPath.setBackground(new Color(40, 40, 40));
