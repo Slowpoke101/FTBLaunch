@@ -52,12 +52,21 @@ public class JavaInfo implements Comparable<JavaInfo> {
         if(OSUtils.getCurrentOS() == OS.MACOSX) {
             if (this.major == 1 && (this.minor == 7 || this.minor == 6))
                 this.supportedVersion = true;
-        }else if(this.major == 1 && this.minor == 8 ){
-            hasJava8 = true;
-            this.supportedVersion = true;
         } else {
             this.supportedVersion = true;
         }
+    }
+
+    public JavaInfo(int major, int minor) {
+        this.path = null;
+        this.major = major;
+        this.minor = minor;
+        this.revision = 0;
+        this.build = 0;
+    }
+
+    public boolean isJava8() {
+        return this.major == 1 && this.minor == 8;
     }
 
     /**

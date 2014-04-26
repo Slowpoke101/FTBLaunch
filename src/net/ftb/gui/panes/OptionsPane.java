@@ -47,6 +47,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -175,7 +176,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(locale);
 
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
-        if(Settings.getSettings().getJavaVersion()[0] < 1 || settings.getSettings().getJavaVersion()[1] < 7){
+        JavaInfo javaVersion = Settings.getSettings().getJavaVersion();
+        if(javaVersion.getMajor() < 1 || (javaVersion.getMajor() == 1 && javaVersion.getMinor() < 7)){
             if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
                 if(JavaFinder.java8Found) {//they need the jdk link
                     addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
@@ -207,7 +209,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 }
             }
         }
-        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (Settings.getSettings().getJavaVersion()[0]> 1 || settings.getSettings().getJavaVersion()[1] > 7)){
+        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (javaVersion.getMajor() > 1 || (javaVersion.getMajor() == 1 ||  javaVersion.getMinor() > 7))){
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
         }else if (!OSUtils.is64BitVM()) {//needs to use proper bit's

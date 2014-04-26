@@ -115,6 +115,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.StyleUtil;
 import net.ftb.util.TrackerUtils;
+import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
@@ -1524,10 +1525,10 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        int[] localJavaVsn = Settings.getSettings().getJavaVersion();
+        JavaInfo javaVersion = Settings.getSettings().getJavaVersion();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-            if (minSup.length >= 2 && localJavaVsn.length >= 2 && minSup[0] <= localJavaVsn[0] && minSup[1] <= localJavaVsn[1]){
+            if (minSup.length >= 2 && minSup[0] <= javaVersion.getMajor() && minSup[1] <= javaVersion.getMinor()){
                 Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
                 saveSettings();
                 doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
