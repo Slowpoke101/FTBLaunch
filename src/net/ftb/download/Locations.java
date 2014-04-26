@@ -30,4 +30,12 @@ public class Locations {
     public static HashMap<String, String> downloadServers = new HashMap<String, String>();
     public static HashMap<String, String> backupServers = new HashMap<String, String>();
 
+    //Oracle Java Locations
+    public final static String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";
+    public final static String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=86895";
+    public final static String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87437";
+    public final static String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
+    public final static String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+    public final static String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+
 }

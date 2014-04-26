@@ -2,6 +2,7 @@ package net.ftb.util.winreg;
 
 import java.util.regex.Pattern;
 
+import lombok.Getter;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 
@@ -20,7 +21,9 @@ public class JavaInfo implements Comparable<JavaInfo> {
     public String version; //! Version string.
     public String origVersion = new String();
     public boolean supportedVersion = false;
+    public boolean hasJava8;
     public boolean is64bits; //! true for 64-bit javas, false for 32
+    @Getter
     private int major, minor, revision, build;
     private static String regex = new String("[^\\d_.-]");
 
@@ -47,8 +50,11 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
 
         if(OSUtils.getCurrentOS() == OS.MACOSX) {
-            if(this.major == 1 && (this.minor == 7 || this.minor == 6))
+            if (this.major == 1 && (this.minor == 7 || this.minor == 6))
                 this.supportedVersion = true;
+        }else if(this.major == 1 && this.minor == 8 ){
+            hasJava8 = true;
+            this.supportedVersion = true;
         } else {
             this.supportedVersion = true;
         }

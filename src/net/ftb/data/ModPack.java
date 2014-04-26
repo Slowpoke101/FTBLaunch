@@ -32,6 +32,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
+import lombok.Getter;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.panes.ModpacksPane;
 import net.ftb.log.Logger;
@@ -48,7 +51,8 @@ public class ModPack {
     private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
     private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
     private boolean privatePack;
-
+    @Getter
+    private int[] minJRE;
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
      */
@@ -160,7 +164,7 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP) throws IOException, NoSuchAlgorithmException {
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -174,6 +178,12 @@ public class ModPack {
         this.maxPermSize = maxPermSize;
         this.hasbundledmap = bundledMap;
         this.hasCustomTP = customTP;
+        String[] tempJRE = minJRE.split("\\.");
+        List<Integer> tmpIJre = Lists.newArrayList();
+            for(int i = 0; i<tempJRE.length; i++){
+                tmpIJre.add(Integer.parseInt(tempJRE[i]));
+            }
+        this.minJRE = Ints.toArray(tmpIJre);
         if (!animation.isEmpty()) {
             this.animation = animation;
         } else {

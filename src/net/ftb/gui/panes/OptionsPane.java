@@ -38,6 +38,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
@@ -173,33 +174,47 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(lblLocale);
         add(locale);
 
-        // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM 
-        if (!OSUtils.is64BitVM()) {
-            lbl32BitWarning = new JLabel(I18N.getLocaleString("JAVA_32BIT_WARNING"));
-            lbl32BitWarning.setBounds(190, 170, 500, 25);
-            lbl32BitWarning.setForeground(Color.red);
-            add(lbl32BitWarning);
-
+        // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
+        if(Settings.getSettings().getJavaVersion()[0] < 1 || settings.getSettings().getJavaVersion()[1] < 7){
+            if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
+                if(JavaFinder.java8Found) {//they need the jdk link
+                    addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
+                    addUpdateLabel("JAVA_NEW_Warning");
+                }else if(OSUtils.canRun7OnMac()){
+                    addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }else{
+                    //TODO deal with old mac's that can't run java 7
+                }
+            }
+            else if(OSUtils.is64BitOS()){
+                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                    addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+            }else{
+                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                    addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                    addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+            }
+        }
+        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (Settings.getSettings().getJavaVersion()[0]> 1 || settings.getSettings().getJavaVersion()[1] > 7)){
+            addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
+            addUpdateLabel("JAVA_NEW_Warning");
+        }else if (!OSUtils.is64BitVM()) {//needs to use proper bit's
+            addUpdateLabel("JAVA_32BIT_WARNING");
             if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
                 if (OSUtils.is64BitWindows()) {
-                    btnInstallJava = new JButton(I18N.getLocaleString("DOWNLOAD_JAVA64"));
-                    btnInstallJava.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed (ActionEvent arg0) {
-                            if (Desktop.isDesktopSupported()) {
-                                Desktop desktop = Desktop.getDesktop();
-                                try {
-                                    desktop.browse(new URI("http://javadl.sun.com/webapps/download/AutoDL?BundleId=81821"));
-                                } catch (Exception exc) {
-                                    Logger.logError("Could not open url: " + exc.getMessage());
-                                }
-                            } else {
-                                Logger.logWarn("Could not open Java Download url, not supported");
-                            }
-                        }
-                    });
-                    btnInstallJava.setBounds(345, 200, 150, 28);
-                    add(btnInstallJava);
+                    addUpdateJREButton("http://javadl.sun.com/webapps/download/AutoDL?BundleId=81821", "DOWNLOAD_JAVA64");
                 }
             }
         }
@@ -264,5 +279,32 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     @Override
     public void onVisible () {
+    }
+    public void addUpdateJREButton(final String webLink, String unlocMessage){
+        btnInstallJava = new JButton(I18N.getLocaleString(unlocMessage));
+        btnInstallJava.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    try {
+                        desktop.browse(new URI(webLink));
+                    } catch (Exception exc) {
+                        Logger.logError("Could not open url: " + exc.getMessage());
+                    }
+                } else {
+                    Logger.logWarn("Could not open Java Download url, not supported");
+                }
+            }
+        });
+        btnInstallJava.setBounds(345, 200, 150, 28);
+        add(btnInstallJava);
+    }
+    public void addUpdateLabel(final String unlocMessage){
+        lbl32BitWarning = new JLabel(I18N.getLocaleString(unlocMessage));
+        lbl32BitWarning.setBounds(190, 170, 500, 25);
+        lbl32BitWarning.setForeground(Color.red);
+        add(lbl32BitWarning);
+
     }
 }

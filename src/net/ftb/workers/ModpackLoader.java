@@ -95,7 +95,8 @@ public class ModpackLoader extends Thread {
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
                                 .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()), privatePack, xmlFile, modPackAttr
-                                .getNamedItem("bundledMap") != null ? true : false, modPackAttr.getNamedItem("customTP") != null ? true : false));
+                                .getNamedItem("bundledMap") != null ? true : false, modPackAttr.getNamedItem("customTP") != null ? true : false, modPackAttr
+                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6"));
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }

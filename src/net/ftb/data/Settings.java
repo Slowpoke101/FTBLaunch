@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.gui.LaunchFrame;
@@ -109,7 +111,32 @@ public class Settings extends Properties {
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
     }
+    public int[] getJavaVersion() {
+        String separator = System.getProperty("file.separator");
+        String defaultPath = null;
+        JavaInfo javaVersion;
 
+        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+            javaVersion = JavaFinder.parseJavaVersion();
+
+            if(javaVersion != null && javaVersion.path != null)
+                Logger.logError(javaVersion.getMajor() + "."+ javaVersion.getMinor());
+                return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};//minimum supported should NEVER be more detailed than this!!
+        } else if(OSUtils.getCurrentOS() == OS.WINDOWS) {
+            javaVersion = JavaFinder.parseJavaVersion();
+
+            if(javaVersion != null && javaVersion.path != null)
+                 return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};
+        }
+        String[] version = System.getProperty("java.version").split("\\.");
+        List<Integer> tmpIJre = Lists.newArrayList();
+        for(int i = 0; i<version.length; i++){
+            tmpIJre.add(Integer.parseInt(version[i]));
+        }
+        return Ints.toArray(tmpIJre);
+
+
+    }
     private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;

@@ -20,6 +20,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
     private List<DownloadInfo> downloads;
     private final ProgressMonitor monitor;
     private String status;
+    private String hashType;
     private int progressIndex = 0;
 
     public AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
@@ -44,12 +45,13 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         byte[] buffer = new byte[24000];
         for (int x = 0; x < downloads.size(); x++) {
             DownloadInfo asset = downloads.get(x);
-            String remoteHash = null;
+            String remoteHash = asset.hash;
             int attempt = 0;
-            final int attempts = 5;
+            final int attempts = 2;
             boolean downloadSuccess = false;
             while (!downloadSuccess && (attempt < attempts)) {
                 try {
+                    hashType = asset.hashType;
                     if (attempt++ > 0) {
                         Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
                     }
@@ -65,11 +67,14 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     int readLen;
                     int currentSize = 0;
                     int size = Integer.parseInt(con.getHeaderField("Content-Length"));
-                    if (asset.getPrimaryDLType() == DLType.ETag)
-                        remoteHash = con.getHeaderField("ETag");
-                    if (asset.getPrimaryDLType() == DLType.ContentMD5)
-                        remoteHash = con.getHeaderField("Content-MD5");
-
+                    if (asset.hash == null && asset.getPrimaryDLType() == DLType.ETag){
+                        remoteHash = con.getHeaderField("ETag").replace("\"", "");
+                        hashType = "md5";
+                    }
+                    if (asset.hash == null && asset.getPrimaryDLType() == DLType.ContentMD5) {
+                        remoteHash = con.getHeaderField("Content-MD5").replace("\"", "");
+                        hashType= "md5";
+                    }
                     setProgress(0);
                     while ((readLen = input.read(buffer, 0, buffer.length)) != -1) {
                         output.write(buffer, 0, readLen);
@@ -92,15 +97,14 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
                     String assetHash = asset.hash;
                     if (asset.hash == null) {
-                        if (remoteHash != null)
+                        if (remoteHash != null) {
                             assetHash = remoteHash;
-                        else if (asset.getBackupDLType() == DLType.FTBBackup && DownloadUtils.backupIsValid(asset.local, asset.url.getPath().replace("/FTB2", ""))) {
+                        }else if (asset.getBackupDLType() == DLType.FTBBackup && DownloadUtils.backupIsValid(asset.local, asset.url.getPath().replace("/FTB2", ""))) {
                             remoteHash = asset.hash;
                         }
-
                     }
                     if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0)) {
-                        if ((assetHash != null && !assetHash.toLowerCase().equals(remoteHash))) {
+                        if ((hash != null && !hash.toLowerCase().equals(assetHash))) {
                             asset.local.delete();
                         } else {
                             downloadSuccess = true;

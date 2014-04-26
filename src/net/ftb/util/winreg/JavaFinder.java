@@ -20,7 +20,7 @@ import net.ftb.util.OSUtils.OS;
  * Windows-specific java versions finder
  *****************************************************************************/
 public class JavaFinder {
-
+    public static boolean java8Found = false;
     /**
      * @return: A list of javaExec paths found under this registry key (rooted at HKEY_LOCAL_MACHINE)
      * @param wow64  0 for standard registry access (32-bits for 32-bit app, 64-bits for 64-bits app)
@@ -155,6 +155,9 @@ public class JavaFinder {
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (int i = 0; i < javas.size(); i++) {
                 Logger.logInfo(javas.get(i).toString());
+                if(javas.get(i).hasJava8){
+                    java8Found = true;
+                }
                 if(javas.get(i).supportedVersion) { 
                     if (preferred == null && javas.get(i) != null)
                         preferred = javas.get(i);

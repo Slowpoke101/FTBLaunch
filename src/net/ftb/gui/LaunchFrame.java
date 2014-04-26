@@ -926,8 +926,6 @@ public class LaunchFrame extends JFrame {
 
             downloader.execute();
         } else {
-            //launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
-
             launchMinecraftNew(installPath, pack, RESPONSE);
         }
     }
@@ -1526,10 +1524,16 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
+        int[] localJavaVsn = Settings.getSettings().getJavaVersion();
+        int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-            Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
-            saveSettings();
-            doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+            if (minSup.length >= 2 && localJavaVsn.length >= 2 && minSup[0] <= localJavaVsn[0] && minSup[1] <= localJavaVsn[1]){
+                Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
+                saveSettings();
+                doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
+            }else{//user can't run pack-- JRE not high enough
+                ErrorUtils.tossError("You must use at least java " + minSup[0] +"." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.");
+            }
         } else if (users.getSelectedIndex() <= 1) {
             ErrorUtils.tossError("Please select a profile!");
         }

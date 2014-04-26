@@ -1,10 +1,11 @@
 package net.feed_the_beast.launcher.json;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.FileReader;
 import java.util.Date;
 
+import com.google.common.reflect.TypeToken;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Version;
 
@@ -25,11 +26,17 @@ public class JsonFactory {
         GSON = builder.create();
     }
 
-    public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-        return GSON.fromJson(new FileReader(json), Version.class);
+    public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException {
+        FileReader reader = new FileReader(json);
+        Version v =  GSON.fromJson(reader, Version.class);
+        reader.close();
+        return v;
     }
 
-    public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-        return GSON.fromJson(new FileReader(json), AssetIndex.class);
+    public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, IOException {
+        FileReader reader = new FileReader(json);
+        AssetIndex a =  GSON.fromJson(reader, AssetIndex.class);
+        reader.close();
+        return a;
     }
 }

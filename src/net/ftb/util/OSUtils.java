@@ -327,7 +327,9 @@ public class OSUtils {
             Logger.logError("Could not open file", e);
         }
     }
-
+    public static boolean canRun7OnMac(){
+        return getCurrentOS() == OS.MACOSX && !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"));
+    }
     /**
      * Removes environment variables which may cause faulty JVM memory allocations
      */
