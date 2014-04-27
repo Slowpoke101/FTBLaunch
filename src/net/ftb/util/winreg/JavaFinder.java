@@ -155,7 +155,7 @@ public class JavaFinder {
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (int i = 0; i < javas.size(); i++) {
                 Logger.logInfo(javas.get(i).toString());
-                if(javas.get(i).hasJava8){
+                if(javas.get(i).isJava8()){
                     java8Found = true;
                 }
                 if(javas.get(i).supportedVersion) { 

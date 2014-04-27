@@ -111,32 +111,17 @@ public class Settings extends Properties {
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
     }
-    public int[] getJavaVersion() {
-        String separator = System.getProperty("file.separator");
-        String defaultPath = null;
-        JavaInfo javaVersion;
 
-        if(OSUtils.getCurrentOS() == OS.MACOSX) {
-            javaVersion = JavaFinder.parseJavaVersion();
-
-            if(javaVersion != null && javaVersion.path != null)
-                Logger.logError(javaVersion.getMajor() + "."+ javaVersion.getMinor());
-                return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};//minimum supported should NEVER be more detailed than this!!
-        } else if(OSUtils.getCurrentOS() == OS.WINDOWS) {
-            javaVersion = JavaFinder.parseJavaVersion();
-
-            if(javaVersion != null && javaVersion.path != null)
-                 return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};
-        }
-        String[] version = System.getProperty("java.version").split("\\.");
-        List<Integer> tmpIJre = Lists.newArrayList();
-        for(int i = 0; i<version.length; i++){
-            tmpIJre.add(Integer.parseInt(version[i]));
-        }
-        return Ints.toArray(tmpIJre);
-
-
+    /**
+     * Returns user selected or automatically selected JVM's
+     * JavaInfo object.
+     */
+    public JavaInfo getJavaVersion() {
+        JavaInfo javaVersion = new JavaInfo(getJavaPath());
+        return javaVersion;
+        //return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};
     }
+
     private String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
