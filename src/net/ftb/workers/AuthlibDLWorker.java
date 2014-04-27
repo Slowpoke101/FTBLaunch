@@ -50,11 +50,11 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         this.binDir = new File(DLFolder);
         this.authlibVersion = authver;
         this.status = "";
-        doInBackground();
     }
 
     @Override
     protected Boolean doInBackground () {
+        //try{Thread.sleep(10000);}catch (Exception e){}
         if (debugVerbose) {
             Logger.logInfo(debugTag + "Loading Authlib...");
         }
@@ -69,6 +69,10 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         setStatus("Adding Authlib to Classpath");
         Logger.logInfo("Adding Authlib to Classpath");
         return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
+    }
+    @Override
+    protected void done() {
+        LaunchFrame.getInstance().getLaunch().setEnabled(true);
     }
 
     protected boolean addToClasspath (String location) {

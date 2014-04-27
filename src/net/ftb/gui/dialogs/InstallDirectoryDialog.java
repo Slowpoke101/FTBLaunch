@@ -40,6 +40,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
 @SuppressWarnings("serial")
 public class InstallDirectoryDialog extends JDialog {
@@ -72,11 +73,15 @@ public class InstallDirectoryDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 File f = new File(installPath.getText());
-                // TODO: add more tests! (Unicode test, \Program Files*\
-                if (f.isDirectory() && f.canWrite()) {
-                    setVisible(false);
-                } else {
+                // TODO: add more tests! (Unicode test)\
+                if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && installPath.getText().contains(System.getenv("ProgramFiles"))) {
+                    ErrorUtils.tossError("Installing under C:\\Program Files\\ or similar is not supported. Please, select again.");
+                }
+                else if (f.isDirectory() && !f.canWrite()) {
                     ErrorUtils.tossError("No write access to selected directory. Please, select again");
+                }
+                else {
+                    setVisible(false);
                 }
             }
         });

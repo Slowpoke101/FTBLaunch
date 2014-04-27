@@ -91,4 +91,31 @@ public class AppUtils {
         }
         return null;
     }
+
+    /**
+     * Simple sleep and check locking scheme
+     * @param b boolean to check, continue  when true
+     */
+    public static void waitForLock (boolean b) {
+        waitForLock(b, null);
+    }
+
+    /**
+     * Simple sleep and check locking scheme
+     * @param b boolean to check, continue when true
+     * @param s String to use as locking reason for log messages
+     */
+    public static void waitForLock (boolean b, String s) {
+        while (!b) {
+            try {
+                Thread.sleep(100);
+                if (s != null) {
+                    Logger.logInfo("Waiting for " + s);
+                }
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 }
+
+

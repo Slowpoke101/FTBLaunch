@@ -23,6 +23,7 @@ public class Locations {
     public static boolean primaryCH = true;
 
     //various values for mirrors located here so that multiple download threads don't need to re-initialize the data
+    //worker's that rely on the server list being in tact should check serversloaded
     public volatile static boolean serversLoaded = false;
     public static boolean hasDLInitialized = false;
 

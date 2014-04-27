@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
@@ -67,8 +68,31 @@ public class I18N {
         synchronized (localeIndices) {
             localeIndices.put(0, "enUS");
         }
+        addFiles();
+        LaunchFrame.i18nLoaded = true;
+    }
+
+    /**
+     * Download locales, set available locales and load fallback locale
+     */
+    public static void downloadSetupLocale () {
+        localeFiles.put("enUS", "English");
+        synchronized (localeIndices) {
+            localeIndices.put(0, "enUS");
+        }
         try {
             new LocaleUpdater().start();
+        } catch (Exception e) {
+            Logger.logError(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Download locales
+     */
+    public static void downloadLocale () {
+        try {
+            new LocaleUpdater(true).start();
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
@@ -81,20 +105,22 @@ public class I18N {
         int i = 1;
         Properties tmp = new Properties();
         String[] list = dir.list();
-        for (String file : list) {
-            if (file.matches("^\\w{4}$")) {
-                try {
-                    if (!file.equalsIgnoreCase("enUS")) {
-                        tmp.clear();
-                        tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-                        localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-                        synchronized (localeIndices) {
-                            localeIndices.put(i, file);
+        if (list != null ) {
+            for (String file : list) {
+                if (file.matches("^\\w{4}$")) {
+                    try {
+                        if (!file.equalsIgnoreCase("enUS")) {
+                            tmp.clear();
+                            tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
+                            localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
+                            synchronized (localeIndices) {
+                                localeIndices.put(i, file);
+                            }
+                            i++;
                         }
-                        i++;
+                    } catch (IOException e) {
+                        Logger.logWarn("[i18n] Could not load language file", e);
                     }
-                } catch (IOException e) {
-                    Logger.logWarn("[i18n] Could not load language file", e);
                 }
             }
         }
