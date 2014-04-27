@@ -50,7 +50,7 @@ public class ModpackLoader extends Thread {
         //TODO ASAP thread this
         for (String xmlFile : xmlFiles) {
             boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
-            File modPackFile = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + xmlFile);
+            File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
             try {
                 modPackFile.getParentFile().mkdirs();
                 DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);

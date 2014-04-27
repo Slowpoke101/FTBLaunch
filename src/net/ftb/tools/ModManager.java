@@ -69,18 +69,18 @@ public class ModManager extends JDialog {
         protected Boolean doInBackground () {
             try {
                 if (!upToDate()) {
-                    String installPath = OSUtils.getDynamicStorageLocation();
+                    String installPath = OSUtils.getCacheStorageLocation();
                     ModPack pack = ModPack.getSelectedPack();
                     pack.setUpdated(true);
                     File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
                     if (modPackZip.exists()) {
                         FileUtils.delete(modPackZip);
                     }
-                    File animationGif = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
+                    File animationGif = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
                     if (animationGif.exists()) {
                         FileUtils.delete(animationGif);
                     }
-                    String dynamicLoc = OSUtils.getDynamicStorageLocation();
+                    String dynamicLoc = OSUtils.getCacheStorageLocation();
                     baseDynamic = new File(dynamicLoc, "ModPacks" + sep + pack.getDir() + sep);
                     //clearModsFolder(pack);
                     erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
@@ -199,7 +199,7 @@ public class ModManager extends JDialog {
 
             Logger.logInfo("Downloading Mod Pack");
             TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Downloaded: " + modPackName + " v." + curVersion.replace('_', '.'));
-            String dynamicLoc = OSUtils.getDynamicStorageLocation();
+            String dynamicLoc = OSUtils.getCacheStorageLocation();
             String installPath = Settings.getSettings().getInstallPath();
             ModPack pack = ModPack.getSelectedPack();
             //clearModsFolder(pack);
@@ -381,7 +381,7 @@ public class ModManager extends JDialog {
                 return true;
             }
             if (backup) {
-                File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
+                File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
                 if (destination.exists()) {
                     FileUtils.delete(destination);
                 }
@@ -397,7 +397,7 @@ public class ModManager extends JDialog {
 
     public static void cleanUp () {
         ModPack pack = ModPack.getSelectedPack();
-        File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
+        File tempFolder = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
         for (String file : tempFolder.list()) {
             if (!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
                 try {

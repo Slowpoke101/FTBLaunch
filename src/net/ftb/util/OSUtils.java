@@ -91,6 +91,28 @@ public class OSUtils {
             return getDefInstallPath() + "/temp/";
         }
     }
+    
+    /**
+     * Used to get a location to store cached content such as maps,
+     * texture packs and pack archives.
+     * 
+     * @return string containing cache storage location
+     */
+    public static String getCacheStorageLocation () {
+        switch (getCurrentOS()) {
+        case WINDOWS:
+            if(System.getenv("LOCALAPPDATA").length() > 5)
+                return System.getenv("LOCALAPPDATA") + "/ftblauncher/";
+            else
+                return System.getenv("APPDATA") + "/ftblauncher/";
+        case MACOSX:
+            return cachedUserHome + "/Library/Application Support/ftblauncher/";
+        case UNIX:
+            return cachedUserHome + "/.ftblauncher/";
+        default:
+            return getDefInstallPath() + "/temp/";
+        }
+    }
 
     public static long getOSTotalMemory () {
         long ram = 0;
