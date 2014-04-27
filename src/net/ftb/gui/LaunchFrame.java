@@ -91,6 +91,10 @@ import net.ftb.locale.I18N.Locale;
 import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
+import net.ftb.log.LogSource;
+import net.ftb.log.LogWriter;
+import net.ftb.log.OutputOverride;
+import net.ftb.log.StdOutLogger;
 import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.mclauncher.MinecraftLauncherNew;
@@ -164,6 +168,8 @@ public class LaunchFrame extends JFrame {
     public static LoadingDialog loader;
 
     public static final String FORGENAME = "MinecraftForge.zip";
+    private final static String launcherLogFile = "FTBLauncherLog.txt";
+    private final static String minecraftLogFile = "MinecraftLog.txt";
 
     @Getter
     private static ProcessMonitor procMonitor;
@@ -188,6 +194,36 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
+        if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
+            new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
+        }
+
+        if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
+            new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
+        }
+        
+
+        /*
+         * Create new StdoutLogger as soon as possible
+         */
+        Logger.addListener(new StdOutLogger());
+        /*
+         * Setup System.out and System.err redirection as soon as possible
+         */
+        System.setOut(new OutputOverride(System.out, LogLevel.INFO));
+        System.setErr(new OutputOverride(System.err, LogLevel.ERROR));
+
+        /*
+         * Setup LogWriters as soon as possible
+         */
+        try {
+            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
+            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
+        } catch (IOException e1) {
+            Logger.logError(e1.getMessage(), e1);
+        }
+
+
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
@@ -206,13 +242,6 @@ public class LaunchFrame extends JFrame {
 
         LaunchFrameHelpers.printInfo();
 
-        if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
-        }
-
-        if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
-        }
 
         /*
          * Resolves servers in background thread
@@ -289,6 +318,7 @@ public class LaunchFrame extends JFrame {
 
                 con = new LauncherConsole();
                 con.setVisible(Settings.getSettings().getConsoleActive());
+                Logger.addListener(con);
                 con.scrollToBottom();
 
                 LaunchFrameHelpers.googleAnalytics();
