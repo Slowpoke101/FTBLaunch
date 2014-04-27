@@ -101,6 +101,10 @@ public class MinecraftLauncher {
         if (!additionalOptions.isEmpty()) {
             Collections.addAll(arguments, additionalOptions.split("\\s+"));
         }
+        if (Settings.getSettings().getOptJavaArgs()) {
+            Logger.logInfo("Adding Optimization Arguments");
+            Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
+        }
 
         arguments.add(MinecraftLauncher.class.getCanonicalName());
         arguments.add(workingDir);

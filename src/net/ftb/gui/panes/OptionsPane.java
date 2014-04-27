@@ -57,7 +57,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private JSlider ramMaximum;
     private JComboBox locale;
     private JTextField installFolderTextField;
-    private JCheckBox chckbxShowConsole, keepLauncherOpen;
+    private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs;
     private final Settings settings;
 
     private FocusListener settingsChangeListener = new FocusListener() {
@@ -216,7 +216,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
             addUpdateLabel("JAVA_32BIT_WARNING");
             if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
                 if (OSUtils.is64BitWindows()) {
-                    addUpdateJREButton("http://javadl.sun.com/webapps/download/AutoDL?BundleId=81821", "DOWNLOAD_JAVA64");
+                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
                 }
             }
         }
@@ -224,14 +224,20 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         chckbxShowConsole = new JCheckBox(I18N.getLocaleString("SHOW_CONSOLE"));
         chckbxShowConsole.addFocusListener(settingsChangeListener);
         chckbxShowConsole.setSelected(settings.getConsoleActive());
-        chckbxShowConsole.setBounds(550, 95, 183, 25);
+        chckbxShowConsole.setBounds(540, 95, 183, 25);
         add(chckbxShowConsole);
 
         keepLauncherOpen = new JCheckBox(I18N.getLocaleString("REOPEN_LAUNCHER"));
-        keepLauncherOpen.setBounds(550, 130, 300, 25);
+        keepLauncherOpen.setBounds(540, 130, 300, 25);
         keepLauncherOpen.setSelected(settings.getKeepLauncherOpen());
         keepLauncherOpen.addFocusListener(settingsChangeListener);
         add(keepLauncherOpen);
+
+        optJavaArgs = new JCheckBox(I18N.getLocaleString("OPT_JAVA_ARGS"));
+        optJavaArgs.setBounds(540, 165, 300, 25);
+        optJavaArgs.setSelected(settings.getOptJavaArgs());
+        optJavaArgs.addFocusListener(settingsChangeListener);
+        add(optJavaArgs);
 
         advancedOptionsBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS"));
         advancedOptionsBtn.setBounds(147, 275, 629, 29);
@@ -245,7 +251,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         advancedOptionsBtn.getModel().setPressed(settings.isForceUpdateEnabled());
         add(advancedOptionsBtn);
 
-        if (OSUtils.getCurrentOS().equals(OS.WINDOWS) && JavaFinder.parseJavaVersion() != null && JavaFinder.parseJavaVersion().path != null) {
+        if ((OSUtils.getCurrentOS().equals(OS.WINDOWS) || OSUtils.getCurrentOS().equals(OS.MACOSX)) && JavaFinder.parseJavaVersion() != null && JavaFinder.parseJavaVersion().path != null) {
             lblJavaVersion = new JLabel("Java version: " + JavaFinder.parseJavaVersion().origVersion);
             lblJavaVersion.setBounds(15, 276, 250, 25);
             add(lblJavaVersion);
@@ -263,6 +269,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         settings.setRamMax(String.valueOf(ramMaximum.getValue()));
         settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
         settings.setConsoleActive(chckbxShowConsole.isSelected());
+        settings.setOptJavaArgs(optJavaArgs.isSelected());
         settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
         settings.save();
     }

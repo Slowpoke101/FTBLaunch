@@ -35,8 +35,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import com.google.common.collect.Lists;
-import com.google.common.primitives.Ints;
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.gui.LaunchFrame;
@@ -196,6 +194,14 @@ public class Settings extends Properties {
 
     public boolean getConsoleActive () {
         return Boolean.valueOf(getProperty("consoleActive", "true"));
+    }
+
+    public void setOptJavaArgs (boolean console) {
+        setProperty("optJavaArgs", String.valueOf(console));
+    }
+
+    public boolean getOptJavaArgs () {
+        return Boolean.valueOf(getProperty("optJavaArgs", "false"));
     }
 
     public void setPackVer (String string) {

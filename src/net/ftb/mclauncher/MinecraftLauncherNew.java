@@ -111,6 +111,10 @@ public class MinecraftLauncherNew {
             Logger.logInfo("Additional java parameters: " + additionalOptions);
             Collections.addAll(arguments, additionalOptions.split("\\s+"));
         }
+        if (Settings.getSettings().getOptJavaArgs()) {
+            Logger.logInfo("Adding Optimization Arguments");
+            Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
+        }
 
         //Undocumented environment variable to control JVM
         String additionalEnvVar = System.getenv("_JAVA_OPTIONS");
