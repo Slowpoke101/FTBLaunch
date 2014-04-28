@@ -73,7 +73,9 @@ public class Settings extends Properties {
 
     public void save () {
         try {
-            store(new FileOutputStream(configFile), "FTBLaunch Config File");
+            FileOutputStream fos = new FileOutputStream(configFile);
+            store(fos, "FTBLaunch Config File");
+            fos.close();
         } catch (IOException e) {
             Logger.logError("Failed to save settings", e);
         }

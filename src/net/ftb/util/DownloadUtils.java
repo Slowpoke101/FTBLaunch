@@ -276,18 +276,24 @@ public class DownloadUtils extends Thread {
      * @throws IOException 
      */
     public static String fileMD5 (File file) throws IOException {
-        if (file.exists())
-            return DigestUtils.md5Hex(new FileInputStream(file));
-        else
+        if (file.exists()) {
+            FileInputStream fis = new FileInputStream(file);
+            String result = DigestUtils.md5Hex(fis);
+            fis.close();
+            return result;
+        } else
             return "";
 
         //return fileHash(file, "md5");
     }
 
     public static String fileSHA (File file) throws IOException {
-        if (file.exists())
-            return DigestUtils.sha1Hex(new FileInputStream(file)).toLowerCase();
-        else
+        if (file.exists()) {
+            FileInputStream fis = new FileInputStream(file);
+            String result = DigestUtils.sha1Hex(fis).toLowerCase();
+            fis.close();
+            return result;
+        } else
             return "";
         //return fileHash(file, "sha1").toLowerCase();
     }
