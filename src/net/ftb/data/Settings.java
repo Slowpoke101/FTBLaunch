@@ -80,6 +80,10 @@ public class Settings extends Properties {
     }
 
     public String getRamMax () {
+        if (getJavaVersion().is64bits && OSUtils.getOSTotalMemory() > 6144)//6gb or more default to 2gb of ram for MC
+            return getProperty("ramMax", Integer.toString(2048));
+        else if (getJavaVersion().is64bits)//on 64 bit java default to 1.5gb newer pack's need more than a gig
+            return getProperty("ramMax", Integer.toString(1536));
         return getProperty("ramMax", Integer.toString(1024));
     }
 
@@ -105,7 +109,7 @@ public class Settings extends Properties {
 
     public String getJavaPath () {
         String javaPath = getProperty("javaPath", getDefaultJavaPath());
-        if(javaPath == null || !new File(javaPath).isFile())
+        if (javaPath == null || !new File(javaPath).isFile())
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
     }
@@ -114,7 +118,7 @@ public class Settings extends Properties {
      * Returns user selected or automatically selected JVM's
      * JavaInfo object.
      */
-    public JavaInfo getJavaVersion() {
+    public JavaInfo getJavaVersion () {
         JavaInfo javaVersion = new JavaInfo(getJavaPath());
         return javaVersion;
         //return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};
@@ -124,19 +128,19 @@ public class Settings extends Properties {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
         JavaInfo javaVersion;
-        
-        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+
+        if (OSUtils.getCurrentOS() == OS.MACOSX) {
             javaVersion = JavaFinder.parseJavaVersion();
-            
-            if(javaVersion != null && javaVersion.path != null)
+
+            if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path;
-        } else if(OSUtils.getCurrentOS() == OS.WINDOWS) { 
+        } else if (OSUtils.getCurrentOS() == OS.WINDOWS) {
             javaVersion = JavaFinder.parseJavaVersion();
-            
-            if(javaVersion != null && javaVersion.path != null) 
+
+            if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path.replace(".exe", "w.exe");
         }
-        
+
         return System.getProperty("java.home") + ("/bin/java" + (OSUtils.getCurrentOS() == OS.WINDOWS ? "w" : "")).replace("/", separator);
     }
 
