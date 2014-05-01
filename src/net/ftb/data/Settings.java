@@ -110,19 +110,20 @@ public class Settings extends Properties {
     }
 
     public String getJavaPath () {
-        String javaPath = getProperty("javaPath", "");
+        String javaPath = getProperty("javaPath", null);
         if (javaPath == null || !new File(javaPath).isFile())
-            setProperty("javaPath", "");
+            remove("javaPath");
 
         javaPath = getProperty("javaPath", getDefaultJavaPath());
         if (javaPath == null || !new File(javaPath).isFile())
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
     }
+
     /**
-     * Returns user selected or automatically selected JVM's
-     * JavaInfo object.
-     */
+    * Returns user selected or automatically selected JVM's
+    * JavaInfo object.
+    */
     public JavaInfo getJavaVersion () {
         JavaInfo javaVersion = new JavaInfo(getJavaPath());
         return javaVersion;
