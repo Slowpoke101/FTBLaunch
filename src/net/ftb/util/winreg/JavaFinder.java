@@ -113,7 +113,7 @@ public class JavaFinder {
         if(javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
 
-        javaExecs.add("/Library/Internet\\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
+        javaExecs.add("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
         
         List<JavaInfo> result = new ArrayList<JavaInfo>();
         for (String javaPath : javaExecs) {
