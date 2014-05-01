@@ -186,14 +186,10 @@ public class LaunchFrame extends JFrame {
         /*
          *  Create dynamic storage location as soon as possible
          */
-        File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-        if (!dynamicDir.exists()) {
-            dynamicDir.mkdirs();
-        }
+        OSUtils.createStorageLocations();
+        
         File cacheDir = new File(OSUtils.getCacheStorageLocation());
-        if (!cacheDir.exists()) {
-            cacheDir.mkdirs();
-        }
+        File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");

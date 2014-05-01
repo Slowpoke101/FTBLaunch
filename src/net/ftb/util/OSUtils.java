@@ -113,6 +113,37 @@ public class OSUtils {
             return getDefInstallPath() + "/temp/";
         }
     }
+    
+    public static void createStorageLocations() {
+        File cacheDir = new File(OSUtils.getCacheStorageLocation());
+        File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
+        
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+            
+            if (dynamicDir.exists()) {
+                // Migrate cached archives from the user's roaming profile to their local cache
+                
+                Logger.logInfo("Migrating cached Maps from Roaming to Local storage");
+                FileUtils.move(new File(dynamicDir, "Maps"), new File(cacheDir, "Maps"));
+                
+                Logger.logInfo("Migrating cached Modpacks from Roaming to Local storage");
+                FileUtils.move(new File(dynamicDir, "ModPacks"), new File(cacheDir, "ModPacks"));
+                
+                Logger.logInfo("Migrating cached Texturepacks from Roaming to Local storage");
+                FileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
+                
+                Logger.logInfo("Migrating launcher settings");
+                FileUtils.move(new File(dynamicDir, "logindata"), new File(cacheDir, "logindata"));
+                
+                Logger.logInfo("Migration complete.");
+            }
+        }
+        
+        if (!dynamicDir.exists()) {
+            dynamicDir.mkdirs();
+        }
+    }
 
     public static long getOSTotalMemory () {
         long ram = 0;
