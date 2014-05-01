@@ -193,6 +193,9 @@ public class LaunchFrame extends JFrame {
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
+        
+        // Use system default proxy settings
+        System.setProperty("java.net.useSystemProxies", "true");
 
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
