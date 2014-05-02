@@ -26,14 +26,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -77,16 +73,13 @@ import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
-import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
-import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
-import net.ftb.gui.LaunchFrameHelpers;
 import net.ftb.gui.panes.ILauncherPane;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -310,8 +303,6 @@ public class LaunchFrame extends JFrame {
 
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
-                
-                AdvancedOptionsDialog.setDownloadServers();
 
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
