@@ -316,10 +316,12 @@ public class LaunchFrame extends JFrame {
 
                 LoadingDialog.setProgress(140);
 
-                con = new LauncherConsole();
-                con.setVisible(Settings.getSettings().getConsoleActive());
-                Logger.addListener(con);
-                con.scrollToBottom();
+                if (Settings.getSettings().getConsoleActive()) {
+                    con = new LauncherConsole();
+                    con.setVisible(true);
+                    Logger.addListener(con);
+                    con.scrollToBottom();
+                }
 
                 LaunchFrameHelpers.googleAnalytics();
 
