@@ -202,7 +202,7 @@ public class ModPack {
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        String installPath = OSUtils.getDynamicStorageLocation();
+        String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
         URL url_;

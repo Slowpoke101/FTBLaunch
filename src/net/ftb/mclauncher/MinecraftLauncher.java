@@ -108,14 +108,14 @@ public class MinecraftLauncher {
 
         arguments.add(MinecraftLauncher.class.getCanonicalName());
         arguments.add(workingDir);
-        arguments.add((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getDynamicStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
+        arguments.add((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
                 + separator + ModPack.getSelectedPack().getAnimation() : "empty");
         arguments.add(forgename);
         arguments.add(username);
         arguments.add(password);
         arguments.add(ModPack.getSelectedPack().getName() + " v"
                 + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
-        arguments.add(OSUtils.getDynamicStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
+        arguments.add(OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
 
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         processBuilder.redirectErrorStream(true);

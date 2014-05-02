@@ -114,7 +114,7 @@ public class MapManager extends JDialog {
 
         protected void downloadMap (String mapName, String dir) throws IOException, NoSuchAlgorithmException {
             Logger.logInfo("Downloading Map");
-            String installPath = OSUtils.getDynamicStorageLocation();
+            String installPath = OSUtils.getCacheStorageLocation();
             Map map = Map.getSelectedMap();
             new File(installPath + "/Maps/" + dir + "/").mkdirs();
             new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
@@ -126,7 +126,7 @@ public class MapManager extends JDialog {
         protected void installMap (String mapName, String dir) throws IOException {
             Logger.logInfo("Installing Map");
             String installPath = Settings.getSettings().getInstallPath();
-            String tempPath = OSUtils.getDynamicStorageLocation();
+            String tempPath = OSUtils.getCacheStorageLocation();
             Map map = Map.getSelectedMap();
             new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
             FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
@@ -177,7 +177,7 @@ public class MapManager extends JDialog {
 
     public static void cleanUp () {
         Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-        File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "Maps" + sep + map.getMapName() + sep);
+        File tempFolder = new File(OSUtils.getCacheStorageLocation(), "Maps" + sep + map.getMapName() + sep);
         for (String file : tempFolder.list()) {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
                 try {

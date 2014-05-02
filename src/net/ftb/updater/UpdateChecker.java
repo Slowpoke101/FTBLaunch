@@ -52,7 +52,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         //try{Thread.sleep(10000);}catch (Exception e){}
         loadInfo();
         try {
-            FileUtils.delete(new File(OSUtils.getDynamicStorageLocation(), "updatetemp"));
+            FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
         } catch (Exception ignored) {
             Logger.logError(ignored.getMessage(), ignored);
         }
@@ -107,7 +107,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         } catch (IOException e) {
             Logger.logError("Couldn't get path to current launcher jar/exe", e);
         }
-        String temporaryUpdatePath = OSUtils.getDynamicStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
+        String temporaryUpdatePath = OSUtils.getCacheStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
         String extension = path.substring(path.lastIndexOf('.') + 1);
         extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
         try {

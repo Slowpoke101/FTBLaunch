@@ -180,10 +180,10 @@ public class LaunchFrame extends JFrame {
         /*
          *  Create dynamic storage location as soon as possible
          */
+        OSUtils.createStorageLocations();
+        
+        File cacheDir = new File(OSUtils.getCacheStorageLocation());
         File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-        if (!dynamicDir.exists()) {
-            dynamicDir.mkdirs();
-        }
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -283,7 +283,8 @@ public class LaunchFrame extends JFrame {
 
                 LoadingDialog.setProgress(130);
 
-                userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+                // Store this in the cache (local) storage, since it's machine specific.
+                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"));
 
                 LoadingDialog.setProgress(140);
 
@@ -737,7 +738,7 @@ public class LaunchFrame extends JFrame {
         if (Settings.getSettings().isForceUpdateEnabled() || !verFile.exists() || checkVersion(verFile, pack)) {
             if (doVersionBackup) {
                 try {
-                    File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
+                    File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
                     if (destination.exists()) {
                         FileUtils.delete(destination);
                     }
@@ -1106,7 +1107,7 @@ public class LaunchFrame extends JFrame {
      */
     protected void installMods (String modPackName) throws IOException {
         String installpath = Settings.getSettings().getInstallPath();
-        String temppath = OSUtils.getDynamicStorageLocation();
+        String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 

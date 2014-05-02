@@ -128,7 +128,7 @@ public class Map {
         this.compatible = compatible.split(",");
         this.mcversion = mcversion;
         this.mapname = mapname;
-        String installPath = OSUtils.getDynamicStorageLocation();
+        String installPath = OSUtils.getCacheStorageLocation();
         this.info = info;
         logoName = logo;
         imageName = image;

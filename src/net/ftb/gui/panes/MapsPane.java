@@ -271,7 +271,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
                 mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
-                File tempDir = new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
+                File tempDir = new File(OSUtils.getCacheStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
                 mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + Map.getMap(getIndex()).getInfo() + packs);
                 mapInfo.setCaretPosition(0);

@@ -353,7 +353,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
                     }
                     packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                     packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    File tempDir = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + File.separator + ModPack.getPack(getIndex()).getDir());
+                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + ModPack.getPack(getIndex()).getDir());
                     packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + ModPack.getPack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                             + ModPack.getPack(getIndex()).getInfo() + mods);
                     packInfo.setCaretPosition(0);
