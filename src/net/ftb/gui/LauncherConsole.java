@@ -53,14 +53,11 @@ import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
 import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
-import net.ftb.log.LogWriter;
 import net.ftb.log.Logger;
 import net.ftb.tools.PastebinPoster;
 
 @SuppressWarnings("serial")
 public class LauncherConsole extends JFrame implements ILogListener {
-    private final static String launcherLogFile = "FTBLauncherLog.txt";
-    private final static String minecraftLogFile = "MinecraftLog.txt";
     private final JEditorPane displayArea;
     private final HTMLEditorKit kit;
     private HTMLDocument doc;
@@ -69,38 +66,6 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private final JComboBox logSourceComboBox;
     private LogSource logSource = LogSource.ALL;
     private YNDialog yn;
-
-    private class OutputOverride extends PrintStream {
-        final LogLevel level;
-
-        public OutputOverride(OutputStream str, LogLevel type) {
-            super(str);
-            this.level = type;
-        }
-
-        @Override
-        public void write (byte[] b) throws IOException {
-            super.write(b);
-            String text = new String(b).trim();
-            if (!text.equals("") && !text.equals("\n")) {
-                Logger.log("From Console: " + text, level, null);
-            }
-        }
-
-        @Override
-        public void write (byte[] buf, int off, int len) {
-            super.write(buf, off, len);
-            String text = new String(buf, off, len).trim();
-            if (!text.equals("") && !text.equals("\n")) {
-                Logger.log("From Console: " + text, level, null);
-            }
-        }
-
-        @Override
-        public void write (int b) {
-            throw new UnsupportedOperationException("Write(int) is not supported by OutputOverride.");
-        }
-    }
 
     public LauncherConsole() {
         setTitle(I18N.getLocaleString("CONSOLE_TITLE"));
@@ -238,16 +203,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         pack();
 
         refreshLogs();
-        Logger.addListener(this);
 
-        System.setOut(new OutputOverride(System.out, LogLevel.INFO));
-        System.setErr(new OutputOverride(System.err, LogLevel.ERROR));
-        try {
-            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
-            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
-        } catch (IOException e1) {
-            Logger.logError(e1.getMessage(), e1);
-        }
     }
 
     synchronized private void refreshLogs () {

@@ -35,9 +35,7 @@ public class LogThread extends Thread {
         setName("Log dispatcher");
         try {
             while ((entry = logQueue.take()) != null) {
-                if (listeners.isEmpty()) {
-                    (entry.level == LogLevel.ERROR ? System.err : System.out).println(entry.toString(LogType.EXTENDED));
-                } else {
+                if (!listeners.isEmpty()) {
                     List<ILogListener> tempListeners = new ArrayList<ILogListener>();
                     tempListeners.addAll(listeners);
                     for (ILogListener listener : tempListeners) {
