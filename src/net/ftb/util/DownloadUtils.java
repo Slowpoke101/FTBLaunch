@@ -410,18 +410,6 @@ public class DownloadUtils extends Thread {
             // and the user/we will not even know why an error has occurred. 
             Logger.logInfo("DL ready");
 
-            try {
-                /* 
-                 * TODO: this will need some work. LaunchFrame.getInstance() WAS ALWAYS null and this code
-                 * actually is ecexuted
-                 */
-                if (LaunchFrame.getInstance() != null && LaunchFrame.getInstance().optionsPane != null) {
-                    AdvancedOptionsDialog.setDownloadServers();
-                }
-            } catch (Exception e) {
-                Logger.logError("Unknown error setting download servers: " + e.getMessage());
-            }
-
             String selectedMirror = Settings.getSettings().getDownloadServer();
             String selectedHost = downloadServers.get(selectedMirror);
             String resolvedIP = "UNKNOWN";
