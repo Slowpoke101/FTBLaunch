@@ -138,7 +138,7 @@ public class LaunchFrame extends JFrame {
     @Getter
     private static LaunchFrame instance = null;
     @Getter
-    private static String version = "1.3.9";
+    private static String version = "1.4.0";
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -150,7 +150,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
-    public static int buildNumber = 139;
+    public static int buildNumber = 140;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
