@@ -45,9 +45,12 @@ public class LoginWorker extends SwingWorker<String, Void> {
                     Logger.logError("Error using authlib");
                 }
             }
-            if (!authlibreturn.equals(null) && !authlibreturn.isEmpty()) {
+            if (authlibreturn!=null && !authlibreturn.isEmpty()) {
                 Logger.logInfo("using Authlib authentication data");
                 return "A:" + authlibreturn;
+            }
+            else {
+                ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
             }
         } catch (Exception e) {
             ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
