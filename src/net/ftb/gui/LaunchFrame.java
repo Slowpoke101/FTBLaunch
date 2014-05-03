@@ -51,6 +51,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
@@ -622,19 +623,23 @@ public class LaunchFrame extends JFrame {
     }
 
     public static void checkDoneLoading () {
-        if (ModpacksPane.loaded) {
-            LoadingDialog.setProgress(190);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (ModpacksPane.loaded) {
+                    LoadingDialog.setProgress(190);
 
-            if (MapsPane.loaded) {
-                LoadingDialog.setProgress(200);
+                    if (MapsPane.loaded) {
+                        LoadingDialog.setProgress(200);
 
-                if (TexturepackPane.loaded) {
-                    loader.setVisible(false);
-                    instance.setVisible(true);
-                    instance.toFront();
+                        if (TexturepackPane.loaded) {
+                            loader.setVisible(false);
+                            instance.setVisible(true);
+                            instance.toFront();
+                        }
+                    }
                 }
             }
-        }
+        });
     }
 
     public void setNewsIcon () {

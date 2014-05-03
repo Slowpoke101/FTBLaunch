@@ -40,6 +40,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
@@ -257,7 +258,12 @@ public class LauncherConsole extends JFrame implements ILogListener {
     @Override
     public void onLogEvent (LogEntry entry) {
         if (logSource == LogSource.ALL || entry.source == logSource) {
-            addHTML(getMessage(entry));
+            final LogEntry entry_ = entry;
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    addHTML(getMessage(entry_));
+                }
+            });
         }
     }
 }
