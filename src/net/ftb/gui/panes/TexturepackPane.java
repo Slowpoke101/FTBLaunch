@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -221,9 +222,14 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     @Override
     public void onTexturePackAdded (TexturePack texturePack) {
-        addTexturePack(texturePack);
-        Logger.logInfo("Adding texture pack " + getTexturePackNum() + " (" + texturePack.getName() + ")");
-        updateTexturePacks();
+        final TexturePack texturePack_ = texturePack;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                addTexturePack(texturePack_);
+                Logger.logInfo("Adding texture pack " + getTexturePackNum() + " (" + texturePack_.getName() + ")");
+                updateTexturePacks();
+            }
+        });
     }
 
     public static void sortTexturePacks () {
