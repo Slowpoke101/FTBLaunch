@@ -461,7 +461,7 @@ public class DownloadUtils extends Thread {
                             IOUtils.toString(new URL("http://" + e.getValue().getAsString() + "/" + location));
                             h.put(e.getKey(), e.getValue().getAsString());
                         } catch (Exception ex) {
-                            Logger.logWarn(e.getValue().getAsString().contains("creeper") ? "CreeperHost" : "Curse" + " Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());
+                            Logger.logWarn((e.getValue().getAsString().contains("creeper") ? "CreeperHost" : "Curse") + " Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());
                         }
 
                         if (i < 90)
