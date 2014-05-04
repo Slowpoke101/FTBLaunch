@@ -40,7 +40,7 @@ public class LaunchFrameHelpers {
             Logger.logWarn("Warning: 32 Bit operating system. 64 Bit is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
 
-        if (OSUtils.is64BitOS() && !OSUtils.is64BitVM()) {//unfortunately the easy to find DL links are for 32 bit java
+        if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {//unfortunately the easy to find DL links are for 32 bit java
             Logger.logWarn("Warning: 32 Bit Java in 64 Bit operating system. 64 Bit Java is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
     }

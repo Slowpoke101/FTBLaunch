@@ -115,7 +115,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         ramMaximum.setMinorTickSpacing(256);
         ramMaximum.setMinimum(256);
 
-        Boolean vm64Bits = OSUtils.is64BitVM();
+        Boolean vm64Bits = Settings.getSettings().getCurrentJava().is64bits;
         if (vm64Bits != null) {
             if (vm64Bits) {
                 ramMaximum.setMaximum((int) ram);
@@ -212,7 +212,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || (java.getMajor() == 1 ||  java.getMinor() > 7))){
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
-        }else if (!OSUtils.is64BitVM()) {//needs to use proper bit's
+        }else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
             addUpdateLabel("JAVA_32BIT_WARNING");
             if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
                 if (OSUtils.is64BitWindows()) {
