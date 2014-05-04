@@ -66,7 +66,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     FileOutputStream output = new FileOutputStream(asset.local);
                     int readLen;
                     int currentSize = 0;
-                    int size = Integer.parseInt(con.getHeaderField("Content-Length"));
+                    int remoteSize = Integer.parseInt(con.getHeaderField("Content-Length"));
                     if (asset.hash == null && asset.getPrimaryDLType() == DLType.ETag){
                         remoteHash = con.getHeaderField("ETag").replace("\"", "");
                         hashType = "md5";
@@ -79,7 +79,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     while ((readLen = input.read(buffer, 0, buffer.length)) != -1) {
                         output.write(buffer, 0, readLen);
                         currentSize += readLen;
-                        int prog = (int) ((currentSize / size) * 100);
+                        int prog = (int) ((currentSize / remoteSize) * 100);
                         if (prog > 100)
                             prog = 100;
                         if (prog < 0)
@@ -103,18 +103,22 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                             remoteHash = asset.hash;
                         }
                     }
-                    if (con instanceof HttpURLConnection && (currentSize == asset.size || asset.size <= 0)) {
+                    if (con instanceof HttpURLConnection && currentSize > 0 && currentSize == remoteSize ) {
                         if ((hash != null && !hash.toLowerCase().equals(assetHash))) {
+                            Logger.logWarn("Asset hash checking failed: " + asset.name);
                             asset.local.delete();
                         } else {
                             downloadSuccess = true;
                         }
                     }
+                    else {
+                        asset.local.delete();
+                        Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + "local: " + currentSize );
+                    }
                     progressIndex += 1;
                 } catch (Exception e) {
-                    e.printStackTrace();
                     downloadSuccess = false;
-                    Logger.logWarn("Connection failed, trying again");
+                    Logger.logWarn("Connection failed, trying again", e);
                 }
             }
             if (!downloadSuccess) {
