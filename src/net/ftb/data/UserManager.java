@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
 import net.ftb.gui.LaunchFrame;
@@ -82,6 +83,8 @@ public class UserManager {
                 objectInputStream.close();
                 fileInputStream.close();
             }
+        } catch (StreamCorruptedException e) {
+            Logger.logWarn("Failed to decode logindata. Trying old format");
         } catch (Exception e) {
             Logger.logError("Failed to decode logindata", e);
         }

@@ -91,6 +91,7 @@ public class LaunchFrameHelpers {
 
         File stamp = new File(OSUtils.getDynamicStorageLocation(), "stamp");
         long unixTime = System.currentTimeMillis() / 1000L;
+        long unixts=0;
         try {
             if (!stamp.exists()) {
                 FileOutputStream fos = new FileOutputStream(stamp);
@@ -109,7 +110,11 @@ public class LaunchFrameHelpers {
                     timeBuilder.append(String.valueOf(c));
                 }
                 String time = timeBuilder.toString();
-                long unixts = Long.valueOf(time);
+                try {
+                    unixts = Long.valueOf(time);
+                } catch (NumberFormatException e) {
+                    Logger.logWarn("Malformed stamp-file. Will be fixed automatically");
+                }
                 unixts = unixts + (24 * 60 * 60);
                 if (unixts < unixTime) {
                     FileOutputStream fos = new FileOutputStream(stamp);
