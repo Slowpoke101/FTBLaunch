@@ -147,6 +147,8 @@ public class AdvancedOptionsDialog extends JDialog {
         settings.setSnooper(snooper.isSelected());
         settings.setDebugLauncher(debugLauncherVerbose.isSelected());
         settings.save();
+        // invalidate current java information
+        settings.setCurrentJava(null);
     }
 
     private void setupGui () {

@@ -176,8 +176,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(locale);
 
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
-        JavaInfo javaVersion = Settings.getSettings().getJavaVersion();
-        if(javaVersion.getMajor() < 1 || (javaVersion.getMajor() == 1 && javaVersion.getMinor() < 7)){
+        JavaInfo java = Settings.getSettings().getCurrentJava();
+        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
             if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
                 if(JavaFinder.java8Found) {//they need the jdk link
                     addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
@@ -209,7 +209,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 }
             }
         }
-        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (javaVersion.getMajor() > 1 || (javaVersion.getMajor() == 1 ||  javaVersion.getMinor() > 7))){
+        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || (java.getMajor() == 1 ||  java.getMinor() > 7))){
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
         }else if (!OSUtils.is64BitVM()) {//needs to use proper bit's

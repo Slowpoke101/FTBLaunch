@@ -1457,10 +1457,10 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        JavaInfo javaVersion = Settings.getSettings().getJavaVersion();
+        JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-            if (minSup.length >= 2 && minSup[0] <= javaVersion.getMajor() && minSup[1] <= javaVersion.getMinor()){
+            if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()){
                 Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
                 saveSettings();
                 doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
