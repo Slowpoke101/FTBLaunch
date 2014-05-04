@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -222,9 +223,14 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
     @Override
     public void onMapAdded (Map map) {
-        addMap(map);
-        Logger.logInfo("Adding map " + getMapNum() + " (" + map.getName() + ")");
-        updateMaps();
+        final Map map_ = map;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                addMap(map_);
+                Logger.logInfo("Adding map " + getMapNum() + " (" + map_.getName() + ")");
+                updateMaps();
+            }
+        });
     }
 
     public static void sortMaps () {
@@ -271,7 +277,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
                 mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
-                File tempDir = new File(OSUtils.getDynamicStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
+                File tempDir = new File(OSUtils.getCacheStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
                 mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + Map.getMap(getIndex()).getInfo() + packs);
                 mapInfo.setCaretPosition(0);

@@ -26,14 +26,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -55,6 +51,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
@@ -78,14 +75,12 @@ import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
-import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
-import net.ftb.gui.LaunchFrameHelpers;
 import net.ftb.gui.panes.ILauncherPane;
 import net.ftb.gui.panes.MapsPane;
 import net.ftb.gui.panes.ModpacksPane;
@@ -97,6 +92,10 @@ import net.ftb.locale.I18N.Locale;
 import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
+import net.ftb.log.LogSource;
+import net.ftb.log.LogWriter;
+import net.ftb.log.OutputOverride;
+import net.ftb.log.StdOutLogger;
 import net.ftb.log.StreamLogger;
 import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.mclauncher.MinecraftLauncherNew;
@@ -144,7 +143,7 @@ public class LaunchFrame extends JFrame {
     @Getter
     private static LaunchFrame instance = null;
     @Getter
-    private static String version = "1.3.9";
+    private static String version = "1.4.0";
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -156,7 +155,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
-    public static int buildNumber = 139;
+    public static int buildNumber = 140;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -170,6 +169,8 @@ public class LaunchFrame extends JFrame {
     public static LoadingDialog loader;
 
     public static final String FORGENAME = "MinecraftForge.zip";
+    private final static String launcherLogFile = "FTBLauncherLog.txt";
+    private final static String minecraftLogFile = "MinecraftLog.txt";
 
     @Getter
     private static ProcessMonitor procMonitor;
@@ -186,16 +187,46 @@ public class LaunchFrame extends JFrame {
         /*
          *  Create dynamic storage location as soon as possible
          */
+        OSUtils.createStorageLocations();
+        
+        File cacheDir = new File(OSUtils.getCacheStorageLocation());
         File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-        if (!dynamicDir.exists()) {
-            dynamicDir.mkdirs();
-        }
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
         
         // Use system default proxy settings
         System.setProperty("java.net.useSystemProxies", "true");
+
+        if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
+            new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
+        }
+
+        if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
+            new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
+        }
+        
+
+        /*
+         * Create new StdoutLogger as soon as possible
+         */
+        Logger.addListener(new StdOutLogger());
+        /*
+         * Setup System.out and System.err redirection as soon as possible
+         */
+        System.setOut(new OutputOverride(System.out, LogLevel.INFO));
+        System.setErr(new OutputOverride(System.err, LogLevel.ERROR));
+
+        /*
+         * Setup LogWriters as soon as possible
+         */
+        try {
+            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
+            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
+        } catch (IOException e1) {
+            Logger.logError(e1.getMessage(), e1);
+        }
+
 
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
@@ -215,13 +246,6 @@ public class LaunchFrame extends JFrame {
 
         LaunchFrameHelpers.printInfo();
 
-        if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
-        }
-
-        if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
-        }
 
         /*
          * Resolves servers in background thread
@@ -292,13 +316,17 @@ public class LaunchFrame extends JFrame {
 
                 LoadingDialog.setProgress(130);
 
-                userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+                // Store this in the cache (local) storage, since it's machine specific.
+                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"));
 
                 LoadingDialog.setProgress(140);
 
-                con = new LauncherConsole();
-                con.setVisible(Settings.getSettings().getConsoleActive());
-                con.scrollToBottom();
+                if (Settings.getSettings().getConsoleActive()) {
+                    con = new LauncherConsole();
+                    con.setVisible(true);
+                    Logger.addListener(con);
+                    con.scrollToBottom();
+                }
 
                 LaunchFrameHelpers.googleAnalytics();
 
@@ -312,7 +340,7 @@ public class LaunchFrame extends JFrame {
 
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
-                
+
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
@@ -598,19 +626,23 @@ public class LaunchFrame extends JFrame {
     }
 
     public static void checkDoneLoading () {
-        if (ModpacksPane.loaded) {
-            LoadingDialog.setProgress(190);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (ModpacksPane.loaded) {
+                    LoadingDialog.setProgress(190);
 
-            if (MapsPane.loaded) {
-                LoadingDialog.setProgress(200);
+                    if (MapsPane.loaded) {
+                        LoadingDialog.setProgress(200);
 
-                if (TexturepackPane.loaded) {
-                    loader.setVisible(false);
-                    instance.setVisible(true);
-                    instance.toFront();
+                        if (TexturepackPane.loaded) {
+                            loader.setVisible(false);
+                            instance.setVisible(true);
+                            instance.toFront();
+                        }
+                    }
                 }
             }
-        }
+        });
     }
 
     public void setNewsIcon () {
@@ -746,7 +778,7 @@ public class LaunchFrame extends JFrame {
         if (Settings.getSettings().isForceUpdateEnabled() || !verFile.exists() || checkVersion(verFile, pack)) {
             if (doVersionBackup) {
                 try {
-                    File destination = new File(OSUtils.getDynamicStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
+                    File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
                     if (destination.exists()) {
                         FileUtils.delete(destination);
                     }
@@ -1115,7 +1147,7 @@ public class LaunchFrame extends JFrame {
      */
     protected void installMods (String modPackName) throws IOException {
         String installpath = Settings.getSettings().getInstallPath();
-        String temppath = OSUtils.getDynamicStorageLocation();
+        String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 

@@ -97,7 +97,7 @@ public class TexturePack {
         this.version = version;
         this.url = url;
         this.version = version;
-        String installPath = OSUtils.getDynamicStorageLocation();
+        String installPath = OSUtils.getCacheStorageLocation();
         logoName = logo;
         imageName = image;
         String[] tmp = compatible.split(",");
