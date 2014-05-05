@@ -132,7 +132,7 @@ public class Settings extends Properties {
         return currentJava;
     }
 
-    private String getDefaultJavaPath () {
+    public String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
         String defaultPath = null;
         JavaInfo javaVersion;
