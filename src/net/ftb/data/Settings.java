@@ -50,6 +50,8 @@ public class Settings extends Properties {
     @Getter
     private static Settings settings;
     private File configFile;
+    @Setter
+    private static JavaInfo currentJava = null;
     @Getter
     @Setter
     private boolean forceUpdateEnabled = false;
@@ -82,9 +84,9 @@ public class Settings extends Properties {
     }
 
     public String getRamMax () {
-        if (getJavaVersion().is64bits && OSUtils.getOSTotalMemory() > 6144)//6gb or more default to 2gb of ram for MC
+        if (getCurrentJava().is64bits && OSUtils.getOSTotalMemory() > 6144)//6gb or more default to 2gb of ram for MC
             return getProperty("ramMax", Integer.toString(2048));
-        else if (getJavaVersion().is64bits)//on 64 bit java default to 1.5gb newer pack's need more than a gig
+        else if (getCurrentJava().is64bits)//on 64 bit java default to 1.5gb newer pack's need more than a gig
             return getProperty("ramMax", Integer.toString(1536));
         return getProperty("ramMax", Integer.toString(1024));
     }
@@ -124,10 +126,10 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
-    public JavaInfo getJavaVersion () {
-        JavaInfo javaVersion = new JavaInfo(getJavaPath());
-        return javaVersion;
-        //return new int[]{javaVersion.getMajor(), javaVersion.getMinor()};
+    public JavaInfo getCurrentJava() {
+        if (currentJava == null)
+            currentJava = new JavaInfo(getJavaPath());
+        return currentJava;
     }
 
     private String getDefaultJavaPath () {
