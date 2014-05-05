@@ -47,7 +47,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
             DownloadInfo asset = downloads.get(x);
             String remoteHash = asset.hash;
             int attempt = 0;
-            final int attempts = 2;
+            final int attempts = 5;
             boolean downloadSuccess = false;
             while (!downloadSuccess && (attempt < attempts)) {
                 try {
