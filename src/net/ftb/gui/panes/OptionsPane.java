@@ -52,8 +52,8 @@ import net.ftb.util.winreg.JavaInfo;
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
     private JToggleButton tglbtnForceUpdate;
-    private JButton installBrowseBtn, advancedOptionsBtn, btnInstallJava;
-    private JLabel lblJavaVersion, lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX, lbl32BitWarning;
+    private JButton installBrowseBtn, advancedOptionsBtn, btnInstallJava = new JButton();
+    private JLabel lblJavaVersion, lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX, lbl32BitWarning = new JLabel();
     private JSlider ramMaximum;
     private JComboBox locale;
     private JTextField installFolderTextField;
@@ -175,51 +175,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(lblLocale);
         add(locale);
 
-        // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
-        JavaInfo java = Settings.getSettings().getCurrentJava();
-        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
-            if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
-                if(JavaFinder.java8Found) {//they need the jdk link
-                    addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
-                    addUpdateLabel("JAVA_NEW_Warning");
-                }else if(OSUtils.canRun7OnMac()){
-                    addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }else{
-                    //TODO deal with old mac's that can't run java 7
-                }
-            }
-            else if(OSUtils.is64BitOS()){
-                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
-                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
-                    addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-            }else{
-                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
-                    addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
-                    addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-            }
-        }
-        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || (java.getMajor() == 1 ||  java.getMinor() > 7))){
-            addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
-            addUpdateLabel("JAVA_NEW_Warning");
-        }else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
-            addUpdateLabel("JAVA_32BIT_WARNING");
-            if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
-                if (OSUtils.is64BitWindows()) {
-                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
-                }
-            }
-        }
+        updateJavaLabels();
 
         chckbxShowConsole = new JCheckBox(I18N.getLocaleString("SHOW_CONSOLE"));
         chckbxShowConsole.addFocusListener(settingsChangeListener);
@@ -289,8 +245,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     @Override
     public void onVisible () {
     }
+
     public void addUpdateJREButton(final String webLink, String unlocMessage){
-        btnInstallJava = new JButton(I18N.getLocaleString(unlocMessage));
+        btnInstallJava.setText(I18N.getLocaleString(unlocMessage));
         btnInstallJava.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -306,14 +263,66 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 }
             }
         });
-        btnInstallJava.setBounds(345, 200, 150, 28);
+        btnInstallJava.setBounds(345, 210, 150, 28);
         add(btnInstallJava);
     }
+
     public void addUpdateLabel(final String unlocMessage){
-        lbl32BitWarning = new JLabel(I18N.getLocaleString(unlocMessage));
-        lbl32BitWarning.setBounds(190, 170, 500, 25);
+        lbl32BitWarning.setText(I18N.getLocaleString(unlocMessage));
+        lbl32BitWarning.setBounds(147, 180, 600, 25);
         lbl32BitWarning.setForeground(Color.red);
         add(lbl32BitWarning);
 
+    }
+
+    public void updateJavaLabels() {
+        remove(lbl32BitWarning);
+        remove(btnInstallJava);
+        // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
+        JavaInfo java = Settings.getSettings().getCurrentJava();
+        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
+            if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
+                if(JavaFinder.java8Found) {//they need the jdk link
+                    addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
+                    addUpdateLabel("JAVA_NEW_Warning");
+                }else if(OSUtils.canRun7OnMac()){
+                    addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }else{
+                    //TODO deal with old mac's that can't run java 7
+                }
+            }
+            else if(OSUtils.is64BitOS()){
+                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                    addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+            }else{
+                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                    addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                    addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
+                    addUpdateLabel("JAVA_OLD_Warning");
+                }
+            }
+        }
+        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || (java.getMajor() == 1 ||  java.getMinor() > 7))){
+            addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
+            addUpdateLabel("JAVA_NEW_Warning");
+        }else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
+            addUpdateLabel("JAVA_32BIT_WARNING");
+            if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
+                if (OSUtils.is64BitWindows()) {
+                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
+                }
+            }
+        }
+        repaint();
     }
 }
