@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.swing.SwingWorker;
 
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.info.DownloadInfo.DLType;
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
@@ -20,7 +22,6 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
     private List<DownloadInfo> downloads;
     private final ProgressMonitor monitor;
     private String status;
-    private String hashType;
     private int progressIndex = 0;
 
     public AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
@@ -46,6 +47,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         for (int x = 0; x < downloads.size(); x++) {
             DownloadInfo asset = downloads.get(x);
             String remoteHash = asset.hash;
+            String hashType;
             int attempt = 0;
             final int attempts = 5;
             boolean downloadSuccess = false;
@@ -55,18 +57,18 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     if (attempt++ > 0) {
                         Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
                     }
+
+                    // Will this break something?
+                    //HTTPURLConnection con = (HttpURLConnection) asset.url.openConnection();
                     URLConnection con = asset.url.openConnection();
                     if (con instanceof HttpURLConnection) {
                         con.setRequestProperty("Cache-Control", "no-cache");
+                        ((HttpURLConnection) con).setRequestMethod("HEAD");
                         con.connect();
                     }
-                    this.status = "Downloading " + asset.name + "...";
-                    asset.local.getParentFile().mkdirs();
-                    InputStream input = con.getInputStream();
-                    FileOutputStream output = new FileOutputStream(asset.local);
-                    int readLen;
-                    int currentSize = 0;
-                    int remoteSize = Integer.parseInt(con.getHeaderField("Content-Length"));
+
+                    // gather data for basic checks
+                    long remoteSize = Long.parseLong(con.getHeaderField("Content-Length"));
                     if (asset.hash == null && asset.getPrimaryDLType() == DLType.ETag){
                         remoteHash = con.getHeaderField("ETag").replace("\"", "");
                         hashType = "md5";
@@ -75,7 +77,49 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                         remoteHash = con.getHeaderField("Content-MD5").replace("\"", "");
                         hashType= "md5";
                     }
+
+                    if (Settings.getSettings().getDebugLauncher()) {
+                        Logger.logInfo(asset.name);
+                        Logger.logInfo("RemoteSize: " + remoteSize);
+                        Logger.logInfo("asset.hash: " + asset.hash);
+                        Logger.logInfo("remoteHash: " + remoteHash);
+                    }
+
+                    // existing file are only added when we want to check file integrity with force update
+                    if (asset.local.exists()) {
+                        long localSize = asset.local.length();
+                        if (con instanceof HttpURLConnection && localSize == remoteSize ) {
+                            ;// size OK
+                        } else {
+                            asset.local.delete();
+                            Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + localSize );
+                        }
+                    }
+
+                    if (asset.local.exists()) {
+                        doHashCheck(asset, remoteHash);
+                    }
+
+                    if (asset.local.exists()) {
+                        downloadSuccess = true;
+                        progressIndex += 1;
+                        continue;
+                    }
+
+                    //download if needed
                     setProgress(0);
+                    status = "Downloading " + asset.name + "...";
+                    con = asset.url.openConnection();
+                    if (con instanceof HttpURLConnection) {
+                        con.setRequestProperty("Cache-Control", "no-cache");
+                        ((HttpURLConnection) con).setRequestMethod("GET");
+                        con.connect();
+                    }
+                    asset.local.getParentFile().mkdirs();
+                    int readLen;
+                    int currentSize = 0;
+                    InputStream input = con.getInputStream();
+                    FileOutputStream output = new FileOutputStream(asset.local);
                     while ((readLen = input.read(buffer, 0, buffer.length)) != -1) {
                         output.write(buffer, 0, readLen);
                         currentSize += readLen;
@@ -90,32 +134,22 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                         prog = (progressIndex * 100) + prog;
 
                         monitor.setProgress(prog);
-                        monitor.setNote(this.status);
+                        monitor.setNote(status);
                     }
                     input.close();
                     output.close();
-                    String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
-                    String assetHash = asset.hash;
-                    if (asset.hash == null) {
-                        if (remoteHash != null) {
-                            assetHash = remoteHash;
-                        }else if (asset.getBackupDLType() == DLType.FTBBackup && DownloadUtils.backupIsValid(asset.local, asset.url.getPath().replace("/FTB2", ""))) {
-                            remoteHash = asset.hash;
-                        }
-                    }
+
+                    //file downloaded check size
                     if (con instanceof HttpURLConnection && currentSize > 0 && currentSize == remoteSize ) {
-                        if ((hash != null && !hash.toLowerCase().equals(assetHash))) {
-                            Logger.logWarn("Asset hash checking failed: " + asset.name);
-                            asset.local.delete();
-                        } else {
-                            downloadSuccess = true;
-                        }
-                    }
-                    else {
+                        ;// size OK
+                    } else {
                         asset.local.delete();
-                        Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + "local: " + currentSize );
+                        Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + currentSize );
                     }
-                    progressIndex += 1;
+
+                    if (downloadSuccess = doHashCheck(asset, remoteHash)) {
+                        progressIndex += 1;
+                    }
                 } catch (Exception e) {
                     downloadSuccess = false;
                     Logger.logWarn("Connection failed, trying again", e);
@@ -128,4 +162,24 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         status = allDownloaded ? "Success" : "Downloads failed";
         return allDownloaded;
     }
+
+    public boolean doHashCheck(DownloadInfo asset, String remoteHash) throws IOException {
+        String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();
+        String assetHash = asset.hash;
+        if (asset.hash == null) {
+            if (remoteHash != null) {
+                assetHash = remoteHash;
+            }else if (asset.getBackupDLType() == DLType.FTBBackup && DownloadUtils.backupIsValid(asset.local, asset.url.getPath().replace("/FTB2", ""))) {
+                remoteHash = asset.hash;
+            }
+        }
+        if ((hash != null && !hash.toLowerCase().equals(assetHash))) {
+            Logger.logWarn("Asset hash checking failed: " + asset.name);
+            asset.local.delete();
+            return false;
+        } else {
+            return true;
+        }
+
+   }
 }

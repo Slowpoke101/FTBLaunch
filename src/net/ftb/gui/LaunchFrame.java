@@ -900,12 +900,19 @@ public class LaunchFrame extends JFrame {
     private List<DownloadInfo> gatherAssets (File root, String mcVersion) {
         try {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
+            Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 
+            /*
+             * vanilla minecraft.jar
+             */
             File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
-            if (!local.exists()) {
+            if (!local.exists() || forceUpdate) {
                 list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local, local.getName()));
             }
 
+            /*
+             * <ftb installation location>/libraries/*
+             */
             //check if our copy exists of the version json if not backup to mojang's copy
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
@@ -915,7 +922,7 @@ public class LaunchFrame extends JFrame {
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
                     local = new File(root, "libraries/" + lib.getPath());
-                    if (!local.exists()) {
+                    if (!local.exists() || forceUpdate) {
                         if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         } else {
@@ -966,6 +973,9 @@ public class LaunchFrame extends JFrame {
                 }
             }
 
+            /*
+             * assets/*
+             */
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             DownloadUtils.downloadToFile(url, json);
