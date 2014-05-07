@@ -71,6 +71,7 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
                     if (!server.contains("creeper")) {
@@ -79,6 +80,7 @@ public class DownloadUtils extends Thread {
 
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    connection.setRequestMethod("HEAD");
                 } else {
                     break;
                 }
@@ -102,11 +104,13 @@ public class DownloadUtils extends Thread {
         boolean good = false;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
+                        connection.setRequestMethod("HEAD");
                     } else {
                         if (connection.getResponseCode() == 200)
                             good = true;
@@ -138,11 +142,13 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
+                        connection.setRequestMethod("HEAD");
                     } else {
                         break;
                     }
@@ -160,8 +166,9 @@ public class DownloadUtils extends Thread {
      */
     public static boolean staticFileExists (String file) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(getStaticCreeperhostLink(file)).openStream()));
-            return !reader.readLine().toLowerCase().contains("not found");
+            HttpURLConnection connection = (HttpURLConnection) new URL(getStaticCreeperhostLink(file)).openConnection();
+            connection.setRequestMethod("HEAD");
+            return (connection.getResponseCode() == 200);
         } catch (Exception e) {
             return false;
         }
@@ -173,8 +180,9 @@ public class DownloadUtils extends Thread {
      */
     public static boolean fileExists (String file) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Locations.masterRepo + "/FTB2/" + file).openStream()));
-            return !reader.readLine().toLowerCase().contains("not found");
+            HttpURLConnection connection = (HttpURLConnection) new URL(Locations.masterRepo + "/FTB2/" + file).openConnection();
+            connection.setRequestMethod("HEAD");
+            return (connection.getResponseCode() == 200);
         } catch (Exception e) {
             return false;
         }
