@@ -707,6 +707,11 @@ public class LaunchFrame extends JFrame {
                 String uuid = userManager.getUUID(username);
                 if (responseStr.equals("good")) {
                     Logger.logInfo("Login complete.");
+                    try {
+                        userManager.write();
+                    } catch (IOException e) {
+                        Logger.logError("User data saving failed!");
+                    }
                     runGameUpdater(RESPONSE);
                 } else if (uuid != null && !uuid.isEmpty()) {
                     PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid);
