@@ -54,10 +54,11 @@ public class MapLoader extends Thread {
                         .getTextContent(), mapAttr.getNamedItem("mcversion").getTextContent(), mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description").getTextContent(),
                         i));
             }
-            MapsPane.loaded = true;
-            LaunchFrame.checkDoneLoading();
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
+        } finally {
+            MapsPane.loaded = true;
+            LaunchFrame.checkDoneLoading();
         }
     }
 }

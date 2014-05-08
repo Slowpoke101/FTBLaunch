@@ -54,10 +54,11 @@ public class TexturePackLoader extends Thread {
                         textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), textureAttr.getNamedItem("description").getTextContent(),
                         textureAttr.getNamedItem("resolution").getTextContent(), i));
             }
-            TexturepackPane.loaded = true;
-            LaunchFrame.checkDoneLoading();
         } catch (Exception e) {
             Logger.logError("Error loading Texture packs", e);
+        } finally {
+            TexturepackPane.loaded = true;
+            LaunchFrame.checkDoneLoading();
         }
     }
 }
