@@ -71,6 +71,13 @@ public class AuthlibHelper {
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
+                    if (hasMojangData && hasPassword) {
+                        //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
+                        //if the UUID is valid we can proceed to offline mode later
+                        uniqueID = authentication.getSelectedProfile().getId().toString();
+                        if (uniqueID != null && !uniqueID.isEmpty())
+                            UserManager.setUUID(user, uniqueID);
+                    }
                     ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
                     Logger.logError(e.toString());
                     return null;
