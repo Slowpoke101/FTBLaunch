@@ -158,7 +158,7 @@ public class I18N {
      * @param key The key for the string
      * @return the default string
      */
-    private static String getFallbackString (String key) {
+    public static String getFallbackString (String key) {
         return fallback.getProperty(key, key);
     }
 

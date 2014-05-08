@@ -20,6 +20,7 @@ import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
+import net.ftb.util.winreg.JavaInfo;
 
 import java.io.*;
 
@@ -44,12 +45,18 @@ public class LaunchFrameHelpers {
         }
 
         if (!OSUtils.is64BitOS()) {
-            Logger.logWarn("Warning: 32 Bit operating system. 64 Bit is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+            Logger.logError("32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
 
         if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {//unfortunately the easy to find DL links are for 32 bit java
-            Logger.logWarn("Warning: 32 Bit Java in 64 Bit operating system. 64 Bit Java is encouraged for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+            Logger.logError("32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
+
+        JavaInfo java = Settings.getSettings().getCurrentJava();
+        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
+            Logger.logError("Java 6 detected. Java 7 is recommended for most mod packs.");
+        }
+
     }
 
     public static void googleAnalytics() {

@@ -22,8 +22,39 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 public class ErrorUtils {
-    public static void tossError (String output) {
+    /**
+     * Writes error into log and shows error in message dialog
+     * <p>
+     * Same error message will be used for log and for message dialog.
+     * If using translated messages consider using {@link #tossError(Sting output, String log)}
+     * @param output String to log and show in message dialog
+     */
+    public static void tossError(String output) {
         Logger.logError(output);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Writes error into log and shows error in message dialog
+     * <p>
+     * Parameter for logging system and for message dialog are given separately and
+     * this method is optimal to show localized message in message dialog but
+     * to log error message in english.
+     * @param output String to show in message dialog
+     * @param log String to log
+     */
+    public static void tossError(String output, String log) {
+        Logger.logError(log);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Writes error and exception stacktrace into log and shows error in message dialog
+     * @param output Strong to log and show in message dialog
+     * @param t Exception to to log
+     */
+    public static void tossError(String output, Throwable t) {
+        Logger.logError(output, t);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 }
