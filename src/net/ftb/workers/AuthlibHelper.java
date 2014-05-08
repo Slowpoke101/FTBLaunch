@@ -49,7 +49,6 @@ public class AuthlibHelper {
                 hasPassword = true;
             }
             if (mojangData != null && !mojangData.isEmpty()) {
-                Logger.logError(mojangData);
                 Map<String, Object> m = decode(mojangData);
                 if (m != null) {
                     authentication.loadFromStorage(m);
