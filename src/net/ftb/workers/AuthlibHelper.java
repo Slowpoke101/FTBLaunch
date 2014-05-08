@@ -50,8 +50,11 @@ public class AuthlibHelper {
             }
             if (mojangData != null && !mojangData.isEmpty()) {
                 Logger.logError(mojangData);
-                authentication.loadFromStorage(decode(mojangData));
-                hasMojangData = true;
+                Map<String, Object> m = decode(mojangData);
+                if (m != null) {
+                    authentication.loadFromStorage(m);
+                    hasMojangData = true;
+                }
             }
             if (authentication.canLogIn()) {
                 try {
@@ -71,15 +74,14 @@ public class AuthlibHelper {
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
-                    if (hasMojangData && hasPassword) {
+                    if (hasMojangData) {
                         //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         if (uniqueID != null && !uniqueID.isEmpty())
                             UserManager.setUUID(user, uniqueID);
                     }
-                    ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
-                    Logger.logError(e.toString());
+                    ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com", e);
                     return null;
                 } catch (AuthenticationException e) {
                     Logger.logError("Unkown error from authlib:");
@@ -141,10 +143,15 @@ public class AuthlibHelper {
 
     @SuppressWarnings("unchecked")
     private static Map<String, Object> decode (String s) {
-        Map<String, Object> ret = new LinkedHashMap<String, Object>();
-        JsonObject jso = new JsonParser().parse(s).getAsJsonObject();
-        ret = (Map<String, Object>) decodeElement(jso);
-        return ret;
+        try {
+            Map<String, Object> ret = new LinkedHashMap<String, Object>();
+            JsonObject jso = new JsonParser().parse(s).getAsJsonObject();
+            ret = (Map<String, Object>) decodeElement(jso);
+            return ret;
+        } catch (Exception e) {
+            Logger.logError("Error decoding Authlib JSON", e);
+            return null;
+        }
     }
 
     private static Object decodeElement (JsonElement e) {
@@ -167,16 +174,22 @@ public class AuthlibHelper {
     }
 
     private static String encode (Map<String, Object> m) {
-        Gson gson;
-        final GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
-        builder.registerTypeAdapter(Date.class, new DateAdapter());
-        builder.registerTypeAdapter(File.class, new FileAdapter());
-        builder.enableComplexMapKeySerialization();
-        builder.setPrettyPrinting();
-        gson = builder.create();
-        String s = gson.toJson(m);
-        return s;
+        try {
+            Gson gson;
+            final GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
+            builder.registerTypeAdapter(Date.class, new DateAdapter());
+            builder.registerTypeAdapter(File.class, new FileAdapter());
+            builder.enableComplexMapKeySerialization();
+            builder.setPrettyPrinting();
+            gson = builder.create();
+            String s = gson.toJson(m);
+            return s;
+        } catch (Exception e) {
+            Logger.logError("Error encoding Authlib JSON", e);
+            return null;
+        }
+
     }
 
 }
