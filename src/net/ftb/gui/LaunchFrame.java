@@ -882,9 +882,10 @@ public class LaunchFrame extends JFrame {
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
+                    } catch (CancellationException e) {
+                        Logger.logInfo("Asset download interrupted by user");
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        ErrorUtils.tossError("Failed to download files.");
+                        ErrorUtils.tossError("Failed to download files.", e);
                     } finally {
                         enableObjects();
                     }

@@ -12,6 +12,8 @@ import java.util.List;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
+import lombok.Getter;
+
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.info.DownloadInfo.DLType;
 import net.ftb.data.Settings;
@@ -21,8 +23,13 @@ import net.ftb.util.DownloadUtils;
 public class AssetDownloader extends SwingWorker<Boolean, Void> {
     private List<DownloadInfo> downloads;
     private final ProgressMonitor monitor;
-    private String status;
     private int progressIndex = 0;
+    private boolean allDownloaded = true;
+
+    @Getter
+    private String status;
+    @Getter
+    private int ready = 0;
 
     public AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
         this.downloads = downloads;
@@ -33,24 +40,53 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange (PropertyChangeEvent evt) {
-                if (monitor.isCanceled())
+                if (monitor.isCanceled()) {
+                    //sane?
                     AssetDownloader.this.cancel(false);
+                    monitor.close();
+                } else if (!AssetDownloader.this.isCancelled()) {
+                    if ("ready".equals(evt.getPropertyName()))
+                        monitor.setProgress(getReady());
+                    if ("status".equals(evt.getPropertyName()))
+                        monitor.setNote(getStatus());
+                }
             }
         });
     }
 
     @Override
-    protected Boolean doInBackground () throws Exception {
-        boolean allDownloaded = true;
-
-        byte[] buffer = new byte[24000];
+    protected Boolean doInBackground() throws Exception {
         for (int x = 0; x < downloads.size(); x++) {
+            if (isCancelled()) {
+                return false;
+            }
             DownloadInfo asset = downloads.get(x);
+            doDownload(asset);
+        }
+        setStatus(allDownloaded ? "Success" : "Downloads failed");
+        return allDownloaded;
+    }
+
+    public synchronized void setReady(int newReady) {
+        int oldReady = ready;
+        ready = newReady;
+        firePropertyChange("ready", oldReady, ready);
+    }
+
+    public synchronized void setStatus(String newStatus) {
+        String oldStatus = status;
+        status = newStatus;
+        firePropertyChange("note", oldStatus, status);
+    }
+
+        private void doDownload(DownloadInfo asset) {
+            byte[] buffer = new byte[24000];
+            boolean downloadSuccess = false;
             String remoteHash = asset.hash;
             String hashType;
             int attempt = 0;
             final int attempts = 5;
-            boolean downloadSuccess = false;
+
             while (!downloadSuccess && (attempt < attempts)) {
                 try {
                     hashType = asset.hashType;
@@ -108,7 +144,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
                     //download if needed
                     setProgress(0);
-                    status = "Downloading " + asset.name + "...";
+                    setStatus("Downloading " + asset.name + "...");
                     con = asset.url.openConnection();
                     if (con instanceof HttpURLConnection) {
                         con.setRequestProperty("Cache-Control", "no-cache");
@@ -133,8 +169,9 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
                         prog = (progressIndex * 100) + prog;
 
-                        monitor.setProgress(prog);
-                        monitor.setNote(status);
+                        setReady(prog);
+                        //monitor.setProgress(prog);
+                        //monitor.setNote(status);
                     }
                     input.close();
                     output.close();
@@ -159,9 +196,6 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                 allDownloaded = false;
             }
         }
-        status = allDownloaded ? "Success" : "Downloads failed";
-        return allDownloaded;
-    }
 
     public boolean doHashCheck(DownloadInfo asset, String remoteHash) throws IOException {
         String hash = DownloadUtils.fileHash(asset.local, asset.hashType).toLowerCase();

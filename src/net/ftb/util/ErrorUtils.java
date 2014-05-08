@@ -47,4 +47,14 @@ public class ErrorUtils {
         Logger.logError(log);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
+
+    /**
+     * Writes error and exception stacktrace into log and shows error in message dialog
+     * @param output Strong to log and show in message dialog
+     * @param t Exception to to log
+     */
+    public static void tossError(String output, Throwable t) {
+        Logger.logError(output, t);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
 }
