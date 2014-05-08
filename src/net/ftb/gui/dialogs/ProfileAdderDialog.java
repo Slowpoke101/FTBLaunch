@@ -35,7 +35,6 @@ import javax.swing.event.DocumentListener;
 import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 
 @SuppressWarnings("serial")
@@ -174,7 +173,6 @@ public class ProfileAdderDialog extends JDialog {
             messageLbl = new JLabel(updatecreds);
             panel.add(messageLbl);
         }
-        Logger.logError("GUI FUN");
         panel.add(usernameLbl);
         panel.add(username);
         panel.add(passwordLbl);

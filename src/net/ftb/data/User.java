@@ -25,8 +25,8 @@ import net.ftb.util.OSUtils;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String _username = "", _name = "", _encryptedPassword = "";
-    private transient String _password = "";
+    private String _username = "", _name = "", _encryptedPassword = "", _encryptedStore = "", _uuid = "";
+    private transient String _password = "", _decryptedStore = "";
 
     /**
      * @param username - the username of the profile
@@ -40,7 +40,7 @@ public class User implements Serializable {
     }
 
     /**
-     * @param input - text with username, password, name
+     * @param input - text with username, password, name, encrypted mojang datastore
      */
     @Deprecated
     public User(String input) {
@@ -49,6 +49,9 @@ public class User implements Serializable {
         setUsername(tokens[1]);
         if (tokens.length == 3) {
             setPassword(tokens[2]);
+        } else if (tokens.length == 4) {
+            setPassword(tokens[2]);
+            setStore(tokens[3]);
         }
     }
 
@@ -74,11 +77,30 @@ public class User implements Serializable {
     }
 
     /**
+     * @return - authlib profile datastore
+     */
+    public String getDecryptedDatastore () {
+        return _decryptedStore;
+    }
+
+    /**
+     * @param datastore - set profile password
+     */
+    public void setStore (String store) {
+        _decryptedStore = store;
+        if (_decryptedStore == null || _decryptedStore.isEmpty()) {
+            _encryptedStore = "";
+        } else {
+            _encryptedStore = CryptoUtils.encrypt(_decryptedStore, OSUtils.getMacAddress());
+        }
+    }
+
+    /**
      * @param password - set profile password
      */
     public void setPassword (String password) {
         _password = password;
-        if (_password.isEmpty()) {
+        if (_password == null || _password.isEmpty()) {
             _encryptedPassword = "";
         } else {
             _encryptedPassword = CryptoUtils.encrypt(_password, OSUtils.getMacAddress());
@@ -106,5 +128,18 @@ public class User implements Serializable {
         } else {
             _password = "";
         }
+        if (_encryptedStore != null && !_encryptedStore.isEmpty()) {
+            _decryptedStore = CryptoUtils.decrypt(_encryptedStore, OSUtils.getMacAddress());
+        } else {
+            _decryptedStore = null;
+        }
+    }
+
+    public void setUUID (String uuid) {
+        this._uuid = uuid;
+    }
+
+    public String getUUID () {
+        return this._uuid;
     }
 }

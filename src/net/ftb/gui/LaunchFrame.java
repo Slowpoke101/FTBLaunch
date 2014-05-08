@@ -91,9 +91,9 @@ import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
-import net.ftb.log.Logger;
 import net.ftb.log.LogSource;
 import net.ftb.log.LogWriter;
+import net.ftb.log.Logger;
 import net.ftb.log.OutputOverride;
 import net.ftb.log.StdOutLogger;
 import net.ftb.log.StreamLogger;
@@ -158,10 +158,7 @@ public class LaunchFrame extends JFrame {
     /*
      * limit for version component is 99.
      */
-    public static int buildNumber = 
-        1   *100*100 +
-        3   *100 +
-        10  *1;
+    public static int buildNumber = 1 * 100 * 100 + 3 * 100 + 10 * 1;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -194,7 +191,7 @@ public class LaunchFrame extends JFrame {
          *  Create dynamic storage location as soon as possible
          */
         OSUtils.createStorageLocations();
-        
+
         File cacheDir = new File(OSUtils.getCacheStorageLocation());
         File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
 
@@ -208,7 +205,6 @@ public class LaunchFrame extends JFrame {
         if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
         }
-        
 
         /*
          * Create new StdoutLogger as soon as possible
@@ -230,7 +226,6 @@ public class LaunchFrame extends JFrame {
             Logger.logError(e1.getMessage(), e1);
         }
 
-
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
@@ -249,7 +244,6 @@ public class LaunchFrame extends JFrame {
 
         LaunchFrameHelpers.printInfo();
 
-
         /*
          * Resolves servers in background thread
          */
@@ -262,7 +256,7 @@ public class LaunchFrame extends JFrame {
          *  => If this guideline is followed then GUI should work smoothly
          */
         EventQueue.invokeLater(new Runnable() {
-            @Override 
+            @Override
             public void run () {
                 StyleUtil.loadUiStyles();
                 try {
@@ -282,7 +276,7 @@ public class LaunchFrame extends JFrame {
                 loader.setModal(false);
                 loader.setVisible(true);
 
-                if(!noConfig) {
+                if (!noConfig) {
                     /*
                      * Setup locales,  set locale and check  for new locales
                      * in background thread. Download new locales.
@@ -294,8 +288,7 @@ public class LaunchFrame extends JFrame {
                     i18nLoaded = true;
                     I18N.downloadLocale();
 
-                }
-                else {
+                } else {
                     /*
                      * First run
                      */
@@ -377,7 +370,7 @@ public class LaunchFrame extends JFrame {
 
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
-                
+
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
@@ -630,7 +623,7 @@ public class LaunchFrame extends JFrame {
 
     public static void checkDoneLoading () {
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run () {
                 if (ModpacksPane.loaded) {
                     LoadingDialog.setProgress(190);
 
@@ -659,8 +652,8 @@ public class LaunchFrame extends JFrame {
     /**
      * call this to login
      */
-    private void doLogin (final String username, String password) {
-        if (password.isEmpty()) {
+    private void doLogin (final String username, String password, String mojangData) {
+        if ((mojangData == null || mojangData.isEmpty()) && password.isEmpty()) {
             PasswordDialog p = new PasswordDialog(this, true);
             p.setVisible(true);
             if (tempPass.isEmpty()) {
@@ -690,7 +683,7 @@ public class LaunchFrame extends JFrame {
         tpInstall.setEnabled(false);
         tpInstallLocation.setEnabled(false);
 
-        LoginWorker loginWorker = new LoginWorker(username, password) {
+        LoginWorker loginWorker = new LoginWorker(username, password, mojangData) {
             @Override
             public void done () {
                 String responseStr;
@@ -703,34 +696,27 @@ public class LaunchFrame extends JFrame {
                 } catch (ExecutionException err) {
                     if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
                         Logger.logError(err.getMessage(), err);
-                        PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+                        PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username));
                         d.setVisible(true);
                     }
                     enableObjects();
                     return;
                 }
-
-                try {
-                    RESPONSE = new LoginResponse(responseStr);
-                } catch (IllegalArgumentException e) {
-                    if (responseStr.contains(":")) {
-                        Logger.logError("Received invalid response from server.");
-                    } else {
-                        if (responseStr.equalsIgnoreCase("bad login")) {
-                            ErrorUtils.tossError("Invalid username or password.");
-                        } else if (responseStr.equalsIgnoreCase("old version")) {
-                            ErrorUtils.tossError("Outdated launcher.");
-                        } else {
-                            ErrorUtils.tossError("Login failed: " + responseStr);
-                            PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
-                            d.setVisible(true);
-                        }
-                    }
+                
+                RESPONSE = getResp();
+                String uuid = userManager.getUUID(username);
+                if (responseStr.equals("good")) {
+                    Logger.logInfo("Login complete.");
+                    runGameUpdater(RESPONSE);
+                }else if(uuid != null && !uuid.isEmpty()){
+                    PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid);
+                    d.setVisible(true);
+                } else {
                     enableObjects();
                     return;
-                }
-                Logger.logInfo("Login complete.");
-                runGameUpdater(RESPONSE);
+                }//if user doesn't want offline mode
+                enableObjects();
+                return;
             }
         };
         loginWorker.execute();
@@ -757,6 +743,7 @@ public class LaunchFrame extends JFrame {
      * @param response - the response from the minecraft servers
      */
     private void runGameUpdater (final LoginResponse response) {
+
         final String installPath = Settings.getSettings().getInstallPath();
         final ModPack pack = ModPack.getSelectedPack();
         boolean debugVerbose = Settings.getSettings().getDebugLauncher();
@@ -1104,7 +1091,7 @@ public class LaunchFrame extends JFrame {
 
             Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, resp.getUsername(), resp.getSessionID(),
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getUUID());
+                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getUuid());
             MCRunning = true;
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
@@ -1460,12 +1447,13 @@ public class LaunchFrame extends JFrame {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-            if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()){
+            if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
                 Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
                 saveSettings();
-                doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
-            }else{//user can't run pack-- JRE not high enough
-                ErrorUtils.tossError("You must use at least java " + minSup[0] +"." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.");
+                doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
+                        UserManager.getMojangData(users.getSelectedItem().toString()));
+            } else {//user can't run pack-- JRE not high enough
+                ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.");
             }
         } else if (users.getSelectedIndex() <= 1) {
             ErrorUtils.tossError("Please select a profile!");

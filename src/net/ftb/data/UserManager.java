@@ -183,4 +183,23 @@ public class UserManager {
             _users.get(_users.indexOf(temp)).setName(name);
         }
     }
+
+    //used by authlib helper in order to send key's back to disc for next load
+    public static void setStore (String user, String encode) {
+        findUser(user).setStore(encode);
+    }
+
+    //used by authlib helper in order to send key's back to disc for next load
+    public static String getMojangData (String user) {
+        return findUser(user).getDecryptedDatastore();
+    }
+
+    public static String getUUID (String username) {
+        return findUser(username).getDecryptedDatastore();
+    }
+
+    public static void setUUID (String username, String uuid) {
+        findUser(username).setUUID(uuid);
+    }
+
 }

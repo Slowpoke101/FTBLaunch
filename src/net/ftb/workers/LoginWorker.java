@@ -18,6 +18,8 @@ package net.ftb.workers;
 
 import javax.swing.SwingWorker;
 
+import lombok.Getter;
+import net.ftb.data.LoginResponse;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
@@ -26,31 +28,32 @@ import net.ftb.util.ErrorUtils;
  * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.
  */
 public class LoginWorker extends SwingWorker<String, Void> {
-    private String username, password;
+    private String username, password, mojangData;
+    @Getter
+    LoginResponse resp;
 
-    public LoginWorker(String username, String password) {
+    public LoginWorker(String username, String password, String mojangData) {
         super();
         this.username = username;
         this.password = password;
+        this.mojangData = mojangData;
     }
 
     @Override
     protected String doInBackground () {
         try {
-            String authlibreturn = new String();
             if (LaunchFrame.canUseAuthlib) {
                 try {
-                    authlibreturn = AuthlibHelper.authenticateWithAuthlib(username, password);
+                    LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData);
+                    this.resp = resp;
+                    if (resp != null)
+                        return "good";
+                    return "";
                 } catch (Exception e) {
-                    Logger.logError("Error using authlib");
+                    Logger.logError("Error using authlib", e);
                 }
-            }
-            if (authlibreturn!=null && !authlibreturn.isEmpty()) {
-                Logger.logInfo("using Authlib authentication data");
-                return "A:" + authlibreturn;
-            }
-            else {
-                ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
+            } else {
+                ErrorUtils.tossError("Authlib Unavaible");
             }
         } catch (Exception e) {
             ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");

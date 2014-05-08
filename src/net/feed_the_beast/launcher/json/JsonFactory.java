@@ -1,11 +1,10 @@
 package net.feed_the_beast.launcher.json;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 
-import com.google.common.reflect.TypeToken;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Version;
 
