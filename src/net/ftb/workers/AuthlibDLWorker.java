@@ -126,7 +126,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Logger.logError(e.getMessage(), e);
                 return false;
             }
