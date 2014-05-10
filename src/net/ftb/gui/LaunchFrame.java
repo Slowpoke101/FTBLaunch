@@ -1433,7 +1433,6 @@ public class LaunchFrame extends JFrame {
         donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
-        writeUsers((String) users.getSelectedItem());
         optionsPane.updateLocale();
         modPacksPane.updateLocale();
         mapsPane.updateLocale();
