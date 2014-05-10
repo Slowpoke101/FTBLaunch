@@ -20,11 +20,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import net.ftb.log.Logger;
 import net.ftb.util.CryptoUtils;
 import net.ftb.util.OSUtils;
 
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+    /**
+     * Increase serial if adding conversion ObjectInputStream
+     */
+    private static final int serialVersionUID = 1;
+
+    private int _serial = 0;
     private String _username = "", _name = "", _encryptedPassword = "", _encryptedStore = "", _uuid = "";
     private transient String _password = "", _decryptedStore = "";
 
@@ -34,6 +40,7 @@ public class User implements Serializable {
      * @param name - the name of the profile
      */
     public User(String username, String password, String name) {
+        _serial = serialVersionUID;
         setUsername(username);
         setPassword(password);
         setName(name);
@@ -44,6 +51,7 @@ public class User implements Serializable {
      */
     @Deprecated
     public User(String input) {
+        _serial = serialVersionUID;
         String[] tokens = input.split(":");
         setName(tokens[0]);
         setUsername(tokens[1]);
@@ -123,6 +131,24 @@ public class User implements Serializable {
 
     private void readObject (ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
+        switch(_serial) {
+            case 0:
+                //_serial not found by defaultReadObject()
+                if (serialVersionUID == 1) {
+                    // convert old stored password to new format
+                    if (!_encryptedPassword.isEmpty()) {
+                        Logger.logInfo("Password will be converted to new format, ignore following decrypt warn");
+                        Logger.logInfo("Converted password will be saved to disk after succesfull login");
+                        String password =  CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
+                        _encryptedPassword =  CryptoUtils.encrypt(password, OSUtils.getMacAddress());
+                    }
+                    _serial = 1;
+                }
+                break;
+            default:
+                break;
+        }
+
         if (!_encryptedPassword.isEmpty()) {
             _password = CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
         } else {
