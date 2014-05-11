@@ -121,7 +121,7 @@ public class OSUtils {
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
             
-            if (dynamicDir.exists()) {
+            if (dynamicDir.exists() && !cacheDir.equals(dynamicDir)) {
                 // Migrate cached archives from the user's roaming profile to their local cache
                 
                 Logger.logInfo("Migrating cached Maps from Roaming to Local storage");
