@@ -246,8 +246,17 @@ public class ModPack {
      */
     private boolean upToDate (File verFile) {
         String storedVersion = getStoredVersion(verFile).replace(".", "");
+        int storedVersion_ = -1;
+        if (!storedVersion.isEmpty()) {
+            try {
+                Integer.parseInt(storedVersion);
+            } catch (NumberFormatException e) {
+                Logger.logWarn("Automatically fixing malformed version file for " + name, e);
+                storedVersion = "";
+            }
+        }
 
-        if (storedVersion.isEmpty() || Integer.parseInt(storedVersion) != Integer.parseInt(version.replace(".", ""))) {
+        if (storedVersion.isEmpty() || storedVersion_ != Integer.parseInt(version.replace(".", ""))) {
             try {
                 if (!verFile.exists()) {
                     verFile.getParentFile().mkdirs();
