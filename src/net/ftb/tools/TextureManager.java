@@ -151,7 +151,7 @@ public class TextureManager extends JDialog {
                     fout.flush();
                     fout.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.logError(e.getMessage(), e);
                 }
             }
             return true;

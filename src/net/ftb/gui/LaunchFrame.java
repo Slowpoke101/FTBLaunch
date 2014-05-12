@@ -877,7 +877,6 @@ public class LaunchFrame extends JFrame {
                     } catch (CancellationException e) {
                         Logger.logInfo("Asset download interrupted by user");
                     } catch (Exception e) {
-                        e.printStackTrace();
                         ErrorUtils.tossError("Failed to download files.", e);
                     } finally {
                         enableObjects();
@@ -992,7 +991,7 @@ public class LaunchFrame extends JFrame {
             }
             return list;
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.logError(e.getMessage(), e);
         }
         return null;
     }
@@ -1145,7 +1144,7 @@ public class LaunchFrame extends JFrame {
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.logError(e.getMessage(), e);
         }
     }
 

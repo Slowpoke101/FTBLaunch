@@ -86,7 +86,7 @@ public class ModManager extends JDialog {
                     erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logError(e.getMessage(), e);
             }
             return true;
         }
@@ -102,8 +102,7 @@ public class ModManager extends JDialog {
             try {
                 fout = new FileOutputStream(filename);
             } catch (IOException e) {
-                e.printStackTrace();
-                Logger.logError("Failed opening output file: " + filename);
+                Logger.logError("Failed opening output file: " + filename, e);
                 return null;
             }
 
@@ -165,9 +164,9 @@ public class ModManager extends JDialog {
                         }
                     }
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Logger.logError(e.getMessage(), e);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.logError(e.getMessage(), e);
                 }
 
                 try {
@@ -178,7 +177,7 @@ public class ModManager extends JDialog {
                         connection.disconnect();
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.logWarn(e.getMessage(), e);
                 }
             } while (amount < modPackSize && (amount > startAmount || retryCount-- > 0));
 
@@ -188,7 +187,7 @@ public class ModManager extends JDialog {
                     fout.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logWarn(e.getMessage(), e);
             }
             return md5;
         }
@@ -221,9 +220,9 @@ public class ModManager extends JDialog {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
                     } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
+                        Logger.logWarn(e.getMessage(), e);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.logWarn(e.getMessage(), e);
                     }
                     String animation = pack.getAnimation();
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
@@ -232,12 +231,12 @@ public class ModManager extends JDialog {
                         try {
                             downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
                         } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            Logger.logWarn(e.getMessage(), e);
                         }
                     }
                 }
             } catch (Exception e) {
-                Logger.logError("Error validating pack archive");
+                Logger.logError("Error validating pack archive", e);
             }
 
             try {
@@ -296,7 +295,7 @@ public class ModManager extends JDialog {
                     return false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logError(e.getMessage(), e);
             }
             return false;
         }
@@ -435,7 +434,7 @@ public class ModManager extends JDialog {
                         if (!b)
                             Logger.logInfo("Error deleting " + file);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.logWarn(e.getMessage(), e);
 
                     }
                 }

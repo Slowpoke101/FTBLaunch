@@ -246,7 +246,7 @@ public class OSUtils {
                 result += (line + "\n");
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            Logger.logError(e.getMessage(), e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
         return (result.contains("_64"));
