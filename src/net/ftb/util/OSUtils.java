@@ -121,7 +121,7 @@ public class OSUtils {
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
             
-            if (dynamicDir.exists()) {
+            if (dynamicDir.exists() && !cacheDir.equals(dynamicDir)) {
                 // Migrate cached archives from the user's roaming profile to their local cache
                 
                 Logger.logInfo("Migrating cached Maps from Roaming to Local storage");
@@ -246,7 +246,7 @@ public class OSUtils {
                 result += (line + "\n");
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            Logger.logError(e.getMessage(), e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
         return (result.contains("_64"));

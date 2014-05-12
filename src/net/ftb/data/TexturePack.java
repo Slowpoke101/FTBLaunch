@@ -162,8 +162,18 @@ public class TexturePack {
                 result = false;
             }
             BufferedReader in = new BufferedReader(new FileReader(verFile));
-            String line;
-            if ((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) != Integer.parseInt(line.replace(".", ""))) {
+            String line = in.readLine();
+            int storedVersion = -1;
+            if (line != null) {
+                try {
+                    storedVersion = Integer.parseInt(line.replace(".", ""));
+                } catch (NumberFormatException e) {
+                    Logger.logWarn("Automatically fixing malformed version file for " + name, e);
+                    line = null;
+                }
+            }
+
+            if (line == null || Integer.parseInt(version.replace(".", "")) != storedVersion) {
                 BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
                 out.write(version);
                 out.flush();

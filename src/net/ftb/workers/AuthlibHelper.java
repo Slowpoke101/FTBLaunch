@@ -85,18 +85,16 @@ public class AuthlibHelper {
                 } catch (AuthenticationException e) {
                     Logger.logError("Unkown error from authlib:");
                     if (e.getMessage() == null) {
-                        e.printStackTrace();
+                        Logger.logWarn("null", e);
                     } else {
                         Logger.logError(e.getMessage(), e);
                     }
                 } catch (Exception e) {
                     if (e.getMessage() == null) {
-                        Logger.logError("Unknown authentication error occurred");
-                        e.printStackTrace();
+                        Logger.logError("Unknown authentication error occurred", e);
                     } else {
                         Logger.logError(e.getMessage(), e);
                     }
-                    //e.printStackTrace();
                 }
             }
             //Logger.logError("authDebug " + (hasMojangData ? "true" : "false") + " " + authentication.toString());

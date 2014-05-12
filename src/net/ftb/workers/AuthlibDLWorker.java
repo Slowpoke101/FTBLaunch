@@ -89,7 +89,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 Logger.logError("Authlib file does not exist");
             }
         } catch (Throwable t) {
-            t.printStackTrace(System.err);
+            Logger.logError(t.getMessage(), t);
             return false;
         }
         LaunchFrame.canUseAuthlib = true;
@@ -104,7 +104,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             method.setAccessible(true);
             method.invoke(sysloader, new Object[] { u });
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.logWarn(t.getMessage(), t);
             throw new IOException("Error, could not add URL to system classloader");
         }
     }
@@ -183,8 +183,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 }
             } catch (Exception e) {
                 downloadSuccess = false;
-                e.printStackTrace();
-                Logger.logWarn("Connection failed, trying again");
+                Logger.logWarn("Connection failed, trying again", e);
             }
         }
         if (!downloadSuccess) {
