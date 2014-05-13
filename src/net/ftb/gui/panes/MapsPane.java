@@ -270,7 +270,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
                 if (Map.getMap(getIndex()).getCompatible() != null) {
                     packs += "<p>This map works with the following packs:</p><ul>";
                     for (String name : Map.getMap(getIndex()).getCompatible()) {
-                        packs += "<li>" + ModPack.getPack(name).getName() + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name)!=null ? ModPack.getPack(name).getName() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }

@@ -267,7 +267,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
                     packs += "<p>This texture pack works with the following packs:</p><ul>";
                     for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
-                        packs += "<li>" + ModPack.getPack(name).getName() + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name)!=null ? ModPack.getPack(name).getName() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }
