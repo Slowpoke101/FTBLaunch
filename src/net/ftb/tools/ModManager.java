@@ -215,7 +215,7 @@ public class ModManager extends JDialog {
             String md5 = "";
             try {
                 File packFile = new File(baseDynamic, modPackName);
-                if (!packFile.exists() || !DownloadUtils.backupIsValid(packFile, baseLink + modPackName)) {
+                if (!dir.equals("mojang_vanilla") && (!packFile.exists() || !DownloadUtils.backupIsValid(packFile, baseLink + modPackName))) {
                     try {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
@@ -240,8 +240,9 @@ public class ModManager extends JDialog {
             }
 
             try {
-                if ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(
-                        new File(baseDynamic, modPackName), md5)) {
+                if (!dir.equals("mojang_vanilla")
+                        && ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic,
+                                modPackName), md5))) {
                     if (debugVerbose) {
                         Logger.logInfo(debugTag + "Extracting pack.");
                     }
@@ -290,9 +291,19 @@ public class ModManager extends JDialog {
                         Logger.logInfo(debugTag + "Pack extracted, version tagged.");
                     }
                     return true;
-                } else {
+                } else if (!dir.equals("mojang_vanilla")) {
                     ErrorUtils.tossError("Error downloading modpack!!!");
                     return false;
+                } else {
+                    File version = new File(installPath, dir + sep + "version");
+                    BufferedWriter out = new BufferedWriter(new FileWriter(version));
+                    out.write(curVersion.replace("_", "."));
+                    out.flush();
+                    out.close();
+                    if (debugVerbose) {
+                        Logger.logInfo(debugTag + "Vanilla version tagged.");
+                    }
+                    return true;
                 }
             } catch (IOException e) {
                 Logger.logError(e.getMessage(), e);

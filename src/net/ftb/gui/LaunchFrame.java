@@ -1094,11 +1094,15 @@ public class LaunchFrame extends JFrame {
             }
             List<File> classpath = new ArrayList<File>();
             Version packjson = new Version();
-            if (new File(gameDir, "pack.json").exists()) {
-                packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
-                for (Library lib : packjson.getLibraries()) {
-                    classpath.add(new File(libDir, lib.getPath()));
+            if (!pack.getDir().equals("mojang_vanilla")) {
+                if (new File(gameDir, "pack.json").exists()) {
+                    packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                    for (Library lib : packjson.getLibraries()) {
+                        classpath.add(new File(libDir, lib.getPath()));
+                    }
                 }
+            } else {
+                packjson = base;
             }
             classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
             for (Library lib : base.getLibraries()) {
