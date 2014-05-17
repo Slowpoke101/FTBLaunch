@@ -29,8 +29,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import net.feed_the_beast.launcher.json.JsonFactory;
+import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
 import net.ftb.data.ModPack;
@@ -41,12 +43,18 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.authlib.UserAuthentication;
+import com.mojang.authlib.UserType;
+import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
+import com.mojang.util.UUIDTypeAdapter;
 
 public class MinecraftLauncherNew {
-    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String username, String password, String mainClass, String args,
-            String assetIndex, String rmax, String maxPermSize, String version, String auth_UUID) throws IOException {
+    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
+            String maxPermSize, String version, UserAuthentication authentication) throws IOException {
 
         assetDir = syncAssets(assetDir, assetIndex);
 
@@ -129,18 +137,46 @@ public class MinecraftLauncherNew {
 
         arguments.add(mainClass);
         for (String s : args.split(" ")) {
-            if (s.equals("${auth_player_name}"))
-                arguments.add(username);
-            else if (s.equals("${auth_session}") || s.equals("${auth_access_token}"))
-                arguments.add(password);
+            if (authentication.getSelectedProfile() != null) {
+                if (s.equals("${auth_player_name}"))
+                    arguments.add(authentication.getSelectedProfile().getName());
+                else if (s.equals("${auth_uuid}"))
+                    arguments.add(UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId()));
+                else if (s.equals("${user_type}"))
+                    arguments.add(authentication.getUserType().getName());
+            } else {
+                if (s.equals("${auth_player_name}"))
+                    arguments.add("Player");
+                else if (s.equals("${auth_uuid}"))
+                    arguments.add(new UUID(0L, 0L).toString());
+                else if (s.equals("${user_type}"))
+                    arguments.add(UserType.LEGACY.getName());
+            }
+            if (s.equals("${auth_session}")) {
+                if (authentication.isLoggedIn() && authentication.canPlayOnline()) {
+                    if (authentication instanceof YggdrasilUserAuthentication) {
+                        arguments.add(String.format("token:%s:%s", authentication.getAuthenticatedToken(), UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId())));
+                    } else {
+                        arguments.add(authentication.getAuthenticatedToken());
+                    }
+                } else {
+                    arguments.add("-");
+                }
+            } else if (s.equals("${auth_access_token}"))
+                arguments.add(authentication.getAuthenticatedToken());
             else if (s.equals("${version_name}"))
                 arguments.add(version);
             else if (s.equals("${game_directory}"))
                 arguments.add(gameDir.getAbsolutePath());
-            else if (s.equals("${game_assets}"))
+            else if (s.equals("${game_assets}") || s.equals("${assets_root}"))
                 arguments.add(assetDir.getAbsolutePath());
-            else if (s.equals("${auth_uuid}"))
-                arguments.add(auth_UUID);
+
+            else if (s.equals("${assets_index_name}"))
+                arguments.add(assetIndex == null ? "legacy" : assetIndex);
+            else if (s.equals("${user_properties}"))
+                arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new OldPropertyMapSerializer()).create().toJson(authentication.getUserProperties()));
+            else if (s.equals("${user_properties_map}"))
+                arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
 
             else
                 arguments.add(s);

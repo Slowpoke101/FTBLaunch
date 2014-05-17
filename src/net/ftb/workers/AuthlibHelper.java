@@ -39,9 +39,9 @@ public class AuthlibHelper {
         String displayName;
         boolean hasMojangData = false;
         boolean hasPassword = false;
+        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
         if (user != null) {
             Logger.logInfo("Beginning authlib authentication attempt");
-            YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
             if (pass != null && !pass.isEmpty()) {
@@ -67,14 +67,12 @@ public class AuthlibHelper {
                     if (hasMojangData && hasPassword) {
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
-                        //if the UUID is valid we can proceed to offline mode later
                     } else {
                         ErrorUtils.tossError("Invalid username or password.");
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
                     if (hasMojangData) {
-                        //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         if (uniqueID != null && !uniqueID.isEmpty())
@@ -105,7 +103,7 @@ public class AuthlibHelper {
                         UserManager.setStore(user, encode(authentication.saveForStorage()));
                         UserManager.setUUID(user, authentication.getSelectedProfile().getId().toString());//enables use of offline mode later if needed on newer MC Versions
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", displayName, authentication.getAuthenticatedToken(), authentication
-                                .getSelectedProfile().getId().toString());
+                                .getSelectedProfile().getId().toString(), authentication);
                     }
                 }
             }
@@ -123,8 +121,10 @@ public class AuthlibHelper {
             LoginResponse l = authenticateWithAuthlib(user, pass, null);
             if (l == null) {
                 //offline mode is allowed here if the UUID exists
-                if (uniqueID != null && !uniqueID.isEmpty())
+                if (uniqueID != null && !uniqueID.isEmpty()) {
                     UserManager.setUUID(user, uniqueID);
+                    return new LoginResponse(null, null, null, null, null, authentication);
+                }
                 return l;
             } else {
                 return l;

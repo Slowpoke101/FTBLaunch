@@ -340,7 +340,7 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.5");
+                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13");
                 authworker.execute();
 
                 LoadingDialog.setProgress(170);
@@ -696,7 +696,7 @@ public class LaunchFrame extends JFrame {
                 } catch (ExecutionException err) {
                     if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
                         Logger.logError(err.getMessage(), err);
-                        PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username));
+                        PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username), getResp());
                         d.setVisible(true);
                     }
                     enableObjects();
@@ -714,7 +714,7 @@ public class LaunchFrame extends JFrame {
                     }
                     runGameUpdater(RESPONSE);
                 } else if (uuid != null && !uuid.isEmpty()) {
-                    PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid);
+                    PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid, RESPONSE);
                     d.setVisible(true);
                 } else {
                     enableObjects();
@@ -1106,9 +1106,9 @@ public class LaunchFrame extends JFrame {
             }
             //launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, resp.getUsername(), resp.getSessionID(),
-                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getUuid());
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, packjson.mainClass != null ? packjson.mainClass
+                    : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(),
+                    Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth());
             MCRunning = true;
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());

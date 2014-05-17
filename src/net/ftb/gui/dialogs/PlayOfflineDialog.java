@@ -40,7 +40,7 @@ public class PlayOfflineDialog extends JDialog {
     private JButton play;
     private JButton abort;
 
-    public PlayOfflineDialog(String cause, final String username, final String uuid) {
+    public PlayOfflineDialog(String cause, final String username, final String uuid, final LoginResponse resp) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
 
@@ -59,7 +59,8 @@ public class PlayOfflineDialog extends JDialog {
                         unique = "1234567890";
                     else
                         unique = uuid;
-                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), new LoginResponse("1", "token", username, "offlinemods", unique));
+                    LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
+                            new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()));
                 }
             }
         });

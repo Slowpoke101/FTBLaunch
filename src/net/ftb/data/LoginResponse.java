@@ -18,8 +18,13 @@ package net.ftb.data;
 
 import lombok.Getter;
 
+import com.mojang.authlib.UserAuthentication;
+
 public class LoginResponse {
     private String type;
+
+    @Getter
+    private UserAuthentication auth;
 
     /**
     * Constructor for LoginResponse class
@@ -29,12 +34,13 @@ public class LoginResponse {
     * @param session - the session ID from authlib
     * @param uniqueID - the user's uuid from authlib
     */
-    public LoginResponse(String version, String dlTicket, String username, String session, String uniqueID) {
+    public LoginResponse(String version, String dlTicket, String username, String session, String uniqueID, UserAuthentication userAuth) {
         this.latestVersion = version;
         this.downloadTicket = dlTicket;
         this.username = username;
         this.sessionID = session;
         this.uuid = uniqueID;
+        this.auth = userAuth;
     }
 
     /**

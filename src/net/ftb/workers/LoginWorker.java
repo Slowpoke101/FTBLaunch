@@ -48,6 +48,8 @@ public class LoginWorker extends SwingWorker<String, Void> {
                     this.resp = resp;
                     if (resp != null)
                         return "good";
+                    if (resp.getUsername() == null)
+                        return "";
                     return "";
                 } catch (Exception e) {
                     Logger.logError("Error using authlib", e);
