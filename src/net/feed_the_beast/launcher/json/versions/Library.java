@@ -3,6 +3,7 @@ package net.feed_the_beast.launcher.json.versions;
 import java.util.List;
 import java.util.Map;
 
+import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.util.DownloadUtils;
 
@@ -46,7 +47,7 @@ public class Library {
         if (_artifact == null) {
             _artifact = new Artifact(name);
         }
-        return _artifact.getPath(natives.get(OS.CURRENT));
+        return _artifact.getPath(natives.get(OS.CURRENT).replace("${arch}", (Settings.getSettings().getCurrentJava().is64bits ? "64" : "32")));
     }
 
     public String getUrl () {

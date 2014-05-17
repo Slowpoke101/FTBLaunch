@@ -32,8 +32,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.google.common.collect.Lists;
-import com.google.common.primitives.Ints;
 import lombok.Getter;
 import net.ftb.data.events.ModPackListener;
 import net.ftb.gui.panes.ModpacksPane;
@@ -41,6 +39,9 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
+
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 
 public class ModPack {
     private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
@@ -53,6 +54,7 @@ public class ModPack {
     private boolean privatePack;
     @Getter
     private int[] minJRE;
+
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
      */
@@ -180,9 +182,9 @@ public class ModPack {
         this.hasCustomTP = customTP;
         String[] tempJRE = minJRE.split("\\.");
         List<Integer> tmpIJre = Lists.newArrayList();
-            for(int i = 0; i<tempJRE.length; i++){
-                tmpIJre.add(Integer.parseInt(tempJRE[i]));
-            }
+        for (int i = 0; i < tempJRE.length; i++) {
+            tmpIJre.add(Integer.parseInt(tempJRE[i]));
+        }
         this.minJRE = Ints.toArray(tmpIJre);
         if (!animation.isEmpty()) {
             this.animation = animation;
@@ -472,5 +474,17 @@ public class ModPack {
 
     public boolean hasCustomTP () {
         return hasCustomTP;
+    }
+
+    public static void setVanillaPackMCVersion (String string) {
+        for (int i = 0; i < packs.size(); i++) {
+            if (packs.get(i).getDir().equals("mojang_vanilla")) {
+                ModPack temp = packs.get(i);
+                temp.setMcVersion(string);
+                packs.remove(i);
+                packs.add(i, temp);
+                return;
+            }
+        }
     }
 }
