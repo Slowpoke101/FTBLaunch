@@ -54,7 +54,7 @@ import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModManager extends JDialog {
-    public static boolean update = false, backup = false, erroneous = false, upToDate = false;
+    public static boolean update = false, backupCFG = false, backupSave = false, erroneous = false, upToDate = false;
     private static String curVersion = "";
     private JPanel contentPane;
     private double downloadedPerc;
@@ -226,7 +226,7 @@ public class ModManager extends JDialog {
                     }
                     String animation = pack.getAnimation();
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
-                    
+
                     if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
                         try {
                             downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
@@ -379,12 +379,19 @@ public class ModManager extends JDialog {
             if (!update) {
                 return true;
             }
-            if (backup) {
+            if (backupCFG) {
                 File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
                 if (destination.exists()) {
                     FileUtils.delete(destination);
                 }
                 FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
+            }
+            if (backupSave) {
+                File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "saves_backup");
+                if (destination.exists()) {
+                    FileUtils.delete(destination);
+                }
+                FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "saves"), destination);
             }
             curVersion = pack.getVersion().replace(".", "_");
             return false;

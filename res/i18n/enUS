@@ -87,7 +87,8 @@ LUNCHERUPDATE_CURRENTDEAD = Your Current Launcher Must be updated for one of the
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = A new mod pack version is available!
-UPDATEMODPACK_BACKUP = Back-up config files?
+UPDATEMODPACK_BACKUPCFG = Back-up config files?
+UPDATEMODPACK_BACKUPSave = Back-up Saves?
 UPDATEMODPACK_TITLE = Mod Pack Update Available
 UPDATEMODPACK_DOWNGRADE = Installed version is newer than selected version
 UPDATEMODPACK_FROM_TO_VERSION = Current Version: %LOCALVER%\nSelected Version: %ONLINEVER%

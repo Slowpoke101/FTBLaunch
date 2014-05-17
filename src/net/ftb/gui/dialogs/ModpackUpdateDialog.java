@@ -39,7 +39,8 @@ public class ModpackUpdateDialog extends JDialog {
     private JLabel updateLbl;
     private JButton update;
     private JButton abort;
-    private JCheckBox backup;
+    private JCheckBox backupCFG;
+    private JCheckBox backupSave;
 
     public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
         super(instance, modal);
@@ -50,7 +51,8 @@ public class ModpackUpdateDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 ModManager.update = true;
-                ModManager.backup = backup.isSelected();
+                ModManager.backupCFG = backupCFG.isSelected();
+                ModManager.backupSave = backupSave.isSelected();
                 setVisible(false);
             }
         });
@@ -75,17 +77,20 @@ public class ModpackUpdateDialog extends JDialog {
 
         messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
         updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-        backup = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUP"));
+        backupCFG = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPCFG"));
+        backupSave = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPSAVE"));
         update = new JButton(I18N.getLocaleString("MAIN_YES"));
         abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
         messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
         updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        backup.setHorizontalAlignment(SwingConstants.CENTER);
+        backupCFG.setHorizontalAlignment(SwingConstants.CENTER);
+        backupSave.setHorizontalAlignment(SwingConstants.CENTER);
 
         panel.add(messageLbl);
         panel.add(updateLbl);
-        panel.add(backup);
+        panel.add(backupCFG);
+        panel.add(backupSave);
         panel.add(update);
         panel.add(abort);
 
@@ -96,23 +101,27 @@ public class ModpackUpdateDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, backup, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, backupCFG, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, backupSave, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(messageLbl);
         columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(backup));
+        columnWidth = Spring.max(columnWidth, Spring.width(backupCFG));
+        columnWidth = Spring.max(columnWidth, Spring.width(backupSave));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
         layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, backup, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, backupCFG, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.EAST, backupSave, hSpring, SpringLayout.WEST, panel);
 
         hSpring = Spring.sum(hSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backup, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backupCFG, 0, SpringLayout.HORIZONTAL_CENTER, panel);
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backupSave, 0, SpringLayout.HORIZONTAL_CENTER, panel);
         layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
         layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
 
@@ -131,9 +140,14 @@ public class ModpackUpdateDialog extends JDialog {
         vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
         vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-        layout.putConstraint(SpringLayout.NORTH, backup, vSpring, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, backupCFG, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(backup));
+        vSpring = Spring.sum(vSpring, Spring.height(backupCFG));
+        vSpring = Spring.sum(vSpring, Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.NORTH, backupSave, vSpring, SpringLayout.NORTH, panel);
+
+        vSpring = Spring.sum(vSpring, Spring.height(backupSave));
         vSpring = Spring.sum(vSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
