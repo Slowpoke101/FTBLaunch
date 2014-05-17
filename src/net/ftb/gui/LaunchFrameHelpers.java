@@ -26,7 +26,7 @@ import java.io.*;
 
 public class LaunchFrameHelpers {
     public static void printInfo() {
-        Logger.logInfo("FTBLaunch starting up (version " + LaunchFrame.getVersion() + ")");
+        Logger.logInfo("FTBLaunch starting up (version " + LaunchFrame.getVersion() + " Build: " + LaunchFrame.buildNumber + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));
