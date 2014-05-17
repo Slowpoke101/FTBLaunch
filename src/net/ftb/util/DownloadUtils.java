@@ -19,13 +19,11 @@ package net.ftb.util;
 import static net.ftb.download.Locations.backupServers;
 import static net.ftb.download.Locations.downloadServers;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -46,7 +44,6 @@ import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
@@ -355,6 +352,9 @@ public class DownloadUtils extends Thread {
                         if (jso != null && jso.get("minUsableLauncherVersion") != null) {
                             LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
                         }
+                        if (jso != null && jso.get("chEnabled") != null) {
+                            Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
+                        }
                         if (jso != null && jso.get("repoSplitCurse") != null) {
                             JsonElement e = jso.get("repoSplitCurse");
                             if (Settings.getSettings().getDebugLauncher()) {
@@ -362,19 +362,20 @@ public class DownloadUtils extends Thread {
                             }
                             if (e != null && e.getAsDouble() > choice) {
                                 Logger.logInfo("Balance has selected Automatic:CurseCDN");
-                                Locations.masterRepoNoHTTP = Locations.curseRepo.replaceAll("http://", "");
-                                Locations.masterRepo = Locations.curseRepo;
-                                Locations.primaryCH = false;
-                                downloadServers.remove("Automatic");
-                                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
                             } else {
                                 Logger.logInfo("Balance has selected Automatic:CreeperRepo");
+                                Locations.masterRepoNoHTTP = Locations.chRepo.replaceAll("http://", "");
+                                Locations.masterRepo = Locations.chRepo;
+                                Locations.primaryCH = true;
+                                downloadServers.remove("Automatic");
+                                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
                             }
                         }
                     }
-
-                    // Fetch servers from creeperhost using edges.json first
-                    parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
+                    if (Locations.chEnabled) {
+                        // Fetch servers from creeperhost using edges.json first
+                        parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
+                    }
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
                     LoadingDialog.setProgress(80);
