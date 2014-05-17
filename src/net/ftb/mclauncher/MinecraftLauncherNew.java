@@ -63,6 +63,7 @@ public class MinecraftLauncherNew {
             cpb.append(OSUtils.getJavaDelimiter());
             cpb.append(f.getAbsolutePath());
         }
+        Logger.logInfo("ClassPath: " + cpb.toString());
 
         List<String> arguments = new ArrayList<String>();
 
@@ -106,13 +107,13 @@ public class MinecraftLauncherNew {
 
         //Due to this being bugged in vanilla, and likely to cause crashes,
         //this will not be enabled until it can be tested with the first 1.7.x test packs
-        /* if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
-             arguments.add("--fullscreen true");
+        /*if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+             arguments.add("--fullscreen");
              Logger.logInfo("fullscreen");
-         }*/
+        }*/
 
         arguments.add("-cp");
-        arguments.add(System.getProperty("java.class.path") + cpb.toString());
+        arguments.add(cpb.toString() + System.getProperty("java.class.path"));//our libs come 1st!
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
@@ -137,55 +138,65 @@ public class MinecraftLauncherNew {
 
         arguments.add(mainClass);
         for (String s : args.split(" ")) {
+            boolean done = false;
             if (authentication.getSelectedProfile() != null) {
-                if (s.equals("${auth_player_name}"))
+                if (s.equals("${auth_player_name}")) {
                     arguments.add(authentication.getSelectedProfile().getName());
-                else if (s.equals("${auth_uuid}"))
+                    done = true;
+                } else if (s.equals("${auth_uuid}")) {
                     arguments.add(UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId()));
-                else if (s.equals("${user_type}"))
+                    done = true;
+                } else if (s.equals("${user_type}")) {
                     arguments.add(authentication.getUserType().getName());
-            } else {
-                if (s.equals("${auth_player_name}"))
-                    arguments.add("Player");
-                else if (s.equals("${auth_uuid}"))
-                    arguments.add(new UUID(0L, 0L).toString());
-                else if (s.equals("${user_type}"))
-                    arguments.add(UserType.LEGACY.getName());
-            }
-            if (s.equals("${auth_session}")) {
-                if (authentication.isLoggedIn() && authentication.canPlayOnline()) {
-                    if (authentication instanceof YggdrasilUserAuthentication) {
-                        arguments.add(String.format("token:%s:%s", authentication.getAuthenticatedToken(), UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId())));
-                    } else {
-                        arguments.add(authentication.getAuthenticatedToken());
-                    }
-                } else {
-                    arguments.add("-");
+                    done = true;
                 }
-            } else if (s.equals("${auth_access_token}"))
-                arguments.add(authentication.getAuthenticatedToken());
-            else if (s.equals("${version_name}"))
-                arguments.add(version);
-            else if (s.equals("${game_directory}"))
-                arguments.add(gameDir.getAbsolutePath());
-            else if (s.equals("${game_assets}") || s.equals("${assets_root}"))
-                arguments.add(assetDir.getAbsolutePath());
+            } else {
+                if (s.equals("${auth_player_name}")) {
+                    arguments.add("Player");
+                    done = true;
+                } else if (s.equals("${auth_uuid}")) {
+                    arguments.add(new UUID(0L, 0L).toString());
+                    done = true;
+                } else if (s.equals("${user_type}")) {
+                    arguments.add(UserType.LEGACY.getName());
+                    done = true;
+                }
+            }
+            if (!done) {
+                if (s.equals("${auth_session}")) {
+                    if (authentication.isLoggedIn() && authentication.canPlayOnline()) {
+                        if (authentication instanceof YggdrasilUserAuthentication) {
+                            arguments.add(String.format("token:%s:%s", authentication.getAuthenticatedToken(), UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId())));
+                        } else {
+                            arguments.add(authentication.getAuthenticatedToken());
+                        }
+                    } else {
+                        arguments.add("-");
+                    }
+                } else if (s.equals("${auth_access_token}"))
+                    arguments.add(authentication.getAuthenticatedToken());
+                else if (s.equals("${version_name}"))
+                    arguments.add(version);
+                else if (s.equals("${game_directory}"))
+                    arguments.add(gameDir.getAbsolutePath());
+                else if (s.equals("${game_assets}") || s.equals("${assets_root}"))
+                    arguments.add(assetDir.getAbsolutePath());
 
-            else if (s.equals("${assets_index_name}"))
-                arguments.add(assetIndex == null ? "legacy" : assetIndex);
-            else if (s.equals("${user_properties}"))
-                arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new OldPropertyMapSerializer()).create().toJson(authentication.getUserProperties()));
-            else if (s.equals("${user_properties_map}"))
-                arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
-
-            else
-                arguments.add(s);
+                else if (s.equals("${assets_index_name}"))
+                    arguments.add(assetIndex == null ? "legacy" : assetIndex);
+                else if (s.equals("${user_properties}"))
+                    arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new OldPropertyMapSerializer()).create().toJson(authentication.getUserProperties()));
+                else if (s.equals("${user_properties_map}"))
+                    arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
+                else
+                    arguments.add(s);
+            }
         }
-
         ProcessBuilder builder = new ProcessBuilder(arguments);
-        //StringBuilder tmp = new StringBuilder();
-        //for (String a : builder.command()) tmp.append(a).append(' ');
-        //Logger.logInfo("Launching: " + tmp.toString());		
+        /*StringBuilder tmp = new StringBuilder();
+        for (String a : builder.command())
+            tmp.append(a).append(' ');
+        Logger.logInfo("Launching: " + tmp.toString());*/
         builder.directory(gameDir);
         builder.redirectErrorStream(true);
         OSUtils.cleanEnvVars(builder.environment());
