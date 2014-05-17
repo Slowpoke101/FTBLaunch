@@ -61,7 +61,7 @@ public class MinecraftLauncherNew {
         List<String> arguments = new ArrayList<String>();
 
         Logger.logInfo("Java Path: " + javaPath);
-        Logger.logInfo("Pack: " + ModPack.getSelectedPack().getName() + " " + ModPack.getSelectedPack().getVersion());
+        Logger.logInfo("Pack: " + ModPack.getSelectedPack().getName() + " " + version);
         arguments.add(javaPath);
 
         setMemory(arguments, rmax);

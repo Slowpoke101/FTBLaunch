@@ -54,7 +54,6 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground () {
-        //try{Thread.sleep(10000);}catch (Exception e){}
         if (debugVerbose) {
             Logger.logInfo(debugTag + "Loading Authlib...");
         }
