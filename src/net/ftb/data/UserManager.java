@@ -99,7 +99,7 @@ public class UserManager {
                 BufferedReader read = new BufferedReader(new FileReader(_file));
                 String str;
                 while ((str = read.readLine()) != null) {
-                    str = CryptoUtils.decrypt(str, OSUtils.getMacAddress());
+                    str = CryptoUtils.decryptLegacy(str, OSUtils.getMacAddress());
                     _users.add(new User(str));
                 }
                 read.close();
