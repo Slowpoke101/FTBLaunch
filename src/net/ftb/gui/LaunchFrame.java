@@ -964,11 +964,14 @@ public class LaunchFrame extends JFrame {
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
             int attempt=0, attempts=3;
-            while (attempt < attempts) {
+            boolean success = false;
+            while ((attempt < attempts) && !success) {
                 try {
+                    success = true;
                     DownloadUtils.downloadToFile(url, json);
                 } catch (Exception e) {
                     Logger.logError("JSON download failed. Trying download again.", e);
+                    success = false;
                     attempt++;
                 }
                 if (attempt == attempts) {
@@ -1037,11 +1040,14 @@ public class LaunchFrame extends JFrame {
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             attempt=0; attempts=3;
-            while (attempt < attempts) {
+            success = false;
+            while ((attempt < attempts) && !success) {
                 try {
+                    success = true;
                     DownloadUtils.downloadToFile(url, json);
                 } catch (Exception e) {
-                    Logger.logError("JSON download failed. Trying download again.");
+                    Logger.logError("JSON download failed. Trying download again.", e);
+                    success = false;
                     attempt++;
                 }
                 if (attempt == attempts) {
@@ -1049,6 +1055,7 @@ public class LaunchFrame extends JFrame {
                     return null;
                 }
             }
+
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
             for (Entry<String, Asset> e : index.objects.entrySet()) {
