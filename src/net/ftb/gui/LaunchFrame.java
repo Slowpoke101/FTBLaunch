@@ -75,6 +75,7 @@ import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
+import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
@@ -340,7 +341,12 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13");
+                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13") {
+                    @Override
+                    protected void done() {
+                        LaunchFrame.getInstance().getLaunch().setEnabled(true);
+                    }
+                };
                 authworker.execute();
 
                 LoadingDialog.setProgress(170);
@@ -374,8 +380,19 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable);
-                //UpdateChecker updateChecker = new UpdateChecker(135, minUsable);
+                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable) {
+                    @Override
+                    protected void done() {
+                        try {
+                            if (get()) {
+                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
+                                p.setVisible(true);
+                            }
+                        } catch (InterruptedException e) {
+                        } catch (ExecutionException e) {
+                        }
+                    }
+                };
                 updateChecker.execute();
                 LoadingDialog.setProgress(180);
             };
@@ -645,7 +662,21 @@ public class LaunchFrame extends JFrame {
         /* Call unreadNews swingworker
          * done() will set news tab icon
          */
-        UnreadNewsWorker unreadNews = new UnreadNewsWorker();
+        UnreadNewsWorker unreadNews = new UnreadNewsWorker() {
+            @Override
+            protected void done() {
+                try {
+                    int i = get();
+                    if (i > 0 && i < 100) {
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
+                    } else {
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+                    }
+                } catch (InterruptedException e) {
+                } catch (ExecutionException e) {
+                }
+            }
+        };
         unreadNews.execute();
     }
 
@@ -867,6 +898,8 @@ public class LaunchFrame extends JFrame {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
 
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100);
+            prog.setMaximum(assets.size() * 100);
+
             final AssetDownloader downloader = new AssetDownloader(prog, assets) {
                 @Override
                 public void done () {
@@ -887,6 +920,21 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             };
+
+            downloader.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange (PropertyChangeEvent evt) {
+                    if (prog.isCanceled()) {
+                        downloader.cancel(false);
+                        prog.close();
+                    } else if (!downloader.isCancelled()) {
+                        if ("ready".equals(evt.getPropertyName()))
+                            prog.setProgress(downloader.getReady());
+                        if ("status".equals(evt.getPropertyName()))
+                            prog.setNote(downloader.getStatus());
+                    }
+                }
+            });
 
             downloader.execute();
         } else {
