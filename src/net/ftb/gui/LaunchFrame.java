@@ -925,7 +925,7 @@ public class LaunchFrame extends JFrame {
                     }
                 } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
-                    if (!local.exists()) {
+                    if (!local.exists() || forceUpdate) {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
                     }
 
