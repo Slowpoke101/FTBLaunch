@@ -858,6 +858,10 @@ public class LaunchFrame extends JFrame {
 
     private void setupNewStyle (final String installPath, final ModPack pack) {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
+        if (assets == null) {
+            ErrorUtils.tossError("Error occurred during downloading the assets");
+            enableObjects();
+        }
 
         if (assets.size() > 0) {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
@@ -911,7 +915,19 @@ public class LaunchFrame extends JFrame {
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
-            DownloadUtils.downloadToFile(url, json);
+            int attempt=0, attempts=3;
+            while (attempt < attempts) {
+                try {
+                    DownloadUtils.downloadToFile(url, json);
+                } catch (Exception e) {
+                    Logger.logError("JSON download failed. Trying download again.", e);
+                    attempt++;
+                }
+                if (attempt == attempts) {
+                    ErrorUtils.tossError("JSON download failed");
+                    return null;
+                }
+            }
             Version version = JsonFactory.loadVersion(json);
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
@@ -972,7 +988,19 @@ public class LaunchFrame extends JFrame {
              */
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
-            DownloadUtils.downloadToFile(url, json);
+            attempt=0; attempts=3;
+            while (attempt < attempts) {
+                try {
+                    DownloadUtils.downloadToFile(url, json);
+                } catch (Exception e) {
+                    Logger.logError("JSON download failed. Trying download again.");
+                    attempt++;
+                }
+                if (attempt == attempts) {
+                    ErrorUtils.tossError("JSON download failed");
+                    return null;
+                }
+            }
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
             for (Entry<String, Asset> e : index.objects.entrySet()) {
