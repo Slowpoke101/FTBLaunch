@@ -75,6 +75,7 @@ import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
 import net.ftb.gui.dialogs.InstallDirectoryDialog;
+import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
@@ -340,7 +341,12 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13");
+                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13") {
+                    @Override
+                    protected void done() {
+                        LaunchFrame.getInstance().getLaunch().setEnabled(true);
+                    }
+                };
                 authworker.execute();
 
                 LoadingDialog.setProgress(170);
@@ -374,8 +380,19 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable);
-                //UpdateChecker updateChecker = new UpdateChecker(135, minUsable);
+                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable) {
+                    @Override
+                    protected void done() {
+                        try {
+                            if (get()) {
+                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
+                                p.setVisible(true);
+                            }
+                        } catch (InterruptedException e) {
+                        } catch (ExecutionException e) {
+                        }
+                    }
+                };
                 updateChecker.execute();
                 LoadingDialog.setProgress(180);
             };
@@ -645,7 +662,21 @@ public class LaunchFrame extends JFrame {
         /* Call unreadNews swingworker
          * done() will set news tab icon
          */
-        UnreadNewsWorker unreadNews = new UnreadNewsWorker();
+        UnreadNewsWorker unreadNews = new UnreadNewsWorker() {
+            @Override
+            protected void done() {
+                try {
+                    int i = get();
+                    if (i > 0 && i < 100) {
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
+                    } else {
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+                    }
+                } catch (InterruptedException e) {
+                } catch (ExecutionException e) {
+                }
+            }
+        };
         unreadNews.execute();
     }
 
@@ -858,11 +889,17 @@ public class LaunchFrame extends JFrame {
 
     private void setupNewStyle (final String installPath, final ModPack pack) {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
+        if (assets == null) {
+            ErrorUtils.tossError("Error occurred during downloading the assets");
+            enableObjects();
+        }
 
         if (assets.size() > 0) {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
 
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100);
+            prog.setMaximum(assets.size() * 100);
+
             final AssetDownloader downloader = new AssetDownloader(prog, assets) {
                 @Override
                 public void done () {
@@ -883,6 +920,21 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             };
+
+            downloader.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange (PropertyChangeEvent evt) {
+                    if (prog.isCanceled()) {
+                        downloader.cancel(false);
+                        prog.close();
+                    } else if (!downloader.isCancelled()) {
+                        if ("ready".equals(evt.getPropertyName()))
+                            prog.setProgress(downloader.getReady());
+                        if ("status".equals(evt.getPropertyName()))
+                            prog.setNote(downloader.getStatus());
+                    }
+                }
+            });
 
             downloader.execute();
         } else {
@@ -911,7 +963,19 @@ public class LaunchFrame extends JFrame {
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
-            DownloadUtils.downloadToFile(url, json);
+            int attempt=0, attempts=3;
+            while (attempt < attempts) {
+                try {
+                    DownloadUtils.downloadToFile(url, json);
+                } catch (Exception e) {
+                    Logger.logError("JSON download failed. Trying download again.", e);
+                    attempt++;
+                }
+                if (attempt == attempts) {
+                    ErrorUtils.tossError("JSON download failed");
+                    return null;
+                }
+            }
             Version version = JsonFactory.loadVersion(json);
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
@@ -925,7 +989,7 @@ public class LaunchFrame extends JFrame {
                     }
                 } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
-                    if (!local.exists()) {
+                    if (!local.exists() || forceUpdate) {
                         list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
                     }
 
@@ -972,7 +1036,19 @@ public class LaunchFrame extends JFrame {
              */
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
-            DownloadUtils.downloadToFile(url, json);
+            attempt=0; attempts=3;
+            while (attempt < attempts) {
+                try {
+                    DownloadUtils.downloadToFile(url, json);
+                } catch (Exception e) {
+                    Logger.logError("JSON download failed. Trying download again.");
+                    attempt++;
+                }
+                if (attempt == attempts) {
+                    ErrorUtils.tossError("JSON download failed");
+                    return null;
+                }
+            }
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
             for (Entry<String, Asset> e : index.objects.entrySet()) {

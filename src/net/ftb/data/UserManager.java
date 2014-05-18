@@ -99,7 +99,7 @@ public class UserManager {
                 BufferedReader read = new BufferedReader(new FileReader(_file));
                 String str;
                 while ((str = read.readLine()) != null) {
-                    str = CryptoUtils.decrypt(str, OSUtils.getMacAddress());
+                    str = CryptoUtils.decryptLegacy(str, OSUtils.getMacAddress());
                     _users.add(new User(str));
                 }
                 read.close();
@@ -108,6 +108,9 @@ public class UserManager {
                 // Catch exception from parseInt => no more stack prints for end users
             } catch (Exception ex) {
                 Logger.logError(ex.getMessage(), ex);
+            }
+            if (_users.isEmpty()) {
+                Logger.logInfo("No users found after decoding old logindata format. Malformed logindata or empty logindata");
             }
         }
     }

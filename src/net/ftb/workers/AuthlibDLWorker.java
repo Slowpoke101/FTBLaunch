@@ -69,10 +69,6 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         Logger.logInfo("Adding Authlib to Classpath");
         return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
     }
-    @Override
-    protected void done() {
-        LaunchFrame.getInstance().getLaunch().setEnabled(true);
-    }
 
     protected boolean addToClasspath (String location) {
         File f = new File(location);

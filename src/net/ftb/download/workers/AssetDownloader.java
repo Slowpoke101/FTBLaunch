@@ -34,24 +34,6 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
     public AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
         this.downloads = downloads;
         this.monitor = monitor;
-
-        monitor.setMaximum(downloads.size() * 100);
-
-        addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange (PropertyChangeEvent evt) {
-                if (monitor.isCanceled()) {
-                    //sane?
-                    AssetDownloader.this.cancel(false);
-                    monitor.close();
-                } else if (!AssetDownloader.this.isCancelled()) {
-                    if ("ready".equals(evt.getPropertyName()))
-                        monitor.setProgress(getReady());
-                    if ("status".equals(evt.getPropertyName()))
-                        monitor.setNote(getStatus());
-                }
-            }
-        });
     }
 
     @Override

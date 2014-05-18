@@ -72,17 +72,4 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
 
         return i;
     }
-    @Override
-    protected void done() {
-        try {
-            int i = get();
-            if (i > 0 && i < 100) {
-                LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
-            } else {
-                LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
-            }
-        } catch (InterruptedException e) {
-        } catch (ExecutionException e) {
-        }
-    }
 }

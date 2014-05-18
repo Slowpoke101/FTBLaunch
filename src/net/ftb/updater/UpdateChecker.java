@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
-import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -57,18 +56,6 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             Logger.logError(ignored.getMessage(), ignored);
         }
         return this.shouldUpdate();
-    }
-
-    @Override
-    protected void done() {
-        try {
-            if (get()) {
-                LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
-                p.setVisible(true);
-            }
-        } catch (InterruptedException e) {
-        } catch (ExecutionException e) {
-        }
     }
 
     private void loadInfo () {
