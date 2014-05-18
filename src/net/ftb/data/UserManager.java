@@ -109,6 +109,9 @@ public class UserManager {
             } catch (Exception ex) {
                 Logger.logError(ex.getMessage(), ex);
             }
+            if (_users.isEmpty()) {
+                Logger.logInfo("No users found after decoding old logindata format. Malformed logindata or empty logindata");
+            }
         }
     }
 
