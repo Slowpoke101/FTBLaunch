@@ -889,12 +889,8 @@ public class LaunchFrame extends JFrame {
 
     private void setupNewStyle (final String installPath, final ModPack pack) {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
-        if (assets == null) {
-            ErrorUtils.tossError("Error occurred during downloading the assets");
-            enableObjects();
-        }
 
-        if (assets.size() > 0) {
+        if (assets != null && assets.size() > 0) {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
 
             final ProgressMonitor prog = new ProgressMonitor(this, "Downloading Files...", "", 0, 100);
@@ -965,17 +961,18 @@ public class LaunchFrame extends JFrame {
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
             int attempt=0, attempts=3;
             boolean success = false;
+            Exception reason = null;
             while ((attempt < attempts) && !success) {
                 try {
                     success = true;
                     DownloadUtils.downloadToFile(url, json);
                 } catch (Exception e) {
-                    Logger.logError("JSON download failed. Trying download again.", e);
                     success = false;
+                    reason = e;
                     attempt++;
                 }
-                if (attempt == attempts) {
-                    ErrorUtils.tossError("JSON download failed");
+                if (attempt == attempts && !success) {
+                    Logger.logError("JSON download failed", reason);
                     return null;
                 }
             }
@@ -1046,12 +1043,12 @@ public class LaunchFrame extends JFrame {
                     success = true;
                     DownloadUtils.downloadToFile(url, json);
                 } catch (Exception e) {
-                    Logger.logError("JSON download failed. Trying download again.", e);
                     success = false;
                     attempt++;
+                    reason = e;
                 }
-                if (attempt == attempts) {
-                    ErrorUtils.tossError("JSON download failed");
+                if (attempt == attempts && !success) {
+                    Logger.logError("JSON download failed", reason);
                     return null;
                 }
             }
