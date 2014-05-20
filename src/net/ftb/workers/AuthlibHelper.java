@@ -79,6 +79,10 @@ public class AuthlibHelper {
                             UserManager.setUUID(user, uniqueID);
                     }
                     ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com", e);
+                    if (uniqueID != null && !uniqueID.isEmpty()) {
+                        UserManager.setUUID(user, uniqueID);
+                        return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
+                    }
                     return null;
                 } catch (AuthenticationException e) {
                     Logger.logError("Unkown error from authlib:");
@@ -120,11 +124,7 @@ public class AuthlibHelper {
 
             LoginResponse l = authenticateWithAuthlib(user, pass, null);
             if (l == null) {
-                //offline mode is allowed here if the UUID exists
-                if (uniqueID != null && !uniqueID.isEmpty()) {
-                    UserManager.setUUID(user, uniqueID);
-                    return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
-                }
+                Logger.logError("Failed to login with username & password");
                 return l;
             } else {
                 return l;

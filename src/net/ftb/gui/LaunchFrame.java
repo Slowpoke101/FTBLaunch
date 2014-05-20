@@ -744,7 +744,7 @@ public class LaunchFrame extends JFrame {
                         Logger.logError("User data saving failed!");
                     }
                     runGameUpdater(RESPONSE);
-                } else if (uuid != null && !uuid.isEmpty() && RESPONSE != null) {
+                } else if (uuid != null && !uuid.isEmpty() && RESPONSE != null && responseStr.equals("offline")) {
                     PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid, RESPONSE);
                     d.setVisible(true);
                 } else {
