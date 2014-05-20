@@ -123,7 +123,7 @@ public class AuthlibHelper {
                 //offline mode is allowed here if the UUID exists
                 if (uniqueID != null && !uniqueID.isEmpty()) {
                     UserManager.setUUID(user, uniqueID);
-                    return new LoginResponse(null, null, null, null, null, authentication);
+                    return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
                 }
                 return l;
             } else {
