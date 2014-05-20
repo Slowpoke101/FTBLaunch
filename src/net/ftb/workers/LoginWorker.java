@@ -46,8 +46,10 @@ public class LoginWorker extends SwingWorker<String, Void> {
                 try {
                     LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData);
                     this.resp = resp;
-                    if (resp != null)
+                    if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty())
                         return "good";
+                    if (resp == null)
+                        return "";
                     if (resp.getUsername() == null)
                         return "";
                     return "";
