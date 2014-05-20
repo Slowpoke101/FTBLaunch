@@ -74,6 +74,7 @@ public class JavaFinder {
 
         javaExecs.add(System.getenv("WINDIR") + "\\system32\\java.exe");
         javaExecs.add(System.getenv("WINDIR") + "\\SysWOW64\\java.exe");
+        javaExecs.add(System.getProperty("java.home") + "\\bin\\javaw.exe");
 
         List<JavaInfo> result = new ArrayList<JavaInfo>();
         for (String javaPath : javaExecs) {
@@ -114,7 +115,8 @@ public class JavaFinder {
             javaExecs.add(javaVersion + "/bin/java");
 
         javaExecs.add("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
-        
+        javaExecs.add(System.getProperty("java.home") + "/bin/java");
+
         List<JavaInfo> result = new ArrayList<JavaInfo>();
         for (String javaPath : javaExecs) {
             File javaFile = new File(javaPath); 
