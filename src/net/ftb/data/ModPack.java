@@ -251,7 +251,7 @@ public class ModPack {
         int storedVersion_ = -1;
         if (!storedVersion.isEmpty()) {
             try {
-                Integer.parseInt(storedVersion);
+                storedVersion_ = Integer.parseInt(storedVersion);
             } catch (NumberFormatException e) {
                 Logger.logWarn("Automatically fixing malformed version file for " + name, e);
                 storedVersion = "";
