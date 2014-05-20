@@ -18,6 +18,7 @@ package net.ftb.workers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -66,6 +67,8 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
                 }
             }
 
+        } catch (UnknownHostException e) {
+            Logger.logWarn(e.getMessage());
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
