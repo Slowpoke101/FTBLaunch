@@ -119,8 +119,8 @@ public class AuthlibHelper {
                 new PasswordDialog(LaunchFrame.getInstance(), true).setVisible(true);
                 if (LaunchFrame.tempPass.isEmpty())
                     return null;
+                pass = LaunchFrame.tempPass;
             }
-            pass = LaunchFrame.tempPass;
 
             LoginResponse l = authenticateWithAuthlib(user, pass, null);
             if (l == null) {
