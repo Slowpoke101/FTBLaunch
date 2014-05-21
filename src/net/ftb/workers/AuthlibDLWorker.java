@@ -122,7 +122,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
             } catch (Exception e) {
-                Logger.logError(e.getMessage(), e);
+                Logger.logWarn("Authlib checksum download failed", e);
                 return false;
             }
         }

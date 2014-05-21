@@ -77,6 +77,10 @@ public class InstallDirectoryDialog extends JDialog {
                 if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && installPath.getText().contains(System.getenv("ProgramFiles"))) {
                     ErrorUtils.tossError("Installing under C:\\Program Files\\ or similar is not supported. Please, select again.");
                 }
+                else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("USERPROFILE")!=null && installPath.getText().contains(System.getenv("USERPROFILE"))) {
+                    ErrorUtils.tossError("Installing under C:\\Users\\<username> is not recommended and can cause problems. You can change installation directory from  options tab.");
+                    setVisible(false);
+                }
                 else if (f.isDirectory() && !f.canWrite()) {
                     ErrorUtils.tossError("No write access to selected directory. Please, select again");
                 }
