@@ -1087,6 +1087,7 @@ public class LaunchFrame extends JFrame {
             Process minecraftProcess = MinecraftLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(),
                     maxPermSize);
             MCRunning = true;
+            if(con != null) con.minecraftStarted();
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1103,6 +1104,7 @@ public class LaunchFrame extends JFrame {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
                         } else {
+                            if(con != null) con.minecraftStopped();
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
@@ -1194,6 +1196,7 @@ public class LaunchFrame extends JFrame {
                     : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(),
                     Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth());
             MCRunning = true;
+            if(con != null) con.minecraftStarted();
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1210,6 +1213,7 @@ public class LaunchFrame extends JFrame {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
                         } else {
+                            if(con != null) con.minecraftStopped();
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
