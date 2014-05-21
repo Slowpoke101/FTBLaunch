@@ -69,6 +69,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private final JComboBox logSourceComboBox;
     private LogSource logSource = LogSource.ALL;
     private YNDialog yn;
+    private JButton killMCButton;
 
     public LauncherConsole() {
         setTitle(I18N.getLocaleString("CONSOLE_TITLE"));
@@ -168,7 +169,9 @@ public class LauncherConsole extends JFrame implements ILogListener {
         });
         panel.add(ircButton);
 
-        JButton killMCButton = new JButton(I18N.getLocaleString("KILL_MC"));
+        killMCButton = new JButton(I18N.getLocaleString("KILL_MC"));
+        killMCButton.setEnabled(false);
+        killMCButton.setVisible(false);
         killMCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -264,6 +267,15 @@ public class LauncherConsole extends JFrame implements ILogListener {
         return "<font color=\"" + color + "\">" + (entry.toString(logType).replace("<", "&lt;").replace(">", "&gt;").trim().replace("\r\n", "\n").replace("\n", "<br/>")) + "</font><br/>";
     }
 
+    public void minecraftStarted() {
+        killMCButton.setEnabled(true);
+        killMCButton.setVisible(true);
+    }
+    
+    public void minecraftStopped() {
+        killMCButton.setEnabled(false);
+    }
+    
     @Override
     public void onLogEvent (LogEntry entry) {
         if (logSource == LogSource.ALL || entry.source == logSource) {
