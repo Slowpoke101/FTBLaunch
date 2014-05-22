@@ -57,7 +57,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private JSlider ramMaximum;
     private JComboBox locale;
     private JTextField installFolderTextField;
-    private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs;
+    private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs, useSystemProxy;
     private final Settings settings;
 
     private FocusListener settingsChangeListener = new FocusListener() {
@@ -195,6 +195,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         optJavaArgs.addFocusListener(settingsChangeListener);
         add(optJavaArgs);
 
+        useSystemProxy = new JCheckBox(I18N.getLocaleString("USE_SYSTEM_PROXY"));
+        useSystemProxy.setBounds(540, 165, 300, 25);
+        useSystemProxy.setSelected(settings.getUseSystemProxy());
+        useSystemProxy.addFocusListener(settingsChangeListener);
+        add(useSystemProxy);
+
         advancedOptionsBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS"));
         advancedOptionsBtn.setBounds(147, 275, 629, 29);
         advancedOptionsBtn.addActionListener(new ActionListener() {
@@ -227,6 +233,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         settings.setConsoleActive(chckbxShowConsole.isSelected());
         settings.setOptJavaArgs(optJavaArgs.isSelected());
         settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
+        settings.setUseSystemProxy(useSystemProxy.isSelected());
         settings.save();
     }
 
