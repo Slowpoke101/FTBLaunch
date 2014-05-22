@@ -34,7 +34,9 @@ import javax.imageio.ImageIO;
 
 import lombok.Getter;
 import net.ftb.data.events.ModPackListener;
-import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
@@ -49,6 +51,8 @@ public class ModPack {
     private Image logo, image;
     private int index;
     private boolean updated = false, hasCustomTP, hasbundledmap;
+    @Getter
+    private boolean thirdPartyTab;
     private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
     private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
     private boolean privatePack;
@@ -141,9 +145,15 @@ public class ModPack {
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
-        return getPack(ModpacksPane.getSelectedModIndex());
+        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
+            return getPack(ThirdPartyPane.getSelectedModIndex());
+        }
+        return getPack(FTBPacksPane.getSelectedModIndex());
     }
 
+    public static ModPack getSelectedPack (boolean isFTBPane) {
+        return isFTBPane?getPack(FTBPacksPane.getSelectedModIndex()):getPack(ThirdPartyPane.getSelectedModIndex());
+    }
     /**
      * Constructor for ModPack class
      * @param name - the name of the ModPack
@@ -166,7 +176,7 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE) throws IOException, NoSuchAlgorithmException {
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -207,6 +217,7 @@ public class ModPack {
         String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
+        this.thirdPartyTab = thirdpartyTab;
         URL url_;
         if (!upToDate(verFile)) {
             url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));

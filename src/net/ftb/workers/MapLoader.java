@@ -20,7 +20,7 @@ import java.net.URL;
 
 import net.ftb.data.Map;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
+import net.ftb.gui.panes.MapUtils;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
@@ -57,7 +57,7 @@ public class MapLoader extends Thread {
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         } finally {
-            MapsPane.loaded = true;
+            MapUtils.loaded = true;
             LaunchFrame.checkDoneLoading();
         }
     }

@@ -27,7 +27,7 @@ import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
@@ -50,6 +50,7 @@ public class ModpackLoader extends Thread {
         //TODO ASAP thread this
         for (String xmlFile : xmlFiles) {
             boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
+            boolean isThirdParty = !xmlFile.equalsIgnoreCase("thirdparty.xml");
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
             try {
                 modPackFile.getParentFile().mkdirs();
@@ -94,9 +95,10 @@ public class ModpackLoader extends Thread {
                                 .getTextContent(), modPackAttr.getNamedItem("description").getTextContent(), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
-                                .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()), privatePack, xmlFile, modPackAttr
+                                .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()),
+                                isThirdParty?(modPackAttr.getNamedItem("private") != null ? true : false): privatePack, xmlFile, modPackAttr
                                 .getNamedItem("bundledMap") != null ? true : false, modPackAttr.getNamedItem("customTP") != null ? true : false, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6"));
+                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty || privatePack));
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }
@@ -107,8 +109,8 @@ public class ModpackLoader extends Thread {
                 }
             }
         }
-        if (!ModpacksPane.loaded) {
-            ModpacksPane.loaded = true;
+        if (!FTBPacksPane.loaded) {
+            FTBPacksPane.loaded = true;
             LaunchFrame.checkDoneLoading();
             Map.loadAll();
             TexturePack.loadAll();

@@ -29,16 +29,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
-import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.MapUtils;
 import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 
 @SuppressWarnings("serial")
 public class SearchDialog extends JDialog {
     public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
     public JTextField query = new JTextField(20);
 
-    public SearchDialog(final ModpacksPane instance) {
+    public SearchDialog(final FTBPacksPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastPackSearch == null) ? "" : lastPackSearch);
@@ -69,7 +70,38 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    public SearchDialog(final MapsPane instance) {
+    public SearchDialog(final ThirdPartyPane instance) {
+        super(LaunchFrame.getInstance(), true);
+        setupGui();
+        query.setText((lastPackSearch == null) ? "" : lastPackSearch);
+        query.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void removeUpdate (DocumentEvent arg0) {
+                lastPackSearch = query.getText();
+                instance.sortPacks();
+            }
+
+            @Override
+            public void insertUpdate (DocumentEvent arg0) {
+                lastPackSearch = query.getText();
+                instance.sortPacks();
+            }
+
+            @Override
+            public void changedUpdate (DocumentEvent arg0) {
+            }
+        });
+        query.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent event) {
+                lastPackSearch = query.getText();
+                instance.sortPacks();
+                setVisible(false);
+            }
+        });
+    }
+
+    public SearchDialog(final MapUtils instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastMapSearch == null) ? "" : lastMapSearch);

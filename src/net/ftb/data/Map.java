@@ -34,7 +34,7 @@ import javax.imageio.ImageIO;
 
 import net.ftb.data.events.MapListener;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
+import net.ftb.gui.panes.MapUtils;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
@@ -99,7 +99,7 @@ public class Map {
      * @return Map - the currently selected Map
      */
     public static Map getSelectedMap () {
-        return getMap(MapsPane.getSelectedMapIndex());
+        return getMap(MapUtils.getSelectedMapIndex());
     }
 
     /**

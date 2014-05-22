@@ -42,6 +42,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.google.common.collect.Maps;
+import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
@@ -59,6 +61,10 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     public static ArrayList<JPanel> texturePackPanels;
     private static JScrollPane texturePacksScroll;
 
+    //stuff for swapping between maps/texture packs
+    private JButton mapButton;
+    private JButton textureButton;
+
     private static JLabel typeLbl;
     public static String compatible = "All", resolution = "All";
     private JButton filter;
@@ -68,7 +74,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     private TexturepackPane instance = this;
 
-    private static HashMap<Integer, TexturePack> currentTexturePacks = new HashMap<Integer, TexturePack>();
+    private static HashMap<Integer, TexturePack> currentTexturePacks = Maps.newHashMap();
 
     public static boolean loaded = false;
 
@@ -108,6 +114,28 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\"> / </strong></font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + resolution + "</font>";
         typeLblText += "</body></html>";
+
+
+        mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
+        mapButton.setBounds(400, 5, 105, 25);
+        mapButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(true);
+            }
+        });
+        add(mapButton);
+
+        textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
+        textureButton.setBounds(510, 5, 105, 25);
+        textureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(false);
+            }
+        });
+        add(textureButton);
+
 
         typeLbl = new JLabel(typeLblText);
         typeLbl.setBounds(115, 5, 295, 25);
@@ -224,7 +252,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     public void onTexturePackAdded (TexturePack texturePack) {
         final TexturePack texturePack_ = texturePack;
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run () {
                 addTexturePack(texturePack_);
                 Logger.logInfo("Adding texture pack " + getTexturePackNum() + " (" + texturePack_.getName() + ")");
                 updateTexturePacks();
@@ -267,7 +295,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
                     packs += "<p>This texture pack works with the following packs:</p><ul>";
                     for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name)!=null ? ModPack.getPack(name).getName() : name) + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }
@@ -334,4 +362,5 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         String searchString = SearchDialog.lastTextureSearch.toLowerCase();
         return ((searchString.isEmpty()) || tp.getName().toLowerCase().contains(searchString) || tp.getAuthor().toLowerCase().contains(searchString));
     }
+
 }
