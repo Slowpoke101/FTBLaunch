@@ -319,7 +319,8 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 addPack(pack_);
-                Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack_.getName() + ")");
+                if(!pack_.isThirdPartyTab())
+                    Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack_.getName() + ")");
                 if (!currentPacks.isEmpty()) {
                     sortPacks();
                 } else {
