@@ -51,6 +51,10 @@ public class UserManager {
             if(_oldFile.exists()) {
                 _oldFile.delete();
             }
+            
+            if(_file.exists()) {
+                _file.delete();
+            }
         } finally {
             
         }
