@@ -133,9 +133,6 @@ public class OSUtils {
                 Logger.logInfo("Migrating cached Texturepacks from Roaming to Local storage");
                 FileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
                 
-//               Logger.logInfo("Migrating launcher settings");
-//                FileUtils.move(new File(dynamicDir, "logindata"), new File(cacheDir, "logindata"));
-                
                 Logger.logInfo("Migration complete.");
             }
         }
@@ -146,7 +143,10 @@ public class OSUtils {
         
         File oldLoginData = new File(dynamicDir, "logindata");
         File newLoginData = new File(cacheDir, "logindata");
-        if(oldLoginData.exists() && oldLoginData.getAbsolutePath() != newLoginData.getAbsolutePath()) { newLoginData.delete(); }
+        
+        if(oldLoginData.exists() && oldLoginData.getCanonicalPath() != newLoginData.getCanonicalPath()) {
+            newLoginData.delete();
+        }
     }
 
     public static long getOSTotalMemory () {
