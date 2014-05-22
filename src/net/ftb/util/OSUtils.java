@@ -101,7 +101,7 @@ public class OSUtils {
     public static String getCacheStorageLocation () {
         switch (getCurrentOS()) {
         case WINDOWS:
-            if(System.getenv("LOCALAPPDATA").length() > 5)
+            if(System.getenv("LOCALAPPDATA")!= null && System.getenv("LOCALAPPDATA").length() > 5)
                 return System.getenv("LOCALAPPDATA") + "/ftblauncher/";
             else
                 return System.getenv("APPDATA") + "/ftblauncher/";
