@@ -109,8 +109,6 @@ public class MinecraftLauncher {
 
         arguments.add("-cp");
         arguments.add(cpb.toString() + OSUtils.getJavaDelimiter() + System.getProperty("java.class.path"));
-        Logger.logError(cpb.toString());
-        Logger.logError( System.getProperty("java.class.path"));
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
             Collections.addAll(arguments, additionalOptions.split("\\s+"));
