@@ -219,7 +219,7 @@ public class Settings extends Properties {
     public void setPackVer (String string) {
         setProperty(ModPack.getSelectedPack().getDir(), string);
         if (ModPack.getSelectedPack().getDir().equals("mojang_vanilla"))
-            ModPack.setVanillaPackMCVersion(string);
+            ModPack.setVanillaPackMCVersion(string.equalsIgnoreCase("Recommended Version") ? ModPack.getSelectedPack().getVersion() : string);
     }
 
     public String getPackVer () {
