@@ -143,9 +143,12 @@ public class OSUtils {
         
         File oldLoginData = new File(dynamicDir, "logindata");
         File newLoginData = new File(cacheDir, "logindata");
-        
-        if(oldLoginData.exists() && oldLoginData.getCanonicalPath() != newLoginData.getCanonicalPath()) {
-            newLoginData.delete();
+        try {
+            if (oldLoginData.exists() && oldLoginData.getCanonicalPath() != newLoginData.getCanonicalPath()) {
+                newLoginData.delete();
+            }
+        } catch (Exception e){
+            Logger.logError("Error deleting login data", e);
         }
     }
 
