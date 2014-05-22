@@ -22,6 +22,10 @@ CONSOLE_SUPPORT = Need support? Click me!
 INSTALL_MAP = Install Map
 DOWNLOAD_MAP_SERVER = Download Server Map
 
+#tab swapping
+SWAP_MAP = Maps
+SWAP_TEXTURE = TexturePacks
+
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Install TexturePack
 
