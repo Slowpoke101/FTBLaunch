@@ -189,8 +189,11 @@ public class UserManager {
 
     //used by authlib helper in order to send key's back to disc for next load
     public static void setStore (String user, String encode) {
-        if (encode != null && !encode.isEmpty())
-            findUser(user).setStore(encode);
+        if (encode != null && !encode.isEmpty()){
+            User temp = findUser(user);
+            if(temp != null)
+                temp.setStore(encode);
+        }
     }
 
     //used by authlib helper in order to send key's back to disc for next load
