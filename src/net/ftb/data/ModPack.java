@@ -53,8 +53,8 @@ public class ModPack {
     private boolean updated = false, hasCustomTP, hasbundledmap;
     @Getter
     private boolean thirdPartyTab;
-    private final static ArrayList<ModPack> packs = new ArrayList<ModPack>();
-    private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
+    private final static ArrayList<ModPack> packs = Lists.newArrayList();
+    private static List<ModPackListener> listeners = Lists.newArrayList();
     private boolean privatePack;
     @Getter
     private int[] minJRE;

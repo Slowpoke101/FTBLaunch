@@ -49,7 +49,7 @@ public class ModpackLoader extends Thread {
     public void run () {
         //TODO ASAP thread this
         for (String xmlFile : xmlFiles) {
-            boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml");
+            boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml") && !xmlFile.equalsIgnoreCase("thirdparty.xml");//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase("thirdparty.xml");
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
             try {
@@ -89,6 +89,11 @@ public class ModpackLoader extends Thread {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
                     try {
+                        if(modPackAttr.getNamedItem("author") != null)
+                            if(!modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team"))
+                                isThirdParty = true;
+                            else
+                                isThirdParty = false;
                         ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
                                 .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
@@ -96,9 +101,9 @@ public class ModpackLoader extends Thread {
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
                                 .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()),
-                                isThirdParty?(modPackAttr.getNamedItem("private") != null ? true : false): privatePack, xmlFile, modPackAttr
+                                (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null ? true : false): privatePack, xmlFile, modPackAttr
                                 .getNamedItem("bundledMap") != null ? true : false, modPackAttr.getNamedItem("customTP") != null ? true : false, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty || privatePack));
+                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty));
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }
