@@ -105,9 +105,8 @@ public class MinecraftLauncherNew {
              arguments.add("--fullscreen");
              Logger.logInfo("fullscreen");
         }*/
-
         arguments.add("-cp");
-        arguments.add(cpb.toString() + System.getProperty("java.class.path"));//our libs come 1st!
+        arguments.add(cpb.toString());
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
