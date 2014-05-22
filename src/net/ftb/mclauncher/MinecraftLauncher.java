@@ -109,14 +109,6 @@ public class MinecraftLauncher {
 
         arguments.add("-cp");
         arguments.add(cpb.toString() + OSUtils.getJavaDelimiter() + System.getProperty("java.class.path"));
-        String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
-        if (!additionalOptions.isEmpty()) {
-            Collections.addAll(arguments, additionalOptions.split("\\s+"));
-        }
-        if (Settings.getSettings().getOptJavaArgs()) {
-            Logger.logInfo("Adding Optimization Arguments");
-            Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
-        }
 
         arguments.add(MinecraftLauncher.class.getCanonicalName());
         arguments.add(workingDir);
@@ -129,6 +121,15 @@ public class MinecraftLauncher {
                 + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
         arguments.add(OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
 
+
+        String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
+        if (!additionalOptions.isEmpty()) {
+            Collections.addAll(arguments, additionalOptions.split("\\s+"));
+        }
+        if (Settings.getSettings().getOptJavaArgs()) {
+            Logger.logInfo("Adding Optimization Arguments");
+            Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
+        }
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         processBuilder.redirectErrorStream(true);
         OSUtils.cleanEnvVars(processBuilder.environment());
