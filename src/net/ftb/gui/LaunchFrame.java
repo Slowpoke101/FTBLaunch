@@ -317,7 +317,7 @@ public class LaunchFrame extends JFrame {
                 LoadingDialog.setProgress(130);
 
                 // Store this in the cache (local) storage, since it's machine specific.
-                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"));
+                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
                 LoadingDialog.setProgress(140);
 
