@@ -43,6 +43,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -74,7 +76,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     private static JComboBox version;
     private static int selectedPack = 0;
     private static boolean modPacksAdded = false;
-    private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
+    private static HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
     private final FTBPacksPane instance = this;
     private static JEditorPane packInfo;
 
@@ -89,7 +91,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
 
-        packPanels = new ArrayList<JPanel>();
+        packPanels = Lists.newArrayList();
 
         // TODO: Set loading animation while we wait
         //		try {
@@ -320,7 +322,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
             public void run() {
                 addPack(pack_);
                 if(!pack_.isThirdPartyTab())
-                    Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack_.getName() + ")");
+                    Logger.logInfo("Adding FTB pack " + packPanels.size() + " (" + pack_.getName() + ")");
                 if (!currentPacks.isEmpty()) {
                     sortPacks();
                 } else {
