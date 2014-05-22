@@ -80,12 +80,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
 
         packPanels = Lists.newArrayList();
 
-        // TODO: Set loading animation while we wait
-        //		try {
-        //			loadingImage = new JLabel(new ImageIcon(new URL("http://cdn.nirmaltv.com/images/generatorphp-thumb.gif")));
-        //		} catch (MalformedURLException e1) { e1.printStackTrace(); }
-        //		loadingImage.setLocation(58, 36);
-
         packs = new JPanel();
         packs.setLayout(null);
         packs.setOpaque(false);
