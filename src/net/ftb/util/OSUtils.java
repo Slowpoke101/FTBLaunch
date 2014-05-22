@@ -140,7 +140,8 @@ public class OSUtils {
         if (!dynamicDir.exists()) {
             dynamicDir.mkdirs();
         }
-        
+
+        if(getCurrentOS() == OS.WINDOWS) {
         File oldLoginData = new File(dynamicDir, "logindata");
         File newLoginData = new File(cacheDir, "logindata");
         try {
@@ -149,6 +150,7 @@ public class OSUtils {
             }
         } catch (Exception e){
             Logger.logError("Error deleting login data", e);
+        }
         }
     }
 
