@@ -95,7 +95,7 @@ public class MinecraftLauncher {
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
         arguments.add("-cp");
-        arguments.add(cpb.toString() + System.getProperty("java.class.path"));
+        arguments.add(System.getProperty("java.class.path") + cpb.toString());
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
