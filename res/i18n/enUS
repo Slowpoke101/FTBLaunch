@@ -32,6 +32,7 @@ RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 SHOW_CONSOLE = Show Console?
 OPT_JAVA_ARGS= Use Optimization Arguments for fast computers?
+USE_SYSTEM_PROXY = Use Internet Proxy to download files 
 REOPEN_LAUNCHER = Reopen launcher after exiting minecraft?
 ADVANCED_OPTIONS = Advanced Options
 INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.

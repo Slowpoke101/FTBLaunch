@@ -35,7 +35,7 @@ import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class LocaleUpdater extends Thread {
-    private final String root = OSUtils.getCacheStorageLocation();
+    private final String root = OSUtils.getDynamicStorageLocation();
     private File local = new File(root, "locale" + File.separator + "version");
     private File archive = new File(root, "locales.zip");
     private int remoteVer;
@@ -87,6 +87,7 @@ public class LocaleUpdater extends Thread {
 
         try {
             URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             Scanner scanner = new Scanner(connection.getInputStream());
             remoteVer = scanner.nextInt();
             Logger.logInfo("[i18n] remoteVer = " + remoteVer);
