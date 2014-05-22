@@ -87,6 +87,7 @@ public class LocaleUpdater extends Thread {
 
         try {
             URLConnection connection = new URL(DownloadUtils.getStaticCreeperhostLink("locales")).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             Scanner scanner = new Scanner(connection.getInputStream());
             remoteVer = scanner.nextInt();
             Logger.logInfo("[i18n] remoteVer = " + remoteVer);

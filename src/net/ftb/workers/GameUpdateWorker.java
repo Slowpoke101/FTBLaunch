@@ -145,7 +145,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
                     lastfile = i;
                     URLConnection dlConnection = jarURLs.get(i).openConnection();
                     if (dlConnection instanceof HttpURLConnection) {
-                        dlConnection.setRequestProperty("Cache-Control", "no-cache");
+                        dlConnection.setRequestProperty("Cache-Control", "no-cache, no-transform");
                         dlConnection.connect();
                     }
                     String jarFileName = getFilename(jarURLs.get(i));

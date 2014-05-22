@@ -123,6 +123,7 @@ public class ModManager extends JDialog {
                     });
 
                     connection = (HttpURLConnection) url_.openConnection();
+                    connection.setRequestProperty("Cache-Control", "no-transform");
                     connection.setAllowUserInteraction(true);
                     connection.setConnectTimeout(14000);
                     connection.setReadTimeout(20000);

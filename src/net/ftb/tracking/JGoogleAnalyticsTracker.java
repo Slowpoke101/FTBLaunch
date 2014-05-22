@@ -445,6 +445,7 @@ public class JGoogleAnalyticsTracker {
         try {
             URL url = new URL(argURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("GET");
             connection.setInstanceFollowRedirects(true);
             connection.connect();
