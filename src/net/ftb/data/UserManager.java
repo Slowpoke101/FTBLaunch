@@ -47,6 +47,14 @@ public class UserManager {
     }
 
     public void write () throws IOException {
+        try {
+            if(_oldFile.exists()) {
+                _oldFile.delete();
+            }
+        } finally {
+            
+        }
+        
         FileOutputStream fileOutputStream = new FileOutputStream(_file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         try {
@@ -54,9 +62,6 @@ public class UserManager {
                 objectOutputStream.writeObject(user);
             }
             
-            if(_oldFile.exists()) {
-                _oldFile.delete();
-            }
         } finally {
             objectOutputStream.close();
             fileOutputStream.close();
