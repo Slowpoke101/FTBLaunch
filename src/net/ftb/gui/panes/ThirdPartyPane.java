@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.panes;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -77,7 +78,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
 
-        packPanels = new ArrayList<JPanel>();
+        packPanels = Lists.newArrayList();
 
         // TODO: Set loading animation while we wait
         //		try {
@@ -308,7 +309,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             public void run() {
                 addPack(pack_);
                 if(pack_.isThirdPartyTab())
-                    Logger.logInfo("Adding pack " + packPanels.size() + " (" + pack_.getName() + ")");
+                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack_.getName() + ")");
                 if (!currentPacks.isEmpty()) {
                     sortPacks();
                 } else {

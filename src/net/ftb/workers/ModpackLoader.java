@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
@@ -39,7 +40,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
-    private ArrayList<String> xmlFiles = new ArrayList<String>();
+    private ArrayList<String> xmlFiles = Lists.newArrayList();
 
     public ModpackLoader(ArrayList<String> xmlFiles) {
         this.xmlFiles = xmlFiles;
@@ -101,8 +102,8 @@ public class ModpackLoader extends Thread {
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
                                 .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()),
-                                (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null ? true : false): privatePack, xmlFile, modPackAttr
-                                .getNamedItem("bundledMap") != null ? true : false, modPackAttr.getNamedItem("customTP") != null ? true : false, modPackAttr
+                                (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
+                                .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
                                 .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty));
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
