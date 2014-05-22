@@ -60,7 +60,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
-public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListener {
+public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListener {
     private static JPanel packs;
     public static ArrayList<JPanel> packPanels;
     private static JScrollPane packsScroll;
@@ -75,7 +75,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
     private static int selectedPack = 0;
     private static boolean modPacksAdded = false;
     private static HashMap<Integer, ModPack> currentPacks = new HashMap<Integer, ModPack>();
-    private final ModpacksPane instance = this;
+    private final FTBPacksPane instance = this;
     private static JEditorPane packInfo;
 
     //	private JLabel loadingImage;
@@ -84,7 +84,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 
     private static JScrollPane infoScroll;
 
-    public ModpacksPane() {
+    public FTBPacksPane() {
         super();
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
@@ -199,20 +199,27 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
+<<<<<<< HEAD:src/net/ftb/gui/panes/ModpacksPane.java
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
                     if (ModpacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
                             if (!ModPack.getSelectedPack().getServerUrl().equals("") && ModPack.getSelectedPack().getServerUrl() != null) {
+=======
+                if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(true).getServerUrl().isEmpty()) {
+                    if (FTBPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
+                        try {
+                            if (!ModPack.getSelectedPack(true).getServerUrl().equals("") && ModPack.getSelectedPack(true).getServerUrl() != null) {
+>>>>>>> bump for next dev cycle, start work on pane re-work:src/net/ftb/gui/panes/FTBPacksPane.java
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                        .getSelectedPack().getVersion().replace(".", "_")
+                                        .getSelectedPack(true).getVersion().replace(".", "_")
                                         : Settings.getSettings().getPackVer().replace(".", "_");
-                                if (ModPack.getSelectedPack().isPrivatePack()) {
-                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E"
-                                            + ModPack.getSelectedPack().getServerUrl()));
+                                if (ModPack.getSelectedPack(true).isPrivatePack()) {
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack(true).getDir() + "%5E" + version + "%5E"
+                                            + ModPack.getSelectedPack(true).getServerUrl()));
                                 } else {
-                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E"
-                                            + ModPack.getSelectedPack().getServerUrl()));
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(true).getDir() + "%5E" + version + "%5E"
+                                            + ModPack.getSelectedPack(true).getServerUrl()));
                                 }
-                                TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
+                                TrackerUtils.sendPageView(ModPack.getSelectedPack(true).getName() + " Server Download", ModPack.getSelectedPack(true).getName());
                             }
                     }
                 }
@@ -253,6 +260,10 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
      * GUI Code to add a modpack to the selection
      */
     public static void addPack (ModPack pack) {
+        if(pack.isThirdPartyTab()) {
+            modPacksAdded = true;
+            return;
+        }
         if (!modPacksAdded) {
             modPacksAdded = true;
             packs.removeAll();
@@ -332,7 +343,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
                 addPack(pack);
                 counter++;
@@ -345,7 +356,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
         for (int i = 0; i < packPanels.size(); i++) {
             if (selectedPack == i) {
                 ModPack pack = ModPack.getPack(getIndex());
-                if (pack != null) {
+                if (pack != null && !pack.isThirdPartyTab()) {
                     String mods = "";
                     if (pack.getMods() != null) {
                         mods += "<p>This pack contains the following mods by default:</p><ul>";
@@ -361,12 +372,12 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
                             + ModPack.getPack(getIndex()).getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
-                    if (ModPack.getSelectedPack().getServerUrl().equals("") || ModPack.getSelectedPack().getServerUrl() == null) {
+                    if (ModPack.getSelectedPack(true).getServerUrl().equals("") || ModPack.getSelectedPack(true).getServerUrl() == null) {
                         server.setEnabled(false);
                     } else {
                         server.setEnabled(true);
                     }
-                    String tempVer = Settings.getSettings().getPackVer();
+                    String tempVer = Settings.getSettings().getPackVer(pack.getDir());
                     version.removeAllItems();
                     version.addItem("Recommended");
                     if (pack.getOldVersions() != null) {
@@ -403,7 +414,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
     }
 
     private static int getIndex () {
-        return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
+        return (!currentPacks.isEmpty()) ? ModPack.getPackArray().get(selectedPack).getIndex() : selectedPack;
     }
 
     public void updateLocale () {

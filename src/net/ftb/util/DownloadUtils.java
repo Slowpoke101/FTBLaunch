@@ -193,6 +193,27 @@ public class DownloadUtils extends Thread {
     }
 
     /**
+     * @param file - file on the repo
+     * @return boolean representing if the file exists 
+     */
+    public static boolean CloudFlareInspector (String repoURL, boolean fullDebug) {
+        try {
+            boolean ret;
+            HttpURLConnection connection = (HttpURLConnection) new URL(repoURL + "cdn-cgi/trace").openConnection();
+            if (!fullDebug)
+                connection.setRequestMethod("HEAD");
+            Logger.logInfo("CF-RAY: " + connection.getHeaderField("CF-RAY"));
+            if (fullDebug)
+                Logger.logInfo("CF Debug Info: " + connection.getContent().toString());
+            ret = connection.getResponseCode() == 200;
+            IOUtils.close(connection);
+            return ret;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * Downloads data from the given URL and saves it to the given file
      * @param filename - String of destination
      * @param urlString - http location of file to download

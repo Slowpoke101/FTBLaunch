@@ -32,7 +32,8 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.ModpacksPane;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
 
 public class ModPackFilterDialog extends JDialog {
@@ -46,17 +47,18 @@ public class ModPackFilterDialog extends JDialog {
     private JButton cancel;
     private JButton search;
 
-    private ModpacksPane pane;
+    private FTBPacksPane ftbPane;
+    private ThirdPartyPane thirdPartyPane;
 
-    public ModPackFilterDialog(ModpacksPane instance) {
+    public ModPackFilterDialog(FTBPacksPane instance) {
         super(LaunchFrame.getInstance(), true);
-        this.pane = instance;
+        this.ftbPane = instance;
 
         setupGui();
 
         getRootPane().setDefaultButton(apply);
 
-        this.pane = instance;
+        this.ftbPane = instance;
 
         ArrayList<String> mcVersions = new ArrayList<String>();
         mcVersion.addItem("All");
@@ -72,19 +74,19 @@ public class ModPackFilterDialog extends JDialog {
         origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
         availability.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), I18N.getLocaleString("FILTER_PUBLIC"), I18N.getLocaleString("FILTER_PRIVATE") }));
 
-        origin.setSelectedItem(pane.origin);
-        mcVersion.setSelectedItem(pane.mcVersion);
-        availability.setSelectedItem(pane.avaliability);
+        origin.setSelectedItem(ftbPane.origin);
+        mcVersion.setSelectedItem(ftbPane.mcVersion);
+        availability.setSelectedItem(ftbPane.avaliability);
 
         pack();
 
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                pane.origin = (String) origin.getSelectedItem();
-                pane.mcVersion = (String) mcVersion.getSelectedItem();
-                pane.avaliability = (String) availability.getSelectedItem();
-                pane.updateFilter();
+                ftbPane.origin = (String) origin.getSelectedItem();
+                ftbPane.mcVersion = (String) mcVersion.getSelectedItem();
+                ftbPane.avaliability = (String) availability.getSelectedItem();
+                ftbPane.updateFilter();
                 setVisible(false);
             }
         });
@@ -99,7 +101,65 @@ public class ModPackFilterDialog extends JDialog {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                SearchDialog sd = new SearchDialog(pane);
+                SearchDialog sd = new SearchDialog(ftbPane);
+                sd.setVisible(true);
+                setVisible(false);
+            }
+        });
+    }
+
+    public ModPackFilterDialog(ThirdPartyPane instance) {
+        super(LaunchFrame.getInstance(), true);
+        this.thirdPartyPane = instance;
+
+        setupGui();
+
+        getRootPane().setDefaultButton(apply);
+
+        this.thirdPartyPane = instance;
+
+        ArrayList<String> mcVersions = new ArrayList<String>();
+        mcVersion.addItem("All");
+        mcVersions.add("All");
+        for (ModPack pack : ModPack.getPackArray()) {
+            if (!mcVersions.contains(pack.getMcVersion())) {
+                mcVersions.add(pack.getMcVersion());
+                mcVersion.addItem(pack.getMcVersion());
+            }
+        }
+
+        mcVersion.setModel(new DefaultComboBoxModel(mcVersions.toArray()));
+        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
+        availability.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), I18N.getLocaleString("FILTER_PUBLIC"), I18N.getLocaleString("FILTER_PRIVATE") }));
+
+        origin.setSelectedItem(thirdPartyPane.origin);
+        mcVersion.setSelectedItem(thirdPartyPane.mcVersion);
+        availability.setSelectedItem(thirdPartyPane.avaliability);
+
+        pack();
+
+        apply.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                thirdPartyPane.origin = (String) origin.getSelectedItem();
+                thirdPartyPane.mcVersion = (String) mcVersion.getSelectedItem();
+                thirdPartyPane.avaliability = (String) availability.getSelectedItem();
+                thirdPartyPane.updateFilter();
+                setVisible(false);
+            }
+        });
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                setVisible(false);
+            }
+        });
+
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                SearchDialog sd = new SearchDialog(thirdPartyPane);
                 sd.setVisible(true);
                 setVisible(false);
             }

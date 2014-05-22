@@ -78,12 +78,8 @@ import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
-import net.ftb.gui.panes.ILauncherPane;
-import net.ftb.gui.panes.MapsPane;
-import net.ftb.gui.panes.ModpacksPane;
-import net.ftb.gui.panes.NewsPane;
-import net.ftb.gui.panes.OptionsPane;
-import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.gui.panes.*;
+import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.LogEntry;
@@ -137,22 +133,23 @@ public class LaunchFrame extends JFrame {
     @Getter
     private static LaunchFrame instance = null;
     @Getter
-    private static String version = "1.3.14";
+    private static String version = "1.4.0";
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
     protected static UserManager userManager;
 
-    public ModpacksPane modPacksPane;
-    public MapsPane mapsPane;
+    public FTBPacksPane modPacksPane;
+    public ThirdPartyPane thirdPartyPane;
+    public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
 
     /*
      * limit for version component is 99.
      */
-    public static int buildNumber = 1 * 100 * 100 + 3 * 100 + 14 * 1;
+    public static int buildNumber = 1 * 100 * 100 + 4 * 100 + 0 * 1;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -172,9 +169,10 @@ public class LaunchFrame extends JFrame {
     @Getter
     private static ProcessMonitor procMonitor;
 
-    protected enum Panes {
-        NEWS, OPTIONS, MODPACK, MAPS, TEXTURE
+    public enum Panes {
+        NEWS, OPTIONS, MODPACK, THIRDPARTY, TEXTURE
     }
+    private boolean tpEnabled = true;
 
     /**
      * Launch the application.
@@ -367,6 +365,8 @@ public class LaunchFrame extends JFrame {
                 instance.toBack();
 
                 ModPack.addListener(frame.modPacksPane);
+                ModPack.addListener(frame.thirdPartyPane);
+
                 ModPack.loadXml(getXmls());
 
                 Map.addListener(frame.mapsPane);
@@ -509,6 +509,7 @@ public class LaunchFrame extends JFrame {
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
         serverbutton.addActionListener(new ActionListener() {
+            //TODO this needs to be sensitive to 2 panes!!!
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
@@ -595,8 +596,9 @@ public class LaunchFrame extends JFrame {
         footer.add(tpInstallLocation);
 
         newsPane = new NewsPane();
-        modPacksPane = new ModpacksPane();
-        mapsPane = new MapsPane();
+        modPacksPane = new FTBPacksPane();
+        thirdPartyPane = new ThirdPartyPane();
+        mapsPane = new MapUtils();
         tpPane = new TexturepackPane();
         optionsPane = new OptionsPane(Settings.getSettings());
 
@@ -606,15 +608,15 @@ public class LaunchFrame extends JFrame {
         tabbedPane.add(newsPane, 0);
         tabbedPane.add(optionsPane, 1);
         tabbedPane.add(modPacksPane, 2);
-        tabbedPane.add(mapsPane, 3);
+        tabbedPane.add(thirdPartyPane, 3);
         tabbedPane.add(tpPane, 4);
         /*
          * TODO: This will block. Network.
          */
         setNewsIcon();
         tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-        tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/modpacks.png")));
-        tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/maps.png")));
+        tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
+        tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
         tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
         tabbedPane.setSelectedIndex(tab);
 
@@ -633,10 +635,10 @@ public class LaunchFrame extends JFrame {
     public static void checkDoneLoading () {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
-                if (ModpacksPane.loaded) {
+                if (FTBPacksPane.loaded) {
                     LoadingDialog.setProgress(190);
 
-                    if (MapsPane.loaded) {
+                    if (MapUtils.loaded) {
                         LoadingDialog.setProgress(200);
 
                         if (TexturepackPane.loaded) {
@@ -1205,7 +1207,7 @@ public class LaunchFrame extends JFrame {
                 tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
             }
         }
-        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack().getName());
+        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getName());
     }
 
     /**
@@ -1363,19 +1365,21 @@ public class LaunchFrame extends JFrame {
     public void updateFooter () {
         boolean result;
         switch (currentPane) {
-        case MAPS:
-            result = mapsPane.type.equals("Server");
-            mapInstall.setVisible(!result);
-            mapInstallLocation.setVisible(!result);
-            serverMap.setVisible(result);
-            disableMainButtons();
-            disableTextureButtons();
-            break;
         case TEXTURE:
+            if(tpEnabled) {
             tpInstall.setVisible(true);
             tpInstallLocation.setVisible(true);
             disableMainButtons();
             disableMapButtons();
+            } else {
+                result = mapsPane.type.equals("Server");
+                mapInstall.setVisible(!result);
+                mapInstallLocation.setVisible(!result);
+                serverMap.setVisible(result);
+                disableMainButtons();
+                disableTextureButtons();
+
+            }
             break;
         default:
             launch.setVisible(true);
@@ -1422,6 +1426,7 @@ public class LaunchFrame extends JFrame {
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
         optionsPane.updateLocale();
         modPacksPane.updateLocale();
+        thirdPartyPane.updateLocale();
         mapsPane.updateLocale();
         tpPane.updateLocale();
     }
@@ -1444,6 +1449,7 @@ public class LaunchFrame extends JFrame {
             }
         }
         s.add(0, "modpacks.xml");
+        s.add(1, "thirdparty.xml");
         return s;
     }
 
@@ -1490,4 +1496,21 @@ public class LaunchFrame extends JFrame {
         }
     }
 
+    public void swapTabs(boolean toMaps){
+        if(toMaps) {
+            tabbedPane.remove(4);
+            tabbedPane.add(tpPane, 4);
+            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+            tabbedPane.setSelectedIndex(4);
+            tpEnabled = true;
+            updateFooter();
+        } else {
+            tabbedPane.remove(4);
+            tabbedPane.add(mapsPane, 4);
+            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+            tabbedPane.setSelectedIndex(4);
+            tpEnabled = false;
+            updateFooter();
+        }
+    }
 }

@@ -1,19 +1,3 @@
-/*
- * This file is part of FTB Launcher.
- *
- * Copyright © 2012-2013, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
- * FTB Launcher is licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package net.ftb.gui.panes;
 
 import java.awt.Color;
@@ -42,6 +26,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.google.common.collect.Maps;
+import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
@@ -53,30 +39,47 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-@SuppressWarnings("serial")
-public class MapsPane extends JPanel implements ILauncherPane, MapListener {
-    private static JPanel maps;
+public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
+
+    protected static JPanel maps;
     public static ArrayList<JPanel> mapPanels;
     private static JScrollPane mapsScroll;
 
     private static JLabel typeLbl;
-    private JButton filter;
+    private static JButton filter;
     private static int selectedMap = 0;
-    private static boolean mapsAdded = false;
+    protected static boolean mapsAdded = false;
     public static String type = "Client", origin = "All", compatible = "All";
-    private final MapsPane instance = this;
+
+
+    //stuff for swapping between maps/texture packs
+    private JButton mapButton;
+    private JButton textureButton;
 
     private static JEditorPane mapInfo;
 
     public static boolean loaded = false;
 
-    private static HashMap<Integer, Map> currentMaps = new HashMap<Integer, Map>();
+    @Getter
+    private MapUtils instance = this;
 
-    public MapsPane() {
+    private static HashMap<Integer, Map> currentMaps = Maps.newHashMap();
+
+    public MapUtils() {
         super();
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
+        setup();
 
+    }
+
+    @Override
+    public void onVisible () {
+        MapUtils.sortMaps();
+        MapUtils.updateFilter();
+    }
+
+    public void setup () {
         mapPanels = new ArrayList<JPanel>();
 
         // TODO: Set loading animation while we wait
@@ -94,12 +97,32 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
             @Override
             public void actionPerformed (ActionEvent e) {
                 if (loaded) {
-                    MapFilterDialog filterDia = new MapFilterDialog(instance);
+                    MapFilterDialog filterDia = new MapFilterDialog(getInstance());
                     filterDia.setVisible(true);
                 }
             }
         });
-        add(filter);
+        getInstance().add(filter);
+
+        mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
+        mapButton.setBounds(400, 5, 105, 25);
+        mapButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(true);
+            }
+        });
+        add(mapButton);
+
+        textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
+        textureButton.setBounds(510, 5, 105, 25);
+        textureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(false);
+            }
+        });
+        add(textureButton);
 
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
@@ -116,7 +139,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
         typeLbl = new JLabel(typeLblText);
         typeLbl.setBounds(115, 5, 295, 25);
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        add(typeLbl);
+        getInstance().add(typeLbl);
 
         JTextArea filler = new JTextArea(I18N.getLocaleString("MAPS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
@@ -160,12 +183,6 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
         infoScroll.setViewportView(mapInfo);
         infoScroll.setOpaque(false);
         add(infoScroll);
-    }
-
-    @Override
-    public void onVisible () {
-        sortMaps();
-        updateFilter();
     }
 
     /*
@@ -225,7 +242,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
     public void onMapAdded (Map map) {
         final Map map_ = map;
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run () {
                 addMap(map_);
                 Logger.logInfo("Adding map " + getMapNum() + " (" + map_.getName() + ")");
                 updateMaps();
@@ -242,7 +259,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
         maps.repaint();
         LaunchFrame.updateMapInstallLocs(new String[] { "" });
         mapInfo.setText("");
-        HashMap<Integer, List<Map>> sorted = new HashMap<Integer, List<Map>>();
+        HashMap<Integer, List<Map>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<Map>());
         sorted.put(1, new ArrayList<Map>());
         for (Map map : Map.getMapArray()) {
@@ -270,7 +287,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
                 if (Map.getMap(getIndex()).getCompatible() != null) {
                     packs += "<p>This map works with the following packs:</p><ul>";
                     for (String name : Map.getMap(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name)!=null ? ModPack.getPack(name).getName() : name) + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }

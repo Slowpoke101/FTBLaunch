@@ -33,7 +33,7 @@ import javax.swing.SpringLayout;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.MapsPane;
+import net.ftb.gui.panes.MapUtils;
 import net.ftb.locale.I18N;
 
 public class MapFilterDialog extends JDialog {
@@ -47,9 +47,9 @@ public class MapFilterDialog extends JDialog {
     private JButton cancel;
     private JButton search;
 
-    private MapsPane pane;
+    private MapUtils pane;
 
-    public MapFilterDialog(MapsPane instance) {
+    public MapFilterDialog(MapUtils instance) {
         super(LaunchFrame.getInstance(), true);
         this.pane = instance;
 
