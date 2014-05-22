@@ -71,6 +71,19 @@ public class MinecraftLauncher {
             cpb.append(OSUtils.getJavaDelimiter());
             cpb.append(new File(new File(workingDir, "bin"), jarFile).getAbsolutePath());
         }
+        File libsDir = new File(workingDir, "lib/");
+        if (libsDir.isDirectory()) {
+            String[] files = libsDir.list();
+            Arrays.sort(files);
+            for (String name : files) {
+                     if ((name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
+                        cpb.append(OSUtils.getJavaDelimiter());
+                        cpb.append(new File(libsDir, name).getAbsolutePath());
+                    }
+            }
+        } else {
+            Logger.logInfo("Not loading any FML libs, as the directory does not exist.");
+        }
 
         List<String> arguments = new ArrayList<String>();
 
@@ -95,8 +108,9 @@ public class MinecraftLauncher {
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
         arguments.add("-cp");
-        arguments.add(System.getProperty("java.class.path") + cpb.toString());
-
+        arguments.add(cpb.toString() + OSUtils.getJavaDelimiter() + System.getProperty("java.class.path"));
+        Logger.logError(cpb.toString());
+        Logger.logError( System.getProperty("java.class.path"));
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
             Collections.addAll(arguments, additionalOptions.split("\\s+"));
@@ -191,7 +205,6 @@ public class MinecraftLauncher {
             System.setProperty("user.home", new File(basepath).getParent());
 
             URLClassLoader cl = new URLClassLoader(urls, MinecraftLauncher.class.getClassLoader());
-
             System.out.println("Loading minecraft class");
             Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
             System.out.println("mc = " + mc);
@@ -216,7 +229,6 @@ public class MinecraftLauncher {
             System.out.println("MCDIR: " + mcDir);
 
             System.out.println("Launching with applet wrapper...");
-
             try {
                 Class<?> MCAppletClass = cl.loadClass("net.minecraft.client.MinecraftApplet");
                 Applet mcappl = (Applet) MCAppletClass.newInstance();
