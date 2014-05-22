@@ -146,7 +146,7 @@ public class OSUtils {
         
         File oldLoginData = new File(dynamicDir, "logindata");
         File newLoginData = new File(cacheDir, "logindata");
-        if(oldLoginData.exists()) { newLoginData.delete(); }
+        if(oldLoginData.exists() && oldLoginData.getAbsolutePath() != newLoginData.getAbsolutePath()) { newLoginData.delete(); }
     }
 
     public static long getOSTotalMemory () {
