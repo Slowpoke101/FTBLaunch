@@ -198,11 +198,18 @@ public class UserManager {
 
     //used by authlib helper in order to send key's back to disc for next load
     public static String getMojangData (String user) {
-        return findUser(user).getDecryptedDatastore();
+        User temp = findUser(user);
+        if(temp != null)
+            return temp.getDecryptedDatastore();
+        return null;
     }
 
+
     public static String getUUID (String username) {
-        return findUser(username).getDecryptedDatastore();
+        User temp = findUser(username);
+        if(temp != null)
+            return temp.getDecryptedDatastore();
+        return null;
     }
 
     public static void setUUID (String username, String uuid) {
