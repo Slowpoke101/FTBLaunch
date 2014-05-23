@@ -51,7 +51,7 @@ public class Library {
     }
 
     public String getUrl () {
-        return (url == null ? (localRepo ? DownloadUtils.getStaticCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs) : url);
+        return (url == null ? (localRepo ? DownloadUtils.getCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs) : url);
     }
 
     @Override

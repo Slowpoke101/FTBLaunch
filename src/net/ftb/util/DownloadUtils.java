@@ -59,9 +59,8 @@ public class DownloadUtils extends Thread {
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
      * @return - the direct link
-     * @throws NoSuchAlgorithmException - see md5
      */
-    public static String getCreeperhostLink (String file) throws NoSuchAlgorithmException {
+    public static String getCreeperhostLink (String file) {
         String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/" + file;

@@ -987,7 +987,7 @@ public class LaunchFrame extends JFrame {
                         if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         } else {
-                            list.add(new DownloadInfo(new URL(DownloadUtils.getStaticCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
+                            list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
                         }
                     }
                 } else {
