@@ -107,6 +107,10 @@ public class MinecraftLauncher {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
+        if(Settings.getSettings().getUseSystemProxy()) {
+            arguments.add("-Djava.net.useSystemProxies=true");
+        }
+        
         arguments.add("-cp");
         arguments.add(cpb.toString() + OSUtils.getJavaDelimiter() + legacyLaunchLocation);
 
