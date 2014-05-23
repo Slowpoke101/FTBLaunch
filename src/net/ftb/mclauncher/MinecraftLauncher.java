@@ -110,7 +110,7 @@ public class MinecraftLauncher {
         arguments.add("-cp");
         arguments.add(cpb.toString() + OSUtils.getJavaDelimiter() + legacyLaunchLocation);
 
-        arguments.add("net.ftb.legacylaunch.Launch");//legacy launch entry point
+        arguments.add("net.ftb.legacylaunch.Launch");//legacy launch entry point will eventually be ran through new lib code
 
         arguments.add(username);//done
         arguments.add(password);//done
@@ -127,6 +127,15 @@ public class MinecraftLauncher {
                 + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
         arguments.add("--packImage");
         arguments.add(OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
+        arguments.add("--lastExtendedState");
+        arguments.add(String.valueOf(Settings.getSettings().getLastExtendedState()));
+        arguments.add("--width");
+        arguments.add(String.valueOf(Settings.getSettings().getLastDimension().getWidth()));
+        arguments.add("--height");
+        arguments.add(String.valueOf(Settings.getSettings().getLastDimension().getHeight()));
+        arguments.add("--mcJar");
+        arguments.add(workingDir + File.separator +  "bin" + File.separator + jarFiles[0]);
+        //                classPathFiles.add(new File(new File(ld.gameDir, "bin"), jarFile));
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
@@ -137,6 +146,7 @@ public class MinecraftLauncher {
             Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
         }
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
+        processBuilder.directory(new File(workingDir));
         processBuilder.redirectErrorStream(true);
         OSUtils.cleanEnvVars(processBuilder.environment());
         return processBuilder.start();
