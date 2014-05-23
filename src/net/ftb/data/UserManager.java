@@ -61,7 +61,7 @@ public class UserManager {
 
             }
         }
-    
+
         FileOutputStream fileOutputStream = new FileOutputStream(_file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         try {

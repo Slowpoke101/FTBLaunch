@@ -26,10 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -122,6 +119,7 @@ import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
+import org.apache.commons.io.IOUtils;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -144,7 +142,7 @@ public class LaunchFrame extends JFrame {
     @Getter
     private static LaunchFrame instance = null;
     @Getter
-    private static String version = "1.3.12";
+    private static String version = "1.3.13";
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -159,7 +157,7 @@ public class LaunchFrame extends JFrame {
     /*
      * limit for version component is 99.
      */
-    public static int buildNumber = 1 * 100 * 100 + 3 * 100 + 12 * 1;
+    public static int buildNumber = 1 * 100 * 100 + 3 * 100 + 13 * 1;
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -1089,8 +1087,10 @@ public class LaunchFrame extends JFrame {
      */
     public void launchMinecraft (String workingDir, String username, String password, String maxPermSize) {
         try {
+            extractLegacy();
             Process minecraftProcess = MinecraftLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(),
-                    maxPermSize);
+                    maxPermSize, OSUtils.getDefInstallPath()+File.separator +"libraries" + File.separator + "net.ftb.legacylaunch".replace(".",File.separator)+ "0.0.1"+File.separator + "FTBLegacyLaunch-0.0.1.jar");
+
             MCRunning = true;
             if(con != null) con.minecraftStarted();
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
@@ -1567,5 +1567,18 @@ public class LaunchFrame extends JFrame {
         } else if (users.getSelectedIndex() <= 1) {
             ErrorUtils.tossError("Please select a profile!");
         }
+    }
+    public static void extractLegacy(){
+       try {
+           File f = new File(OSUtils.getDefInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch".replace(".", File.separator) + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
+           if(!new File(f.getParent()).exists())
+               new File(f.getParent()).mkdirs();
+           if(f.exists())
+               f.delete();//we want to have the current version always!!!
+           URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
+           org.apache.commons.io.FileUtils.copyURLToFile(u,f);
+       } catch (Exception e){
+            Logger.logError("Error extracting legacy launch to maven directory");
+       }
     }
 }
