@@ -196,7 +196,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(optJavaArgs);
 
         useSystemProxy = new JCheckBox(I18N.getLocaleString("USE_SYSTEM_PROXY"));
-        useSystemProxy.setBounds(540, 165, 300, 25);
+        useSystemProxy.setBounds(540, 200, 300, 25);
         useSystemProxy.setSelected(settings.getUseSystemProxy());
         useSystemProxy.addFocusListener(settingsChangeListener);
         add(useSystemProxy);
