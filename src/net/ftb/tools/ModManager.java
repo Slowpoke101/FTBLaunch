@@ -220,8 +220,6 @@ public class ModManager extends JDialog {
                     try {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
-                    } catch (NoSuchAlgorithmException e) {
-                        Logger.logWarn(e.getMessage(), e);
                     } catch (IOException e) {
                         Logger.logWarn(e.getMessage(), e);
                     }
@@ -229,11 +227,7 @@ public class ModManager extends JDialog {
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
 
                     if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
-                        try {
                             downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
-                        } catch (NoSuchAlgorithmException e) {
-                            Logger.logWarn(e.getMessage(), e);
-                        }
                     }
                 }
             } catch (Exception e) {

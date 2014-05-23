@@ -201,7 +201,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
                     if (ModpacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-                        try {
                             if (!ModPack.getSelectedPack().getServerUrl().equals("") && ModPack.getSelectedPack().getServerUrl() != null) {
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                         .getSelectedPack().getVersion().replace(".", "_")
@@ -215,8 +214,6 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
                                 }
                                 TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
                             }
-                        } catch (NoSuchAlgorithmException e) {
-                        }
                     }
                 }
             }
