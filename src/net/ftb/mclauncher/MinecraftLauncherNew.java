@@ -292,7 +292,8 @@ public class MinecraftLauncherNew {
     }
     public static void setupLegacyStuff(String workingDir, String forgename, String MCVersion){
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
-        if (instModsDir.isDirectory()) {
+        //added inside the wrapper
+        /*if (instModsDir.isDirectory()) {
             String[] files = instModsDir.list();
             Arrays.sort(files);
             for (String name : files) {
@@ -313,7 +314,7 @@ public class MinecraftLauncherNew {
             }
         } else {
             Logger.logInfo("Not loading any instMods (minecraft jar mods), as the directory does not exist.");
-        }
+        }*/
 
         cpb.append(OSUtils.getJavaDelimiter());
         cpb.append(new File(instModsDir, forgename).getAbsolutePath());

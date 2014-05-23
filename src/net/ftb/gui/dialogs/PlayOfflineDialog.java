@@ -49,8 +49,10 @@ public class PlayOfflineDialog extends JDialog {
             public void actionPerformed (ActionEvent arg0) {
                 ModPack pack = ModPack.getSelectedPack();
                 boolean legacy = false;
-                if (Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162)
+                if (!pack.getMcVersion().startsWith("14w") && Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162)
                     legacy = true;
+                if(pack.getDir().equalsIgnoreCase("mojang_vanilla"))
+                    legacy=false;//vanilla goes direct!!
                     //setVisible(false);
                     //LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
 
