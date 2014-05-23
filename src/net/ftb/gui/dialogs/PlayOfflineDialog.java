@@ -48,11 +48,12 @@ public class PlayOfflineDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 ModPack pack = ModPack.getSelectedPack();
-                if (Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162) {
-                    setVisible(false);
-                    LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
+                boolean legacy = false;
+                if (Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162)
+                    legacy = true;
+                    //setVisible(false);
+                    //LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
 
-                } else {
                     setVisible(false);
                     String unique;
                     if (uuid == null || uuid.isEmpty())
@@ -60,8 +61,8 @@ public class PlayOfflineDialog extends JDialog {
                     else
                         unique = uuid;
                     LaunchFrame.getInstance().launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
-                            new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()));
-                }
+                            new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()),legacy);
+
             }
         });
 

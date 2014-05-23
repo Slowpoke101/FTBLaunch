@@ -18,12 +18,8 @@ package net.ftb.mclauncher;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
@@ -31,6 +27,7 @@ import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
@@ -46,16 +43,26 @@ import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import com.mojang.util.UUIDTypeAdapter;
 
 public class MinecraftLauncherNew {
-    public static Process launchMinecraft (String javaPath, File gameDir, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
-            String maxPermSize, String version, UserAuthentication authentication) throws IOException {
+    public static boolean isLegacy = false;
+    private static String separator = File.separator;
+    private static String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };//legacy stuffs
+    private static String gameDirectory;
+    private static StringBuilder cpb = new StringBuilder("");
 
+    public static Process launchMinecraft(String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
+                                          String maxPermSize, String version, UserAuthentication authentication, boolean legacy) throws IOException {
+
+        isLegacy = legacy;
+        gameDirectory = gameFolder;
+        File gameDir = new File(gameFolder);
         assetDir = syncAssets(assetDir, assetIndex);
 
-        StringBuilder cpb = new StringBuilder("");
         for (File f : classpath) {
             cpb.append(OSUtils.getJavaDelimiter());
             cpb.append(f.getAbsolutePath());
         }
+        if(isLegacy)
+            setupLegacyStuff(gameDirectory, LaunchFrame.FORGENAME, ModPack.getSelectedPack().getMcVersion());
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
         List<String> arguments = new ArrayList<String>();
@@ -158,7 +165,7 @@ public class MinecraftLauncherNew {
             if (!done) {
                 if (s.equals("${auth_session}")) {
                     if (authentication.isLoggedIn() && authentication.canPlayOnline()) {
-                        if (authentication instanceof YggdrasilUserAuthentication) {
+                        if (authentication instanceof YggdrasilUserAuthentication && !isLegacy) {
                             arguments.add(String.format("token:%s:%s", authentication.getAuthenticatedToken(), UUIDTypeAdapter.fromUUID(authentication.getSelectedProfile().getId())));
                         } else {
                             arguments.add(authentication.getAuthenticatedToken());
@@ -181,6 +188,8 @@ public class MinecraftLauncherNew {
                     arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new OldPropertyMapSerializer()).create().toJson(authentication.getUserProperties()));
                 else if (s.equals("${user_properties_map}"))
                     arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
+                else if (isLegacy)
+                    arguments.add(parseLegacyArgs(s));
                 else
                     arguments.add(s);
             }
@@ -196,7 +205,7 @@ public class MinecraftLauncherNew {
         return builder.start();
     }
 
-    private static void setMemory (List<String> arguments, String rmax) {
+    private static void setMemory(List<String> arguments, String rmax) {
         boolean memorySet = false;
         try {
             int min = 256;
@@ -218,7 +227,7 @@ public class MinecraftLauncherNew {
         }
     }
 
-    private static File syncAssets (File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException {
+    private static File syncAssets(File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException {
         Logger.logInfo("Syncing Assets:");
         File objects = new File(assetDir, "objects");
         AssetIndex index = JsonFactory.loadAssetIndex(new File(assetDir, "indexes/{INDEX}.json".replace("{INDEX}", indexName)));
@@ -253,5 +262,71 @@ public class MinecraftLauncherNew {
         }
 
         return targetDir;
+    }
+
+    public static String parseLegacyArgs(String s) {
+        if (s.equals("${animation_name}"))
+            return (((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
+                    + separator + ModPack.getSelectedPack().getAnimation() : "empty"));
+        else if (s.equals("${forge_name}"))
+            return LaunchFrame.FORGENAME;
+        else if (s.equals("${pack_name}"))
+            return (ModPack.getSelectedPack().getName() + " v"
+                    + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
+        else if (s.equals("${pack_image}"))
+            return (OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
+        else if (s.equals("${extended_state}"))
+            return (String.valueOf(Settings.getSettings().getLastExtendedState()));
+        else if (s.equals("${width}"))
+            return (String.valueOf(Settings.getSettings().getLastDimension().getWidth()));
+        else if (s.equals("${height}"))
+            return (String.valueOf(Settings.getSettings().getLastDimension().getHeight()));
+        else if (s.equals("${minecraft_jar}"))
+            return (gameDirectory + File.separator + "bin" + File.separator + jarFiles[0]);
+        else
+            return s;
+    }
+    public static void setupLegacyStuff(String workingDir, String forgename, String MCVersion){
+        File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
+        if (instModsDir.isDirectory()) {
+            String[] files = instModsDir.list();
+            Arrays.sort(files);
+            for (String name : files) {
+                if (!name.equals(forgename)) {
+                    if (name.toLowerCase().contains("forge") && name.toLowerCase().contains("minecraft") && name.toLowerCase().endsWith(".zip")) {
+                        if (new File(instModsDir, forgename).exists()) {
+                            if (!new File(instModsDir, forgename).equals(new File(instModsDir, name))) {
+                                new File(instModsDir, name).delete();
+                            }
+                        } else {
+                            new File(instModsDir, name).renameTo(new File(instModsDir, forgename));
+                        }
+                    } else if (!name.equalsIgnoreCase(forgename) && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
+                        cpb.append(OSUtils.getJavaDelimiter());
+                        cpb.append(new File(instModsDir, name).getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+            Logger.logInfo("Not loading any instMods (minecraft jar mods), as the directory does not exist.");
+        }
+
+        cpb.append(OSUtils.getJavaDelimiter());
+        cpb.append(new File(instModsDir, forgename).getAbsolutePath());
+        cpb.append(new File(new File(workingDir, "bin"), jarFiles[0]).getAbsolutePath());
+        File libsDir = new File(workingDir, "lib/");
+        if (libsDir.isDirectory()) {
+            String[] files = libsDir.list();
+            Arrays.sort(files);
+            for (String name : files) {
+                if ((name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
+                    cpb.append(OSUtils.getJavaDelimiter());
+                    cpb.append(new File(libsDir, name).getAbsolutePath());
+                }
+            }
+        } else {
+            Logger.logInfo("Not loading any FML libs, as the directory does not exist.");
+        }
+        Logger.logError(gameDirectory + File.separator + "bin" + File.separator + jarFiles[0]);
     }
 }

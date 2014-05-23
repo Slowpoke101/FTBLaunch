@@ -1,0 +1,10 @@
+{
+  "minecraftArguments": "${auth_player_name} ${auth_session} --version ${version_name} --gameDir ${game_directory} --assetsDir ${game_assets} --animationName ${animation_name} --forgeName ${forge_name} --packName ${pack_name} --packImage ${pack_image} --lastExtendedState ${extended_state} --width ${width} --height ${width} --mcJar ${minecraft_jar}",
+  "libraries": [
+    {
+      "name": "net.ftb.legacylaunch:FTBLegacyLaunch:0.0.1"
+    }
+  ],
+  "mainClass": "net.ftb.legacylaunch.Launch",
+  "id": "FTB-Legacy MC"
+}
