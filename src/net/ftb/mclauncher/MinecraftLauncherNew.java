@@ -47,11 +47,12 @@ public class MinecraftLauncherNew {
     private static String separator = File.separator;
     private static String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };//legacy stuffs
     private static String gameDirectory;
-    private static StringBuilder cpb = new StringBuilder("");
+    private static StringBuilder cpb;
 
     public static Process launchMinecraft(String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
                                           String maxPermSize, String version, UserAuthentication authentication, boolean legacy) throws IOException {
 
+        cpb = new StringBuilder("");
         isLegacy = legacy;
         gameDirectory = gameFolder;
         File gameDir = new File(gameFolder);
