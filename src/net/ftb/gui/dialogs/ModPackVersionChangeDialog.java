@@ -48,7 +48,7 @@ public class ModPackVersionChangeDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, String onlineVersion) {
+    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
         super(instance, modal);
 
         setupGui(storedVersion, onlineVersion);
@@ -58,6 +58,7 @@ public class ModPackVersionChangeDialog extends JDialog {
             public void actionPerformed (ActionEvent arg0) {
                 LaunchFrame.allowVersionChange = true;
                 LaunchFrame.doVersionBackup = backupCFG.isSelected();
+                Settings.getSettings().setPackVer(onlineVersion);
                 ModManager.backupSave = backupSave.isSelected();
                 setVisible(false);
             }
