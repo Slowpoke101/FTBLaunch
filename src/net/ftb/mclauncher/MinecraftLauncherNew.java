@@ -186,7 +186,6 @@ public class MinecraftLauncherNew {
                     arguments.add(gameDir.getAbsolutePath());
                 else if (s.equals("${game_assets}") || s.equals("${assets_root}"))
                     arguments.add(assetDir.getAbsolutePath());
-
                 else if (s.equals("${assets_index_name}"))
                     arguments.add(assetIndex == null ? "legacy" : assetIndex);
                 else if (s.equals("${user_properties}"))
@@ -293,29 +292,7 @@ public class MinecraftLauncherNew {
     }
     public static void setupLegacyStuff(String workingDir, String forgename, String MCVersion){
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
-        //added inside the wrapper
-        /*if (instModsDir.isDirectory()) {
-            String[] files = instModsDir.list();
-            Arrays.sort(files);
-            for (String name : files) {
-                if (!name.equals(forgename)) {
-                    if (name.toLowerCase().contains("forge") && name.toLowerCase().contains("minecraft") && name.toLowerCase().endsWith(".zip")) {
-                        if (new File(instModsDir, forgename).exists()) {
-                            if (!new File(instModsDir, forgename).equals(new File(instModsDir, name))) {
-                                new File(instModsDir, name).delete();
-                            }
-                        } else {
-                            new File(instModsDir, name).renameTo(new File(instModsDir, forgename));
-                        }
-                    } else if (!name.equalsIgnoreCase(forgename) && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
-                        cpb.append(OSUtils.getJavaDelimiter());
-                        cpb.append(new File(instModsDir, name).getAbsolutePath());
-                    }
-                }
-            }
-        } else {
-            Logger.logInfo("Not loading any instMods (minecraft jar mods), as the directory does not exist.");
-        }*/
+        //jarmods are added inside the wrapper
 
         cpb.append(OSUtils.getJavaDelimiter());
         cpb.append(new File(instModsDir, forgename).getAbsolutePath());
@@ -333,6 +310,5 @@ public class MinecraftLauncherNew {
         } else {
             Logger.logInfo("Not loading any FML libs, as the directory does not exist.");
         }
-        Logger.logError(gameDirectory + File.separator + "bin" + File.separator + jarFiles[0]);
     }
 }
