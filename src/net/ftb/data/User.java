@@ -92,7 +92,7 @@ public class User implements Serializable {
     }
 
     /**
-     * @param datastore - set profile password
+     * @param store - set profile password
      */
     public void setStore (String store) {
         _decryptedStore = store;
@@ -137,8 +137,8 @@ public class User implements Serializable {
                 if (serialVersionUID == 1) {
                     // convert old stored password to new format
                     if (!_encryptedPassword.isEmpty()) {
-                        Logger.logInfo("Password will be converted to new format, ignore following decrypt warn");
-                        Logger.logInfo("Converted password will be saved to disk after succesfull login");
+                        Logger.logInfo("Password is being converted to a newer format, ignore following decryption error");
+                        Logger.logInfo("Converted password will be saved to disk after successful login");
                         String password =  CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
                         _encryptedPassword =  CryptoUtils.encrypt(password, OSUtils.getMacAddress());
                     }

@@ -26,13 +26,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,10 +90,8 @@ import net.ftb.log.Logger;
 import net.ftb.log.OutputOverride;
 import net.ftb.log.StdOutLogger;
 import net.ftb.log.StreamLogger;
-import net.ftb.mclauncher.MinecraftLauncher;
 import net.ftb.mclauncher.MinecraftLauncherNew;
 import net.ftb.tools.MapManager;
-import net.ftb.tools.MinecraftVersionDetector;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
@@ -115,7 +109,6 @@ import net.ftb.util.StyleUtil;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
-import net.ftb.workers.GameUpdateWorker;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
@@ -197,9 +190,17 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
+<<<<<<< HEAD
         // Use system default proxy settings
         System.setProperty("java.net.useSystemProxies", "true");
 
+=======
+        if(Settings.getSettings().getUseSystemProxy()) {
+            // Use system default proxy settings
+            System.setProperty("java.net.useSystemProxies", "true");
+        }
+        
+>>>>>>> master
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
         }
@@ -315,7 +316,7 @@ public class LaunchFrame extends JFrame {
                 LoadingDialog.setProgress(130);
 
                 // Store this in the cache (local) storage, since it's machine specific.
-                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"));
+                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
                 LoadingDialog.setProgress(140);
 
@@ -519,7 +520,6 @@ public class LaunchFrame extends JFrame {
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
                     if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-                        try {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                     .getSelectedPack().getVersion().replace(".", "_")
                                     : Settings.getSettings().getPackVer().replace(".", "_");
@@ -529,8 +529,6 @@ public class LaunchFrame extends JFrame {
                                 OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
                             }
                             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
-                        } catch (NoSuchAlgorithmException e) {
-                        }
                     }
                 }
             }
@@ -562,11 +560,8 @@ public class LaunchFrame extends JFrame {
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-                    try {
                         OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
                                 + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
-                    } catch (NoSuchAlgorithmException e) {
-                    }
                 }
             }
         });
@@ -832,67 +827,15 @@ public class LaunchFrame extends JFrame {
             TextureManager.updateTextures();
         } catch (Exception e1) {
         }
-
+        boolean isLegacy = true;
         if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("14w")) {
-            setupNewStyle(installPath, pack);
+            isLegacy = false;
+        }
+        setupNewStyle(installPath, pack, isLegacy);
             return;
-        }
-
-        MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-
-        // I know it's wordy, but it's correct; why is this not using File.separator ? http://stackoverflow.com/questions/2417485/file-separator-vs-slash-in-paths
-
-        if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
-            final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-            final GameUpdateWorker updater = new GameUpdateWorker(pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
-                @Override
-                public void done () {
-                    progMonitor.close();
-                    try {
-                        if (get()) {
-                            Logger.logInfo("Game update complete");
-                            FileUtils.killMetaInf();
-                            launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-                        } else {
-                            ErrorUtils.tossError("Error occurred during downloading the game");
-                        }
-                    } catch (CancellationException e) {
-                        ErrorUtils.tossError("Game update canceled.");
-                    } catch (InterruptedException e) {
-                        ErrorUtils.tossError("Game update interrupted.");
-                    } catch (ExecutionException e) {
-                        ErrorUtils.tossError("Failed to download game.");
-                    } finally {
-                        enableObjects();
-                    }
-                }
-            };
-
-            updater.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange (PropertyChangeEvent evt) {
-                    if (progMonitor.isCanceled()) {
-                        updater.cancel(false);
-                    }
-                    if (!updater.isDone()) {
-                        int prog = updater.getProgress();
-                        if (prog < 0) {
-                            prog = 0;
-                        } else if (prog > 100) {
-                            prog = 100;
-                        }
-                        progMonitor.setProgress(prog);
-                        progMonitor.setNote(updater.getStatus());
-                    }
-                }
-            });
-            updater.execute();
-        } else {
-            launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize());
-        }
     }
 
-    private void setupNewStyle (final String installPath, final ModPack pack) {
+    private void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy) {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
 
         if (assets != null && assets.size() > 0) {
@@ -908,7 +851,7 @@ public class LaunchFrame extends JFrame {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraftNew(installPath, pack, RESPONSE);
+                            launchMinecraftNew(installPath, pack, RESPONSE, isLegacy);
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
@@ -939,7 +882,7 @@ public class LaunchFrame extends JFrame {
 
             downloader.execute();
         } else {
-            launchMinecraftNew(installPath, pack, RESPONSE);
+            launchMinecraftNew(installPath, pack, RESPONSE,isLegacy);
         }
     }
 
@@ -989,7 +932,7 @@ public class LaunchFrame extends JFrame {
                         if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         } else {
-                            list.add(new DownloadInfo(new URL(DownloadUtils.getStaticCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
+                            list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
                         }
                     }
                 } else {
@@ -1081,69 +1024,20 @@ public class LaunchFrame extends JFrame {
         return null;
     }
 
-    /**
-     * launch the game with the mods in the classpath
-     * @param workingDir - install path
-     * @param username - the MC username
-     * @param password - the MC password
-     */
-    public void launchMinecraft (String workingDir, String username, String password, String maxPermSize) {
-        try {
-            Process minecraftProcess = MinecraftLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax(),
-                    maxPermSize);
-            MCRunning = true;
-            if(con != null) con.minecraftStarted();
-            StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-            }
-            try {
-                minecraftProcess.exitValue();
-            } catch (IllegalThreadStateException e) {
-                this.setVisible(false);
-                procMonitor = ProcessMonitor.create(minecraftProcess, new Runnable() {
-                    @Override
-                    public void run () {
-                        if (!Settings.getSettings().getKeepLauncherOpen()) {
-                            System.exit(0);
-                        } else {
-                            if(con != null) con.minecraftStopped();
-                            LaunchFrame launchFrame = LaunchFrame.this;
-                            launchFrame.setVisible(true);
-                            launchFrame.enableObjects();
-                            try {
-                                Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
-                                tabbedPane.remove(1);
-                                optionsPane = new OptionsPane(Settings.getSettings());
-                                tabbedPane.add(optionsPane, 1);
-                                tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-                            } catch (Exception e1) {
-                                Logger.logError("Failed to reload settings after launcher closed", e1);
-                            }
-                        }
-                        MCRunning = false;
-                    }
-                });
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public void launchMinecraftNew (String installDir, ModPack pack, LoginResponse resp) {
+    public void launchMinecraftNew (String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
         try {
             File packDir = new File(installDir, pack.getDir());
+            String gameFolder = installDir + File.separator + pack.getDir() + File.separator + "minecraft";
             File gameDir = new File(packDir, "minecraft");
             File assetDir = new File(installDir, "assets");
             File libDir = new File(installDir, "libraries");
             File natDir = new File(packDir, "natives");
-
             if (natDir.exists()) {
                 natDir.delete();
             }
             natDir.mkdirs();
-
+            if(isLegacy)
+                extractLegacy();
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion())));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
@@ -1182,24 +1076,33 @@ public class LaunchFrame extends JFrame {
             List<File> classpath = new ArrayList<File>();
             Version packjson = new Version();
             if (!pack.getDir().equals("mojang_vanilla")) {
+                if(isLegacy){
+                    extractLegacyJson(new File(gameDir, "pack.json"));
+                }
                 if (new File(gameDir, "pack.json").exists()) {
                     packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                     for (Library lib : packjson.getLibraries()) {
+                        //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                         classpath.add(new File(libDir, lib.getPath()));
                     }
                 }
             } else {
                 packjson = base;
             }
-            classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
+            if(!isLegacy) //we copy the jar to a new location for legacy
+                classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
+            else {
+                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())), new File(gameDir, "bin/minecraft.jar"));
+                FileUtils.killMetaInf();
+            }
             for (Library lib : base.getLibraries()) {
                 classpath.add(new File(libDir, lib.getPath()));
             }
             //launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameDir, assetDir, natDir, classpath, packjson.mainClass != null ? packjson.mainClass
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath, packjson.mainClass != null ? packjson.mainClass
                     : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(),
-                    Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth());
+                    Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
             MCRunning = true;
             if(con != null) con.minecraftStarted();
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
@@ -1572,6 +1475,33 @@ public class LaunchFrame extends JFrame {
             ErrorUtils.tossError("Please select a profile!");
         }
     }
+    public static void extractLegacy(){
+       try {
+           File f = new File(Settings.getSettings().getInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch.FTBLegacyLaunch".replace(".", File.separator) + File.separator + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
+           //Logger.logError("Extracting Legacy launch code to " + f.getAbsolutePath());
+           if(!new File(f.getParent()).exists())
+               new File(f.getParent()).mkdirs();
+           if(f.exists())
+               f.delete();//we want to have the current version always!!!
+           URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
+           org.apache.commons.io.FileUtils.copyURLToFile(u,f);
+       } catch (Exception e){
+            Logger.logError("Error extracting legacy launch to maven directory");
+       }
+    }
+    public static void extractLegacyJson(File newLoc){
+        try {
+            if(!new File(newLoc.getParent()).exists())
+                new File(newLoc.getParent()).mkdirs();
+            if(newLoc.exists())
+                newLoc.delete();//we want to have the current version always!!!
+            URL u = LaunchFrame.class.getResource("/launch/legacypack.json");
+            org.apache.commons.io.FileUtils.copyURLToFile(u,newLoc);
+        } catch (Exception e){
+            Logger.logError("Error extracting legacy launch to maven directory");
+        }
+    }
+
     public void swapTabs(boolean toMaps){
         if(toMaps) {
             tabbedPane.remove(4);

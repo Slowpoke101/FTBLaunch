@@ -38,19 +38,37 @@ import net.ftb.util.OSUtils;
 public class UserManager {
     public final static ArrayList<User> _users = new ArrayList<User>();
     private File _file;
+    private File _oldFile;
 
-    public UserManager(File file) {
+    public UserManager(File file, File oldFile) {
         _file = file;
+        _oldFile = oldFile;
         read();
     }
 
     public void write () throws IOException {
+
+        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
+            try {
+                if (_oldFile.exists()) {
+                    _oldFile.delete();
+                }
+
+                if (_file.exists()) {
+                    _file.delete();
+                }
+            } finally {
+
+            }
+        }
+
         FileOutputStream fileOutputStream = new FileOutputStream(_file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         try {
             for (User user : _users) {
                 objectOutputStream.writeObject(user);
             }
+            
         } finally {
             objectOutputStream.close();
             fileOutputStream.close();
@@ -58,7 +76,7 @@ public class UserManager {
     }
 
     public void read () {
-        if (!_file.exists()) {
+        if (!_file.exists() && !_oldFile.exists()) {
             return;
         }
         _users.clear();
@@ -69,7 +87,14 @@ public class UserManager {
             return;
         }
         try {
-            FileInputStream fileInputStream = new FileInputStream(_file);
+            FileInputStream fileInputStream;
+            
+            if(_file.exists()) {
+                fileInputStream = new FileInputStream(_file);
+            } else {
+                fileInputStream = new FileInputStream(_oldFile);
+            }
+            
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             try {
                 Object obj;
@@ -96,7 +121,14 @@ public class UserManager {
             // p.setVisible(true);
 
             try {
-                BufferedReader read = new BufferedReader(new FileReader(_file));
+                BufferedReader read;
+                
+                if(_file.exists()) {
+                    read = new BufferedReader(new FileReader(_file));
+                } else {
+                    read = new BufferedReader(new FileReader(_oldFile));
+                }
+                
                 String str;
                 while ((str = read.readLine()) != null) {
                     str = CryptoUtils.decryptLegacy(str, OSUtils.getMacAddress());
@@ -213,7 +245,9 @@ public class UserManager {
     }
 
     public static void setUUID (String username, String uuid) {
-        findUser(username).setUUID(uuid);
+        User temp = findUser(username);
+        if(temp != null)
+            temp.setUUID(uuid);
     }
 
 }

@@ -101,7 +101,7 @@ public class OSUtils {
     public static String getCacheStorageLocation () {
         switch (getCurrentOS()) {
         case WINDOWS:
-            if(System.getenv("LOCALAPPDATA").length() > 5)
+            if(System.getenv("LOCALAPPDATA")!= null && System.getenv("LOCALAPPDATA").length() > 5)
                 return System.getenv("LOCALAPPDATA") + "/ftblauncher/";
             else
                 return System.getenv("APPDATA") + "/ftblauncher/";
@@ -133,15 +133,24 @@ public class OSUtils {
                 Logger.logInfo("Migrating cached Texturepacks from Roaming to Local storage");
                 FileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
                 
-                Logger.logInfo("Migrating launcher settings");
-                FileUtils.move(new File(dynamicDir, "logindata"), new File(cacheDir, "logindata"));
-                
                 Logger.logInfo("Migration complete.");
             }
         }
         
         if (!dynamicDir.exists()) {
             dynamicDir.mkdirs();
+        }
+
+        if(getCurrentOS() == OS.WINDOWS) {
+        File oldLoginData = new File(dynamicDir, "logindata");
+        File newLoginData = new File(cacheDir, "logindata");
+        try {
+            if (oldLoginData.exists() && oldLoginData.getCanonicalPath() != newLoginData.getCanonicalPath()) {
+                newLoginData.delete();
+            }
+        } catch (Exception e){
+            Logger.logError("Error deleting login data", e);
+        }
         }
     }
 

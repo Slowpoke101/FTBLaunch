@@ -38,6 +38,7 @@ public class PastebinPoster extends Thread {
         try {
             URL url = new URL("http://pastebin.com/api/api_post.php");
             conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Cache-Control", "no-transform");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             conn.setRequestMethod("POST");

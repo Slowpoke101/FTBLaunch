@@ -211,8 +211,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
                                 }
                                 TrackerUtils.sendPageView(ModPack.getSelectedPack(true).getName() + " Server Download", ModPack.getSelectedPack(true).getName());
                             }
-                        } catch (NoSuchAlgorithmException e) {
-                        }
                     }
                 }
             }

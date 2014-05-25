@@ -80,7 +80,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     //HTTPURLConnection con = (HttpURLConnection) asset.url.openConnection();
                     URLConnection con = asset.url.openConnection();
                     if (con instanceof HttpURLConnection) {
-                        con.setRequestProperty("Cache-Control", "no-cache");
+                        con.setRequestProperty("Cache-Control", "no-cache, no-transform");
                         ((HttpURLConnection) con).setRequestMethod("HEAD");
                         con.connect();
                     }
@@ -129,7 +129,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     setStatus("Downloading " + asset.name + "...");
                     con = asset.url.openConnection();
                     if (con instanceof HttpURLConnection) {
-                        con.setRequestProperty("Cache-Control", "no-cache");
+                        con.setRequestProperty("Cache-Control", "no-cache, no-transform");
                         ((HttpURLConnection) con).setRequestMethod("GET");
                         con.connect();
                     }

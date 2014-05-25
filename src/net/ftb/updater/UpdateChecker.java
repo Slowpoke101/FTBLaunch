@@ -65,13 +65,15 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
                 return;
             }
             NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
-            latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
-            char[] temp = String.valueOf(latest).toCharArray();
-            for (int i = 0; i < (temp.length - 1); i++) {
-                verString += temp[i] + ".";
-            }
-            verString += temp[temp.length - 1];
+            int latest_ = latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
+            verString += latest_ / (100*100) + ".";
+            latest_ = latest_ % (100*100);
+            verString += latest_ / (100) + ".";
+            latest_ = latest_ % 100;
+            verString += latest_;
             downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
+
+
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }

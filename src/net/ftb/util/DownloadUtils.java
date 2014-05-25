@@ -59,15 +59,15 @@ public class DownloadUtils extends Thread {
     /**
      * @param file - the name of the file, as saved to the repo (including extension)
      * @return - the direct link
-     * @throws NoSuchAlgorithmException - see md5
      */
-    public static String getCreeperhostLink (String file) throws NoSuchAlgorithmException {
+    public static String getCreeperhostLink (String file) {
         String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
@@ -77,6 +77,7 @@ public class DownloadUtils extends Thread {
 
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    connection.setRequestProperty("Cache-Control", "no-transform");
                     connection.setRequestMethod("HEAD");
                 } else {
                     break;
@@ -101,12 +102,14 @@ public class DownloadUtils extends Thread {
         boolean good = false;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
+                        connection.setRequestProperty("Cache-Control", "no-transform");
                         connection.setRequestMethod("HEAD");
                     } else {
                         if (connection.getResponseCode() == 200)
@@ -139,12 +142,14 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
+                        connection.setRequestProperty("Cache-Control", "no-transform");
                         connection.setRequestMethod("HEAD");
                     } else {
                         break;
@@ -164,6 +169,7 @@ public class DownloadUtils extends Thread {
     public static boolean staticFileExists (String file) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(getStaticCreeperhostLink(file)).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             return (connection.getResponseCode() == 200);
         } catch (Exception e) {
@@ -178,6 +184,7 @@ public class DownloadUtils extends Thread {
     public static boolean fileExists (String file) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(Locations.masterRepo + "/FTB2/" + file).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             return (connection.getResponseCode() == 200);
         } catch (Exception e) {
@@ -260,6 +267,7 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setRequestProperty("Cache-Control", "no-transform");
             int response = connection.getResponseCode();
             if (response == 200) {
                 scanner = new Scanner(connection.getInputStream());
@@ -270,6 +278,7 @@ public class DownloadUtils extends Thread {
                 for (String server : backupServers.values()) {
                     resolved = "http://" + server + "/md5/FTB2/" + url.replace("/", "%5E");
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
+                    connection.setRequestProperty("Cache-Control", "no-transform");
                     response = connection.getResponseCode();
                     if (response == 200) {
                         scanner = new Scanner(connection.getInputStream());

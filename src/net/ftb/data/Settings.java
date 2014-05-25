@@ -110,6 +110,14 @@ public class Settings extends Properties {
     public void setInstallPath (String path) {
         setProperty("installPath", path);
     }
+    
+    public Boolean getUseSystemProxy () {
+        return Boolean.valueOf(getProperty("useSystemProxy", "false"));
+    }
+
+    public void setUseSystemProxy (Boolean flag) {
+        setProperty("useSystemProxy", String.valueOf(flag));
+    }
 
     public String getJavaPath () {
         String javaPath = getProperty("javaPath", null);
