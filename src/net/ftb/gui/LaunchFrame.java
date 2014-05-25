@@ -617,7 +617,7 @@ public class LaunchFrame extends JFrame {
         tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
         tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
         tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
-        tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+        tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
         tabbedPane.setSelectedIndex(tab);
 
         tabbedPane.addChangeListener(new ChangeListener() {
@@ -1500,14 +1500,14 @@ public class LaunchFrame extends JFrame {
         if(toMaps) {
             tabbedPane.remove(4);
             tabbedPane.add(tpPane, 4);
-            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
             tpEnabled = true;
             updateFooter();
         } else {
             tabbedPane.remove(4);
             tabbedPane.add(mapsPane, 4);
-            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/texturepacks.png")));
+            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
             tpEnabled = false;
             updateFooter();
