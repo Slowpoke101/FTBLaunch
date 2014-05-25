@@ -192,12 +192,20 @@ public class Settings extends Properties {
         return configFile;
     }
 
-    public void setLastPack (String name) {
-        setProperty("lastPack", name);
+    public void setLastFTBPack (String name) {
+        setProperty("lastFTBPack", name);
     }
 
-    public String getLastPack () {
-        return getProperty("lastPack", ModPack.getPack(0).getDir());
+    public void setLastThirdPartyPack (String name) {
+        setProperty("lastThirdPartyPack", name);
+    }
+
+    public String getLastFTBPack () {
+        return getProperty("lastFTBPack", ModPack.getPack(0).getDir());
+    }
+
+    public String getLastThirdPartyPack () {
+        return getProperty("lastThirdPartyPack", ModPack.getPack(0).getDir());
     }
 
     public void setDownloadServer (String server) {

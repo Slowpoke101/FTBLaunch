@@ -123,7 +123,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             @Override
             public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
-                    if (getSelectedModIndex() >= 0) {
+                    if (getSelectedThirdPartyModIndex() >= 0) {
                         EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(false));
                         empd.setVisible(true);
                     }
@@ -183,7 +183,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
-                    if (ThirdPartyPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
+                    if (ThirdPartyPane.packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
                             if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                         .getSelectedPack(false).getVersion().replace(".", "_")
@@ -268,6 +268,8 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
 
             @Override
             public void mousePressed (MouseEvent e) {
+                Logger.logError("" + (currentPacks.get(selectedPack)==null? ModPack.getPackArray().get(getIndex()).getName()+ selectedPack + "null":currentPacks.get(selectedPack).getName()));
+                Logger.logError("" + (currentPacks.get(packIndex)==null?ModPack.getPackArray().get(getIndex()).getName() + packIndex+ "null":currentPacks.get(packIndex).getName()));
                 selectedPack = packIndex;
                 updatePacks();
             }
@@ -287,7 +289,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
         }
         packsScroll.revalidate();
-        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastPack())) {
+        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastThirdPartyPack())) {
             selectedPack = packIndex;
         }
     }
@@ -331,7 +333,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     private static void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
             if (selectedPack == i) {
-                ModPack pack = currentPacks.get(getIndex());
+                ModPack pack = ModPack.getPackArray().get(getIndex());
                 if (pack != null) {
                     String mods = "";
                     if (pack.getMods() != null) {
@@ -370,7 +372,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         }
     }
 
-    public static int getSelectedModIndex () {
+    public static int getSelectedThirdPartyModIndex () {
         return modPacksAdded ? getIndex() : -1;
     }
 

@@ -637,16 +637,12 @@ public class LaunchFrame extends JFrame {
             public void run () {
                 if (FTBPacksPane.loaded) {
                     LoadingDialog.setProgress(190);
-                    if (ThirdPartyPane.loaded) {
-                        LoadingDialog.setProgress(195);
-                        if (MapUtils.loaded) {
-                            LoadingDialog.setProgress(200);
-
-                            if (TexturepackPane.loaded) {
-                                loader.setVisible(false);
-                                instance.setVisible(true);
-                                instance.toFront();
-                            }
+                    if (MapUtils.loaded) {
+                        LoadingDialog.setProgress(200);
+                        if (TexturepackPane.loaded) {
+                            loader.setVisible(false);
+                            instance.setVisible(true);
+                            instance.toFront();
                         }
                     }
                 }
@@ -1148,7 +1144,11 @@ public class LaunchFrame extends JFrame {
         String installpath = Settings.getSettings().getInstallPath();
         String temppath = OSUtils.getCacheStorageLocation();
 
-        ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());//TODO this needs to check which pane is active
+        ModPack pack;
+        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
+           pack = ModPack.getPack(ThirdPartyPane.getSelectedThirdPartyModIndex());
+        else
+           pack = ModPack.getPack(modPacksPane.getSelectedFTBModIndex());
 
         String packDir = pack.getDir();
 
@@ -1248,7 +1248,10 @@ public class LaunchFrame extends JFrame {
      * @return - Outputs selected modpack index
      */
     public static int getSelectedModIndex () {
-        return instance.modPacksPane.getSelectedModIndex();
+        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
+            return instance.thirdPartyPane.getSelectedThirdPartyModIndex();
+        else
+        return instance.modPacksPane.getSelectedFTBModIndex();
     }//TODO this needs to check which pane is active
 
     /**
@@ -1460,7 +1463,8 @@ public class LaunchFrame extends JFrame {
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
             if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
-                Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
+                Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
+                Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
                 saveSettings();
                 doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                         UserManager.getMojangData(users.getSelectedItem().toString()));

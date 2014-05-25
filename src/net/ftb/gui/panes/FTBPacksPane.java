@@ -136,7 +136,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
             @Override
             public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
-                    if (getSelectedModIndex() >= 0) {
+                    if (getSelectedFTBModIndex() >= 0) {
                         EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack());
                         empd.setVisible(true);
                     }
@@ -195,20 +195,20 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(true).getServerUrl().isEmpty()) {
-                    if (FTBPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-                            if (!ModPack.getSelectedPack(true).getServerUrl().equals("") && ModPack.getSelectedPack(true).getServerUrl() != null) {
-                                String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                        .getSelectedPack(true).getVersion().replace(".", "_")
+                ModPack pack = ModPack.getSelectedPack(true);
+                if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
+                    if (FTBPacksPane.packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
+                            if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
+                                String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
                                         : Settings.getSettings().getPackVer().replace(".", "_");
-                                if (ModPack.getSelectedPack(true).isPrivatePack()) {
-                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack(true).getDir() + "%5E" + version + "%5E"
-                                            + ModPack.getSelectedPack(true).getServerUrl()));
+                                if (pack.isPrivatePack()) {
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + pack.getDir() + "%5E" + version + "%5E"
+                                            + pack.getServerUrl()));
                                 } else {
-                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(true).getDir() + "%5E" + version + "%5E"
-                                            + ModPack.getSelectedPack(true).getServerUrl()));
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + pack.getDir() + "%5E" + version + "%5E"
+                                            + pack.getServerUrl()));
                                 }
-                                TrackerUtils.sendPageView(ModPack.getSelectedPack(true).getName() + " Server Download", ModPack.getSelectedPack(true).getName());
+                                TrackerUtils.sendPageView(pack.getName() + " Server Download", pack.getName());
                             }
                     }
                 }
@@ -248,7 +248,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     /*
      * GUI Code to add a modpack to the selection
      */
-    public static void addPack (ModPack pack) {
+    public static void addPack (final ModPack pack) {
         if(pack.isThirdPartyTab()) {
             modPacksAdded = true;
             return;
@@ -282,6 +282,8 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
 
             @Override
             public void mousePressed (MouseEvent e) {
+                Logger.logError("" + (currentPacks.get(selectedPack)==null? ModPack.getPackArray().get(getIndex()).getName()+ selectedPack + "null":currentPacks.get(selectedPack).getName()));
+                Logger.logError("" + (currentPacks.get(packIndex)==null?ModPack.getPackArray().get(getIndex()).getName() + packIndex+ "null":currentPacks.get(packIndex).getName()));
                 selectedPack = packIndex;
                 updatePacks();
             }
@@ -301,7 +303,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
             packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
         }
         packsScroll.revalidate();
-        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastPack())) {
+        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastFTBPack())) {
             selectedPack = packIndex;
         }
     }
@@ -333,7 +335,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.getParentXml().contains("modpacks.xml") && !pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
                 addPack(pack);
                 counter++;
@@ -345,8 +347,8 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     private static void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
             if (selectedPack == i) {
-                ModPack pack = ModPack.getPack(getIndex());
-                if (pack != null && !pack.isThirdPartyTab()) {
+                ModPack pack = ModPack.getPackArray().get(getIndex());
+                if (pack != null) {
                     String mods = "";
                     if (pack.getMods() != null) {
                         mods += "<p>This pack contains the following mods by default:</p><ul>";
@@ -384,7 +386,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         }
     }
 
-    public static int getSelectedModIndex () {
+    public static int getSelectedFTBModIndex () {
         return modPacksAdded ? getIndex() : -1;
     }
 

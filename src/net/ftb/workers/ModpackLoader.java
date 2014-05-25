@@ -29,6 +29,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
@@ -117,6 +118,7 @@ public class ModpackLoader extends Thread {
         }
         if (!FTBPacksPane.loaded) {
             FTBPacksPane.loaded = true;
+            ThirdPartyPane.loaded = true;
             LaunchFrame.checkDoneLoading();
             Map.loadAll();
             TexturePack.loadAll();
