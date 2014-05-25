@@ -184,7 +184,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             public void actionPerformed (ActionEvent event) {
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
                     if (ThirdPartyPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-                        try {
                             if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                         .getSelectedPack(false).getVersion().replace(".", "_")
@@ -198,8 +197,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
                                 }
                                 TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", ModPack.getSelectedPack(false).getName());
                             }
-                        } catch (NoSuchAlgorithmException e) {
-                        }
                     }
                 }
             }

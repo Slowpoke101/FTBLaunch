@@ -197,7 +197,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
             public void actionPerformed (ActionEvent event) {
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(true).getServerUrl().isEmpty()) {
                     if (FTBPacksPane.packPanels.size() > 0 && getSelectedModIndex() >= 0) {
-                        try {
                             if (!ModPack.getSelectedPack(true).getServerUrl().equals("") && ModPack.getSelectedPack(true).getServerUrl() != null) {
                                 String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                         .getSelectedPack(true).getVersion().replace(".", "_")

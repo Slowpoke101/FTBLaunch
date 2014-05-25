@@ -190,17 +190,11 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
-<<<<<<< HEAD
-        // Use system default proxy settings
-        System.setProperty("java.net.useSystemProxies", "true");
-
-=======
         if(Settings.getSettings().getUseSystemProxy()) {
             // Use system default proxy settings
             System.setProperty("java.net.useSystemProxies", "true");
         }
         
->>>>>>> master
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
         }
