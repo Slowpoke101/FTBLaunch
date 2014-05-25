@@ -107,14 +107,12 @@ PRIVATEPACK_NOTEXISTS = Incorrect pack name.
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Type:
-FILTER_ORIGIN = Mod Pack Origin:
 FILTER_COMPERTIBLEPACK = Compatible Pack:
-FILTER_3THPARTY = 3rd Party
 FILTER_APPLY = Apply Filter
 FILTER_SEARCHMAP = Search Maps
 FILTER_TITLE = Filter
-FILTER_PUBLIC = Public
-FILTER_PRIVATE = Private
+FILTER_PUBLIC = Listed
+FILTER_PRIVATE = Unlisted
 FILTER_MODPACKAVALIABILITY = Mod Pack Availability:
 FILTER_MCVERSION = Minecraft Version:
 FILTER_RESULUTION = Mod Pack Resolution:

@@ -37,8 +37,6 @@ import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
 
 public class ModPackFilterDialog extends JDialog {
-    private JLabel originLbl;
-    private JComboBox origin;
     private JLabel availabilityLbl;
     private JComboBox availability;
     private JLabel mcVersionLbl;
@@ -71,10 +69,8 @@ public class ModPackFilterDialog extends JDialog {
         }
 
         mcVersion.setModel(new DefaultComboBoxModel(mcVersions.toArray()));
-        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
         availability.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), I18N.getLocaleString("FILTER_PUBLIC"), I18N.getLocaleString("FILTER_PRIVATE") }));
 
-        origin.setSelectedItem(ftbPane.origin);
         mcVersion.setSelectedItem(ftbPane.mcVersion);
         availability.setSelectedItem(ftbPane.avaliability);
 
@@ -83,7 +79,6 @@ public class ModPackFilterDialog extends JDialog {
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                ftbPane.origin = (String) origin.getSelectedItem();
                 ftbPane.mcVersion = (String) mcVersion.getSelectedItem();
                 ftbPane.avaliability = (String) availability.getSelectedItem();
                 ftbPane.updateFilter();
@@ -129,10 +124,8 @@ public class ModPackFilterDialog extends JDialog {
         }
 
         mcVersion.setModel(new DefaultComboBoxModel(mcVersions.toArray()));
-        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
         availability.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), I18N.getLocaleString("FILTER_PUBLIC"), I18N.getLocaleString("FILTER_PRIVATE") }));
 
-        origin.setSelectedItem(thirdPartyPane.origin);
         mcVersion.setSelectedItem(thirdPartyPane.mcVersion);
         availability.setSelectedItem(thirdPartyPane.avaliability);
 
@@ -141,7 +134,6 @@ public class ModPackFilterDialog extends JDialog {
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                thirdPartyPane.origin = (String) origin.getSelectedItem();
                 thirdPartyPane.mcVersion = (String) mcVersion.getSelectedItem();
                 thirdPartyPane.avaliability = (String) availability.getSelectedItem();
                 thirdPartyPane.updateFilter();
@@ -175,24 +167,19 @@ public class ModPackFilterDialog extends JDialog {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
         availabilityLbl = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
         mcVersionLbl = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
-        origin = new JComboBox();
         mcVersion = new JComboBox();
         availability = new JComboBox();
         apply = new JButton(I18N.getLocaleString("FILTER_APPLY"));
         cancel = new JButton(I18N.getLocaleString("MAIN_CANCEL"));
         search = new JButton(I18N.getLocaleString("FILTER_SEARCHPACK"));
 
-        origin.setPrototypeDisplayValue("xxxxxxxxxxxx");
         mcVersion.setPrototypeDisplayValue("xxxxxxxxxxxx");
         availability.setPrototypeDisplayValue("xxxxxxxxxxxx");
 
         panel.add(mcVersionLbl);
         panel.add(mcVersion);
-        panel.add(originLbl);
-        panel.add(origin);
         panel.add(availability);
         panel.add(availabilityLbl);
         panel.add(apply);
@@ -205,28 +192,23 @@ public class ModPackFilterDialog extends JDialog {
         hSpring = Spring.constant(10);
 
         layout.putConstraint(SpringLayout.WEST, mcVersionLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, originLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, availabilityLbl, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(mcVersionLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(originLbl));
         columnWidth = Spring.max(columnWidth, Spring.width(availabilityLbl));
 
         hSpring = Spring.sum(hSpring, columnWidth);
         hSpring = Spring.sum(hSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, mcVersion, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, origin, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, availability, hSpring, SpringLayout.WEST, panel);
 
         columnWidth = Spring.width(mcVersion);
-        columnWidth = Spring.max(columnWidth, Spring.width(origin));
         columnWidth = Spring.max(columnWidth, Spring.width(availability));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
         layout.putConstraint(SpringLayout.EAST, mcVersion, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, origin, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.EAST, availability, hSpring, SpringLayout.WEST, panel);
 
         hSpring = Spring.sum(hSpring, Spring.constant(10));
@@ -254,12 +236,6 @@ public class ModPackFilterDialog extends JDialog {
 
         vSpring = Spring.sum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, originLbl, 0, SpringLayout.BASELINE, origin);
-        layout.putConstraint(SpringLayout.NORTH, origin, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(originLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(origin));
 
         vSpring = Spring.sum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(5));

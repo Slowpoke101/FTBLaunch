@@ -64,9 +64,10 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     private static int selectedPack = 0;
     private static boolean modPacksAdded = false;
     private static HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
+    private static HashMap<Integer, Integer> packMapping= Maps.newHashMap();
     private final ThirdPartyPane instance = this;
     private static JEditorPane packInfo;
-
+    private static int thirdPacks = 0;
     //	private JLabel loadingImage;
     public static String origin = "All", mcVersion = "All", avaliability = "All";
     public static boolean loaded = false;
@@ -279,9 +280,10 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         p.add(logo);
         packPanels.add(p);
         packs.add(p);
+        int size = thirdPacks>0?thirdPacks:ModPack.getPackArray().size();
         if (currentPacks.isEmpty()) {
-            packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
-            packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
+            packs.setMinimumSize(new Dimension(420, (size * 55)));
+            packs.setPreferredSize(new Dimension(420, (size * 55)));
         } else {
             packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
             packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
@@ -298,21 +300,24 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
             public void run() {
                 addPack(pack);
                 if(pack.isThirdPartyTab() && !pack.getParentXml().contains("modpacks.xml")){
-                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack.getName() + ") " + pack.getImageName());
+                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack.getName() + ")");
+                    thirdPacks++;
                     if (!currentPacks.isEmpty()) {
                         sortPacks();
                     } else {
                         updatePacks();
-                        int counter = 0;
-                        currentPacks.clear();
-                        for (ModPack pack : ModPack.getPackArray()) {
-                            if (originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                                currentPacks.put(counter, pack);
-                                counter++;
+                        packMapping.clear();
+                        int count = 0;
+                        for(ModPack pack: ModPack.getPackArray()){
+                            if(pack.isThirdPartyTab() && !pack.getParentXml().contains("modpacks.xml")) {
+                                packMapping.put(count, pack.getIndex());
+                                //Logger.logError(pack.getName() + " " + count + ":"+pack.getIndex());
+                                count++;
                             }
                         }
+
+                    }
                 }
-            }
             }
         });
     }
@@ -321,14 +326,16 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         packPanels.clear();
         packs.removeAll();
         currentPacks.clear();
+        packMapping.clear();
         int counter = 0;
         selectedPack = 0;
         packInfo.setText("");
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.getParentXml().contains("modpacks.xml") && pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.getParentXml().contains("modpacks.xml") && pack.isThirdPartyTab() && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
+                packMapping.put(counter, pack.getIndex());
                 addPack(pack);
                 counter++;
             }
@@ -338,7 +345,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
 
     private static void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
-            if (selectedPack == i) {
+            if (selectedPack == i && getIndex() >=0) {
                 ModPack pack = ModPack.getPackArray().get(getIndex());
                 if (pack != null) {
                     String mods = "";
@@ -387,8 +394,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
-        typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
 
@@ -398,7 +403,10 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     }
 
     private static int getIndex () {
-        return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
+        if(packMapping.get(selectedPack) == null){
+            return -1;
+        } else
+            return packMapping.get(selectedPack);
     }
 
     public void updateLocale () {
@@ -420,11 +428,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
 
     private static boolean mcVersionCheck (ModPack pack) {
         return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
-    }
-
-    private static boolean originCheck (ModPack pack) {
-        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && pack.getAuthor().equalsIgnoreCase("the ftb team"))
-                || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !pack.getAuthor().equalsIgnoreCase("the ftb team"));
     }
 
     private static boolean textSearch (ModPack pack) {

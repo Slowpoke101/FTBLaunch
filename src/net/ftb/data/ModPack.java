@@ -172,6 +172,8 @@ public class ModPack {
      * @param idx - the actual position of the modpack in the index
      * @param bundledMap - pack has map bundled inside it
      * @param customTP - pack does not use primary TP's for MC version
+     * @param minJRE - minimum JRE version needed to run pack
+     * @param thirdpartyTab - should this pack be in the FTB or third party tabs?
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */

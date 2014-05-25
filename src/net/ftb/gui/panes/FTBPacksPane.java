@@ -27,6 +27,7 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -79,9 +80,10 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     private static HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
     private final FTBPacksPane instance = this;
     private static JEditorPane packInfo;
-
+    private static int ftbPacks = 0;
     //	private JLabel loadingImage;
-    public static String origin = "All", mcVersion = "All", avaliability = "All";
+    private static HashMap<Integer, Integer> packMapping= Maps.newHashMap();
+    public static String mcVersion = "All", avaliability = "All";
     public static boolean loaded = false;
 
     private static JScrollPane infoScroll;
@@ -120,8 +122,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
 
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
-        typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
 
@@ -137,7 +137,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
             public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
                     if (getSelectedFTBModIndex() >= 0) {
-                        EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack());
+                        EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(true));
                         empd.setVisible(true);
                     }
                 }
@@ -293,9 +293,10 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         p.add(logo);
         packPanels.add(p);
         packs.add(p);
+        int size = ftbPacks>0?ftbPacks:ModPack.getPackArray().size();
         if (currentPacks.isEmpty()) {
-            packs.setMinimumSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
-            packs.setPreferredSize(new Dimension(420, (ModPack.getPackArray().size() * 55)));
+            packs.setMinimumSize(new Dimension(420, (size * 55)));
+            packs.setPreferredSize(new Dimension(420, (size * 55)));
         } else {
             packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
             packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
@@ -312,18 +313,20 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 addPack(pack_);
-                if(!pack_.isThirdPartyTab())
+                if(!pack_.isThirdPartyTab()) {
                     Logger.logInfo("Adding FTB pack " + packPanels.size() + " (" + pack_.getName() + ")");
-                if (!currentPacks.isEmpty()) {
-                    sortPacks();
-                } else {
-                    updatePacks();
-                    int counter = 0;
-                    currentPacks.clear();
-                    for (ModPack pack : ModPack.getPackArray()) {
-                        if (originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                            currentPacks.put(counter, pack);
-                            counter++;
+                    ftbPacks++;
+                    if (!currentPacks.isEmpty()) {
+                        sortPacks();
+                    } else {
+                        updatePacks();
+                        packMapping.clear();
+                        int count = 0;
+                        for (ModPack pack : ModPack.getPackArray()) {
+                            if (!pack.isThirdPartyTab()) {
+                                packMapping.put(count, pack.getIndex());
+                                count++;
+                            }
                         }
                     }
                 }
@@ -335,14 +338,16 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         packPanels.clear();
         packs.removeAll();
         currentPacks.clear();
+        packMapping.clear();
         int counter = 0;
         selectedPack = 0;
         packInfo.setText("");
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.isThirdPartyTab() && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
+                packMapping.put(counter, pack.getIndex());
                 addPack(pack);
                 counter++;
             }
@@ -352,7 +357,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
 
     private static void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
-            if (selectedPack == i) {
+            if (selectedPack == i && getIndex() >=0) {
                 ModPack pack = ModPack.getPackArray().get(getIndex());
                 if (pack != null) {
                     String mods = "";
@@ -401,7 +406,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
         typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
@@ -412,7 +416,10 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     }
 
     private static int getIndex () {
-        return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
+        if(packMapping.get(selectedPack) == null){
+            return -1;
+        } else
+        return packMapping.get(selectedPack);
     }
 
     public void updateLocale () {
@@ -436,10 +443,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
     }
 
-    private static boolean originCheck (ModPack pack) {
-        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && pack.getAuthor().equalsIgnoreCase("the ftb team"))
-                || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !pack.getAuthor().equalsIgnoreCase("the ftb team"));
-    }
 
     private static boolean textSearch (ModPack pack) {
         String searchString = SearchDialog.lastPackSearch.toLowerCase();
