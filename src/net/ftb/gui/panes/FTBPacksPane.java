@@ -282,8 +282,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
 
             @Override
             public void mousePressed (MouseEvent e) {
-                Logger.logError("" + (currentPacks.get(selectedPack)==null? ModPack.getPackArray().get(getIndex()).getName()+ selectedPack + "null":currentPacks.get(selectedPack).getName()));
-                Logger.logError("" + (currentPacks.get(packIndex)==null?ModPack.getPackArray().get(getIndex()).getName() + packIndex+ "null":currentPacks.get(packIndex).getName()));
                 selectedPack = packIndex;
                 updatePacks();
             }
@@ -320,6 +318,14 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
                     sortPacks();
                 } else {
                     updatePacks();
+                    int counter = 0;
+                    currentPacks.clear();
+                    for (ModPack pack : ModPack.getPackArray()) {
+                        if (originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+                            currentPacks.put(counter, pack);
+                            counter++;
+                        }
+                    }
                 }
             }
         });
@@ -335,7 +341,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (!!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
                 addPack(pack);
                 counter++;

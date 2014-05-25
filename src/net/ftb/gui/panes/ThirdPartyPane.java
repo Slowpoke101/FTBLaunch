@@ -268,8 +268,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
 
             @Override
             public void mousePressed (MouseEvent e) {
-                Logger.logError("" + (currentPacks.get(selectedPack)==null? ModPack.getPackArray().get(getIndex()).getName()+ selectedPack + "null":currentPacks.get(selectedPack).getName()));
-                Logger.logError("" + (currentPacks.get(packIndex)==null?ModPack.getPackArray().get(getIndex()).getName() + packIndex+ "null":currentPacks.get(packIndex).getName()));
                 selectedPack = packIndex;
                 updatePacks();
             }
@@ -305,8 +303,16 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
                         sortPacks();
                     } else {
                         updatePacks();
-                    }
+                        int counter = 0;
+                        currentPacks.clear();
+                        for (ModPack pack : ModPack.getPackArray()) {
+                            if (originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+                                currentPacks.put(counter, pack);
+                                counter++;
+                            }
+                        }
                 }
+            }
             }
         });
     }
