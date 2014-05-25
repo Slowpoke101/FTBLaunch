@@ -333,7 +333,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.getParentXml().contains("modpacks.xml") && !pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
                 addPack(pack);
                 counter++;
@@ -350,16 +350,16 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
                     String mods = "";
                     if (pack.getMods() != null) {
                         mods += "<p>This pack contains the following mods by default:</p><ul>";
-                        for (String name : ModPack.getPack(getIndex()).getMods()) {
+                        for (String name : pack.getMods()) {
                             mods += "<li>" + name + "</li>";
                         }
                         mods += "</ul>";
                     }
                     packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                     packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + ModPack.getPack(getIndex()).getDir());
-                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + ModPack.getPack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
-                            + ModPack.getPack(getIndex()).getInfo() + mods);
+                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + pack.getDir());
+                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>"
+                            + pack.getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
                     if (ModPack.getSelectedPack(true).getServerUrl().equals("") || ModPack.getSelectedPack(true).getServerUrl() == null) {
@@ -404,7 +404,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane, ModPackListen
     }
 
     private static int getIndex () {
-        return (!currentPacks.isEmpty()) ? ModPack.getPackArray().get(selectedPack).getIndex() : selectedPack;
+        return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
     }
 
     public void updateLocale () {

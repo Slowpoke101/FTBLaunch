@@ -637,14 +637,16 @@ public class LaunchFrame extends JFrame {
             public void run () {
                 if (FTBPacksPane.loaded) {
                     LoadingDialog.setProgress(190);
+                    if (ThirdPartyPane.loaded) {
+                        LoadingDialog.setProgress(195);
+                        if (MapUtils.loaded) {
+                            LoadingDialog.setProgress(200);
 
-                    if (MapUtils.loaded) {
-                        LoadingDialog.setProgress(200);
-
-                        if (TexturepackPane.loaded) {
-                            loader.setVisible(false);
-                            instance.setVisible(true);
-                            instance.toFront();
+                            if (TexturepackPane.loaded) {
+                                loader.setVisible(false);
+                                instance.setVisible(true);
+                                instance.toFront();
+                            }
                         }
                     }
                 }
@@ -1146,7 +1148,7 @@ public class LaunchFrame extends JFrame {
         String installpath = Settings.getSettings().getInstallPath();
         String temppath = OSUtils.getCacheStorageLocation();
 
-        ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
+        ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());//TODO this needs to check which pane is active
 
         String packDir = pack.getDir();
 
@@ -1247,7 +1249,7 @@ public class LaunchFrame extends JFrame {
      */
     public static int getSelectedModIndex () {
         return instance.modPacksPane.getSelectedModIndex();
-    }
+    }//TODO this needs to check which pane is active
 
     /**
      * @return - Outputs selected map index

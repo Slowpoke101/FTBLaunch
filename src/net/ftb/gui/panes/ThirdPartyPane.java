@@ -236,8 +236,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
      * GUI Code to add a modpack to the selection
      */
     public static void addPack (ModPack pack) {
-        if(!pack.isThirdPartyTab()) {
-            modPacksAdded = true;
+        if(!pack.isThirdPartyTab()|| pack.getParentXml().contains("modpacks.xml")) {//we ignore any 3rd party in main modpacks xml those will be removed once enough ppl update
             return;
         }
         if (!modPacksAdded) {
@@ -294,17 +293,17 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     }
 
     @Override
-    public void onModPackAdded (ModPack pack) {
-        final ModPack pack_ = pack;
+    public void onModPackAdded (final ModPack pack) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                addPack(pack_);
-                if(pack_.isThirdPartyTab())
-                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack_.getName() + ")");
-                if (!currentPacks.isEmpty()) {
-                    sortPacks();
-                } else {
-                    updatePacks();
+                addPack(pack);
+                if(pack.isThirdPartyTab() && !pack.getParentXml().contains("modpacks.xml")){
+                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack.getName() + ") " + pack.getImageName());
+                    if (!currentPacks.isEmpty()) {
+                        sortPacks();
+                    } else {
+                        updatePacks();
+                    }
                 }
             }
         });
@@ -320,7 +319,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         packs.repaint();
         modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
-            if (pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
+            if (!pack.getParentXml().contains("modpacks.xml") && pack.isThirdPartyTab() && originCheck(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
                 currentPacks.put(counter, pack);
                 addPack(pack);
                 counter++;
@@ -332,21 +331,21 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     private static void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
             if (selectedPack == i) {
-                ModPack pack = ModPack.getPack(getIndex());
+                ModPack pack = currentPacks.get(getIndex());
                 if (pack != null) {
                     String mods = "";
                     if (pack.getMods() != null) {
                         mods += "<p>This pack contains the following mods by default:</p><ul>";
-                        for (String name : ModPack.getPack(getIndex()).getMods()) {
+                        for (String name : pack.getMods()) {
                             mods += "<li>" + name + "</li>";
                         }
                         mods += "</ul>";
                     }
                     packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                     packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + ModPack.getPack(getIndex()).getDir());
-                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + ModPack.getPack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
-                            + ModPack.getPack(getIndex()).getInfo() + mods);
+                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + pack.getDir());
+                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>"
+                            + pack.getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
                     if (ModPack.getSelectedPack(false).getServerUrl().equals("") || ModPack.getSelectedPack(false).getServerUrl() == null) {
@@ -391,7 +390,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
     }
 
     private static int getIndex () {
-        return (!currentPacks.isEmpty()) ? ModPack.getPackArray().get(selectedPack).getIndex() : selectedPack;
+        return (!currentPacks.isEmpty()) ? currentPacks.get(selectedPack).getIndex() : selectedPack;
     }
 
     public void updateLocale () {
