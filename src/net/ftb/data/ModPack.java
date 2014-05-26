@@ -33,7 +33,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import lombok.Getter;
-import net.ftb.data.events.ModPackListener;
+import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
@@ -54,7 +54,6 @@ public class ModPack {
     @Getter
     private boolean thirdPartyTab;
     private final static ArrayList<ModPack> packs = Lists.newArrayList();
-    private static List<ModPackListener> listeners = Lists.newArrayList();
     private boolean privatePack;
     @Getter
     private int[] minJRE;
@@ -75,25 +74,29 @@ public class ModPack {
     }
 
     /**
-     * Adds a listener to the listeners array
-     * @param listener - the ModPackListener to add
-     */
-    public static void addListener (ModPackListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
      * Adds modpack to the modpacks array
      * @param pack - a ModPack instance
      */
     public static void addPack (ModPack pack) {
         synchronized (packs) {
             packs.add(pack);
-        }
-        for (ModPackListener listener : listeners) {
-            listener.onModPackAdded(pack);
+            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, new ArrayList<ModPack>().add(pack)));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
+
+    /**
+     * Adds modpack to the modpacks array
+     * @param pack - an array list of ModPack instances
+     */
+    public static void addPacks (ArrayList<ModPack> pack) {
+        synchronized (packs) {
+            for(ModPack p :packs){
+                packs.add(p);
+            }
+            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, pack));//MAKE SURE TO REMOVE FROM LISTENER!!
+        }
+    }
+
 
     public static void removePacks (String xml) {
         ArrayList<ModPack> remove = new ArrayList<ModPack>();
@@ -112,6 +115,7 @@ public class ModPack {
                 pack.setIndex(pack.getIndex() - 1);
             }
         }
+        LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
     }
 
     /**
