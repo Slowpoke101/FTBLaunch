@@ -207,7 +207,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         filler.setEditable(false);
         filler.setForeground(Color.white);
         filler.setBounds(58, 6, 378, 42);
-        filler.setBackground(new Color(255, 255, 255, 0));
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         MouseAdapter lin = new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent e) {

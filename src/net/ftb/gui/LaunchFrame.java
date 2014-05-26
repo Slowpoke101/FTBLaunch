@@ -39,6 +39,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -614,12 +615,15 @@ public class LaunchFrame extends JFrame {
          * TODO: This will block. Network.
          */
         setNewsIcon();
-        tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
-        tabbedPane.setIconAt(2, new ImageIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
-        tabbedPane.setIconAt(3, new ImageIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
-        tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
-        tabbedPane.setSelectedIndex(tab);
-
+        try {
+            tabbedPane.setIconAt(1, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/options.png")));
+            tabbedPane.setIconAt(2,  LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
+            tabbedPane.setIconAt(3, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
+            tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
+            tabbedPane.setSelectedIndex(tab);
+        }catch(Exception e1){
+            Logger.logError("error changing colors", e1);
+        }
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged (ChangeEvent event) {
@@ -660,9 +664,11 @@ public class LaunchFrame extends JFrame {
                 try {
                     int i = get();
                     if (i > 0 && i < 100) {
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
+                        ImageAndTextIcon iti = new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i));
+                        iti.setImage(LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png")).getImage());
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, iti);
                     } else {
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
                     }
                 } catch (InterruptedException e) {
                 } catch (ExecutionException e) {
@@ -689,7 +695,7 @@ public class LaunchFrame extends JFrame {
         Logger.logInfo("Logging in...");
 
         tabbedPane.setEnabledAt(0, false);
-        tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
+        tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
         tabbedPane.setEnabledAt(1, false);
         tabbedPane.setEnabledAt(2, false);
         tabbedPane.setEnabledAt(3, false);
@@ -1122,7 +1128,7 @@ public class LaunchFrame extends JFrame {
                                 tabbedPane.remove(1);
                                 optionsPane = new OptionsPane(Settings.getSettings());
                                 tabbedPane.add(optionsPane, 1);
-                                tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
+                                tabbedPane.setIconAt(1, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/options.png")));
                             } catch (Exception e1) {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
@@ -1506,14 +1512,14 @@ public class LaunchFrame extends JFrame {
         if(toMaps) {
             tabbedPane.remove(4);
             tabbedPane.add(tpPane, 4);
-            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
+            tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
             tpEnabled = true;
             updateFooter();
         } else {
             tabbedPane.remove(4);
             tabbedPane.add(mapsPane, 4);
-            tabbedPane.setIconAt(4, new ImageIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
+            tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
             tpEnabled = false;
             updateFooter();

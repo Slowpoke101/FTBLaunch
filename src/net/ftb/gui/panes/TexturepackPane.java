@@ -145,9 +145,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         JTextArea filler = new JTextArea(I18N.getLocaleString("TEXTURE_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
-        filler.setForeground(Color.white);
+        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 378, 42);
-        filler.setBackground(new Color(255, 255, 255, 0));
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         p.add(filler);
         texturePacks.add(p);
 
@@ -221,9 +221,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         JTextArea filler = new JTextArea(texturePack.getName() + " : " + texturePack.getAuthor() + "\n" + info);
         filler.setBorder(null);
         filler.setEditable(false);
-        filler.setForeground(Color.white);
+        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 378, 42);
-        filler.setBackground(new Color(255, 255, 255, 0));
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         MouseAdapter lin = new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent e) {

@@ -44,7 +44,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -136,9 +135,9 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         JTextArea filler = new JTextArea(I18N.getLocaleString("MODS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
-        filler.setForeground(Color.white);
+        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 378, 42);
-        filler.setBackground(new Color(255, 255, 255, 0));
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         //		p.add(loadingImage);
         p.add(filler);
         packs.add(p);
@@ -256,9 +255,9 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         JTextArea filler = new JTextArea(pack.getName() + " (v" + pack.getVersion() + ") Minecraft Version " + pack.getMcVersion() + "\n" + "By " + pack.getAuthor());
         filler.setBorder(null);
         filler.setEditable(false);
-        filler.setForeground(Color.white);
+        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 362, 42);
-        filler.setBackground(new Color(255, 255, 255, 0));
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         MouseAdapter lin = new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent e) {
