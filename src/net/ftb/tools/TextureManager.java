@@ -48,7 +48,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.TrackerUtils;
-
+import static net.ftb.download.Locations.TEXTUREPACKS;
 @SuppressWarnings("serial")
 public class TextureManager extends JDialog {
     private static TexturePack updateTexture;
@@ -87,7 +87,7 @@ public class TextureManager extends JDialog {
             else
                 packStr = "/" + packVer;
             if (!compPack.hasCustomTP()
-                    && DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + "master_" + compPack.getMcVersion().replace(".", "_") + packStr + "/"
+                    && DownloadUtils.fileExists(TEXTUREPACKS + texturePack.getName().replace(" ", "_") + "/" + "master_" + compPack.getMcVersion().replace(".", "_") + packStr + "/"
                             + texturePack.getUrl())) {
                 populateInstalledTextures(compPack);
                 File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
@@ -95,7 +95,7 @@ public class TextureManager extends JDialog {
                     oldFile.delete();
                 }
                 return downloadTexturePack(texturePack.getUrl(), texturePack.getName(), "master_" + compPack.getMcVersion().replace(".", "_"), compDir, packVer);
-            } else if (DownloadUtils.fileExists("texturepacks/" + texturePack.getName().replace(" ", "_") + "/" + compDir + packStr + "/" + texturePack.getUrl())) {
+            } else if (DownloadUtils.fileExists(TEXTUREPACKS + texturePack.getName().replace(" ", "_") + "/" + compDir + packStr + "/" + texturePack.getUrl())) {
                 populateInstalledTextures(compPack);
                 File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
                 if (oldFile.exists()) {
@@ -170,7 +170,7 @@ public class TextureManager extends JDialog {
             else
                 packStr = "/" + packVer;
             if (downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName,
-                    DownloadUtils.getCreeperhostLink("texturepacks/" + dir.replace(" ", "_") + "/" + remoteName + packStr + "/" + texturePackName))) {
+                    DownloadUtils.getCreeperhostLink(TEXTUREPACKS + dir.replace(" ", "_") + "/" + remoteName + packStr + "/" + texturePackName))) {
                 File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
                 installedTextures.put(dir.toLowerCase(), packVer);
                 BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
@@ -255,7 +255,7 @@ public class TextureManager extends JDialog {
                                     packStr = "";
                                 else
                                     packStr = "/" + version;
-                                if (DownloadUtils.fileExists("texturepacks/" + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
+                                if (DownloadUtils.fileExists(TEXTUREPACKS+ tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
                                     updating = true;
                                     TextureManager man = new TextureManager(new JFrame(), true);
                                     man.updateTexture = tp;

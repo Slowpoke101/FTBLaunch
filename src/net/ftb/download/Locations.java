@@ -40,4 +40,9 @@ public class Locations {
     public final static String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
     public final static String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
 
+    //folder constants all slashes must be web safe... replace w/ system slash on win
+    public final static String MAPS = "Maps/";
+    public final static String MODPACKS ="modpacks/";
+    public final static String PRIVATEPACKS ="privatepacks/";
+    public final static String TEXTUREPACKS = "texturepacks/";
 }

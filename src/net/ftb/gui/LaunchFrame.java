@@ -30,7 +30,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -39,7 +38,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -55,6 +53,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.common.eventbus.EventBus;
 import lombok.Getter;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
@@ -100,14 +99,8 @@ import net.ftb.tracking.AnalyticsConfigData;
 import net.ftb.tracking.JGoogleAnalyticsTracker;
 import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 import net.ftb.updater.UpdateChecker;
-import net.ftb.util.AppUtils;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FileUtils;
-import net.ftb.util.OSUtils;
+import net.ftb.util.*;
 import net.ftb.util.OSUtils.OS;
-import net.ftb.util.StyleUtil;
-import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.LoginWorker;
@@ -169,6 +162,12 @@ public class LaunchFrame extends JFrame {
 
     @Getter
     private static ProcessMonitor procMonitor;
+    /*
+    * @return FTB Launcher event bus
+    */
+    @Getter
+    private EventBus eventBus = new EventBus();
+
 
     public enum Panes {
         NEWS, OPTIONS, MODPACK, THIRDPARTY, TEXTURE
@@ -447,7 +446,7 @@ public class LaunchFrame extends JFrame {
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-        String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
+        String[] dropdown = ObjectUtils.concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
         users = new JComboBox(dropdown);
         if (Settings.getSettings().getLastUser() != null) {
             for (int i = 0; i < dropdown.length; i++) {
@@ -1194,7 +1193,7 @@ public class LaunchFrame extends JFrame {
             userManager.write();
         } catch (IOException e) {
         }
-        String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
+        String[] usernames = ObjectUtils.concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
         users.removeAllItems();
         for (int i = 0; i < usernames.length; i++) {
             users.addItem(usernames[i]);
@@ -1230,35 +1229,6 @@ public class LaunchFrame extends JFrame {
             }
         }
     }
-
-    /**
-     * @param first - First array
-     * @param rest - Rest of the arrays
-     * @return - Outputs concatenated arrays
-     */
-    public static <T> T[] concatenateArrays (T[] first, T[]... rest) {
-        int totalLength = first.length;
-        for (T[] array : rest) {
-            totalLength += array.length;
-        }
-        T[] result = Arrays.copyOf(first, totalLength);
-        int offset = first.length;
-        for (T[] array : rest) {
-            System.arraycopy(array, 0, result, offset, array.length);
-            offset += array.length;
-        }
-        return result;
-    }
-
-    /**
-     * @return - Outputs selected modpack index
-     */
-    public static int getSelectedModIndex () {
-        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
-            return instance.thirdPartyPane.getSelectedThirdPartyModIndex();
-        else
-        return instance.modPacksPane.getSelectedFTBModIndex();
-    }//TODO this needs to check which pane is active
 
     /**
      * @return - Outputs selected map index

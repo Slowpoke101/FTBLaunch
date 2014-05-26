@@ -51,6 +51,8 @@ import net.ftb.util.ErrorUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
+import static net.ftb.download.Locations.MODPACKS;
+import static net.ftb.download.Locations.PRIVATEPACKS;
 
 @SuppressWarnings("serial")
 public class ModManager extends JDialog {
@@ -203,7 +205,7 @@ public class ModManager extends JDialog {
             String installPath = Settings.getSettings().getInstallPath();
             ModPack pack = ModPack.getSelectedPack();
             //clearModsFolder(pack);
-            String baseLink = (pack.isPrivatePack() ? "privatepacks/" + dir + "/" + curVersion + "/" : "modpacks/" + dir + "/" + curVersion + "/");
+            String baseLink = (pack.isPrivatePack() ? PRIVATEPACKS + dir + "/" + curVersion + "/" : MODPACKS + dir + "/" + curVersion + "/");
             baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
             if (debugVerbose) {
                 Logger.logInfo(debugTag + "pack dir: " + dir);
@@ -438,7 +440,6 @@ public class ModManager extends JDialog {
         if (folder.exists()) {
             for (String file : folder.list()) {
                 if (new File(folder, file).isDirectory()) {
-                    //Logger.logInfo(new File(folder, file).toString());
                     clearFolder(new File(folder, file));
                 }
                 if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {

@@ -74,7 +74,7 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @param filename
      *            the name of the file containing the image
-     * @param description
+     * @param desc
      *            a brief textual description of the image
      * @see #ImageIcon(String)
      */

@@ -67,7 +67,7 @@ public class AdvancedOptionsDialog extends JDialog {
     private JCheckBox debugLauncherVerbose;
 
     private final Settings settings = Settings.getSettings();
-
+    //TODO add a UI adjustment tab here
     public AdvancedOptionsDialog() {
         super(LaunchFrame.getInstance(), true);
         setupGui();

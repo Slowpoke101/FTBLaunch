@@ -45,7 +45,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
-
+import static net.ftb.download.Locations.MAPS;
 @SuppressWarnings("serial")
 public class MapManager extends JDialog {
     private JPanel contentPane;
@@ -116,10 +116,10 @@ public class MapManager extends JDialog {
             Logger.logInfo("Downloading Map");
             String installPath = OSUtils.getCacheStorageLocation();
             Map map = Map.getSelectedMap();
-            new File(installPath + "/Maps/" + dir + "/").mkdirs();
-            new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-            downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("maps/" + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
-            FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
+            new File(installPath + "/"+ MAPS + dir + "/").mkdirs();
+            new File(installPath + "/" + MAPS + dir + "/" + mapName).createNewFile();
+            downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
+            FileUtils.extractZipTo(installPath + "/" +MAPS + dir + "/" + mapName, installPath + "/" +MAPS + dir);
             installMap(mapName, dir);
         }
 
@@ -129,8 +129,8 @@ public class MapManager extends JDialog {
             String tempPath = OSUtils.getCacheStorageLocation();
             Map map = Map.getSelectedMap();
             new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
-            FileUtils.copyFolder(new File(tempPath, "Maps/" + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
-            FileUtils.copyFile(new File(tempPath, "Maps/" + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
+            FileUtils.copyFolder(new File(tempPath, MAPS + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
+            FileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
             TrackerUtils.sendPageView(map.getName() + " Install", map.getName());
         }
     }
@@ -177,7 +177,7 @@ public class MapManager extends JDialog {
 
     public static void cleanUp () {
         Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-        File tempFolder = new File(OSUtils.getCacheStorageLocation(), "Maps" + sep + map.getMapName() + sep);
+        File tempFolder = new File(OSUtils.getCacheStorageLocation(),  MAPS.replace("/",sep) + map.getMapName() + sep);
         for (String file : tempFolder.list()) {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
                 try {
