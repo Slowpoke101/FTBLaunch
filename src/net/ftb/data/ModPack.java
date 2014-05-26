@@ -86,14 +86,14 @@ public class ModPack {
 
     /**
      * Adds modpack to the modpacks array
-     * @param pack - an array list of ModPack instances
+     * @param packs_ - an array list of ModPack instances
      */
-    public static void addPacks (ArrayList<ModPack> pack) {
+    public static void addPacks (ArrayList<ModPack> packs_) {
         synchronized (packs) {
-            for(ModPack p :packs){
+            for(ModPack p :packs_){
                 packs.add(p);
             }
-            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, pack));//MAKE SURE TO REMOVE FROM LISTENER!!
+            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
@@ -182,7 +182,7 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab) throws IOException, NoSuchAlgorithmException {
+                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
