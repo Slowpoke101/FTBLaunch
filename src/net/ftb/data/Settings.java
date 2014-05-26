@@ -200,11 +200,11 @@ public class Settings extends Properties {
         setProperty("lastThirdPartyPack", name);
     }
 
-    public String getLastFTBPack () {
-        return getProperty("lastFTBPack", ModPack.getPack(0).getDir());
+    public String getLastFTBPack () {//todo 1.4.0 find out why is this generating tons of NPE's
+        return getProperty("lastFTBPack",ModPack.getPack(0).getDir());
     }
 
-    public String getLastThirdPartyPack () {
+    public String getLastThirdPartyPack () {//todo 1.4.0 find out why is this generating tons of NPE's
         return getProperty("lastThirdPartyPack", ModPack.getPack(0).getDir());
     }
 

@@ -364,8 +364,8 @@ public class LaunchFrame extends JFrame {
                 instance.setVisible(true);
                 instance.toBack();
 
-                ModPack.addListener(frame.modPacksPane);
-                ModPack.addListener(frame.thirdPartyPane);
+                instance.eventBus.register(frame.thirdPartyPane);
+                instance.eventBus.register(frame.modPacksPane);
 
                 ModPack.loadXml(getXmls());
 
@@ -1210,7 +1210,7 @@ public class LaunchFrame extends JFrame {
     public static void updateTpInstallLocs (List<String> locations) {
         tpInstallLocation.removeAllItems();
         for (String location : locations) {
-            if (!location.isEmpty()) {
+            if (location != null && !location.isEmpty()) {
                 tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
             }
         }
@@ -1224,7 +1224,7 @@ public class LaunchFrame extends JFrame {
     public static void updateMapInstallLocs (String[] locations) {
         mapInstallLocation.removeAllItems();
         for (String location : locations) {
-            if (!location.isEmpty()) {
+            if (location != null && !location.isEmpty()) {
                 mapInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
             }
         }

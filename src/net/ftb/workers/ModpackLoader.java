@@ -89,6 +89,7 @@ public class ModpackLoader extends Thread {
                     return;
                 }
                 NodeList modPacks = doc.getElementsByTagName("modpack");
+                ArrayList<ModPack> mp = Lists.newArrayList();
                 for (int i = 0; i < modPacks.getLength(); i++) {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
@@ -98,7 +99,7 @@ public class ModpackLoader extends Thread {
                                 isThirdParty = true;
                             else
                                 isThirdParty = false;
-                        ModPack.addPack(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
+                        mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
                                 .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
                                 .getTextContent(), modPackAttr.getNamedItem("description").getTextContent(), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
@@ -112,6 +113,7 @@ public class ModpackLoader extends Thread {
                         Logger.logError(e.getMessage(), e);
                     }
                 }
+                ModPack.addPacks(mp);
                 try {
                     modPackStream.close();
                 } catch (IOException e) {
