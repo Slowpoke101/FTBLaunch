@@ -35,6 +35,7 @@ import javax.swing.*;
 
 public class LauncherStyle extends Properties {
 
+    //TODO bump this???
     private static final long serialVersionUID = 6370446700503387209L;
 
     private static LauncherStyle currentStyle;
@@ -64,11 +65,11 @@ public class LauncherStyle extends Properties {
     public Color filterTextColor = new Color(243, 119, 31);
     public Color filterInnerTextColor = new Color(255, 255, 255);
     public Color tabPaneBackground = new Color(255, 255, 255, 0);
-    public Color tabPaneForeground = Color.white;
-    public Color headerImageColor = Color.white;
-    public Color headerColor = LauncherStyle.getCurrentStyle().filterTextColor;
-    public Color headerImageHighlightColor = Color.decode("#ec1a3d".toUpperCase(Locale.ENGLISH));
-    public Color headerHighlightColor = Color.decode("#ec1a3d".toUpperCase(Locale.ENGLISH));//LauncherStyle.getCurrentStyle().filterTextColor.darker().darker();
+    public Color tabPaneForeground = new Color(255, 255, 255);
+    public Color headerImageColor = new Color(255, 255, 255);
+    public Color headerColor = new Color(243, 119, 31);
+    public Color headerImageHighlightColor = new Color(236, 26,61);
+    public Color headerHighlightColor = new Color(236, 26,61);
 
 
     public void load () {
@@ -98,7 +99,7 @@ public class LauncherStyle extends Properties {
         this.footerColor = loadColor("footerColor", this.footerColor);
         this.filterTextColor = loadColor("filterTextColor", this.filterTextColor);
         this.filterInnerTextColor = loadColor("filterInnerTextColor", this.filterInnerTextColor);
-
+        //todo add all the new color swap stuffs in here!!!
         try {
             this.store(new FileOutputStream(filename), "FTB Style File");
         } catch (FileNotFoundException e) {
