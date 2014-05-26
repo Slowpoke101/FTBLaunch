@@ -779,23 +779,17 @@ public class LaunchFrame extends JFrame {
 
         final String installPath = Settings.getSettings().getInstallPath();
         final ModPack pack = ModPack.getSelectedPack();
-        boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-        final String debugTag = "DEBUG: runGameUpdater: ";
 
-        if (debugVerbose) {
-            Logger.logInfo(debugTag + "ForceUpdate: " + Settings.getSettings().isForceUpdateEnabled());
-            Logger.logInfo(debugTag + "installPath: " + installPath);
-            Logger.logInfo(debugTag + "pack dir: " + pack.getDir());
-            Logger.logInfo(debugTag + "pack check path: " + pack.getDir() + File.separator + "version");
-        }
+        Logger.logDebug("ForceUpdate: " + Settings.getSettings().isForceUpdateEnabled());
+        Logger.logDebug("installPath: " + installPath);
+        Logger.logDebug("pack dir: " + pack.getDir());
+        Logger.logDebug("pack check path: " + pack.getDir() + File.separator + "version");
 
         File verFile = new File(installPath, pack.getDir() + File.separator + "version");
 
         if (Settings.getSettings().isForceUpdateEnabled() && verFile.exists()) {
             verFile.delete();
-            if (debugVerbose) {
-                Logger.logInfo(debugTag + "Pack found and delete attempted");
-            }
+            Logger.logDebug("Pack found and delete attempted");
         }
 
         if (Settings.getSettings().isForceUpdateEnabled() || !verFile.exists() || checkVersion(verFile, pack)) {
@@ -812,9 +806,7 @@ public class LaunchFrame extends JFrame {
             }
 
             if (!initializeMods()) {
-                if (debugVerbose) {
-                    Logger.logInfo(debugTag + "initializeMods: Failed to Init mods! Aborting to menu.");
-                }
+                Logger.logDebug("initializeMods: Failed to Init mods! Aborting to menu.");
                 enableObjects();
                 return;
             }
@@ -1164,13 +1156,10 @@ public class LaunchFrame extends JFrame {
             source = new File(temppath, "ModPacks/" + packDir + "/minecraft");
         }
 
-        if (Settings.getSettings().getDebugLauncher()) {
-            final String debugTag = "debug: installMods: ";
-            Logger.logInfo(debugTag + "install path: " + installpath);
-            Logger.logInfo(debugTag + "temp path: " + temppath);
-            Logger.logInfo(debugTag + "source: " + source);
-            Logger.logInfo(debugTag + "packDir: " + packDir);
-        }
+        Logger.logDebug("install path: " + installpath);
+        Logger.logDebug("temp path: " + temppath);
+        Logger.logDebug("source: " + source);
+        Logger.logDebug("packDir: " + packDir);
 
         FileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"));
         FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"), new File(installpath, packDir + "/instMods/"));
@@ -1286,12 +1275,7 @@ public class LaunchFrame extends JFrame {
      * @return boolean - represents whether it was successful in initializing mods
      */
     private boolean initializeMods () {
-        boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-        final String debugTag = "debug: initializeMods: ";
-
-        if (debugVerbose) {
-            Logger.logInfo(debugTag + "pack dir...");
-        }
+        Logger.logDebug("pack dir...");
         Logger.logInfo(ModPack.getSelectedPack().getDir());
         ModManager man = new ModManager(new JFrame(), true);
         man.setVisible(true);
@@ -1306,9 +1290,7 @@ public class LaunchFrame extends JFrame {
             installMods(ModPack.getSelectedPack().getDir());
             man.cleanUp();
         } catch (IOException e) {
-            if (debugVerbose) {
-                Logger.logInfo(debugTag + "Exception: " + e);
-            }
+            Logger.logDebug("Exception: ", e);
         }
         return true;
     }

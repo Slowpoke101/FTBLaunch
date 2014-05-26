@@ -44,6 +44,10 @@ public class Logger {
         log(new LogEntry().level(level).message(message).cause(t));
     }
 
+    public static void logDebug (String message) {
+        logDebug(message, null);
+    }
+
     public static void logInfo (String message) {
         logInfo(message, null);
     }
@@ -54,6 +58,10 @@ public class Logger {
 
     public static void logError (String message) {
         logError(message, null);
+    }
+
+    public static void logDebug (String message, Throwable t) {
+        log(message,  LogLevel.DEBUG, t);
     }
 
     public static void logInfo (String message, Throwable t) {

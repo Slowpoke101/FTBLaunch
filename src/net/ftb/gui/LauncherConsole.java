@@ -68,6 +68,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private LogType logType = LogType.MINIMAL;
     private final JComboBox logSourceComboBox;
     private LogSource logSource = LogSource.ALL;
+    private LogLevel logLevel = LogLevel.INFO;
     private YNDialog yn;
     private JButton killMCButton;
 
@@ -136,6 +137,20 @@ public class LauncherConsole extends JFrame implements ILogListener {
         logTypeComboBox.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent arg0) {
                 logType = (LogType) logTypeComboBox.getSelectedItem();
+
+                // setup loglevel. If DEBUG selected show also DEBUG messages
+                switch (logType) {
+                case MINIMAL:
+                    logLevel=LogLevel.INFO;
+                    break;
+                case EXTENDED:
+                    logLevel=LogLevel.INFO;
+                    break;
+                case DEBUG:
+                    logLevel=LogLevel.DEBUG;
+                    break;
+                }
+
                 refreshLogs();
             }
         });
@@ -225,7 +240,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
         List<LogEntry> entries = Logger.getLogEntries();
         StringBuilder logHTML = new StringBuilder();
         for (LogEntry entry : entries) {
-            if (logSource == LogSource.ALL || entry.source == logSource) {
+            // select only messages we want
+            if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))) {
                 logHTML.append(getMessage(entry));
             }
         }
@@ -259,6 +275,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
             color = "yellow";
         case INFO:
             break;
+        case DEBUG:
+            break;
         case UNKNOWN:
             break;
         default:
@@ -278,7 +296,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
     
     @Override
     public void onLogEvent (LogEntry entry) {
-        if (logSource == LogSource.ALL || entry.source == logSource) {
+        // drop unneeded messages as soon as possible
+        if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))){
             final LogEntry entry_ = entry;
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {

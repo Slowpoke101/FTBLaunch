@@ -96,12 +96,10 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                         hashType= "md5";
                     }
 
-                    if (Settings.getSettings().getDebugLauncher()) {
-                        Logger.logInfo(asset.name);
-                        Logger.logInfo("RemoteSize: " + remoteSize);
-                        Logger.logInfo("asset.hash: " + asset.hash);
-                        Logger.logInfo("remoteHash: " + remoteHash);
-                    }
+                    Logger.logDebug(asset.name);
+                    Logger.logDebug("RemoteSize: " + remoteSize);
+                    Logger.logDebug("asset.hash: " + asset.hash);
+                    Logger.logDebug("remoteHash: " + remoteHash);
 
                     // existing file are only added when we want to check file integrity with force update
                     if (asset.local.exists()) {
