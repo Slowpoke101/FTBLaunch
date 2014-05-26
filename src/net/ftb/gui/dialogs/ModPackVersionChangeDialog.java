@@ -36,6 +36,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.tools.ModManager;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class ModPackVersionChangeDialog extends JDialog {
@@ -127,11 +128,7 @@ public class ModPackVersionChangeDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, backupSave, hSpring, SpringLayout.WEST, panel);
 
 
-        columnWidth = Spring.width(messageLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(versionLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(backupCFG));
-        columnWidth = Spring.max(columnWidth, Spring.width(backupSave));
+        columnWidth = SwingUtils.springMax(Spring.width(messageLbl), Spring.width(updateLbl), Spring.width(versionLbl), Spring.width(backupCFG), Spring.width(backupSave));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -156,29 +153,19 @@ public class ModPackVersionChangeDialog extends JDialog {
         vSpring = Spring.constant(10);
 
         layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-
-        vSpring = Spring.sum(vSpring, Spring.constant(15));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(messageLbl), Spring.constant(15));
 
         layout.putConstraint(SpringLayout.NORTH, versionLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = Spring.sum(vSpring, Spring.height(versionLbl));
-
-        vSpring = Spring.sum(vSpring, Spring.constant(15));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(versionLbl), Spring.constant(15));
 
         layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
-
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(updateLbl), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, backupCFG, vSpring, SpringLayout.NORTH, panel);
-        vSpring = Spring.sum(vSpring, Spring.height(backupCFG));
-
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(backupCFG), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, backupSave, vSpring, SpringLayout.NORTH, panel);
-        vSpring = Spring.sum(vSpring, Spring.height(backupSave));
-
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(backupSave), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
@@ -186,8 +173,7 @@ public class ModPackVersionChangeDialog extends JDialog {
         rowHeight = Spring.height(update);
         rowHeight = Spring.max(rowHeight, Spring.height(abort));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

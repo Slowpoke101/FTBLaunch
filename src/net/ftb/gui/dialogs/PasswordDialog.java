@@ -30,6 +30,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class PasswordDialog extends JDialog {
@@ -76,13 +77,11 @@ public class PasswordDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.WEST, passwordLbl, hSpring, SpringLayout.WEST, panel);
 
-        hSpring = Spring.sum(hSpring, Spring.width(passwordLbl));
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, Spring.width(passwordLbl), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
 
-        hSpring = Spring.sum(hSpring, Spring.width(password));
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, Spring.width(password), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
@@ -96,16 +95,13 @@ public class PasswordDialog extends JDialog {
         layout.putConstraint(SpringLayout.BASELINE, passwordLbl, 0, SpringLayout.BASELINE, password);
         layout.putConstraint(SpringLayout.NORTH, password, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(passwordLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(password));
+        rowHeight = Spring.max(Spring.height(passwordLbl), Spring.height(password));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, login, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(login));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(login), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

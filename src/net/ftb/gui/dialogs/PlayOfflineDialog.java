@@ -33,6 +33,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class PlayOfflineDialog extends JDialog {
@@ -103,13 +104,9 @@ public class PlayOfflineDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.WEST, text, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(play);
-        columnWidth = Spring.sum(columnWidth, Spring.constant(10));
-        columnWidth = Spring.sum(columnWidth, Spring.width(abort));
-        columnWidth = Spring.max(columnWidth, Spring.width(text));
+        columnWidth = SwingUtils.springSum(Spring.width(play), Spring.constant(10), Spring.width(abort), Spring.width(text));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
@@ -123,17 +120,14 @@ public class PlayOfflineDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, text, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(text));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(text), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, play, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(play);
-        rowHeight = Spring.max(rowHeight, Spring.height(abort));
+        rowHeight = Spring.max(Spring.height(play), Spring.height(abort));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

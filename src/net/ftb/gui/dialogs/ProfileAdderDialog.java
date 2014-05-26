@@ -36,6 +36,7 @@ import net.ftb.data.UserManager;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
@@ -197,24 +198,18 @@ public class ProfileAdderDialog extends JDialog {
             columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
 
         }
-        columnWidth = Spring.max(columnWidth, Spring.width(passwordLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(nameLbl));
+        columnWidth = SwingUtils.springMax(columnWidth, Spring.width(passwordLbl), Spring.width(nameLbl));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, username, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, name, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, savePassword, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(username);
-        columnWidth = Spring.max(columnWidth, Spring.width(password));
-        columnWidth = Spring.max(columnWidth, Spring.width(name));
-        columnWidth = Spring.max(columnWidth, Spring.width(savePassword));
+        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name),Spring.width(savePassword));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
@@ -228,11 +223,9 @@ public class ProfileAdderDialog extends JDialog {
         layout.putConstraint(SpringLayout.BASELINE, usernameLbl, 0, SpringLayout.BASELINE, username);
         layout.putConstraint(SpringLayout.NORTH, username, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(usernameLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(username));
+        rowHeight = Spring.max(Spring.height(usernameLbl), Spring.height(username));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, passwordLbl, 0, SpringLayout.BASELINE, password);
         layout.putConstraint(SpringLayout.NORTH, password, vSpring, SpringLayout.NORTH, panel);
@@ -240,27 +233,22 @@ public class ProfileAdderDialog extends JDialog {
         rowHeight = Spring.height(passwordLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(password));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, nameLbl, 0, SpringLayout.BASELINE, name);
         layout.putConstraint(SpringLayout.NORTH, name, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(nameLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(name));
+        rowHeight = Spring.max(Spring.height(nameLbl), Spring.height(name));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, savePassword, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(savePassword));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(savePassword), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, add, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(add));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(add), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

@@ -35,6 +35,7 @@ import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.locale.I18N;
+import net.ftb.util.SwingUtils;
 
 public class MapFilterDialog extends JDialog {
     private JLabel typeLbl;
@@ -150,20 +151,15 @@ public class MapFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, originLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(typeLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(originLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(compatiblePackLbl));
+        columnWidth = SwingUtils.springMax(Spring.width(typeLbl), Spring.width(originLbl), Spring.width(compatiblePackLbl));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, type, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, origin, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(type);
-        columnWidth = Spring.max(columnWidth, Spring.width(origin));
-        columnWidth = Spring.max(columnWidth, Spring.width(compatiblePack));
+        columnWidth = SwingUtils.springMax(Spring.width(type), Spring.width(origin), Spring.width(compatiblePack));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -191,20 +187,16 @@ public class MapFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.BASELINE, typeLbl, 0, SpringLayout.BASELINE, type);
         layout.putConstraint(SpringLayout.NORTH, type, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(typeLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(type));
+        rowHeight = Spring.max(Spring.height(typeLbl), Spring.height(type));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, originLbl, 0, SpringLayout.BASELINE, origin);
         layout.putConstraint(SpringLayout.NORTH, origin, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(originLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(origin));
+        rowHeight = Spring.max(Spring.height(originLbl), Spring.height(origin));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl, 0, SpringLayout.BASELINE, compatiblePack);
         layout.putConstraint(SpringLayout.NORTH, compatiblePack, vSpring, SpringLayout.NORTH, panel);
@@ -212,22 +204,18 @@ public class MapFilterDialog extends JDialog {
         rowHeight = Spring.height(compatiblePackLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(search);
-        rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(apply));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

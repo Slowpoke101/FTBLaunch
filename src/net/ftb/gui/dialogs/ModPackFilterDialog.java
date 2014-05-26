@@ -35,6 +35,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
+import net.ftb.util.SwingUtils;
 
 public class ModPackFilterDialog extends JDialog {
     private JLabel availabilityLbl;
@@ -194,17 +195,14 @@ public class ModPackFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, mcVersionLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, availabilityLbl, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(mcVersionLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(availabilityLbl));
+        columnWidth = Spring.max(Spring.width(mcVersionLbl), Spring.width(availabilityLbl));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, mcVersion, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, availability, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(mcVersion);
-        columnWidth = Spring.max(columnWidth, Spring.width(availability));
+        columnWidth = Spring.max(Spring.width(mcVersion), Spring.width(availability));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -231,37 +229,28 @@ public class ModPackFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.BASELINE, mcVersionLbl, 0, SpringLayout.BASELINE, mcVersion);
         layout.putConstraint(SpringLayout.NORTH, mcVersion, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(mcVersionLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(mcVersion));
+        rowHeight = Spring.max(Spring.height(mcVersionLbl), Spring.height(mcVersion));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
-
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, availabilityLbl, 0, SpringLayout.BASELINE, availability);
         layout.putConstraint(SpringLayout.NORTH, availability, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(availabilityLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(availability));
+        rowHeight = Spring.max(Spring.height(availabilityLbl), Spring.height(availability));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
+        vSpring = SwingUtils.springSum(vSpring, rowHeight);
         vSpring = Spring.sum(vSpring, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(search);
-        rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(apply));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

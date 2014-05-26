@@ -22,6 +22,7 @@ import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.events.ModPackListener;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
@@ -236,7 +237,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
      * GUI Code to add a modpack to the selection
      */
     public static void addPack (ModPack pack) {
-        if(!pack.isThirdPartyTab()|| pack.getParentXml().contains("modpacks.xml")) {//we ignore any 3rd party in main modpacks xml those will be removed once enough ppl update
+        if(!pack.isThirdPartyTab()|| pack.getParentXml().contains(Locations.MODPACKXML)) {//we ignore any 3rd party in main modpacks xml those will be removed once enough ppl update
             return;
         }
         if (!modPacksAdded) {
@@ -298,7 +299,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 addPack(pack);
-                if(pack.isThirdPartyTab() && !pack.getParentXml().contains("modpacks.xml")){
+                if(pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)){
                     Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack.getName() + ")");
                     thirdPacks++;
                     if (!currentPacks.isEmpty()) {
@@ -308,9 +309,8 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane, ModPackList
                         packMapping.clear();
                         int count = 0;
                         for(ModPack pack: ModPack.getPackArray()){
-                            if(pack.isThirdPartyTab() && !pack.getParentXml().contains("modpacks.xml")) {
+                            if(pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)) {
                                 packMapping.put(count, pack.getIndex());
-                                //Logger.logError(pack.getName() + " " + count + ":"+pack.getIndex());
                                 count++;
                             }
                         }

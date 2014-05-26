@@ -36,6 +36,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
@@ -146,17 +147,14 @@ public class TexturePackFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, resolutionLbl, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(compatiblePackLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(resolutionLbl));
+        columnWidth = Spring.max(Spring.width(compatiblePackLbl), Spring.width(resolutionLbl));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, resolution, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(compatiblePack);
-        columnWidth = Spring.max(columnWidth, Spring.width(resolution));
+        columnWidth = Spring.max(Spring.width(compatiblePack), Spring.width(resolution));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -183,34 +181,27 @@ public class TexturePackFilterDialog extends JDialog {
         layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl, 0, SpringLayout.BASELINE, compatiblePack);
         layout.putConstraint(SpringLayout.NORTH, compatiblePack, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(compatiblePackLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
+        rowHeight = Spring.max(Spring.height(compatiblePackLbl), Spring.height(compatiblePack));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.BASELINE, resolutionLbl, 0, SpringLayout.BASELINE, resolution);
         layout.putConstraint(SpringLayout.NORTH, resolution, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(resolutionLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(resolution));
+        rowHeight = Spring.max(Spring.height(resolutionLbl), Spring.height(resolution));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(search);
-        rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(apply));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

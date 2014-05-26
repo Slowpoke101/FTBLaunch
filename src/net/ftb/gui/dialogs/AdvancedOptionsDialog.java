@@ -45,6 +45,7 @@ import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.SwingUtils;
 
 public class AdvancedOptionsDialog extends JDialog {
     private JButton exit;
@@ -240,14 +241,9 @@ public class AdvancedOptionsDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, snooper, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(downloadLocationLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(javaPathLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(additionalJavaOptionsLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowSizeLbl));
-        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosLbl));
+        columnWidth = SwingUtils.springMax(Spring.width(downloadLocationLbl),Spring.width(javaPathLbl), Spring.width(additionalJavaOptionsLbl), Spring.width(mcWindowSizeLbl), Spring.width(mcWindowPosLbl) );
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth,Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.WEST, downloadLocation, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, javaPath, hSpring, SpringLayout.WEST, panel);
@@ -304,8 +300,7 @@ public class AdvancedOptionsDialog extends JDialog {
         rowHeight = Spring.height(downloadLocationLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.BASELINE, javaPathLbl, 0, SpringLayout.BASELINE, javaPath);
         layout.putConstraint(SpringLayout.NORTH, javaPath, vSpring, SpringLayout.NORTH, panel);
@@ -313,8 +308,7 @@ public class AdvancedOptionsDialog extends JDialog {
         rowHeight = Spring.height(javaPathLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(javaPath));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.BASELINE, additionalJavaOptionsLbl, 0, SpringLayout.BASELINE, additionalJavaOptions);
         layout.putConstraint(SpringLayout.NORTH, additionalJavaOptions, vSpring, SpringLayout.NORTH, panel);
@@ -322,54 +316,41 @@ public class AdvancedOptionsDialog extends JDialog {
         rowHeight = Spring.height(additionalJavaOptionsLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(additionalJavaOptions));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
         layout.putConstraint(SpringLayout.NORTH, mcWindowSizeWidth, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeSepLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
         layout.putConstraint(SpringLayout.NORTH, mcWindowSizeHeight, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(mcWindowSizeLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeWidth));
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeSepLbl));
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowSizeHeight));
+        rowHeight = SwingUtils.springMax(Spring.height(mcWindowSizeLbl), Spring.height(mcWindowSizeWidth), Spring.height(mcWindowSizeSepLbl), Spring.height(mcWindowSizeHeight));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.BASELINE, mcWindowPosLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
         layout.putConstraint(SpringLayout.NORTH, mcWindowPosX, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.BASELINE, mcWindowPosSepLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
         layout.putConstraint(SpringLayout.NORTH, mcWindowPosY, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(mcWindowPosLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosX));
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosSepLbl));
-        rowHeight = Spring.max(rowHeight, Spring.height(mcWindowPosY));
+        rowHeight = SwingUtils.springMax(Spring.height(mcWindowPosLbl), Spring.height(mcWindowPosX), Spring.height(mcWindowPosSepLbl), Spring.height(mcWindowPosY));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, autoMaxCheck, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(autoMaxCheck));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(autoMaxCheck), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, snooper, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(snooper));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(snooper), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, debugLauncherVerbose, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(debugLauncherVerbose));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(debugLauncherVerbose), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(exit));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(exit), Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

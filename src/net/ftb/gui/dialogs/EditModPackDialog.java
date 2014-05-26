@@ -48,6 +48,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
+import net.ftb.util.SwingUtils;
 
 public class EditModPackDialog extends JDialog {
     private JTabbedPane tabbedPane;
@@ -300,17 +301,14 @@ public class EditModPackDialog extends JDialog {
         rowHeight = Spring.height(enabledModsLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(disabledModsLbl));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
         layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 
         rowHeight = Spring.constant(320);
 
-        buttonRowHeight = Spring.scale(rowHeight, .5f);
-        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.height(enableMod)));
-        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.minus(Spring.constant(5)));
+        buttonRowHeight = SwingUtils.springSum(Spring.scale(rowHeight, .5f),Spring.minus(Spring.height(enableMod)), Spring.minus(Spring.constant(5)));
 
         layout.putConstraint(SpringLayout.SOUTH, enableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
 
@@ -328,11 +326,9 @@ public class EditModPackDialog extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, addMod, vSpring, SpringLayout.NORTH, formPnl);
         layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
 
-        rowHeight = Spring.height(addMod);
-        rowHeight = Spring.max(rowHeight, Spring.height(openFolder));
+        rowHeight = Spring.max(Spring.height(addMod), Spring.height(openFolder));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.SOUTH, formPnl, vSpring, SpringLayout.NORTH, formPnl);
 
@@ -346,9 +342,7 @@ public class EditModPackDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
         layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
 
-        columnWidth = Spring.width(enabledModsLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(disabledModsLbl));
-        columnWidth = Spring.max(columnWidth, Spring.constant(260));
+        columnWidth = SwingUtils.springMax(Spring.width(enabledModsLbl), Spring.width(disabledModsLbl),Spring.constant(260) );
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -361,8 +355,7 @@ public class EditModPackDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, enableMod, hSpring, SpringLayout.WEST, formPnl);
         layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
 
-        buttonColumnWidth = Spring.width(enableMod);
-        buttonColumnWidth = Spring.max(buttonColumnWidth, Spring.width(disableMod));
+        buttonColumnWidth = Spring.max(Spring.width(enableMod), Spring.width(disableMod));
 
         hSpring = Spring.sum(hSpring, buttonColumnWidth);
 

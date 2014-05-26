@@ -36,10 +36,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FileUtils;
-import net.ftb.util.OSUtils;
+import net.ftb.util.*;
 
 @SuppressWarnings("serial")
 public class PrivatePackDialog extends JDialog {
@@ -147,11 +144,7 @@ public class PrivatePackDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, remove, hSpring, SpringLayout.EAST, add);
         layout.putConstraint(SpringLayout.WEST, cancel, hSpring, SpringLayout.EAST, remove);
 
-        hSpring = Spring.sum(hSpring, Spring.width(add));
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-        hSpring = Spring.sum(hSpring, Spring.width(remove));
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-        hSpring = Spring.sum(hSpring, Spring.width(cancel));
+        hSpring = SwingUtils.springSum(hSpring, Spring.width(add), Spring.constant(10), Spring.width(remove), Spring.constant(10), Spring.width(cancel));
         hSpring = Spring.max(hSpring, Spring.width(modpackName));
 
         layout.putConstraint(SpringLayout.EAST, modpackName, hSpring, SpringLayout.WEST, panel);
@@ -171,24 +164,20 @@ public class PrivatePackDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, editorPane, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(editorPane));
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(editorPane), Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, modpackName, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(modpackName));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(modpackName), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, add, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, remove, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
 
         rowHeight = Spring.height(add);
-        rowHeight = Spring.max(rowHeight, Spring.height(remove));
-        rowHeight = Spring.max(rowHeight, Spring.height(cancel));
+        rowHeight = SwingUtils.springMax(rowHeight, Spring.height(remove), Spring.height(cancel));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

@@ -31,6 +31,7 @@ import javax.swing.SwingConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.tools.MapManager;
+import net.ftb.util.SwingUtils;
 
 public class MapOverwriteDialog extends JDialog {
     private JLabel messageLbl;
@@ -90,8 +91,7 @@ public class MapOverwriteDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, overwriteLbl, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(messageLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(overwriteLbl));
+        columnWidth = Spring.max(Spring.width(messageLbl), Spring.width(overwriteLbl));
 
         hSpring = Spring.sum(hSpring, columnWidth);
 
@@ -112,13 +112,11 @@ public class MapOverwriteDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-        vSpring = Spring.sum(vSpring, Spring.constant(5));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(messageLbl), Spring.constant(5));
 
         layout.putConstraint(SpringLayout.NORTH, overwriteLbl, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(overwriteLbl));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(overwriteLbl), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, overwrite, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
@@ -126,8 +124,7 @@ public class MapOverwriteDialog extends JDialog {
         rowHeight = Spring.height(overwrite);
         rowHeight = Spring.max(rowHeight, Spring.height(abort));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

@@ -33,6 +33,7 @@ import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.gui.panes.ThirdPartyPane;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class SearchDialog extends JDialog {
@@ -180,8 +181,7 @@ public class SearchDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, query, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(query));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(query), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
@@ -191,8 +191,7 @@ public class SearchDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.WEST, query, hSpring, SpringLayout.WEST, panel);
 
-        hSpring = Spring.sum(hSpring, Spring.width(query));
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, Spring.width(query), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 

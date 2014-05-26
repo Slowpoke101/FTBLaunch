@@ -41,6 +41,7 @@ import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
+import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class InstallDirectoryDialog extends JDialog {
@@ -129,8 +130,7 @@ public class InstallDirectoryDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, installPathLbl, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = Spring.width(installPathLbl);
-        columnWidth = Spring.sum(columnWidth, Spring.constant(5));
+        columnWidth = Spring.sum(Spring.width(installPathLbl), Spring.constant(5));
 
         layout.putConstraint(SpringLayout.WEST, installPath, Spring.sum(hSpring, columnWidth), SpringLayout.WEST, panel);
 
@@ -145,8 +145,7 @@ public class InstallDirectoryDialog extends JDialog {
         columnWidth = Spring.sum(columnWidth, Spring.width(installPathBrowse));
         columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
 
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
 
@@ -159,24 +158,19 @@ public class InstallDirectoryDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(messageLbl), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.BASELINE, installPathLbl, 0, SpringLayout.BASELINE, installPath);
         layout.putConstraint(SpringLayout.BASELINE, installPathBrowse, 0, SpringLayout.BASELINE, installPath);
         layout.putConstraint(SpringLayout.NORTH, installPath, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(installPathLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(installPath));
-        rowHeight = Spring.max(rowHeight, Spring.height(installPathBrowse));
+        rowHeight = SwingUtils.springMax(Spring.height(installPathLbl), Spring.height(installPath), Spring.height(installPathBrowse));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
 
         layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(apply));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

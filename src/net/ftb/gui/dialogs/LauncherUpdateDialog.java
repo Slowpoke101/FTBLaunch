@@ -33,6 +33,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
+import net.ftb.util.SwingUtils;
 
 public class LauncherUpdateDialog extends JDialog {
     private JLabel messageLbl;
@@ -148,17 +149,14 @@ public class LauncherUpdateDialog extends JDialog {
 
         layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = Spring.sum(vSpring, Spring.height(updateLbl));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(updateLbl), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
 
-        rowHeight = Spring.height(update);
-        rowHeight = Spring.max(rowHeight, Spring.height(abort));
+        rowHeight = Spring.max(Spring.height(update), Spring.height(abort));
 
-        vSpring = Spring.sum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
