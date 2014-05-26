@@ -44,8 +44,6 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
     protected File binDir;
     protected String authlibVersion;
     protected URL jarURLs;
-    protected boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-    protected String debugTag = "debug: AuthlibDLWorker: ";
 
     public AuthlibDLWorker(String DLFolder, String authver) {
         this.binDir = new File(DLFolder);
@@ -55,9 +53,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground () {
-        if (debugVerbose) {
-            Logger.logInfo(debugTag + "Loading Authlib...");
-        }
+        Logger.logDebug("Loading Authlib...");
         if (!binDir.exists())
             binDir.mkdirs();
         if (!downloadJars()) {
@@ -143,9 +139,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         while (!downloadSuccess && (attempt < attempts)) {
             try {
                 attempt++;
-                if (debugVerbose) {
-                    Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs.toURI());
-                }
+                Logger.logDebug("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs.toURI());
                 URLConnection dlConnection = jarURLs.openConnection();
                 if (dlConnection instanceof HttpURLConnection) {
                     dlConnection.setRequestProperty("Cache-Control", "no-cache, no-transform");

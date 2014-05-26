@@ -388,9 +388,7 @@ public class DownloadUtils extends Thread {
                         }
                         if (jso != null && jso.get("repoSplitCurse") != null) {
                             JsonElement e = jso.get("repoSplitCurse");
-                            if (Settings.getSettings().getDebugLauncher()) {
-                                Logger.logInfo("Balance Settings: " + e.getAsDouble() + " > " + choice);
-                            }
+                            Logger.logDebug("Balance Settings: " + e.getAsDouble() + " > " + choice);
                             if (e != null && e.getAsDouble() > choice) {
                                 Logger.logInfo("Balance has selected Automatic:CurseCDN");
                             } else {
