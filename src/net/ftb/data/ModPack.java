@@ -86,14 +86,14 @@ public class ModPack {
 
     /**
      * Adds modpack to the modpacks array
-     * @param pack - an array list of ModPack instances
+     * @param packs_ - an array list of ModPack instances
      */
-    public static void addPacks (ArrayList<ModPack> pack) {
+    public static void addPacks (ArrayList<ModPack> packs_) {
         synchronized (packs) {
-            for(ModPack p :packs){
+            for(ModPack p :packs_){
                 packs.add(p);
             }
-            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, pack));//MAKE SURE TO REMOVE FROM LISTENER!!
+            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
