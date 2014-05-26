@@ -19,6 +19,7 @@ package net.ftb.workers;
 import java.net.URL;
 
 import net.ftb.data.TexturePack;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
@@ -31,7 +32,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class TexturePackLoader extends Thread {
-    private static String TEXTUREPACKFILE;
 
     public TexturePackLoader() {
     }
@@ -40,8 +40,7 @@ public class TexturePackLoader extends Thread {
     public void run () {
         try {//TODO ASAP thread this!!!
             Logger.logInfo("loading texture pack information...");
-            TEXTUREPACKFILE = DownloadUtils.getStaticCreeperhostLink("texturepack.xml");
-            Document doc = AppUtils.downloadXML(new URL(TEXTUREPACKFILE));
+            Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.TEXTUREPACKXML)));
             if (doc == null) {
                 Logger.logError("Error: Could not load texture pack data!");
             }

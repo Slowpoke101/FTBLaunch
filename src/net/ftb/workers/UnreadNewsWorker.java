@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.ImageAndTextIcon;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
@@ -40,11 +41,10 @@ import net.ftb.log.Logger;
 public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
     @Override
     protected Integer doInBackground () {
-        //try{Thread.sleep(10000);}catch (Exception e){}
         int i = 0;
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
+            reader = new BufferedReader(new InputStreamReader(new URL(Locations.NEWSUPDATEPHP).openStream()));
             ArrayList<Long> timeStamps = new ArrayList<Long>();
             String s = reader.readLine();
             s = s.trim();

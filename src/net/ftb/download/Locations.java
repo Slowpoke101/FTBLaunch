@@ -45,4 +45,11 @@ public class Locations {
     public final static String MODPACKS ="modpacks/";
     public final static String PRIVATEPACKS ="privatepacks/";
     public final static String TEXTUREPACKS = "texturepacks/";
+
+    public final static String MAPXML = "maps.xml";
+    public final static String MODPACKXML = "modpacks.xml";
+    public final static String THIRDPARTYXML = "thirdparty.xml";
+    public final static String TEXTUREPACKXML= "texturepack.xml";
+    public final static String NEWSUPDATEPHP = "http://launcher.feed-the-beast.com/newsupdate.php";
+    public final static String FTBSITE = "http://www.feed-the-beast.com";
 }

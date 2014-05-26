@@ -19,6 +19,7 @@ package net.ftb.workers;
 import java.net.URL;
 
 import net.ftb.data.Map;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.log.Logger;
@@ -31,7 +32,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class MapLoader extends Thread {
-    private static String MAPFILE;
 
     public MapLoader() {
     }
@@ -40,8 +40,7 @@ public class MapLoader extends Thread {
     public void run () {
         try {//TODO ASAP THREAD THIS!!!
             Logger.logInfo("loading map information...");
-            MAPFILE = DownloadUtils.getStaticCreeperhostLink("maps.xml");
-            Document doc = AppUtils.downloadXML(new URL(MAPFILE));
+            Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.MAPXML)));
             if (doc == null) {
                 Logger.logError("Error: Could not load map data!");
             }

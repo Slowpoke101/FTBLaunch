@@ -39,6 +39,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static net.ftb.download.Locations.MODPACKXML;
+import static net.ftb.download.Locations.THIRDPARTYXML;
 
 public class ModpackLoader extends Thread {
     private ArrayList<String> xmlFiles = Lists.newArrayList();
@@ -51,8 +53,8 @@ public class ModpackLoader extends Thread {
     public void run () {
         //TODO ASAP thread this
         for (String xmlFile : xmlFiles) {
-            boolean privatePack = !xmlFile.equalsIgnoreCase("modpacks.xml") && !xmlFile.equalsIgnoreCase("thirdparty.xml");//this is for stuff that is stored under privatepacks on the repo
-            boolean isThirdParty = !xmlFile.equalsIgnoreCase("thirdparty.xml");
+            boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
+            boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
             try {
                 modPackFile.getParentFile().mkdirs();

@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import javax.swing.SwingWorker;
 
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -106,7 +107,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
 
     protected boolean downloadJars () {
         try {
-            jarURLs = new URL("https://libraries.minecraft.net/com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
+            jarURLs = new URL(Locations.mc_libs + "com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
         } catch (MalformedURLException e) {
             Logger.logError(e.getMessage(), e);
             return false;

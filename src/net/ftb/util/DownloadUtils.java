@@ -193,8 +193,9 @@ public class DownloadUtils extends Thread {
     }
 
     /**
-     * @param file - file on the repo
-     * @return boolean representing if the file exists 
+     * @param repoURL - URL on the repo
+     * @param fullDebug - should this dump the full cloudflare debug info in the console
+     * @return boolean representing if the file exists
      */
     public static boolean CloudFlareInspector (String repoURL, boolean fullDebug) {
         try {
