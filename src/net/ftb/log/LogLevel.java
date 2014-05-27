@@ -17,5 +17,9 @@
 package net.ftb.log;
 
 public enum LogLevel {
-    INFO, WARN, ERROR, UNKNOWN
+    DEBUG, INFO, WARN, ERROR, UNKNOWN;
+
+    public boolean includes(LogLevel other) {
+        return other.compareTo(this) >= 0;
+    }
 }

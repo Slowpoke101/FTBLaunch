@@ -196,9 +196,6 @@ public class ModManager extends JDialog {
         }
 
         protected boolean downloadModPack (String modPackName, String dir) {
-            boolean debugVerbose = Settings.getSettings().getDebugLauncher();
-            String debugTag = "debug: downloadModPack: ";
-
             Logger.logInfo("Downloading Mod Pack");
             TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Downloaded: " + modPackName + " v." + curVersion.replace('_', '.'));
             String dynamicLoc = OSUtils.getCacheStorageLocation();
@@ -207,12 +204,11 @@ public class ModManager extends JDialog {
             //clearModsFolder(pack);
             String baseLink = (pack.isPrivatePack() ? PRIVATEPACKS + dir + "/" + curVersion + "/" : MODPACKS + dir + "/" + curVersion + "/");
             baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
-            if (debugVerbose) {
-                Logger.logInfo(debugTag + "pack dir: " + dir);
-                Logger.logInfo(debugTag + "dynamicLoc: " + dynamicLoc);
-                Logger.logInfo(debugTag + "installPath: " + installPath);
-                Logger.logInfo(debugTag + "baseLink: " + baseLink);
-            }
+
+            Logger.logDebug("pack dir: " + dir);
+            Logger.logDebug("dynamicLoc: " + dynamicLoc);
+            Logger.logDebug("installPath: " + installPath);
+            Logger.logDebug("baseLink: " + baseLink);
             baseDynamic.mkdirs();
 
             String md5 = "";
@@ -240,12 +236,8 @@ public class ModManager extends JDialog {
                 if (!dir.equals("mojang_vanilla")
                         && ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic,
                                 modPackName), md5))) {
-                    if (debugVerbose) {
-                        Logger.logInfo(debugTag + "Extracting pack.");
-                    }
-                    if (debugVerbose) {
-                        Logger.logInfo(debugTag + "Purging mods, coremods, instMods");
-                    }
+                    Logger.logDebug("Extracting pack.");
+                    Logger.logDebug("Purging mods, coremods, instMods");
                     clearModsFolder(pack);
                     FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
                     FileUtils.delete(new File(installPath, dir + "/instMods/"));
@@ -262,9 +254,7 @@ public class ModManager extends JDialog {
                         }
                     }
 
-                    if (debugVerbose) {
-                        Logger.logInfo(debugTag + "Extracting pack.");
-                    }
+                    Logger.logDebug("Extracting pack.");
                     FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
                     if (pack.getBundledMap() && saveExists) {
                         try {
@@ -284,9 +274,7 @@ public class ModManager extends JDialog {
                     out.write(curVersion.replace("_", "."));
                     out.flush();
                     out.close();
-                    if (debugVerbose) {
-                        Logger.logInfo(debugTag + "Pack extracted, version tagged.");
-                    }
+                    Logger.logDebug("Pack extracted, version tagged.");
                     return true;
                 } else if (!dir.equals("mojang_vanilla")) {
                     ErrorUtils.tossError("Error downloading modpack!!!");
@@ -297,9 +285,7 @@ public class ModManager extends JDialog {
                     out.write(curVersion.replace("_", "."));
                     out.flush();
                     out.close();
-                    if (debugVerbose) {
-                        Logger.logInfo(debugTag + "Vanilla version tagged.");
-                    }
+                    Logger.logDebug("Vanilla version tagged.");
                     return true;
                 }
             } catch (IOException e) {
@@ -415,8 +401,8 @@ public class ModManager extends JDialog {
         for (String file : tempFolder.list()) {
             if (!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
                 try {
-                    if (Settings.getSettings().getDebugLauncher() || file.endsWith(".zip")) {
-                        Logger.logInfo("debug: retaining modpack file: " + tempFolder + File.separator + file);
+                    if (file.endsWith(".zip")) {
+                        Logger.logDebug("retaining modpack file: " + tempFolder + File.separator + file);
                     } else {
                         FileUtils.delete(new File(tempFolder, file));
                     }
