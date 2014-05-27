@@ -17,19 +17,16 @@
 package net.ftb.gui.panes;
 
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
@@ -45,7 +42,6 @@ import java.awt.event.ActionListener;
 public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
     @Getter
     private static ThirdPartyPane instance;
-    private static int thirdPacks = 0;
 
     public ThirdPartyPane() {
         super();

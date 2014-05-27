@@ -27,25 +27,21 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
@@ -54,7 +50,6 @@ import net.ftb.util.TrackerUtils;
 public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     @Getter
     private static FTBPacksPane instance;
-    private static int ftbPacks = 0;
 
     public FTBPacksPane() {
         super();

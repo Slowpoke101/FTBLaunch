@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractModPackPane extends JPanel {
     // container for packs. Upgraded by appPack()
     JPanel packs;
