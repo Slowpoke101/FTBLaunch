@@ -336,7 +336,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
                                         count++;
                                     }
                                 }
-
                             }
                             loaded = true;
                         }
@@ -345,34 +344,6 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
             }
         });
     }
-
-
-    /*@Override
-    public void onModPackAdded (ModPack pack) {
-        final ModPack pack_ = pack;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                addPack(pack_);
-                if(!pack_.isThirdPartyTab()) {
-                    Logger.logInfo("Adding FTB pack " + packPanels.size() + " (" + pack_.getName() + ")");
-                    ftbPacks++;
-                    if (!currentPacks.isEmpty()) {
-                        sortPacks();
-                    } else {
-                        updatePacks();
-                        packMapping.clear();
-                        int count = 0;
-                        for (ModPack pack : ModPack.getPackArray()) {
-                            if (!pack.isThirdPartyTab()) {
-                                packMapping.put(count, pack.getIndex());
-                                count++;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }*/
 
     public static void sortPacks() {
         packPanels.clear();

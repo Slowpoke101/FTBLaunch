@@ -338,33 +338,6 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
         });
     }
 
-  /*  @Override
-    public void onModPackAdded (final ModPack pack) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                addPack(pack);
-                if(pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)){
-                    Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + pack.getName() + ")");
-                    thirdPacks++;
-                    if (!currentPacks.isEmpty()) {
-                        sortPacks();
-                    } else {
-                        updatePacks();
-                        packMapping.clear();
-                        int count = 0;
-                        for(ModPack pack: ModPack.getPackArray()){
-                            if(pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)) {
-                                packMapping.put(count, pack.getIndex());
-                                count++;
-                            }
-                        }
-
-                    }
-                }
-            }
-        });
-    }*/
-
     public static void sortPacks() {
         packPanels.clear();
         packs.removeAll();
