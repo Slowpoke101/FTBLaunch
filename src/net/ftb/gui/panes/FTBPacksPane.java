@@ -224,4 +224,5 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     String getLastPack() {
         return Settings.getSettings().getLastFTBPack();
     }
+    String getPaneShortName() {return "FTB";}
 }

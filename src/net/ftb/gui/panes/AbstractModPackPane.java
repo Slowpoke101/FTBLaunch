@@ -40,7 +40,7 @@ public abstract class AbstractModPackPane extends JPanel {
     JComboBox version;
     int selectedPack = 0;
     boolean modPacksAdded = false;
-    // pack hashes. Upfated by updateDatas()
+    // pack hashes. Updated by updateDatas()
     HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
     HashMap<Integer, Integer> packMapping = Maps.newHashMap();
 
@@ -134,7 +134,7 @@ public abstract class AbstractModPackPane extends JPanel {
                             if (filterForTab(p)) {
                                 addPack(p);
                                 //TODO: fix
-                                Logger.logInfo("Adding pack " + packPanels.size() + " (" + p.getName() + ")");
+                                Logger.logInfo("Adding " + getPaneShortName() + " Pack: " + packPanels.size() + " (" + p.getName() + ")");
                                 doneWork = true;
                                 numberOfPacks++;
                             }
@@ -289,4 +289,5 @@ public abstract class AbstractModPackPane extends JPanel {
 
     abstract boolean filterForTab(ModPack pack);
     abstract String getLastPack();
+    abstract String getPaneShortName();
 }
