@@ -182,7 +182,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
         killMCButton = new JButton(I18N.getLocaleString("KILL_MC"));
         killMCButton.setEnabled(false);
-        killMCButton.setVisible(false);
+        killMCButton.setVisible(true);
         killMCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -283,7 +283,6 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
     public void minecraftStarted() {
         killMCButton.setEnabled(true);
-        killMCButton.setVisible(true);
     }
     
     public void minecraftStopped() {

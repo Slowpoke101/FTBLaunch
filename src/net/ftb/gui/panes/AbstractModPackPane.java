@@ -143,9 +143,10 @@ public abstract class AbstractModPackPane extends JPanel {
                         if (doneWork) {
                             if (!currentPacks.isEmpty()) {
                                 updateDatas();
-                            } else {
                                 updatePacks();
+                            } else {
                                 updateDatas();
+                                updatePacks();
                             }
                             loaded = true;
                         }
@@ -192,6 +193,7 @@ public abstract class AbstractModPackPane extends JPanel {
                 counter++;
             }
         }
+        updateDatas();
         updatePacks();
     }
 
@@ -217,7 +219,7 @@ public abstract class AbstractModPackPane extends JPanel {
                             + pack.getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
-                    if (ModPack.getSelectedPack(false).getServerUrl().equals("") || ModPack.getSelectedPack(false).getServerUrl() == null) {
+                    if (ModPack.getSelectedPack(isFTB()).getServerUrl().equals("") || ModPack.getSelectedPack(isFTB()).getServerUrl() == null) {
                         server.setEnabled(false);
                     } else {
                         server.setEnabled(true);
@@ -291,4 +293,5 @@ public abstract class AbstractModPackPane extends JPanel {
     abstract boolean filterForTab(ModPack pack);
     abstract String getLastPack();
     abstract String getPaneShortName();
+    abstract boolean isFTB();
 }
