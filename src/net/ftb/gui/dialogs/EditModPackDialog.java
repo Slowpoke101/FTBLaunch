@@ -71,7 +71,7 @@ public class EditModPackDialog extends JDialog {
 
     private List<String> enabledMods;
     private List<String> disabledMods;
-    private int mcversion = 000;
+    private int mcversion = 0;
 
     private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
     private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");

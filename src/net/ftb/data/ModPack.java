@@ -198,8 +198,8 @@ public class ModPack {
         this.hasCustomTP = customTP;
         String[] tempJRE = minJRE.split("\\.");
         List<Integer> tmpIJre = Lists.newArrayList();
-        for (int i = 0; i < tempJRE.length; i++) {
-            tmpIJre.add(Integer.parseInt(tempJRE[i]));
+        for (String aTempJRE : tempJRE) {
+            tmpIJre.add(Integer.parseInt(aTempJRE));
         }
         this.minJRE = Ints.toArray(tmpIJre);
         if (!animation.isEmpty()) {

@@ -37,7 +37,6 @@ public class ChooseDir extends JFrame implements ActionListener {
     private OptionsPane optionsPane;
     private EditModPackDialog editMPD;
     private InstallDirectoryDialog installDialog;
-    private String choosertitle = "Please select an install location";
 
     public ChooseDir(OptionsPane optionsPane) {
         super();
@@ -61,6 +60,7 @@ public class ChooseDir extends JFrame implements ActionListener {
     @Override
     public void actionPerformed (ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
+        String choosertitle = "Please select an install location";
         if (optionsPane != null) {
             chooser.setCurrentDirectory(new File(Settings.getSettings().getInstallPath()));
             chooser.setDialogTitle(choosertitle);

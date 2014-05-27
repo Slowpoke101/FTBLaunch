@@ -29,7 +29,6 @@ import java.net.URLConnection;
 
 import javax.swing.SwingWorker;
 
-import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
@@ -94,7 +93,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         try {
             Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
-            method.invoke(sysloader, new Object[] { u });
+            method.invoke(sysloader, u);
         } catch (Throwable t) {
             Logger.logWarn(t.getMessage(), t);
             throw new IOException("Error, could not add URL to system classloader");
@@ -177,10 +176,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 Logger.logWarn("Connection failed, trying again", e);
             }
         }
-        if (!downloadSuccess) {
-            return false;
-        }
-        return true;
+        return downloadSuccess;
     }
 
     protected String getFilename (URL url) {

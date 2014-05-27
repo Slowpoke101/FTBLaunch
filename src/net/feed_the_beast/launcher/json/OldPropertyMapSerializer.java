@@ -17,9 +17,9 @@ public class OldPropertyMapSerializer implements JsonSerializer<PropertyMap> {
     @Override
     public JsonElement serialize (PropertyMap src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject out = new JsonObject();
-        for (String key : ((ForwardingMultimap<String, Property>) src).keySet()) {
+        for (String key : src.keySet()) {
             JsonArray jsa = new JsonArray();
-            for (Property p : ((ForwardingMultimap<String, Property>) src).get(key)) {
+            for (Property p : src.get(key)) {
                 jsa.add(new JsonPrimitive(p.getValue()));
             }
             out.add(key, jsa);

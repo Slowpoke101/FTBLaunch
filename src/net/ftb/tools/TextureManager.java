@@ -81,7 +81,7 @@ public class TextureManager extends JDialog {
 
             String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir))
                     .replace(".", "_");
-            String packStr = new String();
+            String packStr = "";
             if (mcversion > 160)
                 packStr = "";
             else
@@ -164,7 +164,7 @@ public class TextureManager extends JDialog {
             int mcversion = Integer.parseInt(pack.getMcVersion().replace(".", ""));
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();
-            String packStr = new String();
+            String packStr = "";
             if (mcversion > 160)
                 packStr = "";
             else
@@ -250,7 +250,7 @@ public class TextureManager extends JDialog {
                         if (texturePackFile.exists()) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
                             if (!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
-                                String packStr = new String();
+                                String packStr = "";
                                 if (mcversion > 160)
                                     packStr = "";
                                 else

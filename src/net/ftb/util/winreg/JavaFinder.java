@@ -28,7 +28,7 @@ public class JavaFinder {
      *               or WinRegistry.KEY_WOW64_64KEY to force access to 64-bit registry view
      * @param previous: Insert all entries from this list at the beggining of the results
      *************************************************************************/
-    private static List<String> searchRegistry (String key, int wow64, List<String> previous) {
+    private static List<String> searchRegistry (String key, int wow64, final List<String> previous) {
         List<String> result = previous;
         try {
             List<String> entries = WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, key, wow64);
@@ -136,9 +136,9 @@ public class JavaFinder {
         boolean isOS64 = OSUtils.is64BitWindows();
 
         List<JavaInfo> javas = JavaFinder.findJavas();
-        for (int i = 0; i < javas.size(); i++) {
-            if (javas.get(i).is64bits == isOS64)
-                return javas.get(i).path;
+        for (JavaInfo java : javas) {
+            if (java.is64bits == isOS64)
+                return java.path;
         }
         return null;
     }
@@ -155,31 +155,31 @@ public class JavaFinder {
             List<JavaInfo> java64 = new ArrayList<JavaInfo>();
 
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
-            for (int i = 0; i < javas.size(); i++) {
-                Logger.logInfo(javas.get(i).toString());
-                if(javas.get(i).isJava8()){
+            for (JavaInfo java : javas) {
+                Logger.logInfo(java.toString());
+                if (java.isJava8()) {
                     java8Found = true;
                 }
-                if(javas.get(i).supportedVersion) { 
-                    if (preferred == null && javas.get(i) != null)
-                        preferred = javas.get(i);
-                    if (javas.get(i).is64bits)
-                        java64.add(javas.get(i));
+                if (java.supportedVersion) {
+                    if (preferred == null && java != null)
+                        preferred = java;
+                    if (java.is64bits)
+                        java64.add(java);
                     else
-                        java32.add(javas.get(i));
+                        java32.add(java);
                 }
             }
 
             if (java64.size() > 0) {
-                for (int i = 0; i < java64.size(); i++) {
-                    if (!preferred.is64bits || java64.get(i).compareTo(preferred) == 1)
-                        preferred = java64.get(i);
+                for (JavaInfo aJava64 : java64) {
+                    if (!preferred.is64bits || aJava64.compareTo(preferred) == 1)
+                        preferred = aJava64;
                 }
             }
             if (java32.size() > 0) {
-                for (int i = 0; i < java32.size(); i++) {
-                    if (!preferred.is64bits && java32.get(i).compareTo(preferred) == 1)
-                        preferred = java32.get(i);
+                for (JavaInfo aJava32 : java32) {
+                    if (!preferred.is64bits && aJava32.compareTo(preferred) == 1)
+                        preferred = aJava32;
                 }
             }
             Logger.logInfo("Preferred: " + String.valueOf(preferred));

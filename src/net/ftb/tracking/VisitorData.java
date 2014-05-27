@@ -41,8 +41,7 @@ public class VisitorData {
     }
 
     private static long now () {
-        long now = System.currentTimeMillis() / 1000L;
-        return now;
+        return System.currentTimeMillis() / 1000L;
     }
 
     public int getVisitorId () {

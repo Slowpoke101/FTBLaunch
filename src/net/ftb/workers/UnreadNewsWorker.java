@@ -21,15 +21,11 @@ import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.ImageAndTextIcon;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
 

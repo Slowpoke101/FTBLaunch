@@ -27,10 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.URI;
 import java.util.List;
 
@@ -48,7 +45,6 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import net.ftb.data.Settings;
 import net.ftb.gui.dialogs.YNDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.ILogListener;

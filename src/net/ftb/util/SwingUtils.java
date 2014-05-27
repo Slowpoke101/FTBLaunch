@@ -11,8 +11,9 @@ public class SwingUtils {
      */
     public static Spring springSum(int minimumSize, Spring... spr){
         Spring ret = Spring.constant(minimumSize);
-        for(int i = 0; i < spr.length; i++){
-        ret = ret.sum(ret,spr[i]);}
+        for (Spring aSpr : spr) {
+            ret = ret.sum(ret, aSpr);
+        }
         return ret;
     }
     /*
@@ -22,8 +23,9 @@ public class SwingUtils {
  */
     public static Spring springSum(Spring base, Spring... spr){
         Spring ret = base;
-        for(int i = 0; i < spr.length; i++){
-            ret = ret.sum(ret,spr[i]);}
+        for (Spring aSpr : spr) {
+            ret = ret.sum(ret, aSpr);
+        }
         return ret;
     }
 
@@ -34,8 +36,9 @@ public class SwingUtils {
  */
     public static Spring springMax(Spring base, Spring... spr){
         Spring ret = base;
-        for(int i = 0; i < spr.length; i++){
-            ret = ret.max(ret,spr[i]);}
+        for (Spring aSpr : spr) {
+            ret = ret.max(ret, aSpr);
+        }
         return ret;
     }
 

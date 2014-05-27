@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;

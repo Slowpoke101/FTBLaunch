@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Properties;
 
 import net.ftb.log.Logger;

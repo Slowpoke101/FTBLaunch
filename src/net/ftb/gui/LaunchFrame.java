@@ -79,7 +79,6 @@ import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.*;
-import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.LogEntry;
@@ -390,7 +389,7 @@ public class LaunchFrame extends JFrame {
                 };
                 updateChecker.execute();
                 LoadingDialog.setProgress(180);
-            };
+            }
         });
     }
 
@@ -443,7 +442,8 @@ public class LaunchFrame extends JFrame {
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-        String[] dropdown = ObjectUtils.concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
+        ArrayList<String> var = UserManager.getNames();
+        String[] dropdown = ObjectUtils.concatenateArrays(dropdown_, var.toArray(new String[var.size()]));
         users = new JComboBox(dropdown);
         if (Settings.getSettings().getLastUser() != null) {
             for (int i = 0; i < dropdown.length; i++) {
@@ -746,7 +746,6 @@ public class LaunchFrame extends JFrame {
                     return;
                 }//if user doesn't want offline mode
                 enableObjects();
-                return;
             }
         };
         loginWorker.execute();
@@ -818,7 +817,6 @@ public class LaunchFrame extends JFrame {
             isLegacy = false;
         }
         setupNewStyle(installPath, pack, isLegacy);
-            return;
     }
 
     private void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy) {
@@ -1179,7 +1177,8 @@ public class LaunchFrame extends JFrame {
             userManager.write();
         } catch (IOException e) {
         }
-        String[] usernames = ObjectUtils.concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[]{}));
+        ArrayList<String> var = UserManager.getNames();
+        String[] usernames = ObjectUtils.concatenateArrays(dropdown_, var.toArray(new String[var.size()]));
         users.removeAllItems();
         for (int i = 0; i < usernames.length; i++) {
             users.addItem(usernames[i]);

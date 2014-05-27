@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -101,9 +102,7 @@ public class TexturePack {
         logoName = logo;
         imageName = image;
         String[] tmp = compatible.split(",");
-        for (String s : tmp) {
-            this.compatible.add(s);
-        }
+        Collections.addAll(this.compatible, tmp);
         this.info = info;
         this.resolution = resolution;
         for (Iterator<String> it = this.compatible.iterator(); it.hasNext();) {

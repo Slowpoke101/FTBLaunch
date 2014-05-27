@@ -1,7 +1,5 @@
 package net.ftb.download.workers;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import lombok.Getter;
 
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.info.DownloadInfo.DLType;
-import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
@@ -38,12 +35,11 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        for (int x = 0; x < downloads.size(); x++) {
+        for (DownloadInfo download : downloads) {
             if (isCancelled()) {
                 return false;
             }
-            DownloadInfo asset = downloads.get(x);
-            doDownload(asset);
+            doDownload(download);
         }
         setStatus(allDownloaded ? "Success" : "Downloads failed");
         return allDownloaded;
@@ -105,7 +101,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     if (asset.local.exists()) {
                         long localSize = asset.local.length();
                         if (con instanceof HttpURLConnection && localSize == remoteSize ) {
-                            ;// size OK
+                            // size OK
                         } else {
                             asset.local.delete();
                             Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + localSize );
@@ -158,7 +154,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
                     //file downloaded check size
                     if (con instanceof HttpURLConnection && currentSize > 0 && currentSize == remoteSize ) {
-                        ;// size OK
+                        // size OK
                     } else {
                         asset.local.delete();
                         Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + currentSize );

@@ -161,7 +161,7 @@ public class AuthlibHelper {
         }
         if (e instanceof JsonArray) {
             List<Object> ret = new ArrayList<Object>();
-            for (JsonElement jse : ((JsonArray) e).getAsJsonArray()) {
+            for (JsonElement jse : e.getAsJsonArray()) {
                 ret.add(decodeElement(jse));
             }
             return ret;
@@ -180,8 +180,7 @@ public class AuthlibHelper {
             builder.enableComplexMapKeySerialization();
             builder.setPrettyPrinting();
             gson = builder.create();
-            String s = gson.toJson(m);
-            return s;
+            return gson.toJson(m);
         } catch (Exception e) {
             Logger.logError("Error encoding Authlib JSON", e);
             return null;

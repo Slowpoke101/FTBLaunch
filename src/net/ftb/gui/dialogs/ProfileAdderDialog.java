@@ -40,7 +40,7 @@ import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
-    private String updatecreds = new String("");
+    private String updatecreds = "";
     private JLabel usernameLbl;
     private JTextField username;
     private JLabel passwordLbl;

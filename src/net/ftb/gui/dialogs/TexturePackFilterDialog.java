@@ -71,15 +71,15 @@ public class TexturePackFilterDialog extends JDialog {
         comp.add("All");
         for (int i = 0; i < textures; i++) {
             List<String> s = TexturePack.getTexturePack(i).getCompatible();
-            for (int j = 0; j < s.size(); j++) {
-                if (!comp.contains(ModPack.getPack(s.get(j).trim()).getName())) {
-                    comp.add(ModPack.getPack(s.get(j).trim()).getName());
+            for (String value : s) {
+                if (!comp.contains(ModPack.getPack(value.trim()).getName())) {
+                    comp.add(ModPack.getPack(value.trim()).getName());
                 }
             }
         }
 
-        compatiblePack.setModel(new DefaultComboBoxModel(comp.toArray(new String[] {})));
-        resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[] {})));
+        compatiblePack.setModel(new DefaultComboBoxModel(comp.toArray(new String[comp.size()])));
+        resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[res.size()])));
 
         compatiblePack.setSelectedItem(instance.compatible);
         resolution.setSelectedItem(instance.resolution);

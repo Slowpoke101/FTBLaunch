@@ -39,7 +39,6 @@ import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
-import net.feed_the_beast.launcher.json.versions.OS;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -47,6 +46,7 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.SwingUtils;
 
+@SuppressWarnings("unchecked")
 public class AdvancedOptionsDialog extends JDialog {
     private JButton exit;
     private JLabel downloadLocationLbl;

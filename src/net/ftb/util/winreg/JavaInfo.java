@@ -19,13 +19,13 @@ import net.ftb.util.OSUtils.OS;
 public class JavaInfo implements Comparable<JavaInfo> {
     public String path; //! Full path to java.exe executable file
     public String version; //! Version string.
-    public String origVersion = new String();
+    public String origVersion = "";
     public boolean supportedVersion = false;
     public boolean hasJava8;
     public boolean is64bits; //! true for 64-bit javas, false for 32
     @Getter
     private int major, minor, revision, build;
-    private static String regex = new String("[^\\d_.-]");
+    private static String regex = "[^\\d_.-]";
 
     /**
      * Calls 'javaPath -version' and parses the results
@@ -81,7 +81,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
     }
 
     @Override
-    public int compareTo (JavaInfo o) {
+    public int compareTo (@SuppressWarnings("NullableProblems") JavaInfo o) {
         if (o.major > major)
             return -1;
         if (o.major < major)
