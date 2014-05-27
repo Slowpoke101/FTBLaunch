@@ -17,8 +17,8 @@
 package net.ftb.gui.panes;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
+import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -28,9 +28,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
-import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
-import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
@@ -40,52 +38,18 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 @SuppressWarnings("serial")
-public class ThirdPartyPane extends JPanel implements ILauncherPane {
-    private static JPanel packs;
-    public static ArrayList<JPanel> packPanels;
-    private static JScrollPane packsScroll;
-
-    private static JLabel typeLbl;
-    private JButton filter, editModPack;
-
-    private static JButton server;
-
-    private JButton privatePack;
-    private static JComboBox version;
-    private static int selectedPack = 0;
-    private static boolean modPacksAdded = false;
-    private static HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
-    private static HashMap<Integer, Integer> packMapping = Maps.newHashMap();
-    private final ThirdPartyPane instance = this;
-    private static JEditorPane packInfo;
+public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
+    @Getter
+    private static ThirdPartyPane instance;
     private static int thirdPacks = 0;
-    //	private JLabel loadingImage;
-    public static String origin = "All", mcVersion = "All", avaliability = "All";
-    public static boolean loaded = false;
-
-    private static JScrollPane infoScroll;
-    private static final ActionListener al = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-            if (version.getItemCount() > 0) {
-                Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
-                Settings.getSettings().save();
-            }
-        }
-    };
 
     public ThirdPartyPane() {
         super();
+        instance = this;
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
 
@@ -106,6 +70,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loaded) {
+                    // TODO: problem here. How to move into abstract?
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
                     filterDia.setVisible(true);
                 }
@@ -134,6 +99,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (packPanels.size() > 0) {
+                    //TODO: fix by rename?
                     if (getSelectedThirdPartyModIndex() >= 0) {
                         EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(false));
                         empd.setVisible(true);
@@ -190,11 +156,12 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
         server = new JButton("Download Server");
         server.setBounds(420, 5, 130, 25);
 
+        //TODO: check
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
-                    if (ThirdPartyPane.packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
+                    if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
                         if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
                                     .getSelectedPack(false).getVersion().replace(".", "_")
@@ -237,219 +204,15 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
     public void onVisible() {
     }
 
-    /*
-     * GUI Code to add a modpack to the selection
-     */
-    public static void addPack(ModPack pack) {
-        if (!pack.isThirdPartyTab() || pack.getParentXml().contains(Locations.MODPACKXML)) {//we ignore any 3rd party in main modpacks xml those will be removed once enough ppl update
-            return;
-        }
-        if (!modPacksAdded) {
-            modPacksAdded = true;
-            packs.removeAll();
-            packs.repaint();
-        }
-        final int packIndex = packPanels.size();
-        final JPanel p = new JPanel();
-        p.setBounds(0, (packIndex * 55), 420, 55);
-        p.setLayout(null);
-        JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
-        logo.setBounds(6, 6, 42, 42);
-        logo.setVisible(true);
-
-        JTextArea filler = new JTextArea(pack.getName() + " (v" + pack.getVersion() + ") Minecraft Version " + pack.getMcVersion() + "\n" + "By " + pack.getAuthor());
-        filler.setBorder(null);
-        filler.setEditable(false);
-        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
-        filler.setBounds(58, 6, 362, 42);
-        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
-        MouseAdapter lin = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    LaunchFrame.getInstance().doLaunch();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                selectedPack = packIndex;
-                updatePacks();
-            }
-        };
-        p.addMouseListener(lin);
-        filler.addMouseListener(lin);
-        logo.addMouseListener(lin);
-        p.add(filler);
-        p.add(logo);
-        packPanels.add(p);
-        packs.add(p);
-        int size = thirdPacks > 0 ? thirdPacks : ModPack.getPackArray().size();
-        if (currentPacks.isEmpty()) {
-            packs.setMinimumSize(new Dimension(420, (size * 55)));
-            packs.setPreferredSize(new Dimension(420, (size * 55)));
-        } else {
-            packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
-            packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
-        }
-        packsScroll.revalidate();
-        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastThirdPartyPack())) {
-            selectedPack = packIndex;
-        }
-    }
-
-    //TODO handle changes & removals here as well!!!
-    @Subscribe
-    public void packChange(PackChangeEvent evt) {
-        final PackChangeEvent event = evt;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                if (event.getType() == PackChangeEvent.TYPE.ADD) {
-                    boolean doneWork = false;
-                    if (event.getPacks() != null) {
-                        for (ModPack p : event.getPacks()) {
-                            addPack(p);
-                            if (p.isThirdPartyTab() && !p.getParentXml().contains(Locations.MODPACKXML)) {
-                                Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + p.getName() + ")");
-                                doneWork = true;
-                                thirdPacks++;
-                            }
-                        }
-                        if (doneWork) {
-                            if (!currentPacks.isEmpty()) {
-                                sortPacks();
-                            } else {
-                                updatePacks();
-                                packMapping.clear();
-                                int count = 0;
-                                for (ModPack pack : ModPack.getPackArray()) {
-                                    if (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)) {
-                                        packMapping.put(count, pack.getIndex());
-                                        count++;
-                                    }
-                                }
-
-                            }
-                            loaded = true;
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public static void sortPacks() {
-        packPanels.clear();
-        packs.removeAll();
-        currentPacks.clear();
-        packMapping.clear();
-        int counter = 0;
-        selectedPack = 0;
-        packInfo.setText("");
-        packs.repaint();
-        modPacksAdded = false;
-        for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.getParentXml().contains("modpacks.xml") && pack.isThirdPartyTab() && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                currentPacks.put(counter, pack);
-                packMapping.put(counter, pack.getIndex());
-                addPack(pack);
-                counter++;
-            }
-        }
-        updatePacks();
-    }
-
-    private static void updatePacks() {
-        for (int i = 0; i < packPanels.size(); i++) {
-            if (selectedPack == i && getIndex() >= 0) {
-                ModPack pack = ModPack.getPackArray().get(getIndex());
-                if (pack != null) {
-                    String mods = "";
-                    if (pack.getMods() != null) {
-                        mods += "<p>This pack contains the following mods by default:</p><ul>";
-                        for (String name : pack.getMods()) {
-                            mods += "<li>" + name + "</li>";
-                        }
-                        mods += "</ul>";
-                    }
-                    packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-                    packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + pack.getDir());
-                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>"
-                            + pack.getInfo() + mods);
-                    packInfo.setCaretPosition(0);
-
-                    if (ModPack.getSelectedPack(false).getServerUrl().equals("") || ModPack.getSelectedPack(false).getServerUrl() == null) {
-                        server.setEnabled(false);
-                    } else {
-                        server.setEnabled(true);
-                    }
-                    String tempVer = Settings.getSettings().getPackVer(pack.getDir());
-                    version.removeActionListener(al);
-                    version.removeAllItems();
-                    version.addItem("Recommended");
-                    if (pack.getOldVersions() != null) {
-                        for (String s : pack.getOldVersions()) {
-                            version.addItem(s);
-                        }
-                        version.setSelectedItem(tempVer);
-                    }
-                    version.addActionListener(al);
-                }
-            } else {
-                packPanels.get(i).setBackground(UIManager.getColor("control"));
-                packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
-        }
-    }
-
-    public static int getSelectedThirdPartyModIndex() {
+    public int getSelectedThirdPartyModIndex() {
         return modPacksAdded ? getIndex() : -1;
     }
 
-    public static void updateFilter() {
-        String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
-        String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
-        String typeLblText = "<html><body>";
-        typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
-        typeLblText += "</body></html>";
-
-        typeLbl.setText(typeLblText);
-        sortPacks();
-        LaunchFrame.getInstance().updateFooter();
+    boolean filterForTab(ModPack pack) {
+        return (pack.isThirdPartyTab() || !pack.getParentXml().contains(Locations.MODPACKXML));
     }
 
-    private static int getIndex() {
-        if (packMapping.get(selectedPack) == null) {
-            return -1;
-        } else
-            return packMapping.get(selectedPack);
-    }
-
-    public void updateLocale() {
-        filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
-        editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
-        if (I18N.currentLocale == Locale.deDE) {
-            editModPack.setBounds(290, 5, 120, 25);
-            typeLbl.setBounds(115, 5, 165, 25);
-        } else {
-            editModPack.setBounds(300, 5, 110, 25);
-            typeLbl.setBounds(115, 5, 175, 25);
-        }
-    }
-
-    private static boolean avaliabilityCheck(ModPack pack) {
-        return (avaliability.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PUBLIC")) && !pack.isPrivatePack())
-                || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PRIVATE")) && pack.isPrivatePack());
-    }
-
-    private static boolean mcVersionCheck(ModPack pack) {
-        return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
-    }
-
-    private static boolean textSearch(ModPack pack) {
-        String searchString = SearchDialog.lastPackSearch.toLowerCase();
-        return ((searchString.isEmpty()) || pack.getName().toLowerCase().contains(searchString) || pack.getAuthor().toLowerCase().contains(searchString));
+    String getLastPack() {
+        return Settings.getSettings().getLastThirdPartyPack();
     }
 }

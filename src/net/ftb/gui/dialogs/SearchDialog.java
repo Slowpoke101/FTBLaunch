@@ -48,13 +48,13 @@ public class SearchDialog extends JDialog {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
             }
 
             @Override
             public void insertUpdate (DocumentEvent arg0) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
             }
 
             @Override
@@ -65,7 +65,7 @@ public class SearchDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
                 setVisible(false);
             }
         });
@@ -78,13 +78,13 @@ public class SearchDialog extends JDialog {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
             }
 
             @Override
             public void insertUpdate (DocumentEvent arg0) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
             }
 
             @Override
@@ -95,7 +95,7 @@ public class SearchDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                 lastPackSearch = query.getText();
-                instance.sortPacks();
+                instance.filterPacks();
                 setVisible(false);
             }
         });

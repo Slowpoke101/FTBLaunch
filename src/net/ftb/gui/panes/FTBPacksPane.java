@@ -16,17 +16,9 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
@@ -42,53 +34,31 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
+import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.download.Locations;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
-import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
-import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
-public class FTBPacksPane extends JPanel implements ILauncherPane {
-    private static JPanel packs;
-    public static ArrayList<JPanel> packPanels;
-    private static JScrollPane packsScroll;
-
-    private static JLabel typeLbl;
-    private JButton filter, editModPack;
-
-    private static JButton server;
-
-    private JButton privatePack;
-    private static JComboBox version;
-    private static int selectedPack = 0;
-    private static boolean modPacksAdded = false;
-    private static HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
-    private final FTBPacksPane instance = this;
-    private static JEditorPane packInfo;
+public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
+    @Getter
+    private static FTBPacksPane instance;
     private static int ftbPacks = 0;
-    //	private JLabel loadingImage;
-    private static HashMap<Integer, Integer> packMapping = Maps.newHashMap();
-    public static String mcVersion = "All", avaliability = "All";
-    public static boolean loaded = false;
-
-    private static JScrollPane infoScroll;
 
     public FTBPacksPane() {
         super();
+        instance = this;
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(null);
 
@@ -109,6 +79,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loaded) {
+                    // TODO: problem here. How to move into abstract?
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
                     filterDia.setVisible(true);
                 }
@@ -121,6 +92,8 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
 
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+        typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
 
@@ -135,6 +108,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (packPanels.size() > 0) {
+                    //TODO: fix by rename
                     if (getSelectedFTBModIndex() >= 0) {
                         EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(true));
                         empd.setVisible(true);
@@ -191,12 +165,13 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
         server = new JButton("Download Server");
         server.setBounds(420, 5, 130, 25);
 
+        //TODO: check
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 ModPack pack = ModPack.getSelectedPack(true);
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
-                    if (FTBPacksPane.packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
+                    if (packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
                                     : Settings.getSettings().getPackVer().replace(".", "_");
@@ -217,13 +192,7 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
 
         version = new JComboBox(new String[]{});
         version.setBounds(560, 5, 130, 25);
-        version.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
-                Settings.getSettings().save();
-            }
-        });
+        version.addActionListener(al);
         version.setToolTipText("Modpack Versions");
         add(version);
 
@@ -244,219 +213,15 @@ public class FTBPacksPane extends JPanel implements ILauncherPane {
     public void onVisible() {
     }
 
-    /*
-     * GUI Code to add a modpack to the selection
-     */
-    public static void addPack(final ModPack pack) {
-        if (pack.isThirdPartyTab()) {
-            modPacksAdded = true;
-            return;
-        }
-        if (!modPacksAdded) {
-            modPacksAdded = true;
-            packs.removeAll();
-            packs.repaint();
-        }
-        final int packIndex = packPanels.size();
-        final JPanel p = new JPanel();
-        p.setBounds(0, (packIndex * 55), 420, 55);
-        p.setLayout(null);
-        JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
-        logo.setBounds(6, 6, 42, 42);
-        logo.setVisible(true);
-
-        JTextArea filler = new JTextArea(pack.getName() + " (v" + pack.getVersion() + ") Minecraft Version " + pack.getMcVersion() + "\n" + "By " + pack.getAuthor());
-        filler.setBorder(null);
-        filler.setEditable(false);
-        filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
-        filler.setBounds(58, 6, 362, 42);
-        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
-        MouseAdapter lin = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    LaunchFrame.getInstance().doLaunch();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                selectedPack = packIndex;
-                updatePacks();
-            }
-        };
-        p.addMouseListener(lin);
-        filler.addMouseListener(lin);
-        logo.addMouseListener(lin);
-        p.add(filler);
-        p.add(logo);
-        packPanels.add(p);
-        packs.add(p);
-        int size = ftbPacks > 0 ? ftbPacks : ModPack.getPackArray().size();
-        if (currentPacks.isEmpty()) {
-            packs.setMinimumSize(new Dimension(420, (size * 55)));
-            packs.setPreferredSize(new Dimension(420, (size * 55)));
-        } else {
-            packs.setMinimumSize(new Dimension(420, (currentPacks.size() * 55)));
-            packs.setPreferredSize(new Dimension(420, (currentPacks.size() * 55)));
-        }
-        packsScroll.revalidate();
-        if (pack.getDir().equalsIgnoreCase(Settings.getSettings().getLastFTBPack())) {
-            selectedPack = packIndex;
-        }
-    }
-
-    //TODO handle change & removals here as well!!!
-    @Subscribe
-    public void packChange(PackChangeEvent evt) {
-        final PackChangeEvent event = evt;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                if (event.getType() == PackChangeEvent.TYPE.ADD) {
-                    boolean doneWork = false;
-                    if (event.getPacks() != null) {
-                        for (ModPack p : event.getPacks()) {
-                            addPack(p);
-                            if(!p.isThirdPartyTab()) {
-                                Logger.logInfo("Adding FTB pack " + packPanels.size() + " (" + p.getName() + ")");
-                                doneWork = true;
-                                ftbPacks++;
-                            }
-                        }
-                        if (doneWork) {
-                            if (!currentPacks.isEmpty()) {
-                                sortPacks();
-                            } else {
-                                updatePacks();
-                                packMapping.clear();
-                                int count = 0;
-                                for (ModPack pack : ModPack.getPackArray()) {
-                                    if (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML)) {
-                                        packMapping.put(count, pack.getIndex());
-                                        count++;
-                                    }
-                                }
-                            }
-                            loaded = true;
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public static void sortPacks() {
-        packPanels.clear();
-        packs.removeAll();
-        currentPacks.clear();
-        packMapping.clear();
-        int counter = 0;
-        selectedPack = 0;
-        packInfo.setText("");
-        packs.repaint();
-        modPacksAdded = false;
-        for (ModPack pack : ModPack.getPackArray()) {
-            if (!pack.isThirdPartyTab() && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                currentPacks.put(counter, pack);
-                packMapping.put(counter, pack.getIndex());
-                addPack(pack);
-                counter++;
-            }
-        }
-        updatePacks();
-    }
-
-    private static void updatePacks() {
-        for (int i = 0; i < packPanels.size(); i++) {
-            if (selectedPack == i && getIndex() >= 0) {
-                ModPack pack = ModPack.getPackArray().get(getIndex());
-                if (pack != null) {
-                    String mods = "";
-                    if (pack.getMods() != null) {
-                        mods += "<p>This pack contains the following mods by default:</p><ul>";
-                        for (String name : pack.getMods()) {
-                            mods += "<li>" + name + "</li>";
-                        }
-                        mods += "</ul>";
-                    }
-                    packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-                    packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + pack.getDir());
-                    packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>"
-                            + pack.getInfo() + mods);
-                    packInfo.setCaretPosition(0);
-
-                    if (ModPack.getSelectedPack(true).getServerUrl().equals("") || ModPack.getSelectedPack(true).getServerUrl() == null) {
-                        server.setEnabled(false);
-                    } else {
-                        server.setEnabled(true);
-                    }
-                    String tempVer = Settings.getSettings().getPackVer(pack.getDir());
-                    version.removeAllItems();
-                    version.addItem("Recommended");
-                    if (pack.getOldVersions() != null) {
-                        for (String s : pack.getOldVersions()) {
-                            version.addItem(s);
-                        }
-                        version.setSelectedItem(tempVer);
-                    }
-                }
-            } else {
-                packPanels.get(i).setBackground(UIManager.getColor("control"));
-                packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
-        }
-    }
-
-    public static int getSelectedFTBModIndex() {
+    public int getSelectedFTBModIndex() {
         return modPacksAdded ? getIndex() : -1;
     }
 
-    public static void updateFilter() {
-        String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
-        String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
-        String typeLblText = "<html><body>";
-        typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
-        typeLblText += "</body></html>";
-
-        typeLbl.setText(typeLblText);
-        sortPacks();
-        LaunchFrame.getInstance().updateFooter();
+    boolean filterForTab(ModPack pack) {
+       return (!pack.isThirdPartyTab());
     }
 
-    private static int getIndex() {
-        if (packMapping.get(selectedPack) == null) {
-            return -1;
-        } else
-            return packMapping.get(selectedPack);
-    }
-
-    public void updateLocale() {
-        filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
-        editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
-        if (I18N.currentLocale == Locale.deDE) {
-            editModPack.setBounds(290, 5, 120, 25);
-            typeLbl.setBounds(115, 5, 165, 25);
-        } else {
-            editModPack.setBounds(300, 5, 110, 25);
-            typeLbl.setBounds(115, 5, 175, 25);
-        }
-    }
-
-    private static boolean avaliabilityCheck(ModPack pack) {
-        return (avaliability.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PUBLIC")) && !pack.isPrivatePack())
-                || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PRIVATE")) && pack.isPrivatePack());
-    }
-
-    private static boolean mcVersionCheck(ModPack pack) {
-        return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
-    }
-
-
-    private static boolean textSearch(ModPack pack) {
-        String searchString = SearchDialog.lastPackSearch.toLowerCase();
-        return ((searchString.isEmpty()) || pack.getName().toLowerCase().contains(searchString) || pack.getAuthor().toLowerCase().contains(searchString));
+    String getLastPack() {
+        return Settings.getSettings().getLastFTBPack();
     }
 }

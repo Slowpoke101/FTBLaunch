@@ -91,7 +91,7 @@ public class PrivatePackDialog extends JDialog {
                         }
                         ModPack.removePacks(modpackName.getText() + ".xml");
                         FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + modpackName.getText() + ".xml"));
-                        LaunchFrame.getInstance().modPacksPane.sortPacks();
+                        LaunchFrame.getInstance().modPacksPane.filterPacks();
                     } catch (IOException e) {
                         Logger.logError(e.getMessage(), e);
                     }

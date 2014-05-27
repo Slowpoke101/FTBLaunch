@@ -635,7 +635,7 @@ public class LaunchFrame extends JFrame {
     public static void checkDoneLoading () {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
-                if (FTBPacksPane.loaded) {
+                if (FTBPacksPane.getInstance().loaded) {
                     LoadingDialog.setProgress(190);
                     if (MapUtils.loaded) {
                         LoadingDialog.setProgress(200);
@@ -1138,7 +1138,7 @@ public class LaunchFrame extends JFrame {
 
         ModPack pack;
         if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
-           pack = ModPack.getPack(ThirdPartyPane.getSelectedThirdPartyModIndex());
+           pack = ModPack.getPack(thirdPartyPane.getSelectedThirdPartyModIndex());
         else
            pack = ModPack.getPack(modPacksPane.getSelectedFTBModIndex());
 

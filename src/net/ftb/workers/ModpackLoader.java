@@ -90,6 +90,9 @@ public class ModpackLoader extends Thread {
                 }
                 NodeList modPacks = doc.getElementsByTagName("modpack");
                 ArrayList<ModPack> mp = Lists.newArrayList();
+                // ATT: this is not thread safe. Only one thread can run rest of the code!
+                // proper fix: ModPack.add() should assign indexes for modpacks
+                int offset = ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size();
                 for (int i = 0; i < modPacks.getLength(); i++) {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
@@ -102,7 +105,7 @@ public class ModpackLoader extends Thread {
                                 .getTextContent(), modPackAttr.getNamedItem("description").getTextContent(), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
-                                .getNamedItem("maxPermSize").getTextContent() : "", (ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size()),
+                                .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
                                 (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
                                 .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty));
@@ -117,9 +120,11 @@ public class ModpackLoader extends Thread {
                 }
             }
         }
-        if (!FTBPacksPane.loaded) {
-            FTBPacksPane.loaded = true;
-            ThirdPartyPane.loaded = true;
+        Logger.logDebug("All packlists loaded");
+        //if (!FTBPacksPane.loaded) {
+        if (true) {
+            FTBPacksPane.getInstance().loaded = true;
+            ThirdPartyPane.getInstance().loaded = true;
             LaunchFrame.checkDoneLoading();
             Map.loadAll();
             TexturePack.loadAll();
