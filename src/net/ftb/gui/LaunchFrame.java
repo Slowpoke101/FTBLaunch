@@ -1462,14 +1462,14 @@ public class LaunchFrame extends JFrame {
             tabbedPane.add(mapsPane, 4);
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
-            tpEnabled = true;
+            tpEnabled = false;
             updateFooter();
         } else {
             tabbedPane.remove(4);
             tabbedPane.add(tpPane, 4);
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
-            tpEnabled = false;
+            tpEnabled = true;
             updateFooter();
         }
     }
