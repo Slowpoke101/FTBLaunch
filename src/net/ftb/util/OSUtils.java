@@ -155,40 +155,26 @@ public class OSUtils {
     }
 
     public static long getOSTotalMemory () {
-        long ram = 0;
-
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        Method m;
-        try {
-            m = operatingSystemMXBean.getClass().getDeclaredMethod("getTotalPhysicalMemorySize");
-            m.setAccessible(true);
-            Object value = m.invoke(operatingSystemMXBean);
-            if (value != null) {
-                ram = Long.valueOf(value.toString()) / 1024 / 1024;
-            } else {
-                Logger.logWarn("Could not get RAM Value");
-                ram = 1024;
-            }
-        } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
-        }
-
-        return ram;
+        return getOSMemory("getTotalPhysicalMemorySize", "Could not get RAM Value");
     }
 
     public static long getOSFreeMemory () {
+        return getOSMemory("getFreePhysicalMemorySize", "Could not get free RAM Value");
+    }
+
+    private static long getOSMemory (String methodName, String warning) {
         long ram = 0;
 
         OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
         Method m;
         try {
-            m = operatingSystemMXBean.getClass().getDeclaredMethod("getFreePhysicalMemorySize");
+            m = operatingSystemMXBean.getClass().getDeclaredMethod(methodName);
             m.setAccessible(true);
             Object value = m.invoke(operatingSystemMXBean);
             if (value != null) {
                 ram = Long.valueOf(value.toString()) / 1024 / 1024;
             } else {
-                Logger.logWarn("Could not get free RAM Value");
+                Logger.logWarn(warning);
                 ram = 1024;
             }
         } catch (Exception e) {
