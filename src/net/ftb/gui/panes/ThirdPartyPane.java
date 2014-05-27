@@ -74,6 +74,15 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
     public static boolean loaded = false;
 
     private static JScrollPane infoScroll;
+    private static final ActionListener al = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            if (version.getItemCount() > 0) {
+                Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
+                Settings.getSettings().save();
+            }
+        }
+    };
 
     public ThirdPartyPane() {
         super();
@@ -207,13 +216,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
 
         version = new JComboBox(new String[]{});
         version.setBounds(560, 5, 130, 25);
-        version.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
-                Settings.getSettings().save();
-            }
-        });
+        version.addActionListener(al);
         version.setToolTipText("Modpack Versions");
         add(version);
 
@@ -306,11 +309,12 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
                     if (event.getPacks() != null) {
                         for (ModPack p : event.getPacks()) {
                             addPack(p);
-                            if(p.isThirdPartyTab() && !p.getParentXml().contains(Locations.MODPACKXML)){
+                            if (p.isThirdPartyTab() && !p.getParentXml().contains(Locations.MODPACKXML)) {
                                 Logger.logInfo("Adding Third Party pack " + packPanels.size() + " (" + p.getName() + ")");
-                            doneWork = true;
-                            thirdPacks++;
-                        }}
+                                doneWork = true;
+                                thirdPacks++;
+                            }
+                        }
                         if (doneWork) {
                             if (!currentPacks.isEmpty()) {
                                 sortPacks();
@@ -408,6 +412,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
                         server.setEnabled(true);
                     }
                     String tempVer = Settings.getSettings().getPackVer(pack.getDir());
+                    version.removeActionListener(al);
                     version.removeAllItems();
                     version.addItem("Recommended");
                     if (pack.getOldVersions() != null) {
@@ -416,6 +421,7 @@ public class ThirdPartyPane extends JPanel implements ILauncherPane {
                         }
                         version.setSelectedItem(tempVer);
                     }
+                    version.addActionListener(al);
                 }
             } else {
                 packPanels.get(i).setBackground(UIManager.getColor("control"));
