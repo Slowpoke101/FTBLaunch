@@ -23,6 +23,11 @@ public class TrackerUtils {
     public TrackerUtils() {
     }
 
+    /**
+     *
+     * @param pageUrl URL for Launcher Analytics Page view -- usually the classpath
+     * @param pageTitle Entry for view such as pack name & pack version, etc.
+     */
     public static void sendPageView (String pageUrl, String pageTitle) {
         if (!Settings.getSettings().getSnooper()) {
             LaunchFrame.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");

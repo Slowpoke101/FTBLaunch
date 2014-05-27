@@ -44,16 +44,6 @@ public class AppUtils {
     }
 
     /**
-     * Downloads data from the given URL and returns it as a string.
-     * @param url the URL to fetch data from.
-     * @return the data downloaded from the given URL as a string.
-     * @throws IOException if an error occurs when reading from the stream.
-     */
-    public static String downloadString (URL url) throws IOException {
-        return readString(url.openStream());
-    }
-
-    /**
      * Downloads data from the given URL and returns it as a Document
      * @param url the URL to fetch
      * @return The document
@@ -61,16 +51,6 @@ public class AppUtils {
      */
     public static Document downloadXML (URL url) throws IOException, SAXException {
         return getXML(url.openStream());
-    }
-
-    /**
-     * Reads XML from a file
-     * @param file the URL to fetch
-     * @return The document
-     * @throws IOException, SAXException if an error occurs when reading from the stream
-     */
-    public static Document readXML (File file) throws IOException, SAXException {
-        return getXML(new FileInputStream(file));
     }
 
     /**

@@ -140,15 +140,6 @@ public class AnalyticsConfigData {
         encoding = argEncoding;
     }
 
-    /**
-     * Sets the flash version of the client, like "9.0 r24"
-     * 
-     * @param argFlashVersion
-     *            the flashVersion to set
-     */
-    public void setFlashVersion (String argFlashVersion) {
-        flashVersion = argFlashVersion;
-    }
 
     /**
      * Sets the screen resolution, like "1280x800".

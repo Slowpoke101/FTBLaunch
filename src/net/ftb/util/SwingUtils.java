@@ -4,10 +4,10 @@ import javax.swing.*;
 
 public class SwingUtils {
 
-    /*
-    * @Param minimumSize minimum size -- used to insantiate returned Spring
-    * @Param spr springs to get summed with the minimum size
-    * @Return summed spring
+    /**
+    * @param minimumSize minimum size -- used to insantiate returned Spring
+    * @param spr springs to get summed with the minimum size
+    * @return summed spring
      */
     public static Spring springSum(int minimumSize, Spring... spr){
         Spring ret = Spring.constant(minimumSize);
@@ -16,10 +16,10 @@ public class SwingUtils {
         }
         return ret;
     }
-    /*
-* @Param base spring used to create spring that will get returned
-* @Param spr springs to get summed with the minimum size
-* @Return summed spring
+    /**
+* @param base spring used to create spring that will get returned
+* @param spr springs to get summed with the minimum size
+* @return summed spring
  */
     public static Spring springSum(Spring base, Spring... spr){
         Spring ret = base;
@@ -29,10 +29,10 @@ public class SwingUtils {
         return ret;
     }
 
-    /*
-* @Param base spring used to create spring that will get returned
-* @Param spr springs to get maxed with the minimum size
-* @Return maxed spring
+    /**
+* @param base spring used to create spring that will get returned
+* @param spr springs to get maxed with the minimum size
+* @return maxed spring
  */
     public static Spring springMax(Spring base, Spring... spr){
         Spring ret = base;

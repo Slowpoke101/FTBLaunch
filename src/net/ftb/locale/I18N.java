@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
 
+import com.google.common.collect.Maps;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -31,8 +32,8 @@ public class I18N {
     private static Properties locales = new Properties();
     private static Properties fallback = new Properties();
     private static File dir = new File(OSUtils.getDynamicStorageLocation(), "locale");
-    public static HashMap<String, String> localeFiles = new HashMap<String, String>();
-    public final static HashMap<Integer, String> localeIndices = new HashMap<Integer, String>();
+    public static HashMap<String, String> localeFiles = Maps.newHashMap();
+    public final static HashMap<Integer, String> localeIndices = Maps.newHashMap();
     public static Locale currentLocale = Locale.enUS;
 
     public enum Locale {
