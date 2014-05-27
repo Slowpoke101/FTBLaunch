@@ -1459,17 +1459,17 @@ public class LaunchFrame extends JFrame {
     public void swapTabs(boolean toMaps){
         if(toMaps) {
             tabbedPane.remove(4);
-            tabbedPane.add(tpPane, 4);
-            tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
-            tabbedPane.setSelectedIndex(4);
-            tpEnabled = true;
-            updateFooter();
-        } else {
-            tabbedPane.remove(4);
             tabbedPane.add(mapsPane, 4);
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(4);
             tpEnabled = false;
+            updateFooter();
+        } else {
+            tabbedPane.remove(4);
+            tabbedPane.add(tpPane, 4);
+            tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
+            tabbedPane.setSelectedIndex(4);
+            tpEnabled = true;
             updateFooter();
         }
     }
