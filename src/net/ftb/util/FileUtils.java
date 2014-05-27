@@ -152,7 +152,7 @@ public class FileUtils {
         Logger.logInfo("Extracting (Backup way)");
         byte[] buffer = new byte[1024];
         ZipInputStream zis = null;
-        ZipEntry ze = null;
+        ZipEntry ze;
         try {
             File folder = new File(outputLocation);
             if (!folder.exists()) {

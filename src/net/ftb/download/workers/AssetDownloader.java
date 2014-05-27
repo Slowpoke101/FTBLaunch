@@ -100,9 +100,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     // existing file are only added when we want to check file integrity with force update
                     if (asset.local.exists()) {
                         long localSize = asset.local.length();
-                        if (con instanceof HttpURLConnection && localSize == remoteSize ) {
-                            // size OK
-                        } else {
+                        if (!(con instanceof HttpURLConnection && localSize == remoteSize)) {
                             asset.local.delete();
                             Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + localSize );
                         }
@@ -153,9 +151,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     output.close();
 
                     //file downloaded check size
-                    if (con instanceof HttpURLConnection && currentSize > 0 && currentSize == remoteSize ) {
-                        // size OK
-                    } else {
+                    if (!(con instanceof HttpURLConnection && currentSize > 0 && currentSize == remoteSize )) {
                         asset.local.delete();
                         Logger.logWarn("Local asset size differs from remote size: " + asset.name + " remote: " + remoteSize + " local: " + currentSize );
                     }
@@ -180,10 +176,10 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
             if (remoteHash != null) {
                 assetHash = remoteHash;
             }else if (asset.getBackupDLType() == DLType.FTBBackup && DownloadUtils.backupIsValid(asset.local, asset.url.getPath().replace("/FTB2", ""))) {
-                remoteHash = asset.hash;
+                remoteHash = asset.hash;//TODO check this why is this being done variable is null!!!!
             }
         }
-        if ((hash != null && !hash.toLowerCase().equals(assetHash))) {
+        if ((!hash.toLowerCase().equals(assetHash))) {
             Logger.logWarn("Asset hash checking failed: " + asset.name);
             asset.local.delete();
             return false;

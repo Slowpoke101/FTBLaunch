@@ -49,7 +49,6 @@ public class UserManager {
     public void write () throws IOException {
 
         if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
-            try {
                 if (_oldFile.exists()) {
                     _oldFile.delete();
                 }
@@ -57,9 +56,6 @@ public class UserManager {
                 if (_file.exists()) {
                     _file.delete();
                 }
-            } finally {
-
-            }
         }
 
         FileOutputStream fileOutputStream = new FileOutputStream(_file);

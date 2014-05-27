@@ -210,7 +210,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         JLabel logo = new JLabel(new ImageIcon(texturePack.getLogo()));
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
-        String info = "";
+        String info;
         if (texturePack.getInfo().length() > 60) {
             info = texturePack.getInfo().substring(0, 59) + "...";
         } else {

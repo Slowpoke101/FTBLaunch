@@ -95,10 +95,7 @@ public class ModpackLoader extends Thread {
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
                     try {
                         if(modPackAttr.getNamedItem("author") != null)
-                            if(!modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team"))
-                                isThirdParty = true;
-                            else
-                                isThirdParty = false;
+                            isThirdParty = !modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team");
                         mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
                                 .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")

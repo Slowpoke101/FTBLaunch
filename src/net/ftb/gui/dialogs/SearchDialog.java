@@ -28,11 +28,9 @@ import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.ftb.events.ILauncherEvent;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.FTBPacksPane;
-import net.ftb.gui.panes.MapUtils;
-import net.ftb.gui.panes.TexturepackPane;
-import net.ftb.gui.panes.ThirdPartyPane;
+import net.ftb.gui.panes.*;
 import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
@@ -70,7 +68,9 @@ public class SearchDialog extends JDialog {
             }
         });
     }
+    private SearchDialog(final IModPackPane instance){
 
+    }
     public SearchDialog(final ThirdPartyPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();

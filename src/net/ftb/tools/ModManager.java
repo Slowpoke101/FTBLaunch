@@ -94,10 +94,10 @@ public class ModManager extends JDialog {
 
         public String downloadUrl (String filename, String urlString) {
             BufferedInputStream in = null;
-            FileOutputStream fout = null;
+            FileOutputStream fout;
             HttpURLConnection connection = null;
             String md5 = "";
-            int amount = 0, startAmount = -1, modPackSize = 0, count = 0, steps = 0;
+            int amount = 0, startAmount = -1, modPackSize = 0, count, steps = 0;
             int retryCount = 5;
 
             try {

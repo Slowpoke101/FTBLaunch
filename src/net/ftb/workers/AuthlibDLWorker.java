@@ -70,12 +70,11 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         File f = new File(location);
         try {
             if (f.exists()) {
-                URL urls[] = { f.toURI().toURL() };
                 addURL(f.toURI().toURL());
-                Class C = this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
-                Class C2 = this.getClass().forName("com.mojang.authlib.Agent");
-                Class C3 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
-                Class C4 = this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
+                this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
+                this.getClass().forName("com.mojang.authlib.Agent");
+                this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
+                this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
             } else {
                 Logger.logError("Authlib file does not exist");
             }
@@ -134,7 +133,6 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             }
         int attempt = 0;
         final int attempts = 5;
-        int lastfile = -1;
         while (!downloadSuccess && (attempt < attempts)) {
             try {
                 attempt++;

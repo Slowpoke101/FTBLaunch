@@ -142,7 +142,6 @@ public class Settings extends Properties {
 
     public String getDefaultJavaPath () {
         String separator = System.getProperty("file.separator");
-        String defaultPath = null;
         JavaInfo javaVersion;
 
         if (OSUtils.getCurrentOS() == OS.MACOSX) {

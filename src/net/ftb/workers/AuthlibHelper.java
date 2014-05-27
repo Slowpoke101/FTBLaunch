@@ -141,7 +141,7 @@ public class AuthlibHelper {
     @SuppressWarnings("unchecked")
     private static Map<String, Object> decode (String s) {
         try {
-            Map<String, Object> ret = new LinkedHashMap<String, Object>();
+            Map<String, Object> ret;
             JsonObject jso = new JsonParser().parse(s).getAsJsonObject();
             ret = (Map<String, Object>) decodeElement(jso);
             return ret;
