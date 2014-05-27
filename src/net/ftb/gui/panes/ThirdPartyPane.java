@@ -213,4 +213,8 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     }
 
     String getPaneShortName() {return "Third Party";}
+
+    boolean isFTB() {
+        return false;
+    }
 }
