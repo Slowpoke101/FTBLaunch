@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.Collection;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -891,7 +892,7 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    private List<DownloadInfo> gatherAssets (File root, String mcVersion, String installDir) {
+    private List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
         try {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
@@ -1030,20 +1031,41 @@ public class LaunchFrame extends JFrame {
 
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
-            for (Entry<String, Asset> e : index.objects.entrySet()) {
-                String name = e.getKey();
-                Asset asset = e.getValue();
-                String path = asset.hash.substring(0, 2) + "/" + asset.hash;
-                local = new File(root, "assets/objects/" + path);
+            long unixTime = System.currentTimeMillis();
+            long size = list.size();
+            Collection<DownloadInfo> tmp;
+            Logger.logDebug("Running with 2*OSUtils.getNumCores() threads");
+            Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
+                .withFixedThreads(2*OSUtils.getNumCores())
+                //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+                .apply( new Parallel.F<Entry<String, Asset>, DownloadInfo>() {
+                        public DownloadInfo apply(Entry<String, Asset> e) {
+                            try {
+                                //Logger.logDebug("YYYY" + System.currentTimeMillis());
+                                String name = e.getKey();
+                                Asset asset = e. getValue();
+                                String path = asset.hash.substring(0, 2) + "/" + asset.hash;
+                                final File local = new File(root, "assets/objects/" + path);
+                                if (local.exists() && !asset.hash.equals(DownloadUtils.fileSHA(local))) {
+                                    local.delete();
+                                }
+                                if (!local.exists()) {
+                                    return(new DownloadInfo(new URL(Locations.mc_res + path), local, name, asset.hash, "sha1"));
+                                }
+                            } catch (Exception ex) {
+                                Logger.logError("Assest hash check failed", ex);
+                            }
+                            // values() will drop null entries
+                            return null;
+                        }
+                });
+            tmp = th.values();
+            list.addAll(tmp);
+            // kill executorservice
+            th.shutdown();
+            Logger.logDebug("parallel result size: " + tmp.size());
+            Logger.logDebug("time for mc asset check (parallel): " + (System.currentTimeMillis() - unixTime));
 
-                if (local.exists() && !asset.hash.equals(DownloadUtils.fileSHA(local))) {
-                    local.delete();
-                }
-
-                if (!local.exists()) {
-                    list.add(new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
-                }
-            }
             return list;
         } catch (Exception e) {
             Logger.logError("Error while gathering assets", e);

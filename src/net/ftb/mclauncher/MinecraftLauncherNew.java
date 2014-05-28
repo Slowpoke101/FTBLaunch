@@ -19,7 +19,10 @@ package net.ftb.mclauncher;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Map.Entry;
+
 
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
@@ -32,6 +35,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
+import net.ftb.util.Parallel;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -233,31 +237,51 @@ public class MinecraftLauncherNew {
 
     private static File syncAssets(File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException {
         Logger.logInfo("Syncing Assets:");
-        File objects = new File(assetDir, "objects");
+        final File objects = new File(assetDir, "objects");
         AssetIndex index = JsonFactory.loadAssetIndex(new File(assetDir, "indexes/{INDEX}.json".replace("{INDEX}", indexName)));
 
         if (!index.virtual)
             return assetDir;
 
-        File targetDir = new File(assetDir, "virtual/" + indexName);
+        final File targetDir = new File(assetDir, "virtual/" + indexName);
 
-        Set<File> old = FileUtils.listFiles(targetDir);
+        final ConcurrentSkipListSet<File> old = new ConcurrentSkipListSet();
+        old.addAll(FileUtils.listFiles(targetDir));
 
-        for (Entry<String, Asset> e : index.objects.entrySet()) {
-            Asset asset = e.getValue();
-            File local = new File(targetDir, e.getKey());
-            File object = new File(objects, asset.hash.substring(0, 2) + "/" + asset.hash);
+        long unixTime = System.currentTimeMillis();
+        Logger.logDebug("Running with 2*OSUtils.getNumCores() threads");
+        Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
+            .withFixedThreads(2*OSUtils.getNumCores())
+            //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+            .apply( new Parallel.F<Entry<String, Asset>, Void>() {
+                public Void apply(Entry<String, Asset> e) {
+                    Asset asset = e.getValue();
+                    File local = new File(targetDir, e.getKey());
+                    File object = new File(objects, asset.hash.substring(0, 2) + "/" + asset.hash);
 
-            old.remove(local);
+                    old.remove(local);
 
-            if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
-                Logger.logInfo("  Changed: " + e.getKey());
-                FileUtils.copyFile(object, local, true);
-            } else if (!local.exists()) {
-                Logger.logInfo("  Added: " + e.getKey());
-                FileUtils.copyFile(object, local);
-            }
+                    try {
+                        if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
+                            Logger.logInfo("  Changed: " + e.getKey());
+                            FileUtils.copyFile(object, local, true);
+                        } else if (!local.exists()) {
+                            Logger.logInfo("  Added: " + e.getKey());
+                            FileUtils.copyFile(object, local);
+                        }
+                        } catch (Exception ex) {
+                        Logger.logError("Asset checking failed: ", ex);
+                    }
+                    return null;
+                }
+            });
+        try {
+            th.shutdown();
+            th.wait(60, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            Logger.logError("Asset checking failed: ", ex);
         }
+        Logger.logDebug("time for mc asset check (parallel): " + (System.currentTimeMillis() - unixTime));
 
         for (File f : old) {
             String name = f.getAbsolutePath().replace(targetDir.getAbsolutePath(), "");
