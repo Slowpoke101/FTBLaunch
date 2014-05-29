@@ -25,13 +25,21 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-package es.usc.citius.common.parallel;
+
+/*
+ * Original source: https://github.com/pablormier/parallel-loops
+ */
+
+package net.ftb.util;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
+
+import net.ftb.data.Settings;
+import net.ftb.log.Logger;
 
 /**
  * <p>This class contains some useful classes and methods to parallelize code in an
@@ -121,6 +129,25 @@ public final class Parallel {
         private ExecutorService executorService;
 
         public TaskHandler(ExecutorService executor,
+                           Iterable<Callable<V>> tasks, boolean poolSizeCheck, int maxPool, int sleep) {
+
+            this.executorService = executor;
+            for (Callable<V> task : tasks) {
+                while (poolSizeCheck && (((ThreadPoolExecutor)executor).getTaskCount() - ((ThreadPoolExecutor)executor).getCompletedTaskCount()) > maxPool) {
+                    if (Settings.getSettings().getDebugLauncher()) {
+                        Logger.logDebug("system time: " + System.currentTimeMillis());
+                        Logger.logDebug("task count: " + (((ThreadPoolExecutor)executor).getTaskCount() - ((ThreadPoolExecutor)executor).getCompletedTaskCount()));
+                    }
+
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (Exception e) { }
+                }
+                runningTasks.add(executor.submit(task));
+            }
+        }
+
+        public TaskHandler(ExecutorService executor,
                            Iterable<Callable<V>> tasks) {
 
             this.executorService = executor;
@@ -167,6 +194,10 @@ public final class Parallel {
             }
             return results;
         }
+
+        public void shutdown() {
+            executorService.shutdown();
+        }
     }
 
     /**
@@ -177,12 +208,30 @@ public final class Parallel {
     public static class ForEach<E, V> implements F<F<E, V>, TaskHandler<V>> {
         // Source elements
         private Iterable<E> elements;
-        // Executor used to invoke concurrent tasks. By default it uses as many
-        // threads as processors available
-        private ExecutorService executor = Executors.newCachedThreadPool();
+        private boolean poolSizeCheck = false;
+        private int sleep = 0;
+        private int maxTasksInPool = 0;
+        //
+        // Default executor will run tasks in four threads
+        private ExecutorService executor = Executors.newFixedThreadPool(4);
 
         public ForEach(Iterable<E> elements) {
             this.elements = elements;
+        }
+
+        /**
+         * Configure Pool Size.
+         * Will limit speed of the apply().
+         *
+         * @param tasks Size of the tasks in pool
+         * @param sleepTime Time to sleep(in ms) before trying add more tasks in pool
+         * @return a ForEach instance
+         */
+        public ForEach<E, V> configurePoolSize(int tasks, int sleepTime) {
+            poolSizeCheck = true;
+            sleep = sleepTime;
+            maxTasksInPool = tasks;
+            return this;
         }
 
         /**
@@ -239,7 +288,7 @@ public final class Parallel {
         }
 
         public TaskHandler<V> apply(F<E, V> f) {
-            return new TaskHandler<V>(executor, map(elements, f));
+            return new TaskHandler<V>(executor, map(elements, f), poolSizeCheck, maxTasksInPool, sleep);
         }
 
         private Iterable<Callable<V>> map(final Iterable<E> elements,
