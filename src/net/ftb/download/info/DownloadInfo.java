@@ -2,6 +2,7 @@ package net.ftb.download.info;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ public class DownloadInfo {
     public File local;
     public String name;
     public long size = 0;
-    public String hash;
+    public List<String> hash;
     public String hashType;
     @Getter
     @Setter
@@ -35,7 +36,7 @@ public class DownloadInfo {
         this(url, local, name, null, "md5");
     }
 
-    public DownloadInfo(URL url, File local, String name, String hash, String hashType, DLType primary, DLType backup) {
+    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType, DLType primary, DLType backup) {
         this(url, local, name, hash, hashType);
         if (primary != null)
             this.primaryDLType = primary;
@@ -43,7 +44,7 @@ public class DownloadInfo {
             this.backupDLType = backup;
     }
 
-    public DownloadInfo(URL url, File local, String name, String hash, String hashType) {
+    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType) {
         this.url = url;
         this.local = local;
         this.name = name;

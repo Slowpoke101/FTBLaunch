@@ -36,7 +36,6 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
 
-
 public class OSUtils {
     private static byte[] cachedMacAddress;
     private static String cachedUserHome;
@@ -91,7 +90,7 @@ public class OSUtils {
             return getDefInstallPath() + "/temp/";
         }
     }
-    
+
     /**
      * Used to get a location to store cached content such as maps,
      * texture packs and pack archives.
@@ -101,7 +100,7 @@ public class OSUtils {
     public static String getCacheStorageLocation () {
         switch (getCurrentOS()) {
         case WINDOWS:
-            if(System.getenv("LOCALAPPDATA")!= null && System.getenv("LOCALAPPDATA").length() > 5)
+            if (System.getenv("LOCALAPPDATA") != null && System.getenv("LOCALAPPDATA").length() > 5)
                 return System.getenv("LOCALAPPDATA") + "/ftblauncher/";
             else
                 return System.getenv("APPDATA") + "/ftblauncher/";
@@ -113,44 +112,44 @@ public class OSUtils {
             return getDefInstallPath() + "/temp/";
         }
     }
-    
-    public static void createStorageLocations() {
+
+    public static void createStorageLocations () {
         File cacheDir = new File(OSUtils.getCacheStorageLocation());
         File dynamicDir = new File(OSUtils.getDynamicStorageLocation());
-        
+
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
-            
+
             if (dynamicDir.exists() && !cacheDir.equals(dynamicDir)) {
                 // Migrate cached archives from the user's roaming profile to their local cache
-                
+
                 Logger.logInfo("Migrating cached Maps from Roaming to Local storage");
                 FileUtils.move(new File(dynamicDir, "Maps"), new File(cacheDir, "Maps"));
-                
+
                 Logger.logInfo("Migrating cached Modpacks from Roaming to Local storage");
                 FileUtils.move(new File(dynamicDir, "ModPacks"), new File(cacheDir, "ModPacks"));
-                
+
                 Logger.logInfo("Migrating cached Texturepacks from Roaming to Local storage");
                 FileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
-                
+
                 Logger.logInfo("Migration complete.");
             }
         }
-        
+
         if (!dynamicDir.exists()) {
             dynamicDir.mkdirs();
         }
 
-        if(getCurrentOS() == OS.WINDOWS) {
-        File oldLoginData = new File(dynamicDir, "logindata");
-        File newLoginData = new File(cacheDir, "logindata");
-        try {
-            if (oldLoginData.exists() && !oldLoginData.getCanonicalPath().equals(newLoginData.getCanonicalPath())) {
-                newLoginData.delete();
+        if (getCurrentOS() == OS.WINDOWS) {
+            File oldLoginData = new File(dynamicDir, "logindata");
+            File newLoginData = new File(cacheDir, "logindata");
+            try {
+                if (oldLoginData.exists() && !oldLoginData.getCanonicalPath().equals(newLoginData.getCanonicalPath())) {
+                    newLoginData.delete();
+                }
+            } catch (Exception e) {
+                Logger.logError("Error deleting login data", e);
             }
-        } catch (Exception e){
-            Logger.logError("Error deleting login data", e);
-        }
         }
     }
 
@@ -222,7 +221,7 @@ public class OSUtils {
      * Used to check if Windows is 64-bit
      * @return true if 64-bit Windows
      */
-    public static boolean is64BitWindows() {
+    public static boolean is64BitWindows () {
         String arch = System.getenv("PROCESSOR_ARCHITECTURE");
         String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
         return (arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")));
@@ -233,14 +232,14 @@ public class OSUtils {
      * @return true if 64-bit Posix OS
      */
     public static boolean is64BitPosix () {
-        String line, result="";
+        String line, result = "";
         try {
             Process command = Runtime.getRuntime().exec("uname -m");
             BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
             while ((line = in.readLine()) != null) {
                 result += (line + "\n");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
@@ -251,7 +250,7 @@ public class OSUtils {
      * Used to check if operating system is 64-bit
      * @return true if 64-bit operating system
      */
-    public static boolean is64BitOS() {
+    public static boolean is64BitOS () {
         switch (getCurrentOS()) {
         case WINDOWS:
             return is64BitWindows();
@@ -270,16 +269,15 @@ public class OSUtils {
      * Used to get check if JVM is 64-bit
      * @return true if 64-bit JVM
      */
-    public static Boolean is64BitVM() {
+    public static Boolean is64BitVM () {
         Boolean bits64;
         if ((getCurrentOS() == OS.WINDOWS || getCurrentOS() == OS.MACOSX) && JavaFinder.parseJavaVersion() != null) {
             bits64 = JavaFinder.parseJavaVersion().is64bits;
         } else {
-           bits64 = System.getProperty("sun.arch.data.model").equals("64");
+            bits64 = System.getProperty("sun.arch.data.model").equals("64");
         }
         return bits64;
     }
-
 
     /**
      * Used to get the OS name for use in google analytics
@@ -375,13 +373,18 @@ public class OSUtils {
             Logger.logError("Could not open file", e);
         }
     }
-    public static boolean canRun7OnMac(){
+
+    /**
+     * @return if java 7+ can be ran on that version of osx
+     */
+    public static boolean canRun7OnMac () {
         return getCurrentOS() == OS.MACOSX && !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"));
     }
+
     /**
      * Removes environment variables which may cause faulty JVM memory allocations
      */
-    public static void cleanEnvVars(Map<String, String> environment) {
+    public static void cleanEnvVars (Map<String, String> environment) {
         environment.remove("_JAVA_OPTIONS");
         environment.remove("JAVA_TOOL_OPTIONS");
         environment.remove("JAVA_OPTIONS");

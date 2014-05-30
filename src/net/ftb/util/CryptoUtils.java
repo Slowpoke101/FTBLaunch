@@ -30,6 +30,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class CryptoUtils {
 
+    /**
+     * Newer implementation available if possible use {@link #decrypt(String str, byte[] key)}
+     * @param str string to decrypt
+     * @param key decryption key
+     * @return decrypted string or "" if fails
+     */
     @Deprecated
     public static String decryptLegacy (String str, byte[] key) {
         BigInteger in = new BigInteger(str, 16).xor(new BigInteger(1, key));
@@ -43,6 +49,12 @@ public class CryptoUtils {
         }
     }
 
+    /**
+     * Newer implementation available if possible use {@link #encrypt(String str, byte[] key)}
+     * @param str string to decrypt
+     * @param key decryption key
+     * @return decrypted string or "" if fails
+     */
     @Deprecated
     public static String encryptLegacy (String str, byte[] key) {
         BigInteger str2;
@@ -54,6 +66,12 @@ public class CryptoUtils {
         return String.format("%040x", str2);
     }
 
+    /**
+     * Method to AES decrypt string if fails, will attempt to use {@link #decryptLegacy(String str, byte[] key)}
+     * @param str string to decrypt
+     * @param key decryption key key
+     * @return decrypted string or "" if legacy fails
+     */
     public static String decrypt (String str, byte[] key) {
         try {
             Cipher aes = Cipher.getInstance("AES");
@@ -69,6 +87,12 @@ public class CryptoUtils {
         }
     }
 
+    /**
+     * Method to AES encrypt string if fails, will attempt to use {@link #encryptLegacy(String str, byte[] key)}
+     * @param str string to encrypt
+     * @param key encryption key
+     * @return encrypted string or "" if legacy fails
+     */
     public static String encrypt (String str, byte[] key) {
         try {
             Cipher aes = Cipher.getInstance("AES");
@@ -80,6 +104,11 @@ public class CryptoUtils {
         }
     }
 
+    /**
+     * method to pad AES keys by using the sha1Hex hash on them
+     * @param key key to pad
+     * @return padded key
+     */
     public static byte[] pad (byte[] key) {
         try {
             return Arrays.copyOf(DigestUtils.sha1Hex(key).getBytes("utf8"), 16);

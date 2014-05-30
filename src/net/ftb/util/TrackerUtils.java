@@ -24,7 +24,7 @@ public class TrackerUtils {
     }
 
     /**
-     *
+     * Method to send page view to google analytics -- checks if analytics are enabled before attempting to send
      * @param pageUrl URL for Launcher Analytics Page view -- usually the classpath
      * @param pageTitle Entry for view such as pack name & pack version, etc.
      */

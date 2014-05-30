@@ -26,7 +26,7 @@ public class ErrorUtils {
      * Writes error into log and shows error in message dialog
      * <p>
      * Same error message will be used for log and for message dialog.
-     * If using translated messages consider using {@link #tossError(Sting output, String log)}
+     * If using translated messages consider using {@link #tossError(String output, String log)}
      * @param output String to log and show in message dialog
      */
     public static void tossError(String output) {

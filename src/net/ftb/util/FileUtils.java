@@ -23,10 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -35,6 +33,8 @@ import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
@@ -225,7 +225,7 @@ public class FileUtils {
     }
 
     public static List<File> listDirs (File path) {
-        List<File> ret = new ArrayList<File>();
+        List<File> ret = Lists.newArrayList();
         if (path.exists())
             listDirs(path, ret);
         Collections.sort(ret, new Comparator<File>() {
@@ -247,7 +247,7 @@ public class FileUtils {
     }
 
     public static Set<File> listFiles (File path) {
-        Set<File> set = new HashSet<File>();
+        Set<File> set = Sets.newHashSet();
         if (path.exists()) {
             listFiles(path, set);
         }

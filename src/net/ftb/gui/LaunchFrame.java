@@ -29,6 +29,7 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -54,6 +55,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import lombok.Getter;
 import net.feed_the_beast.launcher.json.JsonFactory;
@@ -839,7 +841,7 @@ public class LaunchFrame extends JFrame {
     }
 
     private void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy) {
-        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion());
+        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(),installPath);
 
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
@@ -889,7 +891,7 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    private List<DownloadInfo> gatherAssets (File root, String mcVersion) {
+    private List<DownloadInfo> gatherAssets (File root, String mcVersion, String installDir) {
         try {
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
@@ -928,11 +930,12 @@ public class LaunchFrame extends JFrame {
                 }
             }
             Version version = JsonFactory.loadVersion(json);
+            //TODO make sure to  setup lib DL's for pack.json!!!
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
                     local = new File(root, "libraries/" + lib.getPath());
                     if (!local.exists() || forceUpdate) {
-                        if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {//DL's shouldn't be coming from maven repos but ours or mojang's
+                        if (!lib.getUrl().toLowerCase().equalsIgnoreCase(Locations.ftb_maven)) {//DL's shouldn't be coming from maven repos but ours or mojang's
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         } else {
                             list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
@@ -946,6 +949,26 @@ public class LaunchFrame extends JFrame {
 
                 }
             }
+
+            //Pack JSON Libraries
+            ModPack pack = ModPack.getSelectedPack();
+            File packDir = new File(installDir, pack.getDir());
+            File gameDir = new File(packDir, "minecraft");
+            File libDir = new File(installDir, "libraries");
+            if (!pack.getDir().equals("mojang_vanilla")) {
+                if (new File(gameDir, "pack.json").exists()) {
+                    Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                    for (Library lib : packjson.getLibraries()) {
+                        //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
+                        if(!new File(libDir, lib.getPath()).exists()){
+                            if (lib.checksums!= null)
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(),lib.checksums,"sha1"));
+                        }
+                    }
+                }
+            } else {
+                //TODO handle vanilla packs w/ tweakers w/ this stuffs !!!
+           }
 
             // Move the old format to the new:
             File test = new File(root, "assets/READ_ME_I_AM_VERY_IMPORTANT.txt");
@@ -1018,7 +1041,7 @@ public class LaunchFrame extends JFrame {
                 }
 
                 if (!local.exists()) {
-                    list.add(new DownloadInfo(new URL(Locations.mc_res + path), local, name, asset.hash, "sha1"));
+                    list.add(new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
                 }
             }
             return list;

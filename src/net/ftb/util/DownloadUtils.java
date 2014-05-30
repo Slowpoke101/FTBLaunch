@@ -40,6 +40,9 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.google.common.collect.Lists;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
@@ -299,7 +302,6 @@ public class DownloadUtils extends Thread {
             }
         }
         String result = fileMD5(file);
-        //  Logger.logInfo("OLDHASHING: " + fileHash(file, "md5"));
         Logger.logInfo("Local: " + result.toUpperCase());
         Logger.logInfo("Remote: " + content.toUpperCase());
         return content.equalsIgnoreCase(result);
@@ -313,32 +315,35 @@ public class DownloadUtils extends Thread {
      */
     public static String fileMD5 (File file) throws IOException {
         if (file.exists()) {
-            FileInputStream fis = new FileInputStream(file);
-            String result = DigestUtils.md5Hex(fis);
-            fis.close();
-            return result;
+            return Hashing.md5().hashBytes(Files.toByteArray(file)).toString();
+            //FileInputStream fis = new FileInputStream(file);
+            //String result = DigestUtils.md5Hex(fis);
+            //fis.close();
+            //return result;
         } else
             return "";
-
-        //return fileHash(file, "md5");
     }
 
     public static String fileSHA (File file) throws IOException {
         if (file.exists()) {
-            FileInputStream fis = new FileInputStream(file);
-            String result = DigestUtils.sha1Hex(fis).toLowerCase();
-            fis.close();
-            return result;
+            return Hashing.md5().hashBytes(Files.toByteArray(file)).toString();
+            //FileInputStream fis = new FileInputStream(file);
+            //String result = DigestUtils.sha1Hex(fis).toLowerCase();
+            //fis.close();
+            //return result;
         } else
             return "";
         //return fileHash(file, "sha1").toLowerCase();
     }
 
     public static String fileHash (File file, String type) throws IOException {
-
         if (!file.exists()) {
             return "";
         }
+        if(type.equalsIgnoreCase("md5"))
+            return fileMD5(file);
+        if(type.equalsIgnoreCase("sha1"))
+            return fileSHA(file);
         URL fileUrl = file.toURI().toURL();
         MessageDigest dgest = null;
         try {
@@ -429,7 +434,7 @@ public class DownloadUtils extends Thread {
                 } else if (!downloadServers.containsKey("Automatic")) {
                     // Use a random server from edges.json as the Automatic server
                     int index = (int) (Math.random() * downloadServers.size());
-                    List<String> keys = new ArrayList<String>(downloadServers.keySet());
+                    List<String> keys = Lists.newArrayList(downloadServers.keySet());
                     String defaultServer = downloadServers.get(keys.get(index));
 
                     downloadServers.put("Automatic", defaultServer);
@@ -483,6 +488,14 @@ public class DownloadUtils extends Thread {
         Locations.hasDLInitialized = true;
     }
 
+    /**
+     * method to parse & test if needed server listing
+     * @param u - URL of file to download & parse
+     * @param name - json server's nickname for use in error reports
+     * @param h - map to be written to
+     * @param testEntries - should the locations be tested?
+     * @param location - location to test on the repo ex: edges.json would test ${repoURL}/edges.json
+     */
     @NonNull
     public void parseJSONtoMap (URL u, String name, HashMap<String, String> h, boolean testEntries, String location) {
         try {

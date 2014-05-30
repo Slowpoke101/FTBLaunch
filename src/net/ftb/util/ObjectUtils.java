@@ -1,10 +1,18 @@
 package net.ftb.util;
 
+import lombok.NonNull;
+
 import java.util.Arrays;
 
 public class ObjectUtils {
 
-    public static String preventNullString (String s, String backup) {
+    /**
+     *
+     * @param s - string to check
+     * @param backup -if string is null or empty this will be returned
+     * @return NonNull string
+     */
+    public static String preventNullString (String s,@NonNull String backup) {
         if (s == null || s.isEmpty()) {
             return backup;
         }
