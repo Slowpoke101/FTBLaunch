@@ -319,7 +319,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 }
             }
         }
-        else if( OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || (java.getMajor() == 1 ||  java.getMinor() > 7))){
+        else if(OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 ||  java.getMinor() > 7)){
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
         }else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
