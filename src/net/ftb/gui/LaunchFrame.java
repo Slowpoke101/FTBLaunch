@@ -153,6 +153,8 @@ public class LaunchFrame extends JFrame {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
+    private static Benchmark startupBench;//used for benchmarking startup times.
+
 
     public static final String FORGENAME = "MinecraftForge.zip";
     private final static String launcherLogFile = "FTBLauncherLog.txt";
@@ -177,6 +179,7 @@ public class LaunchFrame extends JFrame {
      * @param args - CLI arguments
      */
     public static void main (String[] args) {
+        startupBench= new Benchmark();
         /*
          *  Create dynamic storage location as soon as possible
          */
@@ -642,6 +645,7 @@ public class LaunchFrame extends JFrame {
                             loader.setVisible(false);
                             instance.setVisible(true);
                             instance.toFront();
+                            startupBench.logBench("Launcher Startup");
                         }
                     }
                 }
