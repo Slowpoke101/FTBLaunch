@@ -27,7 +27,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,10 +166,10 @@ public class LaunchFrame extends JFrame {
     @Getter
     private EventBus eventBus = new EventBus();
 
-
     public enum Panes {
         NEWS, OPTIONS, MODPACK, THIRDPARTY, TEXTURE
     }
+
     private boolean tpEnabled = true;
 
     /**
@@ -186,11 +185,11 @@ public class LaunchFrame extends JFrame {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
-        if(Settings.getSettings().getUseSystemProxy()) {
+        if (Settings.getSettings().getUseSystemProxy()) {
             // Use system default proxy settings
             System.setProperty("java.net.useSystemProxies", "true");
         }
-        
+
         if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
             new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
         }
@@ -335,7 +334,7 @@ public class LaunchFrame extends JFrame {
                  */
                 AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13") {
                     @Override
-                    protected void done() {
+                    protected void done () {
                         LaunchFrame.getInstance().getLaunch().setEnabled(true);
                     }
                 };
@@ -376,7 +375,7 @@ public class LaunchFrame extends JFrame {
                  */
                 UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable) {
                     @Override
-                    protected void done() {
+                    protected void done () {
                         try {
                             if (get()) {
                                 LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
@@ -511,15 +510,15 @@ public class LaunchFrame extends JFrame {
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
                     if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                    .getSelectedPack().getVersion().replace(".", "_")
-                                    : Settings.getSettings().getPackVer().replace(".", "_");
-                            if (ModPack.getSelectedPack().isPrivatePack()) {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                            } else {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                            }
-                            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
+                        String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
+                                .getSelectedPack().getVersion().replace(".", "_")
+                                : Settings.getSettings().getPackVer().replace(".", "_");
+                        if (ModPack.getSelectedPack().isPrivatePack()) {
+                            OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
+                        } else {
+                            OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
+                        }
+                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
                     }
                 }
             }
@@ -551,8 +550,8 @@ public class LaunchFrame extends JFrame {
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-                        OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
-                                + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
+                    OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
+                            + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
                 }
             }
         });
@@ -613,11 +612,11 @@ public class LaunchFrame extends JFrame {
         setNewsIcon();
         try {
             tabbedPane.setIconAt(1, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/options.png")));
-            tabbedPane.setIconAt(2,  LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
+            tabbedPane.setIconAt(2, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
             tabbedPane.setIconAt(3, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
             tabbedPane.setSelectedIndex(tab);
-        }catch(Exception e1){
+        } catch (Exception e1) {
             Logger.logError("error changing colors", e1);
         }
         tabbedPane.addChangeListener(new ChangeListener() {
@@ -656,7 +655,7 @@ public class LaunchFrame extends JFrame {
          */
         UnreadNewsWorker unreadNews = new UnreadNewsWorker() {
             @Override
-            protected void done() {
+            protected void done () {
                 try {
                     int i = get();
                     if (i > 0 && i < 100) {
@@ -719,7 +718,7 @@ public class LaunchFrame extends JFrame {
                     enableObjects();
                     return;
                 } catch (ExecutionException err) {
-                    if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
+                    if (err.getCause() instanceof IOException) {
                         Logger.logError(err.getMessage(), err);
                         PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username), getResp());
                         d.setVisible(true);
@@ -729,7 +728,7 @@ public class LaunchFrame extends JFrame {
                 }
 
                 RESPONSE = getResp();
-                String uuid = userManager.getUUID(username);
+                String uuid = UserManager.getUUID(username);
                 if (responseStr.equals("good")) {
                     Logger.logInfo("Login complete.");
                     try {
@@ -737,7 +736,7 @@ public class LaunchFrame extends JFrame {
                     } catch (IOException e) {
                         Logger.logError("User data saving failed!");
                     }
-                    runGameUpdater(RESPONSE);
+                    runGameUpdater();
                 } else if (uuid != null && !uuid.isEmpty() && RESPONSE != null && responseStr.equals("offline")) {
                     PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid, RESPONSE);
                     d.setVisible(true);
@@ -769,9 +768,8 @@ public class LaunchFrame extends JFrame {
 
     /**
      * checks whether an update is needed, and then starts the update process off
-     * @param response - the response from the minecraft servers
      */
-    private void runGameUpdater (final LoginResponse response) {
+    private void runGameUpdater () {
 
         final String installPath = Settings.getSettings().getInstallPath();
         final ModPack pack = ModPack.getSelectedPack();
@@ -866,7 +864,7 @@ public class LaunchFrame extends JFrame {
 
             downloader.execute();
         } else {
-            launchMinecraftNew(installPath, pack, RESPONSE,isLegacy);
+            launchMinecraftNew(installPath, pack, RESPONSE, isLegacy);
         }
     }
 
@@ -891,7 +889,7 @@ public class LaunchFrame extends JFrame {
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
-            int attempt=0, attempts=3;
+            int attempt = 0, attempts = 3;
             boolean success = false;
             Exception reason = null;
             while ((attempt < attempts) && !success) {
@@ -913,7 +911,7 @@ public class LaunchFrame extends JFrame {
                 if (lib.natives == null) {
                     local = new File(root, "libraries/" + lib.getPath());
                     if (!local.exists() || forceUpdate) {
-                        if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {
+                        if (!lib.getUrl().toLowerCase().contains(Locations.ftb_maven)) {//DL's shouldn't be coming from maven repos but ours or mojang's
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         } else {
                             list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
@@ -968,7 +966,8 @@ public class LaunchFrame extends JFrame {
              */
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
-            attempt=0; attempts=3;
+            attempt = 0;
+            attempts = 3;
             success = false;
             while ((attempt < attempts) && !success) {
                 try {
@@ -1020,7 +1019,7 @@ public class LaunchFrame extends JFrame {
                 natDir.delete();
             }
             natDir.mkdirs();
-            if(isLegacy)
+            if (isLegacy)
                 extractLegacy();
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion())));
             byte[] buf = new byte[1024];
@@ -1060,7 +1059,7 @@ public class LaunchFrame extends JFrame {
             List<File> classpath = new ArrayList<File>();
             Version packjson = new Version();
             if (!pack.getDir().equals("mojang_vanilla")) {
-                if(isLegacy){
+                if (isLegacy) {
                     extractLegacyJson(new File(gameDir, "pack.json"));
                 }
                 if (new File(gameDir, "pack.json").exists()) {
@@ -1073,7 +1072,7 @@ public class LaunchFrame extends JFrame {
             } else {
                 packjson = base;
             }
-            if(!isLegacy) //we copy the jar to a new location for legacy
+            if (!isLegacy) //we copy the jar to a new location for legacy
                 classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
             else {
                 FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())), new File(gameDir, "bin/minecraft.jar"));
@@ -1082,13 +1081,13 @@ public class LaunchFrame extends JFrame {
             for (Library lib : base.getLibraries()) {
                 classpath.add(new File(libDir, lib.getPath()));
             }
-            //launchMinecraftNew(installPath, pack, RESPONSE.getUsername(), RESPONSE.getSessionID(), pack.getMaxPermSize(), RESPONSE.getUUID());
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath, packjson.mainClass != null ? packjson.mainClass
-                    : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(),
-                    Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
+            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
+                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
             MCRunning = true;
-            if(con != null) con.minecraftStarted();
+            if (con != null)
+                con.minecraftStarted();
             StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
@@ -1105,7 +1104,8 @@ public class LaunchFrame extends JFrame {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
                         } else {
-                            if(con != null) con.minecraftStopped();
+                            if (con != null)
+                                con.minecraftStopped();
                             LaunchFrame launchFrame = LaunchFrame.this;
                             launchFrame.setVisible(true);
                             launchFrame.enableObjects();
@@ -1137,10 +1137,10 @@ public class LaunchFrame extends JFrame {
         String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack;
-        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
-           pack = ModPack.getPack(thirdPartyPane.getSelectedThirdPartyModIndex());
+        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
+            pack = ModPack.getPack(thirdPartyPane.getSelectedThirdPartyModIndex());
         else
-           pack = ModPack.getPack(modPacksPane.getSelectedFTBModIndex());
+            pack = ModPack.getPack(modPacksPane.getSelectedFTBModIndex());
 
         String packDir = pack.getDir();
 
@@ -1233,14 +1233,14 @@ public class LaunchFrame extends JFrame {
      * @return - Outputs selected map install index
      */
     public static int getSelectedMapInstallIndex () {
-        return instance.mapInstallLocation.getSelectedIndex();
+        return mapInstallLocation.getSelectedIndex();
     }
 
     /**
      * @return - Outputs selected texturepack install index
      */
     public static int getSelectedTPInstallIndex () {
-        return instance.tpInstallLocation.getSelectedIndex();
+        return tpInstallLocation.getSelectedIndex();
     }
 
     /**
@@ -1325,11 +1325,11 @@ public class LaunchFrame extends JFrame {
         boolean result;
         switch (currentPane) {
         case TEXTURE:
-            if(tpEnabled) {
-            tpInstall.setVisible(true);
-            tpInstallLocation.setVisible(true);
-            disableMainButtons();
-            disableMapButtons();
+            if (tpEnabled) {
+                tpInstall.setVisible(true);
+                tpInstallLocation.setVisible(true);
+                disableMainButtons();
+                disableMapButtons();
             } else {
                 result = mapsPane.type.equals("Server");
                 mapInstall.setVisible(!result);
@@ -1415,49 +1415,56 @@ public class LaunchFrame extends JFrame {
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
-        if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-            if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
-                Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-                Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-                saveSettings();
-                doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
-                        UserManager.getMojangData(users.getSelectedItem().toString()));
-            } else {//user can't run pack-- JRE not high enough
-                ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.");
+        if (ModPack.getSelectedPack().getMinLaunchSpec() <= this.buildNumber) {
+            if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
+                if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
+                    Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
+                    Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
+                    saveSettings();
+                    doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
+                            UserManager.getMojangData(users.getSelectedItem().toString()));
+                } else {//user can't run pack-- JRE not high enough
+                    ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.");
+                }
+            } else if (users.getSelectedIndex() <= 1) {
+                ErrorUtils.tossError("Please select a profile!");
             }
-        } else if (users.getSelectedIndex() <= 1) {
-            ErrorUtils.tossError("Please select a profile!");
+        } else {
+            ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
         }
     }
-    public static void extractLegacy(){
-       try {
-           File f = new File(Settings.getSettings().getInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch.FTBLegacyLaunch".replace(".", File.separator) + File.separator + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
-           //Logger.logError("Extracting Legacy launch code to " + f.getAbsolutePath());
-           if(!new File(f.getParent()).exists())
-               new File(f.getParent()).mkdirs();
-           if(f.exists())
-               f.delete();//we want to have the current version always!!!
-           URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
-           org.apache.commons.io.FileUtils.copyURLToFile(u,f);
-       } catch (Exception e){
-            Logger.logError("Error extracting legacy launch to maven directory");
-       }
-    }
-    public static void extractLegacyJson(File newLoc){
+
+    public static void extractLegacy () {
         try {
-            if(!new File(newLoc.getParent()).exists())
-                new File(newLoc.getParent()).mkdirs();
-            if(newLoc.exists())
-                newLoc.delete();//we want to have the current version always!!!
-            URL u = LaunchFrame.class.getResource("/launch/legacypack.json");
-            org.apache.commons.io.FileUtils.copyURLToFile(u,newLoc);
-        } catch (Exception e){
+            File f = new File(Settings.getSettings().getInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch.FTBLegacyLaunch".replace(".", File.separator)
+                    + File.separator + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
+            //Logger.logError("Extracting Legacy launch code to " + f.getAbsolutePath());
+            if (!new File(f.getParent()).exists())
+                new File(f.getParent()).mkdirs();
+            if (f.exists())
+                f.delete();//we want to have the current version always!!!
+            URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
+            org.apache.commons.io.FileUtils.copyURLToFile(u, f);
+        } catch (Exception e) {
             Logger.logError("Error extracting legacy launch to maven directory");
         }
     }
 
-    public void swapTabs(boolean toMaps){
-        if(toMaps) {
+    public static void extractLegacyJson (File newLoc) {
+        try {
+            if (!new File(newLoc.getParent()).exists())
+                new File(newLoc.getParent()).mkdirs();
+            if (newLoc.exists())
+                newLoc.delete();//we want to have the current version always!!!
+            URL u = LaunchFrame.class.getResource("/launch/legacypack.json");
+            org.apache.commons.io.FileUtils.copyURLToFile(u, newLoc);
+        } catch (Exception e) {
+            Logger.logError("Error extracting legacy launch to maven directory");
+        }
+    }
+
+    public void swapTabs (boolean toMaps) {
+        if (toMaps) {
             tabbedPane.remove(4);
             tabbedPane.add(mapsPane, 4);
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));

@@ -21,7 +21,6 @@ import lombok.Getter;
 import com.mojang.authlib.UserAuthentication;
 
 public class LoginResponse {
-    private String type;
 
     @Getter
     private UserAuthentication auth;

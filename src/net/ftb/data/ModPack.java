@@ -57,6 +57,8 @@ public class ModPack {
     private boolean privatePack;
     @Getter
     private int[] minJRE;
+    @Getter
+    private int minLaunchSpec;
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -176,13 +178,14 @@ public class ModPack {
      * @param idx - the actual position of the modpack in the index
      * @param bundledMap - pack has map bundled inside it
      * @param customTP - pack does not use primary TP's for MC version
-     * @param minJRE - minimum JRE version needed to run pack
+     * @param minJRE - minimum JRE version needed to run pack (optional in xml)
      * @param thirdpartyTab - should this pack be in the FTB or third party tabs?
+     * @param minLaunchSpec - minimum launcher build needed to run latest pack version(optional in xml)
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab) throws IOException, NoSuchAlgorithmException {
+                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -196,6 +199,7 @@ public class ModPack {
         this.maxPermSize = maxPermSize;
         this.hasbundledmap = bundledMap;
         this.hasCustomTP = customTP;
+        this.minLaunchSpec = minLaunchSpec;
         String[] tempJRE = minJRE.split("\\.");
         List<Integer> tmpIJre = Lists.newArrayList();
         for (String aTempJRE : tempJRE) {

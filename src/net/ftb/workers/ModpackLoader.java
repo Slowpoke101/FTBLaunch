@@ -108,7 +108,7 @@ public class ModpackLoader extends Thread {
                                 .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
                                 (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty));
+                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr.getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent())));
                     } catch (Exception e) {
                         Logger.logError(e.getMessage(), e);
                     }

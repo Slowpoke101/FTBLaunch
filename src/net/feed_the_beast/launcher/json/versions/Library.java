@@ -13,7 +13,7 @@ public class Library {
     public Map<OS, String> natives;
     public ExtractRule extract;
     public String url;
-    public boolean localRepo;//when true the DL will be grabbed from the FTB Repo's
+    public boolean localRepo;//when true the DL will be grabbed from the FTB Repo's and use the FTB hash check methods instead of the etag
 
     private Action _applies = null;
 
