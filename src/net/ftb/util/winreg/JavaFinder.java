@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
@@ -61,7 +62,7 @@ public class JavaFinder {
         if(OSUtils.getCurrentOS() == OS.WINDOWS)
             return findWinJavas();
         
-        return new ArrayList<JavaInfo>();
+        return Lists.newArrayList();
     }
     
     protected static List<JavaInfo> findWinJavas() {
@@ -76,7 +77,7 @@ public class JavaFinder {
         javaExecs.add(System.getenv("WINDIR") + "\\SysWOW64\\java.exe");
         javaExecs.add(System.getProperty("java.home") + "\\bin\\javaw.exe");
 
-        List<JavaInfo> result = new ArrayList<JavaInfo>();
+        List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
             if (!(new File(javaPath).exists()))
                 continue;
@@ -99,7 +100,7 @@ public class JavaFinder {
     }
     
     protected static List<JavaInfo> findMacJavas() {
-        List<String> javaExecs = new ArrayList<String>();
+        List<String> javaExecs = Lists.newArrayList();
         String javaVersion;
         
         javaVersion = getMacJavaPath("1.6");
@@ -117,7 +118,7 @@ public class JavaFinder {
         javaExecs.add("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
         javaExecs.add(System.getProperty("java.home") + "/bin/java");
 
-        List<JavaInfo> result = new ArrayList<JavaInfo>();
+        List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
             File javaFile = new File(javaPath); 
             if (!javaFile.exists() || !javaFile.canExecute())
@@ -151,8 +152,8 @@ public class JavaFinder {
     public static JavaInfo parseJavaVersion () {
         if (preferred == null) {
             List<JavaInfo> javas = JavaFinder.findJavas();
-            List<JavaInfo> java32 = new ArrayList<JavaInfo>();
-            List<JavaInfo> java64 = new ArrayList<JavaInfo>();
+            List<JavaInfo> java32 = Lists.newArrayList();
+            List<JavaInfo> java64 = Lists.newArrayList();
 
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (JavaInfo java : javas) {

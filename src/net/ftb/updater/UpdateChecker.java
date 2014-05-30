@@ -136,7 +136,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             URL updateURL = new URL(useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress + "." + extension);
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
-            DownloadUtils.downloadToFile(updateURL, temporaryUpdate);
+            DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
             SelfUpdate.runUpdate(path, temporaryUpdatePath);
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);

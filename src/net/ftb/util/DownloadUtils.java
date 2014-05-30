@@ -20,7 +20,6 @@ import static net.ftb.download.Locations.backupServers;
 import static net.ftb.download.Locations.downloadServers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +31,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +48,6 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.JsonElement;
@@ -371,6 +368,7 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
+        Benchmark bench = new Benchmark();
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
             Logger.logInfo("DownloadUtils.run() starting");
@@ -406,12 +404,15 @@ public class DownloadUtils extends Thread {
                             }
                         }
                     }
+                    bench.logBench("Download Utils Bal");
                     if (Locations.chEnabled) {
                         // Fetch servers from creeperhost using edges.json first
                         parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
+                        bench.logBench("Download Utils CH");
                     }
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
+                    bench.logBench("Download Utils Curse");
                     LoadingDialog.setProgress(80);
                 } catch (IOException e) {
                     int i = 10;
@@ -484,6 +485,7 @@ public class DownloadUtils extends Thread {
             }
 
             Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
+            bench.logBench("Download Utils Init");
         }
         Locations.hasDLInitialized = true;
     }
