@@ -110,13 +110,21 @@ public class Settings extends Properties {
     public void setInstallPath (String path) {
         setProperty("installPath", path);
     }
-    
+
     public Boolean getUseSystemProxy () {
         return Boolean.valueOf(getProperty("useSystemProxy", "false"));
     }
 
     public void setUseSystemProxy (Boolean flag) {
         setProperty("useSystemProxy", String.valueOf(flag));
+    }
+
+    public boolean isBetaChannel () {
+        return Boolean.valueOf(getProperty("betaChannel", "false"));
+    }
+
+    public void setBetaChannel (boolean flag) {
+        setProperty("betaChannel", String.valueOf(flag));
     }
 
     public String getJavaPath () {
@@ -134,7 +142,7 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
-    public JavaInfo getCurrentJava() {
+    public JavaInfo getCurrentJava () {
         if (currentJava == null)
             currentJava = new JavaInfo(getJavaPath());
         return currentJava;
@@ -199,11 +207,11 @@ public class Settings extends Properties {
         setProperty("lastThirdPartyPack", name);
     }
 
-    public String getLastFTBPack () {//todo 1.4.0 find out why is this generating tons of NPE's
-        return getProperty("lastFTBPack",ModPack.getPack(0).getDir());
+    public String getLastFTBPack () {
+        return getProperty("lastFTBPack", ModPack.getPack(0).getDir());
     }
 
-    public String getLastThirdPartyPack () {//todo 1.4.0 find out why is this generating tons of NPE's
+    public String getLastThirdPartyPack () {
         return getProperty("lastThirdPartyPack", ModPack.getPack(0).getDir());
     }
 

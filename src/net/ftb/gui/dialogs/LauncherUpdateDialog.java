@@ -53,7 +53,8 @@ public class LauncherUpdateDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 // TODO: Call new frame containing html page?
-                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + LaunchFrame.buildNumber);
+                // TODO: beta changelogs???
+                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + LaunchFrame.buildNumber);//TODO update this!!!
             }
         });
 
@@ -83,7 +84,7 @@ public class LauncherUpdateDialog extends JDialog {
         panel.setLayout(layout);
 
         messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
-        extraText = new JLabel(!usable ? I18N.getLocaleString("LUNCHERUPDATE_CURRENTDEAD") : "");
+        extraText = new JLabel(!usable ? I18N.getLocaleString("LUNCHERUPDATE_CURRENTDEAD") : "");//TODO use this for beta channel??
         extraText.setForeground(Color.red);
         JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
         showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));

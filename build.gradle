@@ -24,7 +24,6 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
 		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
-
     }
 
 }
@@ -40,9 +39,14 @@ project.ext {
     mainClass = 'net.ftb.gui.LaunchFrame'
     currentYear = '2014'
 }
+    if (System.getenv().BUILD_NUMBER != null) {
+        ext.buildNum = System.getenv().BUILD_NUMBER
+    } else {
+        ext.buildNum = "9999999"
+    }
 
 group = 'net.ftb'
-version = '1.4.0'
+version = "1.4.0-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -81,7 +85,7 @@ task deleteShadow(type: Delete) {
 task zipApp(type: Zip) {
     from "${project.buildDir}/macApp/"
     destinationDir = file("${project.buildDir}/libs")
-    classifier = 'app'	
+    classifier = 'app'
 }
 apply plugin: 'macAppBundle'
 
@@ -111,10 +115,9 @@ macAppBundle {
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
 }
 
-//}
 jar {
     manifest {
-        attributes 'Main-Class': project.mainClass
+        attributes 'Main-Class': project.mainClass, 'Launcher-Jenkins': project.buildNum
     }
 }
 
@@ -148,3 +151,13 @@ sourceSets {
         }
     }
 }
+    if (project.hasProperty("local_maven")) {
+	    apply plugin: 'maven'
+            uploadArchives {
+                repositories {
+                    mavenDeployer {
+                        repository(url: "file://${local_maven}")
+                }
+            }
+        }
+    }

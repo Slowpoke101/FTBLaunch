@@ -34,6 +34,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -103,6 +105,7 @@ import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
+import org.apache.commons.io.IOUtils;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -155,7 +158,6 @@ public class LaunchFrame extends JFrame {
     public static LoadingDialog loader;
     private static Benchmark startupBench;//used for benchmarking startup times.
 
-
     public static final String FORGENAME = "MinecraftForge.zip";
     private final static String launcherLogFile = "FTBLauncherLog.txt";
     private final static String minecraftLogFile = "MinecraftLog.txt";
@@ -179,7 +181,7 @@ public class LaunchFrame extends JFrame {
      * @param args - CLI arguments
      */
     public static void main (String[] args) {
-        startupBench= new Benchmark();
+        startupBench = new Benchmark();
         /*
          *  Create dynamic storage location as soon as possible
          */
@@ -372,11 +374,26 @@ public class LaunchFrame extends JFrame {
 
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
-
+                URL mf = LaunchFrame.class.getResource("/META-INF/MANIFEST.MF");
+                int beta = 9999999;
+                String mfStr = "";
+                try {
+                    Manifest manifest = new Manifest(mf.openStream());
+                    Attributes attr = manifest.getMainAttributes();
+                    if (attr.containsKey("Launcher-Jenkins")) {
+                        mfStr = attr.getValue("Launcher-Jenkins");
+                        beta = Integer.parseInt(mfStr);
+                        Logger.logDebug("FTB Launcher CI Build #: " + beta);
+                    }
+                } catch (Exception e) {
+                    Logger.logError("Error getting beta information, assuming beta channel not usable!");
+                    beta = 9999999;
+                }
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable) {
+                final int beta_ = beta;
+                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable, beta) {
                     @Override
                     protected void done () {
                         try {

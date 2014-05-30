@@ -23,6 +23,8 @@ import java.net.URLDecoder;
 
 import javax.swing.SwingWorker;
 
+import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -35,19 +37,32 @@ import org.w3c.dom.NamedNodeMap;
 
 public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private int version;
-    private int latest;
-    private int  minUsable;
-    public static String verString = "";
-    private String downloadAddress = "";
+    private int buildJenk;
+    private int beta;//beta release target
+    private int betaJenk;//beta CI build #
+    private int relJenk;//beta CI build #
 
-    public UpdateChecker(int version, int minUsable) {
+    private int latest;
+    private int minUsable;
+    public static String verString = "";
+    public static String betaStr = "";
+    private String downloadAddress = "";
+    private String betaAddress = "";
+    private boolean allowBeta;
+    private boolean betaLatest;
+    private boolean useBeta;
+
+    public UpdateChecker(int version, int minUsable, int buildJenk) {
         this.version = version;
         this.minUsable = minUsable;
+        this.allowBeta = Settings.getSettings().isBetaChannel();
+        this.buildJenk = buildJenk;
+        if (buildJenk == 9999999)
+            this.allowBeta = false;
     }
 
     @Override
-    protected Boolean doInBackground() {
-        //try{Thread.sleep(10000);}catch (Exception e){}
+    protected Boolean doInBackground () {
         loadInfo();
         try {
             FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
@@ -65,28 +80,47 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             }
             NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
             int latest_ = latest = Integer.parseInt(updateAttributes.getNamedItem("currentBuild").getTextContent());
-            verString += latest_ / (100*100) + ".";
-            latest_ = latest_ % (100*100);
+            verString += latest_ / (100 * 100) + ".";
+            latest_ = latest_ % (100 * 100);
             verString += latest_ / (100) + ".";
             latest_ = latest_ % 100;
             verString += latest_;
             downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
-
-
+            if(updateAttributes.getNamedItem("releaseJenkins")!= null) {
+                relJenk = Integer.parseInt(updateAttributes.getNamedItem("releaseJenkins").getTextContent());
+                int beta_ = beta = Integer.parseInt(updateAttributes.getNamedItem("betaBuild").getTextContent());
+                betaJenk = Integer.parseInt(updateAttributes.getNamedItem("betaJenkins").getTextContent());
+                betaStr += beta_ / (100 * 100) + ".";
+                beta_ = beta_ % (100 * 100);
+                betaStr += beta_ / (100) + ".";
+                beta_ = beta_ % 100;
+                betaStr += beta_;
+                betaAddress = Locations.FTBMAVENFULL + "net/ftb/FTB Launcher/" + betaStr + "-" + betaJenk + "/FTB_Launcher-" + betaStr + "-" + betaJenk;
+                betaLatest = Boolean.parseBoolean(updateAttributes.getNamedItem("betaLatest").getTextContent());
+            } else {
+                Logger.logInfo("Beta channel hasn't been activated yet!");
+            }
         } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
         }
     }
 
     public boolean shouldUpdate () {
-        if (version < latest) {
-            Logger.logInfo("New version found. version: " + version + ", latest: " + latest );
+        if (allowBeta && !betaLatest && (buildJenk < betaJenk || version < beta)) {
+            Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
+            useBeta = true;
+            return true;
+        } else if (version == latest && buildJenk < relJenk) {
+            Logger.logInfo("Release version found. version: " + version + "-"+ buildJenk+ ", latest: " + latest);
+        } else if (version < latest) {
+            Logger.logInfo("New version found. version: " + version + ", latest: " + latest);
+            useBeta = false;
             return true;
         } else {
             return false;
         }
+        return false;
     }
-
     public void update () {
         String path = null;
         try {
@@ -99,7 +133,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         String extension = path.substring(path.lastIndexOf('.') + 1);
         extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
         try {
-            URL updateURL = new URL(DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension));
+            URL updateURL = new URL(useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress + "." + extension);
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);

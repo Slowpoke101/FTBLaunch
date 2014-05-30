@@ -66,9 +66,11 @@ public class AdvancedOptionsDialog extends JDialog {
     private JCheckBox autoMaxCheck;
     private JCheckBox snooper;
     private JCheckBox debugLauncherVerbose;
+    private JCheckBox betaChannel;
 
     private final Settings settings = Settings.getSettings();
-    //TODO add a UI adjustment tab here
+
+    //TODO add a UI adjustment tab here?
     public AdvancedOptionsDialog() {
         super(LaunchFrame.getInstance(), true);
         setupGui();
@@ -86,6 +88,7 @@ public class AdvancedOptionsDialog extends JDialog {
         autoMaxCheck.setSelected((settings.getLastExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH);
         snooper.setSelected(settings.getSnooper());
         debugLauncherVerbose.setSelected(settings.getDebugLauncher());
+        betaChannel.setSelected(settings.isBetaChannel());
 
         FocusAdapter settingsChangeListener = new FocusAdapter() {
             @Override
@@ -104,7 +107,7 @@ public class AdvancedOptionsDialog extends JDialog {
         autoMaxCheck.addFocusListener(settingsChangeListener);
         snooper.addFocusListener(settingsChangeListener);
         debugLauncherVerbose.addFocusListener(settingsChangeListener);
-
+        betaChannel.addFocusListener(settingsChangeListener);
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -147,6 +150,7 @@ public class AdvancedOptionsDialog extends JDialog {
         settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
         settings.setSnooper(snooper.isSelected());
         settings.setDebugLauncher(debugLauncherVerbose.isSelected());
+        settings.setBetaChannel(betaChannel.isSelected());
         settings.save();
         // invalidate current java information
         settings.setCurrentJava(null);
@@ -172,20 +176,23 @@ public class AdvancedOptionsDialog extends JDialog {
             javaPath.setText(javapath);
             if (!new File(javapath).isFile())
                 javaPath.setBackground(Color.RED);
-        }
-        else {
+        } else {
             // this should not happen ever
             javaPath.setBackground(Color.RED);
         }
 
-        javaPath.addKeyListener(new KeyListener(){
+        javaPath.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped (KeyEvent e) {}
+            public void keyTyped (KeyEvent e) {
+            }
+
             @Override
-            public void keyPressed (KeyEvent e) {}
+            public void keyPressed (KeyEvent e) {
+            }
+
             @Override
             public void keyReleased (KeyEvent e) {
-                if( !javaPath.getText().equals("") && !new File(javaPath.getText()).isFile())
+                if (!javaPath.getText().equals("") && !new File(javaPath.getText()).isFile())
                     javaPath.setBackground(Color.RED);
                 else
                     javaPath.setBackground(new Color(40, 40, 40));
@@ -204,6 +211,7 @@ public class AdvancedOptionsDialog extends JDialog {
         autoMaxCheck = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK"));
         snooper = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS"));
         debugLauncherVerbose = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE"));
+        betaChannel = new JCheckBox(I18N.getLocaleString("ADVANCED_OPTIONS_BETA"));
         exit = new JButton(I18N.getLocaleString("MAIN_EXIT"));
 
         downloadLocationLbl.setLabelFor(downloadLocation);
@@ -225,6 +233,7 @@ public class AdvancedOptionsDialog extends JDialog {
         add(autoMaxCheck);
         add(snooper);
         add(debugLauncherVerbose);
+        add(betaChannel);
         add(exit);
 
         Spring hSpring;
@@ -240,10 +249,12 @@ public class AdvancedOptionsDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, autoMaxCheck, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, snooper, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, betaChannel, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = SwingUtils.springMax(Spring.width(downloadLocationLbl),Spring.width(javaPathLbl), Spring.width(additionalJavaOptionsLbl), Spring.width(mcWindowSizeLbl), Spring.width(mcWindowPosLbl) );
+        columnWidth = SwingUtils.springMax(Spring.width(downloadLocationLbl), Spring.width(javaPathLbl), Spring.width(additionalJavaOptionsLbl), Spring.width(mcWindowSizeLbl),
+                Spring.width(mcWindowPosLbl));
 
-        hSpring = SwingUtils.springSum(hSpring, columnWidth,Spring.constant(10) );
+        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.WEST, downloadLocation, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, javaPath, hSpring, SpringLayout.WEST, panel);
@@ -300,7 +311,7 @@ public class AdvancedOptionsDialog extends JDialog {
         rowHeight = Spring.height(downloadLocationLbl);
         rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
 
-        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.BASELINE, javaPathLbl, 0, SpringLayout.BASELINE, javaPath);
         layout.putConstraint(SpringLayout.NORTH, javaPath, vSpring, SpringLayout.NORTH, panel);
@@ -325,7 +336,7 @@ public class AdvancedOptionsDialog extends JDialog {
 
         rowHeight = SwingUtils.springMax(Spring.height(mcWindowSizeLbl), Spring.height(mcWindowSizeWidth), Spring.height(mcWindowSizeSepLbl), Spring.height(mcWindowSizeHeight));
 
-        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
+        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
 
         layout.putConstraint(SpringLayout.BASELINE, mcWindowPosLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
         layout.putConstraint(SpringLayout.NORTH, mcWindowPosX, vSpring, SpringLayout.NORTH, panel);
@@ -348,9 +359,13 @@ public class AdvancedOptionsDialog extends JDialog {
 
         vSpring = SwingUtils.springSum(vSpring, Spring.height(debugLauncherVerbose), Spring.constant(10));
 
+        layout.putConstraint(SpringLayout.NORTH, betaChannel, vSpring, SpringLayout.NORTH, panel);
+
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(betaChannel), Spring.constant(10));
+
         layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);
 
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(exit), Spring.constant(10) );
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(exit), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 

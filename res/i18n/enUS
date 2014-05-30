@@ -79,6 +79,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disable Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Java Path:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additional Java Parameters:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
+ADVANCED_OPTIONS_BETA= Allow Beta Launcher Versions?
 
 # Update
 UPDATE_WICHUPDATE = Do you wish to update?
