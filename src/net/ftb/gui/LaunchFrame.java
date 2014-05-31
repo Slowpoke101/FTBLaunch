@@ -737,12 +737,12 @@ public class LaunchFrame extends JFrame {
                 try {
                     responseStr = get();
                 } catch (InterruptedException err) {
-                    Logger.logError(err.getMessage(), err);
+                    Logger.logError("User cancelled login process", err);
                     enableObjects();
                     return;
                 } catch (ExecutionException err) {
                     if (err.getCause() instanceof IOException) {
-                        Logger.logError(err.getMessage(), err);
+                        Logger.logError("Error while logging in", err);
                         PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username), getResp());
                         d.setVisible(true);
                     }
@@ -818,7 +818,7 @@ public class LaunchFrame extends JFrame {
                     }
                     FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
                 } catch (IOException e) {
-                    Logger.logError(e.getMessage(), e);
+                    Logger.logError("Error while doing backups", e);
                 }
             }
 
@@ -1046,7 +1046,7 @@ public class LaunchFrame extends JFrame {
             }
             return list;
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while gathering assets", e);
         }
         return null;
     }
@@ -1090,8 +1090,8 @@ public class LaunchFrame extends JFrame {
                             entry = input.getNextEntry();
                         }
                     } catch (Exception e) {
-                        Logger.logError(e.getMessage(), e);
-                        ErrorUtils.tossError("Error extracting natives: " + e.getMessage());
+                        ErrorUtils.tossError("Error extracting native libraries");
+                        Logger.logError("", e);
                     } finally {
                         try {
                             input.close();
@@ -1168,7 +1168,7 @@ public class LaunchFrame extends JFrame {
                 });
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while running launchMinecraftNew()", e);
         }
     }
 

@@ -64,9 +64,9 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
             }
 
         } catch (UnknownHostException e) {
-            Logger.logWarn(e.getMessage());
+            Logger.logWarn("Error while checking news: " + e.getMessage());
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while checking news", e);
         }
 
         return i;

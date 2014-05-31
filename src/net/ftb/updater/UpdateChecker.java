@@ -66,9 +66,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         loadInfo();
         try {
             FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
-        } catch (Exception ignored) {
-            Logger.logError(ignored.getMessage(), ignored);
-        }
+        } catch (Exception ignored) { }
         return this.shouldUpdate();
     }
 
@@ -101,7 +99,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
                 Logger.logInfo("Beta channel hasn't been activated yet!");
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while loading launcher update info", e);
         }
     }
 
@@ -139,7 +137,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
             SelfUpdate.runUpdate(path, temporaryUpdatePath);
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while updating launcher", e);
         }
     }
 }

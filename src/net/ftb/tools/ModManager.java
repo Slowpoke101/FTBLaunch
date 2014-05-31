@@ -87,7 +87,7 @@ public class ModManager extends JDialog {
                     erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
                 }
             } catch (IOException e) {
-                Logger.logError(e.getMessage(), e);
+                Logger.logError("Error while updating modpack", e);
             }
             return true;
         }
@@ -166,9 +166,9 @@ public class ModManager extends JDialog {
                         }
                     }
                 } catch (MalformedURLException e) {
-                    Logger.logError(e.getMessage(), e);
+                    Logger.logError("Error while downloading modpack", e);
                 } catch (IOException e) {
-                    Logger.logError(e.getMessage(), e);
+                    Logger.logError("Error while downloading modpack", e);
                 }
 
                 try {
@@ -179,7 +179,7 @@ public class ModManager extends JDialog {
                         connection.disconnect();
                     }
                 } catch (IOException e) {
-                    Logger.logWarn(e.getMessage(), e);
+                    Logger.logWarn("Error while downloading modpack", e);
                 }
             } while (amount < modPackSize && (amount > startAmount || retryCount-- > 0));
 
@@ -189,7 +189,7 @@ public class ModManager extends JDialog {
                     fout.close();
                 }
             } catch (IOException e) {
-                Logger.logWarn(e.getMessage(), e);
+                Logger.logWarn("Error while downloading modpack", e);
             }
             return md5;
         }
@@ -218,7 +218,7 @@ public class ModManager extends JDialog {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
                     } catch (IOException e) {
-                        Logger.logWarn(e.getMessage(), e);
+                        Logger.logWarn("Error while downloading modpack", e);
                     }
                     String animation = pack.getAnimation();
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
@@ -288,7 +288,7 @@ public class ModManager extends JDialog {
                     return true;
                 }
             } catch (IOException e) {
-                Logger.logError(e.getMessage(), e);
+                Logger.logError("Error while extracting modpack", e);
             }
             return false;
         }

@@ -68,7 +68,7 @@ public class OSUtils {
             jarFile = new File(codeSource.getLocation().toURI().getPath());
             return jarFile.getParentFile().getPath();
         } catch (URISyntaxException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Unexcepted error", e);
         }
         Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
         return System.getProperty("user.dir") + "//FTB Pack Install";
@@ -177,7 +177,7 @@ public class OSUtils {
                 ram = 1024;
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while getting OS memory info", e);
         }
 
         return ram;

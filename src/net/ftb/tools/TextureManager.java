@@ -151,7 +151,7 @@ public class TextureManager extends JDialog {
                     fout.flush();
                     fout.close();
                 } catch (IOException e) {
-                    Logger.logError(e.getMessage(), e);
+                    Logger.logWarn("Error while downloading texture pack", e);
                 }
             }
             return true;

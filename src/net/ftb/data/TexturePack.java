@@ -181,7 +181,7 @@ public class TexturePack {
             }
             in.close();
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while checking texturepack version", e);
         }
         return result;
     }

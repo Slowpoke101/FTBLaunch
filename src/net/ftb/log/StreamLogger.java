@@ -49,7 +49,7 @@ public class StreamLogger extends Thread {
                 Arrays.fill(buffer, (byte) 0);
             }
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while reading log messages from external source(minecraft process)", e);
         }
     }
 

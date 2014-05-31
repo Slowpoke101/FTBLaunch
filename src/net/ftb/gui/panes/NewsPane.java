@@ -71,7 +71,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             Settings.getSettings().save();
             LaunchFrame.getInstance().setNewsIcon();
         } catch (IOException e1) {
-            Logger.logError(e1.getMessage(), e1);
+            Logger.logError("Error while updating news tab", e1);
         }
     }
 }

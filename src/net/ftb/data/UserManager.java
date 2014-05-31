@@ -135,7 +135,7 @@ public class UserManager {
                 // If logindata is new format and empty it will contain bytes 0xae 0xed 0x00 0x05
                 // Catch exception from parseInt => no more stack prints for end users
             } catch (Exception ex) {
-                Logger.logError(ex.getMessage(), ex);
+                Logger.logError("Error while reading logindata", ex);
             }
             if (_users.isEmpty()) {
                 Logger.logInfo("No users found after decoding old logindata format. Malformed logindata or empty logindata");
