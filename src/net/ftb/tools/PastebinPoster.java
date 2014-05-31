@@ -28,6 +28,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class PastebinPoster extends Thread {
     @Override
@@ -66,16 +67,7 @@ public class PastebinPoster extends Thread {
                 String result = response.toString().trim();
                 if (result.matches("^https?://.*")) {
                     Logger.logInfo(result.trim());
-                    if (Desktop.isDesktopSupported()) {
-                        Desktop desktop = Desktop.getDesktop();
-                        try {
-                            desktop.browse(new URI(result.trim()));
-                        } catch (Exception exc) {
-                            Logger.logError("Could not open url: " + exc.getMessage());
-                        }
-                    } else {
-                        Logger.logWarn("Could not open url, not supported");
-                    }
+                    OSUtils.browse(result.trim());
                 } else {
                     String err = result.trim();
                     if (err.length() > 100) {

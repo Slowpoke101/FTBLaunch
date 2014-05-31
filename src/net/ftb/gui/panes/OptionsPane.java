@@ -258,16 +258,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         btnInstallJava.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    try {
-                        desktop.browse(new URI(webLink));
-                    } catch (Exception exc) {
-                        Logger.logError("Could not open url: " + exc.getMessage());
-                    }
-                } else {
-                    Logger.logWarn("Could not open Java Download url, not supported");
-                }
+                OSUtils.browse(webLink);
             }
         });
         btnInstallJava.setBounds(345, 210, 150, 28);

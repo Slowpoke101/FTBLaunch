@@ -54,6 +54,7 @@ import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
 import net.ftb.log.Logger;
 import net.ftb.tools.PastebinPoster;
+import net.ftb.util.OSUtils;
 
 @SuppressWarnings("serial")
 public class LauncherConsole extends JFrame implements ILogListener {
@@ -166,16 +167,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         ircButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    try {
-                        desktop.browse(new URI("http://support.feed-the-beast.com/"));
-                    } catch (Exception exc) {
-                        Logger.logError("Could not open url: " + exc.getMessage());
-                    }
-                } else {
-                    Logger.logWarn("Could not open url, not supported");
-                }
+                OSUtils.browse("http://support.feed-the-beast.com/");
             }
         });
         panel.add(ircButton);

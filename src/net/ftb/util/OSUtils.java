@@ -341,11 +341,11 @@ public class OSUtils {
         try {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(new URI(url));
-            } else if (getCurrentOS() == OS.UNIX) {
+            } else if (getCurrentOS() == OS.UNIX && (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists())) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
-                if (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists()) {
-                    new ProcessBuilder("xdg-open", url).start();
-                }
+                new ProcessBuilder("xdg-open", url).start();
+            } else {
+                Logger.logWarn("Could not open Java Download url, not supported");
             }
         } catch (Exception e) {
             Logger.logError("Could not open link", e);
