@@ -143,9 +143,6 @@ dependencies {
 
 sourceSets {
     main {
-        java {
-            srcDir 'src'
-        }
         resources {
             srcDir 'res'
         }
