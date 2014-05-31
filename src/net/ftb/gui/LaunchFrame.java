@@ -222,7 +222,7 @@ public class LaunchFrame extends JFrame {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
-            Logger.logError(e1.getMessage(), e1);
+            Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
         }
 
         /*
