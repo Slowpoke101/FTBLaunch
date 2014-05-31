@@ -23,7 +23,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -41,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -95,8 +95,8 @@ public class EditModPackDialog extends JDialog {
 
         setupGui();
 
-        enabledMods = new ArrayList<String>();
-        disabledMods = new ArrayList<String>();
+        enabledMods = Lists.newArrayList();
+        disabledMods = Lists.newArrayList();
 
         tabbedPane.setSelectedIndex(0);
 

@@ -57,7 +57,6 @@ public class AppUtils {
      * Reads XML from a stream
      * @param stream the stream to read the document from
      * @return The document
-     * @return The document
      * @throws IOException, SAXException if an error occurs when reading from the stream
      */
     public static Document getXML (InputStream stream) throws IOException, SAXException {

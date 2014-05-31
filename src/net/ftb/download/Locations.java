@@ -1,5 +1,7 @@
 package net.ftb.download;
 
+import com.google.common.collect.Maps;
+
 import java.util.HashMap;
 
 //Class used for storage of various constants & location information used by various downloading processes
@@ -34,8 +36,8 @@ public class Locations {
     public static boolean hasDLInitialized = false;
 
     //maps of JSON pairs of the primary/backup download servers
-    public static HashMap<String, String> downloadServers = new HashMap<String, String>();
-    public static HashMap<String, String> backupServers = new HashMap<String, String>();
+    public static HashMap<String, String> downloadServers = Maps.newHashMap();
+    public static HashMap<String, String> backupServers =  Maps.newHashMap();
 
     //Oracle Java Locations
     public final static String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";

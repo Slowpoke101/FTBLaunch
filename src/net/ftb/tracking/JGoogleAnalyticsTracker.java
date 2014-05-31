@@ -248,8 +248,8 @@ public class JGoogleAnalyticsTracker {
      * @param timeoutMillis  The maximum number of milliseconds to wait.
      */
     public static void completeBackgroundTasks (long timeoutMillis) {
-        boolean fifoEmpty = false;
-        boolean asyncThreadsCompleted = false;
+        boolean fifoEmpty;
+        boolean asyncThreadsCompleted;
         long absTimeout = System.currentTimeMillis() + timeoutMillis;
         while (System.currentTimeMillis() < absTimeout) {
             synchronized (fifo) {

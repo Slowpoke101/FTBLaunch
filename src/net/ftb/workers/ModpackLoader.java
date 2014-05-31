@@ -122,12 +122,10 @@ public class ModpackLoader extends Thread {
         }
         Logger.logDebug("All packlists loaded");
         //if (!FTBPacksPane.loaded) {
-        if (true) {
-            FTBPacksPane.getInstance().loaded = true;
-            ThirdPartyPane.getInstance().loaded = true;
-            LaunchFrame.checkDoneLoading();
-            Map.loadAll();
-            TexturePack.loadAll();
-        }
+        FTBPacksPane.getInstance().loaded = true;
+        ThirdPartyPane.getInstance().loaded = true;
+        LaunchFrame.checkDoneLoading();
+        Map.loadAll();
+        TexturePack.loadAll();
     }
 }

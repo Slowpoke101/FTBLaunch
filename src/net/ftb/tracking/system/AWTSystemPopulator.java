@@ -34,12 +34,12 @@ public class AWTSystemPopulator {
         try {
             int screenHeight = 0;
             int screenWidth = 0;
-            GraphicsEnvironment ge = null;
-            GraphicsDevice[] gs = null;
+            GraphicsEnvironment ge;
+            GraphicsDevice[] gs;
             ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             gs = ge.getScreenDevices();
-            for (int i = 0; i < gs.length; i++) {
-                DisplayMode dm = gs[i].getDisplayMode();
+            for (GraphicsDevice g : gs) {
+                DisplayMode dm = g.getDisplayMode();
                 screenWidth += dm.getWidth();
                 screenHeight += dm.getHeight();
             }

@@ -36,8 +36,8 @@ public abstract class AnalyticsDispatcher {
         String timeDispatched = getQueryParameter(uri.getQuery(), "utmht");
         if (timeDispatched != null) {
             try {
-                Long time = Long.valueOf(Long.parseLong(timeDispatched));
-                analyticsString = analyticsString + "&utmqt=" + (System.currentTimeMillis() - time.longValue());
+                Long time = Long.parseLong(timeDispatched);
+                analyticsString = analyticsString + "&utmqt=" + (System.currentTimeMillis() - time);
             } catch (NumberFormatException e) {
                 Logger.logError("Error parsing utmht parameter: ", e);
             }
