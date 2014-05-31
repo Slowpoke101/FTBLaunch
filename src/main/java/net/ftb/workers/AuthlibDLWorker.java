@@ -35,7 +35,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 
 /**
- * SwingWorker that downloads Minecraft. Returns true if successful, false if it
+ * SwingWorker that downloads Authlib. Returns true if successful, false if it
  * fails.
  */
 public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {

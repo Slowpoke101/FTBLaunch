@@ -29,10 +29,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.FTBPacksPane;
-import net.ftb.gui.panes.MapUtils;
-import net.ftb.gui.panes.TexturepackPane;
-import net.ftb.gui.panes.ThirdPartyPane;
+import net.ftb.gui.panes.*;
 import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
@@ -40,37 +37,7 @@ public class SearchDialog extends JDialog {
     public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
     public JTextField query = new JTextField(20);
 
-    public SearchDialog(final FTBPacksPane instance) {
-        super(LaunchFrame.getInstance(), true);
-        setupGui();
-        query.setText((lastPackSearch == null) ? "" : lastPackSearch);
-        query.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void removeUpdate (DocumentEvent arg0) {
-                lastPackSearch = query.getText();
-                instance.filterPacks();
-            }
-
-            @Override
-            public void insertUpdate (DocumentEvent arg0) {
-                lastPackSearch = query.getText();
-                instance.filterPacks();
-            }
-
-            @Override
-            public void changedUpdate (DocumentEvent arg0) {
-            }
-        });
-        query.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                lastPackSearch = query.getText();
-                instance.filterPacks();
-                setVisible(false);
-            }
-        });
-    }
-    public SearchDialog(final ThirdPartyPane instance) {
+    public SearchDialog(final AbstractModPackPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastPackSearch == null) ? "" : lastPackSearch);

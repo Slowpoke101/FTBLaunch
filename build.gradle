@@ -139,7 +139,8 @@ dependencies {
 	compile 'com.google.guava:guava:16.0'
 	//commons lang3 via authlib
     //commons io via authlib
-	}
+    testCompile 'junit:junit:4.10'
+}
 
 sourceSets {
     main {

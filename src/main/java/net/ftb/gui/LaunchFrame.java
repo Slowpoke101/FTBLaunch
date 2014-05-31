@@ -108,7 +108,6 @@ import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
-import org.apache.commons.io.IOUtils;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -167,7 +166,7 @@ public class LaunchFrame extends JFrame {
 
     @Getter
     private static ProcessMonitor procMonitor;
-    /*
+    /**
     * @return FTB Launcher event bus
     */
     @Getter
@@ -340,7 +339,7 @@ public class LaunchFrame extends JFrame {
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
                  */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(Settings.getSettings().getInstallPath() + File.separator + "authlib" + File.separator, "1.5.13") {
+                AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.13") {
                     @Override
                     protected void done () {
                         LaunchFrame.getInstance().getLaunch().setEnabled(true);
