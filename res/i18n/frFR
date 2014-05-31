@@ -30,6 +30,7 @@ FILTER_SETTINGS = Options de filtres
 # Modpacks pane
 MODS_EDIT_PACK = Editer le Modpack
 MODS_WAIT_WHILE_LOADING = Veuilllez patienter pendant le chargement des mods...
+DOWNLOAD_SERVER = Télécharger serveur
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Mods activÃ©s
