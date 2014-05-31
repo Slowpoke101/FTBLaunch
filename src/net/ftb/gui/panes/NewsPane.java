@@ -53,11 +53,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             @Override
             public void hyperlinkUpdate (HyperlinkEvent arg0) {
                 if (arg0.getEventType() == EventType.ACTIVATED) {
-                    try {
-                        OSUtils.browse(arg0.getURL().toString());
-                    } catch (Exception e) {
-                        Logger.logError(e.getMessage(), e);
-                    }
+                    OSUtils.browse(arg0.getURL().toString());
                 }
             }
         });
