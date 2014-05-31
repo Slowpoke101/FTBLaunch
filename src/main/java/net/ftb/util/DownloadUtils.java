@@ -368,7 +368,7 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
-        Benchmark bench = new Benchmark();
+        Benchmark.start("DlUtils");
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
             Logger.logInfo("DownloadUtils.run() starting");
@@ -404,15 +404,15 @@ public class DownloadUtils extends Thread {
                             }
                         }
                     }
-                    bench.logBench("Download Utils Bal");
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Bal");
                     if (Locations.chEnabled) {
                         // Fetch servers from creeperhost using edges.json first
                         parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
-                        bench.logBench("Download Utils CH");
+                        Benchmark.logBenchAs("DlUtils", "Download Utils CH");
                     }
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
-                    bench.logBench("Download Utils Curse");
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Curse");
                     LoadingDialog.setProgress(80);
                 } catch (IOException e) {
                     int i = 10;
@@ -485,7 +485,7 @@ public class DownloadUtils extends Thread {
             }
 
             Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
-            bench.logBench("Download Utils Init");
+            Benchmark.logBenchAs("DlUtils", "Download Utils Init");
         }
         Locations.hasDLInitialized = true;
     }

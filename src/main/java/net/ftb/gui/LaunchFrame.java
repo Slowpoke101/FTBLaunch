@@ -183,7 +183,7 @@ public class LaunchFrame extends JFrame {
      * @param args - CLI arguments
      */
     public static void main (String[] args) {
-        startupBench = new Benchmark();
+        Benchmark.start("main");
         /*
          *  Create dynamic storage location as soon as possible
          */
@@ -664,7 +664,7 @@ public class LaunchFrame extends JFrame {
                             loader.setVisible(false);
                             instance.setVisible(true);
                             instance.toFront();
-                            startupBench.logBench("Launcher Startup");
+                            Benchmark.logBenchAs("main", "Launcher Startup");
                         }
                     }
                 }
@@ -1030,10 +1030,9 @@ public class LaunchFrame extends JFrame {
 
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
-            long unixTime = System.currentTimeMillis();
+            Benchmark.start("threading");
             long size = list.size();
             Collection<DownloadInfo> tmp;
-            Logger.logDebug("Running with 2*OSUtils.getNumCores() threads");
             Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
                 .withFixedThreads(2*OSUtils.getNumCores())
                 //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
@@ -1062,8 +1061,7 @@ public class LaunchFrame extends JFrame {
             list.addAll(tmp);
             // kill executorservice
             th.shutdown();
-            Logger.logDebug("parallel result size: " + tmp.size());
-            Logger.logDebug("time for mc asset check (parallel): " + (System.currentTimeMillis() - unixTime));
+            Benchmark.logBenchAs("threading", "parallel asset check");
 
             return list;
         } catch (Exception e) {

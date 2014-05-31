@@ -32,6 +32,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
@@ -248,8 +249,7 @@ public class MinecraftLauncherNew {
         final ConcurrentSkipListSet<File> old = new ConcurrentSkipListSet();
         old.addAll(FileUtils.listFiles(targetDir));
 
-        long unixTime = System.currentTimeMillis();
-        Logger.logDebug("Running with 2*OSUtils.getNumCores() threads");
+        Benchmark.reset("threading");
         Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
             .withFixedThreads(2*OSUtils.getNumCores())
             //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
@@ -281,7 +281,7 @@ public class MinecraftLauncherNew {
         } catch (Exception ex) {
             Logger.logError("Asset checking failed: ", ex);
         }
-        Logger.logDebug("time for mc asset check (parallel): " + (System.currentTimeMillis() - unixTime));
+        Benchmark.logBenchAs("threading", "parallel asset(virtual) check");
 
         for (File f : old) {
             String name = f.getAbsolutePath().replace(targetDir.getAbsolutePath(), "");
