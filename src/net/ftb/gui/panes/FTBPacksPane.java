@@ -157,7 +157,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         infoScroll.setOpaque(false);
         add(infoScroll);
 
-        server = new JButton("Download Server");
+        server = new JButton(I18N.getLocaleString("DOWNLOAD_SERVER"));
         server.setBounds(420, 5, 130, 25);
 
         //TODO: check
@@ -188,10 +188,10 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         version = new JComboBox(new String[]{});
         version.setBounds(560, 5, 130, 25);
         version.addActionListener(al);
-        version.setToolTipText("Modpack Versions");
+        version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
         add(version);
 
-        privatePack = new JButton("Pack Codes");
+        privatePack = new JButton(I18N.getLocaleString("PACK_CODES"));
         privatePack.setBounds(700, 5, 120, 25);
         privatePack.addActionListener(new ActionListener() {
             @Override

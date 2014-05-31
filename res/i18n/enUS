@@ -53,6 +53,9 @@ FILTER_SETTINGS = Filter Settings
 # Modpacks pane
 MODS_EDIT_PACK = Edit Mod Pack
 MODS_WAIT_WHILE_LOADING = Please wait while mods are being loaded...
+DOWNLOAD_SERVER = Download Server
+MODPACK_VERSIONS = Modpack Versions
+PACK_CODES = Pack Codes
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Enabled Mods
