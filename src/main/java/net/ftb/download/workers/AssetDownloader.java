@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 
 import net.ftb.download.info.DownloadInfo;
@@ -67,6 +68,8 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
         while (!downloadSuccess && (attempt < attempts)) {
             try {
+                if(remoteHash == null)
+                    remoteHash = Lists.newArrayList();
                 hashType = asset.hashType;
                 if (attempt++ > 0) {
                     Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
