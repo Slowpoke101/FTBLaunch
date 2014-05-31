@@ -138,7 +138,7 @@ public class FileUtils {
                 zipentry = zipinputstream.getNextEntry();
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while extracting zip", e);
             backupExtract(zipLocation, outputLocation);
         } finally {
             try {
@@ -175,7 +175,7 @@ public class FileUtils {
                 ze = zis.getNextEntry();
             }
         } catch (IOException ex) {
-            Logger.logError(ex.getMessage(), ex);
+            Logger.logError("Error while extracting zip", ex);
         } finally {
             try {
                 zis.closeEntry();
@@ -218,9 +218,9 @@ public class FileUtils {
             }
             outputTmpFile.renameTo(inputFile);
         } catch (FileNotFoundException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while killing META-INF", e);
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while killing META-INF", e);
         }
     }
 

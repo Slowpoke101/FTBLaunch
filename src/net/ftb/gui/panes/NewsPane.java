@@ -53,11 +53,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             @Override
             public void hyperlinkUpdate (HyperlinkEvent arg0) {
                 if (arg0.getEventType() == EventType.ACTIVATED) {
-                    try {
-                        OSUtils.browse(arg0.getURL().toString());
-                    } catch (Exception e) {
-                        Logger.logError(e.getMessage(), e);
-                    }
+                    OSUtils.browse(arg0.getURL().toString());
                 }
             }
         });
@@ -75,7 +71,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             Settings.getSettings().save();
             LaunchFrame.getInstance().setNewsIcon();
         } catch (IOException e1) {
-            Logger.logError(e1.getMessage(), e1);
+            Logger.logError("Error while updating news tab", e1);
         }
     }
 }

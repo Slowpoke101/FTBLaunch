@@ -84,7 +84,7 @@ public class I18N {
         try {
             new LocaleUpdater().start();
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while updating locales", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class I18N {
         try {
             new LocaleUpdater(true).start();
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while updating locales", e);
         }
     }
 

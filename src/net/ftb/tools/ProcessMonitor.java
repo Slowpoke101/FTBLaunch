@@ -34,7 +34,7 @@ public class ProcessMonitor implements Runnable {
         try {
             proc.waitFor();
         } catch (InterruptedException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("ProcessMonitor interrupted", e);
         }
         complete = true;
         onComplete.run();

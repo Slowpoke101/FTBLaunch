@@ -90,10 +90,10 @@ public class LocaleUpdater extends Thread {
             connection.setRequestProperty("Cache-Control", "no-transform");
             Scanner scanner = new Scanner(connection.getInputStream());
             remoteVer = scanner.nextInt();
-            Logger.logInfo("[i18n] remoteVer = " + remoteVer);
+            Logger.logDebug("[i18n] remoteVer = " + remoteVer);
             scanner.close();
         } catch (MalformedURLException e1) {
-            Logger.logError(e1.getMessage(), e1);
+            Logger.logError("[i18n]", e1);
         } catch (IOException e1) {
             Logger.logInfo("[i18n] Could not retrieve version info, skipping update.", e1);
             return;

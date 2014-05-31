@@ -19,18 +19,18 @@ package net.ftb.log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 public class Logger {
     private static final List<ILogListener> listeners;
-    private static final Vector<LogEntry> logEntries = new Vector<LogEntry>();
+    private static final Vector<LogEntry> logEntries;
     private static LogThread logThread;
 
     /**
      * Default constructor
-     * creates Buffers, opens launcherLogFile etc
+     * creates lists for listeners and log messages, creates and starts log dispather thread
      */
     static {
         listeners = new ArrayList<ILogListener>();
+        logEntries = new Vector<LogEntry>();
         logThread = new LogThread(listeners);
         logThread.start();
     }

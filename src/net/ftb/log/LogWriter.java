@@ -38,7 +38,9 @@ public class LogWriter implements ILogListener {
                 logWriter.write(entry.toString(LogType.EXTENDED) + System.getProperty("line.separator"));
                 logWriter.flush();
             } catch (IOException e) {
-                Logger.logError(e.getMessage(), e);
+                // We probably do not want to trigger new errors
+                // How can we notify user? Is notify needed?
+                //Logger.logError("Error while writing logs", e);
             }
         }
     }

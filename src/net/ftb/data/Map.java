@@ -202,7 +202,7 @@ public class Map {
             }
             in.close();
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while checking map version", e);
         }
         return result;
     }

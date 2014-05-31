@@ -442,7 +442,7 @@ public class DownloadUtils extends Thread {
                     Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
                 }
             } catch (Exception e) {
-                Logger.logError(e.getMessage(), e);
+                Logger.logError("Error while selecting server", e);
                 downloadServers.clear();
                 downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             }

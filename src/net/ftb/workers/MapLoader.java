@@ -54,7 +54,7 @@ public class MapLoader extends Thread {
                         i));
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while updating map info", e);
         } finally {
             MapUtils.loaded = true;
             LaunchFrame.checkDoneLoading();

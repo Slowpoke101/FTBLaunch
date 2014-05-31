@@ -147,7 +147,14 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                     new File(binDir, jarFileName).delete();
                 }
                 InputStream dlStream = dlConnection.getInputStream();
-                FileOutputStream outStream = new FileOutputStream(new File(binDir, jarFileName));
+                FileOutputStream outStream;
+                try {
+                    outStream = new FileOutputStream(new File(binDir, jarFileName));
+                } catch (Exception e) {
+                    downloadSuccess = false;
+                    Logger.logError("Error while opening authlib file for writing. Check your FTB installation location write access", e);
+                    break;
+                }
                 setStatus("Downloading " + jarFileName + "...");
                 byte[] buffer = new byte[24000];
                 int readLen;

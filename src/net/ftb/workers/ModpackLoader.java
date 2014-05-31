@@ -110,7 +110,7 @@ public class ModpackLoader extends Thread {
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
                                 .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr.getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent())));
                     } catch (Exception e) {
-                        Logger.logError(e.getMessage(), e);
+                        Logger.logError("Error while updating modpack info", e);
                     }
                 }
                 ModPack.addPacks(mp);

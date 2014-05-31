@@ -291,7 +291,7 @@ public class ModPack {
                 out.close();
                 return false;
             } catch (IOException e) {
-                Logger.logError(e.getMessage(), e);
+                Logger.logError("Error while checking modpack version", e);
                 return false;
             }
         }
@@ -317,7 +317,7 @@ public class ModPack {
             }
             in.close();
         } catch (IOException e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Error while getting modpack version", e);
         }
         return result;
     }
