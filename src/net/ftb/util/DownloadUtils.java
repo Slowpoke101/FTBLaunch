@@ -312,7 +312,7 @@ public class DownloadUtils extends Thread {
      */
     public static String fileMD5 (File file) throws IOException {
         if (file.exists()) {
-            return Hashing.md5().hashBytes(Files.toByteArray(file)).toString();
+            return Files.hash(file, Hashing.md5()).toString();
             //FileInputStream fis = new FileInputStream(file);
             //String result = DigestUtils.md5Hex(fis);
             //fis.close();
@@ -323,7 +323,7 @@ public class DownloadUtils extends Thread {
 
     public static String fileSHA (File file) throws IOException {
         if (file.exists()) {
-            return Hashing.md5().hashBytes(Files.toByteArray(file)).toString();
+            return Files.hash(file, Hashing.sha1()).toString();
             //FileInputStream fis = new FileInputStream(file);
             //String result = DigestUtils.sha1Hex(fis).toLowerCase();
             //fis.close();

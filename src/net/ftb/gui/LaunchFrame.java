@@ -1050,7 +1050,7 @@ public class LaunchFrame extends JFrame {
                                     local.delete();
                                 }
                                 if (!local.exists()) {
-                                    return(new DownloadInfo(new URL(Locations.mc_res + path), local, name, asset.hash, "sha1"));
+                                    return(new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
                                 }
                             } catch (Exception ex) {
                                 Logger.logError("Assest hash check failed", ex);
