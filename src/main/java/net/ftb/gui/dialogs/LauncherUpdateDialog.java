@@ -86,7 +86,7 @@ public class LauncherUpdateDialog extends JDialog {
         messageLbl = new JLabel("Version " + UpdateChecker.verString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
         extraText = new JLabel(!usable ? I18N.getLocaleString("LUNCHERUPDATE_CURRENTDEAD") : "");//TODO use this for beta channel??
         extraText.setForeground(Color.red);
-        JLabel updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
+        updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
         showChangeLog = new JButton(I18N.getLocaleString("LUNCHERUPDATE_CHANGELOG"));
         update = new JButton(I18N.getLocaleString("MAIN_YES"));
         abort = new JButton(I18N.getLocaleString("MAIN_NO"));
