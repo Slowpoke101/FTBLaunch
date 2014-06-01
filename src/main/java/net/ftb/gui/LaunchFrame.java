@@ -29,7 +29,6 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -158,7 +157,6 @@ public class LaunchFrame extends JFrame {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
-    private static Benchmark startupBench;//used for benchmarking startup times.
 
     public static final String FORGENAME = "MinecraftForge.zip";
     private final static String launcherLogFile = "FTBLauncherLog.txt";

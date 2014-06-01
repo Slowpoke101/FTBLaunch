@@ -33,8 +33,6 @@ import javax.swing.SpringLayout;
 import net.ftb.data.ModPack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.AbstractModPackPane;
-import net.ftb.gui.panes.FTBPacksPane;
-import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
 
