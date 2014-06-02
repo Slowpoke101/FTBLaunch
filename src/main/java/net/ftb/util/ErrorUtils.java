@@ -18,6 +18,7 @@ package net.ftb.util;
 
 import javax.swing.JOptionPane;
 
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 
@@ -43,7 +44,7 @@ public class ErrorUtils {
      * @param output String to show in message dialog
      * @param log String to log
      */
-    public static void tossError(String output, String log) {
+    public static void tossError(String log, String output) {
         Logger.logError(log);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
@@ -56,5 +57,28 @@ public class ErrorUtils {
     public static void tossError(String output, Throwable t) {
         Logger.logError(output, t);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void tossError(String log, String output , Throwable t) {
+        Logger.logError(log, t);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Opens dialogwith OK and ignore buttons.
+     * Callee should check return value
+     * Does not write error or warning messages into log
+     *
+     * @param message String to show in dialog
+     * @param severity JOptionPane message type
+     * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
+     *
+     */
+    public static int tossOKIgnoreDialog(String message, int severity) {
+        Object[] options = { "OK", "Ignore" };
+        int result = JOptionPane.showOptionDialog(LaunchFrame.getInstance(), 
+                message + "\n" + "Click OK to continue or IGNORE to skip this warning in future", null,
+                JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+        return result;
     }
 }

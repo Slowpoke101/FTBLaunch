@@ -45,6 +45,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.ProgressMonitor;
@@ -102,6 +103,7 @@ import net.ftb.tracking.JGoogleAnalyticsTracker;
 import net.ftb.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.*;
+import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
@@ -215,12 +217,15 @@ public class LaunchFrame extends JFrame {
 
         /*
          * Setup LogWriters as soon as possible
+         * At first run log will be created same directory with launcher
          */
         try {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), launcherLogFile), LogSource.LAUNCHER));
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
-            Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
+            if (!noConfig) {
+                Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
+            }
         }
 
         /*
@@ -305,6 +310,21 @@ public class LaunchFrame extends JFrame {
                 File installDir = new File(Settings.getSettings().getInstallPath());
                 if (!installDir.exists()) {
                     installDir.mkdirs();
+                }
+
+                // CheckInstallPath() does Error/Warning logging in english
+                CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
+                if (checkResult.action == Action.BLOCK || checkResult.action == Action.WARN) {
+                    // ErrorUtils.tossOKIgnoreDialog() does write logs => can be called with localized strings
+                    int result = ErrorUtils.tossOKIgnoreDialog(checkResult.message, JOptionPane.ERROR_MESSAGE);
+                    // pressing OK or closing dialog does not do anything
+                    if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+                        // if user select ignore we save setting and that type of error will be ignored
+                        if (checkResult.setting != null) {
+                            Settings.getSettings().setBoolean(checkResult.setting, true);
+                            Settings.getSettings().save();
+                        }
+                    }
                 }
 
                 LoadingDialog.setProgress(130);
