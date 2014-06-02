@@ -195,12 +195,12 @@ public class LaunchFrame extends JFrame {
             System.setProperty("java.net.useSystemProxies", "true");
         }
 
-        if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
+        if (new File(Settings.getSettings().getInstallPath(), launcherLogFile).exists()) {
+            new File(Settings.getSettings().getInstallPath(), launcherLogFile).delete();
         }
 
-        if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
-            new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
+        if (new File(Settings.getSettings().getInstallPath(), minecraftLogFile).exists()) {
+            new File(Settings.getSettings().getInstallPath(), minecraftLogFile).delete();
         }
 
         /*
