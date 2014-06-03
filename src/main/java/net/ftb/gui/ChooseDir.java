@@ -67,8 +67,8 @@ public class ChooseDir extends JFrame implements ActionListener {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                Logger.logInfo("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-                Logger.logInfo("getSelectedFile() : " + chooser.getSelectedFile());
+                Logger.logDebug("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+                Logger.logDebug("getSelectedFile() : " + chooser.getSelectedFile());
                 optionsPane.setInstallFolderText(chooser.getSelectedFile().getPath());
             } else {
                 Logger.logWarn("No Selection.");
@@ -103,8 +103,8 @@ public class ChooseDir extends JFrame implements ActionListener {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
             if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                Logger.logInfo("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-                Logger.logInfo("getSelectedFile() : " + chooser.getSelectedFile());
+                Logger.logDebug("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+                Logger.logDebug("getSelectedFile() : " + chooser.getSelectedFile());
                 installDialog.setInstallFolderText(chooser.getSelectedFile().getPath());
             } else {
                 Logger.logWarn("No Selection.");

@@ -38,6 +38,8 @@ import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
+import net.ftb.util.CheckInstallPath;
+import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
@@ -62,31 +64,23 @@ public class InstallDirectoryDialog extends JDialog {
 
         installPath.setText(OSUtils.getDefInstallPath());
 
-        installPath.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost (FocusEvent e) {
-                Settings.getSettings().setInstallPath(installPath.getText());
-                Settings.getSettings().save();
-            }
-        });
-
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                File f = new File(installPath.getText());
-                // TODO: add more tests! (Unicode test)\
-                if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && installPath.getText().contains(System.getenv("ProgramFiles"))) {
-                    ErrorUtils.tossError("Installing under C:\\Program Files\\ or similar is not supported. Please, select again.");
-                }
-                else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("USERPROFILE")!=null && installPath.getText().contains(System.getenv("USERPROFILE"))) {
-                    ErrorUtils.tossError("Installing under C:\\Users\\<username> is not recommended and can cause problems. You can change installation directory from  options tab.");
+                CheckInstallPath checkResult = new CheckInstallPath(installPath.getText());
+
+                // No need to localize here. Only shown at first run and language is not yet selected
+                if (checkResult.action == Action.BLOCK) {
+                    ErrorUtils.tossError(checkResult.message + "\nPlease select again");
+                } else if (checkResult.action == Action.WARN) {
+                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab");
                     setVisible(false);
-                }
-                else if (f.isDirectory() && !f.canWrite()) {
-                    ErrorUtils.tossError("No write access to selected directory. Please, select again");
-                }
-                else {
+                    Settings.getSettings().setInstallPath(installPath.getText());
+                    Settings.getSettings().save();
+                } else if (checkResult.action == Action.OK) {
                     setVisible(false);
+                    Settings.getSettings().setInstallPath(installPath.getText());
+                    Settings.getSettings().save();
                 }
             }
         });
@@ -94,14 +88,13 @@ public class InstallDirectoryDialog extends JDialog {
 
     public void setInstallFolderText (String text) {
         installPath.setText(text);
-        Settings.getSettings().setInstallPath(installPath.getText());
-        Settings.getSettings().save();
     }
 
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle("Choose Install Directory");
         setResizable(false);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         Container panel = getContentPane();
         SpringLayout layout = new SpringLayout();

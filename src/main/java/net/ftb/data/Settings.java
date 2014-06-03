@@ -435,4 +435,29 @@ public class Settings extends Properties {
             return null;
         }
     }
+
+    /**
+     * Simple boolean setting getter
+     */
+    public boolean getBoolean(String name) {
+        return Boolean.valueOf(getProperty(name, "false"));
+    }
+
+    /**
+     * Simple boolean setting setter
+     */
+    public void setBoolean(String name, boolean value) {
+        setProperty(name, String.valueOf(value));
+    }
+
+    /**
+     * Clean all setting from namespace
+     */
+    public void cleanNamespace(String name) {
+        for (String s: stringPropertyNames()) {
+            if (s.startsWith(name)) {
+                remove(s);
+            }
+        }
+    }
 }
