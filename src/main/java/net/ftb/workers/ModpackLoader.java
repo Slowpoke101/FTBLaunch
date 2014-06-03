@@ -23,6 +23,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
 import com.google.common.collect.Lists;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
@@ -114,6 +118,12 @@ public class ModpackLoader extends Thread {
                     }
                 }
                 ModPack.addPacks(mp);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+                        ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+                    }
+                });
                 try {
                     modPackStream.close();
                 } catch (IOException e) {

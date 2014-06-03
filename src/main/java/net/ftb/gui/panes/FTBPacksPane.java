@@ -50,6 +50,8 @@ import net.ftb.util.TrackerUtils;
 public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     @Getter
     private static FTBPacksPane instance;
+    @Getter
+    private JScrollPane packsScroll;
 
     public FTBPacksPane() {
         super();

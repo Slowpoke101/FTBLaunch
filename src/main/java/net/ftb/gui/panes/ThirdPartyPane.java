@@ -42,6 +42,8 @@ import java.awt.event.ActionListener;
 public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
     @Getter
     private static ThirdPartyPane instance;
+    @Getter
+    private JScrollPane packsScroll;
 
     public ThirdPartyPane() {
         super();
