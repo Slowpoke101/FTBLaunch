@@ -182,6 +182,7 @@ public class PrivatePackDialog extends JDialog {
         layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
         pack();
+        modpackName.requestFocusInWindow();
         setLocationRelativeTo(getOwner());
     }
 }
