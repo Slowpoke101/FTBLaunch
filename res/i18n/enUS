@@ -10,6 +10,9 @@ LAUNCH_BUTTON = Launch
 PROFILE_CREATE = Create Profile
 PROFILE_SELECT = Select Profile
 DOWNLOAD_SERVER_PACK = Download Server ModPack
+WARN_32BIT_OS = 32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.
+WARN_32BIT_JAVA = 32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.
+WARN_JAVA6 = Java 6 detected. Java 7 is recommended for most mod packs.
 
 # Console
 CONSOLE_TITLE = Console

@@ -18,11 +18,13 @@ package net.ftb.gui;
 
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 
 import java.io.*;
+import javax.swing.JOptionPane;
 
 public class LaunchFrameHelpers {
     public static void printInfo() {
@@ -147,6 +149,19 @@ public class LaunchFrameHelpers {
         } catch (IOException e1) {
             Logger.logError(e1.getMessage());
         }
+    }
+
+    public static void tossNag(String setting, String message) {
+        if (!Settings.getSettings().getBoolean(setting)) {
+            int result = ErrorUtils.tossOKIgnoreDialog(message, JOptionPane.WARNING_MESSAGE);
+            if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+                Settings.getSettings().setBoolean(setting, true);
+                Settings.getSettings().save();
+            }
+        } else {
+            Logger.logDebug("ignored: " + setting);
+        }
+
     }
 
 }
