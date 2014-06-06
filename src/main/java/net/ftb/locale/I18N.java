@@ -46,18 +46,10 @@ public class I18N {
      */
     private static void getLocaleProperties (String file) {
         locales.clear();
-        if (file.equalsIgnoreCase("enUS")) {
-            try {
-                locales.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
-            } catch (IOException e) {
-                Logger.logError("[i18n] Could not load language file", e);
-            }
-        } else {
-            try {
-                locales.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-            } catch (IOException e) {
-                Logger.logWarn("[i18n] Could not load language file", e);
-            }
+        try {
+            locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
+        } catch (IOException e) {
+            Logger.logError("[i18n] Could not load language file", e);
         }
     }
 
@@ -74,57 +66,26 @@ public class I18N {
     }
 
     /**
-     * Download locales, set available locales and load fallback locale
-     */
-    public static void downloadSetupLocale () {
-        localeFiles.put("enUS", "English");
-        synchronized (localeIndices) {
-            localeIndices.put(0, "enUS");
-        }
-        try {
-            new LocaleUpdater().start();
-        } catch (Exception e) {
-            Logger.logError("Error while updating locales", e);
-        }
-    }
-
-    /**
-     * Download locales
-     */
-    public static void downloadLocale () {
-        try {
-            new LocaleUpdater(true).start();
-        } catch (Exception e) {
-            Logger.logError("Error while updating locales", e);
-        }
-    }
-
-    /**
      * Add files from the locale directory
      */
     public static void addFiles () {
         int i = 1;
         Properties tmp = new Properties();
-        String[] list = dir.list();
-        if (list != null ) {
-            for (String file : list) {
-                if (file.matches("^\\w{4}$")) {
-                    try {
-                        if (!file.equalsIgnoreCase("enUS")) {
-                            tmp.clear();
-                            tmp.load(new InputStreamReader(new FileInputStream(dir.getAbsolutePath() + File.separator + file), "UTF8"));
-                            localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-                            synchronized (localeIndices) {
-                                localeIndices.put(i, file);
-                            }
-                            i++;
-                        }
-                    } catch (IOException e) {
-                        Logger.logWarn("[i18n] Could not load language file", e);
-                    }
+        for (Locale file_: Locale.values()) {
+            String file = file_.toString();
+            try {
+                tmp.clear();
+                tmp.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
+                localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
+                synchronized (localeIndices) {
+                    localeIndices.put(i, file);
                 }
+                i++;
+            } catch (IOException e) {
+                Logger.logWarn("[i18n] Could not load language file", e);
             }
         }
+
         try {
             fallback.clear();
             fallback.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
