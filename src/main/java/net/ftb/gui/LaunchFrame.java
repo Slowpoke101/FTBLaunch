@@ -278,27 +278,8 @@ public class LaunchFrame extends JFrame {
                 loader.setModal(false);
                 loader.setVisible(true);
 
-                if (!noConfig) {
-                    /*
-                     * Setup locales,  set locale and check  for new locales
-                     * in background thread. Download new locales.
-                     * Assume we have locale files already downloaded
-                     */
-                    I18N.setupLocale();
-                    I18N.setLocale(Settings.getSettings().getLocale());
-                    // nothing will set i18nLoaded, but it's ready
-                    i18nLoaded = true;
-                    I18N.downloadLocale();
-
-                } else {
-                    /*
-                     * First run
-                     */
-                    I18N.setupLocale();
-                    I18N.setLocale(Settings.getSettings().getLocale());
-                    i18nLoaded = true;
-                    I18N.downloadLocale();
-                }
+                I18N.setupLocale();
+                I18N.setLocale(Settings.getSettings().getLocale());
 
                 if (noConfig) {
                     InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
