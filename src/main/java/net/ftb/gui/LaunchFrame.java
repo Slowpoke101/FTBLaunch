@@ -705,6 +705,9 @@ public class LaunchFrame extends JFrame {
      * call this to login
      */
     private void doLogin (final String username, String password, String mojangData) {
+        if (ModPack.getSelectedPack().getDisclaimer() != null && !ModPack.getSelectedPack().getDisclaimer().isEmpty()) {
+            ErrorUtils.tossError(ModPack.getSelectedPack().getDisclaimer());
+        }
         if ((mojangData == null || mojangData.isEmpty()) && password.isEmpty()) {
             PasswordDialog p = new PasswordDialog(this, true);
             p.setVisible(true);
