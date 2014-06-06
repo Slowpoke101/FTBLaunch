@@ -121,18 +121,19 @@ public class ModpackLoader extends Thread {
                     }
                 }
                 ModPack.addPacks(mp);
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
-                        ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
-                    }
-                });
                 try {
                     modPackStream.close();
                 } catch (IOException e) {
                 }
             }
         }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+                ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+            }
+        });
         Logger.logDebug("All packlists loaded");
         Benchmark.logBenchAs("ModpackLoader", "Modpack Loader Init");
         //if (!FTBPacksPane.loaded) {
