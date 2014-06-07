@@ -20,9 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import net.feed_the_beast.launcher.json.JsonFactory;
+import net.feed_the_beast.launcher.json.launcher.Channel;
+import net.feed_the_beast.launcher.json.launcher.Update;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -40,17 +44,17 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private int buildJenk;
     private int beta;//beta release target
     private int betaJenk;//beta CI build #
-    private int relJenk;//beta CI build #
+    private int relJenk;//release CI build #
 
     private int latest;
-    private int minUsable;
+    private int minUsable;//TODO fix this!!
     public static String verString = "";
     public static String betaStr = "";
     private String downloadAddress = "";
     private String betaAddress = "";
     private boolean allowBeta;
-    private boolean betaLatest;
     private boolean useBeta;
+    private List<String> betaHash;
 
     public UpdateChecker(int version, int minUsable, int buildJenk) {
         this.version = version;
@@ -73,6 +77,26 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private void loadInfo () {
         try {
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink("version.xml")));
+            Update upd = JsonFactory.getUpdate("net.ftb:launcher:beta@json", Locations.FTBMAVENFULL);
+            if (upd.getPrimary().equals("beta")){
+                Channel beta = upd.getBeta();
+                this.betaJenk = beta.getJenkins();
+                int beta_ = this.beta = beta.getVersion();
+                betaStr += beta_ / (100 * 100) + ".";
+                beta_ = beta_ % (100 * 100);
+                betaStr += beta_ / (100) + ".";
+                beta_ = beta_ % 100;
+                betaStr += beta_;
+                betaAddress = beta.getFile().getUrl() + beta.getFile().getPath();
+                if(beta.getFile().checksums != null){
+                    betaHash = beta.getFile().checksums;
+                }
+                if(upd.getRelease() != null){
+                    //TODO add code here to handle if the releases are in maven!!
+                }
+            }
+
+
             if (doc == null) {
                 return;
             }
@@ -86,15 +110,6 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
             if(updateAttributes.getNamedItem("releaseJenkins")!= null) {
                 relJenk = Integer.parseInt(updateAttributes.getNamedItem("releaseJenkins").getTextContent());
-                int beta_ = beta = Integer.parseInt(updateAttributes.getNamedItem("betaBuild").getTextContent());
-                betaJenk = Integer.parseInt(updateAttributes.getNamedItem("betaJenkins").getTextContent());
-                betaStr += beta_ / (100 * 100) + ".";
-                beta_ = beta_ % (100 * 100);
-                betaStr += beta_ / (100) + ".";
-                beta_ = beta_ % 100;
-                betaStr += beta_;
-                betaAddress = Locations.FTBMAVENFULL + "net/ftb/FTB Launcher/" + betaStr + "-" + betaJenk + "/FTB_Launcher-" + betaStr + "-" + betaJenk;
-                betaLatest = Boolean.parseBoolean(updateAttributes.getNamedItem("betaLatest").getTextContent());
             } else {
                 Logger.logInfo("Beta channel hasn't been activated yet!");
             }
@@ -104,7 +119,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     }
 
     public boolean shouldUpdate () {
-        if (allowBeta && !betaLatest && (buildJenk < betaJenk || version < beta)) {
+        if (allowBeta && (buildJenk < betaJenk || version < beta)) {
             Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
             useBeta = true;
             return true;
@@ -131,11 +146,19 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         String extension = path.substring(path.lastIndexOf('.') + 1);
         extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
         try {
-            URL updateURL = new URL(useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress + "." + extension);
+            URL updateURL = new URL(useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress.replace("${ext}", extension).replace("${jenkins}", Integer.toString(betaJenk)));
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
-            SelfUpdate.runUpdate(path, temporaryUpdatePath);
+            if(betaHash != null){
+                String sha = DownloadUtils.fileSHA(temporaryUpdate);
+                if(betaHash.contains(sha))
+                    SelfUpdate.runUpdate(path, temporaryUpdatePath);
+                else
+                    throw new IOException("Update Download failed hash check please try again! -- fileSha " + sha);
+            }else{
+                SelfUpdate.runUpdate(path, temporaryUpdatePath);
+            }
         } catch (Exception e) {
             Logger.logError("Error while updating launcher", e);
         }

@@ -25,9 +25,9 @@ public class Locations {
     public static boolean primaryCH = false;
     public static boolean chEnabled = true;
 
-
+   public static String FTB2 = "FTB2";
     //FULL location of the FTB maven repo
-    public final static String FTBMAVENFULL = curseRepo + "FTB2/maven/";
+    public final static String FTBMAVENFULL = curseRepo + FTB2 + "maven/";
 
 
     //various values for mirrors located here so that multiple download threads don't need to re-initialize the data
