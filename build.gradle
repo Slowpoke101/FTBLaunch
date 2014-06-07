@@ -121,6 +121,9 @@ jar {
     }
 }
 
+configurations {
+    deployerJars
+}
 
 repositories {
 	mavenCentral()
@@ -140,6 +143,8 @@ dependencies {
 	//commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
+	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+
 }
 
 sourceSets {
@@ -157,5 +162,16 @@ sourceSets {
                         repository(url: "file://${local_maven}")
                 }
             }
+        }
+    }
+    if (project.hasProperty("remote_maven")) {
+	    apply plugin: 'maven'
+            uploadArchives {
+		repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+        repository(url: "ftp://${remote_maven}") {
+            authentication(userName: "${ftp_username}", password: "${ftp_pass}")
+        }
+    }
         }
     }
