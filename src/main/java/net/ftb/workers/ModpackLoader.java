@@ -36,6 +36,7 @@ import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 
@@ -56,6 +57,7 @@ public class ModpackLoader extends Thread {
     @Override
     public void run () {
         //TODO ASAP thread this
+        Benchmark.start("ModpackLoader");
         for (String xmlFile : xmlFiles) {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
@@ -131,6 +133,7 @@ public class ModpackLoader extends Thread {
             }
         }
         Logger.logDebug("All packlists loaded");
+        Benchmark.logBenchAs("ModpackLoader", "Modpack Loader Init");
         //if (!FTBPacksPane.loaded) {
         FTBPacksPane.getInstance().loaded = true;
         ThirdPartyPane.getInstance().loaded = true;

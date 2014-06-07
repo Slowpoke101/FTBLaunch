@@ -24,6 +24,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
+import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 
 import org.w3c.dom.Document;
@@ -39,6 +40,7 @@ public class MapLoader extends Thread {
     @Override
     public void run () {
         try {//TODO ASAP THREAD THIS!!!
+            Benchmark.start("MapLoader");
             Logger.logInfo("loading map information...");
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.MAPXML)));
             if (doc == null) {
@@ -57,6 +59,7 @@ public class MapLoader extends Thread {
             Logger.logError("Error while updating map info", e);
         } finally {
             MapUtils.loaded = true;
+            Benchmark.logBenchAs("MapLoader", "MapLoader run ");
             LaunchFrame.checkDoneLoading();
         }
     }

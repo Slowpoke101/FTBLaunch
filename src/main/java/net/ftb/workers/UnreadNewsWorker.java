@@ -24,10 +24,11 @@ import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.log.Logger;
-
+import net.ftb.util.Benchmark;
 
 
 /**
@@ -37,11 +38,12 @@ import net.ftb.log.Logger;
 public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
     @Override
     protected Integer doInBackground () {
+        Benchmark.start("UnreadNews");
         int i = 0;
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(new URL(Locations.NEWSUPDATEPHP).openStream()));
-            ArrayList<Long> timeStamps = new ArrayList<Long>();
+            ArrayList<Long> timeStamps = Lists.newArrayList();
             String s = reader.readLine();
             s = s.trim();
             String[] str = s.split(",");
@@ -62,7 +64,7 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
                     i++;
                 }
             }
-
+            Benchmark.logBenchAs("UnreadNews", "UnreadNews Init");
         } catch (UnknownHostException e) {
             Logger.logWarn("Error while checking news: " + e.getMessage());
         } catch (Exception e) {

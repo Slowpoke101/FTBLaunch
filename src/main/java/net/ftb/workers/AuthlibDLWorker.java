@@ -32,6 +32,7 @@ import javax.swing.SwingWorker;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 
 /**
@@ -52,6 +53,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground () {
+        Benchmark.start("Authlib");
         Logger.logDebug("Loading Authlib...");
         if (!binDir.exists())
             binDir.mkdirs();
@@ -83,6 +85,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             return false;
         }
         LaunchFrame.canUseAuthlib = true;
+        Benchmark.logBenchAs("Authlib", "Authlib DL Worker Init");
         return true;
     }
 

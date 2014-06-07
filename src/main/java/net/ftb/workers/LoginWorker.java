@@ -22,6 +22,7 @@ import lombok.Getter;
 import net.ftb.data.LoginResponse;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.util.Benchmark;
 import net.ftb.util.ErrorUtils;
 
 /**
@@ -41,11 +42,13 @@ public class LoginWorker extends SwingWorker<String, Void> {
 
     @Override
     protected String doInBackground () {
+        Benchmark.start("LoginWorker");
         try {
             if (LaunchFrame.canUseAuthlib) {
                 try {
                     LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData);
                     this.resp = resp;
+                    Benchmark.logBenchAs("LoginWorker", "Login Worker Run");
                     if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty())
                         return "good";
                     if (resp == null)

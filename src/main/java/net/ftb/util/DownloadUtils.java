@@ -368,7 +368,6 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
-        Benchmark.start("DlUtils");
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
             Logger.logInfo("DownloadUtils.run() starting");
@@ -437,6 +436,7 @@ public class DownloadUtils extends Thread {
                     int index = (int) (Math.random() * downloadServers.size());
                     List<String> keys = Lists.newArrayList(downloadServers.keySet());
                     String defaultServer = downloadServers.get(keys.get(index));
+                    Benchmark.start("DlUtils");
 
                     downloadServers.put("Automatic", defaultServer);
                     Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
