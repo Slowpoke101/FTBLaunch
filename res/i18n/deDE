@@ -12,8 +12,11 @@ PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
 
 # Console
+CONSOLE_TITLE = Konsole
 CONSOLE_COPYCLIP = Bericht in Zwischenablage kopieren
 CONSOLE_CLIP_CONFIRM = Möchtest du den gesamten Bericht in deine Zwischenablage kopieren?
+CONSOLE_PASTEBIN = Auf pastebin.com hochladen
+CONSOLE_SUPPORT = Support benötigt? Klick mich!
 
 # Map Tab
 INSTALL_MAP = Map installieren
@@ -28,10 +31,15 @@ FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
+OPT_JAVA_ARGS = Optimierungs Argumente für schnelle Computer benutzen?
 REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
 ADVANCED_OPTIONS = Erweiterte Optionen
 INSTALL_FIRSTUSE = Da dies das erste Mal ist, dass du diesen Launcher verwendest, empfehlen wir, das Installationsverzeichnis zu bestimmen.
 DOWNLOAD_JAVA64 = Java 64-bit herunterladen
+DOWNLOAD_JAVA32 = Java 32-bit herunterladen
+DOWNLOAD_JAVAGOOD = Empfohlenes Java herunterladen
+JAVA_OLD_Warning = Java ist zu alt. Java 7 ist für die meisten FTP Packete empfohlen.
+JAVA_NEW_Warning = Java 8 wird nicht unterstützt. (Minecraft unterstützt nicht Java 8 auf Mac.)
 JAVA_32BIT_WARNING = Dein System verwendet eine 32-bit-Version von Java. Dies wird Minecraft auf 1.5GB Arbeitsspeicher begrenzen.
 
 # Shared strings
@@ -40,6 +48,7 @@ FILTER_SETTINGS = Filtern
 # Modpacks pane
 MODS_EDIT_PACK = Modpack bearbeiten
 MODS_WAIT_WHILE_LOADING = Bitte warten während die Mods geladen werden...
+DOWNLOAD_SERVER = Server herunterladen
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
@@ -65,6 +74,7 @@ ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher-Debugging
+ADVANCED_OPTIONS_BETA = Benutzung der Beta-Version des Launchers erlaubt?
 
 # Update
 UPDATE_WICHUPDATE = Möchtest du updaten?
@@ -77,7 +87,8 @@ LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist verfügbar!
-UPDATEMODPACK_BACKUP = Einstellungen Sichern?
+UPDATEMODPACK_BACKUPCFG = Konfigurationen sichern?
+UPDATEMODPACK_BACKUPSave = Speicherstände sichern?
 UPDATEMODPACK_TITLE = Modpack Update ist verfügbar
 UPDATEMODPACK_DOWNGRADE = Installierte Version ist neuer als gewählte Version
 UPDATEMODPACK_FROM_TO_VERSION = Aktuelle Version: %LOCALVER%\nGewählte Version: %ONLINEVER%
@@ -127,6 +138,12 @@ PROFILEDITOR_TITLE = Profileditor
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warnung! Es exististiert bereits eine Map mit diesem Namen!
 MAPOVERRIDE_WISHOVERRIDE = Möchtest du sie überschreiben?
+
+# Force Kill MC
+KILL_MC = Minecraft töten
+KILL_MC_TITLE = Minecraft töten?
+KILL_MC_MESSAGE = Warnung! Das kann Korruption verursachen und sollte nur benutzt werden, wenn das Spiel eingefroren ist!
+KILL_MC_CONFIRM = Bist du dir sicher, dass du den Minecraft-Prozess töten willst?
 
 # Main
 MAIN_EXIT = Schließen
