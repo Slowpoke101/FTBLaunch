@@ -2,12 +2,12 @@ package net.ftb.workers;
 
 import java.io.File;
 import java.net.Proxy;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.feed_the_beast.launcher.json.DateAdapter;
 import net.feed_the_beast.launcher.json.EnumAdaptorFactory;
 import net.feed_the_beast.launcher.json.FileAdapter;
@@ -90,7 +90,6 @@ public class AuthlibHelper {
                     Logger.logError("Unknown authentication error occurred", e);
                 }
             }
-            //Logger.logError("authDebug " + (hasMojangData ? "true" : "false") + " " + authentication.toString());
             if (isValid(authentication)) {
                 displayName = authentication.getSelectedProfile().getName();
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
@@ -116,7 +115,7 @@ public class AuthlibHelper {
             LoginResponse l = authenticateWithAuthlib(user, pass, null);
             if (l == null) {
                 Logger.logError("Failed to login with username & password");
-                return l;
+                return null;
             } else {
                 return l;
             }
@@ -144,14 +143,14 @@ public class AuthlibHelper {
 
     private static Object decodeElement (JsonElement e) {
         if (e instanceof JsonObject) {
-            Map<String, Object> ret = new LinkedHashMap<String, Object>();
+            Map<String, Object> ret = Maps.newLinkedHashMap();
             for (Map.Entry<String, JsonElement> jse : ((JsonObject) e).entrySet()) {
                 ret.put(jse.getKey(), decodeElement(jse.getValue()));
             }
             return ret;
         }
         if (e instanceof JsonArray) {
-            List<Object> ret = new ArrayList<Object>();
+            List<Object> ret = Lists.newArrayList();
             for (JsonElement jse : e.getAsJsonArray()) {
                 ret.add(decodeElement(jse));
             }

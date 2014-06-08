@@ -370,6 +370,7 @@ public class DownloadUtils extends Thread {
     public void run () {
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
+            Benchmark.start("DlUtils");
             Logger.logInfo("DownloadUtils.run() starting");
             downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             Random r = new Random();
@@ -436,8 +437,6 @@ public class DownloadUtils extends Thread {
                     int index = (int) (Math.random() * downloadServers.size());
                     List<String> keys = Lists.newArrayList(downloadServers.keySet());
                     String defaultServer = downloadServers.get(keys.get(index));
-                    Benchmark.start("DlUtils");
-
                     downloadServers.put("Automatic", defaultServer);
                     Logger.logInfo("Selected " + keys.get(index) + " mirror for Automatic assignment");
                 }
