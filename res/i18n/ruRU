@@ -1,47 +1,167 @@
-LOCALE_NAME = Русский (Russian)
-LOCALE_LOADED = Загружен файл Русского языка!
+LOCALE_NAME = Russian
+LOCALE_LOADED = Файл Русского языка загружен!
 
 # Footer
 DONATE_BUTTON = Пожертвовать
 
 # Main Tab
 EDIT_BUTTON = Изменить
-LAUNCH_BUTTON = Старт
+LAUNCH_BUTTON = Запуск
 PROFILE_CREATE = Создать профиль
 PROFILE_SELECT = Выбрать профиль
-DOWNLOAD_SERVER_PACK = Загрузить серверные файлы
+DOWNLOAD_SERVER_PACK = Загрузить серверный пакет модов
+WARN_32BIT_OS = 32-разрядная операционная система. 64-разрядная требуется для большинства пакетов модов. Если у Вас возникли проблемы, пожалуйста, попробуйте FTB Lite 2 pack.
+WARN_32BIT_JAVA = 32-разрядная Java в 64-разрядной операционной системе. 64-разрядная версия Java требуется для большинства пакетов модов. Если у Вас возникли проблемы, пожалуйста, попробуйте FTB Lite 2 pack.
+WARN_JAVA6 = Java 6 обнаружена. Java 7 рекомендуется для большинства пакетов модов.
+
+# Console
+CONSOLE_TITLE = Консоль
+CONSOLE_COPYCLIP = Скопировать в буфер обмена
+CONSOLE_CLIP_CONFIRM = Вы хотите скопировать полный отчёт в буфер обмена?
+CONSOLE_PASTEBIN = Вставить на pastebin.com
+CONSOLE_SUPPORT = Нужна помощь? Нажмите сюда!
 
 # Map Tab
 INSTALL_MAP = Установить карту
-DOWNLOAD_MAP_SERVER = Загрузить карту для сервера
+DOWNLOAD_MAP_SERVER = Загрузить серверную карту
+
+#tab swapping
+SWAP_MAP = Карты
+SWAP_TEXTURE = Пакеты текстур
 
 # TexturePack Tab
-INSTALL_TEXTUREPACK = Установить дополнительные текстуры
+INSTALL_TEXTUREPACK = Установить пакет текстур
 
 # Options pane
-INSTALL_FOLDER = Путь для установки...
+INSTALL_FOLDER = Папка для установки...
 FORCE_UPDATE = Принудительное обновление?
 RAM_MAX = Максимум ОЗУ (Мб)
 LANGUAGE = Язык
+SHOW_CONSOLE = Показывать консоль?
+OPT_JAVA_ARGS= Использовать оптимизирующие аргументы для быстрых компьютеров?
+USE_SYSTEM_PROXY = Использовать прокси для загрузки файлов
+REOPEN_LAUNCHER = Запускать лаунчер после выхода из Minecraft?
+ADVANCED_OPTIONS = Продвинутые настройки
+INSTALL_FIRSTUSE = Поскольку это Ваш первый запуск лаунчера, мы предлагаем настроить каталог установки.
+DOWNLOAD_JAVA64 = Скачать 64-разрядную Java
+DOWNLOAD_JAVA32 = Скачать 32-разрядную Java
+DOWNLOAD_JAVAGOOD = Скачать рекомендуемую Java
+JAVA_OLD_Warning = Слишком старая Java. Java 7 рекомендуется для большинства паков FTB.
+JAVA_NEW_Warning = Java 8 не поддерживается. (Minecraft не поддерживает Java 8 на Mac.)
+JAVA_32BIT_WARNING = Ваша система использует 32-разрядную версию Java. Это ограничит использование ОЗУ до 1.5Гб.
 
 # Shared strings
-FILTER_SETTINGS = Фильтр
+FILTER_SETTINGS = Фильтр настроек
 
 # Modpacks pane
-MODS_EDIT_PACK = Редактировать набор модов
-MODS_WAIT_WHILE_LOADING = Моды загружаются, пожалуйста подождите...
+MODS_EDIT_PACK = Редактировать пакет модов
+MODS_WAIT_WHILE_LOADING = Пожалуйста подождите, пока моды загружаются...
+DOWNLOAD_SERVER = Загрузить сервер
+MODPACK_VERSIONS = Версии пакета модов
+PACK_CODES = Pack Codes
 
 # EditModPackDialog
-MODS_EDIT_ENABLED_LABEL = Включенные моды
+MODS_EDIT_ENABLED_LABEL = Включённые моды
 MODS_EDIT_DISABLED_LABEL = Выключенные моды
 MODS_EDIT_OPEN_FOLDER = Открыть папку
 MODS_EDIT_ADD_MOD = Добавить мод
 MODS_EDIT_ENABLE_MOD = << Включить
 MODS_EDIT_DISABLE_MOD = Выключить >>
-MODS_EDIT_TITLE = Редактор набора модов
+MODS_EDIT_TITLE = Редактор пакета модов
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Карты загружаются, пожалуйста подождите....
+MAPS_WAIT_WHILE_LOADING = Пожалуйста подождите, пока карты загружаются....
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Текстуры загружаются, пожалуйста подождите....
+TEXTURE_WAIT_WHILE_LOADING = Пожалуйста подождите, пока пакеты текстур загружаются....
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Продвинутые настройки
+ADVANCED_OPTIONS_DLLOCATION = Расположение загрузки:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Размер окна Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_POS = Позиция окна Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Авто увеличение?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Отключить Google Analytic Tracking
+ADVANCED_OPTIONS_JAVA_PATH = Путь Java:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Дополнительные параметры Java:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
+ADVANCED_OPTIONS_BETA= Разрешить использование бета версий лаунчера?
+
+# Update
+UPDATE_WICHUPDATE = Вы хотите обновить?
+UPDATE_DOWNGRADE = Вы хотите понизить версию?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = лаунчера доступна.
+LUNCHERUPDATE_CHANGELOG = Посмотреть список изменений
+LUNCHERUPDATE_ISAVAILABLETITLE = Обновление лаунчера доступно
+LUNCHERUPDATE_CURRENTDEAD = Ваш текущий лаунчер должен быть обновлён по одной из следующих причин: \n невозможно запустить/обновить Minecraft или пакеты!
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Новая версия пакета модов доступна!
+UPDATEMODPACK_BACKUPCFG = Сохранить файлы конфигурации?
+UPDATEMODPACK_BACKUPSave = Сохранить сохранения?
+UPDATEMODPACK_TITLE = Доступно обновление пакета модов
+UPDATEMODPACK_DOWNGRADE = Установленная версия новее, чем выбранная версия
+UPDATEMODPACK_FROM_TO_VERSION = Текущая версия: %LOCALVER%\nВыбранная версия: %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = Интерфейс частного пакета
+PRIVATEPACK_ERROR = Недействительный частный пакет.
+PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
+PRIVATEPACK_SECCESS = успешно удалён.
+PRIVATEPACK_NOTEXISTS = Неправильное имя пакета.
+
+# Filter
+FILTER_PACKTYPE = Типа пакета модов:
+FILTER_COMPERTIBLEPACK = Совместимый пакет:
+FILTER_APPLY = Применить фильтр
+FILTER_SEARCHMAP = Искать карты
+FILTER_TITLE = Фильтр
+FILTER_PUBLIC = В списке
+FILTER_PRIVATE = Вне списка
+FILTER_MODPACKAVALIABILITY = Доступность пакета модов:
+FILTER_MCVERSION = Версия Minecraft:
+FILTER_RESULUTION = Mod Pack Resolution:
+FILTER_TEXSEARCH = Искать пакеты
+FILTER_SEARCHPACK = Искать
+
+# Play Offline
+PLAYOFFLINE_WANNA = Что-то пошло не так..\nВы хотите играть в автономном режиме?
+
+# Password
+PASSWORD_PASSLABEL = Пароль: 
+PASSWORD_TITLE = Пожалуйста, введите пароль 
+
+# Profile
+OLDCREDS = Найдены старые установки данных входа или данные входа потеряны: пожалуйста обновите.
+CHANGEDUUID = Было обнаружено изменение в оборудовании пользователя, это запрещает лаунчеру получить доступ к Вашим учётным данным, пожалуйста, введите их снова.
+PROFILEADDER_USERNAME = Имя пользователя/E-mail адрес:
+PROFILEADDER_PASSWORD = Пароль:
+PROFILEADDER_NAME = Имя профиля:
+PROFILEADDER_SAVEPASSWORD = Запомнить пароль
+PROFILEADDER_TITLE = Создание профиля
+PROFILADDER_ERROR = Невозможно создать профиль.
+PROFILEADDER_UPDATE = Обновить
+PROFILEDITOR_TITLE = Редактор профиля
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Внимание! Уже существует карта с таким именем!
+MAPOVERRIDE_WISHOVERRIDE = Вы хотите перезаписать её?
+
+# Force Kill MC
+KILL_MC = Закрыть Minecraft
+KILL_MC_TITLE = Закрыть Minecraft?
+KILL_MC_MESSAGE = Внимание! Это может вызвать повреждение сохранения и должно использоваться только при зависании игры!
+KILL_MC_CONFIRM = Вы уверены, что хотите закрыть процесс Minecraft?
+
+# Main
+MAIN_EXIT = ВЫХОД
+MAIN_APPLY = Применить
+MAIN_YES = Да
+MAIN_NO = Нет
+MAIN_ALL = Все
+MAIN_CANCEL = Отмена
+MAIN_SUBMIT = Подтвердить
+MAIN_REMOVE = Удалить
+MAIN_ADD = Добавить
