@@ -10,10 +10,24 @@ LAUNCH_BUTTON = Gioca
 PROFILE_CREATE = Crea Profilo
 PROFILE_SELECT = Seleziona Profilo
 DOWNLOAD_SERVER_PACK = Scarica la versione server qui!
+WARN_32BIT_OS = Sistema operativo 32-bit. 64-bit è richiesto per la maggior parte delle mod packs. Se hai problemi, per favore prova il FTB Lite 2 pack.
+WARN_32BIT_JAVA = 32-bit Java in sistema operativo 64-bit. 64-bit Java è richiesto per la maggior parte delle mod packs. Se hai problemi, per favore prova il FTB Lite 2 pack.
+WARN_JAVA6 = Java 6 rilevato. Java 7 è richiesto per la maggior parte delle mod packs.
+
+# Console
+CONSOLE_TITLE = Console
+CONSOLE_COPYCLIP = Copia a clipboard
+CONSOLE_CLIP_CONFIRM = Vuoi copiare tutto il log sul  tuo clipboard?
+CONSOLE_PASTEBIN = Copia su pastebin.com
+CONSOLE_SUPPORT = Bisogno di aiuto? Cliccami!
 
 # Map Tab
-INSTALL_MAP = Installa la mappa
+INSTALL_MAP = Installa la Mappa
 DOWNLOAD_MAP_SERVER = Scarica la mappa server
+
+#tab swapping
+SWAP_MAP = Mappe
+SWAP_TEXTURE = TexturePacks
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Installa la texture pack
@@ -23,13 +37,28 @@ INSTALL_FOLDER = Cartella d'installazione
 FORCE_UPDATE = Aggiornamento forzato?
 RAM_MAX = RAM Massima (MB)
 LANGUAGE = Lingua
+SHOW_CONSOLE = Mostra Console?
+OPT_JAVA_ARGS= Usa Optimization Arguments per computer veloce?
+USE_SYSTEM_PROXY = Usa Internet Proxy per scaricare i file
+REOPEN_LAUNCHER = Riapri il launcher dopo essere uscito da minecraft?
+ADVANCED_OPTIONS = Opzioni Avanzate
+INSTALL_FIRSTUSE = Essendo questa la tua prima volta che usi il launcher, vi sugeriamo scegliere la cartella d'installazione.
+DOWNLOAD_JAVA64 = Scarica Java 64-bit
+DOWNLOAD_JAVA32 = Scarica Java 32-bit
+DOWNLOAD_JAVAGOOD = Scarica Java raccomandato
+JAVA_OLD_Warning = Java troppo vecchio. Java 7 è raccomandato per la maggior parte dei pacchetti FTB.
+JAVA_NEW_Warning = Java 8 non è supportata. (Minecraft non supporta java 8 su Mac.)
+JAVA_32BIT_WARNING = Il tuo sistema usa una versione 32-bit di Java. Questo limiterà Minecraft a 1.5gb di RAM.
 
 # Shared strings
 FILTER_SETTINGS = Filtro 
 
 # Modpacks pane
 MODS_EDIT_PACK = Modifica ModPack
-MODS_WAIT_WHILE_LOADING = PPer favore attendi mentre i modpack si stanno caricando...
+MODS_WAIT_WHILE_LOADING = Per favore attendi mentre i modpack si stanno caricando...
+DOWNLOAD_SERVER = Scarica Server
+MODPACK_VERSIONS = Versione Modpack
+PACK_CODES = Codici per pacchetti
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Attiva mods
@@ -38,10 +67,101 @@ MODS_EDIT_OPEN_FOLDER = Apri cartella
 MODS_EDIT_ADD_MOD = Aggiungi mod
 MODS_EDIT_ENABLE_MOD = << Abilita
 MODS_EDIT_DISABLE_MOD = Disabilita >>
-MODS_EDIT_TITLE = ModPack Editor
+MODS_EDIT_TITLE = ModPack Modificatore
 
 # Maps pane
 MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre le mappe si stanno caricando...
 
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre le texturepack si stanno caricando...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Opzioni Avanzate
+ADVANCED_OPTIONS_DLLOCATION = Luogo di Installazione:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Dimensioni finestra di Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_POS = Posizione finestra di Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Massimizzato?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disabilita Google Analytic Tracking
+ADVANCED_OPTIONS_JAVA_PATH = Java Path:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Parametri Java Aggiuntivia:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
+ADVANCED_OPTIONS_BETA= Permeti di usare versioni beta del Launcher?
+
+# Update
+UPDATE_WICHUPDATE = Desideri aggiornare?
+UPDATE_DOWNGRADE = Desideri tornare a una versione vecchia?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = del launcher è avviabile.
+LUNCHERUPDATE_CHANGELOG = Vedi Changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Aggiornamento del Launcher avviabile.
+LUNCHERUPDATE_CURRENTDEAD = Il tuo Launcher deve essere aggiornato per uno dei seguenti motivi: \n non riesce a lanciare/aggiornare propriamente minecraft o pacchetti!
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Una nuova versione del pacchetto è avviabile!
+UPDATEMODPACK_BACKUPCFG = Back-up file config?
+UPDATEMODPACK_BACKUPSave = Back-up Salvataggi?
+UPDATEMODPACK_TITLE = Aggiornamento del pacchetto è avviabile
+UPDATEMODPACK_DOWNGRADE = La versione installata è più nuova di quella selezionata
+UPDATEMODPACK_FROM_TO_VERSION = Versione Corrente: %LOCALVER%\nVersione Selezionata: %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = Interfaccia Pacchetto Privato
+PRIVATEPACK_ERROR = Pacchetto Privato Invalido.
+PRIVATEPACK_TEXT = Scrivi qui il codice ottenuto dal proprietario del pacchetto privato e clicca aggiungi, il pacchetto si troverà nella tua lista di pacchetti. Sarà automaticamente scaricato quando lanciato. Se desideri rimuovere un pacchetto privato, scrivi il codice di nuovo, e clicca rimuovi.
+PRIVATEPACK_SECCESS = Rimosso con successo.
+PRIVATEPACK_NOTEXISTS = Nome del pacchetto errato.
+
+# Filter
+FILTER_PACKTYPE = Tipo di ModPack:
+FILTER_COMPERTIBLEPACK = Pacchetto compatibile:
+FILTER_APPLY = Applica Filtro
+FILTER_SEARCHMAP = Cerca Mappa
+FILTER_TITLE = Filtro
+FILTER_PUBLIC = In Lista
+FILTER_PRIVATE = Non in lista
+FILTER_MODPACKAVALIABILITY = Disponibilità ModPack:
+FILTER_MCVERSION = Versione Minecraft:
+FILTER_RESULUTION = Risoluzione Texture:
+FILTER_TEXSEARCH = Cerca Pacchetto
+FILTER_SEARCHPACK = Cerca
+
+# Play Offline
+PLAYOFFLINE_WANNA = Qualcosa non è andata nel modo giusto..\nVorresti giocare Offline?
+
+# Password
+PASSWORD_PASSLABEL = Password: 
+PASSWORD_TITLE = Per favore scrivi Password 
+
+# Profile
+OLDCREDS = Trovato vecchio Login Data oppure manca: per favore aggiorna.
+CHANGEDUUID = Una modifica è stata rivelata al hardware che previene il launcher ad acceder alle tue credentials, per favore riaggiungili.
+PROFILEADDER_USERNAME = Username/Indirizzo Email:
+PROFILEADDER_PASSWORD = Password:
+PROFILEADDER_NAME = Nome Profilo:
+PROFILEADDER_SAVEPASSWORD = Ricorda Password
+PROFILEADDER_TITLE = Creatore Profilo
+PROFILADDER_ERROR = Incapace di creare profili.
+PROFILEADDER_UPDATE = Aggiorna
+PROFILEDITOR_TITLE = Modifica Profilo
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Attenzione! Esiste già una mappa con questo nome!
+MAPOVERRIDE_WISHOVERRIDE = Vuoi sovrascriverlo?
+
+# Force Kill MC
+KILL_MC = Uccidere Minecraft
+KILL_MC_TITLE = Uccidere Minecraft?
+KILL_MC_MESSAGE = Attenzione! Queso cauca una corruzione, e dovrebbe soltanto essere usato se il gioco congelato!
+KILL_MC_CONFIRM = Sei sicuro di voler Uccidere Minecraft?
+
+# Main
+MAIN_EXIT = ESCI
+MAIN_APPLY = Applica
+MAIN_YES = Si
+MAIN_NO = No
+MAIN_ALL = Tutti
+MAIN_CANCEL = Cancella
+MAIN_SUBMIT = Invia
+MAIN_REMOVE = Rimuovi
+MAIN_ADD = Agguingi
