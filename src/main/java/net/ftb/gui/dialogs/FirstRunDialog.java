@@ -61,14 +61,6 @@ public class FirstRunDialog extends JDialog {
     public FirstRunDialog() {
         super(LaunchFrame.getInstance(), true);
 
-        setTitle(I18N.getLocaleString("INSTALL_TITLE"));
-        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
-        setResizable(false);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setSize(750, 160);
-        setLocationRelativeTo(getOwner());
-
         setupGUI();
 
         getRootPane().setDefaultButton(applyButton);
@@ -102,7 +94,15 @@ public class FirstRunDialog extends JDialog {
     }
 
     private void setupGUI() {
-        getContentPane().setLayout(new BorderLayout());
+    	setTitle(I18N.getLocaleString("INSTALL_TITLE"));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setSize(750, 160);
+        setLocationRelativeTo(getOwner());
+        setLayout(new BorderLayout());
+
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(null);
