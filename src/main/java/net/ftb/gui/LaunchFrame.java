@@ -58,6 +58,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
+
 import lombok.Getter;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
@@ -74,7 +75,7 @@ import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
-import net.ftb.gui.dialogs.InstallDirectoryDialog;
+import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
@@ -282,8 +283,8 @@ public class LaunchFrame extends JFrame {
                 I18N.setLocale(Settings.getSettings().getLocale());
 
                 if (noConfig) {
-                    InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
-                    installDialog.setVisible(true);
+                	FirstRunDialog firstRunDialog = new FirstRunDialog();
+                    firstRunDialog.setVisible(true);
                 }
 
                 LoadingDialog.setProgress(120);
