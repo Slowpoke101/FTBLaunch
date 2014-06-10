@@ -1,6 +1,9 @@
 FTB Launcher
 ====
 
+Note: some classes used in this project come from the community, and as such are under other open source licenses.
+please see the links in the headers of those java files for more information about the source & the open source license used.
+FTB's code uses the following license:
 ##The license
 Copyright 2012 FTB Launcher Contributors
 
@@ -29,6 +32,7 @@ limitations under the License.
 * Indent with spaces(4)
 * Avoid trailing whitespace
 * If using eclipse: Use formatter located at eclipse_formatter.xml
+* If using Intellij IDEA use the eclipse formatter(there is a plugin for this)
 * Sign-off your commits
 * Avoid merge commits in pull requests
 * Squash your commits - have at most one commit per major change
