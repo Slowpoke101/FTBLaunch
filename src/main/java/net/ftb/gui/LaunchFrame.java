@@ -462,7 +462,7 @@ public class LaunchFrame extends JFrame {
         footerCreeper.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
-                OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
+                OSUtils.browse("http://billing.creeperhost.net/link.php?id=2");
             }
         });
 
