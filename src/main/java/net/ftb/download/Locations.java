@@ -7,13 +7,13 @@ import java.util.HashMap;
 //Class used for storage of various constants & location information used by various downloading processes
 public class Locations {
     //location of them Mojang server that MC itself & the json's are pulled from
-    public final static String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
+    public static final String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
     //location of them Mojang server that MC's resources are pulled from
-    public final static String mc_res = "http://resources.download.minecraft.net/";
+    public static final String mc_res = "http://resources.download.minecraft.net/";
     //location of them Mojang server that hosts the Minecraft Maven host
-    public final static String mc_libs = "https://libraries.minecraft.net/";
+    public static final String mc_libs = "https://libraries.minecraft.net/";
     //location of the FTB maven repo within the FTB2/static part of the repository
-    public final static String ftb_maven = "maven/";
+    public static final String ftb_maven = "maven/";
 
     public static final String chRepo = "http://new.creeperrepo.net";
     public static final String curseRepo = "http://ftb.cursecdn.com";
@@ -27,7 +27,7 @@ public class Locations {
 
    public static String FTB2 = "FTB2/";
     //FULL location of the FTB maven repo
-    public final static String FTBMAVENFULL = curseRepo + "/" + FTB2 + "maven/";
+    public static final String FTBMAVENFULL = curseRepo + "/" + FTB2 + "maven/";
 
 
     //various values for mirrors located here so that multiple download threads don't need to re-initialize the data
@@ -40,23 +40,33 @@ public class Locations {
     public static HashMap<String, String> backupServers =  Maps.newHashMap();
 
     //Oracle Java Locations
-    public final static String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";
-    public final static String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=86895";
-    public final static String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87437";
-    public final static String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
-    public final static String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
-    public final static String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+    public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";
+    public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=86895";
+    public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87437";
+    public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
+    public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+    public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
-    public final static String MAPS = "Maps/";
-    public final static String MODPACKS ="modpacks/";
-    public final static String PRIVATEPACKS ="privatepacks/";
-    public final static String TEXTUREPACKS = "texturepacks/";
+    public static final String MAPS = "Maps/";
+    public static final String MODPACKS ="modpacks/";
+    public static final String PRIVATEPACKS ="privatepacks/";
+    public static final String TEXTUREPACKS = "texturepacks/";
 
-    public final static String MAPXML = "maps.xml";
-    public final static String MODPACKXML = "modpacks.xml";
-    public final static String THIRDPARTYXML = "thirdparty.xml";
-    public final static String TEXTUREPACKXML= "texturepack.xml";
-    public final static String NEWSUPDATEPHP = "http://launcher.feed-the-beast.com/newsupdate.php";
-    public final static String FTBSITE = "http://www.feed-the-beast.com";
+    public static final String MAPXML = "maps.xml";
+    public static final String MODPACKXML = "modpacks.xml";
+    public static final String THIRDPARTYXML = "thirdparty.xml";
+    public static final String TEXTUREPACKXML= "texturepack.xml";
+    public static final String NEWSUPDATEPHP = "http://launcher.feed-the-beast.com/newsupdate.php";
+    public static final String FTBSITE = "http://www.feed-the-beast.com";
+
+    public static final String PIWIK = "http://analytics.feed-the-beast.com/";
+
+    public static final String FTBLOGO = "/image/logo_ftb.png";
+    public static final String CHLOGO = "/image/logo_creeperHost.png";
+    public static final String FORGENAME = "MinecraftForge.zip";
+    public static final String OLDMCJARNAME = "minecraft.jar";
+    public static final String launcherLogFile = "FTBLauncherLog.txt";
+    public static final String minecraftLogFile = "MinecraftLog.txt";
+
 }

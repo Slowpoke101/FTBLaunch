@@ -23,7 +23,7 @@
 /**
  * Created at Jul 22, 2010, 11:37:36 PM
  */
-package net.ftb.tracking;
+package net.ftb.tracking.google;
 
 /**
  * Data that is client-specific, and should be common for all tracking requests.

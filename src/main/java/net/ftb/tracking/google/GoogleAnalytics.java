@@ -23,7 +23,7 @@
 /**
  * Created at Jul 20, 2010, 4:39:49 AM
  */
-package net.ftb.tracking;
+package net.ftb.tracking.google;
 
 import java.util.Random;
 

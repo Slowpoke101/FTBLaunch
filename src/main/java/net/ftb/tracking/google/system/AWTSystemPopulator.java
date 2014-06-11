@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.tracking.system;
+package net.ftb.tracking.google.system;
 
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 
-import net.ftb.tracking.AnalyticsConfigData;
+import net.ftb.tracking.google.AnalyticsConfigData;
 
 public class AWTSystemPopulator {
     public static final void populateConfigData (AnalyticsConfigData data) {

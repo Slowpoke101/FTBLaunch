@@ -30,6 +30,7 @@ import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.Benchmark;
@@ -50,7 +51,6 @@ import com.mojang.util.UUIDTypeAdapter;
 public class MinecraftLauncherNew {
     public static boolean isLegacy = false;
     private static String separator = File.separator;
-    private static String[] jarFiles = new String[] { "minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };//legacy stuffs
     private static String gameDirectory;
     private static StringBuilder cpb;
 
@@ -68,7 +68,7 @@ public class MinecraftLauncherNew {
             cpb.append(f.getAbsolutePath());
         }
         if(isLegacy)
-            setupLegacyStuff(gameDirectory, LaunchFrame.FORGENAME, ModPack.getSelectedPack().getMcVersion());
+            setupLegacyStuff(gameDirectory, Locations.FORGENAME, ModPack.getSelectedPack().getMcVersion());
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
         List<String> arguments = new ArrayList<String>();
@@ -297,7 +297,7 @@ public class MinecraftLauncherNew {
             return (((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
                     + separator + ModPack.getSelectedPack().getAnimation() : "empty"));
         else if (s.equals("${forge_name}"))
-            return LaunchFrame.FORGENAME;
+            return Locations.FORGENAME;
         else if (s.equals("${pack_name}"))
             return (ModPack.getSelectedPack().getName() + " v"
                     + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
@@ -310,7 +310,7 @@ public class MinecraftLauncherNew {
         else if (s.equals("${height}"))
             return (String.valueOf(Settings.getSettings().getLastDimension().getHeight()));
         else if (s.equals("${minecraft_jar}"))
-            return (gameDirectory + File.separator + "bin" + File.separator + jarFiles[0]);
+            return (gameDirectory + File.separator + "bin" + File.separator + Locations.OLDMCJARNAME);
         else
             return s;
     }
@@ -320,7 +320,7 @@ public class MinecraftLauncherNew {
 
         cpb.append(OSUtils.getJavaDelimiter());
         cpb.append(new File(instModsDir, forgename).getAbsolutePath());
-        cpb.append(new File(new File(workingDir, "bin"), jarFiles[0]).getAbsolutePath());
+        cpb.append(new File(new File(workingDir, "bin"), Locations.OLDMCJARNAME).getAbsolutePath());
         File libsDir = new File(workingDir, "lib/");
         if (libsDir.isDirectory()) {
             String[] files = libsDir.list();

@@ -23,7 +23,7 @@
 /**
  * Created on Jul 20, 2010, 4:53:44 AM
  */
-package net.ftb.tracking;
+package net.ftb.tracking.google;
 
 /**
  * Tracking data that is pertinent to each individual tracking

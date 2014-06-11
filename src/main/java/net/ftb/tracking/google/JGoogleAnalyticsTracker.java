@@ -23,7 +23,7 @@
 /**
  * Created at Jul 20, 2010, 4:04:22 AM
  */
-package net.ftb.tracking;
+package net.ftb.tracking.google;
 
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;

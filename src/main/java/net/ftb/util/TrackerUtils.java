@@ -18,8 +18,11 @@ package net.ftb.util;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
 
 public class TrackerUtils {
+    public static boolean googleEnabled = true;
+    public static boolean piwikEnabled = false;
     public TrackerUtils() {
     }
 
@@ -30,7 +33,17 @@ public class TrackerUtils {
      */
     public static void sendPageView (String pageUrl, String pageTitle) {
         if (!Settings.getSettings().getSnooper()) {
-            LaunchFrame.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
+            if(googleEnabled) {
+                LaunchFrame.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
+            }
+            if(piwikEnabled) {
+                try {
+                    //TODO make sure this gets sent!!!! LaunchFrame.piwik.sendRequest(LaunchFrame.piwik.getPageUrl())???
+                    LaunchFrame.piwik.setPageCustomVariable(pageUrl, pageTitle);
+                } catch(Exception e) {
+                    Logger.logError(e.getMessage(), e);
+                }
+            }
         }
     }
 }
