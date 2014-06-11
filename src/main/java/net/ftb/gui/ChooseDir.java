@@ -27,7 +27,7 @@ import javax.swing.JFrame;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.dialogs.EditModPackDialog;
-import net.ftb.gui.dialogs.InstallDirectoryDialog;
+import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
@@ -36,7 +36,7 @@ import net.ftb.util.FileUtils;
 public class ChooseDir extends JFrame implements ActionListener {
     private OptionsPane optionsPane;
     private EditModPackDialog editMPD;
-    private InstallDirectoryDialog installDialog;
+    private FirstRunDialog installDialog;
 
     public ChooseDir(OptionsPane optionsPane) {
         super();
@@ -50,11 +50,11 @@ public class ChooseDir extends JFrame implements ActionListener {
         this.editMPD = editMPD;
     }
 
-    public ChooseDir(InstallDirectoryDialog installDialog) {
+    public ChooseDir(FirstRunDialog firstRunDialog) {
         super();
         optionsPane = null;
         editMPD = null;
-        this.installDialog = installDialog;
+        this.installDialog = firstRunDialog;
     }
 
     @Override

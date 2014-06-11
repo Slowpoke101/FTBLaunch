@@ -39,8 +39,8 @@ RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 SHOW_CONSOLE = Show Console?
 OPT_JAVA_ARGS= Use Optimization Arguments for fast computers?
-USE_SYSTEM_PROXY = Use Internet Proxy to download files 
-REOPEN_LAUNCHER = Reopen launcher after exiting Minecraft?
+USE_SYSTEM_PROXY = Use Internet Proxy to download files
+REOPEN_LAUNCHER = Reopen launcher after exiting minecraft?
 ADVANCED_OPTIONS = Advanced Options
 INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
 DOWNLOAD_JAVA64 = Download Java 64-bit
@@ -130,8 +130,8 @@ FILTER_SEARCHPACK = Search
 PLAYOFFLINE_WANNA = Something went wrong..\nWould you like to Play Offline?
 
 # Password
-PASSWORD_PASSLABEL = Password: 
-PASSWORD_TITLE = Please Enter Password 
+PASSWORD_PASSLABEL = Password:
+PASSWORD_TITLE = Please Enter Password
 
 # Profile
 OLDCREDS = Old Setup Login Data Found or Login Data Missing: please update.
@@ -165,3 +165,8 @@ MAIN_CANCEL = Cancel
 MAIN_SUBMIT = Submit
 MAIN_REMOVE = Remove
 MAIN_ADD = Add
+
+# First run dialog
+INSTALL_TITLE = First Run
+INSTALL_LANGUAGE = Language ...
+INSTALL_CHANGE = Change
