@@ -165,3 +165,8 @@ MAIN_CANCEL = Cancel
 MAIN_SUBMIT = Submit
 MAIN_REMOVE = Remove
 MAIN_ADD = Add
+
+# First run dialog
+INSTALL_TITLE = First Run
+INSTALL_LANGUAGE = Language ...
+INSTALL_CHANGE = Change

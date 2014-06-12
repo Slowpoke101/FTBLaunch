@@ -60,7 +60,7 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
-import net.ftb.gui.dialogs.InstallDirectoryDialog;
+import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
@@ -277,8 +277,8 @@ public class LaunchFrame extends JFrame {
                 I18N.setLocale(Settings.getSettings().getLocale());
 
                 if (noConfig) {
-                    InstallDirectoryDialog installDialog = new InstallDirectoryDialog();
-                    installDialog.setVisible(true);
+                    FirstRunDialog firstRunDialog = new FirstRunDialog();
+                    firstRunDialog.setVisible(true);
                 }
 
                 LoadingDialog.setProgress(120);
