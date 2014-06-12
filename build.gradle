@@ -108,6 +108,11 @@ afterEvaluate {
 	}
 }
 
+artifacts {
+ file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")) 
+ file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.zip")) 
+
+ }
 macAppBundle {
     mainClassName = project.mainClass
     appName = "Feed The Beast"
