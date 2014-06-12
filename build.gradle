@@ -113,6 +113,7 @@ macAppBundle {
     appName = "Feed The Beast"
     icon = "res/app/icon.icns"
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    bundleExtras.put("NSHighResolutionCapable", "true")
 }
 
 jar {
