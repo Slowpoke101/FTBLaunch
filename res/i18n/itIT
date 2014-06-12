@@ -165,3 +165,8 @@ MAIN_CANCEL = Cancella
 MAIN_SUBMIT = Invia
 MAIN_REMOVE = Rimuovi
 MAIN_ADD = Agguingi
+
+# First run dialog
+INSTALL_TITLE = Prima Volta
+INSTALL_LANGUAGE = Lingua ...
+INSTALL_CHANGE = Cambia
