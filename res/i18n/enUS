@@ -1,5 +1,5 @@
-LOCALE_NAME = English
-LOCALE_LOADED = English language file loaded!
+LOCALE_NAME = English (US)
+LOCALE_LOADED = English (US) language file loaded!
 
 # Footer
 DONATE_BUTTON = Donate

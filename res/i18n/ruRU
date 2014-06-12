@@ -84,7 +84,7 @@ ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Авто увеличение?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Отключить Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Путь Java:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Дополнительные параметры Java:
-ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Дополнительная отладка лаунчера
 ADVANCED_OPTIONS_BETA= Разрешить использование бета версий лаунчера?
 
 # Update
@@ -108,12 +108,12 @@ UPDATEMODPACK_FROM_TO_VERSION = Текущая версия: %LOCALVER%\nВыб�
 # Private Pack
 PRIVATEPACK_TITLE = Интерфейс частного пакета
 PRIVATEPACK_ERROR = Недействительный частный пакет.
-PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
+PRIVATEPACK_TEXT = Введите частный код, который Вы получили от создателя частного пакета, и нажмите добавить, пакет появиться в Вашем списке пакетов. Он автоматически загрузится при запуске. Если Вы хотите удалить частный пакет, введите код ещё раз и нажмите удалить.
 PRIVATEPACK_SECCESS = успешно удалён.
 PRIVATEPACK_NOTEXISTS = Неправильное имя пакета.
 
 # Filter
-FILTER_PACKTYPE = Типа пакета модов:
+FILTER_PACKTYPE = Тип пакета модов:
 FILTER_COMPERTIBLEPACK = Совместимый пакет:
 FILTER_APPLY = Применить фильтр
 FILTER_SEARCHMAP = Искать карты
@@ -165,3 +165,8 @@ MAIN_CANCEL = Отмена
 MAIN_SUBMIT = Подтвердить
 MAIN_REMOVE = Удалить
 MAIN_ADD = Добавить
+
+# First run dialog
+INSTALL_TITLE = Первый запуск
+INSTALL_LANGUAGE = Язык ...
+INSTALL_CHANGE = Изменить

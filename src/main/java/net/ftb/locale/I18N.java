@@ -1,7 +1,7 @@
 /*
  * This file is part of FTB Launcher.
  *
- * Copyright © 2012-2013, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
+ * Copyright © 2012-2014, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
  * FTB Launcher is licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,7 +17,6 @@
 package net.ftb.locale;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class I18N {
     public static Locale currentLocale = Locale.enUS;
 
     public enum Locale {
-        cyGB, daDK, deDE, enUS, esES, fiFI, frFR, itIT, nlNL, noNO, maHU, ptBR, ptPT, ruRU, svSE, zhCN
+        cyGB, daDK, deDE, enUS, enGB, esES, fiFI, frFR, itIT, nlNL, noNO, maHU, ptBR, ptPT, ruRU, svSE, zhCN
     }
 
     /**
@@ -57,7 +56,7 @@ public class I18N {
      * Set available locales and load fallback locale
      */
     public static void setupLocale () {
-        localeFiles.put("enUS", "English");
+        localeFiles.put("enUS", "English (US)");
         synchronized (localeIndices) {
             localeIndices.put(0, "enUS");
         }
@@ -107,7 +106,7 @@ public class I18N {
             try {
                 currentLocale = Locale.valueOf(locale);
             } catch (IllegalArgumentException e) {
-                Logger.logWarn("[i18n] Unknown locale " + locale + ". Loaded enUs");
+                Logger.logWarn("[i18n] Unknown locale " + locale + ". Loaded enUS");
                 currentLocale = Locale.enUS;
             }
         }
