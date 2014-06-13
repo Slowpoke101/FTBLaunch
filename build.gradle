@@ -110,7 +110,7 @@ afterEvaluate {
 
 artifacts {
  archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
- archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.exe"))
+ archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.zip"))
  }
 macAppBundle {
     mainClassName = project.mainClass
