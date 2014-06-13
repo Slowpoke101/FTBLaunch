@@ -109,9 +109,8 @@ afterEvaluate {
 }
 
 artifacts {
- file("build/libs/FTB_Launcher-${project.version}.exe") 
- file("build/libs/FTB_Launcher-${project.version}-app.zip") 
-
+ archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
+ archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.exe"))
  }
 macAppBundle {
     mainClassName = project.mainClass
