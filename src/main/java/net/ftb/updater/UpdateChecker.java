@@ -55,7 +55,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private boolean allowBeta;
     private boolean useBeta;
     private List<String> betaHash;
-
+    public static String UCString;
     public UpdateChecker(int version, int minUsable, int buildJenk) {
         this.version = version;
         this.minUsable = minUsable;
@@ -123,13 +123,16 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         Logger.logDebug("latest = "  + latest);
         if (allowBeta && (buildJenk < betaJenk || version < beta)) {
             Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
+            UCString = betaStr +"-" + betaJenk;
             useBeta = true;
             return true;
         } else if (version == latest && buildJenk < relJenk) {
             Logger.logInfo("Release version found. version: " + version + "-"+ buildJenk+ ", latest: " + latest);
+            UCString = verString + "-" + relJenk;
         } else if (version < latest) {
             Logger.logInfo("New version found. version: " + version + ", latest: " + latest);
             useBeta = false;
+            UCString = verString  + "-" + relJenk;
             return true;
         } else {
             return false;

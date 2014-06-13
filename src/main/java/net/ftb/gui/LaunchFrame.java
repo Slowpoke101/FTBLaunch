@@ -382,17 +382,16 @@ public class LaunchFrame extends JFrame {
 
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
+
                 URL mf = LaunchFrame.class.getResource("/META-INF/MANIFEST.MF");
                 int beta = 9999999;
                 String mfStr = "";
                 try {
                     Manifest manifest = new Manifest(mf.openStream());
-                    Attributes attr = manifest.getMainAttributes();
-                    if (attr.containsKey("Launcher-Jenkins")) {
-                        mfStr = attr.getValue("Launcher-Jenkins");
-                        beta = Integer.parseInt(mfStr);
-                        Logger.logDebug("FTB Launcher CI Build #: " + beta);
-                    }
+                    Attributes attrs = manifest.getMainAttributes();
+                    mfStr  = attrs.getValue("Launcher-Jenkins");
+                    beta = Integer.parseInt(mfStr);
+                    Logger.logDebug("FTB Launcher CI Build #: " + beta);
                 } catch (Exception e) {
                     Logger.logError("Error getting beta information, assuming beta channel not usable!");
                     beta = 9999999;
