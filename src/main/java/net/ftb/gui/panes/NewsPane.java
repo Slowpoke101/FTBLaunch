@@ -53,9 +53,10 @@ public class NewsPane extends JPanel implements ILauncherPane {
         
         setLayout(new BorderLayout());
 
-        news = new JEditorPane("text/html", "");
+        news = new JEditorPane();
         news.setEditable(false);
         news.setEditorKit(news_kit);
+        news.setContentType("text/html");
         news.addHyperlinkListener(new HyperlinkListener() {
             @Override
             public void hyperlinkUpdate(HyperlinkEvent e) {
