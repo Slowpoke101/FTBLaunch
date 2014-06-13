@@ -42,6 +42,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.google.common.collect.Maps;
+import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
@@ -57,6 +58,7 @@ import net.ftb.util.OSUtils;
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
     private static JPanel texturePacks;
     public static ArrayList<JPanel> texturePackPanels;
+    @Getter
     private static JScrollPane texturePacksScroll;
 
     //stuff for swapping between maps/texture packs
@@ -70,7 +72,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     private static int selectedTexturePack = 0;
     private static JEditorPane textureInfo;
 
-    private TexturepackPane instance = this;
+    @Getter
+    private static TexturepackPane instance;
 
     private static HashMap<Integer, TexturePack> currentTexturePacks = Maps.newHashMap();
 
@@ -78,6 +81,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     public TexturepackPane() {
         super();
+        instance = this;
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
 

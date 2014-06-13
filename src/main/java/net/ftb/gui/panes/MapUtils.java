@@ -59,6 +59,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
     protected static JPanel maps;
     public static ArrayList<JPanel> mapPanels;
+    @Getter
     private static JScrollPane mapsScroll;
 
     private static JLabel typeLbl;
@@ -77,12 +78,13 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     public static boolean loaded = false;
 
     @Getter
-    private MapUtils instance = this;
+    private static MapUtils instance;
 
     private static HashMap<Integer, Map> currentMaps = Maps.newHashMap();
 
     public MapUtils() {
         super();
+        instance = this;
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
         setup();

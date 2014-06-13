@@ -32,6 +32,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.swing.*;
+
 public class TexturePackLoader extends Thread {
 
     public TexturePackLoader() {
@@ -58,6 +60,11 @@ public class TexturePackLoader extends Thread {
         } catch (Exception e) {
             Logger.logError("Error loading texture pack info", e);
         } finally {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    TexturepackPane.getInstance().getTexturePacksScroll().getVerticalScrollBar().setValue(0);
+                }
+            });
             TexturepackPane.loaded = true;
             Benchmark.logBenchAs("TexturepackLoader", "Texture Pack Load ");
             LaunchFrame.checkDoneLoading();

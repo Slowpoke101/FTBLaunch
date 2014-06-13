@@ -41,8 +41,6 @@ import javax.swing.JTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.Map;
 
 import javax.swing.JComboBox;
@@ -61,18 +59,6 @@ public class FirstRunDialog extends JDialog {
     private JButton applyButton;
 
     private JComboBox languageList;
-
-    private FocusListener updateLanguage = new FocusListener() {
-        @Override
-        public void focusLost (FocusEvent e) {
-        	I18N.setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
-        	updateLocale();
-        }
-
-        @Override
-        public void focusGained (FocusEvent e) {
-        }
-    };
 
     public FirstRunDialog() {
         super(LaunchFrame.getInstance(), true);
@@ -165,11 +151,10 @@ public class FirstRunDialog extends JDialog {
                 I18N.setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
                 if (LaunchFrame.getInstance() != null) {
                     LaunchFrame.getInstance().updateLocale();
-                    updateLocale();
                 }
+                updateLocale();
             }
         });
-        languageList.addFocusListener(updateLanguage);
         languageList.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
         languageList.setBounds(169, 63, 500, 23);
         contentPanel.add(languageList);
@@ -185,6 +170,7 @@ public class FirstRunDialog extends JDialog {
         installPathLbl.setText(I18N.getLocaleString("INSTALL_FOLDER"));
         applyButton.setText(I18N.getLocaleString("MAIN_APPLY"));
         languageLabel.setText(I18N.getLocaleString("INSTALL_LANGUAGE"));
+        repaint();
     }
 
 }

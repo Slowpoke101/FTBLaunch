@@ -112,24 +112,28 @@ public class ModpackLoader extends Thread {
                                 .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
                                 (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr.getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent())));
+                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr
+                                .getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
+                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent()
+                         ));
                     } catch (Exception e) {
                         Logger.logError("Error while updating modpack info", e);
                     }
                 }
                 ModPack.addPacks(mp);
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
-                        ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
-                    }
-                });
                 try {
                     modPackStream.close();
                 } catch (IOException e) {
                 }
             }
         }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+                ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+            }
+        });
         Logger.logDebug("All packlists loaded");
         Benchmark.logBenchAs("ModpackLoader", "Modpack Loader Init");
         //if (!FTBPacksPane.loaded) {

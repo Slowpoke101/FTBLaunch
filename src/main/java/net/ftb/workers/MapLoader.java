@@ -32,6 +32,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.swing.*;
+
 public class MapLoader extends Thread {
 
     public MapLoader() {
@@ -58,6 +60,11 @@ public class MapLoader extends Thread {
         } catch (Exception e) {
             Logger.logError("Error while updating map info", e);
         } finally {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    MapUtils.getInstance().getMapsScroll().getVerticalScrollBar().setValue(0);
+                }
+            });
             MapUtils.loaded = true;
             Benchmark.logBenchAs("MapLoader", "MapLoader run ");
             LaunchFrame.checkDoneLoading();

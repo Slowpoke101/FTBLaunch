@@ -1,0 +1,22 @@
+# This file will prevent accidental line ending changes.
+# If you add files/file types which  are not listed here first rule try automatically
+# do EOL normalization
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+# Git will handle the files in whatever way it thinks is best. This is a good default option.
+* text=auto
+
+# EOL normalization is done automatically:
+#  * commit saves files with LF
+#  * checkout write files into  working directory with OS's native line endings
+*.java  text
+
+# already saved into repository with crlf
+/res/i18n/* text eol=crlf
+
+# binaries
+*.jar binary
+*.ico binary
+*.icns binary
+*.png binary
+*.PNG binary

@@ -34,6 +34,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'shadow'
 apply plugin: 'launch4j'
+apply plugin: 'application'
 
 project.ext {
     mainClass = 'net.ftb.gui.LaunchFrame'
@@ -45,6 +46,7 @@ project.ext {
         ext.buildNum = "9999999"
     }
 
+mainClassName = project.mainClass
 group = 'net.ftb'
 version = "1.4.0-${project.buildNum}"
 description = "FTB Launcher"
