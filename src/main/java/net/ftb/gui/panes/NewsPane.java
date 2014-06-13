@@ -26,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
@@ -35,28 +36,36 @@ import net.ftb.util.OSUtils.OS;
 
 @SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
+	
     private JEditorPane news;
     private JScrollPane newsPanel;
+    
+    private final HTMLEditorKit news_kit = new HTMLEditorKit();
 
     public NewsPane() {
         super();
+        
         if (OSUtils.getCurrentOS() == OS.WINDOWS) {
             setBorder(new EmptyBorder(-5, -25, -5, 12));
         } else {
             setBorder(new EmptyBorder(-4, -25, -4, -2));
         }
+        
         setLayout(new BorderLayout());
 
         news = new JEditorPane();
         news.setEditable(false);
+        news.setEditorKit(news_kit);
+        news.setContentType("text/html");
         news.addHyperlinkListener(new HyperlinkListener() {
             @Override
-            public void hyperlinkUpdate (HyperlinkEvent arg0) {
-                if (arg0.getEventType() == EventType.ACTIVATED) {
-                    OSUtils.browse(arg0.getURL().toString());
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() == EventType.ACTIVATED) {
+                    OSUtils.browse(e.getURL().toString());
                 }
             }
         });
+        
         newsPanel = new JScrollPane(news);
         newsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         newsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -74,4 +83,5 @@ public class NewsPane extends JPanel implements ILauncherPane {
             Logger.logError("Error while updating news tab", e1);
         }
     }
+    
 }

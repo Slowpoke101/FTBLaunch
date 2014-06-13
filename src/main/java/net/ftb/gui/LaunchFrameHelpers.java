@@ -89,6 +89,7 @@ public class LaunchFrameHelpers {
                 osw.write("Eyamaz" + System.getProperty("line.separator"));
 
                 osw.flush();
+                osw.close();
 
                 TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
             }
