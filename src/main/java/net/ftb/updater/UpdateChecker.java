@@ -119,6 +119,8 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     }
 
     public boolean shouldUpdate () {
+        Logger.logDebug("updater: buildjenk " + buildJenk + " < betajenk " + betaJenk + "|| version " + version + " < " + beta );
+        Logger.logDebug("latest = "  + latest);
         if (allowBeta && (buildJenk < betaJenk || version < beta)) {
             Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
             useBeta = true;
