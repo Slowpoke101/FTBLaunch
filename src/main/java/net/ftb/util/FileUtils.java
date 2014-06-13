@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -266,7 +265,7 @@ public class FileUtils {
     public static void move(File oldFile, File newFile) {
         try {
             if(oldFile.exists() && !newFile.exists()) {
-                Files.move(oldFile.toPath(), newFile.toPath());
+                org.apache.commons.io.FileUtils.moveFile(oldFile, newFile);
             }
         } catch(IOException e) {
             Logger.logWarn("Exception occurred while moving " + oldFile.toString() + " : " + e.getMessage());
