@@ -192,7 +192,7 @@ public class LaunchFrame extends JFrame {
         }
 
         if (new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).exists()) {
-            new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).delete();
+            new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).delete();
         }
 
         /*
