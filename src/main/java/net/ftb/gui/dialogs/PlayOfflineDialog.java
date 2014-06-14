@@ -55,17 +55,14 @@ public class PlayOfflineDialog extends JDialog {
                     legacy = true;
                 if(pack.getDir().equalsIgnoreCase("mojang_vanilla"))
                     legacy=false;//vanilla goes direct!!
-                    //setVisible(false);
-                    //LaunchFrame.getInstance().launchMinecraft(Settings.getSettings().getInstallPath() + "/" + pack.getDir() + "/" + "minecraft", username, "offlinemods", pack.getMaxPermSize());
-
-                    setVisible(false);
-                    String unique;
-                    if (uuid == null || uuid.isEmpty())
-                        unique = "1234567890";
-                    else
-                        unique = uuid;
-                    MinecraftInstaller.launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
-                            new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()), legacy);
+                setVisible(false);
+                String unique;
+                if (uuid == null || uuid.isEmpty())
+                    unique = "1234567890";
+                else
+                    unique = uuid;
+                MinecraftInstaller.launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
+                        new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()), legacy);
 
             }
         });
