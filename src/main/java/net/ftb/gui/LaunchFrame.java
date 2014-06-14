@@ -1166,7 +1166,7 @@ public class LaunchFrame extends JFrame {
     	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
     	
     	trayIcon.setPopupMenu(trayMenu);
-    	trayIcon.setToolTip("Feed The Besat Launcher");
+    	trayIcon.setToolTip("Feed The Beast Launcher");
     	trayIcon.setImageAutoSize(true);
     	
     	try {
