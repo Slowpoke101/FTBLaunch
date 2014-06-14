@@ -117,6 +117,7 @@ public class LaunchFrameHelpers {
 
                 osw.write(String.valueOf(unixTime));
                 osw.flush();
+                osw.close();
                 Logger.logInfo("Reporting daily use");
                 TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
             } else {
@@ -140,10 +141,11 @@ public class LaunchFrameHelpers {
 
                     osw.write(String.valueOf(unixTime));
                     osw.flush();
+                    osw.close();
                     Logger.logInfo("Reporting daily use");
                     TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-
                 }
+                fis.close();
             }
         } catch (FileNotFoundException e1) {
             Logger.logError(e1.getMessage());

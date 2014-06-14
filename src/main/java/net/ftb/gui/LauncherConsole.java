@@ -43,7 +43,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import net.ftb.gui.dialogs.YNDialog;
+import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
 import net.ftb.log.ILogListener;
 import net.ftb.log.LogEntry;
@@ -52,6 +52,7 @@ import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
 import net.ftb.log.Logger;
 import net.ftb.tools.PastebinPoster;
+import net.ftb.util.GameUtils;
 import net.ftb.util.OSUtils;
 
 @SuppressWarnings("serial")
@@ -64,7 +65,6 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private final JComboBox logSourceComboBox;
     private LogSource logSource = LogSource.ALL;
     private LogLevel logLevel = LogLevel.INFO;
-    private YNDialog yn;
     private JButton killMCButton;
 
     public LauncherConsole() {
@@ -165,7 +165,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         ircButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                OSUtils.browse("http://support.feed-the-beast.com/");
+                OSUtils.browse(Locations.SUPPORTSITE);
             }
         });
         panel.add(ircButton);
@@ -176,21 +176,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         killMCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                //if Mc is running
-                if (LaunchFrame.getInstance().MCRunning) {
-                    //open confirm dialog for closing MC
-                    yn = new YNDialog("KILL_MC_MESSAGE", "KILL_MC_CONFIRM", "KILL_MC_TITLE");
-                    yn.setVisible(true);
-                    yn.toFront();
-                    if (yn.ready && yn.ret && LaunchFrame.getInstance().MCRunning && LaunchFrame.getInstance() != null && LaunchFrame.getInstance().getProcMonitor() != null) {
-                        Logger.logWarn("MC Killed by the user!");
-                        LaunchFrame.getInstance().getProcMonitor().stop();
-                    }
-                    yn.setVisible(false);
-
-                } else {
-                    Logger.logInfo("no Minecraft Process currently running to kill");
-                }
+                GameUtils.killMC();
             }
         });
         panel.add(killMCButton);

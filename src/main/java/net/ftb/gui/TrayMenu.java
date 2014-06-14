@@ -20,15 +20,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import net.ftb.gui.dialogs.YNDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
+import net.ftb.util.GameUtils;
 
 public class TrayMenu extends PopupMenu {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private YNDialog yn;
 	
 	public TrayMenu() {
 		super();
@@ -51,23 +48,8 @@ public class TrayMenu extends PopupMenu {
 			this.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					//if Mc is running
-	                if (LaunchFrame.getInstance().MCRunning) {
-	                    //open confirm dialog for closing MC
-	                    yn = new YNDialog("KILL_MC_MESSAGE", "KILL_MC_CONFIRM", "KILL_MC_TITLE");
-	                    yn.setVisible(true);
-	                    yn.toFront();
-	                    if (yn.ready && yn.ret && LaunchFrame.getInstance().MCRunning && LaunchFrame.getInstance() != null && LaunchFrame.getInstance().getProcMonitor() != null) {
-	                        Logger.logWarn("MC Killed by the user!");
-	                        LaunchFrame.getInstance().getProcMonitor().stop();
-	                    }
-	                    yn.setVisible(false);
-
-	                } else {
-	                    Logger.logInfo("no Minecraft Process currently running to kill");
-	                }
+					GameUtils.killMC();
 				}
-				
 			});
 		}
 	};
