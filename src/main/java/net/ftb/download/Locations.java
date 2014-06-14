@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 //Class used for storage of various constants & location information used by various downloading processes
 public class Locations {
+	
     //location of them Mojang server that MC itself & the json's are pulled from
     public static final String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
     //location of them Mojang server that MC's resources are pulled from
@@ -41,10 +42,9 @@ public class Locations {
     public static boolean primaryCH = false;
     public static boolean chEnabled = true;
 
-   public static String FTB2 = "FTB2/";
+    public static String FTB2 = "FTB2/";
     //FULL location of the FTB maven repo
     public static final String FTBMAVENFULL = curseRepo + "/" + FTB2 + "maven/";
-
 
     //various values for mirrors located here so that multiple download threads don't need to re-initialize the data
     //worker's that rely on the server list being in tact should check serversloaded
@@ -74,6 +74,7 @@ public class Locations {
     public static final String THIRDPARTYXML = "thirdparty.xml";
     public static final String TEXTUREPACKXML= "texturepack.xml";
     public static final String NEWSUPDATEPHP = "http://launcher.feed-the-beast.com/newsupdate.php";
+    public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 
     public static final String PIWIK = "http://analytics.feed-the-beast.com/";
