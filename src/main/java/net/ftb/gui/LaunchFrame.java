@@ -191,7 +191,7 @@ public class LaunchFrame extends JFrame {
             new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).delete();
         }
 
-        if (new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).exists()) {
+        if (new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).exists()) {
             new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).delete();
         }
 
@@ -211,7 +211,7 @@ public class LaunchFrame extends JFrame {
          */
         try {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile), LogSource.LAUNCHER));
-            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile), LogSource.EXTERNAL));
+            Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
             if (!noConfig) {
                 Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
