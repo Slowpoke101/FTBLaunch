@@ -762,6 +762,7 @@ public class LaunchFrame extends JFrame {
                     enableObjects();
                     return;
                 } catch (ExecutionException err) {
+                    // Worker should not leak ExecutionExceptions to caller: all Exceptions are handled internally twice
                     if (err.getCause() instanceof IOException) {
                         Logger.logError("Error while logging in", err);
                         PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username), getResp());
@@ -772,19 +773,24 @@ public class LaunchFrame extends JFrame {
                 }
 
                 RESPONSE = getResp();
+                Logger.logDebug("responseStr: " + responseStr);
                 String uuid = UserManager.getUUID(username);
                 if (responseStr.equals("good")) {
                     Logger.logInfo("Login complete.");
                     try {
+                        // save userdata, including new mojangData
                         userManager.write();
+                        Logger.logDebug("user data saved");
                     } catch (IOException e) {
-                        Logger.logError("User data saving failed!");
+                        Logger.logError("logindata saving failed!");
                     }
                     runGameUpdater();
                 } else if (uuid != null && !uuid.isEmpty() && RESPONSE != null && responseStr.equals("offline")) {
+                    Logger.logDebug("Asking user for offline mode");
                     PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, uuid, RESPONSE);
                     d.setVisible(true);
                 } else {
+                    Logger.logDebug("Bad responseStr, not starting MC");
                     enableObjects();
                     return;
                 }//if user doesn't want offline mode

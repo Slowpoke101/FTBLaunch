@@ -65,11 +65,15 @@ public class AuthlibHelper {
                 hasPassword = true;
             }
             if (mojangData != null && !mojangData.isEmpty()) {
+                Logger.logDebug("mojangData was passed to current method");
                 Map<String, Object> m = decode(mojangData);
                 if (m != null) {
+                    Logger.logDebug("Loading mojangData into authlib");
                     authentication.loadFromStorage(m);
                     hasMojangData = true;
                 }
+            } else {
+                Logger.logDebug("mojangData is null or empty");
             }
             if (authentication.canLogIn()) {
                 try {
@@ -88,15 +92,17 @@ public class AuthlibHelper {
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
+                    ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com", e);
                     if (hasMojangData) {
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         if (uniqueID != null && !uniqueID.isEmpty())
+                            Logger.logDebug("Setting UUID");
                             UserManager.setUUID(user, uniqueID);
                     }
-                    ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com", e);
                     if (uniqueID != null && !uniqueID.isEmpty()) {
                         UserManager.setUUID(user, uniqueID);
+                        Logger.logDebug("Setting UUID and creating and returning new LoginResponse");
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
                     }
                     return null;
@@ -107,11 +113,14 @@ public class AuthlibHelper {
                 }
             }
             if (isValid(authentication)) {
+                Logger.logDebug("Authentication is valid ");
                 displayName = authentication.getSelectedProfile().getName();
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
+                    Logger.logDebug("loggedIn() && CanPlayOnline()");
                     if ((authentication instanceof YggdrasilUserAuthentication)) {
                         UserManager.setStore(user, encode(authentication.saveForStorage()));
                         UserManager.setUUID(user, authentication.getSelectedProfile().getId().toString());//enables use of offline mode later if needed on newer MC Versions
+                        Logger.logDebug("Authentication done, returning LoginResponse");
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", displayName, authentication.getAuthenticatedToken(), authentication
                                 .getSelectedProfile().getId().toString(), authentication);
                     }
@@ -133,9 +142,11 @@ public class AuthlibHelper {
                 Logger.logError("Failed to login with username & password");
                 return null;
             } else {
+                Logger.logDebug("authentication ready, returning LoginResponse from authlib");
                 return l;
             }
         }
+        Logger.logError("Failed to authenticate");
         return null;
 
     }
