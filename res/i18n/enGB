@@ -173,3 +173,4 @@ INSTALL_CHANGE = Change
 
 # System Tray
 TRAY_QUIT = Quit
+TRAY_FTB_WEBSITE = FTB Website

@@ -19,9 +19,14 @@ package net.ftb.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
+import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
 import net.ftb.util.GameUtils;
+import net.ftb.util.OSUtils;
 
 public class TrayMenu extends PopupMenu {
 	
@@ -32,15 +37,22 @@ public class TrayMenu extends PopupMenu {
 		
 		killMCButton.setLabel(I18N.getLocaleString("KILL_MC"));
 		quitButton.setLabel(I18N.getLocaleString("TRAY_QUIT"));
+		ftbWebsite.setLabel(I18N.getLocaleString("TRAY_FTB_WEBSITE"));
+		showConsole.setLabel(I18N.getLocaleString("SHOW_CONSOLE"));
 		
 		this.add(this.killMCButton);
 		this.addSeparator();
+		this.add(this.showConsole);
+		this.addSeparator();
+		this.add(this.ftbWebsite);
 		this.add(this.quitButton);
 	}
 	
 	public void updateLocale() {
 		killMCButton.setLabel(I18N.getLocaleString("KILL_MC"));
 		quitButton.setLabel(I18N.getLocaleString("TRAY_QUIT"));
+		ftbWebsite.setLabel(I18N.getLocaleString("TRAY_FTB_WEBSITE"));
+		showConsole.setLabel(I18N.getLocaleString("SHOW_CONSOLE"));
 	}
 	
 	private final MenuItem killMCButton = new MenuItem() {
@@ -64,5 +76,35 @@ public class TrayMenu extends PopupMenu {
             });
         }
     };
+    
+    private final MenuItem ftbWebsite = new MenuItem() {
+    	{
+    		this.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                    OSUtils.browse(Locations.FTBSITE);
+                }
+            });
+    	}
+    };
+    
+    private final CheckboxMenuItem showConsole = new CheckboxMenuItem() {
+    	{
+    		this.setState(Settings.getSettings().getConsoleActive());
+    		this.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					Settings.getSettings().setConsoleActive(showConsole.getState());
+					Settings.getSettings().save();
+					LaunchFrame.getInstance().optionsPane.updateShowConsole();
+					LaunchFrame.con.setVisible(showConsole.getState());
+				}
+    		});
+    	}
+    };
+    
+    public void updateShowConsole() {
+    	showConsole.setState(Settings.getSettings().getConsoleActive());
+    }
 
 }
