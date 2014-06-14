@@ -106,7 +106,7 @@ public class ModpackLoader extends Thread {
                         mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
                                 .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
-                                .getTextContent(), modPackAttr.getNamedItem("description").getTextContent(), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
+                                .getTextContent(), modPackAttr.getNamedItem("description")==null?null:modPackAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
                                 .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
                                 .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
@@ -114,7 +114,7 @@ public class ModpackLoader extends Thread {
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
                                 .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr
                                 .getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
-                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent()
+                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n")
                          ));
                     } catch (Exception e) {
                         Logger.logError("Error while updating modpack info", e);
