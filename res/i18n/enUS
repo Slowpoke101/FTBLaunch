@@ -170,3 +170,6 @@ MAIN_ADD = Add
 INSTALL_TITLE = First Run
 INSTALL_LANGUAGE = Language ...
 INSTALL_CHANGE = Change
+
+# System Tray
+TRAY_QUIT = Quit
