@@ -16,14 +16,17 @@
  */
 package net.ftb.mclauncher;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Map.Entry;
 
 
+import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
@@ -46,6 +49,8 @@ import com.mojang.authlib.UserType;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import com.mojang.util.UUIDTypeAdapter;
+
+import javax.swing.*;
 
 public class MinecraftLauncherNew {
     public static boolean isLegacy = false;
@@ -70,7 +75,7 @@ public class MinecraftLauncherNew {
             setupLegacyStuff(gameDirectory, Locations.FORGENAME, ModPack.getSelectedPack().getMcVersion());
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = Lists.newArrayList();
 
         Logger.logInfo("Java Path: " + javaPath);
         Logger.logInfo("Pack: " + ModPack.getSelectedPack().getName() + " " + version);
@@ -98,10 +103,6 @@ public class MinecraftLauncherNew {
             Logger.logInfo("Defaulting PermSize to 256m");
         }
 
-        //arguments.add("-XX:+UseConcMarkSweepGC");
-        //arguments.add("-XX:+CMSIncrementalMode");
-        //arguments.add("-XX:+AggressiveOpts");
-        //arguments.add("-XX:+CMSClassUnloadingEnabled");
         arguments.add("-XX:PermSize=" + maxPermSize);
         arguments.add("-Djava.library.path=" + nativesDir.getAbsolutePath());
         arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
@@ -115,12 +116,6 @@ public class MinecraftLauncherNew {
             arguments.add("-Djava.net.useSystemProxies=true");
         }
 
-        //Due to this being bugged in vanilla, and likely to cause crashes,
-        //this will not be enabled until it can be tested with the first 1.7.x test packs
-        /*if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
-             arguments.add("--fullscreen");
-             Logger.logInfo("fullscreen");
-        }*/
         arguments.add("-cp");
         arguments.add(cpb.toString());
 
@@ -202,6 +197,25 @@ public class MinecraftLauncherNew {
                     arguments.add(s);
             }
         }
+        if(!isLegacy) {//legacy is handled separately
+            boolean fullscreen = false;
+            if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+                arguments.add("--fullscreen");
+                Logger.logDebug("fullscreen");
+                fullscreen = true;
+            }
+            Dimension def = new Dimension(854, 480);
+            if (Settings.getSettings().getLastDimension().getWidth() != def.getWidth() && !fullscreen) {
+                arguments.add("--width");
+                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getWidth()));
+            }
+            if (Settings.getSettings().getLastDimension().getHeight() != def.getHeight() && !fullscreen) {
+                arguments.add("--height");
+                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getHeight()));
+            }
+        }
+
+
         ProcessBuilder builder = new ProcessBuilder(arguments);
         /*StringBuilder tmp = new StringBuilder();
         for (String a : builder.command())
