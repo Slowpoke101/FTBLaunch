@@ -16,10 +16,13 @@
  */
 package net.ftb.gui;
 
+import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -49,6 +52,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.data.LauncherStyle;
@@ -128,6 +132,8 @@ public class LaunchFrame extends JFrame {
     public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
+    
+    private static TrayMenu trayMenu;
 
     /*
      * limit for version component is 99.
@@ -340,6 +346,13 @@ public class LaunchFrame extends JFrame {
 
                 LaunchFrame frame = new LaunchFrame(2);
                 instance = frame;
+                
+                // Set up System Tray
+                if(SystemTray.isSupported()) {
+                	setUpSystemTray();
+                } else {
+                	Logger.logWarn("System Tray not supported");
+                }
 
                 /*
                  * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
@@ -1079,6 +1092,9 @@ public class LaunchFrame extends JFrame {
         thirdPartyPane.updateLocale();
         mapsPane.updateLocale();
         tpPane.updateLocale();
+        if(trayMenu != null) {
+        	trayMenu.updateLocale();
+        }
     }
 
     private static ArrayList<String> getXmls () {
@@ -1125,8 +1141,6 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-
-
     public void swapTabs (boolean toMaps) {
         if (toMaps) {
             tabbedPane.remove(4);
@@ -1143,5 +1157,22 @@ public class LaunchFrame extends JFrame {
             tpEnabled = true;
             updateFooter();
         }
+    }
+    
+    private static void setUpSystemTray() {
+    	trayMenu = new TrayMenu();
+    	
+    	SystemTray tray = SystemTray.getSystemTray();
+    	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
+    	
+    	trayIcon.setPopupMenu(trayMenu);
+    	trayIcon.setToolTip("Feed The Besat Launcher");
+    	trayIcon.setImageAutoSize(true);
+    	
+    	try {
+			tray.add(trayIcon);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
     }
 }
