@@ -133,7 +133,7 @@ public class LaunchFrame extends JFrame {
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
     
-    private static TrayMenu trayMenu;
+    public static TrayMenu trayMenu;
 
     /*
      * limit for version component is 99.
