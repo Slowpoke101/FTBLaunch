@@ -201,7 +201,6 @@ public class MinecraftLauncherNew {
             boolean fullscreen = false;
             if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
                 arguments.add("--fullscreen");
-                Logger.logDebug("fullscreen");
                 fullscreen = true;
             }
             Dimension def = new Dimension(854, 480);

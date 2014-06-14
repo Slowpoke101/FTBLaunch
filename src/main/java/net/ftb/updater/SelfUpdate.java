@@ -21,13 +21,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import net.ftb.log.Logger;
 import net.ftb.util.FileUtils;
 import net.ftb.util.OSUtils;
 
 public class SelfUpdate {
     public static void runUpdate (String currentPath, String temporaryUpdatePath) {
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = Lists.newArrayList();
 
         String separator = System.getProperty("file.separator");
         String path = System.getProperty("java.home") + separator + "bin" + separator + "java";
