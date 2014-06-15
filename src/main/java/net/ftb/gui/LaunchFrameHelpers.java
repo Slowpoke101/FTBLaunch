@@ -16,6 +16,7 @@
  */
 package net.ftb.gui;
 
+import net.ftb.data.Constants;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
@@ -24,11 +25,12 @@ import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 
 import java.io.*;
+
 import javax.swing.JOptionPane;
 
 public class LaunchFrameHelpers {
     public static void printInfo() {
-        Logger.logInfo("FTBLaunch starting up (version " + LaunchFrame.getVersion() + " Build: " + LaunchFrame.buildNumber + ")");
+        Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));

@@ -29,6 +29,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
+import net.ftb.data.Constants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.updater.UpdateChecker;
@@ -46,7 +47,7 @@ public class LauncherUpdateDialog extends JDialog {
 
     public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion) {
         super(LaunchFrame.getInstance(), true);
-        this.usable = LaunchFrame.getInstance().buildNumber > deadVersion;
+        this.usable = Constants.buildNumber > deadVersion;
         setupGui();
 
         showChangeLog.addActionListener(new ActionListener() {
@@ -54,7 +55,7 @@ public class LauncherUpdateDialog extends JDialog {
             public void actionPerformed (ActionEvent arg0) {
                 // TODO: Call new frame containing html page?
                 // TODO: beta changelogs???
-                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + LaunchFrame.buildNumber);//TODO update this!!!
+                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + Constants.buildNumber);//TODO update this!!!
             }
         });
 
