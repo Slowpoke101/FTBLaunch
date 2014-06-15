@@ -84,7 +84,7 @@ public class MapManager extends JDialog {
                 byte data[] = new byte[1024];
                 int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
                 SwingUtilities.invokeLater(new Runnable() {
-                    public void run () {
+                    public void run() {
                         progressBar.setMaximum(10000);
                     }
                 });
@@ -98,14 +98,16 @@ public class MapManager extends JDialog {
                         final String txt = (amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb";
                         final int perc = (int) downloadedPerc * 100;
                         SwingUtilities.invokeLater(new Runnable() {
-                            public void run () {
+                            public void run() {
                                 progressBar.setValue(perc);
                                 label.setText(txt);
                             }
                         });
                     }
                 }
-            } finally {
+            } catch( Exception e){
+                Logger.logError(e.getMessage(), e);
+            }finally {
                 in.close();
                 fout.flush();
                 fout.close();
