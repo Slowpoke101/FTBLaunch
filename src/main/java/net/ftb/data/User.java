@@ -18,6 +18,7 @@ package net.ftb.data;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import net.ftb.log.Logger;
@@ -31,6 +32,7 @@ public class User implements Serializable {
     private static final int serialVersionUID = 1;
 
     private int _serial = 0;
+    private boolean saveMojangData = true;
     private String _username = "", _name = "", _encryptedPassword = "", _encryptedStore = "", _uuid = "";
     private transient String _password = "", _decryptedStore = "";
 
@@ -161,11 +163,32 @@ public class User implements Serializable {
         }
     }
 
+    private void writeObject (ObjectOutputStream s) {
+        // clear mojangData if needed and then ...
+        Logger.logDebug("starting...");
+        if (saveMojangData == false)
+            Logger.logDebug("Clearing mojangData");
+            _encryptedStore = "";
+        try {
+            s.defaultWriteObject();
+        } catch (IOException e) {
+            Logger.logError("logindata save failed", e);
+        }
+    }
+
     public void setUUID (String uuid) {
         this._uuid = uuid;
     }
 
     public String getUUID () {
         return this._uuid;
+    }
+
+    public void setSaveMojangData (boolean b) {
+        saveMojangData = b;
+    }
+
+    public boolean getSaveMojangData () {
+        return saveMojangData;
     }
 }
