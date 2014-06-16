@@ -55,6 +55,7 @@ import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.ftb.data.Constants;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
@@ -119,8 +120,7 @@ public class LaunchFrame extends JFrame {
      */
     @Getter
     private static LaunchFrame instance = null;
-    @Getter
-    private static String version = "1.4.0";
+    
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -134,11 +134,7 @@ public class LaunchFrame extends JFrame {
     public OptionsPane optionsPane;
     
     public static TrayMenu trayMenu;
-
-    /*
-     * limit for version component is 99.
-     */
-    public static int buildNumber = 1 * 100 * 100 + 4 * 100 + 0 * 1;
+    
     public static boolean noConfig = false;
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
@@ -235,11 +231,11 @@ public class LaunchFrame extends JFrame {
             Logger.logError(e.getMessage(), e);
         }
 
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
-        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + version + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + version + " OS " + OSUtils.getOSString());
+        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version);
+        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").exists()) {
+            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + " OS " + OSUtils.getOSString());
             try {
-                new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + version + ".txt").createNewFile();
+                new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
             } catch (IOException e) {
                 Logger.logError("Error creating os cache text file");
             }
@@ -413,7 +409,7 @@ public class LaunchFrame extends JFrame {
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
                 final int beta_ = beta;
-                UpdateChecker updateChecker = new UpdateChecker(buildNumber, minUsable, beta) {
+                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, minUsable, beta) {
                     @Override
                     protected void done () {
                         try {
@@ -438,7 +434,7 @@ public class LaunchFrame extends JFrame {
     public LaunchFrame(final int tab) {
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
         setResizable(false);
-        setTitle("Feed the Beast Launcher v" + version);
+        setTitle(Constants.name + " v" + Constants.version);
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
         panel = new JPanel();
@@ -1128,7 +1124,7 @@ public class LaunchFrame extends JFrame {
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
-        if (ModPack.getSelectedPack().getMinLaunchSpec() <= this.buildNumber) {
+        if (ModPack.getSelectedPack().getMinLaunchSpec() <= Constants.buildNumber) {
             if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
                 if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
                     Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
@@ -1172,7 +1168,7 @@ public class LaunchFrame extends JFrame {
     	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
     	
     	trayIcon.setPopupMenu(trayMenu);
-    	trayIcon.setToolTip("Feed The Beast Launcher");
+    	trayIcon.setToolTip(Constants.name);
     	trayIcon.setImageAutoSize(true);
     	
     	try {

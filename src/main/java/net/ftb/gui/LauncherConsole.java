@@ -43,6 +43,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import net.ftb.data.Constants;
 import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
 import net.ftb.log.ILogListener;
@@ -68,7 +69,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private JButton killMCButton;
 
     public LauncherConsole() {
-        setTitle(I18N.getLocaleString("CONSOLE_TITLE"));
+        setTitle(Constants.name + " " + I18N.getLocaleString("CONSOLE_TITLE"));
         setMinimumSize(new Dimension(800, 400));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         getContentPane().setLayout(new BorderLayout(0, 0));
@@ -85,7 +86,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 JOptionPane pane = new JOptionPane("The log will be copied to your clipboard and pastebin.com will be opened now");
                 Object[] options = new String[] { "Yes do it", "Cancel" };
                 pane.setOptions(options);
-                JDialog dialog = pane.createDialog(new JFrame(), "Paste to pastebin.com");
+                JDialog dialog = pane.createDialog(new JFrame(), I18N.getLocaleString("CONSOLE_PASTEBIN"));
                 dialog.setVisible(true);
                 Object obj = pane.getValue();
                 int result = -1;
