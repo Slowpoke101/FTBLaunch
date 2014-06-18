@@ -63,6 +63,15 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         this.buildJenk = buildJenk;
         if (buildJenk == 9999999)
             this.allowBeta = false;
+        String path = null;
+        try {
+            path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
+            path = URLDecoder.decode(path, "UTF-8");
+            Logger.logDebug("Launcher Install path: " + path);//we need this to make sure that the app behaves correctly when updating
+        } catch (IOException e) {
+            Logger.logError("Couldn't get path to current launcher jar/exe", e);
+        }
+
     }
 
     @Override
