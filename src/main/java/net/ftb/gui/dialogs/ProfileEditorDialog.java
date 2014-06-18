@@ -45,7 +45,7 @@ public class ProfileEditorDialog extends JDialog {
     private JPasswordField password;
     private JLabel nameLbl;
     private JTextField name;
-    private JCheckBox savePassword;
+    private JCheckBox savePassword, saveMojangData;
     private JButton update;
     private JButton remove;
 
@@ -66,6 +66,8 @@ public class ProfileEditorDialog extends JDialog {
             password.setText(UserManager.getPassword(editingName));
             savePassword.setSelected(true);
         }
+
+        saveMojangData.setSelected(UserManager.getSaveMojangData(editingName));
 
         username.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -101,6 +103,7 @@ public class ProfileEditorDialog extends JDialog {
                     } else {
                         UserManager.updateUser(editingName, username.getText(), "", name.getText());
                     }
+                    UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
                     LaunchFrame.writeUsers(name.getText());
                     setVisible(false);
                 }
@@ -133,6 +136,7 @@ public class ProfileEditorDialog extends JDialog {
         nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
         name = new JTextField(16);
         savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
+        saveMojangData = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEMOJANGDATA"));
         update = new JButton(I18N.getLocaleString("PROFILEADDER_UPDATE"));
         remove = new JButton(I18N.getLocaleString("MAIN_REMOVE"));
 
@@ -147,6 +151,7 @@ public class ProfileEditorDialog extends JDialog {
         panel.add(nameLbl);
         panel.add(name);
         panel.add(savePassword);
+        panel.add(saveMojangData);
         panel.add(update);
         panel.add(remove);
 
@@ -167,8 +172,9 @@ public class ProfileEditorDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, name, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, savePassword, hSpring, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, saveMojangData, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name), Spring.width(savePassword));
+        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name), Spring.width(savePassword), Spring.width(saveMojangData));
 
         hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
@@ -206,6 +212,10 @@ public class ProfileEditorDialog extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, savePassword, vSpring, SpringLayout.NORTH, panel);
 
         vSpring = SwingUtils.springSum(vSpring, Spring.height(savePassword), Spring.constant(10));
+
+        layout.putConstraint(SpringLayout.NORTH, saveMojangData, vSpring, SpringLayout.NORTH, panel);
+
+        vSpring = SwingUtils.springSum(vSpring, Spring.height(saveMojangData), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.NORTH, remove, vSpring, SpringLayout.NORTH, panel);

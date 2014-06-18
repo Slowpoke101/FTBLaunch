@@ -49,14 +49,17 @@ public class LoginWorker extends SwingWorker<String, Void> {
                     LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData);
                     this.resp = resp;
                     Benchmark.logBenchAs("LoginWorker", "Login Worker Run");
-                    if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty())
-                        return "good";
+                    if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty()) {
+                        if (resp.getSessionID() != null) {
+                            return "good";
+                        } else {
+                            return "offline";
+                        }
+                    }
                     if (resp == null)
                         return "nullResponse";
                     if (resp.getUsername() == null)
                         return "NullUsername";
-                    if (resp.getSessionID() == null)
-                        return "offline";
                     return "bad";
                 } catch (Exception e) {
                     Logger.logError("Error using authlib", e);

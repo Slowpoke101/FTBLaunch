@@ -246,4 +246,16 @@ public class UserManager {
             temp.setUUID(uuid);
     }
 
+    public static void setSaveMojangData (String username, boolean b) {
+        User temp = findUser(username);
+        if(temp != null)
+            temp.setSaveMojangData(b);
+    }
+
+    public static boolean getSaveMojangData (String username) {
+        User temp = findUser(username);
+        if(temp != null)
+            return temp.getSaveMojangData();
+        return false;
+    }
 }

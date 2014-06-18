@@ -54,7 +54,7 @@ public class MapLoader extends Thread {
                 NamedNodeMap mapAttr = map.getAttributes();
                 Map.addMap(new Map(mapAttr.getNamedItem("name").getTextContent(), mapAttr.getNamedItem("author").getTextContent(), mapAttr.getNamedItem("version").getTextContent(), mapAttr
                         .getNamedItem("url").getTextContent(), mapAttr.getNamedItem("logo").getTextContent(), mapAttr.getNamedItem("image").getTextContent(), mapAttr.getNamedItem("compatible")
-                        .getTextContent(), mapAttr.getNamedItem("mcversion").getTextContent(), mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description").getTextContent(),
+                        .getTextContent(), mapAttr.getNamedItem("mcversion").getTextContent(), mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description")==null?null:mapAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"),
                         i));
             }
         } catch (Exception e) {
