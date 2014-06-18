@@ -144,6 +144,7 @@ PROFILEADDER_TITLE = Profile Creator
 PROFILADDER_ERROR = Unable to create profile.
 PROFILEADDER_UPDATE = Update
 PROFILEDITOR_TITLE = Profile Editor
+PROFILEADDER_SAVEMOJANGDATA = Remember auth token
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warning! There is already a map by that name!
