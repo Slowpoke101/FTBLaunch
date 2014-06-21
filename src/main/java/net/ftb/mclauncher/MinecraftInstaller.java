@@ -56,7 +56,7 @@ public class MinecraftInstaller {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(),installPath);
 
         if (assets != null && assets.size() > 0) {
-            Logger.logInfo("Gathering " + assets.size() + " assets, this may take a while...");
+            Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
             final ProgressMonitor prog = new ProgressMonitor(LaunchFrame.getInstance(), "Downloading Files...", "", 0, 100);
             prog.setMaximum(assets.size() * 100);
@@ -105,6 +105,7 @@ public class MinecraftInstaller {
 
     private static List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
         try {
+            Logger.logInfo("Checking local assets file, Please wait!");
             List<DownloadInfo> list = new ArrayList<DownloadInfo>();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 
@@ -121,6 +122,7 @@ public class MinecraftInstaller {
              * <ftb installation location>/libraries/*
              */
             //check if our copy exists of the version json if not backup to mojang's copy
+            Logger.logDebug("Checking minecraft.jar");
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
@@ -143,6 +145,7 @@ public class MinecraftInstaller {
             }
             Version version = JsonFactory.loadVersion(json);
             //TODO make sure to  setup lib DL's for pack.json!!!
+            Logger.logDebug("checking minecraft libraries");
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
                     local = new File(root, "libraries/" + lib.getPath());
@@ -163,6 +166,7 @@ public class MinecraftInstaller {
             }
 
             //Pack JSON Libraries
+            Logger.logDebug("Checking pack libararies");
             ModPack pack = ModPack.getSelectedPack();
             File packDir = new File(installDir, pack.getDir());
             File gameDir = new File(packDir, "minecraft");
@@ -172,6 +176,7 @@ public class MinecraftInstaller {
                     Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                     for (Library lib : packjson.getLibraries()) {
                         //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
+                        // These files are shipped inside pack.zip, can't do force update check yet
                         if(!new File(libDir, lib.getPath()).exists()){
                             if (lib.checksums!= null)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(),lib.checksums,"sha1"));
@@ -185,6 +190,7 @@ public class MinecraftInstaller {
             // Move the old format to the new:
             File test = new File(root, "assets/READ_ME_I_AM_VERY_IMPORTANT.txt");
             if (test.exists()) {
+                Logger.logDebug("Moving old format");
                 File assets = new File(root, "assets");
                 Set<File> old = FileUtils.listFiles(assets);
                 File objects = new File(assets, "objects");
@@ -220,6 +226,7 @@ public class MinecraftInstaller {
             /*
              * assets/*
              */
+            Logger.logDebug("Checking minecraft assets");
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             attempt = 0;
@@ -245,6 +252,7 @@ public class MinecraftInstaller {
             Benchmark.start("threading");
             long size = list.size();
             Collection<DownloadInfo> tmp;
+            Logger.logDebug("Starting TaskHandler to check MC assets");
             Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
                     .withFixedThreads(2*OSUtils.getNumCores())
                             //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
@@ -263,7 +271,7 @@ public class MinecraftInstaller {
                                     return(new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
                                 }
                             } catch (Exception ex) {
-                                Logger.logError("Assest hash check failed", ex);
+                                Logger.logError("Asset hash check failed", ex);
                             }
                             // values() will drop null entries
                             return null;
@@ -290,6 +298,8 @@ public class MinecraftInstaller {
             File assetDir = new File(installDir, "assets");
             File libDir = new File(installDir, "libraries");
             File natDir = new File(packDir, "natives");
+
+            Logger.logInfo("Setting up native libraries");
             if (natDir.exists()) {
                 natDir.delete();
             }

@@ -120,7 +120,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
                     }
                 }
                 if (result == 0) {
-                    StringSelection stringSelection = new StringSelection(Logger.getLogs());
+                    StringSelection stringSelection = new StringSelection("FTB Launcher logs:\n" + Logger.getLogs());
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(stringSelection, null);
                 }
