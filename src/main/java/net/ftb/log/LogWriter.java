@@ -29,6 +29,8 @@ public class LogWriter implements ILogListener {
     public LogWriter(File logFile, LogSource source) throws IOException {
         this.source = source;
         this.logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logFile), "UTF-8"));
+        this.logWriter.write(logFile + ": written by FTB Launcher" + System.getProperty("line.separator"));
+        this.logWriter.flush();
     }
 
     @Override
