@@ -81,7 +81,11 @@ public class JavaFinder {
         for (String javaPath : javaExecs) {
             if (!(new File(javaPath).exists()))
                 continue;
-            result.add(new JavaInfo(javaPath));
+            try {
+                result.add(new JavaInfo(javaPath));
+            } catch (Exception e) {
+                Logger.logError("Error while creating JavaInfo", e);
+            }
         }
         return result;
     }
