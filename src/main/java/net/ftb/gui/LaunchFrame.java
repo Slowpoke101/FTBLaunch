@@ -82,7 +82,7 @@ import net.ftb.log.LogWriter;
 import net.ftb.log.Logger;
 import net.ftb.log.OutputOverride;
 import net.ftb.log.StdOutLogger;
-import net.ftb.mclauncher.MinecraftInstaller;
+import net.ftb.minecraft.MCInstaller;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
@@ -860,7 +860,7 @@ public class LaunchFrame extends JFrame {
         if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("14w")) {
             isLegacy = false;
         }
-        MinecraftInstaller.setupNewStyle(installPath, pack, isLegacy,RESPONSE);
+        MCInstaller.setupNewStyle(installPath, pack, isLegacy, RESPONSE);
     }
 
 
@@ -989,7 +989,7 @@ public class LaunchFrame extends JFrame {
             return false;
         }
         try {
-            MinecraftInstaller.installMods(ModPack.getSelectedPack().getDir());
+            MCInstaller.installMods(ModPack.getSelectedPack().getDir());
             man.cleanUp();
         } catch (IOException e) {
             Logger.logDebug("Exception: ", e);

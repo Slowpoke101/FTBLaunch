@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.mclauncher;
+package net.ftb.minecraft;
 
 import java.awt.*;
 import java.io.File;
@@ -52,7 +52,7 @@ import com.mojang.util.UUIDTypeAdapter;
 
 import javax.swing.*;
 
-public class MinecraftLauncherNew {
+public class MCLauncher {
     public static boolean isLegacy = false;
     private static String separator = File.separator;
     private static String gameDirectory;
@@ -72,7 +72,7 @@ public class MinecraftLauncherNew {
             cpb.append(f.getAbsolutePath());
         }
         if(isLegacy)
-            setupLegacyStuff(gameDirectory, Locations.FORGENAME, ModPack.getSelectedPack().getMcVersion());
+            setupLegacyStuff(gameDirectory, Locations.FORGENAME);
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
         List<String> arguments = Lists.newArrayList();
@@ -326,7 +326,8 @@ public class MinecraftLauncherNew {
         else
             return s;
     }
-    public static void setupLegacyStuff(String workingDir, String forgename, String MCVersion){
+
+    public static void setupLegacyStuff(String workingDir, String forgename){
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
         //jarmods are added inside the wrapper
 

@@ -33,7 +33,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.mclauncher.MinecraftInstaller;
+import net.ftb.minecraft.MCInstaller;
 import net.ftb.util.SwingUtils;
 
 @SuppressWarnings("serial")
@@ -61,7 +61,7 @@ public class PlayOfflineDialog extends JDialog {
                     unique = "1234567890";
                 else
                     unique = uuid;
-                MinecraftInstaller.launchMinecraftNew(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
+                MCInstaller.launchMinecraft(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
                         new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()), legacy);
 
             }

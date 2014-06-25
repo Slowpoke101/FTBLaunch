@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.mclauncher;
+package net.ftb.minecraft;
 
 import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
@@ -51,7 +51,7 @@ import java.util.concurrent.CancellationException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class MinecraftInstaller {
+public class MCInstaller {
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(),installPath);
 
@@ -68,7 +68,7 @@ public class MinecraftInstaller {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraftNew(installPath, pack, RESPONSE, isLegacy);
+                            launchMinecraft(installPath, pack, RESPONSE, isLegacy);
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
@@ -101,7 +101,7 @@ public class MinecraftInstaller {
         } else if (assets == null) {
             LaunchFrame.getInstance().getEventBus().post(new EnableObjectsEvent());
         } else {
-            launchMinecraftNew(installPath, pack, RESPONSE, isLegacy);
+            launchMinecraft(installPath, pack, RESPONSE, isLegacy);
         }
     }
 
@@ -299,7 +299,7 @@ public class MinecraftInstaller {
         return null;
     }
 
-    public static void launchMinecraftNew (String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
+    public static void launchMinecraft(String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
         try {
             File packDir = new File(installDir, pack.getDir());
             String gameFolder = installDir + File.separator + pack.getDir() + File.separator + "minecraft";
@@ -376,7 +376,7 @@ public class MinecraftInstaller {
                 classpath.add(new File(libDir, lib.getPath()));
             }
 
-            Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
+            Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
@@ -418,7 +418,7 @@ public class MinecraftInstaller {
                 }));
             }
         } catch (Exception e) {
-            Logger.logError("Error while running launchMinecraftNew()", e);
+            Logger.logError("Error while running launchMinecraft()", e);
         }
     }
 
