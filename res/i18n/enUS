@@ -111,6 +111,7 @@ PRIVATEPACK_ERROR = Invalid Private Pack.
 PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
 PRIVATEPACK_SECCESS = successfully removed.
 PRIVATEPACK_NOTEXISTS = Incorrect pack name.
+PRIVATEPACK_ALREADY_ADDED = Private Pack is already added
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Type:

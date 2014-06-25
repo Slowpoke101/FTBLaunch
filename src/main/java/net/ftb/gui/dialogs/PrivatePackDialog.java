@@ -56,12 +56,16 @@ public class PrivatePackDialog extends JDialog {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
-                if (DownloadUtils.staticFileExists(modpackName.getText() + ".xml") && !modpackName.getText().isEmpty() && !Settings.getSettings().getPrivatePacks().contains(modpackName.getText())) {
-                    Logger.logInfo("Adding: " + modpackName.getText());
-                    ModPack.loadXml(modpackName.getText() + ".xml");
-                    Settings.getSettings().addPrivatePack(modpackName.getText());
-                    Settings.getSettings().save();
-                    setVisible(false);
+                if (!modpackName.getText().isEmpty() && DownloadUtils.staticFileExists(modpackName.getText() + ".xml")) {
+                    if (!Settings.getSettings().getPrivatePacks().contains(modpackName.getText())) {
+                        Logger.logInfo("Adding: " + modpackName.getText());
+                        ModPack.loadXml(modpackName.getText() + ".xml");
+                        Settings.getSettings().addPrivatePack(modpackName.getText());
+                        Settings.getSettings().save();
+                        setVisible(false);
+                    } else {
+                        ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ALREADY_ADDED"));
+                    }
                 } else {
                     ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ERROR"));
                 }
