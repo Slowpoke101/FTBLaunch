@@ -98,11 +98,20 @@ public class MinecraftInstaller {
             });
 
             downloader.execute();
+        } else if (assets == null) {
+            LaunchFrame.getInstance().getEventBus().post(new EnableObjectsEvent());
         } else {
             launchMinecraftNew(installPath, pack, RESPONSE, isLegacy);
         }
     }
 
+    /**
+     * Gather assets to check/download. If force update is enabled this will return all assets
+     *
+     * @return null if failed and MC can't be started, otherwise, ArrayList containing assets to be checked/downloaded
+     *              Normally, if offline mode works, setupNewStyle() and gatherAssets() are not called and error situation is impossible
+     *              Returning null just in case of network breakge after authentication process
+     */
     private static List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
         try {
             Logger.logInfo("Checking local assets file, Please wait!");
@@ -138,8 +147,8 @@ public class MinecraftInstaller {
                     reason = e;
                     attempt++;
                 }
-                if (attempt == attempts && !success) {
-                    Logger.logError("JSON download failed", reason);
+                if (attempt == attempts && !success && !json.exists()) {
+                    Logger.logError("library JSON download failed and local JSON file not found", reason);
                     return null;
                 }
             }
@@ -241,8 +250,8 @@ public class MinecraftInstaller {
                     attempt++;
                     reason = e;
                 }
-                if (attempt == attempts && !success) {
-                    Logger.logError("JSON download failed", reason);
+                if (attempt == attempts && !success && !json.exists()) {
+                    Logger.logError("Asset JSON download failed", reason);
                     return null;
                 }
             }
