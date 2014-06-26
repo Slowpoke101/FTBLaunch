@@ -39,7 +39,7 @@ RAM_MAX = RAM Massima (MB)
 LANGUAGE = Lingua
 SHOW_CONSOLE = Mostra Console?
 OPT_JAVA_ARGS= Usa Optimization Arguments per computer veloce?
-USE_SYSTEM_PROXY = Usa Internet Proxy per scaricare i file
+USE_SYSTEM_PROXY = Usa Internet Proxy per scaricare i file?
 REOPEN_LAUNCHER = Riapri il launcher dopo essere uscito da minecraft?
 ADVANCED_OPTIONS = Opzioni Avanzate
 INSTALL_FIRSTUSE = Essendo questa la tua prima volta che usi il launcher, vi sugeriamo scegliere la cartella d'installazione.
@@ -111,6 +111,7 @@ PRIVATEPACK_ERROR = Pacchetto Privato Invalido.
 PRIVATEPACK_TEXT = Scrivi qui il codice ottenuto dal proprietario del pacchetto privato e clicca aggiungi, il pacchetto si troverà nella tua lista di pacchetti. Sarà automaticamente scaricato quando lanciato. Se desideri rimuovere un pacchetto privato, scrivi il codice di nuovo, e clicca rimuovi.
 PRIVATEPACK_SECCESS = Rimosso con successo.
 PRIVATEPACK_NOTEXISTS = Nome del pacchetto errato.
+PRIVATEPACK_ALREADY_ADDED = Pacchetto privato già aggiunto
 
 # Filter
 FILTER_PACKTYPE = Tipo di ModPack:
@@ -144,6 +145,7 @@ PROFILEADDER_TITLE = Creatore Profilo
 PROFILADDER_ERROR = Incapace di creare profili.
 PROFILEADDER_UPDATE = Aggiorna
 PROFILEDITOR_TITLE = Modifica Profilo
+PROFILEADDER_SAVEMOJANGDATA = Ricorda autore
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Attenzione! Esiste già una mappa con questo nome!
@@ -170,3 +172,7 @@ MAIN_ADD = Agguingi
 INSTALL_TITLE = Prima Volta
 INSTALL_LANGUAGE = Lingua ...
 INSTALL_CHANGE = Cambia
+
+# System Tray
+TRAY_QUIT = Esci
+TRAY_FTB_WEBSITE = Sito FTB
