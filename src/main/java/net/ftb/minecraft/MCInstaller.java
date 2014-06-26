@@ -135,23 +135,13 @@ public class MCInstaller {
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
-            int attempt = 0, attempts = 3;
-            boolean success = false;
-            Exception reason = null;
-            while ((attempt < attempts) && !success) {
-                try {
-                    success = true;
-                    DownloadUtils.downloadToFile(url, json);
-                } catch (Exception e) {
-                    success = false;
-                    reason = e;
-                    attempt++;
-                }
-                if (attempt == attempts && !success && !json.exists()) {
-                    Logger.logError("library JSON download failed and local JSON file not found", reason);
-                    return null;
-                }
+
+            DownloadUtils.downloadToFile(url, json, 3);
+            if (!json.exists()) {
+                Logger.logError("library JSON not found");
+                return null;
             }
+
             Version version = JsonFactory.loadVersion(json);
             //TODO make sure to  setup lib DL's for pack.json!!!
             Logger.logDebug("checking minecraft libraries");
@@ -238,22 +228,11 @@ public class MCInstaller {
             Logger.logDebug("Checking minecraft assets");
             url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
-            attempt = 0;
-            attempts = 3;
-            success = false;
-            while ((attempt < attempts) && !success) {
-                try {
-                    success = true;
-                    DownloadUtils.downloadToFile(url, json);
-                } catch (Exception e) {
-                    success = false;
-                    attempt++;
-                    reason = e;
-                }
-                if (attempt == attempts && !success && !json.exists()) {
-                    Logger.logError("Asset JSON download failed", reason);
-                    return null;
-                }
+
+            DownloadUtils.downloadToFile(url, json, 3);
+            if (!json.exists()) {
+                Logger.logError("asset JSON not found");
+                return null;
             }
 
             AssetIndex index = JsonFactory.loadAssetIndex(json);
