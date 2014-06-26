@@ -232,38 +232,32 @@ public class ModPack {
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
         this.thirdPartyTab = thirdpartyTab;
-        URL url_;
+
         if (!upToDate(verFile)) {
-            url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
-            this.logo = Toolkit.getDefaultToolkit().createImage(url_);
-            BufferedImage tempImg = ImageIO.read(url_);
-            ImageIO.write(tempImg, "png", new File(tempDir, logo));
-            tempImg.flush();
-            url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
-            this.image = Toolkit.getDefaultToolkit().createImage(url_);
-            tempImg = ImageIO.read(url_);
-            ImageIO.write(tempImg, "png", new File(tempDir, image));
-            tempImg.flush();
+            DownloadUtils.saveImage(logo, tempDir, "png");
+            DownloadUtils.saveImage(image, tempDir, "png");
+
         } else {
-            if (new File(tempDir, logo).exists()) {
-                this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
-            } else {
-                url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
-                this.logo = Toolkit.getDefaultToolkit().createImage(url_);
-                BufferedImage tempImg = ImageIO.read(url_);
-                ImageIO.write(tempImg, "png", new File(tempDir, logo));
-                tempImg.flush();
+            if (!new File(tempDir, logo).exists()) {
+                DownloadUtils.saveImage(logo, tempDir, "png");
             }
-            if (new File(tempDir, image).exists()) {
-                this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
-            } else {
-                url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
-                this.image = Toolkit.getDefaultToolkit().createImage(url_);
-                BufferedImage tempImg = ImageIO.read(url_);
-                ImageIO.write(tempImg, "png", new File(tempDir, image));
-                tempImg.flush();
+            if (!new File(tempDir, image).exists()) {
+                DownloadUtils.saveImage(image, tempDir, "png");
             }
         }
+
+        // image and logo should now exists, if not use placeholder images
+        if (!new File(tempDir, logo).exists()) {
+            this.logoName = logo = "logo_ftb.png";
+            DownloadUtils.saveImage(logo, tempDir, "png");
+        }
+        this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
+
+        if (!new File(tempDir, image).exists()) {
+            this.imageName = image = "default_splash.png";
+            DownloadUtils.saveImage(image, tempDir, "png");
+        }
+        this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
     }
 
     /**
