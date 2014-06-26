@@ -16,6 +16,8 @@
  */
 package net.ftb.util;
 
+import io.github.asyncronous.toast.Toaster;
+
 import javax.swing.JOptionPane;
 
 import net.ftb.gui.LaunchFrame;
@@ -31,7 +33,7 @@ public class ErrorUtils {
      */
     public static void tossError(String output) {
         Logger.logError(output);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        Toaster.instance().popError(output);
     }
 
     /**
@@ -45,7 +47,7 @@ public class ErrorUtils {
      */
     public static void tossError(String log, String output) {
         Logger.logError(log);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        Toaster.instance().popError(output);
     }
 
     /**
@@ -55,12 +57,12 @@ public class ErrorUtils {
      */
     public static void tossError(String output, Throwable t) {
         Logger.logError(output, t);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        Toaster.instance().popError(output);
     }
 
     public static void tossError(String log, String output , Throwable t) {
         Logger.logError(log, t);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        Toaster.instance().popError(output);
     }
 
     /**

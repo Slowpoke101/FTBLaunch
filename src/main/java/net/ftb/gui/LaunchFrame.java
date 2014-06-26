@@ -148,7 +148,6 @@ public class LaunchFrame extends JFrame {
     public static SimplePiwikTracker piwik;
     public static LoadingDialog loader;
 
-
     @Getter
     @Setter
     private static ProcessMonitor procMonitor;
