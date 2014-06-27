@@ -90,7 +90,6 @@ import net.ftb.tools.TextureManager;
 import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
-import net.ftb.tracking.piwik.SimplePiwikTracker;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.*;
 import net.ftb.util.CheckInstallPath.Action;
@@ -145,7 +144,6 @@ public class LaunchFrame extends JFrame {
     public static Panes currentPane = Panes.MODPACK;
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     public static JGoogleAnalyticsTracker tracker;
-    public static SimplePiwikTracker piwik;
     public static LoadingDialog loader;
 
 
@@ -220,16 +218,6 @@ public class LaunchFrame extends JFrame {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        try {
-            piwik = new SimplePiwikTracker(Locations.PIWIK);
-            //TODO set user agent for Piwik, etc. here, set ID to be the one from settings as well.
-            piwik.setPageUrl("http://launcher.feed-the-beast.com");
-            piwik.setUrlReferrer("/");//should this just be launcher? or the classname??
-            piwik.setIdSite(6);
-            //TODO enable hostname param??
-        } catch(Exception e){
-            Logger.logError(e.getMessage(), e);
-        }
 
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version);
         if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").exists()) {

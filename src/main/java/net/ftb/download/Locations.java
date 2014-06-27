@@ -77,7 +77,7 @@ public class Locations {
     public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 
-    public static final String PIWIK = "http://analytics.feed-the-beast.com/";
+    public static final String PIWIK = "http://stats.feed-the-beast.com/";
 
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";

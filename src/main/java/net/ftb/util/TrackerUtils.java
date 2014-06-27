@@ -19,10 +19,11 @@ package net.ftb.util;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.tracking.piwik.PiwikTracker;
 
 public class TrackerUtils {
     public static boolean googleEnabled = true;
-    public static boolean piwikEnabled = false;
+    public static boolean piwikEnabled = true;
     public TrackerUtils() {
     }
 
@@ -38,8 +39,8 @@ public class TrackerUtils {
             }
             if(piwikEnabled) {
                 try {
-                    //TODO make sure this gets sent!!!! LaunchFrame.piwik.sendRequest(LaunchFrame.piwik.getPageUrl())???
-                    LaunchFrame.piwik.setPageCustomVariable(pageUrl, pageTitle);
+                    PiwikTracker p = new PiwikTracker(pageTitle, pageUrl);
+                    p.run();
                 } catch(Exception e) {
                     Logger.logError(e.getMessage(), e);
                 }

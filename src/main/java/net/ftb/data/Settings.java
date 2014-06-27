@@ -315,6 +315,12 @@ public class Settings extends Properties {
     public void setLastExtendedState (int lastExtendedState) {
         setProperty("lastExtendedState", String.valueOf(lastExtendedState));
     }
+    public void setGeneratedID(String uuid) {
+        setProperty("trackinguuid", uuid);
+    }
+    public String getGeneratedID() {
+        return getProperty("trackinguuid", "");
+    }
 
     public int getLastExtendedState () {
         return Integer.valueOf(getProperty("lastExtendedState", String.valueOf(Frame.MAXIMIZED_BOTH)));
