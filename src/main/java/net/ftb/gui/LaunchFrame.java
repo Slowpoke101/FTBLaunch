@@ -211,7 +211,20 @@ public class LaunchFrame extends JFrame {
                 Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
             }
         }
-
+        URL mf = LaunchFrame.class.getResource("/META-INF/MANIFEST.MF");
+        int beta = 9999999;
+        String mfStr = "";
+        try {
+            Manifest manifest = new Manifest(mf.openStream());
+            Attributes attrs = manifest.getMainAttributes();
+            mfStr  = attrs.getValue("Launcher-Jenkins");
+            beta = Integer.parseInt(mfStr);
+            Logger.logDebug("FTB Launcher CI Build #: " + beta);
+        } catch (Exception e) {
+            Logger.logError("Error getting beta information, assuming beta channel not usable!");
+            beta = 9999999;
+        }
+        final int beta_ = beta;
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
@@ -219,9 +232,9 @@ public class LaunchFrame extends JFrame {
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
 
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version);
-        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + " OS " + OSUtils.getOSString());
+        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version + "." + beta);
+        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
+            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
             try {
                 new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
             } catch (IOException e) {
@@ -380,24 +393,11 @@ public class LaunchFrame extends JFrame {
                 TexturePack.addListener(frame.tpPane);
                 //				TexturePack.loadAll();
 
-                URL mf = LaunchFrame.class.getResource("/META-INF/MANIFEST.MF");
-                int beta = 9999999;
-                String mfStr = "";
-                try {
-                    Manifest manifest = new Manifest(mf.openStream());
-                    Attributes attrs = manifest.getMainAttributes();
-                    mfStr  = attrs.getValue("Launcher-Jenkins");
-                    beta = Integer.parseInt(mfStr);
-                    Logger.logDebug("FTB Launcher CI Build #: " + beta);
-                } catch (Exception e) {
-                    Logger.logError("Error getting beta information, assuming beta channel not usable!");
-                    beta = 9999999;
-                }
+
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                final int beta_ = beta;
-                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, minUsable, beta) {
+                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, minUsable, beta_) {
                     @Override
                     protected void done () {
                         try {
