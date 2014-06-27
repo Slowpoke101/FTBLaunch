@@ -29,7 +29,7 @@ public class PiwikTracker extends Thread {
         HttpURLConnection con = null;
         BufferedReader in = null;
         try {
-            //TODO make this not dependet on having a headed server!!
+            //TODO make this not dependent on having a headed server!!
             if(Settings.getSettings().getGeneratedID() == null || Settings.getSettings().getGeneratedID().isEmpty() ) {
                 Settings.getSettings().setGeneratedID(Hashing.md5().hashUnencodedChars(UUID.randomUUID().toString()).toString().substring(0, 16));//TODO fix this
             }

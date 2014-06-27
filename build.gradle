@@ -64,7 +64,6 @@ shadow {
 		include 'commons-io'
 		include 'org.apache.commons'
 		include 'commons-codec'
-		include 'javax.servlet'
     }
 }
 task deleteOrig(type: Delete) {
@@ -147,7 +146,6 @@ dependencies {
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
 	compile 'com.google.guava:guava:16.0'
-	compile 'javax.servlet:jsp-api:2.0'//used by piwik stuffs
 	//commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
