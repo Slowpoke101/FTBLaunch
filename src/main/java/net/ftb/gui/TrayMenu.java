@@ -16,6 +16,8 @@
  */
 package net.ftb.gui;
 
+import io.github.asyncronous.toast.Toaster;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +63,7 @@ public class TrayMenu extends PopupMenu {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					GameUtils.killMC();
+					Toaster.instance().pop(I18N.getLocaleString("KILLED_MINECRAFT"));
 				}
 			});
 		}

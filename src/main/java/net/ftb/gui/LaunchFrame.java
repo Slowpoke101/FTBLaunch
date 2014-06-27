@@ -146,7 +146,6 @@ public class LaunchFrame extends JFrame {
     public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
 
-
     @Getter
     @Setter
     private static ProcessMonitor procMonitor;
