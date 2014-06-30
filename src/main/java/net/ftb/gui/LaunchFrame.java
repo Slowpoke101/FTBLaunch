@@ -222,7 +222,7 @@ public class LaunchFrame extends JFrame {
             beta = Integer.parseInt(mfStr);
             Logger.logDebug("FTB Launcher CI Build #: " + beta);
         } catch (Exception e) {
-            Logger.logError("Error getting beta information, assuming beta channel not usable!");
+            Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
         }
         final int beta_ = beta;
