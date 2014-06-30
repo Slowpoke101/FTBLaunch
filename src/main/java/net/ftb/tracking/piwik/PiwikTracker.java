@@ -25,7 +25,7 @@ public class PiwikTracker extends Thread {
     }
 
     public static void addExtraPair(String key, String value){
-        extraParamaters += "&" + PiwikUtils.addPair(key,value);
+        extraParamaters += PiwikUtils.addPair(key,value) + "&";
     }
     @Override
     public void run() {
