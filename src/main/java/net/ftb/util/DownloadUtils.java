@@ -19,6 +19,7 @@ package net.ftb.util;
 import static net.ftb.download.Locations.backupServers;
 import static net.ftb.download.Locations.downloadServers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -53,6 +54,8 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import javax.imageio.ImageIO;
 
 public class DownloadUtils extends Thread {
 
@@ -227,6 +230,8 @@ public class DownloadUtils extends Thread {
      * Downloads data from the given URL and saves it to the given file
      * @param url The url to download from
      * @param file The file to save to.
+     *
+     * TODO: how to handle partial downloads? Old file is overwritten as soon as FileOutputStream is created.
      */
     public static void downloadToFile (URL url, File file) throws IOException {
         file.getParentFile().mkdirs();
@@ -234,6 +239,54 @@ public class DownloadUtils extends Thread {
         FileOutputStream fos = new FileOutputStream(file);
         fos.getChannel().transferFrom(rbc, 0, 1 << 24);
         fos.close();
+    }
+
+    /**
+     * Download data from the given URL and saves it to the given file, tries to download attempts times
+     * @param url The url to download from
+     * @param file The file to save to
+     * @param attempts attempts to download file if downloadToFile(URL url, File file) fails
+     */
+    public static void downloadToFile (URL url, File file, int attempts) {
+        int attempt = 0;
+        boolean success = false;
+        Exception reason = null;
+        while ((attempt < attempts) && !success) {
+            try {
+                success = true;
+                DownloadUtils.downloadToFile(url, file);
+            } catch (Exception e) {
+                success = false;
+                reason = e;
+                attempt++;
+            }
+            if (attempt == attempts && !success) {
+                Logger.logError("library JSON download failed", reason);
+                //TODO: check fail reason and delete malformed JSON
+                return;
+            }
+        }
+    }
+
+    /**
+     * Used to download pack images from repo to hard disk
+     * @param file Name of the image
+     * @param location Image save location in hard disk
+     * @param type image type to use when saving
+     */
+    public static void saveImage (String file, File location, String type) {
+        // stupid code: tries to find working server twice.
+        if (DownloadUtils.staticFileExists(file)) {
+            try {
+                URL url_ = new URL(DownloadUtils.getStaticCreeperhostLink(file));
+                BufferedImage tempImg = ImageIO.read(url_);
+                ImageIO.write(tempImg, type, new File(location, file));
+                tempImg.flush();
+            } catch (IOException e) {
+                Logger.logWarn("image download/save failed", e);
+                new File(location, file).delete();
+            }
+        }
     }
 
     /**

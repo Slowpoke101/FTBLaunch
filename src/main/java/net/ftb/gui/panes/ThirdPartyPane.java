@@ -158,7 +158,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
+                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
                         if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
