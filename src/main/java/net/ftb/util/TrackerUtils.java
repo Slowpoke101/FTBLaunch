@@ -16,10 +16,15 @@
  */
 package net.ftb.util;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.tracking.piwik.PiwikTracker;
+
+import java.util.Map;
+import java.util.Set;
 
 public class TrackerUtils {
     public static boolean googleEnabled = true;
@@ -33,6 +38,16 @@ public class TrackerUtils {
      * @param pageTitle Entry for view such as pack name & pack version, etc.
      */
     public static void sendPageView (String pageUrl, String pageTitle) {
+        sendPageView(pageUrl, pageTitle, null);
+    }
+
+    /**
+     * Method to send page view to google analytics -- checks if analytics are enabled before attempting to send
+     * @param pageUrl URL for Launcher Analytics Page view -- usually the classpath
+     * @param pageTitle Entry for view such as pack name & pack version, etc.
+     */
+    public static void sendPageView (String pageUrl, String pageTitle, Map<String, String> extraData) {
+
         if (!Settings.getSettings().getSnooper()) {
             if(googleEnabled) {
                 LaunchFrame.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
@@ -40,6 +55,12 @@ public class TrackerUtils {
             if(piwikEnabled) {
                 try {
                     PiwikTracker p = new PiwikTracker(pageTitle, pageUrl);
+                    if(extraData != null) {
+                        for(Map.Entry<String, String> s: extraData.entrySet()) {
+                            p.addExtraPair(s.getKey(), s.getValue());
+
+                        }
+                    }
                     p.run();
                 } catch(Exception e) {
                     Logger.logError(e.getMessage(), e);
