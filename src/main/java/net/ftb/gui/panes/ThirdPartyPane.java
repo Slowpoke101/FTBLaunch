@@ -31,6 +31,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
+import java.awt.Point;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -200,6 +201,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
 
     @Override
     public void onVisible() {
+        ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
     public int getSelectedThirdPartyModIndex() {

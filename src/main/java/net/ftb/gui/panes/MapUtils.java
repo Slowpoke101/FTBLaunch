@@ -16,9 +16,7 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -95,6 +93,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     public void onVisible () {
         MapUtils.sortMaps();
         MapUtils.updateFilter();
+        MapUtils.getInstance().getMapsScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
     public void setup () {
