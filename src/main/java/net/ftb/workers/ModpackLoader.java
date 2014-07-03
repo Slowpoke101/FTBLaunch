@@ -16,6 +16,7 @@
  */
 package net.ftb.workers;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -130,8 +131,8 @@ public class ModpackLoader extends Thread {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
-                ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
+                // We need to manually scroll FTBPackPane up because onVisible() is executed before packs are loaded
+                FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
             }
         });
         Logger.logDebug("All packlists loaded");
