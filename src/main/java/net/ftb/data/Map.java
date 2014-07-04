@@ -321,10 +321,11 @@ public class Map {
     public boolean isCompatible (String packName) {
         for (String aCompatible : compatible) {
             ModPack pack = ModPack.getPack(aCompatible);
-            if (pack != null && pack.getName().equals(packName)) {
-                return true;
-            } else {
-                Logger.logDebug("Modpack " + packName + " not found");
+            if (pack == null) {
+                Logger.logDebug("Map is compatible with "  + packName + " , but modpack not found");
+            }
+            else {
+                return pack.getName().equals(packName);
             }
         }
         return false;
