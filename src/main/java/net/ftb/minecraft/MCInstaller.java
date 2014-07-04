@@ -53,8 +53,7 @@ import java.util.zip.ZipInputStream;
 
 public class MCInstaller {
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
-        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(),installPath);
-
+        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(pack.getVersion()),installPath);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -115,7 +114,7 @@ public class MCInstaller {
     private static List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
         try {
             Logger.logInfo("Checking local assets file, Please wait!");
-            List<DownloadInfo> list = new ArrayList<DownloadInfo>();
+            List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 
             /*
@@ -286,6 +285,7 @@ public class MCInstaller {
             File assetDir = new File(installDir, "assets");
             File libDir = new File(installDir, "libraries");
             File natDir = new File(packDir, "natives");
+            final String packVer = Settings.getSettings().getPackVer(pack.getDir());
 
             Logger.logInfo("Setting up native libraries");
             if (natDir.exists()) {
@@ -294,7 +294,7 @@ public class MCInstaller {
             natDir.mkdirs();
             if (isLegacy)
                 extractLegacy();
-            Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion())));
+            Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion(packVer))));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
                 if (lib.natives != null) {
@@ -346,9 +346,9 @@ public class MCInstaller {
                 packjson = base;
             }
             if (!isLegacy) //we copy the jar to a new location for legacy
-                classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())));
+                classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion(packVer))));
             else {
-                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion())), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
+                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion(packVer))), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
                 FileUtils.killMetaInf();
             }
             for (Library lib : base.getLibraries()) {
@@ -357,7 +357,7 @@ public class MCInstaller {
 
             Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
+                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
             if (LaunchFrame.con != null)
                 LaunchFrame.con.minecraftStarted();

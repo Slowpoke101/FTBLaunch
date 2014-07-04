@@ -416,6 +416,18 @@ public class ModPack {
     }
 
     /**
+     * Used to get the minecraft version required for the modpack
+     * @param packVersion the version of the modpack you need the MC version for
+     * @return - the minecraft version
+     */
+    public String getMcVersion (String packVersion) {
+        if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
+            return customMCVersions.get(packVersion);
+        }
+        return mcVersion;
+    }
+
+    /**
      * Used to get the info or description of the modpack
      * @return - the info for the modpack
      */
