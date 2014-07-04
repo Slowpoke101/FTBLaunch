@@ -238,7 +238,7 @@ public class ModPack {
         if(customMCVersions == null || customMCVersions.isEmpty()){
             this.customMCVersions = null;
     } else {
-            String[] tmp =  oldVersions.split(";");
+            String[] tmp =  customMCVersions.split(";");
         this.customMCVersions = Maps.newHashMap();
             for(String s :tmp) {
                 String[] s2 = s.split("|");
