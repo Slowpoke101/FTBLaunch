@@ -230,7 +230,7 @@ public class ModPack {
         } else {
             this.mods = mods.split("; ");
         }
-        if (oldVersions.isEmpty()) {
+        if(customMCVersions == null || customMCVersions.isEmpty()){
             this.oldVersions = null;
         } else {
             this.oldVersions = oldVersions.split(";");
