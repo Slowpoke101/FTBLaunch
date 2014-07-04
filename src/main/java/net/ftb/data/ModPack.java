@@ -235,7 +235,7 @@ public class ModPack {
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        if(customMCVersions.isEmpty()){
+        if(customMCVersions == null || customMCVersions.isEmpty()){
             this.customMCVersions = null;
     } else {
             String[] tmp =  oldVersions.split(";");
