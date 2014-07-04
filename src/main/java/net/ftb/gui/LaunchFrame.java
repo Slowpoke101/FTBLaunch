@@ -893,6 +893,8 @@ public class LaunchFrame extends JFrame {
                 tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
             }
         }
+        //TODO: bug here. will add FTB pack into list even if pack is not compatible
+        //test and check if true
         tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getName());
     }
 

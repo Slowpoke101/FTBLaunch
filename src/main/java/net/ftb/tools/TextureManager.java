@@ -160,7 +160,7 @@ public class TextureManager extends JDialog {
         protected boolean downloadTexturePack (String texturePackName, String dir, String remoteName, String compDir, String packVer) throws IOException, NoSuchAlgorithmException {
             Logger.logInfo("Downloading Texture Pack");
             String installPath = Settings.getSettings().getInstallPath();
-            ModPack pack = ModPack.getSelectedPack();
+            ModPack pack = ModPack.getPack(compDir);
             int mcversion = Integer.parseInt(pack.getMcVersion().replace(".", ""));
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();

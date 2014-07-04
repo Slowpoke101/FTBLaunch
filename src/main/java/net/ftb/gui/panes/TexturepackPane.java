@@ -204,10 +204,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
         final int texturePackIndex = texturePackPanels.size();
 
-        /*
-         * TODO: we are getting random java.lang.ClassCastException: java.lang.Boolean cannot be cast to java.awt.Font
-         * from here. Probably because we are creating new components outside from EDT
-         */
         final JPanel p = new JPanel();
         p.setBounds(0, (texturePackIndex * 55), 420, 55);
         p.setLayout(null);
@@ -269,7 +265,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         int counter = 0;
         selectedTexturePack = 0;
         texturePacks.repaint();
-        HashMap<Integer, List<TexturePack>> sorted = new HashMap<Integer, List<TexturePack>>();
+        HashMap<Integer, List<TexturePack>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<TexturePack>());
         sorted.put(1, new ArrayList<TexturePack>());
         for (TexturePack texturePack : TexturePack.getTexturePackArray()) {

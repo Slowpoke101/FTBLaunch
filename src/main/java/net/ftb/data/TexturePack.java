@@ -34,6 +34,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.ftb.data.events.TexturePackListener;
 import net.ftb.gui.LaunchFrame;
@@ -50,15 +51,15 @@ public class TexturePack {
     @Getter
     private Image logo, image;
     @Getter
-    private List<String> compatible = new ArrayList<String>();
+    private List<String> compatible = Lists.newArrayList();
     @Getter
-    private List<String> masters = new ArrayList<String>();
+    private List<String> masters = Lists.newArrayList();
 
     @Getter
     private int index;
     @Getter
-    private final static ArrayList<TexturePack> texturePackArray = new ArrayList<TexturePack>();
-    private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
+    private final static ArrayList<TexturePack> texturePackArray =Lists.newArrayList();
+    private static List<TexturePackListener> listeners = Lists.newArrayList();
 
     public static void addListener (TexturePackListener listener) {
         listeners.add(listener);
