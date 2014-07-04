@@ -175,6 +175,7 @@ public class MCInstaller {
                     for (Library lib : packjson.getLibraries()) {
                         //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                         // These files are shipped inside pack.zip, can't do force update check yet
+                        local = new File(root, "libraries/" + lib.getPath());
                         if(!new File(libDir, lib.getPath()).exists()){
                             if (lib.checksums!= null)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
