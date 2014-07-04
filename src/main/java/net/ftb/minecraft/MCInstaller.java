@@ -53,7 +53,7 @@ import java.util.zip.ZipInputStream;
 
 public class MCInstaller {
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
-        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(pack.getVersion()),installPath);
+        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir())),installPath);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -113,7 +113,7 @@ public class MCInstaller {
      */
     private static List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
         try {
-            Logger.logInfo("Checking local assets file, Please wait!");
+            Logger.logInfo("Checking local assets file, for MC version" + mcVersion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 

@@ -55,7 +55,7 @@ public class SelfUpdate {
     public static void main (String[] args) {
         try {
             if (OSUtils.getCurrentOS() != OSUtils.OS.UNIX) {
-                Thread.sleep(4000);
+                Thread.sleep(4000);//why is this here???
             }
         } catch (InterruptedException ignored) { }
         String launcherPath = args[0];

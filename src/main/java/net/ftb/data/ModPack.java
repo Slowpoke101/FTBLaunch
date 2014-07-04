@@ -67,7 +67,7 @@ public class ModPack {
      * @returns map of <String packversion, String MCVersion>
      */
     @Getter
-    private HashMap<String,String> customMCVersions;
+    private HashMap<String,String> customMCVersions = Maps.newHashMap();;
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -235,17 +235,15 @@ public class ModPack {
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        if(customMCVersions == null || customMCVersions.isEmpty()){
-            this.customMCVersions = null;
-    } else {
+        if(customMCVersions != null && !customMCVersions.isEmpty()) {
             String[] tmp =  customMCVersions.split(";");
-        this.customMCVersions = Maps.newHashMap();
-            for(String s :tmp) {
-                String[] s2 = s.split("|");
+            if(tmp == null)
+                tmp = new String[]{customMCVersions};
+            for(String s : tmp) {
+                String[] s2 = s.split("\\^");
                 this.customMCVersions.put(s2[0], s2[1]);
             }
-
-    }
+        }
 
     String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
