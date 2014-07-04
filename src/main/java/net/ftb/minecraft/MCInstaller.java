@@ -177,7 +177,9 @@ public class MCInstaller {
                         // These files are shipped inside pack.zip, can't do force update check yet
                         if(!new File(libDir, lib.getPath()).exists()){
                             if (lib.checksums!= null)
-                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(),lib.checksums,"sha1"));
+                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
+                            else if(lib.url == null)//mojang downloads
+                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         }
                     }
                 }

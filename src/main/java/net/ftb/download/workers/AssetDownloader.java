@@ -203,7 +203,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         }
         if (good || assetHash != null && assetHash.contains(hash))
             return true;
-        Logger.logWarn("Asset hash checking failed: " + asset.name);//unhashed DL's are not allowed!!!
+        Logger.logWarn("Asset hash checking failed: " + asset.name + " " + asset.hashType + " " + hash);//unhashed DL's are not allowed!!!
         asset.local.delete();
         return false;
     }
