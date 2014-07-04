@@ -16,13 +16,7 @@
  */
 package net.ftb.gui;
 
-import java.awt.AWTException;
-import java.awt.Cursor;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -643,20 +637,25 @@ public class LaunchFrame extends JFrame {
             tabbedPane.setIconAt(2, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/ftbpacks.png")));
             tabbedPane.setIconAt(3, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/thirdpartypacks.png")));
             tabbedPane.setIconAt(4, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/mapstextures.png")));
-            tabbedPane.setSelectedIndex(tab);
         } catch (Exception e1) {
             Logger.logError("error changing colors", e1);
         }
+        // this will be fired when
+        // * tab is clicked
+        // * swapTabs(): tabbedPane.setSelectedIndex() is invoked and when tab is clicked
+        // Is that true?!
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged (ChangeEvent event) {
                 if (tabbedPane.getSelectedComponent() instanceof ILauncherPane) {
                     ((ILauncherPane) tabbedPane.getSelectedComponent()).onVisible();
+                    // When called by swapTabs currentPane will be THIRDPARTY until this ActionListener is called again
                     currentPane = Panes.values()[tabbedPane.getSelectedIndex()];
                     updateFooter();
                 }
             }
         });
+        tabbedPane.setSelectedIndex(tab);
     }
 
     public static void checkDoneLoading () {

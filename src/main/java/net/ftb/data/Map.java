@@ -320,8 +320,11 @@ public class Map {
      */
     public boolean isCompatible (String packName) {
         for (String aCompatible : compatible) {
-            if (ModPack.getPack(aCompatible).getName().equals(packName)) {
+            ModPack pack = ModPack.getPack(aCompatible);
+            if (pack != null && pack.getName().equals(packName)) {
                 return true;
+            } else {
+                Logger.logDebug("Modpack " + packName + " not found");
             }
         }
         return false;

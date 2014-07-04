@@ -16,8 +16,7 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -191,6 +190,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     @Override
     public void onVisible () {
         updateFilter();
+        TexturepackPane.getInstance().getTexturePacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
     /*

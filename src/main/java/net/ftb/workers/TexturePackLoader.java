@@ -60,11 +60,6 @@ public class TexturePackLoader extends Thread {
         } catch (Exception e) {
             Logger.logError("Error loading texture pack info", e);
         } finally {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    TexturepackPane.getInstance().getTexturePacksScroll().getVerticalScrollBar().setValue(0);
-                }
-            });
             TexturepackPane.loaded = true;
             Benchmark.logBenchAs("TexturepackLoader", "Texture Pack Load ");
             LaunchFrame.checkDoneLoading();
