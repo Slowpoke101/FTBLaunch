@@ -115,7 +115,8 @@ public class ModpackLoader extends Thread {
                                 .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
                                 .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr
                                 .getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
-                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n")
+                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n"), modPackAttr
+                                .getNamedItem("customMCVersions")==null?null:modPackAttr.getNamedItem("customMCVersions").getTextContent()
                          ));
                     } catch (Exception e) {
                         Logger.logError("Error while updating modpack info", e);

@@ -28,10 +28,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
@@ -61,6 +63,11 @@ public class ModPack {
     private int minLaunchSpec;
     @Getter
     private String disclaimer;
+    /**
+     * @returns map of <String packversion, String MCVersion>
+     */
+    @Getter
+    private HashMap<String,String> customMCVersions;
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -71,7 +78,7 @@ public class ModPack {
     }
 
     public static void loadXml (String xmlFile) {
-        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> temp = Lists.newArrayList();
         temp.add(xmlFile);
         ModpackLoader loader = new ModpackLoader(temp);
         loader.start();
@@ -103,7 +110,7 @@ public class ModPack {
 
 
     public static void removePacks (String xml) {
-        ArrayList<ModPack> remove = new ArrayList<ModPack>();
+        ArrayList<ModPack> remove = Lists.newArrayList();
         int removed = -1; // TODO: if private xmls ever contain more than one modpack, we need to change this
         for (ModPack pack : packs) {
             if (pack.getParentXml().equalsIgnoreCase(xml)) {
@@ -188,7 +195,7 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec, String disclaimer) throws IOException, NoSuchAlgorithmException {
+                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec, String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -228,7 +235,19 @@ public class ModPack {
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        String installPath = OSUtils.getCacheStorageLocation();
+        if(customMCVersions.isEmpty()){
+            this.customMCVersions = null;
+    } else {
+            String[] tmp =  oldVersions.split(";");
+        this.customMCVersions = Maps.newHashMap();
+            for(String s :tmp) {
+                String[] s2 = s.split("|");
+                this.customMCVersions.put(s2[0], s2[1]);
+            }
+
+    }
+
+    String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
         this.thirdPartyTab = thirdpartyTab;
