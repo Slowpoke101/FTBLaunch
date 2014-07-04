@@ -66,6 +66,20 @@ shadow {
 		include 'commons-codec'
     }
 }
+
+processResources {
+    inputs.property "Launcher-Jenkins", project.buildNum
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.properties'
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.properties'
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                'Launcher-Jenkins': project.buildNum,
+        ])
+    }
+}
+
 task deleteOrig(type: Delete) {
     delete "${project.tasks.jar.getArchivePath().getPath()}"
 }

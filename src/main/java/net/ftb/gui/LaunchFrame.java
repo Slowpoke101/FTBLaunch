@@ -31,6 +31,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -212,14 +213,15 @@ public class LaunchFrame extends JFrame {
                 Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
             }
         }
-        URL mf = LaunchFrame.class.getResource("/META-INF/MANIFEST.MF");
+        URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         int beta = 9999999;
         String mfStr = "";
         try {
-            Manifest manifest = new Manifest(mf.openStream());
-            Attributes attrs = manifest.getMainAttributes();
-            mfStr  = attrs.getValue("Launcher-Jenkins");
-            beta = Integer.parseInt(mfStr);
+            Properties props = new Properties();
+            props.load(mf.openStream());
+            mfStr  = props.getProperty("Launcher-Jenkins");
+            if(! mfStr.equals("@Launcher-Jenkins@"))
+                beta = Integer.parseInt(mfStr);
             Logger.logDebug("FTB Launcher CI Build #: " + beta);
         } catch (Exception e) {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
@@ -232,7 +234,7 @@ public class LaunchFrame extends JFrame {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        java.util.Map m =Maps.newHashMap();
+        java.util.Map m = Maps.newHashMap();
         m.put("new_visit", "1");
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version + "." + beta, m);
         if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
