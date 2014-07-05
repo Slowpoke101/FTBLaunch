@@ -75,7 +75,7 @@ public class JavaFinder {
 
         javaExecs.add(System.getenv("WINDIR") + "\\system32\\java.exe");
         javaExecs.add(System.getenv("WINDIR") + "\\SysWOW64\\java.exe");
-        javaExecs.add(System.getProperty("java.home") + "\\bin\\javaw.exe");
+        javaExecs.add(System.getProperty("java.home") + "\\bin\\java.exe");
 
         List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
@@ -127,8 +127,12 @@ public class JavaFinder {
             File javaFile = new File(javaPath); 
             if (!javaFile.exists() || !javaFile.canExecute())
                 continue;
-            
-            result.add(new JavaInfo(javaPath));
+
+            try {
+                result.add(new JavaInfo(javaPath));
+            } catch (Exception e) {
+                Logger.logError("Error while creating JavaInfo", e);
+            }
         }
         return result;
     }

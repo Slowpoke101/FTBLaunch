@@ -977,6 +977,9 @@ public class LaunchFrame extends JFrame {
         while (man == null) {
         }
         while (!man.worker.isDone()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) { }
         }
         if (man.erroneous) {
             return false;
