@@ -167,6 +167,8 @@ public abstract class AbstractModPackPane extends JPanel {
                             loaded = true;
                         }
                     }
+                } else if(event.getType() == PackChangeEvent.TYPE.REMOVE) {
+                    filterPacks();
                 }
             }
         });
