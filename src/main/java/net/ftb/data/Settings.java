@@ -143,8 +143,13 @@ public class Settings extends Properties {
     * JavaInfo object.
     */
     public JavaInfo getCurrentJava () {
-        if (currentJava == null)
-            currentJava = new JavaInfo(getJavaPath());
+        if (currentJava == null) {
+            try {
+                currentJava = new JavaInfo(getJavaPath());
+            } catch (Exception e) {
+                Logger.logError("Error while creating JavaInfo", e);
+            }
+        }
         return currentJava;
     }
 
@@ -164,7 +169,8 @@ public class Settings extends Properties {
                 return javaVersion.path.replace(".exe", "w.exe");
         }
 
-        return System.getProperty("java.home") + ("/bin/java" + (OSUtils.getCurrentOS() == OS.WINDOWS ? "w" : "")).replace("/", separator);
+        // Windows specific code adds <java.home>/bin/java no need mangle javaw.exe here.
+        return System.getProperty("java.home") + "/bin/java";
     }
 
     public void setJavaPath (String path) {
