@@ -30,7 +30,6 @@ public class CheckInstallPath {
     // Error/Warn message
     public String message;
     // Localized message to show in dialog
-    // TODO: add those
     public String localizedMessage;
     // name of the Setting which controls if check is skipped
     // all settings starts with "CIP_" => we can later add
@@ -55,6 +54,7 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "Installing under C:\\Program Files\\ or similar is not supported.";
+                localizedMessage = "CIP_PROGRAMFILES";
                 Logger.logError(message);
             } else {
                 action = Action.OK;
@@ -66,6 +66,7 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.WARN;
                 message = ("Installing under C:\\Users\\<username> is not recommended and can cause problems.");
+                localizedMessage = "CIP_USERPROFILE";
                 Logger.logWarn(message);
             } else {
                 action = Action.OK;
@@ -77,6 +78,7 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "No write access to FTB installation directory.";
+                localizedMessage = "CIP_WRITEPROTECT";
                 Logger.logError(message);
             } else {
                 action = Action.OK;
@@ -89,6 +91,7 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "FTB installation directory not found!";
+                localizedMessage = "CIP_EXISTS";
                 Logger.logWarn(message);
             } else {
                 action = Action.OK;
@@ -102,6 +105,7 @@ public class CheckInstallPath {
                 if (!Settings.getSettings().getBoolean(setting)) {
                     action = Action.BLOCK;
                     message = "Could not create FTB installation location";
+                    localizedMessage = "CIP_CREATE";
                     Logger.logWarn(message);
                 } else {
                     action = Action.OK;
@@ -113,5 +117,3 @@ public class CheckInstallPath {
         }
     }
 }
-
-

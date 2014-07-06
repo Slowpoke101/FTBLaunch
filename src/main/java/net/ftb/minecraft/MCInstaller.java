@@ -364,7 +364,10 @@ public class MCInstaller {
             LaunchFrame.MCRunning = true;
             if (LaunchFrame.con != null)
                 LaunchFrame.con.minecraftStarted();
-            StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+            StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+            String[] ignore = {"Session ID is token"};
+            StreamLogger.setIgnore(ignore);
+            StreamLogger.doStart();
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
             try {
                 Thread.sleep(1500);
