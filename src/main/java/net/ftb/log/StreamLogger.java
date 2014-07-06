@@ -16,6 +16,8 @@
  */
 package net.ftb.log;
 
+import lombok.Getter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -23,9 +25,14 @@ import java.util.Arrays;
 public class StreamLogger extends Thread {
     private final InputStream is;
     private final LogEntry logInfo;
+    private String[] ignore;
+
+    @Getter
+    private static StreamLogger instance;
 
     private StreamLogger(InputStream from, LogEntry logInfo) {
-        is = from;
+        instance = this;
+        this.is = from;
         this.logInfo = logInfo;
     }
 
@@ -43,7 +50,19 @@ public class StreamLogger extends Thread {
                     logBuffer = logBuffer.substring(0, nullIndex);
                 }
                 while ((newLineIndex = logBuffer.indexOf("\n")) != -1) {
-                    Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
+                    if ( ignore != null) {
+                        boolean skip = false;
+                        for (String s: ignore) {
+                            if (logBuffer.substring(0, newLineIndex).contains(s)) {
+                                skip = true;
+                            }
+                        }
+                        if(!skip) {
+                            Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
+                        }
+                    } else {
+                        Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
+                    }
                     logBuffer = logBuffer.substring(newLineIndex + 1);
                 }
                 Arrays.fill(buffer, (byte) 0);
@@ -53,9 +72,30 @@ public class StreamLogger extends Thread {
         }
     }
 
-    public static void start (InputStream from, LogEntry logInfo) {
+    /**
+     *  Creates StreamLogger object
+     *
+     * @param from InputStream to read incoming log
+     * @param logInfo default  LogEntry configuration
+     */
+    public static void prepare (InputStream from, LogEntry logInfo) {
         logInfo.source(LogSource.EXTERNAL);
-        StreamLogger processStreamRedirect = new StreamLogger(from, logInfo);
-        processStreamRedirect.start();
+        instance = new StreamLogger(from, logInfo);
+    }
+
+    /**
+     * Starts external process logger
+     */
+    public static void doStart () {
+        instance.start();
+    }
+
+    /**
+     * Sets StreamLogger to stop logging certain messages. Uses String.contains() when comparing given strings to single external log line
+     *
+     * @param ignore Array containing Strings which are used to ignore lines from LogListeteners
+     */
+    public static void setIgnore(String[] ignore) {
+        instance.ignore = ignore;
     }
 }
