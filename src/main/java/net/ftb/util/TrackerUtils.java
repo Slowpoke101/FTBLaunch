@@ -55,10 +55,11 @@ public class TrackerUtils {
             if(piwikEnabled) {
                 try {
                     PiwikTracker p = new PiwikTracker(pageTitle, pageUrl);
+                    if(pageTitle.startsWith("Launcher Start v"))
+                        p.newSession();
                     if(extraData != null) {
                         for(Map.Entry<String, String> s: extraData.entrySet()) {
                             p.addExtraPair(s.getKey(), s.getValue());
-
                         }
                     }
                     p.run();

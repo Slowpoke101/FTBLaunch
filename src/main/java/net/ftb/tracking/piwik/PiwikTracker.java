@@ -25,7 +25,10 @@ public class PiwikTracker extends Thread {
     }
 
     public static void addExtraPair(String key, String value){
-        extraParamaters += PiwikUtils.addPair(key,value) + "&";
+        extraParamaters += "&" + PiwikUtils.addPair(key,value);
+    }
+    public static void newSession() {
+        extraParamaters += "&new_visit=1";
     }
     @Override
     public void run() {
@@ -36,9 +39,7 @@ public class PiwikTracker extends Thread {
             if(Settings.getSettings().getGeneratedID() == null || Settings.getSettings().getGeneratedID().isEmpty() ) {
                 Settings.getSettings().setGeneratedID(Hashing.md5().hashUnencodedChars(UUID.randomUUID().toString()).toString().substring(0, 16));
             }//TODO this needs to put bits, and the OS version in the UA data properly!!
-            String s = "http://stats.feed-the-beast.com/piwik.php?action_name=" + PiwikUtils.urlEncode(thingToTrack) + "&url=" + PiwikUtils.urlEncode(urlFrom) + "3%20&idsite=6&%20rand=" + new Random().nextInt(999999) + "&%20h=18&%20m=14&%20s=3%20&rec=1&%20apiv=1&%20cookie=%20&%20urlref=http://feed-the-beast.com%20&_id=" + Settings.getSettings().getGeneratedID() + "%20&res=" + (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() + "�" + (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() + "&_cvar={�1?:['OS','" + System.getProperty("os.name") + "'],�2?:['Launcher Version','" + Constants.version + "']}&ua="+ "Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")" +"&";
-            if(!extraParamaters.isEmpty())
-                s += extraParamaters;
+            String s = "http://stats.feed-the-beast.com/piwik.php?action_name=" + PiwikUtils.urlEncode(thingToTrack) + extraParamaters +"&url=" + PiwikUtils.urlEncode(urlFrom) + "3%20&idsite=6&%20rand=" + new Random().nextInt(999999) + "&%20h=18&%20m=14&%20s=3%20&rec=1&%20apiv=1&%20cookie=%20&%20urlref=http://feed-the-beast.com%20&_id=" + Settings.getSettings().getGeneratedID() + "%20&res=" + (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() + "X" + (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() + "&_cvar={�1?:['Launcher Version','" + Constants.version + "']}&ua="+ "Java/" + PiwikUtils.urlEncode(System.getProperty("java.version")) + " (" + PiwikUtils.urlEncode(System.getProperty("os.name")) + "; " + PiwikUtils.urlEncode(System.getProperty("os.arch")) + ")" +"&";
             con = (HttpURLConnection) new URL(s).openConnection();
             con.setRequestMethod("GET");
             in = new BufferedReader(new InputStreamReader(con.getInputStream()));

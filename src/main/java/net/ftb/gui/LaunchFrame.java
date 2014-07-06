@@ -228,9 +228,7 @@ public class LaunchFrame extends JFrame {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        java.util.Map m = Maps.newHashMap();
-        m.put("new_visit", "1");
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version + "." + beta, m);
+        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + Constants.version + "." + beta);
         if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
             try {
@@ -1156,7 +1154,7 @@ public class LaunchFrame extends JFrame {
             updateFooter();
         }
     }
-    
+
     private static void setUpSystemTray() {
     	trayMenu = new TrayMenu();
     	
