@@ -78,9 +78,10 @@ public class FirstRunDialog extends JDialog {
 
                 // No need to localize here. Only shown at first run and language is not yet selected
                 if (checkResult.action == Action.BLOCK) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease select again");
+                    ErrorUtils.tossError(checkResult.message + "\nPlease select again", I18N.getLocaleString(checkResult.localizedMessage) + "\n" + I18N.getLocaleString("CIP_SELECTAGAIN"));
                 } else if (checkResult.action == Action.WARN) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab");
+                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab", I18N.getLocaleString(checkResult.localizedMessage) +
+                            "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
                     Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));

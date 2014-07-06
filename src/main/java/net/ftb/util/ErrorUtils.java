@@ -19,6 +19,7 @@ package net.ftb.util;
 import javax.swing.JOptionPane;
 
 import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
 public class ErrorUtils {
@@ -74,9 +75,9 @@ public class ErrorUtils {
      *
      */
     public static int tossOKIgnoreDialog(String message, int severity) {
-        Object[] options = { "OK", "Ignore" };
+        Object[] options = { I18N.getLocaleString("BUTTON_OK"), I18N.getLocaleString("BUTTON_IGNORE") };
         int result = JOptionPane.showOptionDialog(LaunchFrame.getInstance(), 
-                message + "\n" + "Click OK to continue or IGNORE to skip this warning in future", null,
+                message + "\n" + I18N.getLocaleString("NAG_SCREEN_MESSAGE"), null,
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
         return result;
     }

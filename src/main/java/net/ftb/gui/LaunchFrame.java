@@ -290,8 +290,8 @@ public class LaunchFrame extends JFrame {
                 // CheckInstallPath() does Error/Warning logging in english
                 CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
                 if (checkResult.action == Action.BLOCK || checkResult.action == Action.WARN) {
-                    // ErrorUtils.tossOKIgnoreDialog() does write logs => can be called with localized strings
-                    int result = ErrorUtils.tossOKIgnoreDialog(checkResult.message, JOptionPane.ERROR_MESSAGE);
+                    // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
+                    int result = ErrorUtils.tossOKIgnoreDialog(I18N.getLocaleString(checkResult.localizedMessage), JOptionPane.ERROR_MESSAGE);
                     // pressing OK or closing dialog does not do anything
                     if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
                         // if user select ignore we save setting and that type of error will be ignored
