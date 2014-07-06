@@ -70,14 +70,14 @@ shadow {
 processResources {
     inputs.property "Launcher-Jenkins", project.buildNum
     from(sourceSets.main.resources.srcDirs) {
+        include '**/*.properties'
+        expand 'Launcher-Jenkins':project.buildNum
+    }
+        // copy everything else, thats not text
+    from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.properties'
     }
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/*.properties'
-        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                'Launcher-Jenkins': project.buildNum,
-        ])
-    }
+
 }
 
 task deleteOrig(type: Delete) {
