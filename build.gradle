@@ -46,6 +46,18 @@ project.ext {
         ext.buildNum = "9999999"
     }
 
+processResources {
+    inputs.property "LauncherJenkins", project.buildNum
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.properties'
+        expand 'LauncherJenkins':project.buildNum
+    }
+        // copy everything else, thats not text
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.properties'
+    }
+
+}
 mainClassName = project.mainClass
 group = 'net.ftb'
 version = "1.4.0-${project.buildNum}"
@@ -67,18 +79,6 @@ shadow {
     }
 }
 
-processResources {
-    inputs.property "Launcher-Jenkins", project.buildNum
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/*.properties'
-        expand 'Launcher-Jenkins':project.buildNum
-    }
-        // copy everything else, thats not text
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.properties'
-    }
-
-}
 
 task deleteOrig(type: Delete) {
     delete "${project.tasks.jar.getArchivePath().getPath()}"

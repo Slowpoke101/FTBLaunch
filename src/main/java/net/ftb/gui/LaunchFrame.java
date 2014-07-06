@@ -213,8 +213,8 @@ public class LaunchFrame extends JFrame {
         try {
             Properties props = new Properties();
             props.load(mf.openStream());
-            mfStr  = props.getProperty("Launcher-Jenkins");
-            if(! mfStr.equals("${Launcher-Jenkins}"))
+            mfStr  = props.getProperty("LauncherJenkins");
+            if(!mfStr.equals("${LauncherJenkins}"))
                 beta = Integer.parseInt(mfStr);
             Logger.logDebug("FTB Launcher CI Build #: " + beta);
         } catch (Exception e) {
