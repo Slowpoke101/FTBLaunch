@@ -61,7 +61,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private FocusListener settingsChangeListener = new FocusListener() {
         @Override
         public void focusLost (FocusEvent e) {
-        	LaunchFrame.con.setVisible(settings.getConsoleActive());
             saveSettingsInto(settings);
         }
 
