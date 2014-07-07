@@ -40,8 +40,8 @@ public class SelfUpdate {
         arguments.add(temporaryUpdatePath);
 
         Logger.logInfo("Would update with: " + arguments);
-        Logger.logInfo("c: " + currentPath);
-        Logger.logInfo("n: " + temporaryUpdatePath);
+        Logger.logInfo("current: " + currentPath);
+        Logger.logInfo("new: " + temporaryUpdatePath);
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command(arguments);
         try {

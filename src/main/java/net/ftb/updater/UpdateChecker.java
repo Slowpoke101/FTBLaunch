@@ -132,21 +132,22 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         Logger.logDebug("latest = "  + latest);
         if (allowBeta && (buildJenk < betaJenk || version < beta)) {
             Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
-            UCString = betaStr +"-" + betaJenk;
+            UCString = "BETA version " + betaStr +"-" + betaJenk;
             useBeta = true;
             return true;
         } else if (version == latest && buildJenk < relJenk) {
             Logger.logInfo("Release version found. version: " + version + "-"+ buildJenk+ ", latest: " + latest);
-            UCString = verString + "-" + relJenk;
+            useBeta = false;
+            UCString ="Version " +  verString;
+            return true;
         } else if (version < latest) {
             Logger.logInfo("New version found. version: " + version + ", latest: " + latest);
             useBeta = false;
-            UCString = verString  + "-" + relJenk;
+            UCString ="Version " +  verString;
             return true;
         } else {
             return false;
         }
-        return false;
     }
     public void update () {
         String path = null;
@@ -157,20 +158,22 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         } catch (IOException e) {
             Logger.logError("Couldn't get path to current launcher jar/exe", e);
         }
-        String temporaryUpdatePath = OSUtils.getCacheStorageLocation() + File.separator + "updatetemp" + File.separator + path.substring(path.lastIndexOf(File.separator) + 1);
+        String temporaryUpdatePath = OSUtils.getCacheStorageLocation() + File.separator + "updatetemp" + "/" + path.substring(path.lastIndexOf(File.separator) + 1);
         String extension = path.substring(path.lastIndexOf('.') + 1);
         extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
         try {
-            URL updateURL = new URL(useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress.replace("${ext}", extension).replace("${jenkins}", Integer.toString(betaJenk)));
+            URL updateURL = new URL(!useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress.replace("${ext}", extension).replace("${jenkins}", Integer.toString(betaJenk)).replace("${version}", betaStr));
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
             if(betaHash != null){
                 String sha = DownloadUtils.fileSHA(temporaryUpdate);
                 if(betaHash.contains(sha))
-                    SelfUpdate.runUpdate(path, temporaryUpdatePath);
-                else
+                    SelfUpdate.runUpdate(path, temporaryUpdate.getCanonicalPath());
+                else {
+                    Logger.logDebug("TempPath" + temporaryUpdatePath);
                     throw new IOException("Update Download failed hash check please try again! -- fileSha " + sha);
+                }
             }else{
                 SelfUpdate.runUpdate(path, temporaryUpdatePath);
             }
