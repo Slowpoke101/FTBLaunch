@@ -201,7 +201,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Logger.removeListener(LaunchFrame.getInstance().con);
+                Logger.removeListener(LaunchFrame.con);
+                if (LaunchFrame.trayMenu != null) {
+                    LaunchFrame.trayMenu.updateShowConsole(false);
+                }
             }
         });
 

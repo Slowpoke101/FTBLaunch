@@ -25,6 +25,7 @@ import java.awt.event.ItemListener;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
 import net.ftb.util.GameUtils;
 import net.ftb.util.OSUtils;
 
@@ -90,21 +91,35 @@ public class TrayMenu extends PopupMenu {
     
     private final CheckboxMenuItem showConsole = new CheckboxMenuItem() {
     	{
-    		this.setState(Settings.getSettings().getConsoleActive());
+            if (LaunchFrame.con != null ) {
+                this.setState(LaunchFrame.con.isVisible());
+            } else {
+                this.setState(false);
+            }
+
     		this.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					Settings.getSettings().setConsoleActive(showConsole.getState());
-					Settings.getSettings().save();
-					LaunchFrame.getInstance().optionsPane.updateShowConsole();
-					LaunchFrame.con.setVisible(showConsole.getState());
+                    boolean state = showConsole.getState();
+                    if (LaunchFrame.con != null) {
+                        if (state) {
+                            LaunchFrame.con.setVisible(true);
+                            Logger.addListener(LaunchFrame.con);
+                        } else {
+                            LaunchFrame.con.setVisible(false);
+                            Logger.removeListener(LaunchFrame.con);
+                        }
+                    } else {
+                        LaunchFrame.con = new LauncherConsole();
+                        LaunchFrame.con.setVisible(true);
+                        Logger.addListener(LaunchFrame.con);
+                    }
 				}
     		});
     	}
     };
     
-    public void updateShowConsole() {
-    	showConsole.setState(Settings.getSettings().getConsoleActive());
+    public void updateShowConsole(boolean b) {
+    	showConsole.setState(b);
     }
-
 }
