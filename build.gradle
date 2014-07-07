@@ -115,7 +115,7 @@ deleteOrig.dependsOn(shadowJar)
 
 afterEvaluate {
 	launch4j {
-		icon = file("res/exe/icon.ico").getCanonicalPath()
+		icon = file("src/main/resources/exe/icon.ico").getCanonicalPath()
 		jreMinVersion = '1.6.0'
 		jar = project.tasks.jar.getArchivePath().getPath()
 		outfile = project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")
@@ -130,7 +130,7 @@ artifacts {
 macAppBundle {
     mainClassName = project.mainClass
     appName = "Feed The Beast"
-    icon = "res/app/icon.icns"
+    icon = "src/main/resources/app/icon.icns"
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     bundleExtras.put("NSHighResolutionCapable", "true")
 }
