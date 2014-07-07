@@ -167,13 +167,6 @@ dependencies {
 
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir 'res'
-        }
-    }
-}
     if (project.hasProperty("local_maven")) {
 	    apply plugin: 'maven'
             uploadArchives {
