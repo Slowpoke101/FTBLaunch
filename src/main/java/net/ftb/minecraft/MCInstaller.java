@@ -179,7 +179,7 @@ public class MCInstaller {
                         if(!new File(libDir, lib.getPath()).exists()){
                             if (lib.checksums!= null)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
-                            else if(lib.url == null)//mojang downloads
+                            else if(lib.download == true)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         }
                     }

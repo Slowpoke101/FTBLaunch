@@ -31,6 +31,7 @@ public class Library {
     public String url;
     public boolean localRepo;//when true the DL will be grabbed from the FTB Repo's and use the FTB hash check methods instead of the etag
     public List<String> checksums;//contains sha1 hashes of the file -- must check against all values!
+    public Boolean download;// used in pack.json to force DL's form mojang
     private Action _applies = null;
 
     public boolean applies () {
