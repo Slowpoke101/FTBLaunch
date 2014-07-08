@@ -47,7 +47,7 @@ public class PrivatePackDialog extends JDialog {
     private JButton cancel;
 
     public PrivatePackDialog() {
-        super(LaunchFrame.getInstance(), true);
+        super(LaunchFrame.getInstance(), false);
 
         setupGui();
 
