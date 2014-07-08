@@ -179,7 +179,7 @@ public class MCInstaller {
                         if(!new File(libDir, lib.getPath()).exists()){
                             if (lib.checksums!= null)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
-                            else if(lib.download == true)
+                            else if(lib.download != null && lib.download)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         }
                     }
@@ -291,6 +291,9 @@ public class MCInstaller {
             final String packVer = Settings.getSettings().getPackVer(pack.getDir());
 
             Logger.logInfo("Setting up native libraries for" + pack.getName() + " v " + packVer + " MC " + pack.getMcVersion(packVer));
+            if(!gameDir.exists())
+                gameDir.mkdirs();
+            
             if (natDir.exists()) {
                 natDir.delete();
             }
