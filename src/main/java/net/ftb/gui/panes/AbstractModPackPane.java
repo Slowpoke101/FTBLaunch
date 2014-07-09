@@ -64,7 +64,7 @@ public abstract class AbstractModPackPane extends JPanel {
     JEditorPane packInfo;
 
     //	private JLabel loadingImage;
-    public String origin = "All", mcVersion = "All", avaliability = "All";
+    public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL");
     public  boolean loaded = false;
 
     public AbstractModPackPane() {
@@ -188,9 +188,6 @@ public abstract class AbstractModPackPane extends JPanel {
         }
     }
 
-    // this does not sort.
-    // does only filtering job
-    // TODO: rename
     public void filterPacks() {
         packPanels.clear();
         packs.removeAll();
@@ -261,16 +258,21 @@ public abstract class AbstractModPackPane extends JPanel {
         }
     }
 
-    public void updateFilter() {
+    public void updateFilterText() {
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
+        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
         typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
 
         typeLbl.setText(typeLblText);
+    }
+
+    public void updateFilter() {
+        updateFilterText();
         filterPacks();
         LaunchFrame.getInstance().updateFooter();
     }
@@ -283,7 +285,9 @@ public abstract class AbstractModPackPane extends JPanel {
     }
 
     public void updateLocale() {
+        origin = I18N.getLocaleString("MAIN_ALL"); mcVersion = I18N.getLocaleString("MAIN_ALL"); avaliability = I18N.getLocaleString("MAIN_ALL");
         filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
+        updateFilterText();
         editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
         if (I18N.currentLocale == I18N.Locale.deDE) {
             editModPack.setBounds(290, 5, 120, 25);

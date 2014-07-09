@@ -58,8 +58,8 @@ public class ModPackFilterDialog extends JDialog {
         this.pane = instance;
 
         ArrayList<String> mcVersions = new ArrayList<String>();
-        mcVersion.addItem("All");
-        mcVersions.add("All");
+        mcVersion.addItem(I18N.getLocaleString("MAIN_ALL"));
+        mcVersions.add(I18N.getLocaleString("MAIN_ALL"));
         for (ModPack pack : ModPack.getPackArray()) {
             if (!mcVersions.contains(pack.getMcVersion())) {
                 mcVersions.add(pack.getMcVersion());
