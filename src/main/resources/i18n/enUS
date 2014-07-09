@@ -181,9 +181,10 @@ TRAY_QUIT = Quit
 TRAY_FTB_WEBSITE = FTB Website
 
 # CheckInstallPath
-CIP_PROGRAMFILES = Installing under C:\Program Files\ or similar is not supported.
-CIP_USERPROFILE = Installing under C:\Users\<username> is not recommended and can cause problems.
-CIP_WRITEPROTECT = No write access to FTB installation directory.
+CIP_PROGRAMFILES = Installing under C:\Program Files\ or similar is not supported. Please select a new location such as 
+CIP_INTERNETFILES = You cannot install FTB to your Temporary Internet Files directory. Please select a new location such as 
+CIP_USERPROFILE = Installing under C:\Users\<username> is not recommended and can cause problems. We suggest you select a new location such as 
+CIP_WRITEPROTECT = Could not write to the FTB installation directory. Please select a folder which you have permission to write to.
 CIP_EXISTS = FTB installation directory not found!
 CIP_CREATE = Could not create FTB installation location
 CIP_SELECTAGAIN = Please select again!
