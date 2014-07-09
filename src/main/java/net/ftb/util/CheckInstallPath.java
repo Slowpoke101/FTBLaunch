@@ -47,14 +47,27 @@ public class CheckInstallPath {
     public CheckInstallPath(String path, boolean calledFromLaunchFrame) {
         installPath = path;
         File f = new File(path);
+		String defaultLocation = "C:\\FTB";
 
         // TODO: add more tests! (Unicode test)\
         if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && path.contains(System.getenv("ProgramFiles"))) {
             setting = "CIP_programfiles";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
-                message = "Installing under C:\\Program Files\\ or similar is not supported.";
+                message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
                 localizedMessage = "CIP_PROGRAMFILES";
+                Logger.logError(message);
+            } else {
+                action = Action.OK;
+                Logger.logDebug("ignored: " + setting);
+            }
+        }
+        else if (OSUtils.getCurrentOS()==OS.WINDOWS && path.contains("Content.IE5")) {
+            setting = "CIP_internetfiles";
+            if (!Settings.getSettings().getBoolean(setting)) {
+                action = Action.BLOCK;
+                message = "You cannot install FTB to your Temporary Internet Files directory. Please select a new location such as " + defaultLocation;
+                localizedMessage = "CIP_INTERNETFILES";
                 Logger.logError(message);
             } else {
                 action = Action.OK;
@@ -65,7 +78,7 @@ public class CheckInstallPath {
             setting = "CIP_userprofile";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.WARN;
-                message = ("Installing under C:\\Users\\<username> is not recommended and can cause problems.");
+                message = ("Installing under C:\\Users\\<username> is not recommended and can cause problems. We suggest you select a new location such as " + defaultLocation);
                 localizedMessage = "CIP_USERPROFILE";
                 Logger.logWarn(message);
             } else {
@@ -77,7 +90,7 @@ public class CheckInstallPath {
             setting = "CIP_writeprotect";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
-                message = "No write access to FTB installation directory.";
+                message = "Could not write to the FTB installation directory. Please select a folder which you have permission to write to.";
                 localizedMessage = "CIP_WRITEPROTECT";
                 Logger.logError(message);
             } else {
