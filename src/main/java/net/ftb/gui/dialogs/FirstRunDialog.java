@@ -76,11 +76,10 @@ public class FirstRunDialog extends JDialog {
             public void actionPerformed (ActionEvent arg0) {
                 CheckInstallPath checkResult = new CheckInstallPath(installPath.getText());
 
-                // No need to localize here. Only shown at first run and language is not yet selected
                 if (checkResult.action == Action.BLOCK) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease select again", I18N.getLocaleString(checkResult.localizedMessage) + "\n" + I18N.getLocaleString("CIP_SELECTAGAIN"));
+                    ErrorUtils.tossError(checkResult.message + "\nPlease select again", checkResult.localizedMessage + "\n" + I18N.getLocaleString("CIP_SELECTAGAIN"));
                 } else if (checkResult.action == Action.WARN) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab", I18N.getLocaleString(checkResult.localizedMessage) +
+                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab", checkResult.localizedMessage +
                             "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
