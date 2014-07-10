@@ -200,10 +200,12 @@ public class MCLauncher {
         if(!isLegacy) {//legacy is handled separately
             boolean fullscreen = false;
             if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+                GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Rectangle bounds = env.getMaximumWindowBounds();
                 arguments.add("--width");
-                arguments.add(String.valueOf((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()));
+                arguments.add(String.valueOf((int) bounds.getWidth()));
                 arguments.add("--height");
-                arguments.add(String.valueOf((int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()));
+                arguments.add(String.valueOf((int) bounds.getHeight()));
                 fullscreen = true;
             }
             Dimension def = new Dimension(854, 480);

@@ -290,7 +290,7 @@ public class MCInstaller {
             File natDir = new File(packDir, "natives");
             final String packVer = Settings.getSettings().getPackVer(pack.getDir());
 
-            Logger.logInfo("Setting up native libraries for" + pack.getName() + " v " + packVer + " MC " + pack.getMcVersion(packVer));
+            Logger.logInfo("Setting up native libraries for " + pack.getName() + " v " + packVer + " MC " + pack.getMcVersion(packVer));
             if(!gameDir.exists())
                 gameDir.mkdirs();
             

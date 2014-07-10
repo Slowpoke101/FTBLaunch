@@ -60,7 +60,7 @@ public class TrackerUtils {
                             p.addExtraPair(s.getKey(), s.getValue());
                         }
                     }
-                    p.run();
+                    p.start();
                 } catch(Exception e) {
                     Logger.logError(e.getMessage(), e);
                 }
