@@ -34,7 +34,6 @@ public class PiwikTracker extends Thread {
     @Override
     public void run() {
         HttpURLConnection con = null;
-        BufferedReader in = null;
         try {
             //TODO make this not dependent on having a headed server!!
             if(Settings.getSettings().getGeneratedID() == null || Settings.getSettings().getGeneratedID().isEmpty() ) {
@@ -46,24 +45,12 @@ public class PiwikTracker extends Thread {
             extraParamaters = "";
             con = (HttpURLConnection) new URL(s).openConnection();
             con.setRequestMethod("GET");
-            in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } catch(MalformedURLException e) {
             Logger.logError("Malformed Tracker URL", e);
         } catch(HeadlessException e) {
             Logger.logError("Headless Exception from Piwik", e);
         } catch(IOException e) {
             Logger.logError("Error Contacting tracking server", e);
-        } finally {
-            try {
-                if(in != null) {
-                    in.close();
-                }
-            } catch(IOException e) {
-                Logger.logError("Error Closing tracking connection", e);
-            }
-            if(con != null) {
-                con.disconnect();
-            }
         }
     }
 }
