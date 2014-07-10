@@ -216,7 +216,7 @@ public class LaunchFrame extends JFrame {
             mfStr  = props.getProperty("LauncherJenkins");
             if(!mfStr.equals("${LauncherJenkins}"))
                 beta = Integer.parseInt(mfStr);
-            Logger.logDebug("FTB Launcher CI Build #: " + beta);
+            Logger.logDebug("FTB Launcher CI Build #: " + beta + ", Git SHA: " + props.getProperty("Git-SHA"));
         } catch (Exception e) {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
