@@ -19,6 +19,7 @@ package net.ftb.util;
 import java.io.File;
 
 import net.ftb.data.Settings;
+import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
@@ -49,13 +50,33 @@ public class CheckInstallPath {
         File f = new File(path);
 		String defaultLocation = "C:\\FTB";
 
-        // TODO: add more tests! (Unicode test)\
-        if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && path.contains(System.getenv("ProgramFiles"))) {
+        /**
+         *  Messages are shown by FirstRunDialog and by LaunchFrame
+         *  E.g.
+         *  FirstRunDialog opens tossError with         message + "\nPlease select again"
+         *  LaunchFrame opens tossOKIgnoreDialog with   message
+         *
+         */
+        String pathRegex = "[\\w\\d:\\\\/ -_\\.]+";
+        if (!path.matches(pathRegex)) {
+            String s = path.replaceAll(pathRegex, "");
+            setting = "CIP_badpath";
+            if (!Settings.getSettings().getBoolean(setting)) {
+                action = Action.BLOCK;
+                message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as "  + defaultLocation;
+                localizedMessage = I18N.getLocaleString("CIP_BADPATH").replace("LIST", s) + defaultLocation;
+                Logger.logError(message);
+            } else {
+                action = Action.OK;
+                Logger.logDebug("ignored: " + setting);
+            }
+        }
+        else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && path.contains(System.getenv("ProgramFiles"))) {
             setting = "CIP_programfiles";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
-                localizedMessage = "CIP_PROGRAMFILES";
+                localizedMessage = I18N.getLocaleString("CIP_PROGRAMFILES") + defaultLocation;
                 Logger.logError(message);
             } else {
                 action = Action.OK;
@@ -67,31 +88,31 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "You cannot install FTB to your Temporary Internet Files directory. Please select a new location such as " + defaultLocation;
-                localizedMessage = "CIP_INTERNETFILES";
+                localizedMessage = I18N.getLocaleString("CIP_INTERNETFILES") + defaultLocation;
                 Logger.logError(message);
             } else {
                 action = Action.OK;
                 Logger.logDebug("ignored: " + setting);
             }
-        }
+        } /*
         else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("USERPROFILE")!=null && path.contains(System.getenv("USERPROFILE"))) {
             setting = "CIP_userprofile";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.WARN;
                 message = ("Installing under C:\\Users\\<username> is not recommended and can cause problems. We suggest you select a new location such as " + defaultLocation);
-                localizedMessage = "CIP_USERPROFILE";
+                localizedMessage = I18N.getLocaleString("CIP_USERPROFILE") + defaultLocation;
                 Logger.logWarn(message);
             } else {
                 action = Action.OK;
                 Logger.logDebug("ignored: " + setting);
             }
-        }
+        }*/
         else if (f.isDirectory() && !f.canWrite()) {
             setting = "CIP_writeprotect";
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "Could not write to the FTB installation directory. Please select a folder which you have permission to write to.";
-                localizedMessage = "CIP_WRITEPROTECT";
+                localizedMessage = I18N.getLocaleString("CIP_WRITEPROTECT");
                 Logger.logError(message);
             } else {
                 action = Action.OK;
@@ -104,7 +125,7 @@ public class CheckInstallPath {
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 message = "FTB installation directory not found!";
-                localizedMessage = "CIP_EXISTS";
+                localizedMessage = I18N.getLocaleString("CIP_EXISTS");
                 Logger.logWarn(message);
             } else {
                 action = Action.OK;
@@ -118,7 +139,7 @@ public class CheckInstallPath {
                 if (!Settings.getSettings().getBoolean(setting)) {
                     action = Action.BLOCK;
                     message = "Could not create FTB installation location";
-                    localizedMessage = "CIP_CREATE";
+                    localizedMessage = I18N.getLocaleString("CIP_CREATE");
                     Logger.logWarn(message);
                 } else {
                     action = Action.OK;
