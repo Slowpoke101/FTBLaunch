@@ -166,7 +166,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
-            if(betaHash != null){
+            if(useBeta && betaHash != null){
                 String sha = DownloadUtils.fileSHA(temporaryUpdate);
                 if(betaHash.contains(sha))
                     SelfUpdate.runUpdate(path, temporaryUpdate.getCanonicalPath());
