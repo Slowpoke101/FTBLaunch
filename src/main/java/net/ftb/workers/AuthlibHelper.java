@@ -112,7 +112,10 @@ public class AuthlibHelper {
                 } catch (Exception e) {
                     Logger.logError("Unknown authentication error occurred", e);
                 }
+            } else {
+                Logger.logDebug("authentication.canLogIn() returned false");
             }
+
             if (isValid(authentication)) {
                 Logger.logDebug("Authentication is valid ");
                 displayName = authentication.getSelectedProfile().getName();
@@ -126,9 +129,15 @@ public class AuthlibHelper {
                                 .getSelectedProfile().getId().toString(), authentication);
                     }
                 }
+                Logger.logDebug("this should never happen");
+            } else {
+                Logger.logDebug("this should never happen");
             }
 
+        } else {
+            Logger.logDebug("this should never happen");
         }
+
         if (hasMojangData) {
             Logger.logError("Failed to authenticate with mojang data, attempting to use username & password");
             if (!hasPassword) {

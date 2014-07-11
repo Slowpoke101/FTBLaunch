@@ -48,9 +48,10 @@ project.ext {
 
 processResources {
     inputs.property "LauncherJenkins", project.buildNum
+    inputs.property "GitSHA", project.gitSha()
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.properties'
-        expand 'LauncherJenkins':project.buildNum
+        expand 'LauncherJenkins':project.buildNum, 'GitSHA':project.gitSha()
     }
         // copy everything else, thats not text
     from(sourceSets.main.resources.srcDirs) {
@@ -165,6 +166,10 @@ dependencies {
     testCompile 'junit:junit:4.10'
 	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
 
+}
+
+def gitSha() {
+    return 'git rev-parse HEAD'.execute().text.trim()
 }
 
     if (project.hasProperty("local_maven")) {
