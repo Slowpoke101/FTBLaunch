@@ -1,5 +1,5 @@
-LOCALE_NAME = Russian
-LOCALE_LOADED = Файл Русского языка загружен!
+LOCALE_NAME = Russian (RU)
+LOCALE_LOADED = Файл Русского (RU) языка загружен!
 
 # Footer
 DONATE_BUTTON = Пожертвовать
@@ -111,6 +111,7 @@ PRIVATEPACK_ERROR = Недействительный частный пакет.
 PRIVATEPACK_TEXT = Введите частный код, который Вы получили от создателя частного пакета, и нажмите добавить, пакет появиться в Вашем списке пакетов. Он автоматически загрузится при запуске. Если Вы хотите удалить частный пакет, введите код ещё раз и нажмите удалить.
 PRIVATEPACK_SECCESS = успешно удалён.
 PRIVATEPACK_NOTEXISTS = Неправильное имя пакета.
+PRIVATEPACK_ALREADY_ADDED = Частный пакет уже добавлен
 
 # Filter
 FILTER_PACKTYPE = Тип пакета модов:
@@ -144,6 +145,7 @@ PROFILEADDER_TITLE = Создание профиля
 PROFILADDER_ERROR = Невозможно создать профиль.
 PROFILEADDER_UPDATE = Обновить
 PROFILEDITOR_TITLE = Редактор профиля
+PROFILEADDER_SAVEMOJANGDATA = Запомнить токен авторизации
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Внимание! Уже существует карта с таким именем!
@@ -165,8 +167,26 @@ MAIN_CANCEL = Отмена
 MAIN_SUBMIT = Подтвердить
 MAIN_REMOVE = Удалить
 MAIN_ADD = Добавить
+BUTTON_IGNORE = Игнорировать
+BUTTON_OK = ОК
+NAG_SCREEN_MESSAGE = Нажмите OK, чтобы продолжить, или ИГНОРИРОВАТЬ, чтобы пропустить это предупреждение в будущем
 
 # First run dialog
 INSTALL_TITLE = Первый запуск
 INSTALL_LANGUAGE = Язык ...
 INSTALL_CHANGE = Изменить
+
+# System Tray
+TRAY_QUIT = Выход
+TRAY_FTB_WEBSITE = Веб-сайт FTB
+
+# CheckInstallPath
+CIP_BADPATH = Каталог установки не поддерживается. Forge не поддерживает следующие \nсимвол(ы): LIST Пожалуйста, выберите новое место, например
+CIP_PROGRAMFILES = Установка в C:\Program Files\ или подобное не поддерживается. \nПожалуйста, выберите новое место, например
+CIP_INTERNETFILES = Вы не можете установить FTB в Вашу папку временных интернет файлов. \nПожалуйста, выберите новое место, например
+CIP_USERPROFILE =  Установка в C:\Users\<username> не рекомендуется и может вызвать проблемы. \nМы предлагаем Вам выбрать новое место, например
+CIP_WRITEPROTECT = Невозможна запись в каталог установки FTB. \nПожалуйста, выберите папку, в которой у Вас есть разрешение на запись.
+CIP_EXISTS = Папка установки FTB не найдена!
+CIP_CREATE = Не удалось создать место установки FTB
+CIP_SELECTAGAIN = Пожалуйста, выберите снова!
+CIP_PLEASECHANGE = Пожалуйста, измените Ваше место установки под вкладкой Настройки.
