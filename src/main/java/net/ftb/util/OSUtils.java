@@ -234,24 +234,38 @@ public class OSUtils {
     public static boolean is64BitPosix () {
         String line, result = "";
         try {
-            Process command;
-            if(getCurrentOS() == OS.MACOSX) {
-                if( !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"))) {
-                    return true;//10.7+ only shipped on hardware capable of using 64 bit java
-                }
-                command= Runtime.getRuntime().exec("/usr/sbin/sysctl -n hw.cpu64bit_capable");
-            } else {
-            command= Runtime.getRuntime().exec("uname -m");
-            }
+            Process command = Runtime.getRuntime().exec("uname -m");
             BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
             while ((line = in.readLine()) != null) {
                 result += (line + "\n");
             }
         } catch (Exception e) {
-            Logger.logError(e.getMessage(), e);
+            Logger.logError("Posix bitness check failed", e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
-        return (result.contains("_64") || result.contains("hw.cpu64bit_capable: 1"));
+        return result.contains("_64");
+    }
+
+    /**
+     * Used to check if OS X is 64-bit
+     * @return true if 64-bit OS X
+     */
+
+    public static boolean is64BitOSX() {
+        String line, result = "";
+        if( !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"))) {
+            return true;//10.7+ only shipped on hardware capable of using 64 bit java
+        }
+        try {
+            Process command = Runtime.getRuntime().exec("/usr/sbin/sysctl -n hw.cpu64bit_capable");
+            BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
+            while ((line = in.readLine()) != null) {
+                result += (line + "\n");
+            }
+        } catch (Exception e) {
+            Logger.logError("OS X bitness check failed", e);
+        }
+        return result.equals("1");
     }
 
     /**
@@ -265,7 +279,7 @@ public class OSUtils {
         case UNIX:
             return is64BitPosix();
         case MACOSX:
-            return is64BitPosix();
+            return is64BitOSX();
         case OTHER:
             return true;
         default:
