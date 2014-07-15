@@ -61,7 +61,7 @@ processResources {
 }
 mainClassName = project.mainClass
 group = 'net.ftb'
-version = "1.4.2-${project.buildNum}"
+version = "1.4.3-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
