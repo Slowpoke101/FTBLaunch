@@ -129,7 +129,7 @@ public class AuthlibHelper {
                                 .getSelectedProfile().getId().toString(), authentication);
                     }
                 }
-                Logger.logDebug("this should never happen");
+                Logger.logDebug("this should never happen: isLoggedIn: " + authentication.isLoggedIn() + " canPlayOnline(): " + authentication.canPlayOnline());
             } else {
                 Logger.logDebug("this should never happen");
             }
@@ -162,7 +162,20 @@ public class AuthlibHelper {
     }
 
     private static boolean isValid (YggdrasilUserAuthentication authentication) {
-        return ((authentication.isLoggedIn()) && (authentication.getAuthenticatedToken() != null) && (authentication.getSelectedProfile() != null));
+        boolean ret = true;
+        if (!authentication.isLoggedIn()) {
+            Logger.logDebug("authentication not valid");
+            ret = false;
+        }
+        if (authentication.getAuthenticatedToken() == null) {
+            Logger.logDebug("authentication not valid");
+            ret = false;
+        }
+        if (authentication.getSelectedProfile() == null) {
+            Logger.logDebug("authentication not valid");
+            ret = false;
+        }
+        return ret;
     }
 
     @SuppressWarnings("unchecked")

@@ -45,12 +45,20 @@ public class PiwikTracker extends Thread {
             extraParamaters = "";
             con = (HttpURLConnection) new URL(s).openConnection();
             con.setRequestMethod("GET");
+            int result = con.getResponseCode();
+            if (result != 200) {
+                Logger.logDebug("Tracker request failed. Return code: " + result);
+            }
         } catch(MalformedURLException e) {
             Logger.logError("Malformed Tracker URL", e);
         } catch(HeadlessException e) {
             Logger.logError("Headless Exception from Piwik", e);
         } catch(IOException e) {
             Logger.logError("Error Contacting tracking server", e);
+        } finally {
+            if (con != null) {
+                con.disconnect();
+            }
         }
     }
 }
