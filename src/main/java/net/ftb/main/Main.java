@@ -16,6 +16,8 @@
  */
 package net.ftb.main;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -52,6 +54,8 @@ public class Main {
     @Getter
     private static int beta;
 
+    private static JCommander jc;
+
     /**
      * @return FTB Launcher event bus
      */
@@ -64,6 +68,19 @@ public class Main {
      */
     public static void main (String[] args) {
         Benchmark.start("main");
+
+        try {
+            jc = new JCommander(CommandLineSettings.getSettings(), args);
+        } catch (ParameterException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+
+        if (CommandLineSettings.getSettings().isHelp()) {
+            jc.usage();
+            System.exit(0);
+        }
+
         /*
          *  Create dynamic storage location as soon as possible
          */

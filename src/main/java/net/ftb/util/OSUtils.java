@@ -32,6 +32,7 @@ import java.util.Map;
 import javax.swing.text.html.StyleSheet;
 
 import lombok.Getter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
@@ -81,6 +82,9 @@ public class OSUtils {
      * @return string containing dynamic storage location
      */
     public static String getDynamicStorageLocation () {
+        if (CommandLineSettings.getSettings().getDynamicDir() != null && !CommandLineSettings.getSettings().getDynamicDir().isEmpty()) {
+            return CommandLineSettings.getSettings().getDynamicDir();
+        }
         switch (getCurrentOS()) {
         case WINDOWS:
             return System.getenv("APPDATA") + "/ftblauncher/";
@@ -100,6 +104,9 @@ public class OSUtils {
      * @return string containing cache storage location
      */
     public static String getCacheStorageLocation () {
+        if (CommandLineSettings.getSettings().getCacheDir() != null && !CommandLineSettings.getSettings().getCacheDir().isEmpty()) {
+            return CommandLineSettings.getSettings().getCacheDir();
+        }
         switch (getCurrentOS()) {
         case WINDOWS:
             if (System.getenv("LOCALAPPDATA") != null && System.getenv("LOCALAPPDATA").length() > 5)
