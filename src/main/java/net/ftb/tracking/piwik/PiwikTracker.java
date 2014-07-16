@@ -23,6 +23,7 @@ public class PiwikTracker extends Thread {
     public PiwikTracker(String thingToTrack, String urlFrom) {
         this.thingToTrack = thingToTrack;
         this.urlFrom = urlFrom;
+        this.extraParamaters = "";
     }
 
     public static void addExtraPair(String key, String value){
