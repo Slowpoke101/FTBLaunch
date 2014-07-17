@@ -129,6 +129,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
         textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
         textureButton.setBounds(510, 5, 105, 25);
+        textureButton.setBackground(UIManager.getColor("control").darker().darker());
+        textureButton.setForeground(UIManager.getColor("text").darker());
         textureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
