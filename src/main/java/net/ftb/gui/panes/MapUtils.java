@@ -123,6 +123,8 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
         mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
         mapButton.setBounds(400, 5, 105, 25);
+        mapButton.setBackground(UIManager.getColor("control").darker().darker());
+        mapButton.setForeground(UIManager.getColor("text").darker());
         mapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {

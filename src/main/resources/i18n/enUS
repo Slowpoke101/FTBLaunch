@@ -27,7 +27,7 @@ DOWNLOAD_MAP_SERVER = Download Server Map
 
 #tab swapping
 SWAP_MAP = Maps
-SWAP_TEXTURE = TexturePacks
+SWAP_TEXTURE = Texture Packs
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Install TexturePack
