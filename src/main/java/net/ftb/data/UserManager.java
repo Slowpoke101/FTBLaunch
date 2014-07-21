@@ -258,4 +258,11 @@ public class UserManager {
             return temp.getSaveMojangData();
         return false;
     }
+
+    public static String getName ( String username) {
+        User temp = findUser(username);
+        if(temp != null)
+            return temp.getName();
+        return null;
+    }
 }

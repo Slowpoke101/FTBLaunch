@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
 import net.feed_the_beast.launcher.json.DateAdapter;
 import net.feed_the_beast.launcher.json.EnumAdaptorFactory;
 import net.feed_the_beast.launcher.json.FileAdapter;
@@ -51,10 +52,11 @@ import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 public class AuthlibHelper {
     private static String uniqueID;
 
-    protected static LoginResponse authenticateWithAuthlib (String user, String pass, String mojangData) {
+    protected static LoginResponse authenticateWithAuthlib (String user, String pass, String mojangData, String selectedProfileName) {
         String displayName;
         boolean hasMojangData = false;
         boolean hasPassword = false;
+        GameProfile selectedProfile = null;
         YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
         if (user != null) {
             Logger.logInfo("Beginning authlib authentication attempt");
@@ -130,6 +132,25 @@ public class AuthlibHelper {
                     }
                 }
                 Logger.logDebug("this should never happen: isLoggedIn: " + authentication.isLoggedIn() + " canPlayOnline(): " + authentication.canPlayOnline());
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0 )) {
+                // user has more than one profile
+                Logger.logDebug("User has more than one profile");
+                for (GameProfile profile : authentication.getAvailableProfiles()) {
+                    if (selectedProfileName.equals(profile.getName())) {
+                        Logger.logDebug("profile found");
+                        selectedProfile = profile;
+                    }
+                }
+                if (selectedProfile == null) {
+                    Logger.logDebug("profile not found, defaulting to first");
+                    selectedProfile = authentication.getAvailableProfiles()[0];
+                }
+                Logger.logDebug("Authentication done, returning LoginResponse");
+                return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
+                        selectedProfile.getId().toString(), authentication);
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0 )) {
+                ErrorUtils.tossError("You need to own minecraft to play FTB packs");
+                return null;
             } else {
                 Logger.logDebug("this should never happen");
             }
@@ -147,7 +168,7 @@ public class AuthlibHelper {
                 pass = LaunchFrame.tempPass;
             }
 
-            LoginResponse l = authenticateWithAuthlib(user, pass, null);
+            LoginResponse l = authenticateWithAuthlib(user, pass, null, selectedProfileName);
             if (l == null) {
                 Logger.logError("Failed to login with username & password");
                 return null;
