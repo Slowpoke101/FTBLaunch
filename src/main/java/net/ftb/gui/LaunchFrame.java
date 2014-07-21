@@ -702,7 +702,7 @@ public class LaunchFrame extends JFrame {
     /**
      * call this to login
      */
-    private void doLogin (final String username, String password, String mojangData) {
+    private void doLogin (final String username, String password, String mojangData, String selectedProfile) {
         if (ModPack.getSelectedPack().getDisclaimer() != null && !ModPack.getSelectedPack().getDisclaimer().isEmpty()) {
             ErrorUtils.tossError(ModPack.getSelectedPack().getDisclaimer());
         }
@@ -736,7 +736,7 @@ public class LaunchFrame extends JFrame {
         tpInstall.setEnabled(false);
         tpInstallLocation.setEnabled(false);
 
-        LoginWorker loginWorker = new LoginWorker(username, password, mojangData) {
+        LoginWorker loginWorker = new LoginWorker(username, password, mojangData, selectedProfile) {
             @Override
             public void done () {
                 String responseStr;
@@ -1125,7 +1125,7 @@ public class LaunchFrame extends JFrame {
                     Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
                     saveSettings();
                     doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
-                            UserManager.getMojangData(users.getSelectedItem().toString()));
+                            UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
                 } else {//user can't run pack-- JRE not high enough
                     ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
                 }
