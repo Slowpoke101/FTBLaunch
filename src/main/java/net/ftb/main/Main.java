@@ -19,7 +19,6 @@ package net.ftb.main;
 import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.LaunchFrameHelpers;
 import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
@@ -50,6 +49,7 @@ public class Main {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     @Getter
     private static UserManager userManager;
+    private static int beta;
 
     /**
      * @return FTB Launcher event bus
@@ -107,20 +107,20 @@ public class Main {
             }
         }
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
-        int beta = 9999999;
+        beta = 9999999;
         String mfStr = "";
         try {
             Properties props = new Properties();
             props.load(mf.openStream());
-            mfStr  = props.getProperty("LauncherJenkins");
-            if(!mfStr.equals("${LauncherJenkins}"))
+            mfStr = props.getProperty("LauncherJenkins");
+            if (!mfStr.equals("${LauncherJenkins}"))
                 beta = Integer.parseInt(mfStr);
             Logger.logDebug("FTB Launcher CI Build #: " + beta + ", Git SHA: " + props.getProperty("Git-SHA"));
         } catch (Exception e) {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
         }
-        final int beta_ = beta;
+
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
@@ -137,7 +137,7 @@ public class Main {
             }
         }
 
-        LaunchFrameHelpers.printInfo();
+        MainHelpers.printInfo();
 
         /*
          * Resolves servers in background thread
@@ -145,6 +145,11 @@ public class Main {
         DownloadUtils thread = new DownloadUtils();
         thread.start();
 
+        // later add other main()s for 100% headless and CLI clients
+        mainGUI(args);
+    }
+
+    private static void mainGUI(String[] args) {
         /*
          * Setup GUI style & create and show Splash screen in EDT
          * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
@@ -203,14 +208,14 @@ public class Main {
                 }
 
                 if (!OSUtils.is64BitOS()) {
-                    LaunchFrameHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
+                    MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
                 }
                 if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
-                    LaunchFrameHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
+                    MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
                 }
                 JavaInfo java = Settings.getSettings().getCurrentJava();
                 if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
-                    LaunchFrameHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
+                    MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
                 }
 
                 LoadingDialog.setProgress(130);
@@ -227,7 +232,7 @@ public class Main {
                     LaunchFrame.con.scrollToBottom();
                 }
 
-                LaunchFrameHelpers.googleAnalytics();
+                MainHelpers.googleAnalytics();
 
                 LoadingDialog.setProgress(160);
 
@@ -287,6 +292,7 @@ public class Main {
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
+                final int beta_ = beta;
                 UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
                     @Override
                     protected void done () {
