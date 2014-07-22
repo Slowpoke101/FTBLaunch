@@ -149,7 +149,7 @@ public class AuthlibHelper {
                 return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
                         selectedProfile.getId().toString(), authentication);
             } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0 )) {
-                ErrorUtils.tossError("You need to own minecraft to play FTB packs");
+                ErrorUtils.showClickableMessage("You need to own minecraft to play FTB Modpacks", "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
                 return null;
             } else {
                 Logger.logDebug("this should never happen");
