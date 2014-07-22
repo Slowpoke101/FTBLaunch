@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.google.common.collect.Maps;
@@ -47,6 +48,12 @@ public class I18N {
         locales.clear();
         try {
             locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
+            // clean empty entries
+            for (Map.Entry<Object, Object> e: locales.entrySet()) {
+                if (e.getValue().equals("")) {
+                    locales.remove(e.getKey());
+                }
+            }
         } catch (IOException e) {
             Logger.logError("[i18n] Could not load language file", e);
         }
@@ -61,7 +68,6 @@ public class I18N {
             localeIndices.put(0, "enUS");
         }
         addFiles();
-        LaunchFrame.i18nLoaded = true;
     }
 
     /**

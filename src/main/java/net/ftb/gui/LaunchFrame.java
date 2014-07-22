@@ -22,31 +22,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.common.collect.Maps;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
@@ -61,8 +52,6 @@ import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
-import net.ftb.gui.dialogs.FirstRunDialog;
-import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
@@ -72,26 +61,16 @@ import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.*;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
-import net.ftb.log.LogLevel;
-import net.ftb.log.LogSource;
-import net.ftb.log.LogWriter;
 import net.ftb.log.Logger;
-import net.ftb.log.OutputOverride;
-import net.ftb.log.StdOutLogger;
+import net.ftb.main.Main;
 import net.ftb.minecraft.MCInstaller;
 import net.ftb.tools.MapManager;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
-import net.ftb.tracking.google.AnalyticsConfigData;
-import net.ftb.tracking.google.JGoogleAnalyticsTracker;
-import net.ftb.tracking.google.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
-import net.ftb.updater.UpdateChecker;
 import net.ftb.util.*;
-import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaInfo;
-import net.ftb.workers.AuthlibDLWorker;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
@@ -114,13 +93,12 @@ public class LaunchFrame extends JFrame {
      * @return - Outputs LaunchFrame instance
      */
     @Getter
+    @Setter
     private static LaunchFrame instance = null;
     
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
-    protected static UserManager userManager;
 
     public FTBPacksPane modPacksPane;
     public ThirdPartyPane thirdPartyPane;
@@ -129,28 +107,19 @@ public class LaunchFrame extends JFrame {
     public OptionsPane optionsPane;
     
     public static TrayMenu trayMenu;
-    
-    public static boolean noConfig = false;
+
     public static boolean allowVersionChange = false;
     public static boolean doVersionBackup = false;
     public static boolean MCRunning = false;
-    public static boolean i18nLoaded = false;
     public static LauncherConsole con;
     public static String tempPass = "";
     public static Panes currentPane = Panes.MODPACK;
-    public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
-    public static JGoogleAnalyticsTracker tracker;
     public static LoadingDialog loader;
 
 
     @Getter
     @Setter
     private static ProcessMonitor procMonitor;
-    /**
-    * @return FTB Launcher event bus
-    */
-    @Getter
-    private EventBus eventBus = new EventBus();
 
     public enum Panes {
         NEWS, OPTIONS, MODPACK, THIRDPARTY, TEXTURE
@@ -510,7 +479,7 @@ public class LaunchFrame extends JFrame {
                     Logger.logInfo("Login complete.");
                     try {
                         // save userdata, including new mojangData
-                        userManager.write();
+                        Main.getUserManager().write();
                         Logger.logDebug("user data saved");
                     } catch (IOException e) {
                         Logger.logError("logindata saving failed!");
@@ -612,7 +581,7 @@ public class LaunchFrame extends JFrame {
      */
     public static void writeUsers (String user) {
         try {
-            userManager.write();
+            Main.getUserManager().write();
         } catch (IOException e) {
         }
         ArrayList<String> var = UserManager.getNames();
@@ -839,28 +808,6 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    private static ArrayList<String> getXmls () {
-        ArrayList<String> s = Settings.getSettings().getPrivatePacks();
-        if (s == null) {
-            s = new ArrayList<String>();
-        }
-        for (int i = 0; i < s.size(); i++) {
-            if (s.get(i).isEmpty()) {
-                s.remove(i);
-                i--;
-            } else {
-                String temp = s.get(i);
-                if (!temp.endsWith(".xml")) {
-                    s.remove(i);
-                    s.add(i, temp + ".xml");
-                }
-            }
-        }
-        s.add(0, "modpacks.xml");
-        s.add(1, "thirdparty.xml");
-        return s;
-    }
-
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
@@ -901,7 +848,7 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    private static void setUpSystemTray() {
+    public static void setUpSystemTray() {
     	trayMenu = new TrayMenu();
     	
     	SystemTray tray = SystemTray.getSystemTray();

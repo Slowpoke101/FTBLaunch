@@ -18,6 +18,7 @@ package net.ftb.main;
 
 import net.ftb.data.*;
 import net.ftb.download.Locations;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LaunchFrameHelpers;
 import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
@@ -25,21 +26,37 @@ import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.*;
+import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.*;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.AuthlibDLWorker;
 
+import com.google.common.eventbus.EventBus;
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
+    public static JGoogleAnalyticsTracker tracker;
+    public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
+    @Getter
+    private static UserManager userManager;
+
+    /**
+     * @return FTB Launcher event bus
+     */
+    @Getter
+    private static EventBus eventBus = new EventBus();
+
     /**
      * Launch the application.
      * @param args - CLI arguments
@@ -85,7 +102,7 @@ public class Main {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile), LogSource.LAUNCHER));
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
-            if (!noConfig) {
+            if (!Settings.getSettings().isNoConfig()) {
                 Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
             }
         }
@@ -150,14 +167,14 @@ public class Main {
                     } catch (Exception e1) {
                     }
                 }
-                loader = new LoadingDialog();
-                loader.setModal(false);
-                loader.setVisible(true);
+                LaunchFrame.loader = new LoadingDialog();
+                LaunchFrame.loader.setModal(false);
+                LaunchFrame.loader.setVisible(true);
 
                 I18N.setupLocale();
                 I18N.setLocale(Settings.getSettings().getLocale());
 
-                if (noConfig) {
+                if (Settings.getSettings().isNoConfig()) {
                     FirstRunDialog firstRunDialog = new FirstRunDialog();
                     firstRunDialog.setVisible(true);
                 }
@@ -204,30 +221,24 @@ public class Main {
                 LoadingDialog.setProgress(140);
 
                 if (Settings.getSettings().getConsoleActive()) {
-                    con = new LauncherConsole();
-                    con.setVisible(true);
-                    Logger.addListener(con);
-                    con.scrollToBottom();
+                    LaunchFrame.con = new LauncherConsole();
+                    LaunchFrame.con.setVisible(true);
+                    Logger.addListener(LaunchFrame.con);
+                    LaunchFrame.con.scrollToBottom();
                 }
 
                 LaunchFrameHelpers.googleAnalytics();
 
                 LoadingDialog.setProgress(160);
 
-                /*  Delay startup until the i18n update thread completes it's work
-                 *  and populates the localeIndices, allowing OptionsTab to load
-                 *  correctly.
-                 */
-                AppUtils.waitForLock(i18nLoaded);
-
                 LaunchFrame frame = new LaunchFrame(2);
-                instance = frame;
+                LaunchFrame.setInstance(frame);
 
                 // Set up System Tray
                 if (SystemTray.isSupported()) {
-                    setUpSystemTray();
+                    LaunchFrame.getInstance().setUpSystemTray();
                 } else {
-                    Logger.logWarn("System Tray not supported");
+                    Logger.logDebug("System Tray not supported");
                 }
 
                 /*
@@ -257,12 +268,12 @@ public class Main {
                  * @TODO ModpacksPane has a display issue with packScroll if the
                  * main form is not visible when constructed.
                  */
-                instance.setVisible(true);
-                instance.toBack();
+                frame.setVisible(true);
+                frame.toBack();
 
-                instance.eventBus.register(frame.thirdPartyPane);
-                instance.eventBus.register(frame.modPacksPane);
-                instance.eventBus.register(this);
+                eventBus.register(frame.thirdPartyPane);
+                eventBus.register(frame.modPacksPane);
+                eventBus.register(this);
 
                 ModPack.loadXml(getXmls());
 
@@ -276,12 +287,12 @@ public class Main {
                 /*
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
-                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, minUsable, beta_) {
+                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
                     @Override
                     protected void done () {
                         try {
                             if (get()) {
-                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, minUsable);
+                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
                                 p.setVisible(true);
                             }
                         } catch (InterruptedException e) {
@@ -293,5 +304,27 @@ public class Main {
                 LoadingDialog.setProgress(180);
             }
         });
+    }
+
+    private static ArrayList<String> getXmls () {
+        ArrayList<String> s = Settings.getSettings().getPrivatePacks();
+        if (s == null) {
+            s = new ArrayList<String>();
+        }
+        for (int i = 0; i < s.size(); i++) {
+            if (s.get(i).isEmpty()) {
+                s.remove(i);
+                i--;
+            } else {
+                String temp = s.get(i);
+                if (!temp.endsWith(".xml")) {
+                    s.remove(i);
+                    s.add(i, temp + ".xml");
+                }
+            }
+        }
+        s.add(0, "modpacks.xml");
+        s.add(1, "thirdparty.xml");
+        return s;
     }
 }

@@ -19,8 +19,8 @@ package net.ftb.util;
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.main.Main;
 import net.ftb.tracking.piwik.PiwikTracker;
 
 import java.util.Map;
@@ -50,7 +50,7 @@ public class TrackerUtils {
 
         if (!Settings.getSettings().getSnooper()) {
             if(googleEnabled) {
-                LaunchFrame.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
+                Main.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
             }
             if(piwikEnabled) {
                 try {

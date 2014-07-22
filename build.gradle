@@ -37,7 +37,7 @@ apply plugin: 'launch4j'
 apply plugin: 'application'
 
 project.ext {
-    mainClass = 'net.ftb.gui.LaunchFrame'
+    mainClass = 'net.ftb.main.Main'
     currentYear = '2014'
 }
     if (System.getenv().BUILD_NUMBER != null) {

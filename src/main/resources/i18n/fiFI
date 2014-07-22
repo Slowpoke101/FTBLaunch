@@ -10,6 +10,7 @@ LAUNCH_BUTTON = Käynnistä
 PROFILE_CREATE = Luo profiili
 PROFILE_SELECT = Valitse profiili
 DOWNLOAD_SERVER_PACK = Lataa serveripaketti
+WARN_32BIT_OS =
 
 # Map Tab
 INSTALL_MAP = Asenna kartta

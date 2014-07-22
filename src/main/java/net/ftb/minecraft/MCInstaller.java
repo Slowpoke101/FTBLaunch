@@ -35,6 +35,7 @@ import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
 import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
+import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.util.*;
 
@@ -76,7 +77,7 @@ public class MCInstaller {
                     } catch (Exception e) {
                         ErrorUtils.tossError("Failed to download files.", e);
                     } finally {
-                        LaunchFrame.getInstance().getEventBus().post(new EnableObjectsEvent());
+                        Main.getEventBus().post(new EnableObjectsEvent());
                     }
                 }
             };
@@ -98,7 +99,7 @@ public class MCInstaller {
 
             downloader.execute();
         } else if (assets == null) {
-            LaunchFrame.getInstance().getEventBus().post(new EnableObjectsEvent());
+            Main.getEventBus().post(new EnableObjectsEvent());
         } else {
             launchMinecraft(installPath, pack, RESPONSE, isLegacy);
         }
@@ -390,7 +391,7 @@ public class MCInstaller {
                                 LaunchFrame.con.minecraftStopped();
                             LaunchFrame launchFrame = LaunchFrame.getInstance();
                             launchFrame.setVisible(true);
-                            LaunchFrame.getInstance().getEventBus().post(new EnableObjectsEvent());
+                            Main.getEventBus().post(new EnableObjectsEvent());
                             try {
                                 Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
                                 LaunchFrame.getInstance().tabbedPane.remove(1);

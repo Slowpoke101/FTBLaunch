@@ -37,7 +37,6 @@ import java.util.Properties;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
@@ -55,6 +54,8 @@ public class Settings extends Properties {
     @Getter
     @Setter
     private boolean forceUpdateEnabled = false;
+    @Getter
+    private boolean noConfig = false;
 
     static {
         try {
@@ -69,7 +70,7 @@ public class Settings extends Properties {
         if (file.exists()) {
             load(new FileInputStream(file));
         } else {
-            LaunchFrame.noConfig = true;
+            noConfig = true;
         }
     }
 
