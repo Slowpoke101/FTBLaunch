@@ -79,14 +79,14 @@ public class LauncherConsole extends JFrame implements ILogListener {
         getContentPane().add(panel, BorderLayout.SOUTH);
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-        JButton pastebin = new JButton(I18N.getLocaleString("CONSOLE_PASTEBIN"));
-        pastebin.addActionListener(new ActionListener() {
+        JButton paste = new JButton(I18N.getLocaleString("CONSOLE_PASTE"));
+        paste.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                JOptionPane pane = new JOptionPane("The log will be copied to your clipboard and pastebin.com will be opened now");
+                JOptionPane pane = new JOptionPane("The log will be sent to the FTB paste site and opened in your browser");
                 Object[] options = new String[] { "Yes do it", "Cancel" };
                 pane.setOptions(options);
-                JDialog dialog = pane.createDialog(new JFrame(), I18N.getLocaleString("CONSOLE_PASTEBIN"));
+                JDialog dialog = pane.createDialog(new JFrame(), I18N.getLocaleString("CONSOLE_PASTE"));
                 dialog.setVisible(true);
                 Object obj = pane.getValue();
                 int result = -1;
@@ -101,7 +101,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 }
             }
         });
-        panel.add(pastebin);
+        panel.add(paste);
 
         JButton clipboard = new JButton(I18N.getLocaleString("CONSOLE_COPYCLIP"));
         clipboard.addActionListener(new ActionListener() {

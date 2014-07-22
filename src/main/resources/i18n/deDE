@@ -15,7 +15,7 @@ DOWNLOAD_SERVER_PACK = Serverpack downloaden
 CONSOLE_TITLE = Konsole
 CONSOLE_COPYCLIP = Bericht in Zwischenablage kopieren
 CONSOLE_CLIP_CONFIRM = Möchtest du den gesamten Bericht in deine Zwischenablage kopieren?
-CONSOLE_PASTEBIN = Auf pastebin.com hochladen
+CONSOLE_PASTE = Auf pastebin.com hochladen
 CONSOLE_SUPPORT = Support benötigt? Klick mich!
 
 # Map Tab

@@ -18,7 +18,7 @@ WARN_JAVA6 = Java 6 detected. Java 7 is recommended for most mod packs.
 CONSOLE_TITLE = Console
 CONSOLE_COPYCLIP = Copy to clipboard
 CONSOLE_CLIP_CONFIRM = Do you want to copy the full log to your clipboard?
-CONSOLE_PASTEBIN = Paste to pastebin.com
+CONSOLE_PASTE = Upload Log
 CONSOLE_SUPPORT = Need support? Click me!
 
 # Map Tab

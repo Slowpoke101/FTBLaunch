@@ -15,7 +15,7 @@ DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
 CONSOLE_TITLE = Bedieningspaneel
 CONSOLE_COPYCLIP = Kopieer log naar het klembord
 CONSOLE_CLIP_CONFIRM = Wil je de volledige log te kopiëren naar het klembord?
-CONSOLE_PASTEBIN = Plak mijn formulier bezorgen aan pastebin.com
+CONSOLE_PASTE = Plak mijn formulier bezorgen aan pastebin.com
 CONSOLE_SUPPORT = Ondersteuning nodig? Klik op mij!
 
 # Map Tab

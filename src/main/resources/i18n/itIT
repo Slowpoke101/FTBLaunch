@@ -18,7 +18,7 @@ WARN_JAVA6 = Java 6 rilevato. Java 7 è richiesto per la maggior parte delle mod
 CONSOLE_TITLE = Console
 CONSOLE_COPYCLIP = Copia a clipboard
 CONSOLE_CLIP_CONFIRM = Vuoi copiare tutto il log sul  tuo clipboard?
-CONSOLE_PASTEBIN = Copia su pastebin.com
+CONSOLE_PASTE = Copia su pastebin.com
 CONSOLE_SUPPORT = Bisogno di aiuto? Cliccami!
 
 # Map Tab
