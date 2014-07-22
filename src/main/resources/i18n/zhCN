@@ -10,14 +10,24 @@ LAUNCH_BUTTON = 登陆
 PROFILE_CREATE = 建立档案
 PROFILE_SELECT = 选择档案
 DOWNLOAD_SERVER_PACK = 下载整合包服务端
+WARN_32BIT_OS =  你是32位操作系统，很多mod包需要在64位下使用，如果出现问题，尝试FTB Lite 2 整合包
+WARN_32BIT_JAVA =  你使用的是32位java，很多modpack需要在64位java下使用，如果出现问题，尝试FTB Lite 2 整合包
+WARN_JAVA6 = 检测到正在使用java6，请使用java7确保整合包可以运行
 
 # Console
+CONSOLE_TITLE = 控制台
 CONSOLE_COPYCLIP = 将日志复制到剪切板
 CONSOLE_CLIP_CONFIRM = 你想要把全部日志复制到剪切板吗?
+CONSOLE_PASTEBIN =  粘贴到 pastebin.com
+CONSOLE_SUPPORT = 需要帮助？点击我
 
 # Map Tab
 INSTALL_MAP = 安装地图
 DOWNLOAD_MAP_SERVER = 下载服务端地图
+
+#tab swapping
+SWAP_MAP = 地图
+SWAP_TEXTURE = 材质包
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = 安装材质包
@@ -28,11 +38,17 @@ FORCE_UPDATE = 强制升级?
 RAM_MAX = 最大内存(MB)
 LANGUAGE = 语言
 SHOW_CONSOLE = 显示控制台?
+OPT_JAVA_ARGS= 使用优化参数快速启动电脑吗?
+USE_SYSTEM_PROXY = 使用internet代理下载文件?
 REOPEN_LAUNCHER = 退出minecraft后重启登陆器?
 ADVANCED_OPTIONS = 高级选项
 INSTALL_FIRSTUSE = 由于这是你初次使用登陆器,我们建议你配置安装路径.
 DOWNLOAD_JAVA64 = 下载64位Java
+DOWNLOAD_JAVA32 = 下载32位java
+DOWNLOAD_JAVAGOOD =  下载推荐版本的java
 JAVA_32BIT_WARNING = 你的系统在使用32位Java. 这将限制Minecraft只能最多使用1.5gb内存.
+JAVA_OLD_Warning = 你的JAVA版本过旧，很多整合包需要JAVA7
+JAVA_NEW_Warning = 不支持JAVA8,（MINECRAFT在MAC上不支持JAVA8）
 
 # Shared strings
 FILTER_SETTINGS = 过滤设置
@@ -40,6 +56,9 @@ FILTER_SETTINGS = 过滤设置
 # Modpacks pane
 MODS_EDIT_PACK = 编辑整合包
 MODS_WAIT_WHILE_LOADING = 模组正被载入请等待...
+DOWNLOAD_SERVER = 下载服务器
+MODPACK_VERSIONS = 整合包版本
+PACK_CODES = Pack Codes
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = 启用模组
@@ -65,6 +84,10 @@ ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 自动最大化?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 禁用谷歌分析追踪
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = 额外java参数:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 额外启动调试
+ADVANCED_OPTIONS_JAVA_PATH = Java路径:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = 格外JAVA参数:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
+ADVANCED_OPTIONS_BETA= 允许使用beta版本的启动器?
 
 # Update
 UPDATE_WICHUPDATE = 你想要升级吗?
@@ -74,10 +97,12 @@ UPDATE_DOWNGRADE = 你想要降级吗?
 LUNCHERUPDATE_ISAVAILABLE = 的登陆器可用.
 LUNCHERUPDATE_CHANGELOG = 浏览日志
 LUNCHERUPDATE_ISAVAILABLETITLE = 登陆器升级可用
+LUNCHERUPDATE_CURRENTDEAD = 你当前的启动器必须更新 原因如下: \n 不能正确的登录/下载整合包
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = 模组整合包新版本可用!
-UPDATEMODPACK_BACKUP = 备份配置(config)文件?
+UPDATEMODPACK_BACKUPCFG = 备份config文件?
+UPDATEMODPACK_BACKUPSave = 备份Saves?
 UPDATEMODPACK_TITLE = 模组整合包升级可用
 UPDATEMODPACK_DOWNGRADE = 已安装版本比选定版本更新
 UPDATEMODPACK_FROM_TO_VERSION = 当前版本: %LOCALVER%\n选中版本: %ONLINEVER%
@@ -88,19 +113,18 @@ PRIVATEPACK_ERROR = 无效私人整合包.
 PRIVATEPACK_TEXT = 输入从私人整合包拥有者那里得到的私人分享码,点击以向整合包列表中添加该整合包. 启动时它会自动被载入. 如果你想移除该整合包,再次输入分享码,点击移除即可.
 PRIVATEPACK_SECCESS = 已成功移除.
 PRIVATEPACK_NOTEXISTS = 不正确的整合包名称.
+PRIVATEPACK_ALREADY_ADDED = 私人整合包已添加.
 
 # Filter
-FILTER_PACKTYPE = 模组整合包类型:
-FILTER_ORIGIN = 模组整合包起源:
+FILTER_PACKTYPE = 整合包类型:
 FILTER_COMPERTIBLEPACK = 兼容包:
-FILTER_3THPARTY = 第三方
 FILTER_APPLY = 应用过滤
 FILTER_SEARCHMAP = 搜索地图
 FILTER_TITLE = 过滤
-FILTER_PUBLIC = 公开
-FILTER_PRIVATE = 私人
-FILTER_MODPACKAVALIABILITY = 模组整合包可用性:
-FILTER_MCVERSION = Minecraft版本:
+FILTER_PUBLIC = listed
+FILTER_PRIVATE = Unlisted
+FILTER_MODPACKAVALIABILITY = 整合包可用:
+FILTER_MCVERSION = Minecraft 版本:
 FILTER_RESULUTION = 分辨率:
 FILTER_TEXSEARCH = 搜索整合包
 FILTER_SEARCHPACK = 搜索
@@ -123,10 +147,17 @@ PROFILEADDER_TITLE = 创建档案
 PROFILADDER_ERROR = 无法创建档案.
 PROFILEADDER_UPDATE = 升级
 PROFILEDITOR_TITLE = 编辑档案
+PROFILEADDER_SAVEMOJANGDATA = 保持登录
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = 警告! 已经有同名地图!
 MAPOVERRIDE_WISHOVERRIDE = 你想要重写吗?
+
+# Force Kill MC
+KILL_MC = 结束Minecraft进程
+KILL_MC_TITLE = 强制结束Minecraft吗？
+KILL_MC_MESSAGE = 警告！这可能导致不可预料的事情发生，只有当Minecraft无响应的时候才适合这种结束方法
+KILL_MC_CONFIRM = 你确定要强制结束Minecraft？
 
 # Main
 MAIN_EXIT = 推出
@@ -138,3 +169,27 @@ MAIN_CANCEL = 取消
 MAIN_SUBMIT = 提交
 MAIN_REMOVE = 移除
 MAIN_ADD = 添加
+BUTTON_IGNORE = 忽略
+BUTTON_OK = 确定
+NAG_SCREEN_MESSAGE = 点“确定”或者“忽略”将不再提醒
+
+# First run dialog
+INSTALL_TITLE = 第一次启动
+INSTALL_LANGUAGE = 语言选择 ...
+INSTALL_CHANGE = 更改
+
+# System Tray
+TRAY_QUIT = 退出
+TRAY_FTB_WEBSITE = FTB 网站
+
+# CheckInstallPath
+CIP_BADPATH = 安装路径不支持. Forge does not support following \ncharacter(s): LIST Please select a new location such as
+CIP_PROGRAMFILES = Installing under C:\Program Files\ or similar is not supported. \nPlease select a new location such as
+CIP_INTERNETFILES = You cannot install FTB to your Temporary Internet Files directory. \nPlease select a new location such as
+CIP_USERPROFILE = Installing under C:\Users\<username> is not recommended and can cause problems. \nWe suggest you select a new location such as
+CIP_WRITEPROTECT = Could not write to the FTB installation directory. \nPlease select a folder which you have permission to write to.
+CIP_EXISTS = 找不到FTB安装目录
+CIP_CREATE = 不能创建FTB安装目录
+CIP_SELECTAGAIN = 请再次选择目录
+CIP_PLEASECHANGE = 请在你的设置面板里更改安装目录
+
