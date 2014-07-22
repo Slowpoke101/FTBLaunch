@@ -16,11 +16,15 @@
  */
 package net.ftb.util;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+
+import java.awt.Font;
 
 public class ErrorUtils {
     /**
@@ -80,5 +84,33 @@ public class ErrorUtils {
                 message + "\n" + I18N.getLocaleString("NAG_SCREEN_MESSAGE"), null,
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
         return result;
+    }
+
+    public static void showClickableMessage(String message, String url) {
+        JLabel l = new JLabel();
+        Font font = l.getFont();
+        StringBuffer html = new StringBuffer("");
+        html.append("<html><body style=\"" +
+                "font-family:" + font.getFamily() + ";" +
+                "font-weight:" + (font.isBold() ? "bold" : "normal") + ";" +
+                "font-size:" + font.getSize() + "pt;" +
+                "\">");
+
+        html.append(message + " ");
+        if ( url != null ){
+            html.append("<br><a href=\""+ url +"\">" + url + "</a>");
+        }
+
+        JEditorPane ep = new JEditorPane("text/html", html.toString());
+        ep.addHyperlinkListener(new HyperlinkListener() {
+            @Override
+            public void hyperlinkUpdate (HyperlinkEvent e)
+            {
+                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+                    OSUtils.browse(e.getURL().toString()); // roll your own link launcher or use Desktop if J6+
+            }
+        });
+        ep.setEditable(false);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep);
     }
 }
