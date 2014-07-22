@@ -59,6 +59,7 @@ MODS_WAIT_WHILE_LOADING = Please wait while mods are being loaded...
 DOWNLOAD_SERVER = Download Server
 MODPACK_VERSIONS = Modpack Versions
 PACK_CODES = Pack Codes
+MODPACK_NO_SERVER = No server files provided by pack creator(s)!
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Enabled Mods

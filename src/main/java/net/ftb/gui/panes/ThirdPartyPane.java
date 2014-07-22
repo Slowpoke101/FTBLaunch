@@ -28,6 +28,7 @@ import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
@@ -159,20 +160,25 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
-                    if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
-                        if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                    .getSelectedPack(false).getVersion().replace(".", "_")
-                                    : Settings.getSettings().getPackVer().replace(".", "_");
-                            if (ModPack.getSelectedPack(false).isPrivatePack()) {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
-                                        + ModPack.getSelectedPack(false).getServerUrl()));
-                            } else {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
-                                        + ModPack.getSelectedPack(false).getServerUrl()));
+                if (ModPack.getSelectedPack(isFTB()).getServerUrl().equals("") || ModPack.getSelectedPack(isFTB()).getServerUrl() == null) {
+                    ErrorUtils.tossError(I18N.getLocaleString("MODPACK_NO_SERVER"));
+                } else {
+                    if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
+                        if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
+                            if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
+                                String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer()
+                                        .equalsIgnoreCase("newest version")) ? ModPack
+                                        .getSelectedPack(false).getVersion().replace(".", "_")
+                                        : Settings.getSettings().getPackVer().replace(".", "_");
+                                if (ModPack.getSelectedPack(false).isPrivatePack()) {
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
+                                            + ModPack.getSelectedPack(false).getServerUrl()));
+                                } else {
+                                    OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
+                                            + ModPack.getSelectedPack(false).getServerUrl()));
+                                }
+                                TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", ModPack.getSelectedPack(false).getName());
                             }
-                            TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", ModPack.getSelectedPack(false).getName());
                         }
                     }
                 }

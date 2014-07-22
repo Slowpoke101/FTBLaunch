@@ -234,11 +234,7 @@ public abstract class AbstractModPackPane extends JPanel {
                             + pack.getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
-                    if (ModPack.getSelectedPack(isFTB()).getServerUrl().equals("") || ModPack.getSelectedPack(isFTB()).getServerUrl() == null) {
-                        server.setEnabled(false);
-                    } else {
-                        server.setEnabled(true);
-                    }
+                    server.setEnabled(true);
                     String tempVer = Settings.getSettings().getPackVer(pack.getDir());
                     version.removeActionListener(al);
                     version.removeAllItems();
