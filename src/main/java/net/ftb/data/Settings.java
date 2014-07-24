@@ -294,8 +294,10 @@ public class Settings extends Properties {
         String out = "";
         String sep = "";
         for (String s : codes) {
-            out += sep + s;
-            sep = ",";
+            if (!s.isEmpty()) {
+                out += sep + s;
+                sep = ",";
+            }
         }
         setProperty("privatePacks", out);
     }
