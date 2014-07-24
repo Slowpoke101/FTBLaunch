@@ -57,7 +57,7 @@ public class ModpackLoader extends Thread {
     public void run () {
         //TODO ASAP thread this
         Benchmark.start("ModpackLoader");
-        for (String xmlFile : xmlFiles) {
+        xmls: for (String xmlFile : xmlFiles) {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
@@ -87,11 +87,11 @@ public class ModpackLoader extends Thread {
                     doc = AppUtils.getXML(modPackStream);
                 } catch (Exception e) {
                     Logger.logError("Exception reading modpack file", e);
-                    return;
+                    continue xmls;
                 }
                 if (doc == null) {
                     Logger.logError("Error: could not load modpack data!");
-                    return;
+                    continue xmls;
                 }
                 NodeList modPacks = doc.getElementsByTagName("modpack");
                 ArrayList<ModPack> mp = Lists.newArrayList();
