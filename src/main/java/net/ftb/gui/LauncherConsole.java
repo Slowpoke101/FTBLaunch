@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -120,7 +122,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
                     }
                 }
                 if (result == 0) {
-                    StringSelection stringSelection = new StringSelection("FTB Launcher logs:\n" + Logger.getLogs());
+                    StringSelection stringSelection = new StringSelection("FTB Launcher logs:\n" + Logger.getLogs()
+                            + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + " Logs copied to clipboard");
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(stringSelection, null);
                 }
