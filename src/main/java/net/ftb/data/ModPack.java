@@ -40,6 +40,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
+import net.ftb.main.Main;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
@@ -64,7 +65,7 @@ public class ModPack {
     @Getter
     private String disclaimer;
     /**
-     * @returns map of <String packversion, String MCVersion>
+     * @return map of <String packversion, String MCVersion>
      */
     @Getter
     private HashMap<String,String> customMCVersions = Maps.newHashMap();;
@@ -91,7 +92,7 @@ public class ModPack {
     public static void addPack (ModPack pack) {
         synchronized (packs) {
             packs.add(pack);
-            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, new ArrayList<ModPack>().add(pack)));//MAKE SURE TO REMOVE FROM LISTENER!!
+            Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, new ArrayList<ModPack>().add(pack)));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
@@ -104,7 +105,7 @@ public class ModPack {
             for(ModPack p :packs_){
                 packs.add(p);
             }
-            LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
+            Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
@@ -126,7 +127,7 @@ public class ModPack {
                 pack.setIndex(pack.getIndex() - 1);
             }
         }
-        LaunchFrame.getInstance().getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
+        Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
     }
 
     /**

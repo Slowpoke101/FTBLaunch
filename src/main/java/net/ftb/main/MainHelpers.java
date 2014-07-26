@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.gui;
+package net.ftb.main;
 
 import net.ftb.data.Constants;
 import net.ftb.data.Settings;
@@ -28,7 +28,7 @@ import java.io.*;
 
 import javax.swing.JOptionPane;
 
-public class LaunchFrameHelpers {
+public class MainHelpers {
     public static void printInfo() {
         Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
