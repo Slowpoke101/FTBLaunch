@@ -20,10 +20,10 @@ CONSOLE_SUPPORT = Support benötigt? Klick mich!
 
 # Map Tab
 INSTALL_MAP = Map installieren
-DOWNLOAD_MAP_SERVER = Server-Map downloaden
+DOWNLOAD_MAP_SERVER = Server-Map herunterladen
 
 # TexturePack Tab
-INSTALL_TEXTUREPACK = Texture Pack Installieren
+INSTALL_TEXTUREPACK = Texturenpaket installieren
 
 # Options pane
 INSTALL_FOLDER = Installationsverzeichnis
@@ -31,7 +31,7 @@ FORCE_UPDATE = Update erzwingen?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
-OPT_JAVA_ARGS = Optimierungs Argumente für schnelle Computer benutzen?
+OPT_JAVA_ARGS = Optimierungs-Argumente für schnelle Computer benutzen?
 REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
 ADVANCED_OPTIONS = Erweiterte Optionen
 INSTALL_FIRSTUSE = Da dies das erste Mal ist, dass du diesen Launcher verwendest, empfehlen wir, das Installationsverzeichnis zu bestimmen.
@@ -71,7 +71,7 @@ ADVANCED_OPTIONS_DLLOCATION = Downloadort:
 ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
-ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytic aus
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytics aus
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher-Debugging
 ADVANCED_OPTIONS_BETA = Benutzung der Beta-Version des Launchers erlaubt?
@@ -81,15 +81,15 @@ UPDATE_WICHUPDATE = Möchtest du updaten?
 UPDATE_DOWNGRADE = Möchtest du downgraden?
 
 # LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = von dem launcher ist verfügbar.
+LUNCHERUPDATE_ISAVAILABLE = von dem Launcher ist verfügbar.
 LUNCHERUPDATE_CHANGELOG = Änderungen
 LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
 
 # Modpack Update
-UPDATEMODPACK_ISAVALIBLE = A neue Modpack Version ist verfügbar!
+UPDATEMODPACK_ISAVALIBLE = Eine neue Modpackversion ist verfügbar!
 UPDATEMODPACK_BACKUPCFG = Konfigurationen sichern?
 UPDATEMODPACK_BACKUPSave = Speicherstände sichern?
-UPDATEMODPACK_TITLE = Modpack Update ist verfügbar
+UPDATEMODPACK_TITLE = Modpackupdate ist verfügbar
 UPDATEMODPACK_DOWNGRADE = Installierte Version ist neuer als gewählte Version
 UPDATEMODPACK_FROM_TO_VERSION = Aktuelle Version: %LOCALVER%\nGewählte Version: %ONLINEVER%
 
@@ -98,21 +98,21 @@ PRIVATEPACK_TITLE = Private Pack Interface
 PRIVATEPACK_ERROR = Ungültiges Private Pack.
 PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen möchtest, gib einfach den Code nochmal ein und klicke entfernen.
 PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
-PRIVATEPACK_NOTEXISTS = Falscher Pack Name.
+PRIVATEPACK_NOTEXISTS = Falscher Packname.
 
 # Filter
-FILTER_PACKTYPE = Mod Pack Typ:
-FILTER_ORIGIN = Mod Pack Team:
+FILTER_PACKTYPE = Modpacktyp:
+FILTER_ORIGIN = Modpackteam:
 FILTER_COMPERTIBLEPACK = Kompatibles Pack:
-FILTER_3THPARTY = 3rd Party
+FILTER_3THPARTY = Drittpartei
 FILTER_APPLY = Filter anwenden
 FILTER_SEARCHMAP = Suche Maps
 FILTER_TITLE = Filter
 FILTER_PUBLIC = Öfentlich
 FILTER_PRIVATE = Privat
-FILTER_MODPACKAVALIABILITY = Mod Pack Verfügbarkeit:
-FILTER_MCVERSION = Minecraft Version:
-FILTER_RESULUTION = Mod Pack Auflösung:
+FILTER_MODPACKAVALIABILITY = Modpack-Verfügbarkeit:
+FILTER_MCVERSION = Minecraftversion:
+FILTER_RESULUTION = Modpackauflösung:
 FILTER_TEXSEARCH = Suche Packs
 FILTER_SEARCHPACK = Suchen
 
@@ -142,7 +142,7 @@ MAPOVERRIDE_WISHOVERRIDE = Möchtest du sie überschreiben?
 # Force Kill MC
 KILL_MC = Minecraft töten
 KILL_MC_TITLE = Minecraft töten?
-KILL_MC_MESSAGE = Warnung! Das kann Korruption verursachen und sollte nur benutzt werden, wenn das Spiel eingefroren ist!
+KILL_MC_MESSAGE = Warnung! Das kann Instanzen beschädigen und sollte nur benutzt werden, wenn das Spiel eingefroren ist!
 KILL_MC_CONFIRM = Bist du dir sicher, dass du den Minecraft-Prozess töten willst?
 
 # Main
