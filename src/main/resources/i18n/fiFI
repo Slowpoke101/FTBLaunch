@@ -10,11 +10,24 @@ LAUNCH_BUTTON = Käynnistä
 PROFILE_CREATE = Luo profiili
 PROFILE_SELECT = Valitse profiili
 DOWNLOAD_SERVER_PACK = Lataa serveripaketti
-WARN_32BIT_OS =
+WARN_32BIT_OS = 
+WARN_32BIT_JAVA = 
+WARN_JAVA6 = 
+
+# Console
+CONSOLE_TITLE = 
+CONSOLE_COPYCLIP = 
+CONSOLE_CLIP_CONFIRM = 
+CONSOLE_PASTE = 
+CONSOLE_SUPPORT = 
 
 # Map Tab
 INSTALL_MAP = Asenna kartta
 DOWNLOAD_MAP_SERVER = Lataa serverikartta
+
+#tab swapping
+SWAP_MAP = 
+SWAP_TEXTURE = 
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Asenna tekstuuripaketti
@@ -25,9 +38,17 @@ FORCE_UPDATE = Pakota päivitys?
 RAM_MAX = RAM maksimi (Mt)
 LANGUAGE = Kieli
 SHOW_CONSOLE = Näytä konsoli?
+OPT_JAVA_ARGS = 
+USE_SYSTEM_PROXY = 
 REOPEN_LAUNCHER = Palaa aloitukseen Minecraftin sulkemisen jälkeen?
 ADVANCED_OPTIONS = Edistyneet asetukset
 INSTALL_FIRSTUSE = Tämä on ensimmäinen kerta kun käytät Feed The Beastia. Suosittelemme valitsemaan asennuskansion.
+DOWNLOAD_JAVA64 = 
+DOWNLOAD_JAVA32 = 
+DOWNLOAD_JAVAGOOD = 
+JAVA_OLD_Warning = 
+JAVA_NEW_Warning = 
+JAVA_32BIT_WARNING = 
 
 # Shared strings
 FILTER_SETTINGS = Suodatinasetukset
@@ -35,6 +56,9 @@ FILTER_SETTINGS = Suodatinasetukset
 # Modpacks pane
 MODS_EDIT_PACK = Muokkaa modipakettia
 MODS_WAIT_WHILE_LOADING = Odota, modeja ladataan...
+DOWNLOAD_SERVER = 
+MODPACK_VERSIONS = 
+PACK_CODES = 
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Modit käytössä
@@ -58,20 +82,28 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft -ikkunan koko:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft -ikkunan sijainti:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automaattisesti maksimoitu?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Estä Google Analytic -seuraus
+ADVANCED_OPTIONS_JAVA_PATH = 
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Lisä-Java parametrit:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 
+ADVANCED_OPTIONS_BETA = 
 
 # Update
 UPDATE_WICHUPDATE = Haluatko päivittää?
+UPDATE_DOWNGRADE = 
 
 # LUNCHERUPDATE
 LUNCHERUPDATE_ISAVAILABLE = FTB:n on saatavilla.
 LUNCHERUPDATE_CHANGELOG = Näytä muutosloki
 LUNCHERUPDATE_ISAVAILABLETITLE = Feed The Beastin päivitys saatavilla
+LUNCHERUPDATE_CURRENTDEAD = 
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = Uusi modipaketin versio saatavilla!
-UPDATEMODPACK_BACKUP = Varmuuskopioi konfiguraatio-tiedostot?
+UPDATEMODPACK_BACKUPCFG = Varmuuskopioi konfiguraatio-tiedostot?
+UPDATEMODPACK_BACKUPSave = 
 UPDATEMODPACK_TITLE = Modipaketin päivitys saatavilla
+UPDATEMODPACK_DOWNGRADE = 
+UPDATEMODPACK_FROM_TO_VERSION = 
 
 # Private Pack
 PRIVATEPACK_TITLE = Yksityisen paketin käyttöliittymä
@@ -79,12 +111,11 @@ PRIVATEPACK_ERROR = Yksityinen paketti virheellinen.
 PRIVATEPACK_TEXT = Syötä koodi jonka sait yksityisen paketin omistajalta ja klikkaa "Lisää" niin paketti lisätään listaan. Se latautuu automaattisesti aloituksessa. Jos haluat poistaa paketin, syötä koodi uudelleen ja klikkaa "Poista".
 PRIVATEPACK_SECCESS = poistettu onnistuneesti.
 PRIVATEPACK_NOTEXISTS = Virheellinen paketin nimi.
+PRIVATEPACK_ALREADY_ADDED = 
 
 # Filter
 FILTER_PACKTYPE = Modipaketin tyyppi:
-FILTER_ORIGIN = Modipaketin alkuperä:
 FILTER_COMPERTIBLEPACK = Yhteensopiva paketti:
-FILTER_3THPARTY = 3. osapuolen
 FILTER_APPLY = Käytä suodatinta
 FILTER_SEARCHMAP = Etsi karttoja
 FILTER_TITLE = Suodatin
@@ -104,6 +135,8 @@ PASSWORD_PASSLABEL = Salasana:
 PASSWORD_TITLE = Syötä salasana 
 
 # Profile
+OLDCREDS = 
+CHANGEDUUID = 
 PROFILEADDER_USERNAME = Käyttäjänimi:
 PROFILEADDER_PASSWORD = Salasana:
 PROFILEADDER_NAME = Profiilin nimi:
@@ -112,10 +145,17 @@ PROFILEADDER_TITLE = Profiilin luoja
 PROFILADDER_ERROR = Profiilin luominen ei onnistu.
 PROFILEADDER_UPDATE = Päivitä
 PROFILEDITOR_TITLE = Profiilin muokkaus
+PROFILEADDER_SAVEMOJANGDATA = 
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Varoitus! Sinulla on jo tämän niminen kartta!
 MAPOVERRIDE_WISHOVERRIDE = Haluatko korvata?
+
+# Force Kill MC
+KILL_MC = 
+KILL_MC_TITLE = 
+KILL_MC_MESSAGE = 
+KILL_MC_CONFIRM = 
 
 # Main
 MAIN_EXIT = POISTU
@@ -127,3 +167,26 @@ MAIN_CANCEL = Peruuta
 MAIN_SUBMIT = Toimita
 MAIN_REMOVE = Poista
 MAIN_ADD = Lisää
+BUTTON_IGNORE = 
+BUTTON_OK = 
+NAG_SCREEN_MESSAGE = 
+
+# First run dialog
+INSTALL_TITLE = 
+INSTALL_LANGUAGE = 
+INSTALL_CHANGE = 
+
+# System Tray
+TRAY_QUIT = 
+TRAY_FTB_WEBSITE = 
+
+# CheckInstallPath
+CIP_BADPATH = 
+CIP_PROGRAMFILES = 
+CIP_INTERNETFILES = 
+CIP_USERPROFILE = 
+CIP_WRITEPROTECT = 
+CIP_EXISTS = 
+CIP_CREATE = 
+CIP_SELECTAGAIN = 
+CIP_PLEASECHANGE = 

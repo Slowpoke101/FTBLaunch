@@ -18,7 +18,7 @@ WARN_JAVA6 = Java 6 обнаружена. Java 7 рекомендуется дл
 CONSOLE_TITLE = Консоль
 CONSOLE_COPYCLIP = Скопировать в буфер обмена
 CONSOLE_CLIP_CONFIRM = Вы хотите скопировать полный отчёт в буфер обмена?
-CONSOLE_PASTEBIN = Вставить на pastebin.com
+CONSOLE_PASTE = 
 CONSOLE_SUPPORT = Нужна помощь? Нажмите сюда!
 
 # Map Tab
@@ -38,7 +38,7 @@ FORCE_UPDATE = Принудительное обновление?
 RAM_MAX = Максимум ОЗУ (Мб)
 LANGUAGE = Язык
 SHOW_CONSOLE = Показывать консоль?
-OPT_JAVA_ARGS= Использовать оптимизирующие аргументы для быстрых компьютеров?
+OPT_JAVA_ARGS = Использовать оптимизирующие аргументы для быстрых компьютеров?
 USE_SYSTEM_PROXY = Использовать прокси для загрузки файлов
 REOPEN_LAUNCHER = Запускать лаунчер после выхода из Minecraft?
 ADVANCED_OPTIONS = Продвинутые настройки
@@ -85,7 +85,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Отключить Google Analytic Tra
 ADVANCED_OPTIONS_JAVA_PATH = Путь Java:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Дополнительные параметры Java:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Дополнительная отладка лаунчера
-ADVANCED_OPTIONS_BETA= Разрешить использование бета версий лаунчера?
+ADVANCED_OPTIONS_BETA = Разрешить использование бета версий лаунчера?
 
 # Update
 UPDATE_WICHUPDATE = Вы хотите обновить?
@@ -184,7 +184,7 @@ TRAY_FTB_WEBSITE = Веб-сайт FTB
 CIP_BADPATH = Каталог установки не поддерживается. Forge не поддерживает следующие \nсимвол(ы): LIST Пожалуйста, выберите новое место, например
 CIP_PROGRAMFILES = Установка в C:\Program Files\ или подобное не поддерживается. \nПожалуйста, выберите новое место, например
 CIP_INTERNETFILES = Вы не можете установить FTB в Вашу папку временных интернет файлов. \nПожалуйста, выберите новое место, например
-CIP_USERPROFILE =  Установка в C:\Users\<username> не рекомендуется и может вызвать проблемы. \nМы предлагаем Вам выбрать новое место, например
+CIP_USERPROFILE = Установка в C:\Users\<username> не рекомендуется и может вызвать проблемы. \nМы предлагаем Вам выбрать новое место, например
 CIP_WRITEPROTECT = Невозможна запись в каталог установки FTB. \nПожалуйста, выберите папку, в которой у Вас есть разрешение на запись.
 CIP_EXISTS = Папка установки FTB не найдена!
 CIP_CREATE = Не удалось создать место установки FTB

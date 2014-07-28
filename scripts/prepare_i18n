@@ -1,0 +1,60 @@
+#! /usr/bin/env python3
+
+import glob
+import os
+
+os.chdir("src/main/resources/i18n")
+main = "enUS"
+files = glob.glob("*")
+
+main_f = open(main)
+main_ = main_f.read()
+main_lines = main_.split("\n")
+
+for file in files:
+    print(file)
+    if file == main:
+        continue
+    f = open(file, "r")
+    f_ = f.read()
+    f_lines = f_.split("\n")
+
+    out = ""
+    i = 0;
+    while i < len(main_lines):
+        line = main_lines[i]
+        # handle commented lines and empty lines
+        if line.startswith(("!", "#")) or line == "":
+            out = out + line + "\n"
+            i = i + 1
+            continue
+
+        # read whole value if continuation is used
+        while line.endswith("\\"):
+            i = i + 1
+            line = line + main_lines[i]
+
+        # assume that we use only = to as key/value separator
+        main_key = line.split("=")[0].rstrip()
+        i = i + 1
+
+        j = 0
+        f_value = ""
+        while j < len(f_lines):
+            f_line = f_lines[j]
+            if f_line.startswith(("!", "#")) or line == "":
+                j = j + 1
+                continue
+            while f_line.endswith("\\"):
+                j = j + 1
+                f_line = f_line + "\n" + f_lines[j]
+            j = j + 1
+            if f_line.split("=")[0].rstrip() == main_key:
+                f_value = f_line.split("=")[1].lstrip()
+
+
+        out = out + main_key + " = " + f_value + "\n"
+    f.close()
+    f = open(file, "w")
+    f.write(out)
+    f.close()
