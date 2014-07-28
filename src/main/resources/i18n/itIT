@@ -38,7 +38,7 @@ FORCE_UPDATE = Aggiornamento forzato?
 RAM_MAX = RAM Massima (MB)
 LANGUAGE = Lingua
 SHOW_CONSOLE = Mostra Console?
-OPT_JAVA_ARGS= Usa Optimization Arguments per computer veloce?
+OPT_JAVA_ARGS = Usa Optimization Arguments per computer veloce?
 USE_SYSTEM_PROXY = Usa Internet Proxy per scaricare i file?
 REOPEN_LAUNCHER = Riapri il launcher dopo essere uscito da minecraft?
 ADVANCED_OPTIONS = Opzioni Avanzate
@@ -85,7 +85,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disabilita Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Java Path:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Parametri Java Aggiuntivia:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
-ADVANCED_OPTIONS_BETA= Permeti di usare versioni beta del Launcher?
+ADVANCED_OPTIONS_BETA = Permeti di usare versioni beta del Launcher?
 
 # Update
 UPDATE_WICHUPDATE = Desideri aggiornare?
@@ -167,6 +167,9 @@ MAIN_CANCEL = Cancella
 MAIN_SUBMIT = Invia
 MAIN_REMOVE = Rimuovi
 MAIN_ADD = Agguingi
+BUTTON_IGNORE = 
+BUTTON_OK = 
+NAG_SCREEN_MESSAGE = 
 
 # First run dialog
 INSTALL_TITLE = Prima Volta
@@ -176,3 +179,14 @@ INSTALL_CHANGE = Cambia
 # System Tray
 TRAY_QUIT = Esci
 TRAY_FTB_WEBSITE = Sito FTB
+
+# CheckInstallPath
+CIP_BADPATH = 
+CIP_PROGRAMFILES = 
+CIP_INTERNETFILES = 
+CIP_USERPROFILE = 
+CIP_WRITEPROTECT = 
+CIP_EXISTS = 
+CIP_CREATE = 
+CIP_SELECTAGAIN = 
+CIP_PLEASECHANGE = 

@@ -38,7 +38,7 @@ FORCE_UPDATE = Force update?
 RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Language
 SHOW_CONSOLE = Show Console?
-OPT_JAVA_ARGS= Use Optimization Arguments for fast computers?
+OPT_JAVA_ARGS = Use Optimization Arguments for fast computers?
 USE_SYSTEM_PROXY = Use Internet Proxy to download files?
 REOPEN_LAUNCHER = Reopen launcher after exiting Minecraft?
 ADVANCED_OPTIONS = Advanced Options
@@ -85,7 +85,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disable Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Java Path:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additional Java Parameters:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
-ADVANCED_OPTIONS_BETA= Allow Use of Beta Launcher Versions?
+ADVANCED_OPTIONS_BETA = Allow Use of Beta Launcher Versions?
 
 # Update
 UPDATE_WICHUPDATE = Do you wish to update?
@@ -111,6 +111,7 @@ PRIVATEPACK_ERROR = Invalid Private Pack.
 PRIVATEPACK_TEXT = Type in the private code that you get from the private pack owner and click add, the pack will then be in your pack list. It will automatically load on startup. If you wish to remove a private pack, type the code again, and click remove.
 PRIVATEPACK_SECCESS = successfully removed.
 PRIVATEPACK_NOTEXISTS = Incorrect pack name.
+PRIVATEPACK_ALREADY_ADDED = 
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Type:
@@ -144,6 +145,7 @@ PROFILEADDER_TITLE = Profile Creator
 PROFILADDER_ERROR = Unable to create profile.
 PROFILEADDER_UPDATE = Update
 PROFILEDITOR_TITLE = Profile Editor
+PROFILEADDER_SAVEMOJANGDATA = 
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warning! There is already a map by that name!
@@ -165,6 +167,9 @@ MAIN_CANCEL = Cancel
 MAIN_SUBMIT = Submit
 MAIN_REMOVE = Remove
 MAIN_ADD = Add
+BUTTON_IGNORE = 
+BUTTON_OK = 
+NAG_SCREEN_MESSAGE = 
 
 # First run dialog
 INSTALL_TITLE = First Run
@@ -174,3 +179,14 @@ INSTALL_CHANGE = Change
 # System Tray
 TRAY_QUIT = Quit
 TRAY_FTB_WEBSITE = FTB Website
+
+# CheckInstallPath
+CIP_BADPATH = 
+CIP_PROGRAMFILES = 
+CIP_INTERNETFILES = 
+CIP_USERPROFILE = 
+CIP_WRITEPROTECT = 
+CIP_EXISTS = 
+CIP_CREATE = 
+CIP_SELECTAGAIN = 
+CIP_PLEASECHANGE = 

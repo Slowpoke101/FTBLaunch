@@ -10,15 +10,15 @@ LAUNCH_BUTTON = 登陆
 PROFILE_CREATE = 建立档案
 PROFILE_SELECT = 选择档案
 DOWNLOAD_SERVER_PACK = 下载整合包服务端
-WARN_32BIT_OS =  你是32位操作系统，很多mod包需要在64位下使用，如果出现问题，尝试FTB Lite 2 整合包
-WARN_32BIT_JAVA =  你使用的是32位java，很多modpack需要在64位java下使用，如果出现问题，尝试FTB Lite 2 整合包
+WARN_32BIT_OS = 你是32位操作系统，很多mod包需要在64位下使用，如果出现问题，尝试FTB Lite 2 整合包
+WARN_32BIT_JAVA = 你使用的是32位java，很多modpack需要在64位java下使用，如果出现问题，尝试FTB Lite 2 整合包
 WARN_JAVA6 = 检测到正在使用java6，请使用java7确保整合包可以运行
 
 # Console
 CONSOLE_TITLE = 控制台
 CONSOLE_COPYCLIP = 将日志复制到剪切板
 CONSOLE_CLIP_CONFIRM = 你想要把全部日志复制到剪切板吗?
-CONSOLE_PASTEBIN =  粘贴到 pastebin.com
+CONSOLE_PASTE = 
 CONSOLE_SUPPORT = 需要帮助？点击我
 
 # Map Tab
@@ -38,17 +38,17 @@ FORCE_UPDATE = 强制升级?
 RAM_MAX = 最大内存(MB)
 LANGUAGE = 语言
 SHOW_CONSOLE = 显示控制台?
-OPT_JAVA_ARGS= 使用优化参数快速启动电脑吗?
+OPT_JAVA_ARGS = 使用优化参数快速启动电脑吗?
 USE_SYSTEM_PROXY = 使用internet代理下载文件?
 REOPEN_LAUNCHER = 退出minecraft后重启登陆器?
 ADVANCED_OPTIONS = 高级选项
 INSTALL_FIRSTUSE = 由于这是你初次使用登陆器,我们建议你配置安装路径.
 DOWNLOAD_JAVA64 = 下载64位Java
 DOWNLOAD_JAVA32 = 下载32位java
-DOWNLOAD_JAVAGOOD =  下载推荐版本的java
-JAVA_32BIT_WARNING = 你的系统在使用32位Java. 这将限制Minecraft只能最多使用1.5gb内存.
+DOWNLOAD_JAVAGOOD = 下载推荐版本的java
 JAVA_OLD_Warning = 你的JAVA版本过旧，很多整合包需要JAVA7
 JAVA_NEW_Warning = 不支持JAVA8,（MINECRAFT在MAC上不支持JAVA8）
+JAVA_32BIT_WARNING = 你的系统在使用32位Java. 这将限制Minecraft只能最多使用1.5gb内存.
 
 # Shared strings
 FILTER_SETTINGS = 过滤设置
@@ -82,12 +82,10 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft窗口大小:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft窗口位置:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 自动最大化?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 禁用谷歌分析追踪
-ADVANCED_OPTIONS_ADDJAVAOPTIONS = 额外java参数:
-ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 额外启动调试
 ADVANCED_OPTIONS_JAVA_PATH = Java路径:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = 格外JAVA参数:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
-ADVANCED_OPTIONS_BETA= 允许使用beta版本的启动器?
+ADVANCED_OPTIONS_BETA = 允许使用beta版本的启动器?
 
 # Update
 UPDATE_WICHUPDATE = 你想要升级吗?
@@ -192,4 +190,3 @@ CIP_EXISTS = 找不到FTB安装目录
 CIP_CREATE = 不能创建FTB安装目录
 CIP_SELECTAGAIN = 请再次选择目录
 CIP_PLEASECHANGE = 请在你的设置面板里更改安装目录
-

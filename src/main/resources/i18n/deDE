@@ -10,6 +10,9 @@ LAUNCH_BUTTON = Starten
 PROFILE_CREATE = Profil erstellen
 PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
+WARN_32BIT_OS = 
+WARN_32BIT_JAVA = 
+WARN_JAVA6 = 
 
 # Console
 CONSOLE_TITLE = Konsole
@@ -22,6 +25,10 @@ CONSOLE_SUPPORT = Support benötigt? Klick mich!
 INSTALL_MAP = Map installieren
 DOWNLOAD_MAP_SERVER = Server-Map herunterladen
 
+#tab swapping
+SWAP_MAP = 
+SWAP_TEXTURE = 
+
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Texturenpaket installieren
 
@@ -32,6 +39,7 @@ RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
 OPT_JAVA_ARGS = Optimierungs-Argumente für schnelle Computer benutzen?
+USE_SYSTEM_PROXY = 
 REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
 ADVANCED_OPTIONS = Erweiterte Optionen
 INSTALL_FIRSTUSE = Da dies das erste Mal ist, dass du diesen Launcher verwendest, empfehlen wir, das Installationsverzeichnis zu bestimmen.
@@ -49,6 +57,8 @@ FILTER_SETTINGS = Filtern
 MODS_EDIT_PACK = Modpack bearbeiten
 MODS_WAIT_WHILE_LOADING = Bitte warten während die Mods geladen werden...
 DOWNLOAD_SERVER = Server herunterladen
+MODPACK_VERSIONS = 
+PACK_CODES = 
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
@@ -62,7 +72,7 @@ MODS_EDIT_TITLE = Modpack bearbeiten
 # Maps pane
 MAPS_WAIT_WHILE_LOADING = Bitte warten während die Maps geladen werden...
 
-# Texturepacks pane
+# TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Bitte warten während die Texture Packs geladen werden...
 
 # Advanced  Options
@@ -72,6 +82,7 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytics aus
+ADVANCED_OPTIONS_JAVA_PATH = 
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher-Debugging
 ADVANCED_OPTIONS_BETA = Benutzung der Beta-Version des Launchers erlaubt?
@@ -84,6 +95,7 @@ UPDATE_DOWNGRADE = Möchtest du downgraden?
 LUNCHERUPDATE_ISAVAILABLE = von dem Launcher ist verfügbar.
 LUNCHERUPDATE_CHANGELOG = Änderungen
 LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
+LUNCHERUPDATE_CURRENTDEAD = 
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = Eine neue Modpackversion ist verfügbar!
@@ -99,12 +111,11 @@ PRIVATEPACK_ERROR = Ungültiges Private Pack.
 PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen möchtest, gib einfach den Code nochmal ein und klicke entfernen.
 PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
 PRIVATEPACK_NOTEXISTS = Falscher Packname.
+PRIVATEPACK_ALREADY_ADDED = 
 
 # Filter
 FILTER_PACKTYPE = Modpacktyp:
-FILTER_ORIGIN = Modpackteam:
 FILTER_COMPERTIBLEPACK = Kompatibles Pack:
-FILTER_3THPARTY = Drittpartei
 FILTER_APPLY = Filter anwenden
 FILTER_SEARCHMAP = Suche Maps
 FILTER_TITLE = Filter
@@ -134,6 +145,7 @@ PROFILEADDER_TITLE = Profilerstellung
 PROFILADDER_ERROR = Fehler bei der Profilerstellung.
 PROFILEADDER_UPDATE = Update
 PROFILEDITOR_TITLE = Profileditor
+PROFILEADDER_SAVEMOJANGDATA = 
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Warnung! Es exististiert bereits eine Map mit diesem Namen!
@@ -155,3 +167,26 @@ MAIN_CANCEL = Abbrechen
 MAIN_SUBMIT = Abschicken
 MAIN_REMOVE = Löschen
 MAIN_ADD = Hinzufügen
+BUTTON_IGNORE = 
+BUTTON_OK = 
+NAG_SCREEN_MESSAGE = 
+
+# First run dialog
+INSTALL_TITLE = 
+INSTALL_LANGUAGE = 
+INSTALL_CHANGE = 
+
+# System Tray
+TRAY_QUIT = 
+TRAY_FTB_WEBSITE = 
+
+# CheckInstallPath
+CIP_BADPATH = 
+CIP_PROGRAMFILES = 
+CIP_INTERNETFILES = 
+CIP_USERPROFILE = 
+CIP_WRITEPROTECT = 
+CIP_EXISTS = 
+CIP_CREATE = 
+CIP_SELECTAGAIN = 
+CIP_PLEASECHANGE = 

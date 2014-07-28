@@ -19,6 +19,7 @@ package net.ftb.locale;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -49,9 +50,10 @@ public class I18N {
         try {
             locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
             // clean empty entries
-            for (Map.Entry<Object, Object> e: locales.entrySet()) {
-                if (e.getValue().equals("")) {
-                    locales.remove(e.getKey());
+            for (Enumeration<Object> e = locales.keys(); e.hasMoreElements();) {
+                String key = (String)e.nextElement();
+                if (locales.get(key).equals("")) {
+                    locales.remove(key);
                 }
             }
         } catch (IOException e) {

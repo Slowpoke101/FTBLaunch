@@ -10,6 +10,9 @@ LAUNCH_BUTTON = Starten
 PROFILE_CREATE = Maak Profiel
 PROFILE_SELECT = Kies Profiel
 DOWNLOAD_SERVER_PACK = Verkrijg De Serverversie Hier
+WARN_32BIT_OS = 
+WARN_32BIT_JAVA = 
+WARN_JAVA6 = 
 
 # Console
 CONSOLE_TITLE = Bedieningspaneel
@@ -22,6 +25,10 @@ CONSOLE_SUPPORT = Ondersteuning nodig? Klik op mij!
 INSTALL_MAP = Installeer Kaart
 DOWNLOAD_MAP_SERVER = Download Serverkaart
 
+#tab swapping
+SWAP_MAP = 
+SWAP_TEXTURE = 
+
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Installeer TexturePack
 
@@ -31,10 +38,16 @@ FORCE_UPDATE = Forceer update?
 RAM_MAX = Maximum RAM (MB)
 LANGUAGE = Taal
 SHOW_CONSOLE = Toon Console?
+OPT_JAVA_ARGS = 
+USE_SYSTEM_PROXY = 
 REOPEN_LAUNCHER = Heropenen launcher na het verlaten van minecraft?
 ADVANCED_OPTIONS = Geavanceerde Opties
 INSTALL_FIRSTUSE = Aangezien dit de eerste keer dat u dit programma gebruikt, wij raden u aan de installatie map.
 DOWNLOAD_JAVA64 = Download Java 64-bit
+DOWNLOAD_JAVA32 = 
+DOWNLOAD_JAVAGOOD = 
+JAVA_OLD_Warning = 
+JAVA_NEW_Warning = 
 JAVA_32BIT_WARNING = Het systeem gebruikt een 32-bits versie van Java. Dit zal beperken Minecraft tot 1.5 GB RAM.
 
 # Shared strings
@@ -43,6 +56,9 @@ FILTER_SETTINGS = Filterinstellingen
 # Modpacks pane
 MODS_EDIT_PACK = Bewerken Mod Pack
 MODS_WAIT_WHILE_LOADING = Wacht alsjeblieft terwijl de mods worden geladen...
+DOWNLOAD_SERVER = 
+MODPACK_VERSIONS = 
+PACK_CODES = 
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Ingeschakeld Mods
@@ -66,8 +82,10 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Window Maat:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Window Positie:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Gemaximaliseerde?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Uitschakelen Google Analytics Tracking
+ADVANCED_OPTIONS_JAVA_PATH = 
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Additionele Java Parameters:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Additionele Launcher Debugging
+ADVANCED_OPTIONS_BETA = 
 
 # Update
 UPDATE_WICHUPDATE = Wilt u updaten?
@@ -77,10 +95,12 @@ UPDATE_DOWNGRADE = Wilt u downgraden?
 LUNCHERUPDATE_ISAVAILABLE = van het programma beschikbaar is.
 LUNCHERUPDATE_CHANGELOG = Bekijk Changelog
 LUNCHERUPDATE_ISAVAILABLETITLE = Programma Update Beschikbaar
+LUNCHERUPDATE_CURRENTDEAD = 
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = Een nieuwe mod pakket versie beschikbaar!
-UPDATEMODPACK_BACKUP = Back-up configuratiebestanden bestanden?
+UPDATEMODPACK_BACKUPCFG = Back-up configuratiebestanden bestanden?
+UPDATEMODPACK_BACKUPSave = 
 UPDATEMODPACK_TITLE = Mod Pack Update beschikbaar
 UPDATEMODPACK_DOWNGRADE = Geïnstalleerde versie is nieuwer dan geselecteerde versie
 UPDATEMODPACK_FROM_TO_VERSION = Huidige versie: %LOCALVER%\nGeselecteerde versie: %ONLINEVER%
@@ -91,12 +111,11 @@ PRIVATEPACK_ERROR = Ongeldige Private Pack.
 PRIVATEPACK_TEXT = Type in de prive-code die je krijgt van de particuliere pakket eigenaar en klik op toevoegen, zal het peloton dan in je rugzak lijst. Het wordt automatisch geladen bij het opstarten. Wilt u een prive-eenheid te verwijderen, typt u de code opnieuw in en klik op verwijderen.
 PRIVATEPACK_SECCESS = succesvol verwijderd.
 PRIVATEPACK_NOTEXISTS = Verkeerde pak naam.
+PRIVATEPACK_ALREADY_ADDED = 
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Soort:
-FILTER_ORIGIN = Mod Pack Afkomst:
 FILTER_COMPERTIBLEPACK = Compatibele Pack:
-FILTER_3THPARTY = 3rd Party
 FILTER_APPLY = Filter toepassen
 FILTER_SEARCHMAP = Kaarten Zoek
 FILTER_TITLE = Filter
@@ -126,10 +145,17 @@ PROFILEADDER_TITLE = Profiel Creator
 PROFILADDER_ERROR = Kan geen profiel aanmaken.
 PROFILEADDER_UPDATE = Update
 PROFILEDITOR_TITLE = Profiel Editor
+PROFILEADDER_SAVEMOJANGDATA = 
 
 # Map Override
 MAPOVERRIDE_FOUNDERROR = Waarschuwing! Er bestaat al een map met die naam!
 MAPOVERRIDE_WISHOVERRIDE = Wilt u overschrijven?
+
+# Force Kill MC
+KILL_MC = 
+KILL_MC_TITLE = 
+KILL_MC_MESSAGE = 
+KILL_MC_CONFIRM = 
 
 # Main
 MAIN_EXIT = Afslag
@@ -141,3 +167,26 @@ MAIN_CANCEL = Annuleren
 MAIN_SUBMIT = Voorstellen
 MAIN_REMOVE = Verwijderen
 MAIN_ADD = Toevoegen
+BUTTON_IGNORE = 
+BUTTON_OK = 
+NAG_SCREEN_MESSAGE = 
+
+# First run dialog
+INSTALL_TITLE = 
+INSTALL_LANGUAGE = 
+INSTALL_CHANGE = 
+
+# System Tray
+TRAY_QUIT = 
+TRAY_FTB_WEBSITE = 
+
+# CheckInstallPath
+CIP_BADPATH = 
+CIP_PROGRAMFILES = 
+CIP_INTERNETFILES = 
+CIP_USERPROFILE = 
+CIP_WRITEPROTECT = 
+CIP_EXISTS = 
+CIP_CREATE = 
+CIP_SELECTAGAIN = 
+CIP_PLEASECHANGE = 
