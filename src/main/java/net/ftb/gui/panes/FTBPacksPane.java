@@ -180,7 +180,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                                 OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + pack.getDir() + "%5E" + version + "%5E"
                                         + pack.getServerUrl()));
                             }
-                            TrackerUtils.sendPageView(pack.getName() + " Server Download", pack.getName());
+                            TrackerUtils.sendPageView(pack.getName() + " Server Download", "Server Download / " + pack.getName() + " / " + version);
                         }
                     }
                 }

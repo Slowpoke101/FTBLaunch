@@ -104,7 +104,7 @@ public class MainHelpers {
         }
 
         if (!Settings.getSettings().getLoaded()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS: " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
+            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS / " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
             Settings.getSettings().setLoaded(true);
         }

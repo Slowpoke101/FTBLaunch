@@ -253,7 +253,7 @@ public class LaunchFrame extends JFrame {
                         } else {
                             OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
                         }
-                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
+                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + "Server Download", "Server Download / " + ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
                     }
                 }
             }

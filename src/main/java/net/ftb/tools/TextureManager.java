@@ -180,7 +180,7 @@ public class TextureManager extends JDialog {
                 }
                 out.flush();
                 out.close();
-                TrackerUtils.sendPageView(dir + " Install", dir + " / " + compDir + " / " + packVer);
+                TrackerUtils.sendPageView(dir + " Install", "Texture Packs / " + dir + " / " + compDir + " / " + packVer);
                 return true;
             }
             return false;

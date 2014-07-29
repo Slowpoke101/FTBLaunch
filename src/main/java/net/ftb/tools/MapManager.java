@@ -133,7 +133,7 @@ public class MapManager extends JDialog {
             new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
             FileUtils.copyFolder(new File(tempPath, MAPS + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
             FileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
-            TrackerUtils.sendPageView(map.getName() + " Install", map.getName());
+            TrackerUtils.sendPageView(map.getName() + " Install", "Maps / " + map.getName());
         }
     }
 

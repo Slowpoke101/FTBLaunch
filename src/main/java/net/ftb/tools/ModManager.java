@@ -196,7 +196,7 @@ public class ModManager extends JDialog {
 
         protected boolean downloadModPack (String modPackName, String dir) {
             Logger.logInfo("Downloading Mod Pack");
-            TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Downloaded: " + modPackName + " v." + curVersion.replace('_', '.'));
+            TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Modpacks / " + modPackName + " / " + curVersion.replace('_', '.'));
             String dynamicLoc = OSUtils.getCacheStorageLocation();
             String installPath = Settings.getSettings().getInstallPath();
             ModPack pack = ModPack.getSelectedPack();

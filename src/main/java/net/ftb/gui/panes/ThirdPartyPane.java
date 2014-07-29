@@ -172,7 +172,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
                                 OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
                                         + ModPack.getSelectedPack(false).getServerUrl()));
                             }
-                            TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", ModPack.getSelectedPack(false).getName());
+                            TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", "Server Download / " + ModPack.getSelectedPack(false).getName() + " / " + version);
                         }
                     }
                 }
