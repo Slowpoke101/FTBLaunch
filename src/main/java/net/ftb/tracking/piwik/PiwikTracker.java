@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
+import java.util.Calendar;
 
 
 public class PiwikTracker extends Thread {
@@ -43,12 +44,14 @@ public class PiwikTracker extends Thread {
             if(thingToTrack.startsWith("Launcher Start v")) {
                 newSession();
             }
+            Calendar time = Calendar.getInstance();
+
             String s = "http://stats.feed-the-beast.com/piwik.php?action_name="
                     + PiwikUtils.urlEncode(thingToTrack)
                     + extraParamaters
                     + "&url=" + PiwikUtils.urlEncode(urlFrom)
                     + "&idsite=6&%20rand=" + new Random().nextInt(999999)
-                    + "&%20h=18&%20m=14&%20s=3%20"
+                    + "&%20h=" + time.get(Calendar.HOUR_OF_DAY) + " &%20m=" + time.get(Calendar.MINUTE) + "&%20s=" + time.get(Calendar.SECOND) + "%20"
                     + "&rec=1&%20apiv=1&%20cookie=%20&%20urlref=http://feed-the-beast.com%20"
                     + "&_id=" + Settings.getSettings().getGeneratedID()
                     + "%20&res=" + (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() + "x" + (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()

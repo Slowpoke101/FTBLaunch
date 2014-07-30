@@ -372,7 +372,7 @@ public class MCInstaller {
             String[] ignore = {"Session ID is token"};
             StreamLogger.setIgnore(ignore);
             StreamLogger.doStart();
-            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + "Launched / ", ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
+            TrackerUtils.sendPageView(ModPack.getSelectedPack().getName(), "Launched / " + ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
