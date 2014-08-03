@@ -40,11 +40,11 @@ project.ext {
     mainClass = 'net.ftb.main.Main'
     currentYear = '2014'
 }
-    if (System.getenv().BUILD_NUMBER != null) {
-        ext.buildNum = System.getenv().BUILD_NUMBER
-    } else {
-        ext.buildNum = "9999999"
-    }
+if (System.getenv().BUILD_NUMBER != null) {
+    ext.buildNum = System.getenv().BUILD_NUMBER
+} else {
+    ext.buildNum = "9999999"
+}
 
 processResources {
     inputs.property "LauncherJenkins", project.buildNum
@@ -53,7 +53,7 @@ processResources {
         include '**/*.properties'
         expand 'LauncherJenkins':project.buildNum, 'GitSHA':project.gitSha()
     }
-        // copy everything else, thats not text
+    // copy everything else, thats not text
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.properties'
     }
@@ -86,18 +86,16 @@ task deleteOrig(type: Delete) {
 }
 
 task fixJars(type: Copy) {
-
     from("${buildDir}/libs/")
 	destinationDir = file("${buildDir}/libs/")
-        rename { String fileName ->
-            fileName.replace('-shadow', '')
-        }
-		rename(/(.+)-shadow(.+)/, '$1$2')
+    rename { String fileName ->
+        fileName.replace('-shadow', '')
+    }
+	rename(/(.+)-shadow(.+)/, '$1$2')
 }
 task deleteShadow(type: Delete) {
     delete "${project.tasks.jar.getArchivePath().getPath().replace('.jar', '-shadow.jar')}"
-
-	}
+}
 task zipApp(type: Zip) {
     from "${project.buildDir}/macApp/"
     destinationDir = file("${project.buildDir}/libs")
@@ -125,9 +123,10 @@ afterEvaluate {
 }
 
 artifacts {
- archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
- archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.zip"))
- }
+    archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
+    archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.zip"))
+}
+
 macAppBundle {
     mainClassName = project.mainClass
     appName = "Feed The Beast"
@@ -149,10 +148,11 @@ configurations {
 repositories {
 	mavenCentral()
 	maven {
-			name = 'Mojang libs'
-			url = 'https://libraries.minecraft.net/'
-		}
+		name = 'Mojang libs'
+		url = 'https://libraries.minecraft.net/'
+	}
 }
+
 dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.google.code.gson:gson:2.2.4'
@@ -172,24 +172,24 @@ def gitSha() {
     return 'git rev-parse HEAD'.execute().text.trim()
 }
 
-    if (project.hasProperty("local_maven")) {
-	    apply plugin: 'maven'
-            uploadArchives {
-                repositories {
-                    mavenDeployer {
-                        repository(url: "file://${local_maven}")
-                }
+if (project.hasProperty("local_maven")) {
+	apply plugin: 'maven'
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    repository(url: "file://${local_maven}")
             }
         }
     }
-    if (project.hasProperty("remote_maven")) {
-	    apply plugin: 'maven'
-            uploadArchives {
+}
+if (project.hasProperty("remote_maven")) {
+	apply plugin: 'maven'
+    uploadArchives {
 		repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        repository(url: "ftp://${remote_maven}") {
-            authentication(userName: "${ftp_username}", password: "${ftp_pass}")
+            configuration = configurations.deployerJars
+            repository(url: "ftp://${remote_maven}") {
+                authentication(userName: "${ftp_username}", password: "${ftp_pass}")
+            }
         }
     }
-        }
-    }
+}
