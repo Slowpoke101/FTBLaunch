@@ -45,7 +45,7 @@ import com.google.common.io.Files;
 import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
@@ -437,7 +437,7 @@ public class DownloadUtils extends Thread {
                     if (element != null && element.isJsonObject()) {
                         JsonObject jso = element.getAsJsonObject();
                         if (jso != null && jso.get("minUsableLauncherVersion") != null) {
-                            LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
+                            LauncherFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
                         }
                         if (jso != null && jso.get("chEnabled") != null) {
                             Locations.chEnabled = jso.get("chEnabled").getAsBoolean();

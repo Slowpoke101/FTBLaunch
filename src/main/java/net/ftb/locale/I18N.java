@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.google.common.collect.Maps;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 

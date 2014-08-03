@@ -38,7 +38,7 @@ import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
@@ -108,7 +108,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                 if (packPanels.size() > 0) {
                     //TODO: fix by rename
                     if (getSelectedFTBModIndex() >= 0) {
-                        EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(true));
+                        EditModPackDialog empd = new EditModPackDialog(LauncherFrame.getInstance(), ModPack.getSelectedPack(true));
                         empd.setVisible(true);
                     }
                 }
@@ -168,7 +168,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
             @Override
             public void actionPerformed(ActionEvent event) {
                 ModPack pack = ModPack.getSelectedPack(true);
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
+                if (LauncherFrame.currentPane == LauncherFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")

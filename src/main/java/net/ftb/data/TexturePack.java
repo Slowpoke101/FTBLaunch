@@ -37,7 +37,7 @@ import javax.imageio.ImageIO;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.ftb.data.events.TexturePackListener;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -186,7 +186,7 @@ public class TexturePack {
      * @return - the compatible pack based on the selected texture pack
      */
     public String getSelectedCompatible () {
-        return compatible.get(LaunchFrame.getSelectedTPInstallIndex()).trim();
+        return compatible.get(LauncherFrame.getSelectedTPInstallIndex()).trim();
     }
 
     public boolean isCompatible (String packName) {

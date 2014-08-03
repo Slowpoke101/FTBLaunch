@@ -33,7 +33,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
@@ -51,7 +51,7 @@ public class TexturePackFilterDialog extends JDialog {
     private TexturepackPane instance;
 
     public TexturePackFilterDialog(final TexturepackPane instance) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         this.instance = instance;
         setupGui();
 

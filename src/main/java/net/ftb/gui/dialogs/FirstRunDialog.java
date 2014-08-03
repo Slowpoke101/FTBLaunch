@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.CheckInstallPath;
@@ -61,7 +61,7 @@ public class FirstRunDialog extends JDialog {
     private JComboBox languageList;
 
     public FirstRunDialog() {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
 
         setupGUI();
 
@@ -149,8 +149,8 @@ public class FirstRunDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent e) {
                 I18N.setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
-                if (LaunchFrame.getInstance() != null) {
-                    LaunchFrame.getInstance().updateLocale();
+                if (LauncherFrame.getInstance() != null) {
+                    LauncherFrame.getInstance().updateLocale();
                 }
                 updateLocale();
             }

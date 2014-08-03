@@ -44,7 +44,7 @@ import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
@@ -84,7 +84,7 @@ public class EditModPackDialog extends JDialog {
         MODS, JARMODS, COREMODS, OLD_VERSIONS
     }
 
-    public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
+    public EditModPackDialog(LauncherFrame instance, ModPack modPack) {
         super(instance, true);
         if (modPack != null && modPack.getMcVersion() != null)
             mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));

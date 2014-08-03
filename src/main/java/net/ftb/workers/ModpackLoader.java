@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
@@ -141,7 +141,7 @@ public class ModpackLoader extends Thread {
         //if (!FTBPacksPane.loaded) {
         FTBPacksPane.getInstance().loaded = true;
         ThirdPartyPane.getInstance().loaded = true;
-        LaunchFrame.checkDoneLoading();
+        LauncherFrame.checkDoneLoading();
         Map.loadAll();
         TexturePack.loadAll();
     }

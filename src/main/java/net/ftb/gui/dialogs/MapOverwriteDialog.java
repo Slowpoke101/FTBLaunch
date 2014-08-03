@@ -28,7 +28,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.tools.MapManager;
 import net.ftb.util.SwingUtils;
@@ -40,7 +40,7 @@ public class MapOverwriteDialog extends JDialog {
     private JButton abort;
 
     public MapOverwriteDialog() {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
 
         setupGui();
 

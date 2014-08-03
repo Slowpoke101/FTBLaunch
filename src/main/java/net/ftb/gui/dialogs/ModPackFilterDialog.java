@@ -31,7 +31,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.AbstractModPackPane;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
@@ -48,7 +48,7 @@ public class ModPackFilterDialog extends JDialog {
     private AbstractModPackPane pane;
 
     public ModPackFilterDialog(AbstractModPackPane instance) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         this.pane = instance;
 
         setupGui();

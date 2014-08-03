@@ -48,7 +48,6 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
@@ -75,7 +74,7 @@ import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
 @SuppressWarnings("serial")
-public class LaunchFrame extends JFrame {
+public class LauncherFrame extends JFrame {
     private LoginResponse RESPONSE;
     private NewsPane newsPane;
     public static JPanel panel;
@@ -94,7 +93,7 @@ public class LaunchFrame extends JFrame {
      */
     @Getter
     @Setter
-    private static LaunchFrame instance = null;
+    private static LauncherFrame instance = null;
     
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
@@ -116,7 +115,6 @@ public class LaunchFrame extends JFrame {
     public static Panes currentPane = Panes.MODPACK;
     public static LoadingDialog loader;
 
-
     @Getter
     @Setter
     private static ProcessMonitor procMonitor;
@@ -130,7 +128,7 @@ public class LaunchFrame extends JFrame {
     /**
      * Create the frame.
      */
-    public LaunchFrame(final int tab) {
+    public LauncherFrame(final int tab) {
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
         setResizable(false);
         setTitle(Constants.name + " v" + Constants.version);
@@ -285,8 +283,8 @@ public class LaunchFrame extends JFrame {
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-                    OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
-                            + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
+                    OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LauncherFrame.getSelectedMapIndex()).getMapName() + "%5E"
+                            + Map.getMap(LauncherFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LauncherFrame.getSelectedMapIndex()).getUrl()));
                 }
             }
         });
@@ -402,9 +400,9 @@ public class LaunchFrame extends JFrame {
                     if (i > 0 && i < 100) {
                         ImageAndTextIcon iti = new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i));
                         iti.setImage(LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png")).getImage());
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, iti);
+                        LauncherFrame.getInstance().tabbedPane.setIconAt(0, iti);
                     } else {
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
+                        LauncherFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
                     }
                 } catch (InterruptedException e) {
                 } catch (ExecutionException e) {

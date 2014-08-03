@@ -33,7 +33,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.SwingUtils;
@@ -51,13 +51,13 @@ public class ProfileAdderDialog extends JDialog {
     private JButton add;
     private JLabel messageLbl;
 
-    public ProfileAdderDialog(LaunchFrame instance, String unlocalizedMessage, boolean modal) {
+    public ProfileAdderDialog(LauncherFrame instance, String unlocalizedMessage, boolean modal) {
         super(instance, modal);
         setUnlocalizedMessage(unlocalizedMessage);
         preSetup();
     }
 
-    public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
+    public ProfileAdderDialog(LauncherFrame instance, boolean modal) {
         super(instance, modal);
         preSetup();
 
@@ -101,7 +101,7 @@ public class ProfileAdderDialog extends JDialog {
                     if (validate(name.getText(), username.getText(), password.getPassword())) {
                         UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
                         UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
-                        LaunchFrame.writeUsers(name.getText());
+                        LauncherFrame.writeUsers(name.getText());
                         setVisible(false);
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
@@ -110,7 +110,7 @@ public class ProfileAdderDialog extends JDialog {
                     if (validate(name.getText(), username.getText())) {
                         UserManager.addUser(username.getText(), "", name.getText());
                         UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
-                        LaunchFrame.writeUsers(name.getText());
+                        LauncherFrame.writeUsers(name.getText());
                         setVisible(false);
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));

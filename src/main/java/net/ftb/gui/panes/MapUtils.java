@@ -46,7 +46,7 @@ import net.ftb.data.LauncherStyle;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.events.MapListener;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.MapFilterDialog;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
@@ -128,7 +128,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         mapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(true);
+                LauncherFrame.getInstance().swapTabs(true);
             }
         });
         add(mapButton);
@@ -138,7 +138,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         textureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(false);
+                LauncherFrame.getInstance().swapTabs(false);
             }
         });
         add(textureButton);
@@ -276,7 +276,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         int counter = 0;
         selectedMap = 0;
         maps.repaint();
-        LaunchFrame.updateMapInstallLocs(new String[] { "" });
+        LauncherFrame.updateMapInstallLocs(new String[] { "" });
         mapInfo.setText("");
         HashMap<Integer, List<Map>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<Map>());
@@ -318,7 +318,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
                 }
                 mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                LaunchFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
+                LauncherFrame.updateMapInstallLocs(Map.getMap(getIndex()).getCompatible());
                 File tempDir = new File(OSUtils.getCacheStorageLocation(), "Maps" + File.separator + Map.getMap(getIndex()).getMapName());
                 mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + Map.getMap(getIndex()).getInfo() + packs);
@@ -350,7 +350,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
         typeLbl.setText(typeLblText);
         sortMaps();
-        LaunchFrame.getInstance().updateFooter();
+        LauncherFrame.getInstance().updateFooter();
     }
 
     private static int getIndex () {

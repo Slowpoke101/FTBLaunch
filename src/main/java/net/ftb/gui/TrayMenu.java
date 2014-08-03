@@ -91,8 +91,8 @@ public class TrayMenu extends PopupMenu {
     
     private final CheckboxMenuItem showConsole = new CheckboxMenuItem() {
     	{
-            if (LaunchFrame.con != null ) {
-                this.setState(LaunchFrame.con.isVisible());
+            if (LauncherFrame.con != null ) {
+                this.setState(LauncherFrame.con.isVisible());
             } else {
                 this.setState(false);
             }
@@ -101,18 +101,18 @@ public class TrayMenu extends PopupMenu {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
                     boolean state = showConsole.getState();
-                    if (LaunchFrame.con != null) {
+                    if (LauncherFrame.con != null) {
                         if (state) {
-                            LaunchFrame.con.setVisible(true);
-                            Logger.addListener(LaunchFrame.con);
+                            LauncherFrame.con.setVisible(true);
+                            Logger.addListener(LauncherFrame.con);
                         } else {
-                            LaunchFrame.con.setVisible(false);
-                            Logger.removeListener(LaunchFrame.con);
+                            LauncherFrame.con.setVisible(false);
+                            Logger.removeListener(LauncherFrame.con);
                         }
                     } else {
-                        LaunchFrame.con = new LauncherConsole();
-                        LaunchFrame.con.setVisible(true);
-                        Logger.addListener(LaunchFrame.con);
+                        LauncherFrame.con = new LauncherConsole();
+                        LauncherFrame.con.setVisible(true);
+                        Logger.addListener(LauncherFrame.con);
                     }
 				}
     		});

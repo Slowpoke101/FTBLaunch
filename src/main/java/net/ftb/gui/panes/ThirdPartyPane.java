@@ -22,7 +22,7 @@ import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
@@ -100,7 +100,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
                 if (packPanels.size() > 0) {
                     //TODO: fix by rename?
                     if (getSelectedThirdPartyModIndex() >= 0) {
-                        EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(false));
+                        EditModPackDialog empd = new EditModPackDialog(LauncherFrame.getInstance(), ModPack.getSelectedPack(false));
                         empd.setVisible(true);
                     }
                 }
@@ -159,7 +159,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
+                if (LauncherFrame.currentPane == LauncherFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
                         if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack

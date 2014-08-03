@@ -38,7 +38,7 @@ import javax.swing.event.ChangeListener;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.ChooseDir;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
@@ -160,8 +160,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
             @Override
             public void actionPerformed (ActionEvent e) {
                 I18N.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
-                if (LaunchFrame.getInstance() != null) {
-                    LaunchFrame.getInstance().updateLocale();
+                if (LauncherFrame.getInstance() != null) {
+                    LauncherFrame.getInstance().updateLocale();
                 }
             }
         });

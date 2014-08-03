@@ -32,7 +32,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import lombok.Getter;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
 
@@ -63,7 +63,7 @@ public class OSUtils {
      */
     public static String getDefInstallPath () {
         try {
-            CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+            CodeSource codeSource = LauncherFrame.class.getProtectionDomain().getCodeSource();
             File jarFile;
             jarFile = new File(codeSource.getLocation().toURI().getPath());
             return jarFile.getParentFile().getPath();

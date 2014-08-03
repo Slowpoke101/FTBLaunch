@@ -36,7 +36,7 @@ import javax.imageio.ImageIO;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
@@ -161,7 +161,7 @@ public class ModPack {
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
-        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
+        if(LauncherFrame.currentPane == LauncherFrame.Panes.THIRDPARTY){
             return getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
         }
         return getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex());

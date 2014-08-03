@@ -29,7 +29,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.tools.ModManager;
 import net.ftb.util.SwingUtils;
@@ -43,7 +43,7 @@ public class ModpackUpdateDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
+    public ModpackUpdateDialog(LauncherFrame instance, boolean modal) {
         super(instance, modal);
 
         setupGui();

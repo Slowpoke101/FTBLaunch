@@ -16,7 +16,7 @@
  */
 package net.ftb.util;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.YNDialog;
 import net.ftb.log.Logger;
 
@@ -24,15 +24,15 @@ public class GameUtils {
 	
 	public static void killMC() {
 		//if Mc is running
-        if (LaunchFrame.MCRunning) {
+        if (LauncherFrame.MCRunning) {
             //open confirm dialog for closing MC
         	YNDialog yn = new YNDialog("KILL_MC_MESSAGE", "KILL_MC_CONFIRM", "KILL_MC_TITLE");
             yn.setVisible(true);
             yn.toFront();
             
-			if (yn.ready && yn.ret && LaunchFrame.MCRunning && LaunchFrame.getProcMonitor() != null) {
+			if (yn.ready && yn.ret && LauncherFrame.MCRunning && LauncherFrame.getProcMonitor() != null) {
                 Logger.logWarn("MC Killed by the user!");
-				LaunchFrame.getProcMonitor().stop();
+				LauncherFrame.getProcMonitor().stop();
             }
 			
             yn.setVisible(false);

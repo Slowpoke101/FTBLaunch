@@ -28,7 +28,7 @@ import javax.swing.JPasswordField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
 
@@ -38,7 +38,7 @@ public class PasswordDialog extends JDialog {
     private JPasswordField password;
     private JButton login;
 
-    public PasswordDialog(LaunchFrame instance, boolean modal) {
+    public PasswordDialog(LauncherFrame instance, boolean modal) {
         super(instance, modal);
         setupGui();
 
@@ -47,7 +47,7 @@ public class PasswordDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (!new String(password.getPassword()).isEmpty()) {
-                    LaunchFrame.tempPass = new String(password.getPassword());
+                    LauncherFrame.tempPass = new String(password.getPassword());
                     setVisible(false);
                 }
             }
