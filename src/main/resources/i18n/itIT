@@ -167,9 +167,9 @@ MAIN_CANCEL = Cancella
 MAIN_SUBMIT = Invia
 MAIN_REMOVE = Rimuovi
 MAIN_ADD = Agguingi
-BUTTON_IGNORE = 
-BUTTON_OK = 
-NAG_SCREEN_MESSAGE = 
+BUTTON_IGNORE = Ignora
+BUTTON_OK = Ok
+NAG_SCREEN_MESSAGE = Clicca OK per continuare o IGNORA per tralasciare questo avvertimento in futuro
 
 # First run dialog
 INSTALL_TITLE = Prima Volta
@@ -181,12 +181,12 @@ TRAY_QUIT = Esci
 TRAY_FTB_WEBSITE = Sito FTB
 
 # CheckInstallPath
-CIP_BADPATH = 
-CIP_PROGRAMFILES = 
-CIP_INTERNETFILES = 
-CIP_USERPROFILE = 
-CIP_WRITEPROTECT = 
-CIP_EXISTS = 
-CIP_CREATE = 
-CIP_SELECTAGAIN = 
-CIP_PLEASECHANGE = 
+CIP_BADPATH = Luogo di installazione non supportata. Forge non supporta i seguenti \ncharacter(s): LISTA Per favore seleziona un nuovo luogo come
+CIP_PROGRAMFILES = Installare sotto C:\Program Files\ o simili non è supportato. \nPer favore seleziona un nuovo luogo come
+CIP_INTERNETFILES = Non puoi installare FTB nel tuo Temporary Internet Files directory. \nPer favore seleziona un nuovo luogo come
+CIP_USERPROFILE = Installare sotto C:\Users\<username> non è raccomandato e può causare problemi. \nConsigliamo di selezionare un nuovo luogo come
+CIP_WRITEPROTECT = Non è possibile scrivere nel luogo d'installazione di FTB. \nPer favore seleziona un cartella in cui hai permesso di scrivere.
+CIP_EXISTS = Non è stata trovata il luogo d'installazione di FTB!
+CIP_CREATE = Non è possibile creare il luogo d'installazione di FTB
+CIP_SELECTAGAIN = Per favore seleziona di nuovo!
+CIP_PLEASECHANGE = Per favore cambia il luogo d'installazione sotto il tab delle opzioni.
