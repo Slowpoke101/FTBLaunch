@@ -127,9 +127,9 @@ public class Main {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, JGoogleAnalyticsTracker.GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start / " + Constants.version + "." + beta);
+        TrackerUtils.sendPageView("net/ftb/gui/LauncherFrame.java", "Launcher Start / " + Constants.version + "." + beta);
         if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
+            TrackerUtils.sendPageView("net/ftb/gui/LauncherFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
             try {
                 new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
             } catch (IOException e) {

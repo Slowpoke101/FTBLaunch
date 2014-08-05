@@ -22,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;

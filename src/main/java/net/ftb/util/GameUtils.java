@@ -22,6 +22,9 @@ import net.ftb.log.Logger;
 
 public class GameUtils {
 	
+    /**
+     * Used to destroy the currently running instance of Minecraft
+     */
 	public static void killMC() {
 		//if Mc is running
         if (LauncherFrame.MCRunning) {

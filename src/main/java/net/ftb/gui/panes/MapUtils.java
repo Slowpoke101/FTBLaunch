@@ -53,7 +53,7 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
+public class MapUtils extends JPanel implements ILauncherPane, MapListener{
 
     protected static JPanel maps;
     public static ArrayList<JPanel> mapPanels;
@@ -65,7 +65,6 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     private static int selectedMap = 0;
     protected static boolean mapsAdded = false;
     public static String type = "Client", origin = "All", compatible = "All";
-
 
     //stuff for swapping between maps/texture packs
     private JButton mapButton;
@@ -86,7 +85,6 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setLayout(null);
         setup();
-
     }
 
     @Override
