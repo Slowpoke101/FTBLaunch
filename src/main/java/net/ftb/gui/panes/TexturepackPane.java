@@ -46,7 +46,7 @@ import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.gui.dialogs.TexturePackFilterDialog;
 import net.ftb.locale.I18N;
@@ -122,7 +122,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         mapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(true);
+                LauncherFrame.getInstance().swapTabs(true);
             }
         });
         add(mapButton);
@@ -134,7 +134,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         textureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(false);
+                LauncherFrame.getInstance().swapTabs(false);
             }
         });
         add(textureButton);
@@ -307,7 +307,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 }
                 texturePackPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                LaunchFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
+                LauncherFrame.updateTpInstallLocs(TexturePack.getTexturePack(getIndex()).getCompatible());
                 File tempDir = new File(OSUtils.getCacheStorageLocation(), "TexturePacks" + File.separator + TexturePack.getTexturePack(getIndex()).getName());
                 textureInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + TexturePack.getTexturePack(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + TexturePack.getTexturePack(getIndex()).getInfo() + packs);
@@ -336,7 +336,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
         typeLbl.setText(typeLblText);
         sortTexturePacks();
-        LaunchFrame.getInstance().updateFooter();
+        LauncherFrame.getInstance().updateFooter();
     }
 
     private static int getIndex () {

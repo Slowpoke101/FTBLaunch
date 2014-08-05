@@ -30,7 +30,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.data.Constants;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
@@ -46,7 +46,7 @@ public class LauncherUpdateDialog extends JDialog {
     private boolean usable;
 
     public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         this.usable = Constants.buildNumber > deadVersion;
         setupGui();
 

@@ -18,7 +18,7 @@ package net.ftb.main;
 
 import net.ftb.data.*;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
@@ -106,7 +106,7 @@ public class Main {
                 Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
             }
         }
-        URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
+        URL mf = LauncherFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";
         try {
@@ -127,9 +127,9 @@ public class Main {
         AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, JGoogleAnalyticsTracker.GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start / " + Constants.version + "." + beta);
+        TrackerUtils.sendPageView("net/ftb/gui/LauncherFrame.java", "Launcher Start / " + Constants.version + "." + beta);
         if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
+            TrackerUtils.sendPageView("net/ftb/gui/LauncherFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
             try {
                 new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
             } catch (IOException e) {
@@ -172,9 +172,9 @@ public class Main {
                     } catch (Exception e1) {
                     }
                 }
-                LaunchFrame.loader = new LoadingDialog();
-                LaunchFrame.loader.setModal(false);
-                LaunchFrame.loader.setVisible(true);
+                LauncherFrame.loader = new LoadingDialog();
+                LauncherFrame.loader.setModal(false);
+                LauncherFrame.loader.setVisible(true);
 
                 I18N.setupLocale();
                 I18N.setLocale(Settings.getSettings().getLocale());
@@ -226,22 +226,22 @@ public class Main {
                 LoadingDialog.setProgress(140);
 
                 if (Settings.getSettings().getConsoleActive()) {
-                    LaunchFrame.con = new LauncherConsole();
-                    LaunchFrame.con.setVisible(true);
-                    Logger.addListener(LaunchFrame.con);
-                    LaunchFrame.con.scrollToBottom();
+                    LauncherFrame.con = new LauncherConsole();
+                    LauncherFrame.con.setVisible(true);
+                    Logger.addListener(LauncherFrame.con);
+                    LauncherFrame.con.scrollToBottom();
                 }
 
                 MainHelpers.googleAnalytics();
 
                 LoadingDialog.setProgress(160);
 
-                LaunchFrame frame = new LaunchFrame(2);
-                LaunchFrame.setInstance(frame);
+                LauncherFrame frame = new LauncherFrame(2);
+                LauncherFrame.setInstance(frame);
 
                 // Set up System Tray
                 if (SystemTray.isSupported()) {
-                    LaunchFrame.getInstance().setUpSystemTray();
+                    LauncherFrame.getInstance().setUpSystemTray();
                 } else {
                     Logger.logDebug("System Tray not supported");
                 }
@@ -252,7 +252,7 @@ public class Main {
                 AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.16") {
                     @Override
                     protected void done () {
-                        LaunchFrame.getInstance().getLaunch().setEnabled(true);
+                        LauncherFrame.getInstance().getLaunch().setEnabled(true);
                     }
                 };
                 authworker.execute();
@@ -293,12 +293,12 @@ public class Main {
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
                 final int beta_ = beta;
-                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LauncherFrame.getInstance().minUsable, beta_) {
                     @Override
                     protected void done () {
                         try {
                             if (get()) {
-                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
+                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LauncherFrame.getInstance().minUsable);
                                 p.setVisible(true);
                             }
                         } catch (InterruptedException e) {

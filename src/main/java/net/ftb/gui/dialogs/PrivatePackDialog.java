@@ -33,7 +33,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.*;
@@ -47,7 +47,7 @@ public class PrivatePackDialog extends JDialog {
     private JButton cancel;
 
     public PrivatePackDialog() {
-        super(LaunchFrame.getInstance(), false);
+        super(LauncherFrame.getInstance(), false);
 
         setupGui();
 
@@ -95,7 +95,7 @@ public class PrivatePackDialog extends JDialog {
                         }
                         ModPack.removePacks(modpackName.getText() + ".xml");
                         FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + modpackName.getText() + ".xml"));
-                        LaunchFrame.getInstance().modPacksPane.filterPacks();
+                        LauncherFrame.getInstance().modPacksPane.filterPacks();
                     } catch (IOException e) {
                         Logger.logError("Error while deleting private modpack", e);
                     }

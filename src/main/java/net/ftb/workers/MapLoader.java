@@ -20,7 +20,7 @@ import java.net.URL;
 
 import net.ftb.data.Map;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -31,8 +31,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.swing.*;
 
 public class MapLoader extends Thread {
 
@@ -62,7 +60,7 @@ public class MapLoader extends Thread {
         } finally {
             MapUtils.loaded = true;
             Benchmark.logBenchAs("MapLoader", "MapLoader run ");
-            LaunchFrame.checkDoneLoading();
+            LauncherFrame.checkDoneLoading();
         }
     }
 }

@@ -86,7 +86,7 @@ public class ChooseDir extends JFrame implements ActionListener {
                     try {
                         FileUtils.copyFile(chooser.getSelectedFile(), destination);
                         Settings.getSettings().setLastAddPath(chooser.getSelectedFile().getPath());
-                        LaunchFrame.getInstance().saveSettings();
+                        LauncherFrame.getInstance().saveSettings();
                     } catch (IOException e1) {
                         Logger.logError(e1.getMessage());
                     }

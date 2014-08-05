@@ -28,7 +28,7 @@ import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.*;
 import net.ftb.util.SwingUtils;
 
@@ -38,7 +38,7 @@ public class SearchDialog extends JDialog {
     public JTextField query = new JTextField(20);
 
     public SearchDialog(final AbstractModPackPane instance) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         setupGui();
         query.setText((lastPackSearch == null) ? "" : lastPackSearch);
         query.getDocument().addDocumentListener(new DocumentListener() {
@@ -69,7 +69,7 @@ public class SearchDialog extends JDialog {
     }
 
     public SearchDialog(final MapUtils instance) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         setupGui();
         query.setText((lastMapSearch == null) ? "" : lastMapSearch);
         query.getDocument().addDocumentListener(new DocumentListener() {
@@ -100,7 +100,7 @@ public class SearchDialog extends JDialog {
     }
 
     public SearchDialog(final TexturepackPane instance) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         setupGui();
         query.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
         query.getDocument().addDocumentListener(new DocumentListener() {

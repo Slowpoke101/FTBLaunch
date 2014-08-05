@@ -29,7 +29,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
@@ -78,7 +78,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
             news.setPage("http://launcher.feed-the-beast.com/news.php");
             Settings.getSettings().setNewsDate();
             Settings.getSettings().save();
-            LaunchFrame.getInstance().setNewsIcon();
+            LauncherFrame.getInstance().setNewsIcon();
         } catch (IOException e1) {
             Logger.logError("Error while updating news tab", e1);
         }

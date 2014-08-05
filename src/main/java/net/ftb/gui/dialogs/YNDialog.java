@@ -28,7 +28,7 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
 
@@ -42,7 +42,7 @@ public class YNDialog extends JDialog {
     public boolean ready = false;
     public boolean ret = false;
     public YNDialog(String unlocMessage, String unlocConfirmMessage, String unlocTitle) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         message = I18N.getLocaleString(unlocMessage);
         confirmMsg = I18N.getLocaleString(unlocConfirmMessage);
         this.setTitle(I18N.getLocaleString(unlocTitle));

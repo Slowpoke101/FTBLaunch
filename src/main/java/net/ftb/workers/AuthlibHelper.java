@@ -30,7 +30,7 @@ import net.feed_the_beast.launcher.json.EnumAdaptorFactory;
 import net.feed_the_beast.launcher.json.FileAdapter;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.UserManager;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
@@ -162,10 +162,10 @@ public class AuthlibHelper {
         if (hasMojangData) {
             Logger.logError("Failed to authenticate with mojang data, attempting to use username & password");
             if (!hasPassword) {
-                new PasswordDialog(LaunchFrame.getInstance(), true).setVisible(true);
-                if (LaunchFrame.tempPass.isEmpty())
+                new PasswordDialog(LauncherFrame.getInstance(), true).setVisible(true);
+                if (LauncherFrame.tempPass.isEmpty())
                     return null;
-                pass = LaunchFrame.tempPass;
+                pass = LauncherFrame.tempPass;
             }
 
             LoginResponse l = authenticateWithAuthlib(user, pass, null, selectedProfileName);

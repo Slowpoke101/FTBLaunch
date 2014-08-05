@@ -42,7 +42,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -362,12 +362,12 @@ public class ModManager extends JDialog {
             }
         } else if (Integer.parseInt(pack.getVersion().replace(".", "")) != currentVersion) {
             Logger.logInfo("Modpack is out of date.");
-            if (LaunchFrame.allowVersionChange) {
+            if (LauncherFrame.allowVersionChange) {
                 curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion().replace(".", "_") : Settings.getSettings().getPackVer())
                         .replace(".", "_");
                 return false;
             }
-            ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
+            ModpackUpdateDialog p = new ModpackUpdateDialog(LauncherFrame.getInstance(), true);
             p.setVisible(true);
             if (!update) {
                 return true;

@@ -31,7 +31,7 @@ import javax.swing.SpringLayout;
 import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.minecraft.MCInstaller;
 import net.ftb.util.SwingUtils;
@@ -43,7 +43,7 @@ public class PlayOfflineDialog extends JDialog {
     private JButton abort;
 
     public PlayOfflineDialog(String cause, final String username, final String uuid, final LoginResponse resp) {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         setupGui();
 
         play.addActionListener(new ActionListener() {

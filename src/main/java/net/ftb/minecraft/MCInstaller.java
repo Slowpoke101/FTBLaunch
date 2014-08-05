@@ -29,7 +29,7 @@ import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
 import net.ftb.events.EnableObjectsEvent;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.log.LogEntry;
 import net.ftb.log.LogLevel;
@@ -58,7 +58,7 @@ public class MCInstaller {
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
-            final ProgressMonitor prog = new ProgressMonitor(LaunchFrame.getInstance(), "Downloading Files...", "", 0, 100);
+            final ProgressMonitor prog = new ProgressMonitor(LauncherFrame.getInstance(), "Downloading Files...", "", 0, 100);
             prog.setMaximum(assets.size() * 100);
 
             final AssetDownloader downloader = new AssetDownloader(prog, assets) {
@@ -365,9 +365,9 @@ public class MCInstaller {
             Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
-            LaunchFrame.MCRunning = true;
-            if (LaunchFrame.con != null)
-                LaunchFrame.con.minecraftStarted();
+            LauncherFrame.MCRunning = true;
+            if (LauncherFrame.con != null)
+                LauncherFrame.con.minecraftStarted();
             StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
             String[] ignore = {"Session ID is token"};
             StreamLogger.setIgnore(ignore);
@@ -381,29 +381,29 @@ public class MCInstaller {
             try {
                 minecraftProcess.exitValue();
             } catch (IllegalThreadStateException e) {
-                LaunchFrame.getInstance().setVisible(false);
-                LaunchFrame.setProcMonitor(ProcessMonitor.create(minecraftProcess, new Runnable() {
+                LauncherFrame.getInstance().setVisible(false);
+                LauncherFrame.setProcMonitor(ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
                     public void run() {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
                         } else {
-                            if (LaunchFrame.con != null)
-                                LaunchFrame.con.minecraftStopped();
-                            LaunchFrame launchFrame = LaunchFrame.getInstance();
+                            if (LauncherFrame.con != null)
+                                LauncherFrame.con.minecraftStopped();
+                            LauncherFrame launchFrame = LauncherFrame.getInstance();
                             launchFrame.setVisible(true);
                             Main.getEventBus().post(new EnableObjectsEvent());
                             try {
                                 Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
-                                LaunchFrame.getInstance().tabbedPane.remove(1);
-                                LaunchFrame.getInstance().optionsPane = new OptionsPane(Settings.getSettings());
-                                LaunchFrame.getInstance().tabbedPane.add(LaunchFrame.getInstance().optionsPane, 1);
-                                LaunchFrame.getInstance().tabbedPane.setIconAt(1, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/options.png")));
+                                LauncherFrame.getInstance().tabbedPane.remove(1);
+                                LauncherFrame.getInstance().optionsPane = new OptionsPane(Settings.getSettings());
+                                LauncherFrame.getInstance().tabbedPane.add(LauncherFrame.getInstance().optionsPane, 1);
+                                LauncherFrame.getInstance().tabbedPane.setIconAt(1, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/options.png")));
                             } catch (Exception e1) {
                                 Logger.logError("Failed to reload settings after launcher closed", e1);
                             }
                         }
-                        LaunchFrame.MCRunning = false;
+                        LauncherFrame.MCRunning = false;
                     }
                 }));
             }
@@ -421,10 +421,10 @@ public class MCInstaller {
         String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack;
-        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
-            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedThirdPartyModIndex());
+        if (LauncherFrame.currentPane == LauncherFrame.Panes.THIRDPARTY)
+            pack = ModPack.getPack(LauncherFrame.getInstance().thirdPartyPane.getSelectedThirdPartyModIndex());
         else
-            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedFTBModIndex());
+            pack = ModPack.getPack(LauncherFrame.getInstance().modPacksPane.getSelectedFTBModIndex());
 
         String packDir = pack.getDir();
 
@@ -455,7 +455,7 @@ public class MCInstaller {
                 new File(f.getParent()).mkdirs();
             if (f.exists())
                 f.delete();//we want to have the current version always!!!
-            URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
+            URL u = LauncherFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
             org.apache.commons.io.FileUtils.copyURLToFile(u, f);
         } catch (Exception e) {
             Logger.logError("Error extracting legacy launch to maven directory");
@@ -468,7 +468,7 @@ public class MCInstaller {
                 new File(newLoc.getParent()).mkdirs();
             if (newLoc.exists())
                 newLoc.delete();//we want to have the current version always!!!
-            URL u = LaunchFrame.class.getResource("/launch/legacypack.json");
+            URL u = LauncherFrame.class.getResource("/launch/legacypack.json");
             org.apache.commons.io.FileUtils.copyURLToFile(u, newLoc);
         } catch (Exception e) {
             Logger.logError("Error extracting legacy json to maven directory");

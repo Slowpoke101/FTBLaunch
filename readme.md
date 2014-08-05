@@ -22,16 +22,15 @@ limitations under the License.
 ##Compiling
 * Download the source from this repo, either with git or as a zip/tarball.
 * Install Eclipse or IDEA
-* you will need project lombok integration installed see http://projectlombok.org/download.html for more info on its IDE integration. Gradle adds this to the classpath for you in the IDE for IDE building
+* You will need project lombok integration installed see http://projectlombok.org/download.html for more info on its IDE integration. Gradle adds this to the classpath for you in the IDE for IDE building
 * To build a jar/exe using gradle run 'gradlew build' to generate the .exe version add 'launch4j' to the end after installing launch4j
 * To generate IDE project with dependencies using gradle run 'gradlew eclipse' or 'gradlew idea' after running a build.
-
 * With Eclipse/idea, import generated project/module and build as usual.
 
 ##Pull Request Standards
 * Indent with spaces(4)
 * Avoid trailing whitespace
-* If using eclipse: Use formatter located at eclipse_formatter.xml
+* If using Eclipse: Use formatter located at eclipse_formatter.xml
 * If using Intellij IDEA use the eclipse formatter(there is a plugin for this)
 * Sign-off your commits
 * Avoid merge commits in pull requests
@@ -46,4 +45,4 @@ To do this, run these commands:
     git push --force origin <branch_name>
 
 The first command is only necessary the first time. If you have issues merging, you will need to get a merge tool such as [P4Merge](http://perforce.com/product/components/perforce_visual_merge_and_diff_tools).
-Once it is set up, run `git mergetool`. Once all conflicts are fixed, run `git rebase --continue`, and `git push --force origin <branch_name>`.
+Once it is set up, run `git mergetool`. Once all conflicts are fixed, run `git rebase --continue`, and `git push --force origin <branch_name>`, if you are using a GUI such as [SourceTree](http://www.sourcetreeapp.com/) make sure you select rebase when you pull from upstream, and use the command line to push to origin.

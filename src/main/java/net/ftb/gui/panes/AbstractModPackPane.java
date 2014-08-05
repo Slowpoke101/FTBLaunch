@@ -22,7 +22,7 @@ import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.events.PackChangeEvent;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
@@ -110,7 +110,7 @@ public abstract class AbstractModPackPane extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    LaunchFrame.getInstance().doLaunch();
+                    LauncherFrame.getInstance().doLaunch();
                 }
             }
 
@@ -274,7 +274,7 @@ public abstract class AbstractModPackPane extends JPanel {
     public void updateFilter() {
         updateFilterText();
         filterPacks();
-        LaunchFrame.getInstance().updateFooter();
+        LauncherFrame.getInstance().updateFooter();
     }
 
     int getIndex() {

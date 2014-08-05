@@ -41,7 +41,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.SwingUtils;
@@ -72,7 +72,7 @@ public class AdvancedOptionsDialog extends JDialog {
 
     //TODO add a UI adjustment tab here?
     public AdvancedOptionsDialog() {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         setupGui();
 
         if (Locations.serversLoaded) {
@@ -155,7 +155,7 @@ public class AdvancedOptionsDialog extends JDialog {
         // invalidate current java information
         settings.setCurrentJava(null);
         //update options pane
-        LaunchFrame.getInstance().optionsPane.updateJavaLabels();
+        LauncherFrame.getInstance().optionsPane.updateJavaLabels();
     }
 
     private void setupGui () {

@@ -20,7 +20,7 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
@@ -36,7 +36,7 @@ public class ErrorUtils {
      */
     public static void tossError(String output) {
         Logger.logError(output);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(LauncherFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ErrorUtils {
      */
     public static void tossError(String log, String output) {
         Logger.logError(log);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(LauncherFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -60,12 +60,12 @@ public class ErrorUtils {
      */
     public static void tossError(String output, Throwable t) {
         Logger.logError(output, t);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(LauncherFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void tossError(String log, String output , Throwable t) {
         Logger.logError(log, t);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(LauncherFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -80,7 +80,7 @@ public class ErrorUtils {
      */
     public static int tossOKIgnoreDialog(String message, int severity) {
         Object[] options = { I18N.getLocaleString("BUTTON_OK"), I18N.getLocaleString("BUTTON_IGNORE") };
-        int result = JOptionPane.showOptionDialog(LaunchFrame.getInstance(), 
+        int result = JOptionPane.showOptionDialog(LauncherFrame.getInstance(), 
                 message + "\n" + I18N.getLocaleString("NAG_SCREEN_MESSAGE"), null,
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
         return result;
@@ -111,6 +111,6 @@ public class ErrorUtils {
             }
         });
         ep.setEditable(false);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep);
+        JOptionPane.showMessageDialog(LauncherFrame.getInstance(), ep);
     }
 }

@@ -18,26 +18,22 @@ package net.ftb.data;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.ftb.data.events.TexturePackListener;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -186,7 +182,7 @@ public class TexturePack {
      * @return - the compatible pack based on the selected texture pack
      */
     public String getSelectedCompatible () {
-        return compatible.get(LaunchFrame.getSelectedTPInstallIndex()).trim();
+        return compatible.get(LauncherFrame.getSelectedTPInstallIndex()).trim();
     }
 
     public boolean isCompatible (String packName) {

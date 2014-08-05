@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 
 @SuppressWarnings("serial")
@@ -37,7 +37,7 @@ public class LoadingDialog extends JDialog {
     public static JDialog instance;
     
     public LoadingDialog() {
-        super(LaunchFrame.getInstance(), true);
+        super(LauncherFrame.getInstance(), true);
         instance = this;
         
         setupGui();

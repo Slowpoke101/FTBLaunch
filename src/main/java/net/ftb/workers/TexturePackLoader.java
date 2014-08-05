@@ -20,7 +20,7 @@ import java.net.URL;
 
 import net.ftb.data.TexturePack;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
@@ -31,8 +31,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.swing.*;
 
 public class TexturePackLoader extends Thread {
 
@@ -62,7 +60,7 @@ public class TexturePackLoader extends Thread {
         } finally {
             TexturepackPane.loaded = true;
             Benchmark.logBenchAs("TexturepackLoader", "Texture Pack Load ");
-            LaunchFrame.checkDoneLoading();
+            LauncherFrame.checkDoneLoading();
         }
     }
 }

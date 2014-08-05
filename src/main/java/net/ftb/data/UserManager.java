@@ -28,7 +28,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
@@ -79,7 +79,7 @@ public class UserManager {
         if (!OSUtils.verifyUUID()) {
             Logger.logError(I18N.getLocaleString("CHANGEDUUID"));
             //TODO: GUI depencency here
-            ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "CHANGEDUUID", true);
+            ProfileAdderDialog p = new ProfileAdderDialog(LauncherFrame.getInstance(), "CHANGEDUUID", true);
             p.setVisible(true);
             return;
         }

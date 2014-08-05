@@ -38,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -178,7 +178,7 @@ public class MapManager extends JDialog {
     }
 
     public static void cleanUp () {
-        Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
+        Map map = Map.getMap(LauncherFrame.getSelectedMapIndex());
         File tempFolder = new File(OSUtils.getCacheStorageLocation(),  MAPS.replace("/",sep) + map.getMapName() + sep);
         for (String file : tempFolder.list()) {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {

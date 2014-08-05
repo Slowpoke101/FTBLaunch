@@ -32,7 +32,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.tools.ModManager;
@@ -49,7 +49,7 @@ public class ModPackVersionChangeDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
+    public ModPackVersionChangeDialog(LauncherFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
         super(instance, modal);
 
         setupGui(storedVersion, onlineVersion);
@@ -57,8 +57,8 @@ public class ModPackVersionChangeDialog extends JDialog {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.allowVersionChange = true;
-                LaunchFrame.doVersionBackup = backupCFG.isSelected();
+                LauncherFrame.allowVersionChange = true;
+                LauncherFrame.doVersionBackup = backupCFG.isSelected();
                 Settings.getSettings().setPackVer(onlineVersion);
                 ModManager.backupSave = backupSave.isSelected();
                 setVisible(false);
@@ -68,7 +68,7 @@ public class ModPackVersionChangeDialog extends JDialog {
         abort.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.allowVersionChange = false;
+                LauncherFrame.allowVersionChange = false;
                 Settings.getSettings().setPackVer(storedVersion);
                 setVisible(false);
             }

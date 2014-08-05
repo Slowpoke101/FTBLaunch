@@ -33,7 +33,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
 
@@ -49,7 +49,7 @@ public class ProfileEditorDialog extends JDialog {
     private JButton update;
     private JButton remove;
 
-    public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
+    public ProfileEditorDialog(LauncherFrame instance, final String editingName, boolean modal) {
         super(instance, modal);
 
         setupGui();
@@ -104,7 +104,7 @@ public class ProfileEditorDialog extends JDialog {
                         UserManager.updateUser(editingName, username.getText(), "", name.getText());
                     }
                     UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
-                    LaunchFrame.writeUsers(name.getText());
+                    LauncherFrame.writeUsers(name.getText());
                     setVisible(false);
                 }
             }
@@ -114,7 +114,7 @@ public class ProfileEditorDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 UserManager.removeUser(editingName);
-                LaunchFrame.writeUsers(null);
+                LauncherFrame.writeUsers(null);
                 setVisible(false);
             }
         });

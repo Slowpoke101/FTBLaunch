@@ -29,7 +29,7 @@ import net.feed_the_beast.launcher.json.launcher.Channel;
 import net.feed_the_beast.launcher.json.launcher.Update;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.LauncherFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
@@ -65,7 +65,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             this.allowBeta = false;
         String path = null;
         try {
-            path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
+            path = new File(LauncherFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
             Logger.logDebug("Launcher Install path: " + path);//we need this to make sure that the app behaves correctly when updating
         } catch (IOException e) {
@@ -152,7 +152,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     public void update () {
         String path = null;
         try {
-            path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
+            path = new File(LauncherFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
             Logger.logDebug("Launcher Install path: " + path);//we need this to make sure that the app behaves correctly when updating
         } catch (IOException e) {
