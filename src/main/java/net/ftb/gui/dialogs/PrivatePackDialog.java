@@ -57,7 +57,7 @@ public class PrivatePackDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent e) {
                 if (!modpackName.getText().isEmpty() && DownloadUtils.staticFileExists(modpackName.getText() + ".xml")) {
-                    if (!Settings.getSettings().getPrivatePacks().contains(modpackName.getText())) {
+                    if (!packExists(modpackName.getText())) {
                         Logger.logInfo("Adding: " + modpackName.getText());
                         ModPack.loadXml(modpackName.getText() + ".xml");
                         Settings.getSettings().addPrivatePack(modpackName.getText());
@@ -83,18 +83,23 @@ public class PrivatePackDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
-                if (codes.contains(modpackName.getText())) {
-                    Settings.getSettings().removePrivatePack(modpackName.getText());
+                String toRemove="";
+                for(String s: codes) {
+                    if(s.equalsIgnoreCase(modpackName.getText()));
+                        toRemove = s;
+                }
+                if (!toRemove.isEmpty()) {
+                    Settings.getSettings().removePrivatePack(toRemove);
                     Settings.getSettings().save();
                     try {
                         for (ModPack pack : ModPack.getPackArray()) {
-                            if (pack.getParentXml().equalsIgnoreCase(modpackName.getText() + ".xml")) {
+                            if (pack.getParentXml().equalsIgnoreCase(toRemove + ".xml")) {
                                 FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + pack.getDir()));
                                 break;
                             }
                         }
-                        ModPack.removePacks(modpackName.getText() + ".xml");
-                        FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + modpackName.getText() + ".xml"));
+                        ModPack.removePacks(toRemove + ".xml");
+                        FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + toRemove + ".xml"));
                         LaunchFrame.getInstance().modPacksPane.filterPacks();
                     } catch (IOException e) {
                         Logger.logError("Error while deleting private modpack", e);
@@ -188,5 +193,12 @@ public class PrivatePackDialog extends JDialog {
         pack();
         modpackName.requestFocusInWindow();
         setLocationRelativeTo(getOwner());
+    }
+    private boolean packExists(String name) {
+        for(String p :Settings.getSettings().getPrivatePacks()){
+            if(p.equalsIgnoreCase(name))
+                return true;
+        }
+        return false;
     }
 }
