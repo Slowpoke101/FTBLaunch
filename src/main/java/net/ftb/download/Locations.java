@@ -62,6 +62,9 @@ public class Locations {
     public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
     public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
     public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+    
+    // Feed URL
+    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";

@@ -20,6 +20,7 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
@@ -30,6 +31,8 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.Enumeration;
 import java.util.Map;
+
+import javax.swing.text.html.StyleSheet;
 
 import lombok.Getter;
 import net.ftb.gui.LaunchFrame;
@@ -411,5 +414,19 @@ public class OSUtils {
         environment.remove("_JAVA_OPTIONS");
         environment.remove("JAVA_TOOL_OPTIONS");
         environment.remove("JAVA_OPTIONS");
+    }
+    
+    public static StyleSheet makeStyleSheet(String name){
+        try{
+            StyleSheet sheet = new StyleSheet();
+            Reader reader = new InputStreamReader(System.class.getResourceAsStream("/css/" + name + ".css"));
+            sheet.loadRules(reader, null);
+            reader.close();
+
+            return sheet;
+        } catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 }
