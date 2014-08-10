@@ -143,7 +143,6 @@ public class MCInstaller {
             }
 
             Version version = JsonFactory.loadVersion(json);
-            //TODO make sure to  setup lib DL's for pack.json!!!
             Logger.logDebug("checking minecraft libraries");
             for (Library lib : version.getLibraries()) {
                 if (lib.natives == null) {
@@ -177,7 +176,7 @@ public class MCInstaller {
                         //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                         // These files are shipped inside pack.zip, can't do force update check yet
                         local = new File(root, "libraries/" + lib.getPath());
-                        if(!new File(libDir, lib.getPath()).exists()){
+                        if(!new File(libDir, lib.getPath()).exists() || forceUpdate){
                             if (lib.checksums!= null)
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
                             else if(lib.download != null && lib.download)
@@ -336,7 +335,7 @@ public class MCInstaller {
                     }
                 }
             }
-            List<File> classpath = new ArrayList<File>();
+            List<File> classpath = Lists.newArrayList();
             Version packjson = new Version();
             if (!pack.getDir().equals("mojang_vanilla")) {
                 if (isLegacy) {

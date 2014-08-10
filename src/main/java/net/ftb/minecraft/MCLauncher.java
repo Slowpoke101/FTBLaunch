@@ -35,11 +35,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.log.Logger;
-import net.ftb.util.Benchmark;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.FileUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.Parallel;
+import net.ftb.util.*;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -122,7 +118,13 @@ public class MCLauncher {
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
             Logger.logInfo("Additional java parameters: " + additionalOptions);
-            Collections.addAll(arguments, additionalOptions.split("\\s+"));
+            for(String s : additionalOptions.split("\\s+")) {
+                if(s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true")&& ! isLegacy) {
+                    ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
+                } else {
+                    arguments.add(s);
+                }
+            }
         }
         if (Settings.getSettings().getOptJavaArgs()) {
             Logger.logInfo("Adding Optimization Arguments");

@@ -165,7 +165,6 @@ dependencies {
     //commons io via authlib
     testCompile 'junit:junit:4.10'
 	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
-
 }
 
 def gitSha() {
