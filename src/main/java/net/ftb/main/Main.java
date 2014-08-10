@@ -49,6 +49,7 @@ public class Main {
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     @Getter
     private static UserManager userManager;
+    @Getter
     private static int beta;
 
     /**

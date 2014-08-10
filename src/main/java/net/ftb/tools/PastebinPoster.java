@@ -29,6 +29,7 @@ import java.util.Date;
 
 import net.ftb.data.Constants;
 import net.ftb.log.Logger;
+import net.ftb.main.Main;
 import net.ftb.util.OSUtils;
 
 public class PastebinPoster extends Thread {
@@ -52,8 +53,8 @@ public class PastebinPoster extends Thread {
             out.write(("text=" + URLEncoder.encode(Logger.getLogs(), "utf-8")
                     + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + " Post created"
                     + "&private=" + URLEncoder.encode("0", "utf-8")
-                    + "&title=" + URLEncoder.encode("Version: " + Constants.version, "utf-8")
-                    + "&lang=" + URLEncoder.encode("text", "utf-8")
+                    + "&title=" + URLEncoder.encode("Version: " + Constants.version + "." + Main.getBeta(), "utf-8")
+                    + "&lang=" + URLEncoder.encode("FTB Logs", "utf-8")
                     + "&name=" + URLEncoder.encode("Launcher")).getBytes());
             out.flush();
             out.close();

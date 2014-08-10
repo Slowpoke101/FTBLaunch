@@ -864,4 +864,7 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 		}
     }
+    public static void main(String args[]) {
+        Main.main(args);// just in case someone is launching w/ this as the main class
+    }
 }

@@ -249,7 +249,6 @@ public class MCInstaller {
                     .apply( new Parallel.F<Map.Entry<String, AssetIndex.Asset>, DownloadInfo>() {
                         public DownloadInfo apply(Map.Entry<String, AssetIndex.Asset> e) {
                             try {
-                                //Logger.logDebug("YYYY" + System.currentTimeMillis());
                                 String name = e.getKey();
                                 AssetIndex.Asset asset = e. getValue();
                                 String path = asset.hash.substring(0, 2) + "/" + asset.hash;
