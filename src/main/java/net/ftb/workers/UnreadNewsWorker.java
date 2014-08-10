@@ -27,8 +27,10 @@ import javax.swing.SwingWorker;
 import com.google.common.collect.Lists;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
+import net.ftb.gui.news.RSSReader;
 import net.ftb.log.Logger;
 import net.ftb.util.Benchmark;
+import net.ftb.util.NewsUtils;
 
 
 /**
@@ -40,36 +42,19 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
     protected Integer doInBackground () {
         Benchmark.start("UnreadNews");
         int i = 0;
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new InputStreamReader(new URL(Locations.NEWSUPDATEPHP).openStream()));
-            ArrayList<Long> timeStamps = Lists.newArrayList();
-            String s = reader.readLine();
-            s = s.trim();
-            String[] str = s.split(",");
-            for (String aStr : str) {
-                if (!timeStamps.contains(Long.parseLong(aStr))) {
-                    timeStamps.add(Long.parseLong(aStr));
-                }
-            }
-            long l;
-            if (Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
-                l = Long.parseLong(Settings.getSettings().getNewsDate());
-            } else {
-                l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
-            }
-            for (Long timeStamp : timeStamps) {
-                long time = timeStamp;
-                if (time > l) {
+        ArrayList<String> dates = NewsUtils.getPubDates();
+        String lastRead = Settings.getSettings().getNewsDate();
+        int read = 0;
+        for(String s : dates) {
+            if(!(read == 1)) {
+                if(!s.equals(lastRead)) {
                     i++;
+                } else {
+                    read = 1;
                 }
             }
-            Benchmark.logBenchAs("UnreadNews", "UnreadNews Init");
-        } catch (UnknownHostException e) {
-            Logger.logWarn("Error while checking news: " + e.getMessage());
-        } catch (Exception e) {
-            Logger.logError("Error while checking news", e);
         }
+        Benchmark.logBenchAs("UnreadNews", "UnreadNews Init");
 
         return i;
     }

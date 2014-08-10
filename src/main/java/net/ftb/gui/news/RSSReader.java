@@ -23,6 +23,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.google.common.collect.Lists;
 import net.ftb.download.Locations;
 
 import org.w3c.dom.Document;
@@ -33,7 +34,7 @@ public class RSSReader {
     
     public static List<NewsArticle> readRSS() {
         try {
-            List<NewsArticle> news = new ArrayList<NewsArticle>();
+            List<NewsArticle> news = Lists.newArrayList();
             
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             URL u = new URL(Locations.feedURL);
@@ -46,6 +47,7 @@ public class RSSReader {
                 article.setTitle(getTextValue(element, "title"));
                 article.setHyperlink(getTextValue(element, "link"));
                 article.setBody(getTextValue(element, "content:encoded"));
+                article.setDate(getTextValue(element, "pubDate"));
                 news.add(article);
             }
             
@@ -65,5 +67,5 @@ public class RSSReader {
         }
         return value;
     }
-    
+
 }

@@ -16,8 +16,10 @@
  */
 package net.ftb.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import net.ftb.gui.news.NewsArticle;
 import net.ftb.gui.news.RSSReader;
 
@@ -47,6 +49,13 @@ public class NewsUtils {
         }
         html += "</html>";
         return html;
+    }
+    public static ArrayList<String> getPubDates() {
+        ArrayList<String> s = Lists.newArrayList();
+        for( NewsArticle n: news) {
+            s.add((n.getDate()));
+        }
+        return s;
     }
 
 }

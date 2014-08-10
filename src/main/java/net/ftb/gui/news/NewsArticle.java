@@ -16,6 +16,7 @@
  */
 package net.ftb.gui.news;
 
+import lombok.Getter;
 import lombok.Setter;
 
 public class NewsArticle {
@@ -33,5 +34,8 @@ public class NewsArticle {
         return "<p id=\"newsHeader\">- <a href=\"" + this.hyperlink + "\">" + this.title + "</a> </p>"
                 + "<p id=\"newsBody\">" + this.body + "</p><br/>";
     }
+    @Setter
+    @Getter
+    private String date;
 
 }
