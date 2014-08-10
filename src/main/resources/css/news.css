@@ -1,0 +1,18 @@
+#newsHeader {
+    color: #FF7B24;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#newsBody {
+    color: white;
+    text-decoration: none;
+    font-size: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+ul {
+    padding-left: 20px;
+}
