@@ -94,12 +94,12 @@ public class PrivatePackDialog extends JDialog {
                     try {
                         for (ModPack pack : ModPack.getPackArray()) {
                             if (pack.getParentXml().equalsIgnoreCase(toRemove + ".xml")) {
-                                FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + pack.getDir()));
+                                FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + pack.getDir()));
                                 break;
                             }
                         }
                         ModPack.removePacks(toRemove + ".xml");
-                        FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + toRemove + ".xml"));
+                        FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + toRemove + ".xml"));
                         LaunchFrame.getInstance().modPacksPane.filterPacks();
                     } catch (IOException e) {
                         Logger.logError("Error while deleting private modpack", e);

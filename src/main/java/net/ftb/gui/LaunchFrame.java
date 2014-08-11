@@ -540,9 +540,9 @@ public class LaunchFrame extends JFrame {
                 try {
                     File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + File.separator + pack.getDir() + File.separator + "config_backup");
                     if (destination.exists()) {
-                        FileUtils.delete(destination);
+                        FTBFileUtils.delete(destination);
                     }
-                    FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
+                    FTBFileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "config"), destination);
                 } catch (IOException e) {
                     Logger.logError("Error while doing backups", e);
                 }

@@ -5,7 +5,7 @@ import net.ftb.data.Settings;
 import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
-import net.ftb.util.FileUtils;
+import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
@@ -33,7 +33,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
             MapOverwriteDialog dialog = new MapOverwriteDialog();
             dialog.setVisible(true);
             if (overwrite) {
-                FileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
+                FTBFileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
             } else {
                 Logger.logInfo("Canceled map installation.");
                 return false;
@@ -90,7 +90,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         new File(installPath + "/"+ MAPS + dir + "/").mkdirs();
         new File(installPath + "/" + MAPS + dir + "/" + mapName).createNewFile();
         downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
-        FileUtils.extractZipTo(installPath + "/" +MAPS + dir + "/" + mapName, installPath + "/" +MAPS + dir);
+        FTBFileUtils.extractZipTo(installPath + "/" + MAPS + dir + "/" + mapName, installPath + "/" + MAPS + dir);
         installMap(mapName, dir);
     }
 
@@ -100,8 +100,8 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         String tempPath = OSUtils.getCacheStorageLocation();
         Map map = Map.getSelectedMap();
         new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir).mkdirs();
-        FileUtils.copyFolder(new File(tempPath, MAPS + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
-        FileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
+        FTBFileUtils.copyFolder(new File(tempPath, MAPS + dir + "/" + dir), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir));
+        FTBFileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
         TrackerUtils.sendPageView(map.getName() + " Install", "Maps / " + map.getName());
     }
     public void setLabelText(String s) {

@@ -31,7 +31,7 @@ import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.panes.OptionsPane;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
-import net.ftb.util.FileUtils;
+import net.ftb.util.FTBFileUtils;
 
 public class ChooseDir extends JFrame implements ActionListener {
     private OptionsPane optionsPane;
@@ -84,7 +84,7 @@ public class ChooseDir extends JFrame implements ActionListener {
                 File destination = new File(editMPD.folder, chooser.getSelectedFile().getName());
                 if (!destination.exists()) {
                     try {
-                        FileUtils.copyFile(chooser.getSelectedFile(), destination);
+                        FTBFileUtils.copyFile(chooser.getSelectedFile(), destination);
                         Settings.getSettings().setLastAddPath(chooser.getSelectedFile().getPath());
                         LaunchFrame.getInstance().saveSettings();
                     } catch (IOException e1) {

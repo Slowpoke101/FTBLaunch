@@ -33,7 +33,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
-import net.ftb.util.FileUtils;
+import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 
 import org.w3c.dom.Document;
@@ -78,7 +78,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     protected Boolean doInBackground () {
         loadInfo();
         try {
-            FileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
+            FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
         } catch (Exception ignored) { }
         return this.shouldUpdate();
     }

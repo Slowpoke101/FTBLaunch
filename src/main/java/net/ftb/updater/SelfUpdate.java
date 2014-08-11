@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import net.ftb.log.Logger;
-import net.ftb.util.FileUtils;
+import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 
 public class SelfUpdate {
@@ -63,8 +63,8 @@ public class SelfUpdate {
         File launcher = new File(launcherPath);
         File temporaryUpdate = new File(temporaryUpdatePath);
         try {
-            FileUtils.delete(launcher);
-            FileUtils.copyFile(temporaryUpdate, launcher);
+            FTBFileUtils.delete(launcher);
+            FTBFileUtils.copyFile(temporaryUpdate, launcher);
         } catch (IOException e) {
             Logger.logError("Auto Updating Failed", e);
         }

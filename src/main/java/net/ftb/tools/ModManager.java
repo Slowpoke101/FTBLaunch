@@ -45,11 +45,9 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FileUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.TrackerUtils;
+import net.ftb.util.*;
+import net.ftb.util.FTBFileUtils;
+
 import static net.ftb.download.Locations.MODPACKS;
 import static net.ftb.download.Locations.PRIVATEPACKS;
 
@@ -75,11 +73,11 @@ public class ModManager extends JDialog {
                     pack.setUpdated(true);
                     File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
                     if (modPackZip.exists()) {
-                        FileUtils.delete(modPackZip);
+                        FTBFileUtils.delete(modPackZip);
                     }
                     File animationGif = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
                     if (animationGif.exists()) {
-                        FileUtils.delete(animationGif);
+                        FTBFileUtils.delete(animationGif);
                     }
                     String dynamicLoc = OSUtils.getCacheStorageLocation();
                     baseDynamic = new File(dynamicLoc, "ModPacks" + sep + pack.getDir() + sep);
@@ -238,15 +236,15 @@ public class ModManager extends JDialog {
                     Logger.logDebug("Extracting pack.");
                     Logger.logDebug("Purging mods, coremods, instMods");
                     clearModsFolder(pack);
-                    FileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
-                    FileUtils.delete(new File(installPath, dir + "/instMods/"));
+                    FTBFileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
+                    FTBFileUtils.delete(new File(installPath, dir + "/instMods/"));
                     boolean saveExists = false;
                     if (pack.getBundledMap()) {
                         try {
                             if (new File(installPath, dir + "/minecraft/saves").exists()) {
                                 saveExists = true;
-                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
-                                FileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves"), new File(installPath, dir + "/minecraft/saves.ftbtmp"), true);
+                                FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
+                                FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves"), new File(installPath, dir + "/minecraft/saves.ftbtmp"), true);
                             }
                         } catch (Exception e) {
                             Logger.logError("error backing up map", e);
@@ -254,14 +252,14 @@ public class ModManager extends JDialog {
                     }
 
                     Logger.logDebug("Extracting pack.");
-                    FileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+                    FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
                     if (pack.getBundledMap() && saveExists) {
                         try {
                             if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
-                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
+                                FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
                             if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
-                                FileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
-                                FileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
+                                FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
+                                FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
                             }
                         } catch (Exception e) {
                             Logger.logError("error restoring map", e);
@@ -375,16 +373,16 @@ public class ModManager extends JDialog {
             if (backupCFG) {
                 File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
                 if (destination.exists()) {
-                    FileUtils.delete(destination);
+                    FTBFileUtils.delete(destination);
                 }
-                FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
+                FTBFileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
             }
             if (backupSave) {
                 File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "saves_backup");
                 if (destination.exists()) {
-                    FileUtils.delete(destination);
+                    FTBFileUtils.delete(destination);
                 }
-                FileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "saves"), destination);
+                FTBFileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "saves"), destination);
             }
             curVersion = pack.getVersion().replace(".", "_");
             return false;
@@ -403,7 +401,7 @@ public class ModManager extends JDialog {
                     if (file.endsWith(".zip")) {
                         Logger.logDebug("retaining modpack file: " + tempFolder + File.separator + file);
                     } else {
-                        FileUtils.delete(new File(tempFolder, file));
+                        FTBFileUtils.delete(new File(tempFolder, file));
                     }
                 } catch (IOException e) {
                     Logger.logError(e.getMessage(), e);
@@ -429,7 +427,7 @@ public class ModManager extends JDialog {
                 }
                 if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
                     try {
-                        boolean b = FileUtils.delete(new File(folder, file));
+                        boolean b = FTBFileUtils.delete(new File(folder, file));
                         if (!b)
                             Logger.logInfo("Error deleting " + file);
                     } catch (IOException e) {

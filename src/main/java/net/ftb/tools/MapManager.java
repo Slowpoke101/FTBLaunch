@@ -18,13 +18,8 @@ package net.ftb.tools;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -32,19 +27,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import net.ftb.data.Map;
-import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.MapOverwriteDialog;
 import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.FileUtils;
+import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.TrackerUtils;
 import net.ftb.workers.MapManagerWorker;
 
 import static net.ftb.download.Locations.MAPS;
@@ -116,7 +105,7 @@ public class MapManager extends JDialog {
         for (String file : tempFolder.list()) {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
                 try {
-                    FileUtils.delete(new File(tempFolder, file));
+                    FTBFileUtils.delete(new File(tempFolder, file));
                 } catch (IOException e) {
                     Logger.logError(e.getMessage(), e);
                 }

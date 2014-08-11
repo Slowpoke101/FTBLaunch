@@ -38,7 +38,7 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
-public class FileUtils {
+public class FTBFileUtils {
     /**
      * @param sourceFolder - the folder to be moved
      * @param destinationFolder - where to move to

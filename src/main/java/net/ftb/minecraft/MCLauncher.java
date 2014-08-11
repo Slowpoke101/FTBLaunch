@@ -266,7 +266,7 @@ public class MCLauncher {
         final File targetDir = new File(assetDir, "virtual/" + indexName);
 
         final ConcurrentSkipListSet<File> old = new ConcurrentSkipListSet();
-        old.addAll(FileUtils.listFiles(targetDir));
+        old.addAll(FTBFileUtils.listFiles(targetDir));
 
         Benchmark.reset("threading");
         Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
@@ -283,10 +283,10 @@ public class MCLauncher {
                     try {
                         if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
                             Logger.logInfo("  Changed: " + e.getKey());
-                            FileUtils.copyFile(object, local, true);
+                            FTBFileUtils.copyFile(object, local, true);
                         } else if (!local.exists()) {
                             Logger.logInfo("  Added: " + e.getKey());
-                            FileUtils.copyFile(object, local);
+                            FTBFileUtils.copyFile(object, local);
                         }
                         } catch (Exception ex) {
                         Logger.logError("Asset checking failed: ", ex);

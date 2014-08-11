@@ -127,13 +127,13 @@ public class OSUtils {
                 // Migrate cached archives from the user's roaming profile to their local cache
 
                 Logger.logInfo("Migrating cached Maps from Roaming to Local storage");
-                FileUtils.move(new File(dynamicDir, "Maps"), new File(cacheDir, "Maps"));
+                FTBFileUtils.move(new File(dynamicDir, "Maps"), new File(cacheDir, "Maps"));
 
                 Logger.logInfo("Migrating cached Modpacks from Roaming to Local storage");
-                FileUtils.move(new File(dynamicDir, "ModPacks"), new File(cacheDir, "ModPacks"));
+                FTBFileUtils.move(new File(dynamicDir, "ModPacks"), new File(cacheDir, "ModPacks"));
 
                 Logger.logInfo("Migrating cached Texturepacks from Roaming to Local storage");
-                FileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
+                FTBFileUtils.move(new File(dynamicDir, "TexturePacks"), new File(cacheDir, "TexturePacks"));
 
                 Logger.logInfo("Migration complete.");
             }

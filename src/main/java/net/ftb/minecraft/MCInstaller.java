@@ -38,6 +38,7 @@ import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.util.*;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
@@ -207,7 +208,7 @@ public class MCInstaller {
             if (test.exists()) {
                 Logger.logDebug("Moving old format");
                 File assets = new File(root, "assets");
-                Set<File> old = FileUtils.listFiles(assets);
+                Set<File> old = FTBFileUtils.listFiles(assets);
                 File objects = new File(assets, "objects");
                 String[] skip = new String[] { objects.getAbsolutePath(), new File(assets, "indexes").getAbsolutePath(), new File(assets, "virtual").getAbsolutePath() };
 
@@ -230,7 +231,7 @@ public class MCInstaller {
                     }
                 }
 
-                List<File> dirs = FileUtils.listDirs(assets);
+                List<File> dirs = FTBFileUtils.listDirs(assets);
                 for (File dir : dirs) {
                     if (dir.listFiles().length == 0) {
                         dir.delete();
@@ -367,8 +368,8 @@ public class MCInstaller {
             if (!isLegacy) //we copy the jar to a new location for legacy
                 classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)));
             else {
-                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
-                FileUtils.killMetaInf();
+                FTBFileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
+                FTBFileUtils.killMetaInf();
             }
             for (Library lib : base.getLibraries()) {
                 classpath.add(new File(libDir, lib.getPath()));
@@ -452,9 +453,9 @@ public class MCInstaller {
         Logger.logDebug("source: " + source);
         Logger.logDebug("packDir: " + packDir);
 
-        FileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"));
-        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"), new File(installpath, packDir + "/instMods/"));
-        FileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
+        FTBFileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"));
+        FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"), new File(installpath, packDir + "/instMods/"));
+        FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
     }
 
 
@@ -481,7 +482,7 @@ public class MCInstaller {
             if (newLoc.exists())
                 newLoc.delete();//we want to have the current version always!!!
             URL u = LaunchFrame.class.getResource("/launch/legacypack.json");
-            org.apache.commons.io.FileUtils.copyURLToFile(u, newLoc);
+            FileUtils.copyURLToFile(u, newLoc);
         } catch (Exception e) {
             Logger.logError("Error extracting legacy json to maven directory");
         }
