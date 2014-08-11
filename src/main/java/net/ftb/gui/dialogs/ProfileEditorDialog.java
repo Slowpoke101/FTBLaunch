@@ -103,7 +103,7 @@ public class ProfileEditorDialog extends JDialog {
                     } else {
                         UserManager.updateUser(editingName, username.getText(), "", name.getText());
                     }
-                    UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
+                    UserManager.setSaveMojangData(editingName, saveMojangData.isSelected());
                     LaunchFrame.writeUsers(name.getText());
                     setVisible(false);
                 }
