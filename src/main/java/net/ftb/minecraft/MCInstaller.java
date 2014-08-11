@@ -469,7 +469,7 @@ public class MCInstaller {
             if (f.exists())
                 f.delete();//we want to have the current version always!!!
             URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
-            org.apache.commons.io.FileUtils.copyURLToFile(u, f);
+            FileUtils.copyURLToFile(u, f);
         } catch (Exception e) {
             Logger.logError("Error extracting legacy launch to maven directory");
         }

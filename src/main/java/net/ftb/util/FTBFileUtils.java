@@ -37,6 +37,7 @@ import com.google.common.collect.Sets;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
+import org.apache.commons.io.FileUtils;
 
 public class FTBFileUtils {
     /**
@@ -265,7 +266,7 @@ public class FTBFileUtils {
     public static void move(File oldFile, File newFile) {
         try {
             if(oldFile.exists() && !newFile.exists()) {
-                org.apache.commons.io.FileUtils.moveFile(oldFile, newFile);
+                FileUtils.moveFile(oldFile, newFile);
             }
         } catch(IOException e) {
             Logger.logWarn("Exception occurred while moving " + oldFile.toString() + " : " + e.getMessage());
