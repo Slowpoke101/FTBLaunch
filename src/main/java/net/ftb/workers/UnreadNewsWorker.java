@@ -16,19 +16,12 @@
  */
 package net.ftb.workers;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.UnknownHostException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.SwingWorker;
 
-import com.google.common.collect.Lists;
 import net.ftb.data.Settings;
-import net.ftb.download.Locations;
-import net.ftb.gui.news.RSSReader;
-import net.ftb.log.Logger;
 import net.ftb.util.Benchmark;
 import net.ftb.util.NewsUtils;
 
@@ -43,11 +36,12 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
         Benchmark.start("UnreadNews");
         int i = 0;
         ArrayList<String> dates = NewsUtils.getPubDates();
-        String lastRead = Settings.getSettings().getNewsDate();
+        Long lastRead = Long.parseLong(Settings.getSettings().getNewsDate());
         int read = 0;
         for(String s : dates) {
+            long l = Long.parseLong(s);
             if(!(read == 1)) {
-                if(!s.equals(lastRead)) {
+                if(l>lastRead) {
                     i++;
                 } else {
                     read = 1;
@@ -55,7 +49,7 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
             }
         }
         Benchmark.logBenchAs("UnreadNews", "UnreadNews Init");
-
         return i;
+
     }
 }

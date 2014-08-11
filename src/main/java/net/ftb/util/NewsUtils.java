@@ -16,17 +16,21 @@
  */
 package net.ftb.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import net.ftb.gui.news.NewsArticle;
-import net.ftb.gui.news.RSSReader;
+import net.ftb.data.news.NewsArticle;
+import net.ftb.data.news.RSSReader;
+import net.ftb.log.Logger;
 
 public class NewsUtils {
     
     private static List<NewsArticle> news = null;
-    
+    private static DateFormat dateFormatterRss = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
     public static void initializeNews() {
         news = RSSReader.readRSS();
     }
@@ -53,9 +57,18 @@ public class NewsUtils {
     public static ArrayList<String> getPubDates() {
         ArrayList<String> s = Lists.newArrayList();
         for( NewsArticle n: news) {
-            s.add((n.getDate()));
+            s.add(getUnixDate(n.getDate()));
         }
         return s;
+    }
+    private static String getUnixDate(String s) {
+        try {
+            Date dte = dateFormatterRss.parse(s);
+            return String.valueOf(dte.getTime()/1000);
+        } catch(Exception e) {
+
+        }
+        return "00000000";
     }
 
 }

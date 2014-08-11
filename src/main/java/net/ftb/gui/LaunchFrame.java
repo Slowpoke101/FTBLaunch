@@ -48,7 +48,6 @@ import net.ftb.data.LoginResponse;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
