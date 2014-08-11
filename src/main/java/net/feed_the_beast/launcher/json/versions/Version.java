@@ -32,7 +32,8 @@ public class Version {
     public String incompatibilityReason;
     public List<OSRule> rules;
     public String assets;
-
+    public String inheritsFrom;
+    public String jar;
     private List<Library> _libraries;
 
     public List<Library> getLibraries () {

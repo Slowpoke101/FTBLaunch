@@ -53,8 +53,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MCInstaller {
+    private static String packmcversion = new String();
+    private static String packbasejson = new String();
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
-        List<DownloadInfo> assets = gatherAssets(new File(installPath), pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir())),installPath);
+        packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -112,29 +115,57 @@ public class MCInstaller {
      *              Normally, if offline mode works, setupNewStyle() and gatherAssets() are not called and error situation is impossible
      *              Returning null just in case of network breakge after authentication process
      */
-    private static List<DownloadInfo> gatherAssets (final File root, String mcVersion, String installDir) {
+    private static List<DownloadInfo> gatherAssets (final File root, String installDir) {
         try {
-            Logger.logInfo("Checking local assets file, for MC version" + mcVersion + " Please wait! ");
+            Logger.logInfo("Checking local assets file, for MC version" + packmcversion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 
-            /*
-             * vanilla minecraft.jar
-             */
+            File local;
+            //Pack JSON Libraries
+            Logger.logDebug("Checking pack libraries");
+            ModPack pack = ModPack.getSelectedPack();
+            File packDir = new File(installDir, pack.getDir());
+            File gameDir = new File(packDir, "minecraft");
+            File libDir = new File(installDir, "libraries");
+            // if (!pack.getDir().equals("mojang_vanilla")) {
+            if (new File(gameDir, "pack.json").exists()) {
+                Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                if(packjson.jar != null && !packjson.jar.isEmpty())
+                    packmcversion = packjson.jar;
+                if(packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty())
+                    packbasejson = packjson.inheritsFrom;
 
-            File local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
-            if (!local.exists() || forceUpdate) {
-                list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local, local.getName()));
+                for (Library lib : packjson.getLibraries()) {
+                    //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
+                    // These files are shipped inside pack.zip, can't do force update check yet
+                    local = new File(root, "libraries/" + lib.getPath());
+                    if(!new File(libDir, lib.getPath()).exists() || forceUpdate){
+                        if (lib.checksums!= null)
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
+                        else if(lib.download != null && lib.download)
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                    }
+                }
+                //}
+            } else {
+                if (!pack.getDir().equals("mojang_vanilla"))
+                    Logger.logError("pack.json file not found-Forge/Liteloader will not be able to load!");
+                else
+                    Logger.logInfo("pack.json not found in vanilla pack(this is expected)");
+                //TODO handle vanilla packs w/ tweakers w/ this stuffs !!!
             }
 
             /*
              * <ftb installation location>/libraries/*
              */
             //check if our copy exists of the version json if not backup to mojang's copy
-            Logger.logDebug("Checking minecraft.jar");
-            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion), Locations.mc_dl
-                    + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion)));
-            File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+            Logger.logDebug("Checking minecraft version json");
+            if(packbasejson == null || packbasejson.isEmpty())
+                packbasejson = packmcversion;
+            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
+                    + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
+            File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson));
 
             DownloadUtils.downloadToFile(url, json, 3);
             if (!json.exists()) {
@@ -162,34 +193,13 @@ public class MCInstaller {
 
                 }
             }
+            /*
+             * vanilla minecraft.jar
+             */
 
-            //Pack JSON Libraries
-            Logger.logDebug("Checking pack libararies");
-            ModPack pack = ModPack.getSelectedPack();
-            File packDir = new File(installDir, pack.getDir());
-            File gameDir = new File(packDir, "minecraft");
-            File libDir = new File(installDir, "libraries");
-           // if (!pack.getDir().equals("mojang_vanilla")) {
-                if (new File(gameDir, "pack.json").exists()) {
-                    Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
-                    for (Library lib : packjson.getLibraries()) {
-                        //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
-                        // These files are shipped inside pack.zip, can't do force update check yet
-                        local = new File(root, "libraries/" + lib.getPath());
-                        if(!new File(libDir, lib.getPath()).exists() || forceUpdate){
-                            if (lib.checksums!= null)
-                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
-                            else if(lib.download != null && lib.download)
-                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
-                        }
-                    }
-                //}
-            } else {
-                    if (!pack.getDir().equals("mojang_vanilla"))
-                        Logger.logError("pack.json file not found-Forge/Liteloader will not be able to load!");
-                    else
-                        Logger.logInfo("pack.json not found in vanilla pack(this is expected)");
-                //TODO handle vanilla packs w/ tweakers w/ this stuffs !!!
+            local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion));
+            if (!local.exists() || forceUpdate) {
+                list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), local, local.getName()));
             }
 
             // Move the old format to the new:
@@ -292,7 +302,7 @@ public class MCInstaller {
             File natDir = new File(packDir, "natives");
             final String packVer = Settings.getSettings().getPackVer(pack.getDir());
 
-            Logger.logInfo("Setting up native libraries for " + pack.getName() + " v " + packVer + " MC " + pack.getMcVersion(packVer));
+            Logger.logInfo("Setting up native libraries for " + pack.getName() + " v " + packVer + " MC " + packmcversion);
             if(!gameDir.exists())
                 gameDir.mkdirs();
             
@@ -302,7 +312,7 @@ public class MCInstaller {
             natDir.mkdirs();
             if (isLegacy)
                 extractLegacy();
-            Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", pack.getMcVersion(packVer))));
+            Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
                 if (lib.natives != null) {
@@ -343,20 +353,21 @@ public class MCInstaller {
                 if (isLegacy) {
                     extractLegacyJson(new File(gameDir, "pack.json"));
                 }
-                if (new File(gameDir, "pack.json").exists()) {
-                    packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
-                    for (Library lib : packjson.getLibraries()) {
-                        //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
-                        classpath.add(new File(libDir, lib.getPath()));
-                    }
+            }
+            if (new File(gameDir, "pack.json").exists()) {
+                packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                for (Library lib : packjson.getLibraries()) {
+                    //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
+                    classpath.add(new File(libDir, lib.getPath()));
                 }
+                //}
             } else {
                 packjson = base;
             }
             if (!isLegacy) //we copy the jar to a new location for legacy
-                classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion(packVer))));
+                classpath.add(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)));
             else {
-                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", pack.getMcVersion(packVer))), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
+                FileUtils.copyFile(new File(installDir, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), new File(gameDir, "bin/" + Locations.OLDMCJARNAME));
                 FileUtils.killMetaInf();
             }
             for (Library lib : base.getLibraries()) {
