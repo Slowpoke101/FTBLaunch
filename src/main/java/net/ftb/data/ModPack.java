@@ -68,7 +68,7 @@ public class ModPack {
      * @return map of <String packversion, String MCVersion>
      */
     @Getter
-    private HashMap<String,String> customMCVersions = Maps.newHashMap();;
+    private HashMap<String,String> customMCVersions = Maps.newHashMap();
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class

@@ -166,7 +166,7 @@ public class User implements Serializable {
     private void writeObject (ObjectOutputStream s) {
         // clear mojangData if needed and then ...
         Logger.logDebug("starting...");
-        if (saveMojangData == false) {
+        if (!saveMojangData) {
             Logger.logDebug("Clearing mojangData");
             _encryptedStore = "";
         }

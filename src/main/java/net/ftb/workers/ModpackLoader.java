@@ -87,11 +87,11 @@ public class ModpackLoader extends Thread {
                     doc = AppUtils.getXML(modPackStream);
                 } catch (Exception e) {
                     Logger.logError("Exception reading modpack file", e);
-                    continue xmls;
+                    continue;
                 }
                 if (doc == null) {
                     Logger.logError("Error: could not load modpack data!");
-                    continue xmls;
+                    continue;
                 }
                 NodeList modPacks = doc.getElementsByTagName("modpack");
                 ArrayList<ModPack> mp = Lists.newArrayList();

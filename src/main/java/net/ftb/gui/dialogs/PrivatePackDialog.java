@@ -85,7 +85,7 @@ public class PrivatePackDialog extends JDialog {
                 ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
                 String toRemove="";
                 for(String s: codes) {
-                    if(s.equalsIgnoreCase(modpackName.getText()));
+                    if(s.equalsIgnoreCase(modpackName.getText()))
                         toRemove = s;
                 }
                 if (!toRemove.isEmpty()) {

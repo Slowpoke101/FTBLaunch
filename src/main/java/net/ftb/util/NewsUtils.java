@@ -25,7 +25,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import net.ftb.data.news.NewsArticle;
 import net.ftb.data.news.RSSReader;
-import net.ftb.log.Logger;
 
 public class NewsUtils {
     

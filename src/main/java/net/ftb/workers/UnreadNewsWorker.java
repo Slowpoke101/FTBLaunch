@@ -17,7 +17,6 @@
 package net.ftb.workers;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.SwingWorker;
 

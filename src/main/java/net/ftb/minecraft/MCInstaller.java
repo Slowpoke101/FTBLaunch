@@ -169,7 +169,7 @@ public class MCInstaller {
             File packDir = new File(installDir, pack.getDir());
             File gameDir = new File(packDir, "minecraft");
             File libDir = new File(installDir, "libraries");
-            if (!pack.getDir().equals("mojang_vanilla")) {
+           // if (!pack.getDir().equals("mojang_vanilla")) {
                 if (new File(gameDir, "pack.json").exists()) {
                     Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                     for (Library lib : packjson.getLibraries()) {
@@ -183,8 +183,12 @@ public class MCInstaller {
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                         }
                     }
-                }
+                //}
             } else {
+                    if (!pack.getDir().equals("mojang_vanilla"))
+                        Logger.logError("pack.json file not found-Forge/Liteloader will not be able to load!");
+                    else
+                        Logger.logInfo("pack.json not found in vanilla pack(this is expected)");
                 //TODO handle vanilla packs w/ tweakers w/ this stuffs !!!
             }
 
@@ -240,7 +244,6 @@ public class MCInstaller {
             AssetIndex index = JsonFactory.loadAssetIndex(json);
 
             Benchmark.start("threading");
-            long size = list.size();
             Collection<DownloadInfo> tmp;
             Logger.logDebug("Starting TaskHandler to check MC assets");
             Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())

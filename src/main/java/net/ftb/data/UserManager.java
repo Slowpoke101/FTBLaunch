@@ -255,9 +255,7 @@ public class UserManager {
 
     public static boolean getSaveMojangData (String username) {
         User temp = findUser(username);
-        if(temp != null)
-            return temp.getSaveMojangData();
-        return false;
+        return temp != null && temp.getSaveMojangData();
     }
 
     public static String getName ( String username) {
