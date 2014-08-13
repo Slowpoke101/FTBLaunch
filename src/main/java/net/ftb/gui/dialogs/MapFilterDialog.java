@@ -65,8 +65,8 @@ public class MapFilterDialog extends JDialog {
         compatiblePack.setSelectedItem(pane.compatible);
 
         ArrayList<String> packs = new ArrayList<String>();
-        compatiblePack.addItem("All");
-        packs.add("All");
+        compatiblePack.addItem(I18N.getLocaleString("MAIN_ALL"));
+        packs.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < Map.getMapArray().size(); i++) {
             String[] compat = Map.getMap(i).getCompatible();
             for (String compatable : compat) {
