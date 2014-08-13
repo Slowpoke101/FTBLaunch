@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import com.google.common.collect.Lists;
 import net.ftb.download.Locations;
 
+import net.ftb.log.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -52,7 +53,7 @@ public class RSSReader {
             
             return news;
         } catch(Exception ex) {
-            ex.printStackTrace();
+            Logger.logError("News download failed", ex);
             return null;
         }
     }
