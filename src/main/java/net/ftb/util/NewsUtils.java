@@ -40,23 +40,33 @@ public class NewsUtils {
      * @return The HTML to display on the news pane
      */
     public static String getNewsHTML() {
+        // if news not fetched try to fetch. Blocks thread.
         if(news == null) {
             NewsUtils.initializeNews();
         }
-        String html = "<html>";
-        for(NewsArticle article : news) {
-            html += article.getHTML();
-            if(news.get(news.size() - 1) != article) {
-                html += "<hr/>";
+
+        String html;
+        html = "<html>";
+        if (news != null) {
+            for (NewsArticle article : news) {
+                html += article.getHTML();
+                if (news.get(news.size() - 1) != article) {
+                    html += "<hr/>";
+                }
             }
+        } else {
+            html += "No network connection, no news.";
         }
         html += "</html>";
         return html;
+
     }
     public static ArrayList<String> getPubDates() {
         ArrayList<String> s = Lists.newArrayList();
-        for( NewsArticle n: news) {
-            s.add(getUnixDate(n.getDate()));
+        if (news != null) {
+            for (NewsArticle n : news) {
+                s.add(getUnixDate(n.getDate()));
+            }
         }
         return s;
     }

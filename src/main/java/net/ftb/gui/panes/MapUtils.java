@@ -64,7 +64,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     private static JButton filter;
     private static int selectedMap = 0;
     protected static boolean mapsAdded = false;
-    public static String type = "Client", origin = "All", compatible = "All";
+    public static String type = "Client", origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
 
 
     //stuff for swapping between maps/texture packs
@@ -247,7 +247,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         p.add(logo);
         mapPanels.add(p);
         maps.add(p);
-        if (origin.equalsIgnoreCase("all")) {
+        if (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
             maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
             maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
         } else {
