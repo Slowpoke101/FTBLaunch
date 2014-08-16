@@ -38,6 +38,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 public class MapFilterDialog extends JDialog {
     private JLabel typeLbl;
@@ -117,8 +118,7 @@ public class MapFilterDialog extends JDialog {
         setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         originLbl = new JLabel(I18N.getLocaleString("FILTER_ORIGIN"));
         typeLbl = new JLabel(I18N.getLocaleString("FILTER_PACKTYPE"));

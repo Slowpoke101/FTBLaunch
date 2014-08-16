@@ -28,9 +28,11 @@ import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.*;
 import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class SearchDialog extends JDialog {
@@ -133,33 +135,12 @@ public class SearchDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle("Text Search Filter");
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
-        panel.add(query);
-
-        Spring vSpring;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.NORTH, query, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(query), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
-
-        Spring hSpring;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, query, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = SwingUtils.springSum(hSpring, Spring.width(query), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
+        panel.add(query, GuiConstants.FILL_SINGLE_LINE);
 
         pack();
         setLocationRelativeTo(getOwner());
