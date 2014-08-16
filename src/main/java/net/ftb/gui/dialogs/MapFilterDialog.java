@@ -32,6 +32,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.MapUtils;
 import net.ftb.locale.I18N;
@@ -133,91 +134,14 @@ public class MapFilterDialog extends JDialog {
         compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
 
         panel.add(typeLbl);
-        panel.add(type);
+        panel.add(type, GuiConstants.WRAP);
         panel.add(originLbl);
-        panel.add(origin);
+        panel.add(origin, GuiConstants.WRAP);
         panel.add(compatiblePackLbl);
-        panel.add(compatiblePack);
-        panel.add(apply);
-        panel.add(cancel);
-        panel.add(search);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, typeLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, originLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = SwingUtils.springMax(Spring.width(typeLbl), Spring.width(originLbl), Spring.width(compatiblePackLbl));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, type, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, origin, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = SwingUtils.springMax(Spring.width(type), Spring.width(origin), Spring.width(compatiblePack));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, type, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, origin, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, compatiblePack, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, search, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, search, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, cancel, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, apply, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.BASELINE, typeLbl, 0, SpringLayout.BASELINE, type);
-        layout.putConstraint(SpringLayout.NORTH, type, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(typeLbl), Spring.height(type));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, originLbl, 0, SpringLayout.BASELINE, origin);
-        layout.putConstraint(SpringLayout.NORTH, origin, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(originLbl), Spring.height(origin));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl, 0, SpringLayout.BASELINE, compatiblePack);
-        layout.putConstraint(SpringLayout.NORTH, compatiblePack, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(compatiblePackLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(compatiblePack));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        panel.add(compatiblePack, GuiConstants.WRAP);
+        panel.add(search, GuiConstants.FILL_TWO);
+        panel.add(cancel, "grow, " + GuiConstants.WRAP);
+        panel.add(apply, GuiConstants.FILL_SINGLE_LINE);
 
         pack();
         setLocationRelativeTo(this.getOwner());
