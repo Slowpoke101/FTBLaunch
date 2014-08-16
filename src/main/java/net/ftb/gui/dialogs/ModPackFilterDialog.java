@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
@@ -59,7 +60,7 @@ public class ModPackFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        ArrayList<String> mcVersions = new ArrayList<String>();
+        ArrayList<String> mcVersions = Lists.newArrayList();
         mcVersion.addItem(I18N.getLocaleString("MAIN_ALL"));
         mcVersions.add(I18N.getLocaleString("MAIN_ALL"));
         for (ModPack pack : ModPack.getPackArray()) {
