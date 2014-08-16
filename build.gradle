@@ -1,9 +1,5 @@
 buildscript {
     repositories {
-		maven {
-            name 'Shadow'
-            url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
-        }
         maven {
             name = 'ForgeFS'
             url = 'http://files.minecraftforge.net/maven'
@@ -12,29 +8,52 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-		maven {
-            name = "jcenter"
-            url = "http://jcenter.bintray.com"
-        }
+        jcenter()
         mavenCentral()
         mavenLocal()
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.3'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
 		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
     }
-
 }
 
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'shadow'
-apply plugin: 'launch4j'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'launch4j'
+apply plugin: 'macAppBundle'
+
+configurations {
+    deployerJars
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		name = 'Mojang libs'
+		url = 'https://libraries.minecraft.net/'
+	}
+}
+
+dependencies {
+    compile 'org.swinglabs.swingx:swingx-all:1.6.4'
+	compile 'com.google.code.gson:gson:2.2.4'
+	compile 'com.mojang:authlib:1.5.16'
+    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+	compile 'org.projectlombok:lombok:1.12.6'
+	compile 'com.google.guava:guava:17.0'
+	//commons lang3 via authlib
+    //commons io via authlib
+    testCompile 'junit:junit:4.10'
+	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+}
 
 project.ext {
     mainClass = 'net.ftb.main.Main'
@@ -65,52 +84,28 @@ version = "1.4.4-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
-shadow {
+shadowJar  {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
-	//classifier = "${System.getenv().BUILD_NUMBER}"
-	destinationDir = "${buildDir}/libs/"
-	artifactSet {
-        include 'com.google.code.gson'
-		include 'com.google.guava'
-		include 'org.apache.logging.log4j'
-		include 'commons-io'
-		include 'org.apache.commons'
-		include 'commons-codec'
-    }
+  dependencies {
+    exclude(dependency('com.mojang:authlib'))
+    exclude(dependency('org.projectlombok:lombok'))
+  }
+  classifier = ''
 }
-
-
-task deleteOrig(type: Delete) {
-    delete "${project.tasks.jar.getArchivePath().getPath()}"
-}
-
-task fixJars(type: Copy) {
+task copyMainJar(type: Copy) {
     from("${buildDir}/libs/")
-	destinationDir = file("${buildDir}/libs/")
-    rename { String fileName ->
-        fileName.replace('-shadow', '')
-    }
-	rename(/(.+)-shadow(.+)/, '$1$2')
+	destinationDir = file("${buildDir}/macApp/Feed The Beast.app/Contents/Java")
 }
-task deleteShadow(type: Delete) {
-    delete "${project.tasks.jar.getArchivePath().getPath().replace('.jar', '-shadow.jar')}"
-}
-task zipApp(type: Zip) {
-    from "${project.buildDir}/macApp/"
-    destinationDir = file("${project.buildDir}/libs")
-    classifier = 'app'
-}
-apply plugin: 'macAppBundle'
 
 assemble.dependsOn.remove(createDmg)
 build.dependsOn.remove(createDmg)
-build.dependsOn(zipApp)
-zipApp.dependsOn(createApp)
-createApp.dependsOn(deleteShadow)
-deleteShadow.dependsOn(fixJars)
-fixJars.dependsOn(deleteOrig)
-deleteOrig.dependsOn(shadowJar)
+createApp.dependsOn.remove(copyToResourcesJava)
+//build.dependsOn(zipApp)
+//zipApp.dependsOn(createApp)
+build.dependsOn(createAppZip)
+createApp.dependsOn(copyMainJar)
+copyMainJar.dependsOn(shadowJar)
 
 afterEvaluate {
 	launch4j {
@@ -124,7 +119,7 @@ afterEvaluate {
 
 artifacts {
     archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
-    archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", "-app.zip"))
+    archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".zip").replace("libs", "distributions"))
 }
 
 macAppBundle {
@@ -139,32 +134,6 @@ jar {
     manifest {
         attributes 'Main-Class': project.mainClass, 'Launcher-Jenkins': project.buildNum
     }
-}
-
-configurations {
-    deployerJars
-}
-
-repositories {
-	mavenCentral()
-	maven {
-		name = 'Mojang libs'
-		url = 'https://libraries.minecraft.net/'
-	}
-}
-
-dependencies {
-    compile 'org.swinglabs.swingx:swingx-all:1.6.4'
-	compile 'com.google.code.gson:gson:2.2.4'
-	compile 'com.mojang:authlib:1.5.16'
-    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
-	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
-	compile 'org.projectlombok:lombok:1.12.6'
-	compile 'com.google.guava:guava:17.0'
-	//commons lang3 via authlib
-    //commons io via authlib
-    testCompile 'junit:junit:4.10'
-	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
 }
 
 def gitSha() {
