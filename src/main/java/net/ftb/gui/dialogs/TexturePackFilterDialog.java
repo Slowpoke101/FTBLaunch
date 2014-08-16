@@ -33,6 +33,7 @@ import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
@@ -132,12 +133,12 @@ public class TexturePackFilterDialog extends JDialog {
         compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
 
         panel.add(compatiblePackLbl);
+        panel.add(compatiblePack, GuiConstants.WRAP);
         panel.add(resolutionLbl);
-        panel.add(compatiblePack);
-        panel.add(resolution);
-        panel.add(apply);
-        panel.add(cancel);
-        panel.add(search);
+        panel.add(resolution, GuiConstants.WRAP);
+        panel.add(search, GuiConstants.FILL_TWO);
+        panel.add(cancel, "grow, " + GuiConstants.WRAP);
+        panel.add(apply, GuiConstants.FILL_SINGLE_LINE);
 
         Spring hSpring;
         Spring columnWidth;
