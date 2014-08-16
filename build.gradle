@@ -96,6 +96,11 @@ shadowJar  {
 task copyMainJar(type: Copy) {
     from("${buildDir}/libs/")
 	destinationDir = file("${buildDir}/macApp/Feed The Beast.app/Contents/Java")
+	rename { String fileName ->
+        fileName.replace("-${version}", '')
+    }
+	rename(/(.+)-${version}(.+)/, '$1$2')
+
 }
 
 assemble.dependsOn.remove(createDmg)
