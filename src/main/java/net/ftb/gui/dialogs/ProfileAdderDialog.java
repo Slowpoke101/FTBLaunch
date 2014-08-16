@@ -33,10 +33,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.data.UserManager;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class ProfileAdderDialog extends JDialog {
@@ -157,7 +159,7 @@ public class ProfileAdderDialog extends JDialog {
         setResizable(false);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
+        MigLayout layout = new MigLayout();
         panel.setLayout(layout);
 
         usernameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_USERNAME"));
@@ -179,88 +181,14 @@ public class ProfileAdderDialog extends JDialog {
             panel.add(messageLbl);
         }
         panel.add(usernameLbl);
-        panel.add(username);
+        panel.add(username, GuiConstants.WRAP);
         panel.add(passwordLbl);
-        panel.add(password);
+        panel.add(password, GuiConstants.WRAP);
         panel.add(nameLbl);
-        panel.add(name);
-        panel.add(savePassword);
-        panel.add(saveMojangData);
-        panel.add(add);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, usernameLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, passwordLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, nameLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.width(usernameLbl);
-        if (!updatecreds.equals("")) {
-            layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-            columnWidth = Spring.max(columnWidth, Spring.width(messageLbl));
-
-        }
-        columnWidth = SwingUtils.springMax(columnWidth, Spring.width(passwordLbl), Spring.width(nameLbl));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, username, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, name, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, savePassword, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, saveMojangData, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name),Spring.width(savePassword),Spring.width(saveMojangData));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, add, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.BASELINE, usernameLbl, 0, SpringLayout.BASELINE, username);
-        layout.putConstraint(SpringLayout.NORTH, username, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(usernameLbl), Spring.height(username));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, passwordLbl, 0, SpringLayout.BASELINE, password);
-        layout.putConstraint(SpringLayout.NORTH, password, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(passwordLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(password));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, nameLbl, 0, SpringLayout.BASELINE, name);
-        layout.putConstraint(SpringLayout.NORTH, name, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(nameLbl), Spring.height(name));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.NORTH, savePassword, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(savePassword), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, saveMojangData, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(saveMojangData), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, add, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(add), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        panel.add(name, GuiConstants.WRAP);
+        panel.add(savePassword, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(saveMojangData, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(add, "center, wrap, span");
 
         pack();
         setLocationRelativeTo(getOwner());

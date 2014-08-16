@@ -43,6 +43,7 @@ repositories {
 
 dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
+	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.mojang:authlib:1.5.17'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
