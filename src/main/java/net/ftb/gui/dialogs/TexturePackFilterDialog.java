@@ -39,6 +39,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
@@ -119,8 +120,7 @@ public class TexturePackFilterDialog extends JDialog {
         setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
         resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
