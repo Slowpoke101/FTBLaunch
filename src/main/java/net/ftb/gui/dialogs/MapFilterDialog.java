@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.gui.GuiConstants;
@@ -65,7 +66,7 @@ public class MapFilterDialog extends JDialog {
         origin.setSelectedItem(pane.origin);
         compatiblePack.setSelectedItem(pane.compatible);
 
-        ArrayList<String> packs = new ArrayList<String>();
+        ArrayList<String> packs = Lists.newArrayList();
         compatiblePack.addItem(I18N.getLocaleString("MAIN_ALL"));
         packs.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < Map.getMapArray().size(); i++) {
@@ -113,7 +114,7 @@ public class MapFilterDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
         SpringLayout layout = new SpringLayout();
