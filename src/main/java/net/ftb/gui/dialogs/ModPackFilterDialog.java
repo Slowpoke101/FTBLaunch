@@ -128,9 +128,9 @@ public class ModPackFilterDialog extends JDialog {
         panel.add(mcVersion, GuiConstants.WRAP);
         panel.add(availabilityLbl);
         panel.add(availability, GuiConstants.WRAP);
-        panel.add(search, GuiConstants.CENTER_TWO);
-        panel.add(cancel, GuiConstants.WRAP);
-        panel.add(apply, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(search, GuiConstants.FILL_TWO);
+        panel.add(cancel, "grow, " + GuiConstants.WRAP);
+        panel.add(apply, GuiConstants.FILL_SINGLE_LINE);
         pack();
         setLocationRelativeTo(this.getOwner());
     }
