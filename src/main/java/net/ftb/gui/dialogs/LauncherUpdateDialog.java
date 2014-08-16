@@ -30,11 +30,13 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import net.ftb.data.Constants;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
 import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 public class LauncherUpdateDialog extends JDialog {
     private JLabel messageLbl;
@@ -55,7 +57,7 @@ public class LauncherUpdateDialog extends JDialog {
             public void actionPerformed (ActionEvent arg0) {
                 // TODO: Call new frame containing html page?
                 // TODO: beta changelogs???
-                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + Constants.buildNumber);//TODO update this!!!
+                OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + Constants.buildNumber);//TODO this should use the new version #!!!
             }
         });
 
@@ -78,11 +80,10 @@ public class LauncherUpdateDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         messageLbl = new JLabel(UpdateChecker.UCString + " " + I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLE"));
         extraText = new JLabel(!usable ? I18N.getLocaleString("LUNCHERUPDATE_CURRENTDEAD") : "");//TODO use this for beta channel??
@@ -92,75 +93,12 @@ public class LauncherUpdateDialog extends JDialog {
         update = new JButton(I18N.getLocaleString("MAIN_YES"));
         abort = new JButton(I18N.getLocaleString("MAIN_NO"));
 
-        messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
-
-        panel.add(messageLbl);
-        panel.add(extraText);
-        panel.add(showChangeLog);
-        panel.add(updateLbl);
-        panel.add(update);
+        panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(extraText, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(showChangeLog, GuiConstants.WRAP);
+        panel.add(updateLbl, GuiConstants.WRAP);
+        panel.add(update, GuiConstants.CENTER_TWO);
         panel.add(abort);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, extraText, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
-        columnWidth = Spring.width(messageLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(extraText));
-        columnWidth = Spring.max(columnWidth, Spring.width(showChangeLog));
-        columnWidth = Spring.max(columnWidth, Spring.width(updateLbl));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, extraText, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, showChangeLog, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = Spring.sum(vSpring, Spring.height(messageLbl));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, extraText, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = Spring.sum(vSpring, Spring.height(extraText));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, showChangeLog, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = Spring.sum(vSpring, Spring.height(showChangeLog));
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(updateLbl), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(update), Spring.height(abort));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
         pack();
         setLocationRelativeTo(getOwner());

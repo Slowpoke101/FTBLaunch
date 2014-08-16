@@ -109,7 +109,7 @@ public class ModPackFilterDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
         panel.setLayout(new MigLayout());
