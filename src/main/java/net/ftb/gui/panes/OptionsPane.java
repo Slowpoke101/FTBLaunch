@@ -51,7 +51,7 @@ import net.ftb.util.winreg.JavaInfo;
 public class OptionsPane extends JPanel implements ILauncherPane {
     private JToggleButton tglbtnForceUpdate;
     private JButton installBrowseBtn, advancedOptionsBtn, btnInstallJava = new JButton();
-    private JLabel lblJavaVersion, lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX, lbl32BitWarning = new JLabel();
+    private JLabel lblJavaVersion, lblInstallFolder, lblRamMaximum, lblLocale, currentRam, lbl32BitWarning = new JLabel();
     private JSlider ramMaximum;
     private JComboBox locale;
     private JTextField installFolderTextField;

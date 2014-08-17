@@ -46,7 +46,6 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.*;
-import net.ftb.util.FTBFileUtils;
 
 import static net.ftb.download.Locations.MODPACKS;
 import static net.ftb.download.Locations.PRIVATEPACKS;
