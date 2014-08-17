@@ -25,8 +25,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JTextArea;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
 import net.ftb.data.LoginResponse;
 import net.ftb.data.ModPack;
@@ -35,7 +33,6 @@ import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.minecraft.MCInstaller;
-import net.ftb.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
