@@ -25,13 +25,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
 import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")

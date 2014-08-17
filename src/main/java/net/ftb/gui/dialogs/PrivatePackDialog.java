@@ -28,8 +28,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JTextField;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;

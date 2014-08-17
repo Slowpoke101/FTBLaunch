@@ -25,15 +25,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
-import javax.swing.SwingConstants;
 
 import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.tools.ModManager;
-import net.ftb.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")

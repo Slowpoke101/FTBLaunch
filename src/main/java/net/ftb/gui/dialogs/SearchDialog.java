@@ -23,15 +23,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.*;
-import net.ftb.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
