@@ -32,8 +32,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -44,16 +42,21 @@ import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
-import net.ftb.util.SwingUtils;
+import net.miginfocom.layout.LC;
+import net.miginfocom.swing.MigLayout;
 
 public class EditModPackDialog extends JDialog {
     private JTabbedPane tabbedPane;
 
     private JPanel formPnl;
+    private JPanel lPnl;
+    private JPanel cPnl;
+    private JPanel rPnl;
 
     private JButton openFolder;
     private JButton addMod;
@@ -94,7 +97,7 @@ public class EditModPackDialog extends JDialog {
         jarModsFolder.mkdirs();
 
         setupGui();
-
+        this.setSize(700,600);
         enabledMods = Lists.newArrayList();
         disabledMods = Lists.newArrayList();
 
@@ -177,11 +180,7 @@ public class EditModPackDialog extends JDialog {
         enabledMods.clear();
         if (folder.exists()) {
             for (String name : folder.list()) {
-                if (name.toLowerCase().endsWith(".zip")) {
-                    enabledMods.add(name);
-                } else if (name.toLowerCase().endsWith(".jar")) {
-                    enabledMods.add(name);
-                } else if (name.toLowerCase().endsWith(".litemod")) {
+                if (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar") || name.toLowerCase().endsWith(".litemod")) {
                     enabledMods.add(name);
                 }
             }
@@ -221,7 +220,7 @@ public class EditModPackDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel;
         panel = getContentPane();
@@ -277,106 +276,26 @@ public class EditModPackDialog extends JDialog {
         enabledModsScl.setViewportView(enabledModsLst);
         disabledModsScl.setViewportView(disabledModsLst);
 
-        SpringLayout layout = new SpringLayout();
-        formPnl.setLayout(layout);
+        lPnl = new JPanel();
+        cPnl = new JPanel();
+        rPnl = new JPanel();
+        lPnl.setLayout(new MigLayout(new LC().fillY()));
+        lPnl.add(enabledModsLbl, GuiConstants.WRAP);
+        lPnl.add(enabledModsScl, "pushy, " + GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        lPnl.add(openFolder, GuiConstants.FILL_SINGLE_LINE);
+        cPnl.setLayout(new MigLayout());
+        cPnl.add(enableMod, GuiConstants.WRAP);
+        cPnl.add(disableMod);
+        rPnl.setLayout(new MigLayout(new LC().fillY()));
+        rPnl.add(disabledModsLbl, GuiConstants.WRAP);
+        rPnl.add(disabledModsScl, "pushy, " + GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        rPnl.add(addMod, GuiConstants.FILL_SINGLE_LINE);
 
-        formPnl.add(enabledModsLbl);
-        formPnl.add(disabledModsLbl);
-        formPnl.add(enabledModsScl);
-        formPnl.add(disabledModsScl);
-        formPnl.add(disableMod);
-        formPnl.add(enableMod);
-        formPnl.add(addMod);
-        formPnl.add(openFolder);
 
-        Spring vSpring;
-        Spring rowHeight;
-        Spring buttonRowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.NORTH, enabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
-        layout.putConstraint(SpringLayout.NORTH, disabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
-
-        rowHeight = Spring.height(enabledModsLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(disabledModsLbl));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
-        layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
-
-        rowHeight = Spring.constant(320);
-
-        buttonRowHeight = SwingUtils.springSum(Spring.scale(rowHeight, .5f),Spring.minus(Spring.height(enableMod)), Spring.minus(Spring.constant(5)));
-
-        layout.putConstraint(SpringLayout.SOUTH, enableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
-
-        buttonRowHeight = Spring.sum(buttonRowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
-
-        vSpring = Spring.sum(vSpring, rowHeight);
-
-        layout.putConstraint(SpringLayout.SOUTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
-        layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
-
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, addMod, vSpring, SpringLayout.NORTH, formPnl);
-        layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
-
-        rowHeight = Spring.max(Spring.height(addMod), Spring.height(openFolder));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight,Spring.constant(10) );
-
-        layout.putConstraint(SpringLayout.SOUTH, formPnl, vSpring, SpringLayout.NORTH, formPnl);
-
-        Spring hSpring;
-        Spring columnWidth;
-        Spring buttonColumnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.WEST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
-
-        columnWidth = SwingUtils.springMax(Spring.width(enabledModsLbl), Spring.width(disabledModsLbl),Spring.constant(260) );
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.EAST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.EAST, openFolder, hSpring, SpringLayout.WEST, formPnl);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, enableMod, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
-
-        buttonColumnWidth = Spring.max(Spring.width(enableMod), Spring.width(disableMod));
-
-        hSpring = Spring.sum(hSpring, buttonColumnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, enableMod, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.EAST, disableMod, hSpring, SpringLayout.WEST, formPnl);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.WEST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.WEST, addMod, hSpring, SpringLayout.WEST, formPnl);
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.EAST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-        layout.putConstraint(SpringLayout.EAST, addMod, hSpring, SpringLayout.WEST, formPnl);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, formPnl, hSpring, SpringLayout.WEST, formPnl);
+        formPnl.setLayout(new MigLayout(new LC().fillY()));
+        formPnl.add(lPnl, "push, grow, " + GuiConstants.SPLIT_3);
+        formPnl.add(cPnl, "push, grow, center");
+        formPnl.add(rPnl, "push, grow ");
 
         ((JPanel) tabbedPane.getComponent(0)).add(formPnl);
 
