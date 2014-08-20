@@ -21,3 +21,5 @@ target/
 
 #mac
 .DS_Store
+*.ipr
+*.iws
