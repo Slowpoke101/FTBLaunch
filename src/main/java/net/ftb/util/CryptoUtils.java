@@ -31,7 +31,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class CryptoUtils {
 
     /**
-     * Newer implementation available if possible use {@link #decrypt(String str, byte[] key)}
+     * Newer implementation available if possible use {@link #decrypt(String str)}
      * @param str string to decrypt
      * @param key decryption key
      * @return decrypted string or "" if fails
@@ -50,7 +50,7 @@ public class CryptoUtils {
     }
 
     /**
-     * Newer implementation available if possible use {@link #encrypt(String str, byte[] key)}
+     * Newer implementation available if possible use {@link #encrypt(String str)}
      * @param str string to decrypt
      * @param key decryption key
      * @return decrypted string or "" if fails
@@ -69,38 +69,57 @@ public class CryptoUtils {
     /**
      * Method to AES decrypt string if fails, will attempt to use {@link #decryptLegacy(String str, byte[] key)}
      * @param str string to decrypt
-     * @param key decryption key key
      * @return decrypted string or "" if legacy fails
      */
-    public static String decrypt (String str, byte[] key) {
+    public static String decrypt (String str) {
+        byte[] keyMac = OSUtils.getMacAddress();
+        byte[] keyHardware = OSUtils.getHardwareID();
+        String s;
         try {
             Cipher aes = Cipher.getInstance("AES");
-            aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(key), "AES"));
-            String s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
+            if (keyHardware != null && keyHardware.length > 0) {
+                try {
+                    aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
+                    s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
+                    if (s.startsWith("FDT:") && s.length() > 4)
+                        return s.split(":", 2)[1];// it was decrypted with HW UUID
+                } catch (Exception e) {
+                    Logger.logDebug("foo", e);
+                }
+            }
+
+            // did not open, try again with old mac based key
+            aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyMac), "AES"));
+            s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
             if (s.startsWith("FDT:") && s.length() > 4)
                 return s.split(":", 2)[1];//we don't want the decryption test
             else
-                return decryptLegacy(str, key);
+                return decryptLegacy(str, keyMac);
         } catch (Exception e) {
             Logger.logError("Error Decrypting information, attempting legacy decryption", e);
-            return decryptLegacy(str, key);
+            return decryptLegacy(str, keyMac);
         }
     }
 
     /**
      * Method to AES encrypt string if fails, will attempt to use {@link #encryptLegacy(String str, byte[] key)}
      * @param str string to encrypt
-     * @param key encryption key
      * @return encrypted string or "" if legacy fails
      */
-    public static String encrypt (String str, byte[] key) {
+    public static String encrypt (String str) {
+        byte[] keyMac = OSUtils.getMacAddress();
+        byte[] keyHardware = OSUtils.getHardwareID();
         try {
             Cipher aes = Cipher.getInstance("AES");
-            aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(key), "AES"));
+            if(keyHardware != null && keyHardware.length > 0) {
+                aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
+                return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
+            }
+            aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyMac), "AES"));
             return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
         } catch (Exception e) {
             Logger.logError("Error Encrypting information, reverting to legacy format", e);
-            return encryptLegacy(str, key);
+            return encryptLegacy(str, keyMac);
         }
     }
 
