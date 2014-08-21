@@ -41,7 +41,7 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
-import net.ftb.locale.I18N.Locale;
+import net.ftb.locale.Locale;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.minecraft.MCInstaller;
@@ -788,7 +788,7 @@ public class LaunchFrame extends JFrame {
      * updates the buttons/text to language specific
      */
     public void updateLocale () {
-        if (I18N.currentLocale == Locale.deDE) {
+        if (I18N.current == Locale.deDE) {
             edit.setBounds(420, 20, 120, 30);
             donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
