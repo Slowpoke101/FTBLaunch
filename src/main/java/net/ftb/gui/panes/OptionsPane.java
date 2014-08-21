@@ -22,7 +22,7 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.AdvancedOptionsDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
+import net.ftb.locale.Locale;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
@@ -33,7 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -145,27 +144,23 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(ramMaximum);
         add(currentRam);
 
-        String[] locales;
-        synchronized (I18N.localeIndices) {
-            locales = new String[I18N.localeIndices.size()];
-            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
-                Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
-                locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
-            }
+        String[] locales = new String[Locale.values().length];
+        for(int i = 0; i < Locale.values().length; i++){
+            locales[i] = I18N.lookup.get(Locale.values()[i]);
         }
-        locale = new JComboBox(locales);
+        locale = new JComboBox<String>(locales);
         locale.setBounds(190, 130, 222, 25);
         locale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
-                I18N.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
+                I18N.setLocale(Locale.values()[locale.getSelectedIndex()].name());
                 if (LaunchFrame.getInstance() != null) {
                     LaunchFrame.getInstance().updateLocale();
                 }
             }
         });
         locale.addFocusListener(settingsChangeListener);
-        locale.setSelectedItem(I18N.localeFiles.get(settings.getLocale()));
+        locale.setSelectedItem(Locale.get(Settings.getSettings().getLocale()));
 
         lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
         lblLocale.setBounds(10, 130, 195, 25);
@@ -226,7 +221,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         settings.setInstallPath(installFolderTextField.getText());
         settings.setForceUpdateEnabled(tglbtnForceUpdate.isSelected());
         settings.setRamMax(String.valueOf(ramMaximum.getValue()));
-        settings.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
+        settings.setLocale(Locale.values()[locale.getSelectedIndex()].name());
         settings.setConsoleActive(chckbxShowConsole.isSelected());
         settings.setOptJavaArgs(optJavaArgs.isSelected());
         settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
