@@ -16,25 +16,6 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.ChooseDir;
@@ -46,6 +27,24 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.Map;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -321,8 +320,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         }
         repaint();
     }
-    
+
     public void updateShowConsole() {
-    	chckbxShowConsole.setSelected(settings.getConsoleActive());
+        chckbxShowConsole.setSelected(settings.getConsoleActive());
     }
 }
