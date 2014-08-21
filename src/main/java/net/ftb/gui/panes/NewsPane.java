@@ -16,8 +16,13 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.BorderLayout;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.util.NewsUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
+import java.awt.BorderLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,15 +32,8 @@ import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
-import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.util.NewsUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
-
 @SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
-    
     private JScrollPane newsPanel;
     
     private final HTMLEditorKit news_kit = new HTMLEditorKit() {
@@ -80,5 +78,4 @@ public class NewsPane extends JPanel implements ILauncherPane {
         Settings.getSettings().save();
         LaunchFrame.getInstance().setNewsIcon();
     }
-    
 }
