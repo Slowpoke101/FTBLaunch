@@ -56,7 +56,7 @@ public final class I18N{
     }
 
     public static String getLocaleString(String key){
-        if(langs.get(current).containsKey(key)){
+        if(langs.get(current).containsKey(key) && !langs.get(current).getProperty(key).isEmpty()){
             return langs.get(current).getProperty(key);
         } else{
             return langs.get(Locale.enUS).getProperty(key, key);
