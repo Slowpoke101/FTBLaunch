@@ -16,6 +16,7 @@
  */
 package net.ftb.locale;
 
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
 import java.io.InputStreamReader;
@@ -42,16 +43,23 @@ public final class I18N{
         }
     }
 
+    public static String[] available(){
+        String[] ret = new String[Locale.values().length];
+        for(int i = 0; i < Locale.values().length; i++){
+            ret[i] = lookup.get(Locale.values()[i]);
+        }
+        return ret;
+    }
+
+    public static String current(){
+        return lookup.get(Locale.get(Settings.getSettings().getLocale()));
+    }
+
     public static synchronized void setLocale(String locale){
         if(locale == null){
             current = Locale.enUS;
         } else{
-            try{
-                current = Locale.valueOf(locale);
-            } catch(IllegalArgumentException e){
-                Logger.logWarn("[I18N] Unknown Locale " + locale + ". Loaded enUS");
-                current = Locale.enUS;
-            }
+            current = Locale.get(locale);
         }
     }
 

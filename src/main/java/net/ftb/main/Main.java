@@ -70,6 +70,16 @@ public class Main {
     @Getter
     private static int beta;
 
+    static
+    {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){
+            @Override
+            public void run(){
+                Settings.getSettings().save();
+            }
+        }));
+    }
+
     /**
      * @return FTB Launcher event bus
      */
