@@ -131,22 +131,19 @@ public class FirstRunDialog extends JDialog {
         applyButton.setBounds(319, 97, 89, 23);
         contentPanel.add(applyButton);
 
-        String[] locales = new String[Locale.values().length];
-        for(int i = 0; i < Locale.values().length; i++){
-            locales[i] = I18N.lookup.get(Locale.values()[i]);
-        }
-        languageList = new JComboBox<String>(locales);
+        languageList = new JComboBox<String>(I18N.available());
         languageList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
                 I18N.setLocale(Locale.values()[languageList.getSelectedIndex()].name());
+                Settings.getSettings().setLocale(Locale.values()[languageList.getSelectedIndex()].name());
                 if (LaunchFrame.getInstance() != null) {
                     LaunchFrame.getInstance().updateLocale();
                 }
                 updateLocale();
             }
         });
-        languageList.setSelectedItem(Locale.get(Settings.getSettings().getLocale()));
+        languageList.setSelectedItem(I18N.current());
         languageList.setBounds(169, 63, 500, 23);
         contentPanel.add(languageList);
     }

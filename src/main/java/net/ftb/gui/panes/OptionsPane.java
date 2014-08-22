@@ -144,11 +144,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(ramMaximum);
         add(currentRam);
 
-        String[] locales = new String[Locale.values().length];
-        for(int i = 0; i < Locale.values().length; i++){
-            locales[i] = I18N.lookup.get(Locale.values()[i]);
-        }
-        locale = new JComboBox<String>(locales);
+        locale = new JComboBox<String>(I18N.available());
         locale.setBounds(190, 130, 222, 25);
         locale.addActionListener(new ActionListener() {
             @Override
@@ -157,10 +153,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 if (LaunchFrame.getInstance() != null) {
                     LaunchFrame.getInstance().updateLocale();
                 }
+                Settings.getSettings().setLocale(Locale.values()[locale.getSelectedIndex()].name());
             }
         });
         locale.addFocusListener(settingsChangeListener);
-        locale.setSelectedItem(Locale.get(Settings.getSettings().getLocale()));
+        locale.setSelectedItem(I18N.current());
 
         lblLocale = new JLabel(I18N.getLocaleString("LANGUAGE"));
         lblLocale.setBounds(10, 130, 195, 25);
