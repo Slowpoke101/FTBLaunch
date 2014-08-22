@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
@@ -166,7 +168,7 @@ public class JavaFinder {
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (JavaInfo java : javas) {
                 Logger.logInfo(java.toString());
-                if (java.isJava8()) {
+                if (java.isJava8() && !Settings.getSettings().canMacUseJava8()) {
                     java8Found = true;
                 }
                 if (java.supportedVersion) {

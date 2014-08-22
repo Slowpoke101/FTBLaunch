@@ -439,6 +439,8 @@ public class DownloadUtils extends Thread {
                         if (jso != null && jso.get("minUsableLauncherVersion") != null) {
                             LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
                         }
+                        if (jso != null && jso.get("macCanUseJava8") != null)
+                            Settings.getSettings().setCanMacUseJava8(jso.get("macCanUseJava8").getAsBoolean());
                         if (jso != null && jso.get("chEnabled") != null) {
                             Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
                         }
