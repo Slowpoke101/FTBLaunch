@@ -420,7 +420,9 @@ public class ModPack {
      * @return - the minecraft version
      */
     public String getMcVersion (String packVersion) {
-        if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
+        if(dir.equals("mojang_vanilla")) {
+            return packVersion;
+        } else if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
             return customMCVersions.get(packVersion);
         }
         return mcVersion;
