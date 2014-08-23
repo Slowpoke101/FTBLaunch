@@ -101,7 +101,7 @@ public class User implements Serializable {
         if (_decryptedStore == null || _decryptedStore.isEmpty()) {
             _encryptedStore = "";
         } else {
-            _encryptedStore = CryptoUtils.encrypt(_decryptedStore, OSUtils.getMacAddress());
+            _encryptedStore = CryptoUtils.encrypt(_decryptedStore);
         }
     }
 
@@ -113,7 +113,7 @@ public class User implements Serializable {
         if (_password == null || _password.isEmpty()) {
             _encryptedPassword = "";
         } else {
-            _encryptedPassword = CryptoUtils.encrypt(_password, OSUtils.getMacAddress());
+            _encryptedPassword = CryptoUtils.encrypt(_password);
         }
     }
 
@@ -133,31 +133,49 @@ public class User implements Serializable {
 
     private void readObject (ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
+        String password;
         switch(_serial) {
             case 0:
                 //_serial not found by defaultReadObject()
+                // TODO: legacy code remove later
                 if (serialVersionUID == 1) {
+                    Logger.logDebug("serialVersionUID == 1");
                     // convert old stored password to new format
                     if (!_encryptedPassword.isEmpty()) {
                         Logger.logInfo("Password is being converted to a newer format, ignore following decryption error");
                         Logger.logInfo("Converted password will be saved to disk after successful login");
-                        String password =  CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
-                        _encryptedPassword =  CryptoUtils.encrypt(password, OSUtils.getMacAddress());
+                        password =  CryptoUtils.decrypt(_encryptedPassword);
+                        _encryptedPassword =  CryptoUtils.encrypt(password);
                     }
                     _serial = 1;
                 }
+                break;
+            case 1:
+                if (!_encryptedPassword.isEmpty()) {
+                    Logger.logInfo("Password is now encrypted with new key");
+                    Logger.logInfo("Converted password will be saved to disk after successful login");
+                    password =  CryptoUtils.decrypt(_encryptedPassword);
+                    _encryptedPassword =  CryptoUtils.encrypt(password);
+                }
+                if (_encryptedStore != null && !_encryptedStore.isEmpty()) {
+                    Logger.logInfo("mojang token is now encrypted with new key");
+                    Logger.logInfo("Converted token will be saved to disk after successful login");
+                    _decryptedStore =  CryptoUtils.decrypt(_encryptedStore);
+                    _encryptedStore =  CryptoUtils.encrypt(_decryptedStore);
+                }
+                _serial = 2;
                 break;
             default:
                 break;
         }
 
         if (!_encryptedPassword.isEmpty()) {
-            _password = CryptoUtils.decrypt(_encryptedPassword, OSUtils.getMacAddress());
+            _password = CryptoUtils.decrypt(_encryptedPassword);
         } else {
             _password = "";
         }
         if (_encryptedStore != null && !_encryptedStore.isEmpty()) {
-            _decryptedStore = CryptoUtils.decrypt(_encryptedStore, OSUtils.getMacAddress());
+            _decryptedStore = CryptoUtils.decrypt(_encryptedStore);
         } else {
             _decryptedStore = null;
         }

@@ -17,10 +17,7 @@
 package net.ftb.util;
 
 import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
@@ -50,6 +47,7 @@ public class OSUtils {
      */
     @Getter
     private static int numCores;
+    private static byte[] hardwareID;
 
     public static enum OS {
         WINDOWS, UNIX, MACOSX, OTHER,
@@ -58,6 +56,7 @@ public class OSUtils {
     static {
         cachedUserHome = System.getProperty("user.home");
         numCores = Runtime.getRuntime().availableProcessors();
+        hardwareID = genHardwareID();
     }
 
     /**
@@ -357,6 +356,75 @@ public class OSUtils {
 
         Logger.logWarn("Failed to get MAC address, using default logindata key");
         return new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+    }
+
+    /**
+     *
+     * @return Unique Id based on hardware
+     */
+    public static byte[] getHardwareID () {
+        if (hardwareID== null) {
+            hardwareID = genHardwareID();
+        }
+        return hardwareID;
+    }
+
+    private static byte[] genHardwareID () {
+        switch (getCurrentOS()) {
+        case WINDOWS:
+            // TODO
+            return genHardwareIDWINDOWS();
+        case UNIX:
+            return genHardwareIDUNIX();
+        case MACOSX:
+            return genHardwareIDMACOSX();
+        default:
+            return null;
+        }
+    }
+    private static byte[] genHardwareIDUNIX () {
+        String line;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("/etc/machine-id"));
+            line = reader.readLine();
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+            return new byte[]{};
+        }
+        return line.getBytes();
+    }
+
+    private static byte[] genHardwareIDMACOSX () {
+        String line;
+        try {
+            Process command = Runtime.getRuntime().exec(new String[] {"system_profiler", "SPHardwareDataType"});
+            BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
+            while ((line = in.readLine()) != null) {
+                if (line.contains("Serial Number"))
+                    //TODO: does that more checks?
+                    return line.split(":")[1].trim().getBytes();
+            }
+            return new byte[]{};
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+            return new byte[]{};
+        }
+    }
+
+    private static byte[] genHardwareIDWINDOWS() {
+        String line;
+        try {
+            Process command = Runtime.getRuntime().exec(new String[] {"wmic", "bios", "get", "serialnumber"});
+            BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
+            line = in.readLine();
+            line = in.readLine();
+            line = in.readLine();
+            Logger.logDebug(line);
+            return line.getBytes();
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+            return new byte[]{};
+        }
     }
 
     /**
