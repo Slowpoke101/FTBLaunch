@@ -16,6 +16,8 @@
  */
 package net.ftb.log;
 
+import com.google.common.collect.Maps;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ public class LogEntry {
     private Throwable cause;
     private String location;
     private final String dateString;
-    private final Map<LogType, String> messageCache = new HashMap<LogType, String>();
+    private final Map<LogType, String> messageCache = Maps.newHashMap();
     private static final String dateFormatString = "HH:mm:ss";
 
     public LogEntry() {

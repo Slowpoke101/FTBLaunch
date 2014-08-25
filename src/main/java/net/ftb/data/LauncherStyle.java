@@ -35,7 +35,7 @@ import javax.swing.*;
 public class LauncherStyle extends Properties {
 
     //TODO bump this???
-    private static final long serialVersionUID = 6370446700503387209L;
+    private static final long serialVersionUID = 6370446700503387211L;
 
     private static LauncherStyle currentStyle;
 
@@ -51,22 +51,22 @@ public class LauncherStyle extends Properties {
         currentStyle = new LauncherStyle();
         currentStyle.load();
     }
-
-    public Color control = new Color(40, 40, 40);
-    public Color text = new Color(40, 40, 40).brighter().brighter().brighter().brighter().brighter();
-    public Color nimbusBase = new Color(0, 0, 0);
-    public Color nimbusFocus = new Color(40, 40, 40);
-    public Color nimbusBorder = new Color(40, 40, 40);
-    public Color nimbusLightBackground = new Color(40, 40, 40);
-    public Color info = new Color(40, 40, 40).brighter().brighter();
-    public Color nimbusSelectionBackground = new Color(40, 40, 40).brighter().brighter();
-    public Color footerColor = new Color(25, 25, 25);
-    public Color filterTextColor = new Color(243, 119, 31);
-    public Color filterInnerTextColor = new Color(255, 255, 255);
-    public Color tabPaneBackground = new Color(255, 255, 255, 0);
-    public Color tabPaneForeground = new Color(255, 255, 255);
-    public Color headerImageColor = new Color(255, 255, 255);
-    public Color headerColor = new Color(243, 119, 31);
+//200, 200, 69
+    public Color control = new Color(238, 238, 238);
+    public Color text = new Color(104, 104, 104);
+    public Color nimbusBase = new Color(221, 221, 221);//highlight color for icons, etc.
+    public Color nimbusFocus = new Color(221, 221, 221);//border around selected tab header icon thingy
+    public Color nimbusBorder = new Color(238, 238, 238);//border pane area below subheaders
+    public Color nimbusLightBackground = new Color(238, 238, 238);//backroud color right side of panes, and console
+    public Color info = new Color(150, 150, 150);//???
+    public Color nimbusSelectionBackground = new Color(222, 222, 223);//background color when selected modpack editor
+    public Color footerColor = new Color(254, 254, 254);//footer color
+    public Color filterTextColor = new Color(236, 26, 61);//filter text("filter")
+    public Color filterInnerTextColor = new Color(104, 104, 104);//other part of filter text ex: "All"
+    public Color tabPaneBackground = new Color(104, 104, 104, 0);//text left side of panes
+    public Color tabPaneForeground = new Color(104, 104, 104);//text left side of panes
+    public Color headerImageColor = new Color(255, 255, 255);//color of images used in the headers -- should never change
+    public Color headerColor = new Color(224, 75, 66);
     public Color headerImageHighlightColor = new Color(236, 26,61);
     public Color headerHighlightColor = new Color(236, 26,61);
 
