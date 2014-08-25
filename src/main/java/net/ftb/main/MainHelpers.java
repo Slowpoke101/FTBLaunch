@@ -81,6 +81,7 @@ public class MainHelpers {
                 osw.write("Viper-7" + System.getProperty("line.separator") + System.getProperty("line.separator"));
                 osw.write("Major Launcher Dev Contributors" + System.getProperty("line.separator"));
                 osw.write("LexManos" + System.getProperty("line.separator"));
+                osw.write("Asyncronous" + System.getProperty("line.separator"));
                 osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
                 osw.write("Web Developers:" + System.getProperty("line.separator"));
                 osw.write("Captainnana" + System.getProperty("line.separator"));
