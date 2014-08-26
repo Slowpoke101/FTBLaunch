@@ -35,6 +35,10 @@ configurations {
 
 repositories {
 	mavenCentral()
+    maven {
+        name = 'FTB'
+        url = 'http://ftb.cursecdn.com/FTB2/maven/'
+    }
 	maven {
 		name = 'Mojang libs'
 		url = 'https://libraries.minecraft.net/'
@@ -50,6 +54,7 @@ dependencies {
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
 	compile 'com.google.guava:guava:17.0'
+    compile 'net.ftb:FTB_Launcher-LAF:1.0-1'
 	//commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
