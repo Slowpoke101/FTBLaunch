@@ -51,15 +51,14 @@ import net.ftb.workers.AuthlibDLWorker;
 
 import com.google.common.eventbus.EventBus;
 
-import java.awt.EventQueue;
 import java.awt.SystemTray;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class Main {
@@ -78,6 +77,16 @@ public class Main {
                 Settings.getSettings().save();
             }
         }));
+        StyleUtil.loadUiStyles();
+        try {
+            UIManager.setLookAndFeel(javax.swing.plaf.nimbus.NimbusLookAndFeel.class.getName());
+        } catch (Exception e) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e1) {
+                // Fallthrough
+            }
+        }
     }
 
     /**
@@ -184,24 +193,10 @@ public class Main {
          * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
          *  => If this guideline is followed then GUI should work smoothly
          */
-        EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run () {
                 I18N.load();
-                StyleUtil.loadUiStyles();
-                try {
-                    for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                        if ("Nimbus".equals(info.getName())) {
-                            UIManager.setLookAndFeel(info.getClassName());
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    try {
-                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                    } catch (Exception e1) {
-                    }
-                }
                 LaunchFrame.loader = new LoadingDialog();
                 LaunchFrame.loader.setModal(false);
                 LaunchFrame.loader.setVisible(true);
@@ -225,7 +220,8 @@ public class Main {
                 if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
                     // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
                     int result = ErrorUtils
-                            .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                            .tossOKIgnoreDialog(checkResult.localizedMessage,
+                                    (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
                     // pressing OK or closing dialog does not do anything
                     if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
                         // if user select ignore we save setting and that type of error will be ignored
@@ -270,7 +266,7 @@ public class Main {
 
                 // Set up System Tray
                 if (SystemTray.isSupported()) {
-                    LaunchFrame.getInstance().setUpSystemTray();
+                    LaunchFrame.setUpSystemTray();
                 } else {
                     Logger.logDebug("System Tray not supported");
                 }
@@ -322,20 +318,19 @@ public class Main {
                  * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
                  */
                 final int beta_ = beta;
-                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+                new UpdateChecker(Constants.buildNumber, LaunchFrame.minUsable, beta_) {
                     @Override
                     protected void done () {
                         try {
                             if (get()) {
-                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
+                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.minUsable);
                                 p.setVisible(true);
                             }
-                        } catch (InterruptedException e) {
-                        } catch (ExecutionException e) {
+                        } catch (Exception e){
+                            // Fallthrough
                         }
                     }
-                };
-                updateChecker.execute();
+                }.execute();
                 LoadingDialog.setProgress(180);
             }
         });
