@@ -1,7 +1,10 @@
 package net.ftb.ui.panel;
 
 import net.ftb.data.ModPack;
+import net.ftb.laf.utils.UIUtils;
 
+import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,11 +22,32 @@ implements MouseListener{
     public ModPackPanel(ModPack pack){
         this.pack = pack;
         this.setPreferredSize(new Dimension(128, 128));
+        this.addMouseListener(this);
     }
 
     @Override
     public void paint(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(UIUtils.GRAY);
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g2.drawImage(this.pack.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+
+        if(this.rollover){
+            Composite comp = g2.getComposite();
+            g2.setComposite(UIUtils.alpha(0.75F));
+            g2.setColor(Color.black);
+            g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g2.setComposite(comp);
+            g2.setColor(Color.white);
+            g2.drawString(this.pack.getName(), 5, g2.getFontMetrics().getHeight());
+
+            String wrapped = UIUtils.wrap(this.pack.getInfo(), 25);
+            int x = 10;
+            int y = g2.getFontMetrics().getHeight();
+            for(String str : wrapped.split("\n")){
+                g2.drawString(str, x, y += g2.getFontMetrics().getHeight());
+            }
+        }
     }
 
     @Override

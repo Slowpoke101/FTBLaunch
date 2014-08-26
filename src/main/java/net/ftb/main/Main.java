@@ -38,6 +38,7 @@ import net.ftb.log.OutputOverride;
 import net.ftb.log.StdOutLogger;
 import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
+import net.ftb.ui.LauncherFrame;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.Benchmark;
 import net.ftb.util.CheckInstallPath;
@@ -185,6 +186,13 @@ public class Main {
 
         // later add other main()s for 100% headless and CLI clients
         mainGUI(args);
+
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                new LauncherFrame().setVisible(true);
+            }
+        });
     }
 
     private static void mainGUI(String[] args) {
