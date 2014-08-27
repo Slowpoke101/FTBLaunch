@@ -16,24 +16,6 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
-import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -46,6 +28,23 @@ import net.ftb.locale.I18N;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
+
+import com.google.common.collect.Lists;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 @SuppressWarnings("serial")
 public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
@@ -188,7 +187,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         });
         add(server);
 
-        version = new JComboBox(new String[]{});
+        version = new JComboBox<String>(new String[]{});
         version.setBounds(560, 5, 130, 25);
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
@@ -209,7 +208,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
 
     @Override
     public void onVisible() {
-        FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
+        FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar().setValue(0);
     }
 
     public int getSelectedFTBModIndex() {
