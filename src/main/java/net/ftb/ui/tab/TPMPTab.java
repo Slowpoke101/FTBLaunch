@@ -3,11 +3,13 @@ package net.ftb.ui.tab;
 import net.ftb.data.ModPack;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.events.PackChangeEvent.TYPE;
+import net.ftb.laf.comp.LightBarScrollPane;
 import net.ftb.main.Main;
 import net.ftb.ui.panel.ModPackPanel;
 
 import com.google.common.eventbus.Subscribe;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -16,9 +18,10 @@ public final class TPMPTab
 extends JPanel
 implements Tab{
     private final GridBagConstraints gbc = new GridBagConstraints();
+    private final JPanel content = new JPanel(new GridBagLayout());
 
     public TPMPTab(){
-        super(new GridBagLayout());
+        super(new BorderLayout());
 
         this.gbc.fill = GridBagConstraints.BOTH;
         this.gbc.weightx = 1.0;
@@ -26,6 +29,8 @@ implements Tab{
         this.gbc.gridx = 0;
         this.gbc.gridy = 0;
         this.gbc.insets.set(15, 15, 15, 15);
+
+        this.add(new LightBarScrollPane(this.content), BorderLayout.CENTER);
 
         Main.getEventBus().register(this);
     }
@@ -35,7 +40,7 @@ implements Tab{
         if(e.getType() == TYPE.ADD){
             for(ModPack mp : e.getPacks()){
                 if(mp.isThirdPartyTab()){
-                    this.add(new ModPackPanel(mp), this.gbc);
+                    this.content.add(new ModPackPanel(mp), this.gbc);
                     this.next();
                 }
             }
