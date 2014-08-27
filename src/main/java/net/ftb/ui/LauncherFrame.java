@@ -81,6 +81,7 @@ extends JFrame{
             public void itemStateChanged(ItemEvent e){
                 if(homeButton.isSelected()){
                     showTab("home");
+                    repaint();
                 }
             }
         });
@@ -89,6 +90,7 @@ extends JFrame{
             public void itemStateChanged(ItemEvent e){
                 if(ftbMpButton.isSelected()){
                     showTab("ftb-mp");
+                    repaint();
                 }
             }
         });
@@ -97,6 +99,7 @@ extends JFrame{
             public void itemStateChanged(ItemEvent e){
                 if(tpMpButton.isSelected()){
                     showTab("tp-mp");
+                    repaint();
                 }
             }
         });
@@ -113,6 +116,7 @@ extends JFrame{
             public void itemStateChanged(ItemEvent e){
                 if(texturesButton.isSelected()){
                     showTab("textures");
+                    repaint();
                 }
             }
         });
@@ -121,6 +125,7 @@ extends JFrame{
             public void itemStateChanged(ItemEvent e){
                 if(optionsButton.isSelected()){
                     showTab("options");
+                    repaint();
                 }
             }
         });
