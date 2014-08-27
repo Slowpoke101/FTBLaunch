@@ -16,8 +16,6 @@
  */
 package net.ftb.gui.panes;
 
-import com.google.common.collect.Maps;
-import com.google.common.eventbus.Subscribe;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -25,11 +23,15 @@ import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
+import net.ftb.locale.Locale;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-import javax.swing.*;
-import java.awt.*;
+import com.google.common.collect.Maps;
+import com.google.common.eventbus.Subscribe;
+
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -37,6 +39,16 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractModPackPane extends JPanel {
@@ -289,7 +301,7 @@ public abstract class AbstractModPackPane extends JPanel {
         filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
         updateFilterText();
         editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
-        if (I18N.currentLocale == I18N.Locale.deDE) {
+        if (I18N.current == Locale.deDE) {
             editModPack.setBounds(290, 5, 120, 25);
             typeLbl.setBounds(115, 5, 165, 25);
         } else {

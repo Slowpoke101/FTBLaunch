@@ -16,30 +16,6 @@
  */
 package net.ftb.gui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import com.google.common.eventbus.Subscribe;
-
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.data.Constants;
@@ -57,9 +33,15 @@ import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
-import net.ftb.gui.panes.*;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ILauncherPane;
+import net.ftb.gui.panes.MapUtils;
+import net.ftb.gui.panes.NewsPane;
+import net.ftb.gui.panes.OptionsPane;
+import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
-import net.ftb.locale.I18N.Locale;
+import net.ftb.locale.Locale;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.minecraft.MCInstaller;
@@ -67,11 +49,46 @@ import net.ftb.tools.MapManager;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
-import net.ftb.util.*;
+import net.ftb.util.Benchmark;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
+import net.ftb.util.ObjectUtils;
+import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
+
+import com.google.common.eventbus.Subscribe;
+
+import java.awt.AWTException;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -771,7 +788,7 @@ public class LaunchFrame extends JFrame {
      * updates the buttons/text to language specific
      */
     public void updateLocale () {
-        if (I18N.currentLocale == Locale.deDE) {
+        if (I18N.current == Locale.deDE) {
             edit.setBounds(420, 20, 120, 30);
             donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
@@ -850,10 +867,19 @@ public class LaunchFrame extends JFrame {
     public static void setUpSystemTray() {
     	trayMenu = new TrayMenu();
     	
-    	SystemTray tray = SystemTray.getSystemTray();
+    	final SystemTray tray = SystemTray.getSystemTray();
     	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
     	
-    	trayIcon.setPopupMenu(trayMenu);
+    	trayIcon.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseReleased(MouseEvent e){
+                if(e.getButton() == MouseEvent.BUTTON3){
+                    trayMenu.setLocation(e.getX(), e.getY());
+                    trayMenu.setInvoker(trayMenu);
+                    trayMenu.setVisible(true);
+                }
+            }
+        });
     	trayIcon.setToolTip(Constants.name);
     	trayIcon.setImageAutoSize(true);
     	

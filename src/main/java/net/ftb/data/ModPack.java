@@ -16,24 +16,6 @@
  */
 package net.ftb.data;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
@@ -46,7 +28,21 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
+
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ModPack {
     private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
@@ -420,7 +416,9 @@ public class ModPack {
      * @return - the minecraft version
      */
     public String getMcVersion (String packVersion) {
-        if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
+        if(dir.equals("mojang_vanilla")) {
+            return packVersion;
+        } else if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
             return customMCVersions.get(packVersion);
         }
         return mcVersion;

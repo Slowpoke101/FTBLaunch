@@ -16,6 +16,24 @@
  */
 package net.feed_the_beast.launcher.json;
 
+import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.launcher.Update;
+import net.feed_the_beast.launcher.json.versions.Library;
+import net.feed_the_beast.launcher.json.versions.Version;
+import net.ftb.log.Logger;
+import org.apache.commons.io.IOUtils;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,28 +42,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.*;
-import net.feed_the_beast.launcher.json.assets.AssetIndex;
-import net.feed_the_beast.launcher.json.launcher.Update;
-import net.feed_the_beast.launcher.json.versions.Library;
-import net.feed_the_beast.launcher.json.versions.Version;
-
-import net.ftb.log.Logger;
-import org.apache.commons.io.IOUtils;
-
 public class JsonFactory {
-    public static final Gson GSON;
-    static {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
-        builder.registerTypeAdapter(Date.class, new DateAdapter());
-        builder.registerTypeAdapter(File.class, new FileAdapter());
-        builder.enableComplexMapKeySerialization();
-        builder.setPrettyPrinting();
-        GSON = builder.create();
-    }
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapterFactory(new EnumAdaptorFactory())
+            .registerTypeAdapter(Date.class, new DateAdapter())
+            .registerTypeAdapter(File.class, new FileAdapter())
+            .enableComplexMapKeySerialization()
+            .setPrettyPrinting()
+            .create();
 
     public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);

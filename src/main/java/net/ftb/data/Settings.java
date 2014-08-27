@@ -449,6 +449,13 @@ public class Settings extends Properties {
             return null;
         }
     }
+    public boolean canMacUseJava8 () {
+        return getBoolean("canMacUseJava8");
+    }
+    public void setCanMacUseJava8 (Boolean b) {
+        setBoolean("canMacUseJava8", b);
+    }
+
 
     /**
      * Simple boolean setting getter

@@ -27,14 +27,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.AbstractModPackPane;
 import net.ftb.locale.I18N;
-import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 public class ModPackFilterDialog extends JDialog {
     private JLabel availabilityLbl;
@@ -57,7 +57,7 @@ public class ModPackFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        ArrayList<String> mcVersions = new ArrayList<String>();
+        ArrayList<String> mcVersions = Lists.newArrayList();
         mcVersion.addItem(I18N.getLocaleString("MAIN_ALL"));
         mcVersions.add(I18N.getLocaleString("MAIN_ALL"));
         for (ModPack pack : ModPack.getPackArray()) {
@@ -106,11 +106,10 @@ public class ModPackFilterDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         availabilityLbl = new JLabel(I18N.getLocaleString("FILTER_MODPACKAVALIABILITY"));
         mcVersionLbl = new JLabel(I18N.getLocaleString("FILTER_MCVERSION"));
@@ -124,80 +123,12 @@ public class ModPackFilterDialog extends JDialog {
         availability.setPrototypeDisplayValue("xxxxxxxxxxxx");
 
         panel.add(mcVersionLbl);
-        panel.add(mcVersion);
-        panel.add(availability);
+        panel.add(mcVersion, GuiConstants.WRAP);
         panel.add(availabilityLbl);
-        panel.add(apply);
-        panel.add(cancel);
-        panel.add(search);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, mcVersionLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, availabilityLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.max(Spring.width(mcVersionLbl), Spring.width(availabilityLbl));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, mcVersion, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, availability, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.max(Spring.width(mcVersion), Spring.width(availability));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, mcVersion, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, availability, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, search, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, search, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, cancel, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, apply, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.BASELINE, mcVersionLbl, 0, SpringLayout.BASELINE, mcVersion);
-        layout.putConstraint(SpringLayout.NORTH, mcVersion, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(mcVersionLbl), Spring.height(mcVersion));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, availabilityLbl, 0, SpringLayout.BASELINE, availability);
-        layout.putConstraint(SpringLayout.NORTH, availability, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(availabilityLbl), Spring.height(availability));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight);
-        vSpring = Spring.sum(vSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
-
+        panel.add(availability, GuiConstants.WRAP);
+        panel.add(search, GuiConstants.FILL_TWO);
+        panel.add(cancel, "grow, " + GuiConstants.WRAP);
+        panel.add(apply, GuiConstants.FILL_SINGLE_LINE);
         pack();
         setLocationRelativeTo(this.getOwner());
     }

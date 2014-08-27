@@ -28,15 +28,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
-import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
@@ -59,7 +59,7 @@ public class TexturePackFilterDialog extends JDialog {
 
         int textures = TexturePack.getTexturePackArray().size();
 
-        ArrayList<String> res = new ArrayList<String>();
+        ArrayList<String> res = Lists.newArrayList();
         res.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < textures; i++) {
             if (!res.contains(TexturePack.getTexturePack(i).getResolution())) {
@@ -67,7 +67,7 @@ public class TexturePackFilterDialog extends JDialog {
             }
         }
 
-        ArrayList<String> comp = new ArrayList<String>();
+        ArrayList<String> comp = Lists.newArrayList();
         comp.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < textures; i++) {
             List<String> s = TexturePack.getTexturePack(i).getCompatible();
@@ -114,11 +114,10 @@ public class TexturePackFilterDialog extends JDialog {
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         compatiblePackLbl = new JLabel(I18N.getLocaleString("FILTER_COMPERTIBLEPACK"));
         resolutionLbl = new JLabel(I18N.getLocaleString("FILTER_RESULUTION"));
@@ -132,78 +131,12 @@ public class TexturePackFilterDialog extends JDialog {
         compatiblePack.setPrototypeDisplayValue("xxxxxxxxxxxxxxxxxxxxxxxxxx");
 
         panel.add(compatiblePackLbl);
+        panel.add(compatiblePack, GuiConstants.WRAP);
         panel.add(resolutionLbl);
-        panel.add(compatiblePack);
-        panel.add(resolution);
-        panel.add(apply);
-        panel.add(cancel);
-        panel.add(search);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, compatiblePackLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, resolutionLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.max(Spring.width(compatiblePackLbl), Spring.width(resolutionLbl));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, compatiblePack, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, resolution, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.max(Spring.width(compatiblePack), Spring.width(resolution));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, compatiblePack, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, resolution, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, search, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, search, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, cancel, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.EAST, cancel, -10, SpringLayout.EAST, panel);
-
-        layout.putConstraint(SpringLayout.WEST, apply, 10, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, apply, -10, SpringLayout.EAST, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.BASELINE, compatiblePackLbl, 0, SpringLayout.BASELINE, compatiblePack);
-        layout.putConstraint(SpringLayout.NORTH, compatiblePack, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(compatiblePackLbl), Spring.height(compatiblePack));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.BASELINE, resolutionLbl, 0, SpringLayout.BASELINE, resolution);
-        layout.putConstraint(SpringLayout.NORTH, resolution, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(resolutionLbl), Spring.height(resolution));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, search, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, cancel, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.max(Spring.height(search), Spring.height(cancel));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.NORTH, apply, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(apply), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        panel.add(resolution, GuiConstants.WRAP);
+        panel.add(search, GuiConstants.FILL_TWO);
+        panel.add(cancel, "grow, " + GuiConstants.WRAP);
+        panel.add(apply, GuiConstants.FILL_SINGLE_LINE);
 
         pack();
         setLocationRelativeTo(this.getOwner());

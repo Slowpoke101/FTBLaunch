@@ -16,34 +16,29 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
+import net.ftb.locale.Locale;
 import net.ftb.util.CheckInstallPath;
+import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.CheckInstallPath.Action;
 
-import javax.swing.JTextField;
-
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.util.Map;
-
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class FirstRunDialog extends JDialog {
 
@@ -83,12 +78,12 @@ public class FirstRunDialog extends JDialog {
                             "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
-                    Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
+                    Settings.getSettings().setLocale(Locale.values()[languageList.getSelectedIndex()].name());
                     Settings.getSettings().save();
                 } else if (checkResult.action == Action.OK) {
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
-                    Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
+                    Settings.getSettings().setLocale(Locale.values()[languageList.getSelectedIndex()].name());
                     Settings.getSettings().save();
                 }
             }
@@ -136,26 +131,19 @@ public class FirstRunDialog extends JDialog {
         applyButton.setBounds(319, 97, 89, 23);
         contentPanel.add(applyButton);
 
-        String[] locales;
-        synchronized (I18N.localeIndices) {
-            locales = new String[I18N.localeIndices.size()];
-            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
-                Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
-                locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
-            }
-        }
-        languageList = new JComboBox(locales);
+        languageList = new JComboBox<String>(I18N.available());
         languageList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
-                I18N.setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
+                I18N.setLocale(Locale.values()[languageList.getSelectedIndex()].name());
+                Settings.getSettings().setLocale(Locale.values()[languageList.getSelectedIndex()].name());
                 if (LaunchFrame.getInstance() != null) {
                     LaunchFrame.getInstance().updateLocale();
                 }
                 updateLocale();
             }
         });
-        languageList.setSelectedItem(I18N.localeFiles.get(Settings.getSettings().getLocale()));
+        languageList.setSelectedItem(I18N.current());
         languageList.setBounds(169, 63, 500, 23);
         contentPanel.add(languageList);
     }

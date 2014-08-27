@@ -3,6 +3,8 @@ package net.ftb.util.winreg;
 import java.util.regex.Pattern;
 
 import lombok.Getter;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 
@@ -21,7 +23,6 @@ public class JavaInfo implements Comparable<JavaInfo> {
     public String version; //! Version string.
     public String origVersion = "";
     public boolean supportedVersion = false;
-    public boolean hasJava8;
     public boolean is64bits; //! true for 64-bit javas, false for 32
     @Getter
     private int major, minor, revision, build;
@@ -50,7 +51,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
 
         if(OSUtils.getCurrentOS() == OS.MACOSX) {
-            if (this.major == 1 && (this.minor == 7 || this.minor == 6))
+            if (this.major == 1 && (this.minor == 7 || this.minor == 6) || Settings.getSettings().canMacUseJava8())
                 this.supportedVersion = true;
         } else {
             this.supportedVersion = true;

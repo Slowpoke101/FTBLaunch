@@ -245,7 +245,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     }
 
     private String getMessage (LogEntry entry) {
-        String color = "white";
+        String color = "#686868";
         switch (entry.level) {
         case ERROR:
             color = "#FF7070";

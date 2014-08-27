@@ -54,11 +54,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MCInstaller {
-    private static String packmcversion = new String();
-    private static String packbasejson = new String();
+    static String packbasejson;
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
-        packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
-        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath);
+        packbasejson = "";
+        final String packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath, packmcversion);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -72,7 +72,7 @@ public class MCInstaller {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraft(installPath, pack, RESPONSE, isLegacy);
+                            launchMinecraft(installPath, pack, RESPONSE, isLegacy, packmcversion);
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }
@@ -105,7 +105,7 @@ public class MCInstaller {
         } else if (assets == null) {
             Main.getEventBus().post(new EnableObjectsEvent());
         } else {
-            launchMinecraft(installPath, pack, RESPONSE, isLegacy);
+            launchMinecraft(installPath, pack, RESPONSE, isLegacy, packmcversion);
         }
     }
 
@@ -116,9 +116,9 @@ public class MCInstaller {
      *              Normally, if offline mode works, setupNewStyle() and gatherAssets() are not called and error situation is impossible
      *              Returning null just in case of network breakge after authentication process
      */
-    private static List<DownloadInfo> gatherAssets (final File root, String installDir) {
+    private static List<DownloadInfo> gatherAssets (final File root, String installDir, String packmcversion) {
         try {
-            Logger.logInfo("Checking local assets file, for MC version" + packmcversion + " Please wait! ");
+            Logger.logInfo("Checking local assets file, for MC version " + packmcversion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
 
@@ -293,7 +293,7 @@ public class MCInstaller {
         return null;
     }
 
-    public static void launchMinecraft(String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
+    public static void launchMinecraft(String installDir, ModPack pack, LoginResponse resp, boolean isLegacy, String packmcversion) {
         try {
             File packDir = new File(installDir, pack.getDir());
             String gameFolder = installDir + File.separator + pack.getDir() + File.separator + "minecraft";
@@ -313,6 +313,7 @@ public class MCInstaller {
             natDir.mkdirs();
             if (isLegacy)
                 extractLegacy();
+            Logger.logDebug("packbaseJSON " + packbasejson);
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
@@ -338,8 +339,7 @@ public class MCInstaller {
                             entry = input.getNextEntry();
                         }
                     } catch (Exception e) {
-                        ErrorUtils.tossError("Error extracting native libraries");
-                        Logger.logError("", e);
+                        ErrorUtils.tossError("Error extracting native libraries", e);
                     } finally {
                         try {
                             input.close();
@@ -372,6 +372,7 @@ public class MCInstaller {
                 FTBFileUtils.killMetaInf();
             }
             for (Library lib : base.getLibraries()) {
+                //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                 classpath.add(new File(libDir, lib.getPath()));
             }
 

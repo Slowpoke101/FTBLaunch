@@ -14,27 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.data.news;
+package net.ftb.locale;
 
-import lombok.Getter;
-import lombok.Setter;
+public enum Locale {
+    cyGB, daDK, deDE,
+    enUS, enGB, esES,
+    fiFI, frFR, itIT,
+    nlNL, noNO, maHU,
+    ptBR, ptPT, ruRU,
+    svSE, zhCN;
 
-public class NewsArticle {
-    @Setter
-    private String title;
-    
-    @Setter
-    private String hyperlink;
-    
-    @Setter
-    private String body;
-    
-    public String getHTML() {
-        return "<p id=\"newsHeader\">- <a href=\"" + this.hyperlink + "\">" + this.title + "</a> </p>"
-                + "<p id=\"newsBody\">" + this.body + "</p><br/>";
+    public static Locale get(String key){
+        try{
+            return Locale.valueOf(key);
+        } catch(Exception ex){
+            return Locale.enUS;
+        }
     }
-
-    @Setter
-    @Getter
-    private String date;
 }

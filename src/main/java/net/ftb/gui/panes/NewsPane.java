@@ -16,8 +16,13 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.BorderLayout;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.util.NewsUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
 
+import java.awt.BorderLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,51 +32,34 @@ import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
-import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.util.NewsUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
-
 @SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
-    
-    private JScrollPane newsPanel;
-    
-    private final HTMLEditorKit news_kit = new HTMLEditorKit() {
-        {
-            this.setStyleSheet(OSUtils.makeStyleSheet("news"));
-        }
-    };
-    
-    private final JEditorPane news_pane = new JEditorPane("text/html", "") {
-        {
-            this.setEditable(false);
-            this.setEditorKit(news_kit);
-            this.addHyperlinkListener(new HyperlinkListener() {
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent e) {
-                    if (e.getEventType() == EventType.ACTIVATED) {
-                        OSUtils.browse(e.getURL().toString());
-                    }
-                }
-            });
-        }
-    };
+    private final HTMLEditorKit html_kit = new HTMLEditorKit();
+    private final JEditorPane news_pane = new JEditorPane("text/html", "");
 
-    public NewsPane() {
+    public NewsPane(){
         super(new BorderLayout());
-        
-        if(OSUtils.getCurrentOS() == OS.WINDOWS) {
-            setBorder(new EmptyBorder(-5, 0, -5, 12));
-        } else {
-            setBorder(new EmptyBorder(-4, 0, -4, -2));
+
+        if(OSUtils.getCurrentOS() == OS.WINDOWS){
+            this.setBorder(new EmptyBorder(-5, 0, -5, 12));
+        } else{
+            this.setBorder(new EmptyBorder(-4, 0, -4, -2));
         }
-        
-        newsPanel = new JScrollPane(this.news_pane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.add(newsPanel, BorderLayout.CENTER);
+
+        this.html_kit.setStyleSheet(OSUtils.makeStyleSheet("news"));
+        this.news_pane.setEditorKit(this.html_kit);
+        this.news_pane.setEditable(false);
+        this.news_pane.addHyperlinkListener(new HyperlinkListener(){
+            @Override
+            public void hyperlinkUpdate(HyperlinkEvent e){
+                if(e.getEventType() == EventType.ACTIVATED){
+                    OSUtils.browse(e.getURL().toString());
+                }
+            }
+        });
         this.news_pane.setText(NewsUtils.getNewsHTML());
+        this.news_pane.setCaretPosition(0);
+        this.add(new JScrollPane(this.news_pane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
     }
 
     @Override
@@ -80,5 +68,4 @@ public class NewsPane extends JPanel implements ILauncherPane {
         Settings.getSettings().save();
         LaunchFrame.getInstance().setNewsIcon();
     }
-    
 }
