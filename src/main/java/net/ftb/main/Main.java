@@ -29,6 +29,7 @@ import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
+import net.ftb.laf.FTBLookAndFeel;
 import net.ftb.locale.I18N;
 import net.ftb.log.LogLevel;
 import net.ftb.log.LogSource;
@@ -80,7 +81,8 @@ public class Main {
         }));
         StyleUtil.loadUiStyles();
         try {
-            UIManager.setLookAndFeel(javax.swing.plaf.nimbus.NimbusLookAndFeel.class.getName());
+            UIManager.setLookAndFeel(new FTBLookAndFeel());
+            // UIManager.setLookAndFeel(javax.swing.plaf.nimbus.NimbusLookAndFeel.class.getName());
         } catch (Exception e) {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
