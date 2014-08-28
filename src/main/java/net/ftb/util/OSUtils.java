@@ -26,7 +26,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 
