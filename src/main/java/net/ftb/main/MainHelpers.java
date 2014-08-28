@@ -30,7 +30,8 @@ import javax.swing.JOptionPane;
 
 public class MainHelpers {
     public static void printInfo() {
-        Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
+        // + version + " starting up based on launcher (version " + "1.3.7"
+        Logger.logInfo("FTBLaunch PAXPRIME2014 "+ Constants.version + " starting based on launcher (version 1.4.4 Build: " + Constants.buildNumber + ")");
         Logger.logInfo("Java version: " + System.getProperty("java.version"));
         Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
         Logger.logInfo("Java home: " + System.getProperty("java.home"));
@@ -63,102 +64,6 @@ public class MainHelpers {
 
     }
 
-    public static void googleAnalytics() {
-        File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
-        try {
-            if (!credits.exists()) {
-                FileOutputStream fos = new FileOutputStream(credits);
-                OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
-                osw.write("-------------------------------" + System.getProperty("line.separator"));
-                osw.write("Launcher Developers:" + System.getProperty("line.separator"));
-                osw.write("jjw123" + System.getProperty("line.separator"));
-                osw.write("unv_annihilator" + System.getProperty("line.separator"));
-                osw.write("ProgWML6" + System.getProperty("line.separator"));
-                osw.write("Launcher Team Members" + System.getProperty("line.separator"));
-                osw.write("IoP" + System.getProperty("line.separator"));
-                osw.write("Viper-7" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                osw.write("Major Launcher Dev Contributors" + System.getProperty("line.separator"));
-                osw.write("LexManos" + System.getProperty("line.separator"));
-                osw.write("Asyncronous" + System.getProperty("line.separator"));
-                osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                osw.write("Web Developers:" + System.getProperty("line.separator"));
-                osw.write("Captainnana" + System.getProperty("line.separator"));
-                osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                osw.write("Modpack Team:" + System.getProperty("line.separator"));
-                osw.write("Lathanael" + System.getProperty("line.separator"));
-                osw.write("Jadedcat" + System.getProperty("line.separator"));
-                osw.write("Eyamaz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                osw.write("Third Modpack Team:" + System.getProperty("line.separator"));
-                osw.write("Watchful11" + System.getProperty("line.separator"));
-                osw.write("TFox83" + System.getProperty("line.separator"));
-
-                osw.flush();
-                osw.close();
-
-                TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
-            }
-
-
-        } catch (FileNotFoundException e1) {
-            Logger.logError(e1.getMessage());
-        } catch (IOException e1) {
-            Logger.logError(e1.getMessage());
-        }
-
-        if (!Settings.getSettings().getLoaded()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS / " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
-            Settings.getSettings().setLoaded(true);
-        }
-
-        File stamp = new File(OSUtils.getDynamicStorageLocation(), "stamp");
-        long unixTime = System.currentTimeMillis() / 1000L;
-        long unixts=0;
-        try {
-            if (!stamp.exists()) {
-                FileOutputStream fos = new FileOutputStream(stamp);
-                OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                osw.write(String.valueOf(unixTime));
-                osw.flush();
-                osw.close();
-                Logger.logInfo("Reporting daily use");
-                TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-            } else {
-                FileInputStream fis = new FileInputStream(stamp);
-                int content;
-                StringBuilder timeBuilder = new StringBuilder();
-                while ((content = fis.read()) != -1) {
-                    char c = (char) content;
-                    timeBuilder.append(String.valueOf(c));
-                }
-                String time = timeBuilder.toString();
-                try {
-                    unixts = Long.valueOf(time);
-                } catch (NumberFormatException e) {
-                    Logger.logWarn("Malformed stamp-file. Will be fixed automatically");
-                }
-                unixts = unixts + (24 * 60 * 60);
-                if (unixts < unixTime) {
-                    FileOutputStream fos = new FileOutputStream(stamp);
-                    OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                    osw.write(String.valueOf(unixTime));
-                    osw.flush();
-                    osw.close();
-                    Logger.logInfo("Reporting daily use");
-                    TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-                }
-                fis.close();
-            }
-        } catch (FileNotFoundException e1) {
-            Logger.logError(e1.getMessage());
-        } catch (IOException e1) {
-            Logger.logError(e1.getMessage());
-        }
-    }
 
     public static void tossNag(String setting, String message) {
         if (!Settings.getSettings().getBoolean(setting)) {

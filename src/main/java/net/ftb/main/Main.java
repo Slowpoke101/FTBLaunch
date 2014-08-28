@@ -122,22 +122,6 @@ public class Main {
             beta = 9999999;
         }
 
-        /*
-         *  Posts information about OS, JVM and launcher version into Google Analytics
-         */
-        AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
-        tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, JGoogleAnalyticsTracker.GoogleAnalyticsVersion.V_4_7_2);
-        tracker.setEnabled(true);
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start / " + Constants.version + "." + beta);
-        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
-            try {
-                new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
-            } catch (IOException e) {
-                Logger.logError("Error creating os cache text file");
-            }
-        }
-
         MainHelpers.printInfo();
 
         /*
@@ -180,9 +164,10 @@ public class Main {
                 I18N.setupLocale();
                 I18N.setLocale(Settings.getSettings().getLocale());
 
-                if (Settings.getSettings().isNoConfig()) {
+                if (Settings.getSettings().isNoConfig()) {//TODO PAX we probably don't need to actually call this dialog force to c:/ftb
                     FirstRunDialog firstRunDialog = new FirstRunDialog();
                     firstRunDialog.setVisible(true);
+                    LaunchFrame.getInstance().forcedl = true;
                 }
 
                 LoadingDialog.setProgress(120);
@@ -208,17 +193,7 @@ public class Main {
                     }
                 }
 
-                if (!OSUtils.is64BitOS()) {
-                    MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
-                }
-                if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
-                    MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
-                }
                 JavaInfo java = Settings.getSettings().getCurrentJava();
-                if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
-                    MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
-                }
-
                 LoadingDialog.setProgress(130);
 
                 // Store this in the cache (local) storage, since it's machine specific.
@@ -232,8 +207,6 @@ public class Main {
                     Logger.addListener(LaunchFrame.con);
                     LaunchFrame.con.scrollToBottom();
                 }
-
-                MainHelpers.googleAnalytics();
 
                 LoadingDialog.setProgress(160);
 

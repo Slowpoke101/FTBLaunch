@@ -75,19 +75,23 @@ import net.ftb.workers.UnreadNewsWorker;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
+    public static boolean bypasslaunch;
+    public static boolean forcedl;
+
     private LoginResponse RESPONSE;
     private NewsPane newsPane;
     public static JPanel panel;
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
+    private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CURSELOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
-    private final JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+    private final JButton launch = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
             tpInstall = new JButton();
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
-    private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static JComboBox tpInstallLocation, mapInstallLocation;
     /**
      * @return - Outputs LaunchFrame instance
      */
@@ -177,53 +181,6 @@ public class LaunchFrame extends JFrame {
 
         ArrayList<String> var = UserManager.getNames();
         String[] dropdown = ObjectUtils.concatenateArrays(dropdown_, var.toArray(new String[var.size()]));
-        users = new JComboBox(dropdown);
-        if (Settings.getSettings().getLastUser() != null) {
-            for (int i = 0; i < dropdown.length; i++) {
-                if (dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
-                    users.setSelectedIndex(i);
-                }
-            }
-        }
-
-        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
-        donate.setBounds(390, 20, 80, 30);
-        donate.setEnabled(false);
-        donate.setToolTipText("Coming Soon...");
-        donate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-            }
-        });
-
-        users.setBounds(550, 20, 150, 30);
-        users.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                if (users.getSelectedIndex() == 1) {
-                    ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
-                    users.setSelectedIndex(0);
-                    p.setVisible(true);
-                }
-                edit.setEnabled(users.getSelectedIndex() > 1);
-            }
-        });
-
-        edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-        edit.setBounds(480, 20, 60, 30);
-        edit.setVisible(true);
-        edit.setEnabled(users.getSelectedIndex() > 1);
-        edit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                if (users.getSelectedIndex() > 1) {
-                    ProfileEditorDialog p = new ProfileEditorDialog(getInstance(), (String) users.getSelectedItem(), true);
-                    users.setSelectedIndex(0);
-                    p.setVisible(true);
-                }
-                edit.setEnabled(users.getSelectedIndex() > 1);
-            }
-        });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         launch.setEnabled(false);
@@ -232,29 +189,6 @@ public class LaunchFrame extends JFrame {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 doLaunch();
-            }
-        });
-
-        serverbutton.setBounds(480, 20, 330, 30);
-        serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
-        serverbutton.setVisible(false);
-        serverbutton.addActionListener(new ActionListener() {
-            //TODO this needs to be sensitive to 2 panes!!!
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
-                    if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-                        String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                .getSelectedPack().getVersion().replace(".", "_")
-                                : Settings.getSettings().getPackVer().replace(".", "_");
-                        if (ModPack.getSelectedPack().isPrivatePack()) {
-                            OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                        } else {
-                            OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
-                        }
-                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + "Server Download", "Server Download / " + ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
-                    }
-                }
             }
         });
 
@@ -312,13 +246,9 @@ public class LaunchFrame extends JFrame {
         tpInstallLocLbl.setBounds(480, 20, 80, 30);
         tpInstallLocLbl.setVisible(false);
 
-        footer.add(edit);
-        footer.add(users);
         footer.add(footerLogo);
         footer.add(footerCreeper);
         footer.add(launch);
-        footer.add(donate);
-        footer.add(serverbutton);
         footer.add(mapInstall);
         footer.add(mapInstallLocation);
         footer.add(serverMap);
@@ -382,6 +312,8 @@ public class LaunchFrame extends JFrame {
                             instance.setVisible(true);
                             instance.toFront();
                             Benchmark.logBenchAs("main", "Launcher Startup");
+                            if (LaunchFrame.forcedl)
+                                forcedl();
                         }
                     }
                 }
@@ -441,9 +373,6 @@ public class LaunchFrame extends JFrame {
         tabbedPane.getSelectedComponent().setEnabled(false);
 
         launch.setEnabled(false);
-        users.setEnabled(false);
-        edit.setEnabled(false);
-        serverbutton.setEnabled(false);
         mapInstall.setEnabled(false);
         mapInstallLocation.setEnabled(false);
         serverMap.setEnabled(false);
@@ -571,7 +500,6 @@ public class LaunchFrame extends JFrame {
      * "Saves" the settings from the GUI controls into the settings class.
      */
     public void saveSettings () {
-        Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
         instance.optionsPane.saveSettingsInto(Settings.getSettings());
     }
 
@@ -579,19 +507,6 @@ public class LaunchFrame extends JFrame {
      * @param user - user added/edited
      */
     public static void writeUsers (String user) {
-        try {
-            Main.getUserManager().write();
-        } catch (IOException e) {
-        }
-        ArrayList<String> var = UserManager.getNames();
-        String[] usernames = ObjectUtils.concatenateArrays(dropdown_, var.toArray(new String[var.size()]));
-        users.removeAllItems();
-        for (int i = 0; i < usernames.length; i++) {
-            users.addItem(usernames[i]);
-            if (usernames[i].equals(user)) {
-                users.setSelectedIndex(i);
-            }
-        }
     }
 
     /**
@@ -668,8 +583,6 @@ public class LaunchFrame extends JFrame {
         serverMap.setEnabled(true);
         tpInstall.setEnabled(true);
         launch.setEnabled(true);
-        users.setEnabled(true);
-        serverbutton.setEnabled(true);
         tpInstallLocation.setEnabled(true);
         TextureManager.updating = false;
     }
@@ -709,10 +622,7 @@ public class LaunchFrame extends JFrame {
      * disables the buttons that are usually active on the footer
      */
     public void disableMainButtons () {
-        serverbutton.setVisible(false);
         launch.setVisible(false);
-        edit.setVisible(false);
-        users.setVisible(false);
     }
 
     /**
@@ -756,10 +666,6 @@ public class LaunchFrame extends JFrame {
             break;
         default:
             launch.setVisible(true);
-            edit.setEnabled(users.getSelectedIndex() > 1);
-            edit.setVisible(true);
-            users.setVisible(true);
-            serverbutton.setVisible(false);
             disableMapButtons();
             disableTextureButtons();
             break;
@@ -772,29 +678,20 @@ public class LaunchFrame extends JFrame {
      */
     public void updateLocale () {
         if (I18N.currentLocale == Locale.deDE) {
-            edit.setBounds(420, 20, 120, 30);
-            donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
             mapInstallLocation.setBounds(420, 20, 190, 30);
-            serverbutton.setBounds(420, 20, 390, 30);
             tpInstallLocation.setBounds(420, 20, 190, 30);
             tpInstall.setBounds(620, 20, 190, 30);
         } else {
-            edit.setBounds(480, 20, 60, 30);
-            donate.setBounds(390, 20, 80, 30);
             mapInstall.setBounds(650, 20, 160, 30);
             mapInstallLocation.setBounds(480, 20, 160, 30);
-            serverbutton.setBounds(480, 20, 330, 30);
             tpInstallLocation.setBounds(480, 20, 160, 30);
             tpInstall.setBounds(650, 20, 160, 30);
         }
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
-        edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-        serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
         optionsPane.updateLocale();
@@ -811,18 +708,18 @@ public class LaunchFrame extends JFrame {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (ModPack.getSelectedPack().getMinLaunchSpec() <= Constants.buildNumber) {
-            if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
+            if (ModPack.getSelectedPack() != null) {
                 if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
                     Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
                     Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
                     saveSettings();
-                    doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
+                            userManager.read();
+                            if (userManager._users.size() >= 1 && ModPack.getSelectedPack() != null) {
+                                doLogin(UserManager._users.get(0).getUsername(), UserManager._users.get(0).getPassword());
                             UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
                 } else {//user can't run pack-- JRE not high enough
                     ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
                 }
-            } else if (users.getSelectedIndex() <= 1) {
-                ErrorUtils.tossError("Please select a profile!");
             }
         } else {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
@@ -863,6 +760,13 @@ public class LaunchFrame extends JFrame {
 			e.printStackTrace();
 		}
     }
+    public static void forcedl () {
+        if (ModPack.getSelectedPack() != null) {
+            bypasslaunch = true;
+            instance.runGameUpdater(new LoginResponse("A:1:token:progwml6:b6e3d27b070240cda22adb9f61077027:83898b2861184900913741ffc46b6e10"));
+        }
+    }
+
     public static void main(String args[]) {
         Main.main(args);// just in case someone is launching w/ this as the main class
     }

@@ -72,7 +72,11 @@ public class MCInstaller {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            launchMinecraft(installPath, pack, RESPONSE, isLegacy);
+                            if (!LaunchFrame.getInstance().bypasslaunch) {
+                                LaunchFrame.getInstance().bypasslaunch = false;
+                                launchMinecraft(installPath, pack, RESPONSE, isLegacy);
+                            }
+
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
                         }

@@ -88,7 +88,7 @@ shadowJar  {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
   dependencies {
-    exclude(dependency('com.mojang:authlib'))
+    //exclude(dependency('com.mojang:authlib'))we shade everything at pax
     exclude(dependency('org.projectlombok:lombok'))
   }
   classifier = ''

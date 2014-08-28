@@ -53,19 +53,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground () {
-        Benchmark.start("Authlib");
-        Logger.logDebug("Loading Authlib...");
-        if (!binDir.exists())
-            binDir.mkdirs();
-        if (!downloadJars()) {
-            Logger.logError("Authlib Download Failed");
-            if (!new File(binDir + File.separator + "authlib-" + authlibVersion + ".jar").exists())
-                return false;
-            Logger.logInfo("Local Authlib copy exists: trying to load it anyway");
-        }
-        setStatus("Adding Authlib to Classpath");
-        Logger.logInfo("Adding Authlib to Classpath");
-        return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
+        return true;//we shade for pax
     }
 
     protected boolean addToClasspath (String location) {

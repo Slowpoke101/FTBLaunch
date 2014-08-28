@@ -20,27 +20,30 @@ import com.google.common.collect.Maps;
 
 import java.util.HashMap;
 
+/**
+ * THIS IS A CUSTOM VERSION FOR PAX!!! NEVER EVER EVER HOST MOJANG's CODE/ASSETS IN PRODUCTION REPOS!!!!!
+ */
 //Class used for storage of various constants & location information used by various downloading processes
 public class Locations {
-	
+    public static final String curseRepo = "http://ftbcompserver";
+
     //location of them Mojang server that MC itself & the json's are pulled from
-    public static final String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
+    public static final String mc_dl = curseRepo + "/mojang/mc.dl/";
     //location of them Mojang server that MC's resources are pulled from
-    public static final String mc_res = "http://resources.download.minecraft.net/";
+    public static final String mc_res = curseRepo + "/mojang/resources/";
     //location of them Mojang server that hosts the Minecraft Maven host
-    public static final String mc_libs = "https://libraries.minecraft.net/";
+    public static final String mc_libs = curseRepo + "/mojang/libraries/";
     //location of the FTB maven repo within the FTB2/static part of the repository
     public static final String ftb_maven = "maven/";
 
-    public static final String chRepo = "http://new.creeperrepo.net";
-    public static final String curseRepo = "http://ftb.cursecdn.com";
+    public static final String chRepo = "unused";
     //this changes based on the primary automatic server in the balancing logic
     //DO NOT ACCESS UNILL 1st DL thread has finished setting up!!!!
-    public static String masterRepo = "http://ftb.cursecdn.com";
-    public static String masterRepoNoHTTP = "ftb.cursecdn.com";
+    public static String masterRepo = curseRepo;
+    public static String masterRepoNoHTTP = curseRepo.replace("http://", "");
     // used in mirroring logic
     public static boolean primaryCH = false;
-    public static boolean chEnabled = true;
+    public static boolean chEnabled = false;//we force using a single mirror @pax
 
     public static String FTB2 = "FTB2/";
     //FULL location of the FTB maven repo
@@ -64,7 +67,7 @@ public class Locations {
     public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
     
     // Feed URL
-    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
+    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";//TODO PAX PRIME bake one locally
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";
@@ -76,7 +79,7 @@ public class Locations {
     public static final String MODPACKXML = "modpacks.xml";
     public static final String THIRDPARTYXML = "thirdparty.xml";
     public static final String TEXTUREPACKXML= "texturepack.xml";
-    public static final String NEWSUPDATEPHP = "http://launcher.feed-the-beast.com/newsupdate.php";
+
     public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 
@@ -84,6 +87,7 @@ public class Locations {
 
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
+    public static final String CURSELOGO = "/image/logo_curse.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";
     public static final String launcherLogFile = "FTBLauncherLog.txt";

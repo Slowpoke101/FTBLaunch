@@ -45,7 +45,7 @@ public class LoginWorker extends SwingWorker<String, Void> {
     protected String doInBackground () {
         Benchmark.start("LoginWorker");
         try {
-            if (LaunchFrame.canUseAuthlib) {
+            if (true) {
                 try {
                     LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData, selectedProfile);
                     this.resp = resp;

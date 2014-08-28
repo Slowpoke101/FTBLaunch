@@ -37,111 +37,17 @@ import net.ftb.util.OSUtils;
 
 public class UserManager {
     public final static ArrayList<User> _users = new ArrayList<User>();
-    private File _file;
-    private File _oldFile;
 
-    public UserManager(File file, File oldFile) {
-        _file = file;
-        _oldFile = oldFile;
-        read();
+    public UserManager() {
     }
 
     public void write () throws IOException {
-
-        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
-                if (_oldFile.exists()) {
-                    _oldFile.delete();
-                }
-
-                if (_file.exists()) {
-                    _file.delete();
-                }
-        }
-
-        FileOutputStream fileOutputStream = new FileOutputStream(_file);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        try {
-            for (User user : _users) {
-                objectOutputStream.writeObject(user);
-            }
-            
-        } finally {
-            objectOutputStream.close();
-            fileOutputStream.close();
-        }
+        //we don't want this info stored at all!
     }
 
     public void read () {
-        if (!_file.exists() && !_oldFile.exists()) {
-            return;
-        }
-        _users.clear();
-        if (!OSUtils.verifyUUID()) {
-            Logger.logError(I18N.getLocaleString("CHANGEDUUID"));
-            //TODO: GUI depencency here
-            ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "CHANGEDUUID", true);
+            ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), true);
             p.setVisible(true);
-            return;
-        }
-        try {
-            FileInputStream fileInputStream;
-            
-            if(_file.exists()) {
-                fileInputStream = new FileInputStream(_file);
-            } else {
-                fileInputStream = new FileInputStream(_oldFile);
-            }
-            
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            try {
-                Object obj;
-                while ((obj = objectInputStream.readObject()) != null) {
-                    if (obj instanceof User) {
-                        _users.add((User) obj);
-                    }
-                }
-            } catch (EOFException ignored) {
-            } finally {
-                objectInputStream.close();
-                fileInputStream.close();
-            }
-        } catch (StreamCorruptedException e) {
-            Logger.logWarn("Failed to decode logindata. Trying old format");
-        } catch (Exception e) {
-            Logger.logError("Failed to decode logindata", e);
-        }
-
-        // TODO: Remove this in a while once people are unlikely to have old format saved logindata
-        if (_users.isEmpty()) {
-            //Logger.logError(I18N.getLocaleString("OLDCREDS"));
-            // ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "OLDCREDS", true);
-            // p.setVisible(true);
-
-            try {
-                BufferedReader read;
-                
-                if(_file.exists()) {
-                    read = new BufferedReader(new FileReader(_file));
-                } else {
-                    read = new BufferedReader(new FileReader(_oldFile));
-                }
-                
-                String str;
-                while ((str = read.readLine()) != null) {
-                    str = CryptoUtils.decryptLegacy(str, OSUtils.getMacAddress());
-                    _users.add(new User(str));
-                }
-                read.close();
-            } catch (NumberFormatException ex) {
-                // If logindata is new format and empty it will contain bytes 0xae 0xed 0x00 0x05
-                // Catch exception from parseInt => no more stack prints for end users
-            } catch (Exception ex) {
-                Logger.logError("Error while reading logindata", ex);
-            }
-            if (_users.isEmpty()) {
-                Logger.logInfo("No users found after decoding old logindata format. Malformed logindata or empty logindata");
-            }
-        }
     }
 
     public static void addUser (String username, String password, String name) {
