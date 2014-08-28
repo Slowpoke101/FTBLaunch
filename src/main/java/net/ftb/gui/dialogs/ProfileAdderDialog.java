@@ -47,7 +47,6 @@ public class ProfileAdderDialog extends JDialog {
     private JPasswordField password;
     private JLabel nameLbl;
     private JTextField name;
-    private JCheckBox savePassword, saveMojangData;
     private JButton add;
     private JLabel messageLbl;
 
@@ -68,9 +67,6 @@ public class ProfileAdderDialog extends JDialog {
 
         getRootPane().setDefaultButton(add);
 
-        savePassword.setSelected(true);
-        saveMojangData.setSelected(true);
-
         username.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
@@ -87,36 +83,19 @@ public class ProfileAdderDialog extends JDialog {
             }
         });
 
-        savePassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                password.setEnabled(savePassword.isSelected());
-            }
-        });
 
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                if (savePassword.isSelected()) {
-                    if (validate(name.getText(), username.getText(), password.getPassword())) {
-                        UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-                        UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
-                        LaunchFrame.writeUsers(name.getText());
-                        setVisible(false);
-                    } else {
-                        ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
-                    }
-                } else {
                     if (validate(name.getText(), username.getText())) {
                         UserManager.addUser(username.getText(), "", name.getText());
-                        UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
                 }
-            }
+
         });
     }
 
@@ -124,11 +103,9 @@ public class ProfileAdderDialog extends JDialog {
         if (editingName.equals("CHANGEDUUID")) {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
-            savePassword.setSelected(false);
         } else if (editingName.equals("OLDCREDS")) {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
-            savePassword.setSelected(false);
         }
 
     }
@@ -166,8 +143,6 @@ public class ProfileAdderDialog extends JDialog {
         password = new JPasswordField(16);
         nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
         name = new JTextField(16);
-        savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-        saveMojangData = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEMOJANGDATA"));
         add = new JButton(I18N.getLocaleString("MAIN_ADD"));
 
         usernameLbl.setLabelFor(username);
@@ -184,8 +159,6 @@ public class ProfileAdderDialog extends JDialog {
         panel.add(password);
         panel.add(nameLbl);
         panel.add(name);
-        panel.add(savePassword);
-        panel.add(saveMojangData);
         panel.add(add);
 
         Spring hSpring;
@@ -210,10 +183,8 @@ public class ProfileAdderDialog extends JDialog {
         layout.putConstraint(SpringLayout.WEST, username, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, password, hSpring, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.WEST, name, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, savePassword, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, saveMojangData, hSpring, SpringLayout.WEST, panel);
 
-        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name),Spring.width(savePassword),Spring.width(saveMojangData));
+        columnWidth = SwingUtils.springMax(Spring.width(username), Spring.width(password), Spring.width(name));
 
         hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
 
@@ -248,13 +219,6 @@ public class ProfileAdderDialog extends JDialog {
 
         vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(5));
 
-        layout.putConstraint(SpringLayout.NORTH, savePassword, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(savePassword), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, saveMojangData, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(saveMojangData), Spring.constant(10));
 
         layout.putConstraint(SpringLayout.NORTH, add, vSpring, SpringLayout.NORTH, panel);
 
