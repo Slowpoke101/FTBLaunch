@@ -69,12 +69,8 @@ public class ProfileAdderDialog extends JDialog {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                    if (validate(username.getText())) {
                         UserManager.addUser(username.getText(), password.getText());
                         setVisible(false);
-                    } else {
-                        ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
-                    }
                 }
 
         });
