@@ -32,6 +32,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.main.Main;
 import net.ftb.util.CryptoUtils;
 import net.ftb.util.OSUtils;
 
@@ -46,6 +47,7 @@ public class UserManager {
     }
 
     public void read () {
+            _users.clear();
             ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), true);
             p.setVisible(true);
     }

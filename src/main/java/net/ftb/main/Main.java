@@ -51,7 +51,6 @@ public class Main {
     private static UserManager userManager;
     @Getter
     private static int beta;
-
     /**
      * @return FTB Launcher event bus
      */
