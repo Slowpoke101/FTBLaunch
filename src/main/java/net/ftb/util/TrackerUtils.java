@@ -16,15 +16,12 @@
  */
 package net.ftb.util;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.tracking.piwik.PiwikTracker;
 
 import java.util.Map;
-import java.util.Set;
 
 public class TrackerUtils {
     public static boolean googleEnabled = true;
