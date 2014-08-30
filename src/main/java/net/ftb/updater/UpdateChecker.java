@@ -86,26 +86,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private void loadInfo () {
         try {
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink("version.xml")));
-            Update upd = JsonFactory.getUpdate("net.ftb:launcher:beta@json", Locations.FTBMAVENFULL);
-            if (upd.getPrimary().equals("beta")){
-                Channel beta = upd.getBeta();
-                this.betaJenk = beta.getJenkins();
-                int beta_ = this.beta = beta.getVersion();
-                betaStr += beta_ / (100 * 100) + ".";
-                beta_ = beta_ % (100 * 100);
-                betaStr += beta_ / (100) + ".";
-                beta_ = beta_ % 100;
-                betaStr += beta_;
-                betaAddress = beta.getFile().getUrl() + beta.getFile().getPath();
-                if(beta.getFile().checksums != null){
-                    betaHash = beta.getFile().checksums;
-                }
-                if(upd.getRelease() != null){
-                    //TODO add code here to handle if the releases are in maven!!
-                }
-            }
-
-
+            allowBeta = false;
             if (doc == null) {
                 return;
             }

@@ -179,7 +179,7 @@ public class LaunchFrame extends JFrame {
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-        ArrayList<String> var = UserManager.getNames();
+        ArrayList<String> var = UserManager.getUsernames();
         String[] dropdown = ObjectUtils.concatenateArrays(dropdown_, var.toArray(new String[var.size()]));
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
@@ -248,6 +248,7 @@ public class LaunchFrame extends JFrame {
 
         footer.add(footerLogo);
         footer.add(footerCreeper);
+        footer.add(footerCurse);
         footer.add(launch);
         footer.add(mapInstall);
         footer.add(mapInstallLocation);
@@ -688,6 +689,13 @@ public class LaunchFrame extends JFrame {
             tpInstallLocation.setBounds(480, 20, 160, 30);
             tpInstall.setBounds(650, 20, 160, 30);
         }
+        footerCurse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                footerCurse.setBounds(72 + 123 + 15, 15, 132, 42);
+                footerCurse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked (MouseEvent event) {
+                }
+        });
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
@@ -713,10 +721,13 @@ public class LaunchFrame extends JFrame {
                     Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
                     Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
                     saveSettings();
-                            userManager.read();
-                            if (userManager._users.size() >= 1 && ModPack.getSelectedPack() != null) {
-                                doLogin(UserManager._users.get(0).getUsername(), UserManager._users.get(0).getPassword());
-                            UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
+                        Main.getUserManager().read();
+                        if (UserManager._users.size() >= 1 && ModPack.getSelectedPack() != null)
+                            doLogin(UserManager.getUsernames().get(0), UserManager.getPassword(UserManager.getUsernames().get(0)), null, UserManager.getUsernames().get(0));
+                        else {
+                            Logger.logError("no users to login w/");
+                        }
+                            //UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
                 } else {//user can't run pack-- JRE not high enough
                     ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
                 }
@@ -762,8 +773,8 @@ public class LaunchFrame extends JFrame {
     }
     public static void forcedl () {
         if (ModPack.getSelectedPack() != null) {
-            bypasslaunch = true;
-            instance.runGameUpdater(new LoginResponse("A:1:token:progwml6:b6e3d27b070240cda22adb9f61077027:83898b2861184900913741ffc46b6e10"));
+            bypasslaunch = true;//TODO FIX THIS \/
+           // instance.runGameUpdater(new LoginResponse("A:1:token:progwml6:b6e3d27b070240cda22adb9f61077027:83898b2861184900913741ffc46b6e10"));
         }
     }
 

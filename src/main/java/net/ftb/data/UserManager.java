@@ -50,29 +50,23 @@ public class UserManager {
             p.setVisible(true);
     }
 
-    public static void addUser (String username, String password, String name) {
-        _users.add(new User(username, password, name));
+    public static void addUser (String username, String password) {
+        _users.add(new User(username, password));
     }
 
     public static ArrayList<String> getUsernames () {
         ArrayList<String> ret = new ArrayList<String>();
         for (User user : _users) {
-            ret.add(user.getName());
+            ret.add(user.getUsername());
         }
         return ret;
     }
 
-    public static ArrayList<String> getNames () {
-        ArrayList<String> ret = new ArrayList<String>();
-        for (User user : _users) {
-            ret.add(user.getName());
-        }
-        return ret;
-    }
+
 
     public static String getUsername (String name) {
         for (User user : _users) {
-            if (user.getName().equals(name)) {
+            if (user.getUsername().equals(name)) {
                 return user.getUsername();
             }
         }
@@ -81,7 +75,7 @@ public class UserManager {
 
     public static String getPassword (String name) {
         for (User user : _users) {
-            if (user.getName().equals(name)) {
+            if (user.getUsername().equals(name)) {
                 return user.getPassword();
             }
         }
@@ -90,7 +84,7 @@ public class UserManager {
 
     private static User findUser (String name) {
         for (User user : _users) {
-            if (user.getName().equals(name)) {
+            if (user.getUsername().equals(name)) {
                 return user;
             }
         }
@@ -118,7 +112,6 @@ public class UserManager {
         if (temp != null) {
             _users.get(_users.indexOf(temp)).setUsername(username);
             _users.get(_users.indexOf(temp)).setPassword(password);
-            _users.get(_users.indexOf(temp)).setName(name);
         }
     }
 
@@ -162,12 +155,5 @@ public class UserManager {
     public static boolean getSaveMojangData (String username) {
         User temp = findUser(username);
         return temp != null && temp.getSaveMojangData();
-    }
-
-    public static String getName ( String username) {
-        User temp = findUser(username);
-        if(temp != null)
-            return temp.getName();
-        return null;
     }
 }

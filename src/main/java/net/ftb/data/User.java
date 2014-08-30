@@ -33,19 +33,17 @@ public class User implements Serializable {
 
     private int _serial = 0;
     private boolean saveMojangData = true;
-    private String _username = "", _name = "", _encryptedPassword = "", _encryptedStore = "", _uuid = "";
+    private String _username = "", _encryptedPassword = "", _encryptedStore = "", _uuid = "";
     private transient String _password = "", _decryptedStore = "";
 
     /**
      * @param username - the username of the profile
      * @param password - the password of the profile
-     * @param name - the name of the profile
      */
-    public User(String username, String password, String name) {
+    public User(String username, String password) {
         _serial = serialVersionUID;
         setUsername(username);
         setPassword(password);
-        setName(name);
     }
 
     /**
@@ -55,7 +53,6 @@ public class User implements Serializable {
     public User(String input) {
         _serial = serialVersionUID;
         String[] tokens = input.split(":");
-        setName(tokens[0]);
         setUsername(tokens[1]);
         if (tokens.length == 3) {
             setPassword(tokens[2]);
@@ -115,20 +112,6 @@ public class User implements Serializable {
         } else {
             _encryptedPassword = CryptoUtils.encrypt(_password);
         }
-    }
-
-    /**
-     * @return - profile name
-     */
-    public String getName () {
-        return _name;
-    }
-
-    /**
-     * @param name - set profile name
-     */
-    public void setName (String name) {
-        _name = name;
     }
 
     private void readObject (ObjectInputStream s) throws IOException, ClassNotFoundException {

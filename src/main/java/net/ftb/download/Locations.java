@@ -67,7 +67,7 @@ public class Locations {
     public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
     
     // Feed URL
-    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";//TODO PAX PRIME bake one locally
+    public static final String feedURL = curseRepo + "/FTB2/static/index.rss";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";

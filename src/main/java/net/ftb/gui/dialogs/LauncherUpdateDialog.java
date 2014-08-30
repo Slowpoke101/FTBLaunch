@@ -63,7 +63,7 @@ public class LauncherUpdateDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 setVisible(false);
-                updateChecker.update();
+
             }
         });
 

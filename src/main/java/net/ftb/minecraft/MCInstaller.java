@@ -168,8 +168,7 @@ public class MCInstaller {
             Logger.logDebug("Checking minecraft version json");
             if(packbasejson == null || packbasejson.isEmpty())
                 packbasejson = packmcversion;
-            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
-                    + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
+            URL url = new URL(DownloadUtils.getStaticCreeperhostLink("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson));
 
             DownloadUtils.downloadToFile(url, json, 3);

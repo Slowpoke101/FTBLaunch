@@ -197,7 +197,7 @@ public class Main {
                 LoadingDialog.setProgress(130);
 
                 // Store this in the cache (local) storage, since it's machine specific.
-                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+                userManager = new UserManager();
 
                 LoadingDialog.setProgress(140);
 
@@ -272,9 +272,7 @@ public class Main {
                     protected void done () {
                         try {
                             if (get()) {
-                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
-                                p.setVisible(true);
-                            }
+                                update();                            }
                         } catch (InterruptedException e) {
                         } catch (ExecutionException e) {
                         }
