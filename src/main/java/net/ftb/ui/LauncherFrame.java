@@ -1,9 +1,12 @@
 package net.ftb.ui;
 
+import net.ftb.events.OpenInfoPanelEvent;
 import net.ftb.laf.utils.UIUtils;
+import net.ftb.main.Main;
 import net.ftb.ui.comp.FTBLogoButton;
 import net.ftb.ui.comp.SelectProfileButton;
 import net.ftb.ui.comp.ToggleButtonGroup;
+import net.ftb.ui.panel.ModPackInfoPanel;
 import net.ftb.ui.tab.FTBMPTab;
 import net.ftb.ui.tab.HomeTab;
 import net.ftb.ui.tab.MapsTab;
@@ -11,6 +14,8 @@ import net.ftb.ui.tab.OptionsTab;
 import net.ftb.ui.tab.TPMPTab;
 import net.ftb.ui.tab.Tab;
 import net.ftb.ui.tab.TexturesTab;
+
+import com.google.common.eventbus.Subscribe;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -20,6 +25,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,6 +39,7 @@ extends JFrame{
     private final JPanel leftPanel = new JPanel();
     private final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     private final GridBagConstraints gbc = new GridBagConstraints();
+    private final Set<String> infoPanels = new HashSet<String>();
 
     private final TPMPTab tpmpTab = new TPMPTab();
     private final FTBMPTab ftbMpTab = new FTBMPTab();
@@ -57,6 +65,8 @@ extends JFrame{
         this.setupTopPanel();
         this.addActionListeners();
         this.addTabs();
+
+        Main.getEventBus().register(this);
     }
 
     private void addTabs(){
@@ -66,6 +76,16 @@ extends JFrame{
         this.addTab(new MapsTab());
         this.addTab(new TexturesTab());
         this.addTab(new OptionsTab());
+    }
+
+    @Subscribe
+    public void onInfoOpen(OpenInfoPanelEvent e){
+        if(!this.infoPanels.contains(e.pack.getName())){
+            this.addTab(new ModPackInfoPanel(e.pack));
+            this.infoPanels.add(e.pack.getName());
+        }
+
+        this.showTab(e.pack.getName());
     }
 
     private void addActionListeners(){

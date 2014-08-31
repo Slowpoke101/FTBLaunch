@@ -43,6 +43,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 public class ModPack {
     private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
@@ -271,7 +272,7 @@ public class ModPack {
             this.imageName = image = "default_splash.png";
             DownloadUtils.saveImage(image, tempDir, "png");
         }
-        this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
+        this.image = ImageIO.read(new File(tempDir, image));
     }
 
     /**

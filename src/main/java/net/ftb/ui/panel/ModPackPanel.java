@@ -1,13 +1,16 @@
 package net.ftb.ui.panel;
 
 import net.ftb.data.ModPack;
+import net.ftb.events.OpenInfoPanelEvent;
 import net.ftb.laf.utils.UIUtils;
+import net.ftb.main.Main;
 
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
@@ -16,6 +19,7 @@ public final class ModPackPanel
 extends JPanel
 implements MouseListener{
     private final ModPack pack;
+    private final Image image;
 
     private boolean rollover = false;
 
@@ -23,6 +27,7 @@ implements MouseListener{
         this.pack = pack;
         this.setPreferredSize(new Dimension(128, 128));
         this.addMouseListener(this);
+        this.image = pack.getLogo();
     }
 
     @Override
@@ -30,7 +35,7 @@ implements MouseListener{
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(UIUtils.GRAY);
         g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-        g2.drawImage(this.pack.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+        g2.drawImage(this.image, 0, 0, this.getWidth(), this.getHeight(), null);
 
         if(this.rollover){
             Composite comp = g2.getComposite();
@@ -52,7 +57,9 @@ implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e){
-
+        if(e.getButton() == MouseEvent.BUTTON1){
+            Main.getEventBus().post(new OpenInfoPanelEvent(this.pack));
+        }
     }
 
     @Override
