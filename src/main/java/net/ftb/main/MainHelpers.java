@@ -90,7 +90,7 @@ public class MainHelpers {
                 osw.write("Lathanael" + System.getProperty("line.separator"));
                 osw.write("Jadedcat" + System.getProperty("line.separator"));
                 osw.write("Eyamaz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-                osw.write("Third Modpack Team:" + System.getProperty("line.separator"));
+                osw.write("Third Party Modpack Team:" + System.getProperty("line.separator"));
                 osw.write("Watchful11" + System.getProperty("line.separator"));
                 osw.write("TFox83" + System.getProperty("line.separator"));
 
