@@ -225,6 +225,7 @@ public class Main {
                     }
                 }
 
+                // Same warnings are logged as errors in MainHelpers.printInfo()
                 if (!OSUtils.is64BitOS()) {
                     MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
                 }
