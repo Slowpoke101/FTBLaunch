@@ -55,8 +55,6 @@ import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.gui.dialogs.ModPackVersionChangeDialog;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
-import net.ftb.gui.dialogs.ProfileAdderDialog;
-import net.ftb.gui.dialogs.ProfileEditorDialog;
 import net.ftb.gui.panes.*;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;

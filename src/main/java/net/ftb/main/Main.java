@@ -209,7 +209,7 @@ public class Main {
 
                 LoadingDialog.setProgress(160);
 
-                LaunchFrame frame = new LaunchFrame(2);
+                LaunchFrame frame = new LaunchFrame(3);
                 LaunchFrame.setInstance(frame);
 
                 // Set up System Tray
