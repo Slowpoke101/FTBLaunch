@@ -1,12 +1,54 @@
 package net.ftb.ui.tab;
 
+import net.ftb.data.TexturePack;
+import net.ftb.data.events.TexturePackListener;
+import net.ftb.laf.comp.LightBarScrollPane;
+import net.ftb.ui.panel.TexturePackPanel;
+
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 
 public class TexturesTab
 extends JPanel
-implements Tab{
+implements Tab,
+           TexturePackListener{
+    private final GridBagConstraints gbc = new GridBagConstraints();
+    private final JPanel content = new JPanel(new GridBagLayout());
+
+    public TexturesTab(){
+        super(new BorderLayout());
+
+        this.gbc.fill = GridBagConstraints.BOTH;
+        this.gbc.weightx = 1.0;
+        this.gbc.weighty = 1.0;
+        this.gbc.gridx = 0;
+        this.gbc.gridy = 0;
+        this.gbc.insets.set(15, 15, 15, 15);
+
+        this.add(new LightBarScrollPane(this.content), BorderLayout.CENTER);
+
+        TexturePack.addListener(this);
+    }
+
+    private void next(){
+        if(this.gbc.gridx == 2){
+            this.gbc.gridx = 0;
+            this.gbc.gridy++;
+        } else{
+            this.gbc.gridx++;
+        }
+    }
+
     @Override
     public String id(){
         return "textures";
+    }
+
+    @Override
+    public void onTexturePackAdded(TexturePack texturePack){
+        this.content.add(new TexturePackPanel(texturePack), this.gbc);
+        this.next();
     }
 }
