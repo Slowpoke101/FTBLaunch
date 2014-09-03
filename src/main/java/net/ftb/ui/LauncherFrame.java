@@ -11,6 +11,7 @@ import net.ftb.ui.tab.FTBMPTab;
 import net.ftb.ui.tab.HomeTab;
 import net.ftb.ui.tab.MapsTab;
 import net.ftb.ui.tab.OptionsTab;
+import net.ftb.ui.tab.ScrollPaneWrapperTab;
 import net.ftb.ui.tab.TPMPTab;
 import net.ftb.ui.tab.Tab;
 import net.ftb.ui.tab.TexturesTab;
@@ -57,6 +58,7 @@ extends JFrame{
         super("FTB Launcher");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
+        this.setResizable(false);
         this.setMinimumSize(new Dimension(830, 500));
         this.add(this.centerPanel, BorderLayout.CENTER);
         this.add(this.leftPanel, BorderLayout.WEST);
@@ -81,7 +83,7 @@ extends JFrame{
     @Subscribe
     public void onInfoOpen(OpenInfoPanelEvent e){
         if(!this.infoPanels.contains(e.pack.getName())){
-            this.addTab(new ModPackInfoPanel(e.pack));
+            this.addTab(new ScrollPaneWrapperTab<ModPackInfoPanel>(new ModPackInfoPanel(e.pack)));
             this.infoPanels.add(e.pack.getName());
         }
 
