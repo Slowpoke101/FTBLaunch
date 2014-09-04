@@ -105,7 +105,11 @@ public class Main {
         /*
          * Create new StdoutLogger as soon as possible
          */
-        Logger.addListener(new StdOutLogger());
+        int logLevel = CommandLineSettings.getSettings().getVerbosity();
+        LogLevel stdoutLogLevel = LogLevel.values()[logLevel];
+        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs()?LogSource.ALL:LogSource.LAUNCHER;
+
+        Logger.addListener(new StdOutLogger(stdoutLogLevel, stdoutLogSource));
         /*
          * Setup System.out and System.err redirection as soon as possible
          */
@@ -244,7 +248,7 @@ public class Main {
 
                 LoadingDialog.setProgress(140);
 
-                if (Settings.getSettings().getConsoleActive()) {
+                if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
                     LaunchFrame.con = new LauncherConsole();
                     LaunchFrame.con.setVisible(true);
                     Logger.addListener(LaunchFrame.con);

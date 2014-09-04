@@ -40,9 +40,18 @@ public class CommandLineSettings {
         settings = new CommandLineSettings();
     }
 
-    @Parameter(names = {"--verbose", "-V"}, description = "Level of verbosity", arity = 1)
+    @Parameter(names = {"--verbose", "-V"}, description = "Level of verbosity: 0=debug, 1=info, 2=warning, 3=error", arity = 1)
     @Getter
-    private int verbosity;
+    // default = VERBOSE
+    private int verbosity = 0;
+
+    @Parameter(names = {"--log-mc", "-m"}, description = "Show messages from minecraft process")
+    @Getter
+    private boolean mcLogs = false;
+
+    @Parameter(names = {"--no-console", "-c"}, description = "Do not open console window. (Overrides GUI option.)")
+    @Getter
+    private boolean noConsole = false;
 
     @Parameter(names = {"--cache-dir", "-C"}, description = "Cache directory", arity = 1, validateWith = ValidateRequiredValue.class)
     @Getter
@@ -56,7 +65,7 @@ public class CommandLineSettings {
     @Getter
     private boolean useMac = false;
 
-    @Parameter(names = {"--help", "-?"}, help = true, description = "Shows help")
+    @Parameter(names = {"--help", "-h"}, help = true, description = "Shows help")
     @Getter
     private boolean help = false;
 
