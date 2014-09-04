@@ -3,8 +3,8 @@ package net.ftb.ui.tab;
 import net.ftb.data.ModPack;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.events.PackChangeEvent.TYPE;
-import net.ftb.laf.comp.LightBarScrollPane;
 import net.ftb.main.Main;
+import net.ftb.ui.LightBarScrollPane;
 import net.ftb.ui.panel.ModPackPanel;
 
 import com.google.common.eventbus.Subscribe;

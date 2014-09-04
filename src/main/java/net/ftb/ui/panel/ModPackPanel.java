@@ -2,8 +2,8 @@ package net.ftb.ui.panel;
 
 import net.ftb.data.ModPack;
 import net.ftb.events.OpenInfoPanelEvent;
-import net.ftb.laf.utils.UIUtils;
 import net.ftb.main.Main;
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.Color;
 import java.awt.Composite;

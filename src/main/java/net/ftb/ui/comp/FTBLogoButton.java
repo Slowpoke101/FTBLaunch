@@ -1,6 +1,7 @@
 package net.ftb.ui.comp;
 
-import net.ftb.laf.utils.UIUtils;
+
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

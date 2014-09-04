@@ -1,7 +1,6 @@
 package net.ftb.ui;
 
 import net.ftb.events.OpenInfoPanelEvent;
-import net.ftb.laf.utils.UIUtils;
 import net.ftb.main.Main;
 import net.ftb.ui.comp.FTBLogoButton;
 import net.ftb.ui.comp.SelectProfileButton;
@@ -15,6 +14,7 @@ import net.ftb.ui.tab.ScrollPaneWrapperTab;
 import net.ftb.ui.tab.TPMPTab;
 import net.ftb.ui.tab.Tab;
 import net.ftb.ui.tab.TexturesTab;
+import net.ftb.ui.utils.UIUtils;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -187,8 +187,18 @@ extends JFrame{
 
     private void setupTopPanel(){
         this.topPanel.setBackground(UIUtils.WHITE);
-        this.topPanel.add(new FTBLogoButton());
-        this.topPanel.add(Box.createRigidArea(new Dimension(448, 0)));
-        this.topPanel.add(new SelectProfileButton());
+        this.topPanel.setLayout(new GridBagLayout());
+        this.gbc.gridx = 0;
+        this.gbc.gridy = 0;
+        this.gbc.weightx = 0.1;
+        this.gbc.weighty = 0.1;
+        this.gbc.fill = GridBagConstraints.NONE;
+        this.gbc.insets.set(0, 0, 0, 0);
+        this.gbc.anchor = GridBagConstraints.LINE_START;
+        this.topPanel.add(new FTBLogoButton(), this.gbc);
+        this.gbc.anchor = GridBagConstraints.CENTER;
+        this.topPanel.add(Box.createHorizontalGlue());
+        this.gbc.anchor = GridBagConstraints.LINE_END;
+        this.topPanel.add(new SelectProfileButton(), this.gbc);
     }
 }

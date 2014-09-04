@@ -1,7 +1,7 @@
 package net.ftb.ui.panel;
 
 import net.ftb.data.TexturePack;
-import net.ftb.laf.utils.UIUtils;
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.Color;
 import java.awt.Composite;
@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
+//TODO: Convert to Card
 public final class TexturePackPanel
 extends JPanel
 implements MouseListener{

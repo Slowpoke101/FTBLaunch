@@ -1,6 +1,6 @@
 package net.ftb.ui.comp;
 
-import net.ftb.laf.comp.LightBarScrollPane;
+import net.ftb.ui.LightBarScrollPane;
 import net.ftb.util.NewsUtils;
 import net.ftb.util.OSUtils;
 

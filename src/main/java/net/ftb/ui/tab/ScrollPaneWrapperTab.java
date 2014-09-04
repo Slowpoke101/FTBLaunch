@@ -1,6 +1,6 @@
 package net.ftb.ui.tab;
 
-import net.ftb.laf.comp.LightBarScrollPane;
+import net.ftb.ui.LightBarScrollPane;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;

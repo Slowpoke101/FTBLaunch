@@ -2,7 +2,7 @@ package net.ftb.ui.tab;
 
 import net.ftb.data.TexturePack;
 import net.ftb.data.events.TexturePackListener;
-import net.ftb.laf.comp.LightBarScrollPane;
+import net.ftb.ui.LightBarScrollPane;
 import net.ftb.ui.panel.TexturePackPanel;
 
 import java.awt.BorderLayout;
