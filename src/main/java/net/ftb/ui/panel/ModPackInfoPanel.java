@@ -1,8 +1,8 @@
 package net.ftb.ui.panel;
 
 import net.ftb.data.ModPack;
-import net.ftb.laf.utils.UIUtils;
 import net.ftb.ui.tab.Tab;
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

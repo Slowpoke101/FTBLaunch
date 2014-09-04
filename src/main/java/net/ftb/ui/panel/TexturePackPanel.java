@@ -1,7 +1,7 @@
 package net.ftb.ui.panel;
 
 import net.ftb.data.TexturePack;
-import net.ftb.laf.utils.UIUtils;
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.Color;
 import java.awt.Composite;

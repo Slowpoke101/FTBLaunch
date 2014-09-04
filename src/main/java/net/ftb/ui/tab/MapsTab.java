@@ -2,7 +2,7 @@ package net.ftb.ui.tab;
 
 import net.ftb.data.Map;
 import net.ftb.data.events.MapListener;
-import net.ftb.laf.comp.LightBarScrollPane;
+import net.ftb.ui.LightBarScrollPane;
 import net.ftb.ui.panel.MapPanel;
 
 import java.awt.BorderLayout;

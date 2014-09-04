@@ -1,8 +1,8 @@
 package net.ftb.ui.tab;
 
-import net.ftb.laf.utils.UIUtils;
 import net.ftb.ui.comp.NewsBox;
 import net.ftb.ui.comp.RecentlyLaunchedBox;
+import net.ftb.ui.utils.UIUtils;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
