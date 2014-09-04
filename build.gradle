@@ -55,6 +55,7 @@ dependencies {
 	compile 'org.projectlombok:lombok:1.12.6'
 	compile 'com.google.guava:guava:17.0'
     compile 'net.ftb:FTB_Launcher-LAF:1.0-6'
+    compile 'com.beust:jcommander:1.30'
 	//commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'

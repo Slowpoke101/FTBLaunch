@@ -7,16 +7,13 @@ import net.ftb.log.Logger;
 
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 import java.util.UUID;
 import java.util.Calendar;
-
 
 public class PiwikTracker extends Thread {
     private final String thingToTrack, urlFrom;

@@ -23,6 +23,9 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LauncherConsole;
@@ -91,6 +94,7 @@ public class Main {
             }
         }
     }
+    private static JCommander jc;
 
     /**
      * @return FTB Launcher event bus
@@ -104,6 +108,19 @@ public class Main {
      */
     public static void main (String[] args) {
         Benchmark.start("main");
+
+        try {
+            jc = new JCommander(CommandLineSettings.getSettings(), args);
+        } catch (ParameterException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+
+        if (CommandLineSettings.getSettings().isHelp()) {
+            jc.usage();
+            System.exit(0);
+        }
+
         /*
          *  Create dynamic storage location as soon as possible
          */

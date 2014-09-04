@@ -31,11 +31,38 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
+import net.ftb.download.Locations;
 
 @SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
     private final HTMLEditorKit html_kit = new HTMLEditorKit();
-    private final JEditorPane news_pane = new JEditorPane("text/html", "");
+
+    private JScrollPane newsPanel;
+    
+    private final HTMLEditorKit news_kit = new HTMLEditorKit() {
+        {
+            this.setStyleSheet(OSUtils.makeStyleSheet("news"));
+        }
+    };
+    
+    private final JEditorPane news_pane = new JEditorPane("text/html", "") {
+        {
+            this.setEditable(false);
+            this.setEditorKit(news_kit);
+            this.addHyperlinkListener(new HyperlinkListener() {
+                @Override
+                public void hyperlinkUpdate(HyperlinkEvent e) {
+                    if (e.getEventType() == EventType.ACTIVATED) {
+                        if(e.getDescription().substring(0, 7).equals("members")) {
+                            OSUtils.browse(Locations.forum + e.getDescription());
+                        } else {
+                            OSUtils.browse(e.getDescription());
+                        }
+                    }
+                }
+            });
+        }
+    };
 
     public NewsPane(){
         super(new BorderLayout());

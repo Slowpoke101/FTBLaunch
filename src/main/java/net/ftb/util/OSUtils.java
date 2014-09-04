@@ -32,9 +32,11 @@ import java.util.Map;
 import javax.swing.text.html.StyleSheet;
 
 import lombok.Getter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.RuntimeStreamer;
 
 public class OSUtils {
     private static byte[] cachedMacAddress;
@@ -56,7 +58,6 @@ public class OSUtils {
     static {
         cachedUserHome = System.getProperty("user.home");
         numCores = Runtime.getRuntime().availableProcessors();
-        hardwareID = genHardwareID();
     }
 
     /**
@@ -81,6 +82,9 @@ public class OSUtils {
      * @return string containing dynamic storage location
      */
     public static String getDynamicStorageLocation () {
+        if (CommandLineSettings.getSettings().getDynamicDir() != null && !CommandLineSettings.getSettings().getDynamicDir().isEmpty()) {
+            return CommandLineSettings.getSettings().getDynamicDir();
+        }
         switch (getCurrentOS()) {
         case WINDOWS:
             return System.getenv("APPDATA") + "/ftblauncher/";
@@ -100,6 +104,9 @@ public class OSUtils {
      * @return string containing cache storage location
      */
     public static String getCacheStorageLocation () {
+        if (CommandLineSettings.getSettings().getCacheDir() != null && !CommandLineSettings.getSettings().getCacheDir().isEmpty()) {
+            return CommandLineSettings.getSettings().getCacheDir();
+        }
         switch (getCurrentOS()) {
         case WINDOWS:
             if (System.getenv("LOCALAPPDATA") != null && System.getenv("LOCALAPPDATA").length() > 5)
@@ -372,7 +379,6 @@ public class OSUtils {
     private static byte[] genHardwareID () {
         switch (getCurrentOS()) {
         case WINDOWS:
-            // TODO
             return genHardwareIDWINDOWS();
         case UNIX:
             return genHardwareIDUNIX();
@@ -384,14 +390,19 @@ public class OSUtils {
     }
     private static byte[] genHardwareIDUNIX () {
         String line;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("/etc/machine-id"));
-            line = reader.readLine();
-        } catch (Exception e) {
-            Logger.logDebug("failed", e);
-            return new byte[]{};
+        // TODO: will add command line option or advanced option later. Use old mac address method
+        if (false) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("/etc/machine-id"));
+                line = reader.readLine();
+            } catch (Exception e) {
+                Logger.logDebug("failed", e);
+                return new byte[] { };
+            }
+            return line.getBytes();
+        } else {
+            return new byte[] { };
         }
-        return line.getBytes();
     }
 
     private static byte[] genHardwareIDMACOSX () {
@@ -412,18 +423,26 @@ public class OSUtils {
     }
 
     private static byte[] genHardwareIDWINDOWS() {
-        String line;
+        String processOutput;
         try {
-            Process command = Runtime.getRuntime().exec(new String[] {"wmic", "bios", "get", "serialnumber"});
-            BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
-            line = in.readLine();
-            line = in.readLine();
-            line = in.readLine();
-            Logger.logDebug(line);
-            return line.getBytes();
+            processOutput = RuntimeStreamer.execute(new String[] {"wmic", "bios", "get", "serialnumber"});
+            /*
+             * wmic's output has special formatting:
+             * SerialNumber<SP><SP><SP><CR><CR><LF>
+             * 00000000000000000<SP><CR><CR><LF><CR><CR><LF>
+             *
+             * readLin()e uses <LF>, <CR> or <CR><LF> as line ending => we need to get third line from RuntimeStreamers output
+             */
+            String line = processOutput.split("\n")[2].trim();
+            // at least VM will report serial to be 0. Does real hardware do it?
+            if (line.equals("0")) {
+                return new byte[] { };
+            } else{
+                return line.trim().getBytes();
+            }
         } catch (Exception e) {
             Logger.logDebug("failed", e);
-            return new byte[]{};
+            return new byte[] { };
         }
     }
 

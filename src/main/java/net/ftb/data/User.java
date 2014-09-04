@@ -23,7 +23,6 @@ import java.io.Serializable;
 
 import net.ftb.log.Logger;
 import net.ftb.util.CryptoUtils;
-import net.ftb.util.OSUtils;
 
 public class User implements Serializable {
     /**
