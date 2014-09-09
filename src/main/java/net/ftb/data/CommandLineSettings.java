@@ -61,6 +61,10 @@ public class CommandLineSettings {
     @Getter
     private String dynamicDir;
 
+    @Parameter(names = {"--pack-dir", "-P"}, description = "FTB installation directory", arity = 1, validateWith = ValidateRequiredValue.class)
+    @Getter
+    private String installDir;
+
     @Parameter(names = {"--use-mac", "-M"}, description = "Use mac address as an encryption key")
     @Getter
     private boolean useMac = false;
