@@ -1,5 +1,29 @@
 #! /usr/bin/env python3
 
+# This script
+# * merges new translation keys from enUS to other translation files(target files)
+# * normalizes separator(s) between key and val. Changes existing separator to " = "
+# * new keys are added with empty value. localization system will default to enUS when empty value is found.
+#
+# Limitations
+# * Existing key/val separator must have = and optionally spaces
+# * ":" in separator is not supported
+# * "\:" does not work in key. Escaped character are not recommended in key
+# * Script will remove existing comments from target files
+# * Script has limited support for value continuation, but it probably has bugs. Double check output if using those
+#
+# Who should run this:
+# * Any of the developers after adding strings which needs translations
+# OR
+# * Project lead before asking translators to update translation files
+# OR
+# * Translator before (s)he starts translating job
+#
+# Communication between translator(s) and other launcher team is recommended to prevent unnecessary conflicts
+
+# BUGS:
+# * bad documentation
+# * adds unneeded CR at end of file
 import glob
 import os
 
@@ -9,6 +33,8 @@ files = glob.glob("*")
 
 main_f = open(main)
 main_ = main_f.read()
+
+# list which contains all lines in enUS file
 main_lines = main_.split("\n")
 
 for file in files:
@@ -17,6 +43,7 @@ for file in files:
         continue
     f = open(file, "r")
     f_ = f.read()
+    # list which contains lines of the main file(enUS) this is source file for new keys
     f_lines = f_.split("\n")
 
     out = ""
@@ -24,6 +51,7 @@ for file in files:
     while i < len(main_lines):
         line = main_lines[i]
         # handle commented lines and empty lines
+        # simply copy whole line to out and do not do any changes
         if line.startswith(("!", "#")) or line == "":
             out = out + line + "\n"
             i = i + 1
@@ -32,7 +60,7 @@ for file in files:
         # read whole value if continuation is used
         while line.endswith("\\"):
             i = i + 1
-            line = line + main_lines[i]
+            line = line + "\n" + main_lines[i]
 
         # assume that we use only = to as key/value separator
         main_key = line.split("=")[0].rstrip()
@@ -40,19 +68,24 @@ for file in files:
 
         j = 0
         f_value = ""
+        # scan through target file
         while j < len(f_lines):
             f_line = f_lines[j]
+            # drop existing comments from target file. Sorry:(
             if f_line.startswith(("!", "#")) or line == "":
                 j = j + 1
                 continue
+            # merge value separated in multiple line
             while f_line.endswith("\\"):
                 j = j + 1
                 f_line = f_line + "\n" + f_lines[j]
             j = j + 1
+            # if we find identical keys file use its existing value in file f, otherwise use ""
             if f_line.split("=")[0].rstrip() == main_key:
                 f_value = f_line.split("=")[1].lstrip()
 
-
+        # finally write new key from main file and empty value
+        # or existing key and existing value from target file
         out = out + main_key + " = " + f_value + "\n"
     f.close()
     f = open(file, "w")

@@ -50,15 +50,27 @@ public class StdOutLogger implements ILogListener {
     public StdOutLogger() {
     }
 
+    public StdOutLogger(LogLevel logLevel) {
+        this.logLevel  = logLevel;
+    }
+
     public StdOutLogger(LogSource logSource) {
+        this.logSource = logSource;
+    }
+
+    public StdOutLogger(LogLevel logLevel, LogSource logSource) {
+        this.logLevel  = logLevel;
         this.logSource = logSource;
     }
 
     @Override
     public void onLogEvent(LogEntry entry) {
-        if (entry.source != logSource)
+        if (logSource != LogSource.ALL && entry.source != logSource)
             return;
 
+        if (!logLevel.includes(entry.level)) {
+            return;
+        }
         if (entry.level == LogLevel.ERROR) {
             realStderr.println(entry.toString(logType));
         } else {

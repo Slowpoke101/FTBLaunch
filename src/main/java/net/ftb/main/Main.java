@@ -77,6 +77,7 @@ public class Main {
         }
 
         if (CommandLineSettings.getSettings().isHelp()) {
+            jc.setProgramName("FTB_Launcher.jar");
             jc.usage();
             System.exit(0);
         }
@@ -105,7 +106,11 @@ public class Main {
         /*
          * Create new StdoutLogger as soon as possible
          */
-        Logger.addListener(new StdOutLogger());
+        int logLevel = CommandLineSettings.getSettings().getVerbosity();
+        LogLevel stdoutLogLevel = LogLevel.values()[logLevel];
+        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs()?LogSource.ALL:LogSource.LAUNCHER;
+
+        Logger.addListener(new StdOutLogger(stdoutLogLevel, stdoutLogSource));
         /*
          * Setup System.out and System.err redirection as soon as possible
          */
@@ -225,6 +230,7 @@ public class Main {
                     }
                 }
 
+                // Same warnings are logged as errors in MainHelpers.printInfo()
                 if (!OSUtils.is64BitOS()) {
                     MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
                 }
@@ -243,7 +249,7 @@ public class Main {
 
                 LoadingDialog.setProgress(140);
 
-                if (Settings.getSettings().getConsoleActive()) {
+                if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
                     LaunchFrame.con = new LauncherConsole();
                     LaunchFrame.con.setVisible(true);
                     Logger.addListener(LaunchFrame.con);
