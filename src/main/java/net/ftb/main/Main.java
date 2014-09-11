@@ -63,6 +63,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+//TODO: Replace Old UI code with New UI Code
 public class Main {
     public static JGoogleAnalyticsTracker tracker;
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");

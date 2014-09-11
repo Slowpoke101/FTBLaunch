@@ -25,7 +25,7 @@ implements Tab,
         this.gbc.weighty = 1.0;
         this.gbc.gridx = 0;
         this.gbc.gridy = 0;
-        this.gbc.insets.set(15, 15, 15, 15);
+        this.gbc.insets.set(2, 2, 2, 2);
 
         this.add(new LightBarScrollPane(this.content), BorderLayout.CENTER);
 
@@ -33,12 +33,7 @@ implements Tab,
     }
 
     private void next(){
-        if(this.gbc.gridx == 2){
-            this.gbc.gridx = 0;
-            this.gbc.gridy++;
-        } else{
-            this.gbc.gridx++;
-        }
+        this.gbc.gridy++;
     }
 
     @Override

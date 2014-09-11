@@ -22,7 +22,7 @@ implements MouseListener{
 
     public MapPanel(Map map){
         this.map = map;
-        this.image = map.getImage();
+        this.image = map.getLogo();
         this.setPreferredSize(new Dimension(128, 128));
         this.addMouseListener(this);
     }
