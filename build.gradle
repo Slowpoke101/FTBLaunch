@@ -113,8 +113,6 @@ task copyMainJar(type: Copy) {
 assemble.dependsOn.remove(createDmg)
 build.dependsOn.remove(createDmg)
 createApp.dependsOn.remove(copyToResourcesJava)
-//build.dependsOn(zipApp)
-//zipApp.dependsOn(createApp)
 build.dependsOn(createAppZip)
 createApp.dependsOn(copyMainJar)
 copyMainJar.dependsOn(shadowJar)
