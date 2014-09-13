@@ -134,12 +134,17 @@ public class MCLauncher {
         //Undocumented environment variable to control JVM
         String additionalEnvVar = System.getenv("_JAVA_OPTIONS");
         if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
-            Logger.logInfo("_JAVA_OPTIONS defined: " + additionalEnvVar);
+            Logger.logDebug("_JAVA_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
         }
         //Documented environment variable to control JVM
         additionalEnvVar = System.getenv("JAVA_TOOL_OPTIONS");
         if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
-            Logger.logInfo("JAVA_TOOL_OPTIONS defined: " + additionalEnvVar);
+            Logger.logDebug("JAVA_TOOL_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
+        }
+        //Documented environment variable to control JVM
+        additionalEnvVar = System.getenv("JAVA_OPTIONS");
+        if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
+            Logger.logDebug("JAVA_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
         }
 
         arguments.add(mainClass);
