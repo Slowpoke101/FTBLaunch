@@ -311,8 +311,12 @@ public class MCInstaller {
                 natDir.delete();
             }
             natDir.mkdirs();
-            if (isLegacy)
-                extractLegacy();
+            if (!pack.getDir().equals("mojang_vanilla")) {
+                if (isLegacy) {
+                    extractLegacyJson(new File(gameDir, "pack.json"));
+                }
+            }
+            Logger.logDebug("packbaseJSON " + packbasejson);
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
@@ -350,11 +354,6 @@ public class MCInstaller {
             }
             List<File> classpath = Lists.newArrayList();
             Version packjson = new Version();
-            if (!pack.getDir().equals("mojang_vanilla")) {
-                if (isLegacy) {
-                    extractLegacyJson(new File(gameDir, "pack.json"));
-                }
-            }
             if (new File(gameDir, "pack.json").exists()) {
                 packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                 for (Library lib : packjson.getLibraries()) {
@@ -458,22 +457,6 @@ public class MCInstaller {
         FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
     }
 
-
-    public static void extractLegacy () {
-        try {
-            File f = new File(Settings.getSettings().getInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch.FTBLegacyLaunch".replace(".", File.separator)
-                    + File.separator + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
-            //Logger.logError("Extracting Legacy launch code to " + f.getAbsolutePath());
-            if (!new File(f.getParent()).exists())
-                new File(f.getParent()).mkdirs();
-            if (f.exists())
-                f.delete();//we want to have the current version always!!!
-            URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
-            FileUtils.copyURLToFile(u, f);
-        } catch (Exception e) {
-            Logger.logError("Error extracting legacy launch to maven directory");
-        }
-    }
 
     public static void extractLegacyJson (File newLoc) {
         try {
