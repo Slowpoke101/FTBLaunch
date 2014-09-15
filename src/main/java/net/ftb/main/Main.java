@@ -251,9 +251,9 @@ public class Main {
 
                 if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
                     LaunchFrame.con = new LauncherConsole();
-                    LaunchFrame.con.setVisible(true);
                     Logger.addListener(LaunchFrame.con);
-                    LaunchFrame.con.scrollToBottom();
+                    LaunchFrame.con.refreshLogs();
+                    LaunchFrame.con.setVisible(true);
                 }
 
                 MainHelpers.googleAnalytics();
