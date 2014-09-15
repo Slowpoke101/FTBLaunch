@@ -31,15 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
@@ -208,6 +200,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 if (LaunchFrame.trayMenu != null) {
                     LaunchFrame.trayMenu.updateShowConsole(false);
                 }
+                dispose();  
             }
         });
 

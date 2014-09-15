@@ -105,8 +105,8 @@ public class TrayMenu extends PopupMenu {
                             LaunchFrame.con.setVisible(true);
                             Logger.addListener(LaunchFrame.con);
                         } else {
-                            LaunchFrame.con.setVisible(false);
                             Logger.removeListener(LaunchFrame.con);
+                            LaunchFrame.con.dispose();
                         }
                     } else {
                         LaunchFrame.con = new LauncherConsole();
