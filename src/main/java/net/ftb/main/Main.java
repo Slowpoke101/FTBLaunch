@@ -264,7 +264,7 @@ public class Main {
                 LaunchFrame.setInstance(frame);
 
                 // Set up System Tray
-                if (SystemTray.isSupported()) {
+                if (SystemTray.isSupported() && CommandLineSettings.getSettings().isTrayIcon()) {
                     LaunchFrame.getInstance().setUpSystemTray();
                 } else {
                     Logger.logDebug("System Tray not supported");

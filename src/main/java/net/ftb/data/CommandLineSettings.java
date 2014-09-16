@@ -73,6 +73,11 @@ public class CommandLineSettings {
     @Getter
     private boolean help = false;
 
+    @Parameter(names = {"--trayIcon", "-tray"}, description = "Enable tray icon")
+    @Getter
+    private boolean trayIcon = true;
+
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate(String name, String value) throws ParameterException {
