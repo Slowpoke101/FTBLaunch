@@ -116,6 +116,8 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             try {
                 HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
                 conn.setRequestProperty("Cache-Control", "no-transform");
+                conn.setRequestMethod("HEAD");
+                conn.connect();
                 hash = conn.getHeaderField("ETag").replace("\"", "");
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
