@@ -28,6 +28,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -44,7 +45,10 @@ import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 import net.ftb.util.SwingUtils;
+import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("unchecked")
 public class AdvancedOptionsDialog extends JDialog {
@@ -52,7 +56,8 @@ public class AdvancedOptionsDialog extends JDialog {
     private JLabel downloadLocationLbl;
     private static JComboBox downloadLocation;
     private JLabel javaPathLbl;
-    private JTextField javaPath;
+    private static JComboBox javaPath;
+    private String[] javapaths;
     private JLabel additionalJavaOptionsLbl;
     private JTextField additionalJavaOptions;
     private JLabel mcWindowSizeLbl;
@@ -146,7 +151,9 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        settings.setJavaPath(javaPath.getText());
+        if (javaPath.getSelectedIndex() >= 1){
+            settings.setJavaPath(javapaths[javaPath.getSelectedIndex() - 1]);
+        }
         settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
         settings.setSnooper(snooper.isSelected());
         settings.setDebugLauncher(debugLauncherVerbose.isSelected());
@@ -170,34 +177,21 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
-        javaPath = new JTextField();
-        String javapath = settings.getJavaPath();
-        if (javapath != null) {
-            javaPath.setText(javapath);
-            if (!new File(javapath).isFile())
-                javaPath.setBackground(Color.RED);
-        } else {
-            // this should not happen ever
-            javaPath.setBackground(Color.RED);
+        List<JavaInfo> javas = JavaFinder.findJavas();
+        String[] javaslist = new String[javas.size() + 2];
+        javapaths = new String[javas.size() + 1];
+        int i = 0;
+        for (JavaInfo java : javas) {
+            javaslist[i + 1] = java.version;
+            if(java.is64bits){
+                javaslist[i + 1] = javaslist[i + 1] + " 64bit";
+            }
+            javapaths[i] = java.path;
+            i++;
         }
-
-        javaPath.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped (KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed (KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased (KeyEvent e) {
-                if (!javaPath.getText().equals("") && !new File(javaPath.getText()).isFile())
-                    javaPath.setBackground(Color.RED);
-                else
-                    javaPath.setBackground(new Color(40, 40, 40));
-            }
-        });
+        javaslist[i + 1] = "Default";
+        javapaths[i] = "";
+        javaPath = new JComboBox(javaslist);
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
         additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
