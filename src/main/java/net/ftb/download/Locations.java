@@ -84,6 +84,7 @@ public class Locations {
 
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
+    public static final String TUGLOGO = "/image/logo_TUG.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";
     public static final String launcherLogFile = "FTBLauncherLog.txt";

@@ -81,6 +81,7 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
+    private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
     private final JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
@@ -169,6 +170,15 @@ public class LaunchFrame extends JFrame {
             @Override
             public void mouseClicked (MouseEvent event) {
                 OSUtils.browse("http://billing.creeperhost.net/link.php?id=2");
+            }
+        });
+
+        footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerTUG.setBounds(212, 20, 132, 42);
+        footerTUG.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+                OSUtils.browse("http://feed-the-beast.com/tug");
             }
         });
 
@@ -316,6 +326,7 @@ public class LaunchFrame extends JFrame {
         footer.add(users);
         footer.add(footerLogo);
         footer.add(footerCreeper);
+        footer.add(footerTUG);
         footer.add(launch);
         footer.add(donate);
         footer.add(serverbutton);
