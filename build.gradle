@@ -4,7 +4,7 @@ buildscript {
             name = 'ForgeFS'
             url = 'http://files.minecraftforge.net/maven'
         }
-		maven {
+        maven {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
@@ -16,7 +16,7 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.3'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
-		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
+        classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
     }
 }
 
@@ -34,26 +34,26 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
-	maven {
-		name = 'Mojang libs'
-		url = 'https://libraries.minecraft.net/'
-	}
+    mavenCentral()
+    maven {
+        name = 'Mojang libs'
+        url = 'https://libraries.minecraft.net/'
+    }
 }
 
 dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
-	compile 'com.google.code.gson:gson:2.2.4'
-	compile 'com.mojang:authlib:1.5.16'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.mojang:authlib:1.5.16'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
-	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
-	compile 'org.projectlombok:lombok:1.12.6'
-	compile 'com.google.guava:guava:17.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    compile 'org.projectlombok:lombok:1.12.6'
+    compile 'com.google.guava:guava:17.0'
     compile 'com.beust:jcommander:1.30'
-	//commons lang3 via authlib
+    //commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
-	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+    deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
 }
 
 project.ext {
@@ -114,13 +114,13 @@ createApp.dependsOn(copyMainJar)
 copyMainJar.dependsOn(shadowJar)
 
 afterEvaluate {
-	launch4j {
-		icon = file("src/main/resources/exe/icon.ico").getCanonicalPath()
-		jreMinVersion = '1.6.0'
-		jar = project.tasks.jar.getArchivePath().getPath()
-		outfile = project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")
-		mainClassName = project.mainClass
-	}
+    launch4j {
+        icon = file("src/main/resources/exe/icon.ico").getCanonicalPath()
+        jreMinVersion = '1.6.0'
+        jar = project.tasks.jar.getArchivePath().getPath()
+        outfile = project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")
+        mainClassName = project.mainClass
+    }
 }
 
 artifacts {
@@ -147,8 +147,8 @@ def gitSha() {
 }
 
 if (project.hasProperty("local_maven")) {
-	apply plugin: 'maven'
-        uploadArchives {
+    apply plugin: 'maven'
+    uploadArchives {
             repositories {
                 mavenDeployer {
                     repository(url: "file://${local_maven}")
@@ -157,13 +157,13 @@ if (project.hasProperty("local_maven")) {
     }
 }
 if (project.hasProperty("remote_maven")) {
-	apply plugin: 'maven'
+    apply plugin: 'maven'
     uploadArchives {
-		repositories.mavenDeployer {
+        repositories.mavenDeployer {
             configuration = configurations.deployerJars
             repository(url: "ftp://${remote_maven}") {
-                authentication(userName: "${ftp_username}", password: "${ftp_pass}")
-            }
+            authentication(userName: "${ftp_username}", password: "${ftp_pass}")
         }
     }
+}
 }
