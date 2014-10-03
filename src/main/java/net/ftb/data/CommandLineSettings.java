@@ -73,9 +73,9 @@ public class CommandLineSettings {
     @Getter
     private boolean help = false;
 
-    @Parameter(names = {"--trayIcon", "-tray"}, description = "Enable tray icon")
+    @Parameter(names = {"--disable-tray", "-t"}, description = "Disable tray icon")
     @Getter
-    private boolean trayIcon = true;
+    private boolean disableTray = false;
 
 
     public static class ValidateRequiredValue implements IParameterValidator {

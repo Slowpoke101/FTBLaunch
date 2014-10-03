@@ -176,7 +176,13 @@ public class LauncherConsole extends JFrame implements ILogListener {
         panel.add(killMCButton);
 
         // setup log area
-        displayArea = new JTextPane();
+        displayArea = new JTextPane(){
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
+
         displayArea.setFont(FONT);
         displayArea.setEditable(false);
         displayAreaDoc = this.displayArea.getDocument();
