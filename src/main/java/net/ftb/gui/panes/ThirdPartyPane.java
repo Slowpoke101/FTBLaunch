@@ -28,6 +28,7 @@ import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
@@ -159,20 +160,24 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !ModPack.getSelectedPack(false).getServerUrl().isEmpty()) {
+                String url;
+                ModPack pack = ModPack.getSelectedPack(false);
+                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
-                        if (!ModPack.getSelectedPack(false).getServerUrl().equals("") && ModPack.getSelectedPack(false).getServerUrl() != null) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
-                                    .getSelectedPack(false).getVersion().replace(".", "_")
+                        if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
+                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
                                     : Settings.getSettings().getPackVer().replace(".", "_");
-                            if (ModPack.getSelectedPack(false).isPrivatePack()) {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
-                                        + ModPack.getSelectedPack(false).getServerUrl()));
+                            if (pack.isPrivatePack()) {
+                                url = DownloadUtils.getCreeperhostLink("privatepacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             } else {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack(false).getDir() + "%5E" + version + "%5E"
-                                        + ModPack.getSelectedPack(false).getServerUrl()));
+                                url = DownloadUtils.getCreeperhostLink("modpacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             }
-                            TrackerUtils.sendPageView(ModPack.getSelectedPack(false).getName() + " Server Download", "Server Download / " + ModPack.getSelectedPack(false).getName() + " / " + version);
+                            if (DownloadUtils.fileExistsURL(url)) {
+                                OSUtils.browse(url);
+                            } else {
+                                ErrorUtils.tossError("Server file for selected version was not found on the server");
+                            }
+                            TrackerUtils.sendPageView(pack.getName() + " Server Download", "Server Download / " + pack.getName() + " / " + version);
                         }
                     }
                 }

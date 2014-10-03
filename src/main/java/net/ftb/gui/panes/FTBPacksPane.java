@@ -44,6 +44,7 @@ import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
@@ -167,6 +168,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         server.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
+                String url;
                 ModPack pack = ModPack.getSelectedPack(true);
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
@@ -174,11 +176,14 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
                                     : Settings.getSettings().getPackVer().replace(".", "_");
                             if (pack.isPrivatePack()) {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + pack.getDir() + "%5E" + version + "%5E"
-                                        + pack.getServerUrl()));
+                                url = DownloadUtils.getCreeperhostLink("privatepacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             } else {
-                                OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + pack.getDir() + "%5E" + version + "%5E"
-                                        + pack.getServerUrl()));
+                                url = DownloadUtils.getCreeperhostLink("modpacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
+                            }
+                            if (DownloadUtils.fileExistsURL(url)) {
+                                OSUtils.browse(url);
+                            } else {
+                                ErrorUtils.tossError("Server file for selected version was not found on the server");
                             }
                             TrackerUtils.sendPageView(pack.getName() + " Server Download", "Server Download / " + pack.getName() + " / " + version);
                         }
