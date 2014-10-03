@@ -16,9 +16,12 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
+import net.ftb.main.Main;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -26,31 +29,24 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import net.ftb.gui.LaunchFrame;
-import net.ftb.locale.I18N;
-
 @SuppressWarnings("serial")
 public class LoadingDialog extends JDialog {
-    private JLabel loadStatusLbl;
-    private JLabel splashLbl;
-    private static JProgressBar progress;
-    public static JDialog instance;
-    
+    private JProgressBar progress;
+    public static LoadingDialog instance;
+
     public LoadingDialog() {
         super(LaunchFrame.getInstance(), true);
         instance = this;
-        
         setupGui();
+        this.repaint();
     }
-    
-    public static void setProgress(int new_progress) {
+
+    public void setProgress(int new_progress) {
         if(progress != null && progress.getValue() < new_progress) {
             progress.setValue(new_progress);
-            
-            instance.repaint();
         }
     }
-    
+
     public void releaseModal() {
         // Release modal from the loading screen, so the main thread can continue
         this.setVisible(false);
@@ -61,29 +57,32 @@ public class LoadingDialog extends JDialog {
     }
 
     private void setupGui () {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("Feed the Beast Launcher"));
         setSize(300, 260);
-        setLayout(null);
+        setLayout(new GridBagLayout());
         setLocationRelativeTo(null);
         setResizable(false);
         setUndecorated(true);
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        Container panel = getContentPane();
-        
-        splashLbl = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb_large.png")));
-        splashLbl.setBounds(0, 20, 300, 160);
 
-        loadStatusLbl = new JLabel("Loading...");
+        JLabel splashLbl = new JLabel(new ImageIcon(Main.img));
+        JLabel loadStatusLbl = new JLabel("Loading...");
         loadStatusLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        loadStatusLbl.setBounds(0, 200, 300, 20);
-        
         progress = new JProgressBar(0, 200);
-        progress.setBounds(10, 230, 280, 20);
-        
-        panel.add(splashLbl);
-        panel.add(loadStatusLbl);
-        panel.add(progress);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
+        this.add(splashLbl, gbc);
+        gbc.gridy++;
+        this.add(loadStatusLbl, gbc);
+        gbc.gridy++;
+        this.add(progress, gbc);
     }
 }

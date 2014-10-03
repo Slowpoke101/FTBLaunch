@@ -111,7 +111,7 @@ public class LaunchFrame extends JFrame {
     @Getter
     @Setter
     private static LaunchFrame instance = null;
-    
+
     public static boolean canUseAuthlib;
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -121,7 +121,7 @@ public class LaunchFrame extends JFrame {
     public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
-    
+
     public static TrayMenu trayMenu;
 
     public static boolean allowVersionChange = false;
@@ -391,9 +391,9 @@ public class LaunchFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
                 if (FTBPacksPane.getInstance().loaded) {
-                    LoadingDialog.setProgress(190);
+                    LoadingDialog.instance.setProgress(190);
                     if (MapUtils.loaded) {
-                        LoadingDialog.setProgress(200);
+                        LoadingDialog.instance.setProgress(200);
                         if (TexturepackPane.loaded) {
                             loader.setVisible(false);
                             instance.setVisible(true);
@@ -866,10 +866,10 @@ public class LaunchFrame extends JFrame {
 
     public static void setUpSystemTray() {
     	trayMenu = new TrayMenu();
-    	
+
     	final SystemTray tray = SystemTray.getSystemTray();
     	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
-    	
+
     	trayIcon.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseReleased(MouseEvent e){
@@ -882,7 +882,7 @@ public class LaunchFrame extends JFrame {
         });
     	trayIcon.setToolTip(Constants.name);
     	trayIcon.setImageAutoSize(true);
-    	
+
     	try {
 			tray.add(trayIcon);
 		} catch (AWTException e) {
