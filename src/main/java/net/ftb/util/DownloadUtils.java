@@ -16,8 +16,20 @@
  */
 package net.ftb.util;
 
-import static net.ftb.download.Locations.backupServers;
-import static net.ftb.download.Locations.downloadServers;
+import lombok.NonNull;
+import net.ftb.data.Settings;
+import net.ftb.download.Locations;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.LoadingDialog;
+import net.ftb.log.Logger;
+import org.apache.commons.io.IOUtils;
+
+import com.google.common.collect.Lists;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -38,24 +50,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
-
-import com.google.common.collect.Lists;
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
-import lombok.NonNull;
-import net.ftb.data.Settings;
-import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.LoadingDialog;
-import net.ftb.log.Logger;
-
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import javax.imageio.ImageIO;
+
+import static net.ftb.download.Locations.backupServers;
+import static net.ftb.download.Locations.downloadServers;
 
 public class DownloadUtils extends Thread {
 
@@ -167,7 +165,7 @@ public class DownloadUtils extends Thread {
 
     /**
      * @param file - file on the repo in static
-     * @return boolean representing if the file exists 
+     * @return boolean representing if the file exists
      */
     public static boolean staticFileExists (String file) {
         try {
@@ -182,7 +180,7 @@ public class DownloadUtils extends Thread {
 
     /**
      * @param file - file on the repo
-     * @return boolean representing if the file exists 
+     * @return boolean representing if the file exists
      */
     public static boolean fileExists (String file) {
         try {
@@ -294,7 +292,7 @@ public class DownloadUtils extends Thread {
      * @param file - File to check
      * @param md5 - remote MD5 to compare against
      * @return boolean representing if it is valid
-     * @throws IOException 
+     * @throws IOException
      */
     public static boolean isValid (File file, String md5) throws IOException {
         String result = fileMD5(file);
@@ -309,7 +307,7 @@ public class DownloadUtils extends Thread {
      * @param file - File to check
      * @param url - base url to grab md5 with old method
      * @return boolean representing if it is valid
-     * @throws IOException 
+     * @throws IOException
      */
     public static boolean backupIsValid (File file, String url) throws IOException {
         Logger.logInfo("Issue with new md5 method, attempting to use backup method.");
@@ -361,7 +359,7 @@ public class DownloadUtils extends Thread {
      * Gets the md5 of the downloaded file
      * @param file - File to check
      * @return - string of file's md5
-     * @throws IOException 
+     * @throws IOException
      */
     public static String fileMD5 (File file) throws IOException {
         if (file.exists()) {
@@ -468,7 +466,7 @@ public class DownloadUtils extends Thread {
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
                     Benchmark.logBenchAs("DlUtils", "Download Utils Curse");
-                    LoadingDialog.setProgress(80);
+                    LoadingDialog.instance.setProgress(80);
                 } catch (IOException e) {
                     int i = 10;
 
@@ -477,10 +475,10 @@ public class DownloadUtils extends Thread {
                     downloadServers.clear();
 
                     Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-                    LoadingDialog.setProgress(i);
+                    LoadingDialog.instance.setProgress(i);
                     parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
                 }
-                LoadingDialog.setProgress(90);
+                LoadingDialog.instance.setProgress(90);
 
                 if (downloadServers.size() == 0) {
                     Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
@@ -501,11 +499,11 @@ public class DownloadUtils extends Thread {
                 downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             }
 
-            LoadingDialog.setProgress(100);
+            LoadingDialog.instance.setProgress(100);
             Locations.serversLoaded = true;
 
             // This line absolutely must be hit, or the console will not be shown
-            // and the user/we will not even know why an error has occurred. 
+            // and the user/we will not even know why an error has occurred.
             Logger.logInfo("DL ready");
 
             String selectedMirror = Settings.getSettings().getDownloadServer();
@@ -573,7 +571,7 @@ public class DownloadUtils extends Thread {
 
                         if (i < 90)
                             i += 10;
-                        LoadingDialog.setProgress(i);
+                        LoadingDialog.instance.setProgress(i);
                     } else {
                         h.put(e.getKey(), e.getValue().getAsString());
                     }

@@ -16,7 +16,11 @@
  */
 package net.ftb.data;
 
-import java.awt.*;
+import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,12 +29,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
-
-import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
 
 public class LauncherStyle extends Properties {
 
@@ -140,7 +140,11 @@ public class LauncherStyle extends Properties {
         }catch(Exception e){
             Logger.logWarn("error changing colors, using default instead");
         }
-        return new ImageIcon(u);
+        try{
+            return new ImageIcon(ImageIO.read(u));
+        } catch(IOException e){
+            throw new RuntimeException(e);
+        }
     }
     public ImageIcon changeColor(BufferedImage image, Color toReplace, Color newColor, Color toReplace2, Color newColor2) {
         BufferedImage destImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
