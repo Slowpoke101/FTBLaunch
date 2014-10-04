@@ -38,7 +38,6 @@ public class LoadingDialog extends JDialog {
         super(LaunchFrame.getInstance(), true);
         instance = this;
         setupGui();
-        this.repaint();
     }
 
     public void setProgress(int new_progress) {

@@ -16,16 +16,16 @@
  */
 package net.ftb.main;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import lombok.Getter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.data.Constants;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.data.UserManager;
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
-import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LauncherConsole;
@@ -237,7 +237,12 @@ public class Main {
         I18N.load();
         LaunchFrame.loader = new LoadingDialog();
         LaunchFrame.loader.setModal(false);
-        LaunchFrame.loader.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                LaunchFrame.loader.setVisible(true);
+            }
+        });
 
         I18N.setLocale(Settings.getSettings().getLocale());
 
@@ -295,7 +300,12 @@ public class Main {
 
         if (Settings.getSettings().getConsoleActive()) {
             LaunchFrame.con = new LauncherConsole();
-            LaunchFrame.con.setVisible(true);
+            SwingUtilities.invokeLater(new Runnable(){
+                @Override
+                public void run(){
+                    LaunchFrame.con.setVisible(true);
+                }
+            });
             Logger.addListener(LaunchFrame.con);
             LaunchFrame.con.scrollToBottom();
         }

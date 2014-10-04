@@ -420,10 +420,16 @@ public class LaunchFrame extends JFrame {
                         iti.setImage(LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png")).getImage());
                         LaunchFrame.getInstance().tabbedPane.setIconAt(0, iti);
                     } else {
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle()
+                                .filterHeaderIcon(this.getClass()
+                                .getResource("/image/tabs/news.png")));
                     }
                 } catch (InterruptedException e) {
+                    // Fallthrough
                 } catch (ExecutionException e) {
+                    // Fallthrough
+                } catch(NullPointerException e){
+                    // Fallthrough
                 }
             }
         };
