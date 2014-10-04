@@ -66,7 +66,7 @@ public class JavaFinder {
     }
     
     protected static List<JavaInfo> findWinJavas() {
-        List<String> javaExecs = new ArrayList<String>();
+        List<String> javaExecs = Lists.newArrayList();
         
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_32KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_64KEY, javaExecs);
@@ -153,11 +153,15 @@ public class JavaFinder {
     }
 
     private static JavaInfo preferred;
+    private static JavaInfo backup;
 
-    /**
-     * Standalone testing - lists all Javas in the system
-     ****************************************************************************/
     public static JavaInfo parseJavaVersion () {
+        return parseJavaVersion(true);
+    }
+        /**
+         * Standalone testing - lists all Javas in the system
+         ****************************************************************************/
+    public static JavaInfo parseJavaVersion (boolean canUseJava8) {
         if (preferred == null) {
             List<JavaInfo> javas = JavaFinder.findJavas();
             List<JavaInfo> java32 = Lists.newArrayList();
@@ -183,6 +187,9 @@ public class JavaFinder {
                 for (JavaInfo aJava64 : java64) {
                     if (!preferred.is64bits || aJava64.compareTo(preferred) == 1)
                         preferred = aJava64;
+                    if(backup.is64bits && !aJava64.isJava8())
+                        backup = aJava64;
+
                 }
             }
             if (java32.size() > 0) {
@@ -195,7 +202,10 @@ public class JavaFinder {
         }
 
         if (preferred != null) {
-            return preferred;
+            if(backup != null && preferred.isJava8() && !canUseJava8)
+                return backup;
+            else
+                return preferred;
         } else {
             Logger.logError("No Java versions found!");
             return null;
