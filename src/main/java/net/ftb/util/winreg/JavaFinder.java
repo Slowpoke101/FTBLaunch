@@ -22,6 +22,9 @@ import net.ftb.util.OSUtils.OS;
  *****************************************************************************/
 public class JavaFinder {
     public static boolean java8Found = false;
+    private static JavaInfo preferred;
+    private static JavaInfo backup;
+
     /**
      * @return: A list of javaExec paths found under this registry key (rooted at HKEY_LOCAL_MACHINE)
      * @param wow64  0 for standard registry access (32-bits for 32-bit app, 64-bits for 64-bits app)
@@ -152,11 +155,9 @@ public class JavaFinder {
         return null;
     }
 
-    private static JavaInfo preferred;
-    private static JavaInfo backup;
-
     public static JavaInfo parseJavaVersion () {
-        return parseJavaVersion(true);
+        // TODO: add command line argument to control this
+        return parseJavaVersion(false);
     }
         /**
          * Standalone testing - lists all Javas in the system
@@ -174,7 +175,7 @@ public class JavaFinder {
                     java8Found = true;
                 }
                 if (java.supportedVersion) {
-                    if (preferred == null && java != null)
+                    if (preferred == null)
                         preferred = java;
                     if (java.is64bits)
                         java64.add(java);
@@ -187,25 +188,36 @@ public class JavaFinder {
                 for (JavaInfo aJava64 : java64) {
                     if (!preferred.is64bits || aJava64.compareTo(preferred) == 1)
                         preferred = aJava64;
-                    if(backup.is64bits && !aJava64.isJava8())
+                    if (backup == null && !aJava64.isJava8())
                         backup = aJava64;
-
+                    if(backup != null && !aJava64.isJava8() && aJava64.compareTo(backup) == 1)
+                        backup = aJava64;
                 }
             }
+
             if (java32.size() > 0) {
                 for (JavaInfo aJava32 : java32) {
                     if (!preferred.is64bits && aJava32.compareTo(preferred) == 1)
                         preferred = aJava32;
+                    if (backup == null && !aJava32.isJava8())
+                        backup = aJava32;
+                    if(backup != null && !aJava32.isJava8() && aJava32.compareTo(backup) == 1)
+                        backup = aJava32;
+
                 }
             }
-            Logger.logInfo("Preferred: " + String.valueOf(preferred));
+            Logger.logDebug("Preferred: " + preferred.toString());
+            Logger.logDebug("Backup: " + backup.toString());
         }
 
         if (preferred != null) {
-            if(backup != null && preferred.isJava8() && !canUseJava8)
+            if(backup != null && preferred.isJava8() && !canUseJava8) {
+                Logger.logInfo("Selected JVM: " + backup.toString());
                 return backup;
-            else
+            } else {
+                Logger.logInfo("Selected JVM: " + preferred.toString());
                 return preferred;
+            }
         } else {
             Logger.logError("No Java versions found!");
             return null;
