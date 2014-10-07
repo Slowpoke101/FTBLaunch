@@ -382,13 +382,14 @@ public class LaunchFrame extends JFrame {
         tabbedPane.setSelectedIndex(tab);
     }
 
+    // TODO: fix this
     public static void checkDoneLoading () {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
                 if (FTBPacksPane.getInstance().loaded) {
-                    LoadingDialog.setProgress(190);
+                    LoadingDialog.advance("Modpacks data loaded");
                     if (MapUtils.loaded) {
-                        LoadingDialog.setProgress(200);
+                        LoadingDialog.advance("Maps data loaded");
                         if (TexturepackPane.loaded) {
                             loader.setVisible(false);
                             instance.setVisible(true);
