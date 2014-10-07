@@ -32,6 +32,7 @@ import javax.swing.SwingWorker;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
+import net.ftb.main.Main;
 import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 
@@ -84,7 +85,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             Logger.logError(t.getMessage(), t);
             return false;
         }
-        LaunchFrame.canUseAuthlib = true;
+        Main.setAuthlibReadyToUse(true);
         Benchmark.logBenchAs("Authlib", "Authlib DL Worker Init");
         return true;
     }

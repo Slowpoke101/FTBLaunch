@@ -18,6 +18,7 @@ package net.ftb.main;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import lombok.Setter;
 import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -53,6 +54,9 @@ public class Main {
     private static UserManager userManager;
     @Getter
     private static int beta;
+    @Setter
+    @Getter
+    private static boolean authlibReadyToUse = false;
 
     private static JCommander jc;
 

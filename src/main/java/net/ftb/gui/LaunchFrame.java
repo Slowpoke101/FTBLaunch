@@ -96,8 +96,7 @@ public class LaunchFrame extends JFrame {
     @Getter
     @Setter
     private static LaunchFrame instance = null;
-    
-    public static boolean canUseAuthlib;
+
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
