@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -90,6 +91,7 @@ public class LaunchFrame extends JFrame {
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static AtomicInteger checkDoneLoadingCallCount = new AtomicInteger(0);
     /**
      * @return - Outputs LaunchFrame instance
      */
@@ -382,24 +384,21 @@ public class LaunchFrame extends JFrame {
         tabbedPane.setSelectedIndex(tab);
     }
 
-    // TODO: fix this
     public static void checkDoneLoading () {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run () {
-                if (FTBPacksPane.getInstance().loaded) {
-                    LoadingDialog.advance("Modpacks data loaded");
-                    if (MapUtils.loaded) {
-                        LoadingDialog.advance("Maps data loaded");
-                        if (TexturepackPane.loaded) {
-                            loader.setVisible(false);
-                            instance.setVisible(true);
-                            instance.toFront();
-                            Benchmark.logBenchAs("main", "Launcher Startup");
-                        }
-                    }
+        int callCount = checkDoneLoadingCallCount.incrementAndGet();
+        if (callCount == 1) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run () {
+                    loader.setVisible(false);
+                    instance.setVisible(true);
+                    instance.toFront();
                 }
-            }
-        });
+            });
+            Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+        }
+        if (callCount == 2) {
+            Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
+        }
     }
 
     public void setNewsIcon () {

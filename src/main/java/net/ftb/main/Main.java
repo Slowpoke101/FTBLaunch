@@ -65,6 +65,8 @@ public class Main {
      */
     @Getter
     private static EventBus eventBus = new EventBus();
+    @Getter
+    private static boolean disableLaunchButton = false;
 
     /**
      * Launch the application.
@@ -130,7 +132,9 @@ public class Main {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
             if (!Settings.getSettings().isNoConfig()) {
-                Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
+                Logger.logDebug("Could not create LogWriters.", e1);
+                Logger.logError("Check your FTB installation location's write access. Launch button is disabled until installation location is fixed.");
+                Main.disableLaunchButton = true;
             }
         }
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
@@ -282,7 +286,8 @@ public class Main {
         AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.16") {
             @Override
             protected void done () {
-                LaunchFrame.getInstance().getLaunch().setEnabled(true);
+                if (disableLaunchButton == false )
+                    LaunchFrame.getInstance().getLaunch().setEnabled(true);
             }
         };
         authworker.execute();
@@ -337,8 +342,8 @@ public class Main {
          */
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run () {
-                LaunchFrame.getInstance().setVisible(true);
-                LaunchFrame.getInstance().toBack();
+                //LaunchFrame.getInstance().setVisible(true);
+                //LaunchFrame.getInstance().toBack();
             }});
 
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
