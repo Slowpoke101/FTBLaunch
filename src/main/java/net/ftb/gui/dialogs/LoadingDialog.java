@@ -34,7 +34,7 @@ public class LoadingDialog extends JDialog {
     private static LoadingDialog instance;
 
     private static int BAR_SIZE = 200;
-    private static int COUNT = 10;
+    private static int COUNT = 7;
     private static int INCREMENT = BAR_SIZE / COUNT;
     private static AtomicInteger  progress = new AtomicInteger(0);
     

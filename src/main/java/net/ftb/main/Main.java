@@ -373,7 +373,7 @@ public class Main {
             }
         };
         updateChecker.execute();
-        LoadingDialog.advance("Waiting modpack/map/texturepack data to be loaded");
+        LoadingDialog.advance("Waiting things to be loaded");
     }
 
     private static ArrayList<String> getXmls () {

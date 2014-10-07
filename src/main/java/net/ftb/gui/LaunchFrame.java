@@ -389,9 +389,12 @@ public class LaunchFrame extends JFrame {
         if (callCount == 1) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run () {
-                    loader.setVisible(false);
+                    LoadingDialog.advance("Opening main window");
                     instance.setVisible(true);
                     instance.toFront();
+                    //TODO: add checks if loader is disabled
+                    loader.setVisible(false);
+                    loader.dispose();
                 }
             });
             Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
