@@ -77,6 +77,10 @@ public class CommandLineSettings {
     @Getter
     private boolean disableTray = false;
 
+    @Parameter(names = {"--use-java8", "-J"}, description = "Allow use of java 8 in legacy MC versions that have known compatibility issues")
+    @Getter
+    private boolean useJava8 = false;
+
 
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override

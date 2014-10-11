@@ -133,6 +133,11 @@ public class Settings extends Properties {
         setProperty("betaChannel", String.valueOf(flag));
     }
 
+
+    /**
+     * don't use this to launch w/ use getCurrentJava(boolean canUse8)
+     * @return java's location
+     */
     public String getJavaPath () {
         String javaPath = getProperty("javaPath", null);
         if (javaPath == null || !new File(javaPath).isFile())
@@ -148,7 +153,16 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
+    @Deprecated //use the boolean version instead
     public JavaInfo getCurrentJava () {
+        return getCurrentJava(false);
+    }
+
+    /**
+     * Returns user selected or automatically selected JVM's
+     * JavaInfo object.
+     */
+    public JavaInfo getCurrentJava(boolean canuse8) {
         if (currentJava == null) {
             try {
                 currentJava = new JavaInfo(getJavaPath());
@@ -156,6 +170,8 @@ public class Settings extends Properties {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
+        if(!canuse8 && currentJava.isJava8())
+            return JavaFinder.parseJavaVersion(false);
         return currentJava;
     }
 

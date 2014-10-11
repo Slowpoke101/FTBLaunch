@@ -188,7 +188,7 @@ public class DownloadUtils extends Thread {
     }
 
     /**
-     * @param URL for file
+     * @param url for file
      * @return true if file is found
      */
     public static boolean fileExistsURL (String url) {
@@ -306,7 +306,6 @@ public class DownloadUtils extends Thread {
      */
     public static boolean isValid (File file, String md5) throws IOException {
         String result = fileMD5(file);
-        // Logger.logInfo("OLDHASHING: " + fileHash(file, "md5"));
         Logger.logInfo("Local: " + result.toUpperCase());
         Logger.logInfo("Remote: " + md5.toUpperCase());
         return md5.equalsIgnoreCase(result);
@@ -374,10 +373,6 @@ public class DownloadUtils extends Thread {
     public static String fileMD5 (File file) throws IOException {
         if (file.exists()) {
             return Files.hash(file, Hashing.md5()).toString();
-            //FileInputStream fis = new FileInputStream(file);
-            //String result = DigestUtils.md5Hex(fis);
-            //fis.close();
-            //return result;
         } else
             return "";
     }
@@ -385,13 +380,8 @@ public class DownloadUtils extends Thread {
     public static String fileSHA (File file) throws IOException {
         if (file.exists()) {
             return Files.hash(file, Hashing.sha1()).toString();
-            //FileInputStream fis = new FileInputStream(file);
-            //String result = DigestUtils.sha1Hex(fis).toLowerCase();
-            //fis.close();
-            //return result;
         } else
             return "";
-        //return fileHash(file, "sha1").toLowerCase();
     }
 
     public static String fileHash (File file, String type) throws IOException {

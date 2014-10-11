@@ -42,6 +42,7 @@ import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.data.Constants;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
@@ -819,7 +820,12 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        JavaInfo java = Settings.getSettings().getCurrentJava();
+        ModPack pack = ModPack.getSelectedPack();
+        String mcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        boolean java8Usable = false;
+        if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8") || CommandLineSettings.getSettings().isUseJava8())
+            java8Usable = true;
+        JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
         int[] minSup = ModPack.getSelectedPack().getMinJRE();
         if (ModPack.getSelectedPack().getMinLaunchSpec() <= Constants.buildNumber) {
             if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
