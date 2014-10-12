@@ -31,12 +31,13 @@ import javax.swing.JOptionPane;
 public class MainHelpers {
     public static void printInfo() {
         Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
-        Logger.logInfo("Java version: " + System.getProperty("java.version"));
-        Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
-        Logger.logInfo("Java home: " + System.getProperty("java.home"));
-        Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " + System.getProperty("java.vm.specification.version") + " by "
+        Logger.logDebug("System's default JVM: (This is not always used to launch MC)");
+        Logger.logDebug("Java version: " + System.getProperty("java.version"));
+        Logger.logDebug("Java vendor: " + System.getProperty("java.vendor"));
+        Logger.logDebug("Java home: " + System.getProperty("java.home"));
+        Logger.logDebug("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " + System.getProperty("java.vm.specification.version") + " by "
                 + System.getProperty("java.vm.specification.vendor"));
-        Logger.logInfo("Java vm: " + System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
+        Logger.logDebug("Java vm: " + System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
         Logger.logInfo("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " (" + (OSUtils.is64BitOS() ? "64-bit" : "32-bit") + ")");
         Logger.logInfo("Launcher Install Dir: " + Settings.getSettings().getInstallPath());
         Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
