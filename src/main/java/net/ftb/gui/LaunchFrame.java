@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -134,31 +135,39 @@ public class LaunchFrame extends JFrame {
      */
     public LaunchFrame(final int tab) {
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
-        setResizable(false);
+        setResizable(true);
         setTitle(Constants.name + " v" + Constants.version);
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-        panel = new JPanel();
+        panel = new JPanel(new BorderLayout());
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            setBounds(100, 100, 842, 480);
-        } else {
-            setBounds(100, 100, 850, 480);
-        }
-        panel.setBounds(0, 0, 850, 480);
-        panel.setLayout(null);
-        footer.setBounds(0, 380, 850, 100);
-        footer.setLayout(null);
-        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-        tabbedPane.setBounds(0, 0, 850, 380);
-        panel.add(tabbedPane);
-        panel.add(footer);
+        //if (OSUtils.getCurrentOS() == OS.WINDOWS) {
+            //setBounds(100, 200, 842, 480);
+        //} else {
+            //setBounds(100, 100, 850, 480);
+        //}
+		setBounds(100, 100, 850, 480);
+		
+        //panel.setBounds(0, 0, 850, 480);
+        //panel.setLayout(null);
+        //footer.setBounds(0, 380, 850, 100);
+        footer.setMinimumSize(new Dimension(850, 100));
+        //footer.setBorder(null);
+        //footer.setLayout(null);
+        footer.setLayout(new BorderLayout());
+        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);        
+        //tabbedPane.setBounds(0, 0, 850, 380);
+        tabbedPane.setMinimumSize(new Dimension(850, 380));
+        
+        panel.add(tabbedPane, BorderLayout.CENTER);
+        panel.add(footer, BorderLayout.PAGE_END);
         setContentPane(panel);
 
         //Footer
         footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerLogo.setBounds(20, 20, 42, 42);
+        //footerLogo.setBounds(20, 20, 42, 42);
+        footerLogo.setMinimumSize(new Dimension(42,42));
         footerLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -167,7 +176,8 @@ public class LaunchFrame extends JFrame {
         });
 
         footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerCreeper.setBounds(72, 20, 132, 42);
+        //footerCreeper.setBounds(72, 20, 132, 42);
+        footerCreeper.setMinimumSize(new Dimension(132, 42));
         footerCreeper.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -199,7 +209,8 @@ public class LaunchFrame extends JFrame {
         }
 
         donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
-        donate.setBounds(390, 20, 80, 30);
+        //donate.setBounds(390, 20, 80, 30);
+        donate.setMinimumSize(new Dimension(80,30));
         donate.setEnabled(false);
         donate.setToolTipText("Coming Soon...");
         donate.addActionListener(new ActionListener() {
@@ -208,7 +219,8 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        users.setBounds(550, 20, 150, 30);
+        //users.setBounds(550, 20, 150, 30);
+        users.setMinimumSize(new Dimension(150,30));
         users.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -222,7 +234,8 @@ public class LaunchFrame extends JFrame {
         });
 
         edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-        edit.setBounds(480, 20, 60, 30);
+        //edit.setBounds(480, 20, 60, 30);
+        edit.setMinimumSize(new Dimension(60,30));
         edit.setVisible(true);
         edit.setEnabled(users.getSelectedIndex() > 1);
         edit.addActionListener(new ActionListener() {
@@ -240,7 +253,8 @@ public class LaunchFrame extends JFrame {
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
-        launch.setBounds(711, 20, 100, 30);
+        //launch.setBounds(711, 20, 100, 30);
+        launch.setMinimumSize(new Dimension(100,30));
         launch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -248,7 +262,8 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        serverbutton.setBounds(480, 20, 330, 30);
+        //serverbutton.setBounds(480, 20, 330, 30);
+        serverbutton.setMinimumSize(new Dimension(330,30));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
         serverbutton.addActionListener(new ActionListener() {
@@ -271,7 +286,8 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        mapInstall.setBounds(650, 20, 160, 30);
+        //mapInstall.setBounds(650, 20, 160, 30);
+        mapInstall.setMinimumSize(new Dimension(160,30));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         mapInstall.setVisible(false);
         mapInstall.addActionListener(new ActionListener() {
@@ -286,11 +302,13 @@ public class LaunchFrame extends JFrame {
         });
 
         mapInstallLocation = new JComboBox();
-        mapInstallLocation.setBounds(480, 20, 160, 30);
+        //mapInstallLocation.setBounds(480, 20, 160, 30);
+        mapInstallLocation.setMinimumSize(new Dimension(160,30));
         mapInstallLocation.setToolTipText("Install to...");
         mapInstallLocation.setVisible(false);
 
-        serverMap.setBounds(480, 20, 330, 30);
+        //serverMap.setBounds(480, 20, 330, 30);
+        serverMap.setMinimumSize(new Dimension(330,30));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         serverMap.setVisible(false);
         serverMap.addActionListener(new ActionListener() {
@@ -303,7 +321,8 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        tpInstall.setBounds(650, 20, 160, 30);
+        //tpInstall.setBounds(650, 20, 160, 30);
+        tpInstall.setMinimumSize(new Dimension(160,30));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
         tpInstall.setVisible(false);
         tpInstall.addActionListener(new ActionListener() {
@@ -317,27 +336,48 @@ public class LaunchFrame extends JFrame {
         });
 
         tpInstallLocation = new JComboBox();
-        tpInstallLocation.setBounds(480, 20, 160, 30);
+        //tpInstallLocation.setBounds(480, 20, 160, 30);
+        tpInstallLocation.setMinimumSize(new Dimension(160,30));
         tpInstallLocation.setToolTipText("Install to...");
         tpInstallLocation.setVisible(false);
 
         tpInstallLocLbl.setText("Install to...");
-        tpInstallLocLbl.setBounds(480, 20, 80, 30);
+        //tpInstallLocLbl.setBounds(480, 20, 80, 30);
+        tpInstallLocLbl.setMinimumSize(new Dimension(80,30));
         tpInstallLocLbl.setVisible(false);
+		
 
-        footer.add(edit);
-        footer.add(users);
-        footer.add(footerLogo);
-        footer.add(footerCreeper);
-        footer.add(footerTUG);
-        footer.add(launch);
-        footer.add(donate);
-        footer.add(serverbutton);
-        footer.add(mapInstall);
-        footer.add(mapInstallLocation);
-        footer.add(serverMap);
-        footer.add(tpInstall);
-        footer.add(tpInstallLocation);
+        // Panel for the items in the bottom left
+		JPanel logoPanel = new JPanel();
+        logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+        logoPanel.add(footerLogo);
+        logoPanel.add(footerCreeper);
+        logoPanel.add(footerTUG);
+        
+        // Panel for the items in the bottom right
+		JPanel buttonFooterPanel = new JPanel();
+        buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+        buttonFooterPanel.add(donate);
+        buttonFooterPanel.add(edit);
+        buttonFooterPanel.add(users);
+        buttonFooterPanel.add(launch);
+        
+        
+        //footer.add(footerLogo, BorderLayout.LINE_START);
+        //footer.add(footerCreeper, BorderLayout.LINE_START);
+        footer.add(logoPanel, BorderLayout.LINE_START);
+        //footer.add(donate, BorderLayout.LINE_END);
+        //footer.add(edit, BorderLayout.LINE_END);
+        //footer.add(users, BorderLayout.LINE_END); 
+        //footer.add(launch, BorderLayout.LINE_END);
+        footer.add(buttonFooterPanel, BorderLayout.LINE_END);
+        
+        //footer.add(serverbutton, BorderLayout.LINE_END);
+        //footer.add(mapInstall, BorderLayout.LINE_END);
+        //footer.add(mapInstallLocation, BorderLayout.LINE_END);
+        //footer.add(serverMap, BorderLayout.LINE_END);
+        //footer.add(tpInstall, BorderLayout.LINE_END);
+        //footer.add(tpInstallLocation, BorderLayout.LINE_END);
 
         newsPane = new NewsPane();
         modPacksPane = new FTBPacksPane();
@@ -354,6 +394,7 @@ public class LaunchFrame extends JFrame {
         tabbedPane.add(modPacksPane, 2);
         tabbedPane.add(thirdPartyPane, 3);
         tabbedPane.add(tpPane, 4);
+
         /*
          * TODO: This will block. Network.
          */
@@ -786,7 +827,9 @@ public class LaunchFrame extends JFrame {
      * updates the buttons/text to language specific
      */
     public void updateLocale () {
-        if (I18N.currentLocale == Locale.deDE) {
+    	// TODO: JLB - Fix this back
+        /*
+    	if (I18N.currentLocale == Locale.deDE) {
             edit.setBounds(420, 20, 120, 30);
             donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
@@ -803,6 +846,7 @@ public class LaunchFrame extends JFrame {
             tpInstallLocation.setBounds(480, 20, 160, 30);
             tpInstall.setBounds(650, 20, 160, 30);
         }
+        */
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));

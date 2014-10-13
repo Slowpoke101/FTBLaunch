@@ -16,16 +16,23 @@
  */
 package net.ftb.gui.panes;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -34,6 +41,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.google.common.collect.Lists;
+
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -54,26 +62,43 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     private static FTBPacksPane instance;
     @Getter
     private JScrollPane packsScroll;
-
+    
     public FTBPacksPane() {
         super();
         instance = this;
-        setBorder(new EmptyBorder(5, 5, 5, 5));
-        setLayout(null);
-
+        //setBorder(new EmptyBorder(5, 5, 5, 5));
+        setBorder(null);
+        //setLayout(null);
+        
+        setLayout(new BorderLayout());
+        
+        
+        // Contains buttons/filter info/selection boxes along top of mod pack panes
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayout(1,6));
+        buttonsPanel.setMinimumSize(new Dimension(420,25));
+        add(buttonsPanel, BorderLayout.PAGE_START);        
+        
+        
+        
+        
         packPanels = Lists.newArrayList();
 
         packs = new JPanel();
-        packs.setLayout(null);
+        packs.setLayout(new FlowLayout());
+        //packs.setLayout(null);
         packs.setOpaque(false);
 
         // stub for a real wait message
         final JPanel p = new JPanel();
-        p.setBounds(0, 0, 420, 55);
-        p.setLayout(null);
+        p.setBackground(Color.cyan);;
+        //p.setBounds(0, 0, 420, 55);
+        p.setMinimumSize(new Dimension(420,55));
+        //p.setLayout(null);
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
-        filter.setBounds(5, 5, 105, 25);
+        //filter.setBounds(5, 5, 105, 25);
+        filter.setMinimumSize(new Dimension(105,25));
         filter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,8 +109,8 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                 }
             }
         });
-        add(filter);
-
+        buttonsPanel.add(filter);
+        
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -97,12 +122,14 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         typeLblText += "</body></html>";
 
         typeLbl = new JLabel(typeLblText);
-        typeLbl.setBounds(115, 5, 175, 25);
+        //typeLbl.setBounds(115, 5, 175, 25);
+        typeLbl.setMinimumSize(new Dimension(175,25));
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        add(typeLbl);
+        buttonsPanel.add(typeLbl);
 
         editModPack = new JButton(I18N.getLocaleString("MODS_EDIT_PACK"));
-        editModPack.setBounds(300, 5, 110, 25);
+        //editModPack.setBounds(300, 5, 110, 25);
+        editModPack.setMinimumSize(new Dimension(110,25));
         editModPack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,27 +142,30 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                 }
             }
         });
-        add(editModPack);
+        buttonsPanel.add(editModPack);
 
         JTextArea filler = new JTextArea(I18N.getLocaleString("MODS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
-        filler.setBounds(58, 6, 378, 42);
+        //filler.setBounds(58, 6, 378, 42);
+        //filler.setMinimumSize(new Dimension(378, 42));
         filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         //		p.add(loadingImage);
         p.add(filler);
         packs.add(p);
 
         packsScroll = new JScrollPane();
-        packsScroll.setBounds(-3, 30, 420, 283);
+        //packsScroll.setBounds(-3, 30, 420, 283);
+        packsScroll.setBorder(null);
+        packsScroll.setMinimumSize(new Dimension(420, 283));
         packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         packsScroll.setWheelScrollingEnabled(true);
         packsScroll.setOpaque(false);
         packsScroll.setViewportView(packs);
         packsScroll.getVerticalScrollBar().setUnitIncrement(19);
-        add(packsScroll);
+        add(packsScroll, BorderLayout.LINE_START);
 
         packInfo = new JEditorPane();
         packInfo.setEditable(false);
@@ -150,19 +180,25 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         });
         // TODO: Fix darker background for text area? Or is it better blending in?
         packInfo.setBackground(UIManager.getColor("control").darker().darker());
-        add(packInfo);
+       // add(packInfo, BorderLayout.LINE_END);
 
         infoScroll = new JScrollPane();
-        infoScroll.setBounds(410, 25, 430, 290);
+        //infoScroll.setBounds(410, 25, 430, 290);
+        infoScroll.setMinimumSize(new Dimension(430,290));
         infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         infoScroll.setWheelScrollingEnabled(true);
         infoScroll.setViewportView(packInfo);
         infoScroll.setOpaque(false);
-        add(infoScroll);
+        add(infoScroll, BorderLayout.LINE_END);
 
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, packsScroll, infoScroll);
+        splitPane.setDividerSize(4);
+        add(splitPane, BorderLayout.CENTER);
+        
         server = new JButton(I18N.getLocaleString("DOWNLOAD_SERVER"));
-        server.setBounds(420, 5, 130, 25);
+        //server.setBounds(420, 5, 130, 25);
+        server.setMinimumSize(new Dimension(130,25));
 
         //TODO: check
         server.addActionListener(new ActionListener() {
@@ -191,16 +227,18 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
                 }
             }
         });
-        add(server);
+        buttonsPanel.add(server);
 
         version = new JComboBox(new String[]{});
-        version.setBounds(560, 5, 130, 25);
+        //version.setBounds(560, 5, 130, 25);
+        version.setMinimumSize(new Dimension(130,25));
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
-        add(version);
+        buttonsPanel.add(version);
 
         privatePack = new JButton(I18N.getLocaleString("PACK_CODES"));
-        privatePack.setBounds(700, 5, 120, 25);
+        //privatePack.setBounds(700, 5, 120, 25);
+        privatePack.setMinimumSize(new Dimension(120,25));
         privatePack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -209,7 +247,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
             }
         });
 
-        add(privatePack);
+        buttonsPanel.add(privatePack);
     }
 
     @Override

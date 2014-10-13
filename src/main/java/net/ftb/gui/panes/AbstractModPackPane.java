@@ -93,7 +93,8 @@ public abstract class AbstractModPackPane extends JPanel {
         }
         final int packIndex = packPanels.size();
         final JPanel p = new JPanel();
-        p.setBounds(0, (packIndex * 55), 420, 55);
+        //p.setBounds(0, (packIndex * 55), 420, 55);
+        p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
         JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
         logo.setBounds(6, 6, 42, 42);
