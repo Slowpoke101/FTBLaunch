@@ -460,7 +460,7 @@ public class OSUtils {
                 Logger.logWarn("Could not open Java Download url, not supported");
             }
         } catch (Exception e) {
-            Logger.logError("Could not open link", e);
+            Logger.logError("Could not open link: " + url, e);
         }
     }
 
