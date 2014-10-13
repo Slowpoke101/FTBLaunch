@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -137,6 +138,7 @@ public class Main {
                 Main.disableLaunchButton = true;
             }
         }
+        Logger.logDebug("Launcher arguments: " + Arrays.toString(args));
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";
@@ -214,6 +216,7 @@ public class Main {
 
 
         if (Settings.getSettings().isNoConfig()) {
+            Logger.logDebug("FirstRunDialog");
             try {
                 EventQueue.invokeAndWait(new Runnable() {
                     @Override

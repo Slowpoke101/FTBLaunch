@@ -74,6 +74,7 @@ public class FirstRunDialog extends JDialog {
         applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
+                Logger.logDebug("Trying path: " + installPath.getText());
                 CheckInstallPath checkResult = new CheckInstallPath(installPath.getText());
 
                 if (checkResult.action == Action.BLOCK) {
