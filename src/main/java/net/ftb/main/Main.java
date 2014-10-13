@@ -18,6 +18,7 @@ package net.ftb.main;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import lombok.Setter;
 import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -53,6 +54,9 @@ public class Main {
     private static UserManager userManager;
     @Getter
     private static int beta;
+    @Setter
+    @Getter
+    private static boolean authlibReadyToUse = false;
 
     private static JCommander jc;
 
@@ -61,6 +65,8 @@ public class Main {
      */
     @Getter
     private static EventBus eventBus = new EventBus();
+    @Getter
+    private static boolean disableLaunchButton = false;
 
     /**
      * Launch the application.
@@ -126,7 +132,9 @@ public class Main {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile), LogSource.EXTERNAL));
         } catch (IOException e1) {
             if (!Settings.getSettings().isNoConfig()) {
-                Logger.logError("Could not create LogWriters. Check your FTB installation location write access", e1);
+                Logger.logDebug("Could not create LogWriters.", e1);
+                Logger.logError("Check your FTB installation location's write access. Launch button is disabled until installation location is fixed.");
+                Main.disableLaunchButton = true;
             }
         }
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
@@ -196,144 +204,176 @@ public class Main {
                     }
                 }
                 LaunchFrame.loader = new LoadingDialog();
-                LaunchFrame.loader.setModal(false);
                 LaunchFrame.loader.setVisible(true);
+                LaunchFrame.loader.toFront();
+            }
+        });
 
-                I18N.setupLocale();
-                I18N.setLocale(Settings.getSettings().getLocale());
+        I18N.setupLocale();
+        I18N.setLocale(Settings.getSettings().getLocale());
 
-                if (Settings.getSettings().isNoConfig()) {
-                    FirstRunDialog firstRunDialog = new FirstRunDialog();
-                    firstRunDialog.setVisible(true);
-                }
 
-                LoadingDialog.setProgress(120);
+        if (Settings.getSettings().isNoConfig()) {
+            try {
+                EventQueue.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run () {
+                        FirstRunDialog firstRunDialog = new FirstRunDialog();
+                        firstRunDialog.setVisible(true);
+                    }
+                });
+            } catch (Exception e) {}
+        }
 
-                File installDir = new File(Settings.getSettings().getInstallPath());
-                if (!installDir.exists()) {
-                    installDir.mkdirs();
-                }
+        // NOTE: this messagage will be missed because laoder is not created when this is executed
+        // should we invokeAndWait when creating LoadingDialog?
+        // if we wait other things in main thread will be executed later
+        LoadingDialog.advance("Checking installation location");
 
-                // CheckInstallPath() does Error/Warning logging in english
-                CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
-                if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
-                    // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
-                    int result = ErrorUtils
-                            .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
-                    // pressing OK or closing dialog does not do anything
-                    if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
-                        // if user select ignore we save setting and that type of error will be ignored
-                        if (checkResult.setting != null) {
-                            Settings.getSettings().setBoolean(checkResult.setting, true);
-                            Settings.getSettings().save();
+        File installDir = new File(Settings.getSettings().getInstallPath());
+        if (!installDir.exists()) {
+            installDir.mkdirs();
+        }
+
+        // CheckInstallPath() does Error/Warning logging in english
+        final CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
+        if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
+            // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override public void run () {
+                        int result = ErrorUtils
+                                .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                        // pressing OK or closing dialog does not do anything
+                        if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+                            // if user select ignore we save setting and that type of error will be ignored
+                            if (checkResult.setting != null) {
+                                Settings.getSettings().setBoolean(checkResult.setting, true);
+                                Settings.getSettings().save();
+                            }
                         }
                     }
+                });
+            } catch (Exception e) {}
+        }
+
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override public void run () {
+                    // Same warnings are logged as errors in MainHelpers.printInfo()
+                    if (!OSUtils.is64BitOS()) {
+                        MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
+                    }
+                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
+                        MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
+                    }
+                    JavaInfo java = Settings.getSettings().getCurrentJava();
+                    if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
+                        MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
+                    }
                 }
+            });
+        } catch (Exception e) {}
+        // NOTE: this is also missed
+        LoadingDialog.advance("Loading user data");
 
-                // Same warnings are logged as errors in MainHelpers.printInfo()
-                if (!OSUtils.is64BitOS()) {
-                    MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
-                }
-                if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
-                    MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
-                }
-                JavaInfo java = Settings.getSettings().getCurrentJava();
-                if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
-                    MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
-                }
+        // Store this in the cache (local) storage, since it's machine specific.
+        userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
-                LoadingDialog.setProgress(130);
+        /*
+         * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
+         */
+        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.16") {
+            @Override
+            protected void done () {
+                if (disableLaunchButton == false )
+                    LaunchFrame.getInstance().getLaunch().setEnabled(true);
+            }
+        };
+        authworker.execute();
 
-                // Store this in the cache (local) storage, since it's machine specific.
-                userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
+        LoadingDialog.advance("Creating log window");
 
-                LoadingDialog.setProgress(140);
-
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run () {
                 if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
                     LaunchFrame.con = new LauncherConsole();
                     Logger.addListener(LaunchFrame.con);
                     LaunchFrame.con.refreshLogs();
                     LaunchFrame.con.setVisible(true);
                 }
-
-                MainHelpers.googleAnalytics();
-
-                LoadingDialog.setProgress(160);
-
-                LaunchFrame frame = new LaunchFrame(2);
-                LaunchFrame.setInstance(frame);
-
-                // Set up System Tray
-                if (SystemTray.isSupported() && !CommandLineSettings.getSettings().isDisableTray()) {
-                    LaunchFrame.getInstance().setUpSystemTray();
-                } else {
-                    Logger.logDebug("System Tray not supported");
-                }
-
-                /*
-                 * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
-                 */
-                AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.16") {
-                    @Override
-                    protected void done () {
-                        LaunchFrame.getInstance().getLaunch().setEnabled(true);
-                    }
-                };
-                authworker.execute();
-
-                LoadingDialog.setProgress(170);
-
-                Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                    @Override
-                    public void uncaughtException (Thread t, Throwable e) {
-                        Logger.logError("Unhandled exception in " + t.toString(), e);
-                    }
-                });
-
-                /*
-                 * Show the main form but hide it behind any active windows until
-                 * loading is complete to prevent display issues.
-                 *
-                 * @TODO ModpacksPane has a display issue with packScroll if the
-                 * main form is not visible when constructed.
-                 */
-                frame.setVisible(true);
-                frame.toBack();
-
-                eventBus.register(frame.thirdPartyPane);
-                eventBus.register(frame.modPacksPane);
-                eventBus.register(this);
-
-                ModPack.loadXml(getXmls());
-
-                Map.addListener(frame.mapsPane);
-                //				Map.loadAll();
-
-                TexturePack.addListener(frame.tpPane);
-                //				TexturePack.loadAll();
-
-
-                /*
-                 * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
-                 */
-                final int beta_ = beta;
-                UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
-                    @Override
-                    protected void done () {
-                        try {
-                            if (get()) {
-                                LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
-                                p.setVisible(true);
-                            }
-                        } catch (InterruptedException e) {
-                        } catch (ExecutionException e) {
-                        }
-                    }
-                };
-                updateChecker.execute();
-                LoadingDialog.setProgress(180);
             }
         });
+
+        MainHelpers.googleAnalytics();
+        LoadingDialog.advance("Creating main window");
+
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override public void run () {
+                    LaunchFrame frame = new LaunchFrame(2);
+                    LaunchFrame.setInstance(frame);
+
+                    // Set up System Tray
+                    if (SystemTray.isSupported() && !CommandLineSettings.getSettings().isDisableTray()) {
+                        LaunchFrame.getInstance().setUpSystemTray();
+                    } else {
+                        Logger.logDebug("System Tray not supported");
+                    }
+                }
+            });
+        } catch (Exception e) {}
+
+        LoadingDialog.advance("Running things");
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException (Thread t, Throwable e) {
+                Logger.logError("Unhandled exception in " + t.toString(), e);
+            }
+        });
+
+        /*
+         * Show the main form but hide it behind any active windows until
+         * loading is complete to prevent display issues.
+         *
+         * @TODO ModpacksPane has a display issue with packScroll if the
+         * main form is not visible when constructed.
+         */
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run () {
+                //LaunchFrame.getInstance().setVisible(true);
+                //LaunchFrame.getInstance().toBack();
+            }});
+
+        eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
+        eventBus.register(LaunchFrame.getInstance().modPacksPane);
+
+        ModPack.loadXml(getXmls());
+
+        Map.addListener(LaunchFrame.getInstance().mapsPane);
+        TexturePack.addListener(LaunchFrame.getInstance().tpPane);
+
+
+        /*
+         * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
+         */
+        final int beta_ = beta;
+        UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+            @Override
+            protected void done () {
+                try {
+                    if (get()) {
+                        LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
+                        p.setVisible(true);
+                    }
+                } catch (InterruptedException e) {
+                } catch (ExecutionException e) {
+                }
+            }
+        };
+        updateChecker.execute();
+        LoadingDialog.advance("Waiting things to be loaded");
     }
 
     private static ArrayList<String> getXmls () {

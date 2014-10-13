@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -90,14 +91,14 @@ public class LaunchFrame extends JFrame {
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static AtomicInteger checkDoneLoadingCallCount = new AtomicInteger(0);
     /**
      * @return - Outputs LaunchFrame instance
      */
     @Getter
     @Setter
     private static LaunchFrame instance = null;
-    
-    public static boolean canUseAuthlib;
+
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -384,22 +385,23 @@ public class LaunchFrame extends JFrame {
     }
 
     public static void checkDoneLoading () {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run () {
-                if (FTBPacksPane.getInstance().loaded) {
-                    LoadingDialog.setProgress(190);
-                    if (MapUtils.loaded) {
-                        LoadingDialog.setProgress(200);
-                        if (TexturepackPane.loaded) {
-                            loader.setVisible(false);
-                            instance.setVisible(true);
-                            instance.toFront();
-                            Benchmark.logBenchAs("main", "Launcher Startup");
-                        }
-                    }
+        int callCount = checkDoneLoadingCallCount.incrementAndGet();
+        if (callCount == 1) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run () {
+                    LoadingDialog.advance("Opening main window");
+                    instance.setVisible(true);
+                    instance.toFront();
+                    //TODO: add checks if loader is disabled
+                    loader.setVisible(false);
+                    loader.dispose();
                 }
-            }
-        });
+            });
+            Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+        }
+        if (callCount == 2) {
+            Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
+        }
     }
 
     public void setNewsIcon () {

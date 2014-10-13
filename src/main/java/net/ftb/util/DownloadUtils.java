@@ -464,7 +464,6 @@ public class DownloadUtils extends Thread {
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
                     Benchmark.logBenchAs("DlUtils", "Download Utils Curse");
-                    LoadingDialog.setProgress(80);
                 } catch (IOException e) {
                     int i = 10;
 
@@ -473,10 +472,8 @@ public class DownloadUtils extends Thread {
                     downloadServers.clear();
 
                     Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
-                    LoadingDialog.setProgress(i);
                     parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
                 }
-                LoadingDialog.setProgress(90);
 
                 if (downloadServers.size() == 0) {
                     Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
@@ -497,7 +494,6 @@ public class DownloadUtils extends Thread {
                 downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             }
 
-            LoadingDialog.setProgress(100);
             Locations.serversLoaded = true;
 
             // This line absolutely must be hit, or the console will not be shown
@@ -569,7 +565,6 @@ public class DownloadUtils extends Thread {
 
                         if (i < 90)
                             i += 10;
-                        LoadingDialog.setProgress(i);
                     } else {
                         h.put(e.getKey(), e.getValue().getAsString());
                     }
