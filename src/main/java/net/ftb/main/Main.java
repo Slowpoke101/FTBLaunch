@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -137,6 +138,7 @@ public class Main {
                 Main.disableLaunchButton = true;
             }
         }
+        Logger.logDebug("Launcher arguments: " + Arrays.toString(args));
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";
@@ -214,6 +216,7 @@ public class Main {
 
 
         if (Settings.getSettings().isNoConfig()) {
+            Logger.logDebug("FirstRunDialog");
             try {
                 EventQueue.invokeAndWait(new Runnable() {
                     @Override
@@ -292,7 +295,7 @@ public class Main {
         };
         authworker.execute();
 
-        LoadingDialog.advance("Creating log window");
+        LoadingDialog.advance("Creating Console window");
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run () {
@@ -324,7 +327,7 @@ public class Main {
             });
         } catch (Exception e) {}
 
-        LoadingDialog.advance("Running things");
+        LoadingDialog.advance("Setting up Launcher");
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -373,7 +376,7 @@ public class Main {
             }
         };
         updateChecker.execute();
-        LoadingDialog.advance("Waiting things to be loaded");
+        LoadingDialog.advance("Downloading pack data");
     }
 
     private static ArrayList<String> getXmls () {

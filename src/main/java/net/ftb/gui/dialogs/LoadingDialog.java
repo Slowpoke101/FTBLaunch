@@ -42,37 +42,28 @@ public class LoadingDialog extends JDialog {
         super();
         setupGui();
         instance = this;
-        Logger.logDebug("XXX: splash screen ready to use");
     }
 
     public static void advance(final String text) {
-        Logger.logDebug("XXX: trying: " + text );
+        Logger.logInfo(text);
         final int newValue = progress.getAndAdd(INCREMENT) + INCREMENT;
         if (instance != null) {
             if (SwingUtilities.isEventDispatchThread()) {
                 doAdvance(text, newValue);
             } else {
-                Logger.logDebug("XXX: adding to EDT: " + text);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override public void run () {
                         doAdvance(text, newValue);
                     }
                 });
             }
-        } else {
-            Logger.logDebug("LoadingDialog was not ready");
         }
     }
 
     private static void doAdvance(String text, int newValue) {
-        Logger.logDebug("XXX: advancing to " + newValue);
         instance.progressBar.setValue(newValue);
-        instance.loadStatusLbl.setText(text + " " + String.valueOf(newValue));
+        instance.loadStatusLbl.setText(text);
         instance.repaint();
-    }
-
-    public static void advance() {
-        advance(null);
     }
 
     private void setupGui () {
