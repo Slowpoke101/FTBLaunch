@@ -54,7 +54,10 @@ import java.util.HashMap;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractModPackPane extends JPanel {
-    // container for packs. Upgraded by appPack()
+    
+	static final int packItemPadding = 4; 
+	
+	// container for packs. Upgraded by appPack()
     JPanel packs;
     // array to store packs. Upgraded by addPack
     public ArrayList<JPanel> packPanels;
@@ -109,7 +112,7 @@ public abstract class AbstractModPackPane extends JPanel {
         packPanels = Lists.newArrayList();
 
         packs = new JPanel();
-        packs.setLayout(new FlowLayout());
+        packs.setLayout(new FlowLayout(FlowLayout.LEFT, 0, packItemPadding));
         //packs.setLayout(null);
         packs.setOpaque(false);
 
@@ -127,7 +130,7 @@ public abstract class AbstractModPackPane extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loaded) {
-                    // TODO: problem here. How to move into abstract?
+                    // TODO: problem here. How to move into abstract?  (Fyber fixed)
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(getThis());
                     filterDia.setVisible(true);
                 }
@@ -277,14 +280,14 @@ public abstract class AbstractModPackPane extends JPanel {
 
         buttonsPanel.add(privatePack);
         
+        // Resize scrollbar when center divider is moved
         packsScroll.addComponentListener(new ComponentAdapter() {	
-			@Override
-			// Resize scrollbar when center divider is moved
+			@Override			
 			public void componentResized(ComponentEvent e) {				
-				//packsScroll.revalidate();
-				int itemsPerWidth = packs.getWidth() / 420;				
-				packs.setMinimumSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
-		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
+				int itemsPerWidth = packs.getWidth() / 420;
+				if (itemsPerWidth < 1) itemsPerWidth = 1;
+				packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding)) / itemsPerWidth));
+		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding)) / itemsPerWidth));		        
 			}        	
         });
     }
@@ -312,7 +315,7 @@ public abstract class AbstractModPackPane extends JPanel {
         final int packIndex = packPanels.size();
         final JPanel p = new JPanel();
         //p.setBounds(0, (packIndex * 55), 420, 55);
-        p.setPreferredSize(new Dimension(420,55));
+        p.setPreferredSize(new Dimension(420,55));        
         p.setLayout(null);
         
         JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
@@ -340,17 +343,17 @@ public abstract class AbstractModPackPane extends JPanel {
                 updatePacks();
             }
         };
+        
         p.addMouseListener(lin);
         filler.addMouseListener(lin);
         logo.addMouseListener(lin);
         p.add(filler);
         p.add(logo);
         packPanels.add(p);
-        packs.add(p);
+        packs.add(p);        
 
-        packs.setMinimumSize(new Dimension(420, (packPanels.size() * 55)));
-        packs.setPreferredSize(new Dimension(420, (packPanels.size() * 55)));
-
+        packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding))));
+        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding))));
         
         //packsScroll.revalidate();
         if (pack.getDir().equalsIgnoreCase(getLastPack())) {
