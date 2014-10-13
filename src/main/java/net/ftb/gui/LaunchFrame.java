@@ -396,6 +396,11 @@ public class LaunchFrame extends JFrame {
                     loader.setVisible(false);
                     loader.dispose();
                     Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
+                    String packDir = CommandLineSettings.getSettings().getPackDir();
+                    if (packDir != null) {
+                        ModPack.setSelectedPack(packDir);
+                        LaunchFrame.getInstance().doLaunch();
+                    }
                 }
             });
             Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");

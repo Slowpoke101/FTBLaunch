@@ -53,6 +53,10 @@ public class CommandLineSettings {
     @Getter
     private boolean noConsole = false;
 
+    @Parameter(names = {"--autostart", "-a"}, description = "Automatically start given pack (WIP feature)", arity = 1)
+    @Getter
+    private String packDir;
+
     @Parameter(names = {"--cache-dir", "-C"}, description = "Cache directory", arity = 1, validateWith = ValidateRequiredValue.class)
     @Getter
     private String cacheDir;
