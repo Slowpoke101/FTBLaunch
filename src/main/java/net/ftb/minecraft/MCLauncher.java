@@ -124,6 +124,9 @@ public class MCLauncher {
             Logger.logInfo("Additional java parameters: " + additionalOptions);
             for(String s : additionalOptions.split("\\s+")) {
                 if(s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true")&& ! isLegacy) {
+                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() :
+                            Settings.getSettings().getPackVer()).replace(".", "_");
+                    TrackerUtils.sendPageView("JarmodAttempt", "JarmodAttempt / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
                     ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
                 } else {
                     arguments.add(s);
