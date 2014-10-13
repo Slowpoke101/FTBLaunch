@@ -395,6 +395,7 @@ public class LaunchFrame extends JFrame {
                     //TODO: add checks if loader is disabled
                     loader.setVisible(false);
                     loader.dispose();
+                    Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
                 }
             });
             Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
