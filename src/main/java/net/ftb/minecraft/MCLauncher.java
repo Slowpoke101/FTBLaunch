@@ -218,11 +218,11 @@ public class MCLauncher {
             Dimension def = new Dimension(854, 480);
             if (Settings.getSettings().getLastDimension().getWidth() != def.getWidth() && !fullscreen) {
                 arguments.add("--width");
-                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getWidth()));
+                arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getWidth())));
             }
             if (Settings.getSettings().getLastDimension().getHeight() != def.getHeight() && !fullscreen) {
                 arguments.add("--height");
-                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getHeight()));
+                arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getHeight())));
             }
         }
 
