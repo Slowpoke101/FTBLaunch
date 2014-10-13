@@ -42,6 +42,7 @@ import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.data.Constants;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
@@ -236,6 +237,7 @@ public class LaunchFrame extends JFrame {
         });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
@@ -819,24 +821,42 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        JavaInfo java = Settings.getSettings().getCurrentJava();
-        int[] minSup = ModPack.getSelectedPack().getMinJRE();
-        if (ModPack.getSelectedPack().getMinLaunchSpec() <= Constants.buildNumber) {
-            if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-                if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
-                    Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-                    Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-                    saveSettings();
-                    doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
-                            UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
-                } else {//user can't run pack-- JRE not high enough
-                    ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
-                }
-            } else if (users.getSelectedIndex() <= 1) {
-                ErrorUtils.tossError("Please select a profile!");
-            }
-        } else {
+        ModPack pack = ModPack.getSelectedPack();
+
+        // compare mc version and jvm version. Stop startup if no valid JVM found for 1.6/1.7.2 packs
+        String mcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        boolean java8Usable = false;
+        if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8") || CommandLineSettings.getSettings().isUseJava8())
+            java8Usable = true;
+        JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
+        if ( (!java8Usable && java == null) || (!java8Usable && OSUtils.getCurrentOS()==OS.UNIX && java.isJava8())) {
+            ErrorUtils.tossError("Your system only has Java 8 installed which is incompatible with this version of minecraft. Please download Java 7 using the link in the options tab");
+            return;
+        }
+
+        // check launcher version
+        if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
+            return;
+        }
+
+        // check if user profile is selected
+        if (users.getSelectedIndex() <= 1) {
+            ErrorUtils.tossError("Please select a profile!");
+            return;
+        }
+
+        // check selected java is at least version specified in pack's XML
+        int[] minSup = pack.getMinJRE();
+        if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
+            Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
+            Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
+            saveSettings();
+            doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
+                    UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
+        } else {//user can't run pack-- JRE not high enough
+            ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
+            return;
         }
     }
 

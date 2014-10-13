@@ -157,7 +157,7 @@ public class JavaFinder {
 
     public static JavaInfo parseJavaVersion () {
         // TODO: add command line argument to control this
-        return parseJavaVersion(false);
+        return parseJavaVersion(true);
     }
         /**
          * Standalone testing - lists all Javas in the system
@@ -206,20 +206,19 @@ public class JavaFinder {
 
                 }
             }
-            Logger.logDebug("Preferred: " + preferred.toString());
-            Logger.logDebug("Backup: " + backup.toString());
+            Logger.logDebug("Preferred: " + String.valueOf(preferred));
+            Logger.logDebug("Backup(java8 excluded): " + String.valueOf(backup));
         }
 
         if (preferred != null) {
-            if(backup != null && preferred.isJava8() && !canUseJava8) {
-                Logger.logInfo("Selected JVM: " + backup.toString());
+            if (backup != null && preferred.isJava8() && !canUseJava8) {
                 return backup;
+            } else if (backup == null && preferred.isJava8() && !canUseJava8) {
+                return null;
             } else {
-                Logger.logInfo("Selected JVM: " + preferred.toString());
                 return preferred;
             }
         } else {
-            Logger.logError("No Java versions found!");
             return null;
         }
     }
