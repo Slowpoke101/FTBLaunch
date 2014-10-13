@@ -295,7 +295,7 @@ public class Main {
         };
         authworker.execute();
 
-        LoadingDialog.advance("Creating log window");
+        LoadingDialog.advance("Creating Console window");
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override public void run () {
@@ -327,7 +327,7 @@ public class Main {
             });
         } catch (Exception e) {}
 
-        LoadingDialog.advance("Running things");
+        LoadingDialog.advance("Setting up Launcher");
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -376,7 +376,7 @@ public class Main {
             }
         };
         updateChecker.execute();
-        LoadingDialog.advance("Waiting things to be loaded");
+        LoadingDialog.advance("Downloading pack data");
     }
 
     private static ArrayList<String> getXmls () {
