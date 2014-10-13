@@ -237,6 +237,7 @@ public class LaunchFrame extends JFrame {
         });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
