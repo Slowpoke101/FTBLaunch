@@ -376,7 +376,7 @@ public class MCInstaller {
                 classpath.add(new File(libDir, lib.getPath()));
             }
             boolean java8Usable = false;
-            if(packmcversion.startsWith("1.7.10") || packmcversion.startsWith("1.8") || CommandLineSettings.getSettings().isUseJava8())
+            if(packmcversion.startsWith("1.7.10") || packmcversion.startsWith("1.8") || pack.getDir().equals("mojang_vanilla") ||  CommandLineSettings.getSettings().isUseJava8())
                 java8Usable = true;
             JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
 
