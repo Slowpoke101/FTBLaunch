@@ -158,13 +158,13 @@ public class ModPack {
      */
     public static ModPack getSelectedPack () {
         if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
-            return getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+            return getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
         }
-        return getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex());
+        return getPack(FTBPacksPane.getInstance().getSelectedPackIndex());
     }
 
     public static ModPack getSelectedPack (boolean isFTBPane) {
-        return isFTBPane?getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex()):getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+        return isFTBPane?getPack(FTBPacksPane.getInstance().getSelectedPackIndex()):getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());    	
     }
     /**
      * Constructor for ModPack class

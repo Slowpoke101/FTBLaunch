@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -158,7 +159,8 @@ public class LaunchFrame extends JFrame {
         //footer.setBorder(null);
         //footer.setLayout(null);
         footer.setLayout(new BorderLayout());
-        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);        
+        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);    
+        
         //tabbedPane.setBounds(0, 0, 850, 380);
         tabbedPane.setMinimumSize(new Dimension(850, 380));
         
@@ -222,7 +224,8 @@ public class LaunchFrame extends JFrame {
         });
 
         //users.setBounds(550, 20, 150, 30);
-        users.setMinimumSize(new Dimension(150,30));
+        users.setMinimumSize(new Dimension(150,28));
+        users.setMaximumSize(new Dimension(150,28));
         users.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -358,12 +361,13 @@ public class LaunchFrame extends JFrame {
         
         // Panel for the items in the bottom right
 		JPanel buttonFooterPanel = new JPanel();
+		buttonFooterPanel.setLayout(new BoxLayout(buttonFooterPanel,BoxLayout.X_AXIS));
         buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         buttonFooterPanel.add(donate);
         buttonFooterPanel.add(edit);
         buttonFooterPanel.add(users);
         buttonFooterPanel.add(launch);
-        
+     
         
         //footer.add(footerLogo, BorderLayout.LINE_START);
         //footer.add(footerCreeper, BorderLayout.LINE_START);
@@ -433,6 +437,7 @@ public class LaunchFrame extends JFrame {
         	@Override
 			public void componentResized(ComponentEvent arg0) {
 				modPacksPane.getSplitPane().resetToPreferredSizes();
+				thirdPartyPane.getSplitPane().resetToPreferredSizes();
 			}        	
         });
         

@@ -440,9 +440,9 @@ public class MCInstaller {
 
         ModPack pack;
         if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
-            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedThirdPartyModIndex());
+            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
         else
-            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedFTBModIndex());
+            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedPackIndex());
 
         String packDir = pack.getDir();
 
