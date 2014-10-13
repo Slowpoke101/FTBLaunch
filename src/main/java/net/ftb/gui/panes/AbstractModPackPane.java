@@ -18,6 +18,7 @@ package net.ftb.gui.panes;
 
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
+
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -29,6 +30,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -96,6 +98,7 @@ public abstract class AbstractModPackPane extends JPanel {
         //p.setBounds(0, (packIndex * 55), 420, 55);
         p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
+        
         JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
@@ -129,8 +132,9 @@ public abstract class AbstractModPackPane extends JPanel {
         packPanels.add(p);
         packs.add(p);
 
-        packs.setMinimumSize(new Dimension(420, (packPanels.size() * 55)));
-        packs.setPreferredSize(new Dimension(420, (packPanels.size() * 55)));
+        int itemsPerWidth = packs.getWidth() / 420;				
+		packs.setMinimumSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
+        packs.setPreferredSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
 
         //
         //packsScroll.revalidate();

@@ -24,6 +24,9 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -62,6 +65,8 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     private static FTBPacksPane instance;
     @Getter
     private JScrollPane packsScroll;
+    @Getter
+    private JSplitPane splitPane;
     
     public FTBPacksPane() {
         super();
@@ -192,9 +197,9 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         infoScroll.setOpaque(false);
         add(infoScroll, BorderLayout.LINE_END);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, packsScroll, infoScroll);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, packsScroll, infoScroll);
         splitPane.setDividerSize(4);
-        add(splitPane, BorderLayout.CENTER);
+        add(splitPane, BorderLayout.CENTER);        
         
         server = new JButton(I18N.getLocaleString("DOWNLOAD_SERVER"));
         //server.setBounds(420, 5, 130, 25);
@@ -248,6 +253,17 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         });
 
         buttonsPanel.add(privatePack);
+        
+        packsScroll.addComponentListener(new ComponentAdapter() {	
+			@Override
+			// Resize scrollbar when center divider is moved
+			public void componentResized(ComponentEvent e) {				
+				//packsScroll.revalidate();
+				int itemsPerWidth = packs.getWidth() / 420;				
+				packs.setMinimumSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
+		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * 55) / itemsPerWidth));
+			}        	
+        });
     }
 
     @Override

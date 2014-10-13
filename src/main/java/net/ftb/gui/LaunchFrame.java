@@ -19,6 +19,8 @@ package net.ftb.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
@@ -423,6 +425,17 @@ public class LaunchFrame extends JFrame {
             }
         });
         tabbedPane.setSelectedIndex(tab);
+        
+        
+        
+        panel.addComponentListener(new ComponentAdapter() {
+			// Reset splitter on window resize to avoid being in an unreachable location
+        	@Override
+			public void componentResized(ComponentEvent arg0) {
+				modPacksPane.getSplitPane().resetToPreferredSizes();
+			}        	
+        });
+        
     }
 
     public static void checkDoneLoading () {
@@ -827,7 +840,7 @@ public class LaunchFrame extends JFrame {
      * updates the buttons/text to language specific
      */
     public void updateLocale () {
-    	// TODO: JLB - Fix this back
+    	// TODO: Fix this back if necessary; removed for resizable
         /*
     	if (I18N.currentLocale == Locale.deDE) {
             edit.setBounds(420, 20, 120, 30);
