@@ -55,7 +55,6 @@ import java.util.HashMap;
 @SuppressWarnings("unchecked")
 public abstract class AbstractModPackPane extends JPanel {
     
-	static final int packItemPadding = 4; 
 	
 	// container for packs. Upgraded by appPack()
     JPanel packs;
@@ -104,24 +103,11 @@ public abstract class AbstractModPackPane extends JPanel {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(1,6));
         buttonsPanel.setMinimumSize(new Dimension(420,25));
-        add(buttonsPanel, BorderLayout.PAGE_START);        
+        add(buttonsPanel, BorderLayout.PAGE_START); 
         
         
+        packPanels = Lists.newArrayList();      
         
-        
-        packPanels = Lists.newArrayList();
-
-        packs = new JPanel();
-        packs.setLayout(new FlowLayout(FlowLayout.LEFT, 0, packItemPadding));
-        //packs.setLayout(null);
-        packs.setOpaque(false);
-
-        // stub for a real wait message
-        final JPanel p = new JPanel();
-        p.setBackground(Color.cyan);;
-        //p.setBounds(0, 0, 420, 55);
-        p.setMinimumSize(new Dimension(420,55));
-        //p.setLayout(null);
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         //filter.setBounds(5, 5, 105, 25);
@@ -171,6 +157,14 @@ public abstract class AbstractModPackPane extends JPanel {
         });
         buttonsPanel.add(editModPack);
 
+        
+        // stub for a real wait message
+        final JPanel p = new JPanel();
+        p.setBackground(Color.cyan);;
+        //p.setBounds(0, 0, 420, 55);
+        p.setMinimumSize(new Dimension(420,55));
+        //p.setLayout(null);
+        
         JTextArea filler = new JTextArea(I18N.getLocaleString("MODS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
@@ -178,51 +172,17 @@ public abstract class AbstractModPackPane extends JPanel {
         //filler.setBounds(58, 6, 378, 42);
         //filler.setMinimumSize(new Dimension(378, 42));
         filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
-        //		p.add(loadingImage);
+        //p.add(loadingImage);
         p.add(filler);
+        
+        ObjectInfoSplitPane splitPane = new ObjectInfoSplitPane();
+        packs = splitPane.getPacks();
+        packInfo = splitPane.getPackInfo();
+        infoScroll = splitPane.getInfoScroll();
+        packsScroll = splitPane.getPacksScroll();
+        add(splitPane, BorderLayout.CENTER);
+        
         packs.add(p);
-
-        packsScroll = new JScrollPane();
-        //packsScroll.setLayout(new BoxLayout(packsScroll,BoxLayout.X_AXIS));
-        //packsScroll.setBounds(-3, 30, 420, 283);
-        packsScroll.setBorder(null);
-        packsScroll.setMinimumSize(new Dimension(420, 283));
-        packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        packsScroll.setWheelScrollingEnabled(true);
-        packsScroll.setOpaque(false);
-        packsScroll.setViewportView(packs);
-        packsScroll.getVerticalScrollBar().setUnitIncrement(19);
-        add(packsScroll, BorderLayout.LINE_START);
-
-        packInfo = new JEditorPane();
-        packInfo.setEditable(false);
-        packInfo.setContentType("text/html");
-        packInfo.addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent event) {
-                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    OSUtils.browse(event.getURL().toString());
-                }
-            }
-        });
-        // TODO: Fix darker background for text area? Or is it better blending in?
-        packInfo.setBackground(UIManager.getColor("control").darker().darker());
-       // add(packInfo, BorderLayout.LINE_END);
-
-        infoScroll = new JScrollPane();
-        //infoScroll.setBounds(410, 25, 430, 290);
-        infoScroll.setMinimumSize(new Dimension(430,290));
-        infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        infoScroll.setWheelScrollingEnabled(true);
-        infoScroll.setViewportView(packInfo);
-        infoScroll.setOpaque(false);
-        add(infoScroll, BorderLayout.LINE_END);
-
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, packsScroll, infoScroll);
-        splitPane.setDividerSize(4);
-        add(splitPane, BorderLayout.CENTER);        
         
         server = new JButton(I18N.getLocaleString("DOWNLOAD_SERVER"));
         //server.setBounds(420, 5, 130, 25);
@@ -286,8 +246,8 @@ public abstract class AbstractModPackPane extends JPanel {
 			public void componentResized(ComponentEvent e) {				
 				int itemsPerWidth = packs.getWidth() / 420;
 				if (itemsPerWidth < 1) itemsPerWidth = 1;
-				packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding)) / itemsPerWidth));
-		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding)) / itemsPerWidth));		        
+				packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
+		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
 			}        	
         });
     }
@@ -352,8 +312,8 @@ public abstract class AbstractModPackPane extends JPanel {
         packPanels.add(p);
         packs.add(p);        
 
-        packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding))));
-        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + packItemPadding))));
+        packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
+        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
         
         //packsScroll.revalidate();
         if (pack.getDir().equalsIgnoreCase(getLastPack())) {
