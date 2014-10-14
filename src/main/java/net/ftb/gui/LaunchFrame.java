@@ -834,7 +834,7 @@ public class LaunchFrame extends JFrame {
         // compare mc version and jvm version. Stop startup if no valid JVM found for 1.6/1.7.2 packs
         String mcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         boolean java8Usable = false;
-        if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8")|| pack.getDir().equals("mojang_vanilla") || CommandLineSettings.getSettings().isUseJava8())
+        //if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8")|| pack.getDir().equals("mojang_vanilla") || CommandLineSettings.getSettings().isUseJava8()) //TODO re-add this if java 8 ever has issues again
             java8Usable = true;
         JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
         if ( (!java8Usable && java == null) || (!java8Usable && OSUtils.getCurrentOS()==OS.UNIX && java.isJava8())) {

@@ -424,6 +424,18 @@ public class Settings extends Properties {
         return lastPosition;
     }
 
+    public int getMinJava8HackVsn() {
+        return Integer.parseInt(getProperty("MinJava8HackVsn", "965"));
+    }
+    public void setMinJava8HackVsn(int java8HackVsn) {
+        setProperty("MinJava8HackVsn", String.valueOf(java8HackVsn));
+    }
+    public int getMaxJava8HackVsn() {
+        return Integer.parseInt(getProperty("MaxJava8HackVsn", "1209"));
+    }
+    public void setMaxJava8HackVsn(int java8HackVsn) {
+        setProperty("MaxJava8HackVsn", String.valueOf(java8HackVsn));
+    }
     public void setLastDimension (Dimension lastDimension) {
         setObjectProperty("lastDimension", lastDimension);
     }
