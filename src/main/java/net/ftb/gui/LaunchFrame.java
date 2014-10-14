@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -393,10 +394,10 @@ public class LaunchFrame extends JFrame {
         optionsPane = new OptionsPane(Settings.getSettings());
 
         getRootPane().setDefaultButton(launch);
-        updateLocale();
-
+        updateLocale(); 
+        
         tabbedPane.add(newsPane, 0);
-        tabbedPane.add(optionsPane, 1);
+        tabbedPane.add(optionsPane, 1);        
         tabbedPane.add(modPacksPane, 2);
         tabbedPane.add(thirdPartyPane, 3);
         tabbedPane.add(tpPane, 4);
