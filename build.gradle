@@ -49,7 +49,7 @@ dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.2.4'
-	compile 'com.mojang:authlib:1.5.16'
+	compile 'com.mojang:authlib:1.5.17'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
@@ -74,10 +74,10 @@ if (System.getenv().BUILD_NUMBER != null) {
 
 processResources {
     inputs.property "LauncherJenkins", project.buildNum
-    inputs.property "GitSHA", project.gitSha()
+    inputs.property "GitSHA", project.getCheckedOutGitCommitHash()
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.properties'
-        expand 'LauncherJenkins':project.buildNum, 'GitSHA':project.gitSha()
+        expand 'LauncherJenkins':project.buildNum, 'GitSHA':project.getCheckedOutGitCommitHash()
     }
     // copy everything else, thats not text
     from(sourceSets.main.resources.srcDirs) {
@@ -146,8 +146,22 @@ jar {
     }
 }
 
-def gitSha() {
-    return 'git rev-parse HEAD'.execute().text.trim()
+def getCheckedOutGitCommitHash() {
+    def gitFolder = "$projectDir/.git/"
+    def takeFromHash = 12
+    /*
+     * '.git/HEAD' contains either
+     * in case of detached head: the currently checked out commit hash
+     * otherwise: a reference to a file containing the current commit hash
+     */
+    def head = new File(gitFolder + "HEAD").text.split(":") // .git/HEAD
+    def isCommit = head.length == 1 // e5a7c79edabbf7dd39888442df081b1c9d8e88fd
+    // def isRef = head.length > 1 // ref: refs/heads/master
+
+    if(isCommit) return head[0].trim().take(takeFromHash) // e5a7c79edabb
+
+    def refHead = new File(gitFolder + head[1].trim()) // .git/refs/heads/master
+    refHead.text.trim().take takeFromHash
 }
 
 if (project.hasProperty("local_maven")) {

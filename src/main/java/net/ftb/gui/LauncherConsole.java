@@ -16,34 +16,16 @@
  */
 package net.ftb.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.*;
+import javax.swing.text.*;
 
 import net.ftb.data.Constants;
 import net.ftb.download.Locations;
@@ -60,22 +42,30 @@ import net.ftb.util.OSUtils;
 
 @SuppressWarnings("serial")
 public class LauncherConsole extends JFrame implements ILogListener {
-    private final JEditorPane displayArea;
-    private final HTMLEditorKit kit;
-    private HTMLDocument doc;
+    private final JTextPane displayArea;
     private final JComboBox logTypeComboBox;
     private LogType logType = LogType.MINIMAL;
     private final JComboBox logSourceComboBox;
     private LogSource logSource = LogSource.ALL;
     private LogLevel logLevel = LogLevel.INFO;
     private JButton killMCButton;
+    private final Document displayAreaDoc;
+    private final Font FONT = new Font("Monospaced", 0, 12);
+
+    private SimpleAttributeSet RED = new SimpleAttributeSet();
+    private SimpleAttributeSet YELLOW = new SimpleAttributeSet();
 
     public LauncherConsole() {
         setTitle(Constants.name + " " + I18N.getLocaleString("CONSOLE_TITLE"));
         setMinimumSize(new Dimension(800, 400));
+        setPreferredSize(new Dimension(800, 400));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         getContentPane().setLayout(new BorderLayout(0, 0));
 
+        StyleConstants.setForeground(RED, Color.RED);
+        StyleConstants.setForeground(YELLOW, Color.YELLOW);
+
+        // setup buttons
         JPanel panel = new JPanel();
 
         getContentPane().add(panel, BorderLayout.SOUTH);
@@ -185,21 +175,28 @@ public class LauncherConsole extends JFrame implements ILogListener {
         });
         panel.add(killMCButton);
 
-        displayArea = new JEditorPane("text/html", "");
-        displayArea.setEditable(false);
-        kit = new HTMLEditorKit();
-        displayArea.setEditorKit(kit);
+        // setup log area
+        displayArea = new JTextPane(){
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
 
-        DefaultCaret caret = (DefaultCaret) displayArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        displayArea.setFont(FONT);
+        displayArea.setEditable(false);
+        displayAreaDoc = this.displayArea.getDocument();
+        displayArea.setMargin(null);
 
         JScrollPane scrollPane = new JScrollPane(displayArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Use third party library to implement autoscroll
+        new SmartScroller(scrollPane);
 
         getContentPane().add(scrollPane);
         pack();
-
-        refreshLogs();
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -208,50 +205,44 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 if (LaunchFrame.trayMenu != null) {
                     LaunchFrame.trayMenu.updateShowConsole(false);
                 }
+                dispose();
             }
         });
 
     }
 
-    synchronized private void refreshLogs () {
-        doc = new HTMLDocument();
-        displayArea.setDocument(doc);
+    synchronized public void refreshLogs () {
+        try {
+            displayAreaDoc.remove(0, displayAreaDoc.getLength());
+        } catch (Exception e) {
+            // ignore
+        }
+
         List<LogEntry> entries = Logger.getLogEntries();
-        StringBuilder logHTML = new StringBuilder();
         for (LogEntry entry : entries) {
-            // select only messages we want
             if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))) {
-                logHTML.append(getMessage(entry));
+                addMessage(entry, this.displayAreaDoc);
             }
         }
-        addHTML(logHTML.toString());
-    }
-
-    private void addHTML (String html) {
-        synchronized (kit) {
-            try {
-                kit.insertHTML(doc, doc.getLength(), html, 0, 0, null);
-            } catch (BadLocationException ignored) {
-                Logger.logError(ignored.getMessage(), ignored);
-            } catch (IOException ignored) {
-                Logger.logError(ignored.getMessage(), ignored);
-            }
-            displayArea.setCaretPosition(displayArea.getDocument().getLength());
+        try {
+            displayAreaDoc.remove(0, 1);
+        } catch (Exception e) {
+            //ignore
         }
     }
 
     public void scrollToBottom () {
         displayArea.setCaretPosition(displayArea.getDocument().getLength());
     }
-
-    private String getMessage (LogEntry entry) {
-        String color = "#686868";
+//        String color = "#686868";
+    synchronized private void addMessage(LogEntry entry, Document d) {
+        SimpleAttributeSet color = null;
         switch (entry.level) {
         case ERROR:
-            color = "#FF7070";
+            color = RED;
             break;
         case WARN:
-            color = "yellow";
+            color = YELLOW;
         case INFO:
             break;
         case DEBUG:
@@ -261,7 +252,11 @@ public class LauncherConsole extends JFrame implements ILogListener {
         default:
             break;
         }
-        return "<font color=\"" + color + "\">" + (entry.toString(logType).replace("<", "&lt;").replace(">", "&gt;").trim().replace("\r\n", "\n").replace("\n", "<br/>")) + "</font><br/>";
+        try {
+            d.insertString(d.getLength(), "\n" + entry.toString(logType), color);
+        } catch (Exception e) {
+            //ignore
+        }
     }
 
     public void minecraftStarted() {
@@ -273,13 +268,12 @@ public class LauncherConsole extends JFrame implements ILogListener {
     }
     
     @Override
-    public void onLogEvent (LogEntry entry) {
+    public void onLogEvent (final LogEntry entry) {
         // drop unneeded messages as soon as possible
         if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))){
-            final LogEntry entry_ = entry;
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    addHTML(getMessage(entry_));
+                    addMessage(entry, LaunchFrame.con.displayAreaDoc);
                 }
             });
         }

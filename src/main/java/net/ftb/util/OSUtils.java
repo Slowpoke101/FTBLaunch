@@ -390,8 +390,7 @@ public class OSUtils {
     }
     private static byte[] genHardwareIDUNIX () {
         String line;
-        // TODO: will add command line option or advanced option later. Use old mac address method
-        if (false) {
+        if (CommandLineSettings.getSettings().isUseMac()) {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader("/etc/machine-id"));
                 line = reader.readLine();
@@ -461,7 +460,7 @@ public class OSUtils {
                 Logger.logWarn("Could not open Java Download url, not supported");
             }
         } catch (Exception e) {
-            Logger.logError("Could not open link", e);
+            Logger.logError("Could not open link: " + url, e);
         }
     }
 

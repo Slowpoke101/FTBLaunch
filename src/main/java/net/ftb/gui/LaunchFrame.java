@@ -18,6 +18,7 @@ package net.ftb.gui;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.data.Constants;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.LoginResponse;
@@ -78,6 +79,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -98,6 +101,7 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
+    private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
     private final JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
@@ -105,14 +109,14 @@ public class LaunchFrame extends JFrame {
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
     private static JComboBox users, tpInstallLocation, mapInstallLocation;
+    private static AtomicInteger checkDoneLoadingCallCount = new AtomicInteger(0);
     /**
      * @return - Outputs LaunchFrame instance
      */
     @Getter
     @Setter
     private static LaunchFrame instance = null;
-    
-    public static boolean canUseAuthlib;
+
     public static int minUsable = -1;
     public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -189,6 +193,15 @@ public class LaunchFrame extends JFrame {
             }
         });
 
+        footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerTUG.setBounds(212, 20, 132, 42);
+        footerTUG.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+                OSUtils.browse("http://feed-the-beast.com/tug");
+            }
+        });
+
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
@@ -243,6 +256,7 @@ public class LaunchFrame extends JFrame {
         });
 
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
+        //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
         launch.setBounds(711, 20, 100, 30);
         launch.addActionListener(new ActionListener() {
@@ -301,8 +315,8 @@ public class LaunchFrame extends JFrame {
             @Override
             public void actionPerformed (ActionEvent event) {
                 if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
-                    OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E"
-                            + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
+                    OSUtils.browse(DownloadUtils.getCreeperhostLink("maps/" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "/"
+                            + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "/" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
                 }
             }
         });
@@ -333,6 +347,7 @@ public class LaunchFrame extends JFrame {
         footer.add(users);
         footer.add(footerLogo);
         footer.add(footerCreeper);
+        footer.add(footerTUG);
         footer.add(launch);
         footer.add(donate);
         footer.add(serverbutton);
@@ -388,22 +403,29 @@ public class LaunchFrame extends JFrame {
     }
 
     public static void checkDoneLoading () {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run () {
-                if (FTBPacksPane.getInstance().loaded) {
-                    LoadingDialog.setProgress(190);
-                    if (MapUtils.loaded) {
-                        LoadingDialog.setProgress(200);
-                        if (TexturepackPane.loaded) {
-                            loader.setVisible(false);
-                            instance.setVisible(true);
-                            instance.toFront();
-                            Benchmark.logBenchAs("main", "Launcher Startup");
-                        }
+        int callCount = checkDoneLoadingCallCount.incrementAndGet();
+        if (callCount == 1) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run () {
+                    LoadingDialog.advance("Opening main window");
+                    instance.setVisible(true);
+                    instance.toFront();
+                    //TODO: add checks if loader is disabled
+                    loader.setVisible(false);
+                    loader.dispose();
+                    Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
+                    String packDir = CommandLineSettings.getSettings().getPackDir();
+                    if (packDir != null) {
+                        ModPack.setSelectedPack(packDir);
+                        LaunchFrame.getInstance().doLaunch();
                     }
                 }
-            }
-        });
+            });
+            Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+        }
+        if (callCount == 2) {
+            Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
+        }
     }
 
     public void setNewsIcon () {
@@ -825,24 +847,42 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
-        JavaInfo java = Settings.getSettings().getCurrentJava();
-        int[] minSup = ModPack.getSelectedPack().getMinJRE();
-        if (ModPack.getSelectedPack().getMinLaunchSpec() <= Constants.buildNumber) {
-            if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-                if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
-                    Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-                    Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-                    saveSettings();
-                    doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
-                            UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
-                } else {//user can't run pack-- JRE not high enough
-                    ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
-                }
-            } else if (users.getSelectedIndex() <= 1) {
-                ErrorUtils.tossError("Please select a profile!");
-            }
-        } else {
+        ModPack pack = ModPack.getSelectedPack();
+
+        // compare mc version and jvm version. Stop startup if no valid JVM found for 1.6/1.7.2 packs
+        String mcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        boolean java8Usable = false;
+        //if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8")|| pack.getDir().equals("mojang_vanilla") || CommandLineSettings.getSettings().isUseJava8()) //TODO re-add this if java 8 ever has issues again
+            java8Usable = true;
+        JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
+        if ( (!java8Usable && java == null) || (!java8Usable && OSUtils.getCurrentOS()==OS.UNIX && java.isJava8())) {
+            ErrorUtils.tossError("Your system only has Java 8 installed which is incompatible with this version of minecraft. Please download Java 7 using the link in the options tab");
+            return;
+        }
+
+        // check launcher version
+        if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
+            return;
+        }
+
+        // check if user profile is selected
+        if (users.getSelectedIndex() <= 1) {
+            ErrorUtils.tossError("Please select a profile!");
+            return;
+        }
+
+        // check selected java is at least version specified in pack's XML
+        int[] minSup = pack.getMinJRE();
+        if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
+            Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
+            Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
+            saveSettings();
+            doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
+                    UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
+        } else {//user can't run pack-- JRE not high enough
+            ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
+            return;
         }
     }
 
@@ -870,13 +910,13 @@ public class LaunchFrame extends JFrame {
     	final SystemTray tray = SystemTray.getSystemTray();
     	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
     	
-    	trayIcon.addMouseListener(new MouseAdapter(){
+    	trayIcon.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseReleased(MouseEvent e){
-                if(e.getButton() == MouseEvent.BUTTON3){
-                    trayMenu.setLocation(e.getX(), e.getY());
-                    trayMenu.setInvoker(trayMenu);
-                    trayMenu.setVisible(true);
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    //trayMenu.setLocation(e.getX(), e.getY());//TODO UI should these lines be uncommented
+                    //trayMenu.setInvoker(trayMenu);//TODO UI should these lines be uncommented
+                   // trayMenu.setVisible(true);//TODO UI should these lines be uncommented
                 }
             }
         });

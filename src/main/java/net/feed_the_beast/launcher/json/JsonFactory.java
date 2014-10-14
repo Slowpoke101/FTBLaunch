@@ -64,6 +64,10 @@ public class JsonFactory {
         reader.close();
         return a;
     }
+
+    public static Library loadLibrary(String libJsonObject)throws JsonSyntaxException, JsonIOException {
+        return GSON.fromJson(libJsonObject, Library.class);
+    }
     public static Update getUpdate(String name, String url) throws IOException{
         Library l = new Library();
         l.name = name;

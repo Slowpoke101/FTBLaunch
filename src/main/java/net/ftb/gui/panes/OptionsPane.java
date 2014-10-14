@@ -262,47 +262,62 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     }
 
+    public void offerJava7(String reason) {
+        if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
+            if(JavaFinder.java8Found) {//they need the jdk link
+                addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
+                addUpdateLabel("JAVA_NEW_Warning");
+            }else if(OSUtils.canRun7OnMac()){
+                addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
+                addUpdateLabel(reason);
+            }else{
+                //TODO deal with old mac's that can't run java 7
+            }
+        }
+        else if(OSUtils.is64BitOS()){
+            if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
+                addUpdateLabel(reason);
+            }
+            else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
+                addUpdateLabel(reason);
+            }
+        }else{
+            if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+                addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
+                addUpdateLabel(reason);
+            }
+            else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+                addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
+                addUpdateLabel(reason);
+            }
+        }
+    }
+
     public void updateJavaLabels() {
         remove(lbl32BitWarning);
         remove(btnInstallJava);
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
         JavaInfo java = Settings.getSettings().getCurrentJava();
+        JavaInfo javaBackup = Settings.getSettings().getCurrentJava(false);
+
+        // offer java 7 is java 6 or older is detected
         if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
-            if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
-                if(JavaFinder.java8Found) {//they need the jdk link
-                    addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
-                    addUpdateLabel("JAVA_NEW_Warning");
-                }else if(OSUtils.canRun7OnMac()){
-                    addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }else{
-                    //TODO deal with old mac's that can't run java 7
-                }
-            }
-            else if(OSUtils.is64BitOS()){
-                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
-                    addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
-                    addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-            }else{
-                if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
-                    addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-                else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
-                    addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
-                    addUpdateLabel("JAVA_OLD_Warning");
-                }
-            }
+            offerJava7("JAVA_OLD_Warning");
         }
+
+        // offer 64-bit java 7 is OS X and java 8 detected
         else if(OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 ||  java.getMinor() > 7)){
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
-        }else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
+        }
+        else if(javaBackup == null && java.isJava8() || (OSUtils.getCurrentOS() == OS.UNIX && java.isJava8())) {
+            offerJava7("JAVA_NEW_Warning");
+        }
+
+        // offer 64-bit java if 32-bit java detected in 64-bit OS
+        else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
             addUpdateLabel("JAVA_32BIT_WARNING");
             if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
                 if (OSUtils.is64BitWindows()) {

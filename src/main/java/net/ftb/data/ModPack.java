@@ -75,6 +75,7 @@ public class ModPack {
     private int minLaunchSpec;
     @Getter
     private String disclaimer;
+    private static ModPack selectedPack;
     /**
      * @return map of <String packversion, String MCVersion>
      */
@@ -167,19 +168,31 @@ public class ModPack {
         return null;
     }
 
+    public static void setSelectedPack (String dir) {
+        selectedPack = getPack(dir);
+    }
+
     /**
      * Used to grab the currently selected ModPack based off the selected index from ModPacksPane
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
-        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
-            return getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+        if (selectedPack == null) {
+            if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
+                return getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+            }
+            return getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex());
+        } else {
+            return selectedPack;
         }
-        return getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex());
     }
 
     public static ModPack getSelectedPack (boolean isFTBPane) {
-        return isFTBPane?getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex()):getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+        if (selectedPack == null) {
+            return isFTBPane ? getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex()) : getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
+        } else {
+            return selectedPack;
+        }
     }
     /**
      * Constructor for ModPack class

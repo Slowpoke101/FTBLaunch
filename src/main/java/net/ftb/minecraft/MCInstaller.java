@@ -38,7 +38,9 @@ import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.util.*;
+import net.ftb.util.winreg.JavaInfo;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
@@ -136,17 +138,21 @@ public class MCInstaller {
                     packmcversion = packjson.jar;
                 if(packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty())
                     packbasejson = packjson.inheritsFrom;
-
+                Library.Artifact a;
                 for (Library lib : packjson.getLibraries()) {
                     //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                     // These files are shipped inside pack.zip, can't do force update check yet
                     local = new File(root, "libraries/" + lib.getPath());
                     if(!new File(libDir, lib.getPath()).exists() || forceUpdate){
                         if (lib.checksums!= null)
-                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1",
+                                                      DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
                         else if(lib.download != null && lib.download)
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                     }
+                    a = lib.get_artifact();
+                    if(a.getDomain().equalsIgnoreCase("net.minecraftforge") && (a.getName().equalsIgnoreCase("forge") || a.getName().equalsIgnoreCase("minecraftforge")))
+                        grabJava8CompatFix(a, pack, packmcversion, installDir + "/" + pack.getDir() );
                 }
                 //}
             } else {
@@ -311,8 +317,11 @@ public class MCInstaller {
                 natDir.delete();
             }
             natDir.mkdirs();
-            if (isLegacy)
-                extractLegacy();
+            if (!pack.getDir().equals("mojang_vanilla")) {
+                if (isLegacy) {
+                    extractLegacyJson(new File(gameDir, "pack.json"));
+                }
+            }
             Logger.logDebug("packbaseJSON " + packbasejson);
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
@@ -350,11 +359,6 @@ public class MCInstaller {
             }
             List<File> classpath = Lists.newArrayList();
             Version packjson = new Version();
-            if (!pack.getDir().equals("mojang_vanilla")) {
-                if (isLegacy) {
-                    extractLegacyJson(new File(gameDir, "pack.json"));
-                }
-            }
             if (new File(gameDir, "pack.json").exists()) {
                 packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                 for (Library lib : packjson.getLibraries()) {
@@ -375,8 +379,12 @@ public class MCInstaller {
                 //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                 classpath.add(new File(libDir, lib.getPath()));
             }
+            boolean java8Usable = false;
+            //if(packmcversion.startsWith("1.7.10") || packmcversion.startsWith("1.8") || pack.getDir().equals("mojang_vanilla") ||  CommandLineSettings.getSettings().isUseJava8())//TODO re-add this if java 8 ever has issues again
+                java8Usable = true;
+            JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
 
-            Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
+            Process minecraftProcess = MCLauncher.launchMinecraft(java.path, gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
@@ -460,22 +468,6 @@ public class MCInstaller {
     }
 
 
-    public static void extractLegacy () {
-        try {
-            File f = new File(Settings.getSettings().getInstallPath() + File.separator + "libraries" + File.separator + "net.ftb.legacylaunch.FTBLegacyLaunch".replace(".", File.separator)
-                    + File.separator + "0.0.1" + File.separator + "FTBLegacyLaunch-0.0.1.jar");
-            //Logger.logError("Extracting Legacy launch code to " + f.getAbsolutePath());
-            if (!new File(f.getParent()).exists())
-                new File(f.getParent()).mkdirs();
-            if (f.exists())
-                f.delete();//we want to have the current version always!!!
-            URL u = LaunchFrame.class.getResource("/launch/FTBLegacyLaunch-0.0.1.jar");
-            FileUtils.copyURLToFile(u, f);
-        } catch (Exception e) {
-            Logger.logError("Error extracting legacy launch to maven directory");
-        }
-    }
-
     public static void extractLegacyJson (File newLoc) {
         try {
             if (!new File(newLoc.getParent()).exists())
@@ -486,6 +478,21 @@ public class MCInstaller {
             FileUtils.copyURLToFile(u, newLoc);
         } catch (Exception e) {
             Logger.logError("Error extracting legacy json to maven directory");
+        }
+    }
+    private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase)
+    {
+        String fgVsn = forgeArtifact.getVersion();
+        int vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".")+1));
+        if(vsn_ >=Settings.getSettings().getMinJava8HackVsn() && vsn_ <=Settings.getSettings().getMaxJava8HackVsn()) {
+            Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
+            String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
+            Library l = JsonFactory.loadLibrary(json);//TODO this should be pulled from the same json file
+            try {//TODO we should have a method to grab a single library file to a location
+                DownloadUtils.downloadToFile(installBase + "/minecraft/mods/legacyjavafixer-1.0.jar", l.getUrl() + l.getPath());
+            } catch (Exception e) {
+                Logger.logError("Error grabbing legacy java wrapper library", e);
+            }
         }
     }
 }

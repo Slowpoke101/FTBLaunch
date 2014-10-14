@@ -21,6 +21,7 @@ import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.locale.Locale;
+import net.ftb.log.Logger;
 import net.ftb.util.CheckInstallPath;
 import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.ErrorUtils;
@@ -69,6 +70,7 @@ public class FirstRunDialog extends JDialog {
         applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
+                Logger.logDebug("Trying path: " + installPath.getText());
                 CheckInstallPath checkResult = new CheckInstallPath(installPath.getText());
 
                 if (checkResult.action == Action.BLOCK) {

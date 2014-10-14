@@ -105,7 +105,12 @@ public class Settings extends Properties {
     }
 
     public String getInstallPath () {
-        return getProperty("installPath", OSUtils.getDefInstallPath());
+        String commandLinePath = CommandLineSettings.getSettings().getInstallDir();
+        if (commandLinePath != null && !commandLinePath.isEmpty()) {
+            return commandLinePath;
+        } else {
+            return getProperty("installPath", OSUtils.getDefInstallPath());
+        }
     }
 
     public void setInstallPath (String path) {
@@ -128,12 +133,21 @@ public class Settings extends Properties {
         setProperty("betaChannel", String.valueOf(flag));
     }
 
+
+    @Deprecated
     public String getJavaPath () {
+        return getJavaPath(true);
+    }
+    /**
+     * don't use this to launch w/ use getCurrentJava(boolean canUse8)
+     * @return java's location
+     */
+    public String getJavaPath (boolean allowJava8) {
         String javaPath = getProperty("javaPath", null);
         if (javaPath == null || !new File(javaPath).isFile())
             remove("javaPath");
 
-        javaPath = getProperty("javaPath", getDefaultJavaPath());
+        javaPath = getProperty("javaPath", getDefaultJavaPath(allowJava8));
         if (javaPath == null || !new File(javaPath).isFile())
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
@@ -143,27 +157,42 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
+    @Deprecated //use the boolean version instead
     public JavaInfo getCurrentJava () {
+        return getCurrentJava(true);
+    }
+
+    /**
+     * Returns user selected or automatically selected JVM's
+     * JavaInfo object.
+     */
+    public JavaInfo getCurrentJava(boolean canuse8) {
         if (currentJava == null) {
             try {
-                currentJava = new JavaInfo(getJavaPath());
+                currentJava = new JavaInfo(getJavaPath(true));
             } catch (Exception e) {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
+        if(!canuse8 && currentJava.isJava8())
+            return new JavaInfo(getJavaPath(false));
         return currentJava;
     }
 
+    @Deprecated
     public String getDefaultJavaPath () {
+        return getDefaultJavaPath(true);
+    }
+    public String getDefaultJavaPath (boolean allowJava8) {
         JavaInfo javaVersion;
 
         if (OSUtils.getCurrentOS() == OS.MACOSX) {
-            javaVersion = JavaFinder.parseJavaVersion();
+            javaVersion = JavaFinder.parseJavaVersion(allowJava8);
 
             if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path;
         } else if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            javaVersion = JavaFinder.parseJavaVersion();
+            javaVersion = JavaFinder.parseJavaVersion(allowJava8);
 
             if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path.replace(".exe", "w.exe");
@@ -395,6 +424,18 @@ public class Settings extends Properties {
         return lastPosition;
     }
 
+    public int getMinJava8HackVsn() {
+        return Integer.parseInt(getProperty("MinJava8HackVsn", "965"));
+    }
+    public void setMinJava8HackVsn(int java8HackVsn) {
+        setProperty("MinJava8HackVsn", String.valueOf(java8HackVsn));
+    }
+    public int getMaxJava8HackVsn() {
+        return Integer.parseInt(getProperty("MaxJava8HackVsn", "1209"));
+    }
+    public void setMaxJava8HackVsn(int java8HackVsn) {
+        setProperty("MaxJava8HackVsn", String.valueOf(java8HackVsn));
+    }
     public void setLastDimension (Dimension lastDimension) {
         setObjectProperty("lastDimension", lastDimension);
     }

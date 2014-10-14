@@ -105,6 +105,10 @@ public class MCLauncher {
         arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
         arguments.add("-Duser.home=" + gameDir.getParentFile().getAbsolutePath());
 
+        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
+            arguments.add("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
+        }
+
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
@@ -120,6 +124,9 @@ public class MCLauncher {
             Logger.logInfo("Additional java parameters: " + additionalOptions);
             for(String s : additionalOptions.split("\\s+")) {
                 if(s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true")&& ! isLegacy) {
+                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() :
+                            Settings.getSettings().getPackVer()).replace(".", "_");
+                    TrackerUtils.sendPageView("JarmodAttempt", "JarmodAttempt / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
                     ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
                 } else {
                     arguments.add(s);
@@ -134,12 +141,17 @@ public class MCLauncher {
         //Undocumented environment variable to control JVM
         String additionalEnvVar = System.getenv("_JAVA_OPTIONS");
         if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
-            Logger.logInfo("_JAVA_OPTIONS defined: " + additionalEnvVar);
+            Logger.logDebug("_JAVA_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
         }
         //Documented environment variable to control JVM
         additionalEnvVar = System.getenv("JAVA_TOOL_OPTIONS");
         if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
-            Logger.logInfo("JAVA_TOOL_OPTIONS defined: " + additionalEnvVar);
+            Logger.logDebug("JAVA_TOOL_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
+        }
+        //Documented environment variable to control JVM
+        additionalEnvVar = System.getenv("JAVA_OPTIONS");
+        if (additionalEnvVar != null && !additionalEnvVar.isEmpty()) {
+            Logger.logDebug("JAVA_OPTIONS has following arguments: " + additionalEnvVar + " Arguments will  be ignored at MC startup");
         }
 
         arguments.add(mainClass);
@@ -213,11 +225,11 @@ public class MCLauncher {
             Dimension def = new Dimension(854, 480);
             if (Settings.getSettings().getLastDimension().getWidth() != def.getWidth() && !fullscreen) {
                 arguments.add("--width");
-                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getWidth()));
+                arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getWidth())));
             }
             if (Settings.getSettings().getLastDimension().getHeight() != def.getHeight() && !fullscreen) {
                 arguments.add("--height");
-                arguments.add(String.valueOf((int) Settings.getSettings().getLastDimension().getHeight()));
+                arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getHeight())));
             }
         }
 
