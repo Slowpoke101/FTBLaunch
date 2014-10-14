@@ -69,7 +69,6 @@ public class ObjectInfoSplitPane extends JSplitPane {
         infoScroll.setViewportView(packInfo);
         infoScroll.setOpaque(false);
         
-        
         this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         this.setLeftComponent(packsScroll);
         this.setRightComponent(infoScroll);

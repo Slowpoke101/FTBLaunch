@@ -82,7 +82,8 @@ public abstract class AbstractModPackPane extends JPanel {
     @Getter
     protected JScrollPane packsScroll;
     @Getter
-    protected JSplitPane splitPane;
+    protected ObjectInfoSplitPane splitPane;
+    //protected JSplitPane splitPane;
     
     
     //	private JLabel loadingImage;
@@ -175,7 +176,7 @@ public abstract class AbstractModPackPane extends JPanel {
         //p.add(loadingImage);
         p.add(filler);
         
-        ObjectInfoSplitPane splitPane = new ObjectInfoSplitPane();
+        splitPane = new ObjectInfoSplitPane();
         packs = splitPane.getPacks();
         packInfo = splitPane.getPackInfo();
         infoScroll = splitPane.getInfoScroll();
@@ -275,7 +276,7 @@ public abstract class AbstractModPackPane extends JPanel {
         final int packIndex = packPanels.size();
         final JPanel p = new JPanel();
         //p.setBounds(0, (packIndex * 55), 420, 55);
-        p.setPreferredSize(new Dimension(420,55));        
+        p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
         
         JLabel logo = new JLabel(new ImageIcon(pack.getLogo()));

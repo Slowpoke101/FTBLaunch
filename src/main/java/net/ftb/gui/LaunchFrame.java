@@ -451,6 +451,8 @@ public class LaunchFrame extends JFrame {
 			public void componentResized(ComponentEvent arg0) {
 				modPacksPane.getSplitPane().resetToPreferredSizes();
 				thirdPartyPane.getSplitPane().resetToPreferredSizes();
+				tpPane.getSplitPane().resetToPreferredSizes();
+				mapsPane.getSplitPane().resetToPreferredSizes();
 			}        	
         });
         
