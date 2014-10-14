@@ -27,7 +27,7 @@ implements MouseListener{
         this.pack = pack;
         this.setPreferredSize(new Dimension(128, 128));
         this.addMouseListener(this);
-        this.image = pack.getLogo();
+        this.image = pack.getSquareImage();
     }
 
     @Override

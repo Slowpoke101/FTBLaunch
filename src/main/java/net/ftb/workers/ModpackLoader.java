@@ -105,7 +105,7 @@ public class ModpackLoader extends Thread {
                         if(modPackAttr.getNamedItem("author") != null)
                             isThirdParty = !modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team");
                         mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
-                                .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
+                                .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(),modPackAttr.getNamedItem("squareImage") == null?null:modPackAttr.getNamedItem("squareImage").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
                                 .getTextContent(), modPackAttr.getNamedItem("description")==null?null:modPackAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
                                 .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr

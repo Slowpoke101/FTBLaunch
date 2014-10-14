@@ -60,9 +60,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 public class ModPack {
-    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
+    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, squareimageName, info, animation, maxPermSize, sep = File.separator, xml;
     private String[] mods, oldVersions;
-    private Image logo, image;
+    private Image logo, image, squareImage;
     private int index;
     private boolean updated = false, hasCustomTP, hasbundledmap;
     @Getter
@@ -202,6 +202,7 @@ public class ModPack {
      * @param logo - the logo file name for the ModPack
      * @param url - the ModPack file name
      * @param image - the splash image file name for the ModPack
+     * @param squareimage - the square image file name for the ModPack
      * @param dir - the directory for the ModPack
      * @param mcVersion - the minecraft version required for the ModPack
      * @param serverUrl - the server file name of the ModPack
@@ -219,7 +220,7 @@ public class ModPack {
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
+    public ModPack(String name, String author, String version, String logo, String url, String image, String squareimage, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
                    String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec, String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
@@ -248,6 +249,7 @@ public class ModPack {
         }
         logoName = logo;
         imageName = image;
+        squareimageName = squareimage;
         this.info = info;
         this.disclaimer = disclaimer;
         if (mods.isEmpty()) {
@@ -278,13 +280,16 @@ public class ModPack {
         if (!upToDate(verFile)) {
             DownloadUtils.saveImage(logo, tempDir, "png");
             DownloadUtils.saveImage(image, tempDir, "png");
-
+            DownloadUtils.saveImage(squareimage, tempDir, "png");
         } else {
             if (!new File(tempDir, logo).exists()) {
                 DownloadUtils.saveImage(logo, tempDir, "png");
             }
             if (!new File(tempDir, image).exists()) {
                 DownloadUtils.saveImage(image, tempDir, "png");
+            }
+            if (!new File(tempDir, squareimage).exists()) {
+                DownloadUtils.saveImage(squareimage, tempDir, "png");
             }
         }
 
@@ -293,13 +298,16 @@ public class ModPack {
             this.logoName = logo = "logo_ftb.png";
             DownloadUtils.saveImage(logo, tempDir, "png");
         }
+        if (!new File(tempDir, squareimage).exists()) {
+            this.squareimageName = squareimage = "ftb-logo-square.png";
+            DownloadUtils.saveImage(squareimage, tempDir, "png");
+        }
         this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
-
+        this.squareImage = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + squareimage);
         if (!new File(tempDir, image).exists()) {
             this.imageName = image = "default_splash.png";
             DownloadUtils.saveImage(image, tempDir, "png");
         }
-        this.image = ImageIO.read(new File(tempDir, image));
     }
 
     /**
@@ -422,6 +430,9 @@ public class ModPack {
         return image;
     }
 
+    public Image getSquareImage() {
+        return squareImage;
+    }
     /**
      * Used to get the directory of the modpack
      * @return - the directory for the modpack
@@ -483,6 +494,8 @@ public class ModPack {
     public String getLogoName () {
         return logoName;
     }
+
+    public String getSquareImageName() {return squareimageName; }
 
     /**
      * Used to get the splash file name
