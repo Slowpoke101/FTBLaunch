@@ -17,7 +17,6 @@
 package net.ftb.minecraft;
 
 import com.google.common.collect.Lists;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Library;
