@@ -225,8 +225,8 @@ public class LaunchFrame extends JFrame {
         });
 
         //users.setBounds(550, 20, 150, 30);
-        users.setMinimumSize(new Dimension(150,28));
-        users.setMaximumSize(new Dimension(150,28));
+        users.setMinimumSize(new Dimension(150,30));
+        users.setMaximumSize(new Dimension(150,30));
         users.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -362,13 +362,25 @@ public class LaunchFrame extends JFrame {
         
         // Panel for the items in the bottom right
 		JPanel buttonFooterPanel = new JPanel();
-		buttonFooterPanel.setLayout(new BoxLayout(buttonFooterPanel,BoxLayout.X_AXIS));
+		//buttonFooterPanel.setLayout(new BoxLayout(buttonFooterPanel,BoxLayout.X_AXIS));
+		buttonFooterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         buttonFooterPanel.add(donate);
         buttonFooterPanel.add(edit);
         buttonFooterPanel.add(users);
         buttonFooterPanel.add(launch);
-     
+        
+        // Buttons for texture pack pane
+        buttonFooterPanel.add(tpInstallLocation);
+        buttonFooterPanel.add(tpInstall);
+
+        // Buttons for custom map pane
+        buttonFooterPanel.add(mapInstallLocation);
+        buttonFooterPanel.add(mapInstall);
+        
+        // Button if server map
+        buttonFooterPanel.add(serverMap);
+        
         
         //footer.add(footerLogo, BorderLayout.LINE_START);
         //footer.add(footerCreeper, BorderLayout.LINE_START);
