@@ -3,7 +3,8 @@
   "libraries": [
     {
       "name": "net.ftb.legacylaunch:FTBLegacyLaunch:0.0.1",
-      "url": "http://ftb.cursecdn.com/FTB2/maven"
+      "url": "http://ftb.cursecdn.com/FTB2/maven",
+      "download":true
     }
   ],
   "mainClass": "net.ftb.legacylaunch.Launch",
