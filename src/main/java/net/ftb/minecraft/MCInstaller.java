@@ -60,7 +60,7 @@ public class MCInstaller {
     private static String packbasejson = new String();
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
-        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath);
+        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath, isLegacy);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -118,12 +118,11 @@ public class MCInstaller {
      *              Normally, if offline mode works, setupNewStyle() and gatherAssets() are not called and error situation is impossible
      *              Returning null just in case of network breakge after authentication process
      */
-    private static List<DownloadInfo> gatherAssets (final File root, String installDir) {
+    private static List<DownloadInfo> gatherAssets (final File root, String installDir, boolean isLegacy) {
         try {
             Logger.logInfo("Checking local assets file, for MC version" + packmcversion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
-
             File local;
             //Pack JSON Libraries
             Logger.logDebug("Checking pack libraries");
@@ -132,6 +131,12 @@ public class MCInstaller {
             File gameDir = new File(packDir, "minecraft");
             File libDir = new File(installDir, "libraries");
             // if (!pack.getDir().equals("mojang_vanilla")) {
+            if (!pack.getDir().equals("mojang_vanilla")) {
+                if (isLegacy) {
+                    extractLegacyJson(new File(gameDir, "pack.json"));
+                }
+            }
+
             if (new File(gameDir, "pack.json").exists()) {
                 Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                 if(packjson.jar != null && !packjson.jar.isEmpty())
@@ -317,11 +322,6 @@ public class MCInstaller {
                 natDir.delete();
             }
             natDir.mkdirs();
-            if (!pack.getDir().equals("mojang_vanilla")) {
-                if (isLegacy) {
-                    extractLegacyJson(new File(gameDir, "pack.json"));
-                }
-            }
             Logger.logDebug("packbaseJSON " + packbasejson);
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
