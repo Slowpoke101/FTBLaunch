@@ -850,8 +850,13 @@ public class LaunchFrame extends JFrame {
 
         // check if user profile is selected
         if (users.getSelectedIndex() <= 1) {
-            ErrorUtils.tossError("Please select a profile!");
-            return;
+            if (UserManager._users.size() == 0) {
+                ProfileAdderDialog p = new ProfileAdderDialog(getInstance(), true);
+                p.setVisible(true);
+            } else {
+                ErrorUtils.tossError("Please select a profile!");
+                return;
+            }
         }
 
         // check selected java is at least version specified in pack's XML
