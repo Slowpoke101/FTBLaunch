@@ -16,8 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -118,6 +117,7 @@ public class PrivatePackDialog extends JDialog {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
         setResizable(true);
+        setPreferredSize(new Dimension(300, 200));
 
         Container panel = getContentPane();
         panel.setLayout(new MigLayout());
