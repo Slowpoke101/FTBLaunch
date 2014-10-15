@@ -28,6 +28,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -55,6 +56,7 @@ public class AdvancedOptionsDialog extends JDialog {
     private JLabel downloadLocationLbl;
     private static JComboBox downloadLocation;
     private JLabel javaPathLbl;
+    private JTextField javaPathText;
     private static JComboBox javaPath;
     private String[] javapaths;
     private JLabel additionalJavaOptionsLbl;
@@ -102,7 +104,10 @@ public class AdvancedOptionsDialog extends JDialog {
         };
 
         downloadLocation.addFocusListener(settingsChangeListener);
-        javaPath.addFocusListener(settingsChangeListener);
+        if (javaPathText != null)
+            javaPathText.addFocusListener(settingsChangeListener);
+        if (javaPath != null)
+            javaPath.addFocusListener(settingsChangeListener);
         additionalJavaOptions.addFocusListener(settingsChangeListener);
         mcWindowSizeWidth.addFocusListener(settingsChangeListener);
         mcWindowSizeHeight.addFocusListener(settingsChangeListener);
@@ -150,8 +155,12 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        if (javaPath.getSelectedIndex() >= 1){
-            settings.setJavaPath(javapaths[javaPath.getSelectedIndex() - 1]);
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX ) {
+            settings.setJavaPath(javaPathText.getText());
+        } else {
+            if (javaPath.getSelectedIndex() >= 0) {
+                settings.setJavaPath(javapaths[javaPath.getSelectedIndex()]);
+            }
         }
         settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
         settings.setSnooper(snooper.isSelected());
@@ -175,21 +184,67 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
-        List<JavaInfo> javas = JavaFinder.findJavas();
-        String[] javaslist = new String[javas.size() + 2];
-        javapaths = new String[javas.size() + 1];
-        int i = 0;
-        for (JavaInfo java : javas) {
-            javaslist[i + 1] = java.version;
-            if(java.is64bits){
-                javaslist[i + 1] = javaslist[i + 1] + " 64bit";
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+            javaPathText = new JTextField();
+            String javapath = settings.getJavaPath();
+            if (javapath != null) {
+                javaPathText.setText(javapath);
+                if (!new File(javapath).isFile())
+                    javaPathText.setBackground(Color.RED);
+            } else {
+                // this should not happen ever
+                javaPathText.setBackground(Color.RED);
             }
-            javapaths[i] = java.path;
-            i++;
+
+            javaPathText.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped (KeyEvent e) {
+                }
+
+                @Override
+                public void keyPressed (KeyEvent e){
+                }
+
+                @Override
+                public void keyReleased (KeyEvent e) {
+                    if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile())
+                        javaPath.setBackground(Color.RED);
+                    else
+                        javaPath.setBackground(new Color(40, 40, 40));
+                }
+            });
+        } else {
+            List<JavaInfo> javas = JavaFinder.findJavas();
+            Collections.sort(javas);
+            String[] javaslist = new String[javas.size() + 1];
+            javapaths = new String[javas.size() + 1];
+            int i = -1;
+            for (JavaInfo java : javas) {
+                i++;
+                javaslist[i] = java.version;
+                if (java.is64bits) {
+                    javaslist[i] = javaslist[i] + " 64bit";
+                }
+                javapaths[i] = java.path;
+            }
+            javaslist[i + 1] = "Default";
+            javapaths[i + 1] = "";
+            javaPath = new JComboBox(javaslist);
+
+            //TODO: set current selected java
+            String selectedJavaPath = Settings.getSettings().getJavaPath();
+            if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
+                javaPath.setSelectedIndex( i + 1);
+            } else {
+                i = 0;
+                for (JavaInfo java : javas) {
+                    if (java.path.equals(selectedJavaPath)) {
+                        javaPath.setSelectedIndex(i);
+                    }
+                    i++;
+                }
+            }
         }
-        javaslist[i + 1] = "Default";
-        javapaths[i] = "";
-        javaPath = new JComboBox(javaslist);
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
         additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
@@ -211,7 +266,10 @@ public class AdvancedOptionsDialog extends JDialog {
         add(downloadLocationLbl);
         add(downloadLocation, GuiConstants.WRAP);
         add(javaPathLbl);
-        add(javaPath, GuiConstants.WRAP);
+        if (javaPathText != null)
+            add(javaPathText, GuiConstants.WRAP);
+        if (javaPath != null)
+            add(javaPath, GuiConstants.WRAP);
         add(additionalJavaOptionsLbl);
         add(additionalJavaOptions,  GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         add(mcWindowSizeLbl, GuiConstants.FILL_FOUR);

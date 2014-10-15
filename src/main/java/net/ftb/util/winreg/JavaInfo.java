@@ -31,11 +31,11 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * Calls 'javaPath -version' and parses the results
      * @param javaPath: path to a java.exe executable
      ****************************************************************************/
-    public JavaInfo(String javaPath) {
+    public JavaInfo(String javaPath) throws Exception{
         String versionInfo = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
         String[] tokens = versionInfo.split("\"");
         if (tokens.length < 2)
-            this.version = "0.0.0_00";
+            throw new Exception("Executable output unsupported");
         else
             this.version = tokens[1];
         this.origVersion = version;
