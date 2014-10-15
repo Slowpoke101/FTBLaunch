@@ -27,16 +27,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
-import javax.swing.SwingConstants;
 
 import net.ftb.data.Settings;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.tools.ModManager;
-import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class ModPackVersionChangeDialog extends JDialog {
@@ -78,11 +76,10 @@ public class ModPackVersionChangeDialog extends JDialog {
     private void setupGui (String storedVersion, String onlineVersion) {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
-        setResizable(false);
+        setResizable(true);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         if (isNewer(onlineVersion, storedVersion)) {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
@@ -102,80 +99,14 @@ public class ModPackVersionChangeDialog extends JDialog {
         backupCFG = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPCFG"));
         backupSave = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPSave"));
 
-        messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        updateLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        backupCFG.setHorizontalAlignment(SwingConstants.CENTER);
-        backupSave.setHorizontalAlignment(SwingConstants.CENTER);
 
-
-        panel.add(messageLbl);
-        panel.add(versionLbl);
-        panel.add(updateLbl);
-        panel.add(backupCFG);
-        panel.add(backupSave);
+        panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(versionLbl, GuiConstants.WRAP);
+        panel.add(updateLbl, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(backupCFG, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(backupSave, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(update);
         panel.add(abort);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, updateLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, versionLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, backupCFG, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, backupSave, hSpring, SpringLayout.WEST, panel);
-
-
-        columnWidth = SwingUtils.springMax(Spring.width(messageLbl), Spring.width(updateLbl), Spring.width(versionLbl), Spring.width(backupCFG), Spring.width(backupSave));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, updateLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, versionLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, backupCFG, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, backupSave, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backupCFG, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backupSave, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.EAST, update, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(messageLbl), Spring.constant(15));
-
-        layout.putConstraint(SpringLayout.NORTH, versionLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(versionLbl), Spring.constant(15));
-
-        layout.putConstraint(SpringLayout.NORTH, updateLbl, vSpring, SpringLayout.NORTH, panel);
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(updateLbl), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, backupCFG, vSpring, SpringLayout.NORTH, panel);
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(backupCFG), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, backupSave, vSpring, SpringLayout.NORTH, panel);
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(backupSave), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, update, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(update);
-        rowHeight = Spring.max(rowHeight, Spring.height(abort));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
 
         pack();
         setLocationRelativeTo(getOwner());

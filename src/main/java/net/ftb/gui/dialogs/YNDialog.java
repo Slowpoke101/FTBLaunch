@@ -24,13 +24,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
-import net.ftb.util.SwingUtils;
+import net.miginfocom.swing.MigLayout;
 
 public class YNDialog extends JDialog {
     private JLabel messageLbl;
@@ -74,8 +73,7 @@ public class YNDialog extends JDialog {
         setResizable(false);
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        panel.setLayout(layout);
+        panel.setLayout(new MigLayout());
 
         messageLbl = new JLabel(message);
         overwriteLbl = new JLabel(confirmMsg);
@@ -85,55 +83,10 @@ public class YNDialog extends JDialog {
         messageLbl.setHorizontalAlignment(SwingConstants.CENTER);
         overwriteLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-        panel.add(messageLbl);
-        panel.add(overwriteLbl);
-        panel.add(overwrite);
-        panel.add(abort);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, overwriteLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.max(Spring.width(messageLbl), Spring.width(overwriteLbl));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, messageLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, overwriteLbl, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        layout.putConstraint(SpringLayout.EAST, overwrite, -5, SpringLayout.HORIZONTAL_CENTER, panel);
-        layout.putConstraint(SpringLayout.WEST, abort, 5, SpringLayout.HORIZONTAL_CENTER, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.NORTH, messageLbl, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(messageLbl), Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.NORTH, overwriteLbl, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(overwriteLbl), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, overwrite, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.NORTH, abort, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(overwrite);
-        rowHeight = Spring.max(rowHeight, Spring.height(abort));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(overwriteLbl, GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(overwrite, GuiConstants.FILL_TWO);
+        panel.add(abort, GuiConstants.GROW);
 
         pack();
         setLocationRelativeTo(getOwner());

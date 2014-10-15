@@ -174,8 +174,18 @@ public class Settings extends Properties {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
-        if(!canuse8 && currentJava.isJava8())
-            return new JavaInfo(getJavaPath(false));
+        if(!canuse8 && currentJava.isJava8()) {
+            JavaInfo java = null;
+            try {
+                // this should not never fail
+                java = new JavaInfo(getJavaPath(false));
+            } catch (Exception e) {
+                Logger.logError("Error while creating JavaInfo", e);
+            }
+            if (java != null)
+                return java;
+        }
+
         return currentJava;
     }
 
