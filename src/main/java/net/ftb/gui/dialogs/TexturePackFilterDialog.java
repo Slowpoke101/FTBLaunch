@@ -39,7 +39,8 @@ import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class TexturePackFilterDialog extends JDialog {
+public class TexturePackFilterDialog extends JDialog
+{
     private JLabel compatiblePackLbl;
     private JComboBox compatiblePack;
     private JLabel resolutionLbl;
@@ -50,7 +51,8 @@ public class TexturePackFilterDialog extends JDialog {
 
     private TexturepackPane instance;
 
-    public TexturePackFilterDialog(final TexturepackPane instance) {
+    public TexturePackFilterDialog(final TexturepackPane instance)
+    {
         super(LaunchFrame.getInstance(), true);
         this.instance = instance;
         setupGui();
@@ -61,18 +63,23 @@ public class TexturePackFilterDialog extends JDialog {
 
         ArrayList<String> res = Lists.newArrayList();
         res.add(I18N.getLocaleString("MAIN_ALL"));
-        for (int i = 0; i < textures; i++) {
-            if (!res.contains(TexturePack.getTexturePack(i).getResolution())) {
+        for (int i = 0; i < textures; i++)
+        {
+            if (!res.contains(TexturePack.getTexturePack(i).getResolution()))
+            {
                 res.add(TexturePack.getTexturePack(i).getResolution());
             }
         }
 
         ArrayList<String> comp = Lists.newArrayList();
         comp.add(I18N.getLocaleString("MAIN_ALL"));
-        for (int i = 0; i < textures; i++) {
+        for (int i = 0; i < textures; i++)
+        {
             List<String> s = TexturePack.getTexturePack(i).getCompatible();
-            for (String value : s) {
-                if (!comp.contains(ModPack.getPack(value.trim()).getName())) {
+            for (String value : s)
+            {
+                if (!comp.contains(ModPack.getPack(value.trim()).getName()))
+                {
                     comp.add(ModPack.getPack(value.trim()).getName());
                 }
             }
@@ -84,10 +91,12 @@ public class TexturePackFilterDialog extends JDialog {
         compatiblePack.setSelectedItem(instance.compatible);
         resolution.setSelectedItem(instance.resolution);
 
-        apply.addActionListener(new ActionListener() {
+        apply.addActionListener(new ActionListener()
+        {
             @SuppressWarnings("static-access")
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 instance.compatible = (String) compatiblePack.getSelectedItem();
                 instance.resolution = (String) resolution.getSelectedItem();
                 instance.updateFilter();
@@ -95,23 +104,28 @@ public class TexturePackFilterDialog extends JDialog {
             }
         });
 
-        cancel.addActionListener(new ActionListener() {
+        cancel.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 setVisible(false);
             }
         });
 
-        search.addActionListener(new ActionListener() {
+        search.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 SearchDialog sd = new SearchDialog(instance);
                 sd.setVisible(true);
             }
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
         setResizable(true);

@@ -46,50 +46,69 @@ import org.w3c.dom.NodeList;
 import static net.ftb.download.Locations.MODPACKXML;
 import static net.ftb.download.Locations.THIRDPARTYXML;
 
-public class ModpackLoader extends Thread {
+public class ModpackLoader extends Thread
+{
     private ArrayList<String> xmlFiles = Lists.newArrayList();
 
-    public ModpackLoader(ArrayList<String> xmlFiles) {
+    public ModpackLoader(ArrayList<String> xmlFiles)
+    {
         this.xmlFiles = xmlFiles;
     }
 
     @Override
-    public void run () {
+    public void run ()
+    {
         //TODO ASAP thread this
         Benchmark.start("ModpackLoader");
-        xmls: for (String xmlFile : xmlFiles) {
+        xmls: for (String xmlFile : xmlFiles)
+        {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
-            try {
+            try
+            {
                 modPackFile.getParentFile().mkdirs();
                 DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logWarn("Failed to load modpacks, loading from backup", e);
             }
             Logger.logInfo("Loading modpack information for " + xmlFile + "...");
             InputStream modPackStream = null;
-            try {
+            try
+            {
                 modPackStream = new FileInputStream(modPackFile);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
             }
-            if (modPackStream == null) {
-                try {
+            if (modPackStream == null)
+            {
+                try
+                {
                     modPackStream = new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)).openStream();
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     Logger.logError("Completely unable to download the modpack file - check your connection", e);
                 }
             }
-            if (modPackStream != null) {
+            if (modPackStream != null)
+            {
                 Document doc;
-                try {
+                try
+                {
                     doc = AppUtils.getXML(modPackStream);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Logger.logError("Exception reading modpack file", e);
                     continue;
                 }
-                if (doc == null) {
+                if (doc == null)
+                {
                     Logger.logError("Error: could not load modpack data!");
                     continue;
                 }
@@ -98,40 +117,48 @@ public class ModpackLoader extends Thread {
                 // ATT: this is not thread safe. Only one thread can run rest of the code!
                 // proper fix: ModPack.add() should assign indexes for modpacks
                 int offset = ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size();
-                for (int i = 0; i < modPacks.getLength(); i++) {
+                for (int i = 0; i < modPacks.getLength(); i++)
+                {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
-                    try {
-                        if(modPackAttr.getNamedItem("author") != null)
+                    try
+                    {
+                        if (modPackAttr.getNamedItem("author") != null)
                             isThirdParty = !modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team");
-                        mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
-                                .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
-                                .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
-                                .getTextContent(), modPackAttr.getNamedItem("description")==null?null:modPackAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
-                                .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
-                                .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
-                                .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
-                                (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
-                                .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr
-                                .getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
-                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n"), modPackAttr
-                                .getNamedItem("customMCVersions")==null?null:modPackAttr.getNamedItem("customMCVersions").getTextContent()
-                         ));
-                    } catch (Exception e) {
+                        mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
+                                modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr
+                                        .getNamedItem("image").getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr
+                                        .getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description") == null ? null : modPackAttr.getNamedItem("description").getTextContent()
+                                        .replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", modPackAttr
+                                        .getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
+                                modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "",
+                                modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr.getNamedItem("maxPermSize").getTextContent() : "", offset + i,
+                                (isThirdParty && !privatePack) ? (modPackAttr.getNamedItem("private") != null) : privatePack, xmlFile, modPackAttr.getNamedItem("bundledMap") != null, modPackAttr
+                                        .getNamedItem("customTP") != null, modPackAttr.getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty,
+                                modPackAttr.getNamedItem("minLaunchSpec") == null ? 0 : Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
+                                        .getNamedItem("warning") == null ? null : modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n"), modPackAttr
+                                        .getNamedItem("customMCVersions") == null ? null : modPackAttr.getNamedItem("customMCVersions").getTextContent()));
+                    }
+                    catch (Exception e)
+                    {
                         Logger.logError("Error while updating modpack info", e);
                     }
                 }
                 ModPack.addPacks(mp);
-                try {
+                try
+                {
                     modPackStream.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                 }
             }
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run ()
+            {
                 // We need to manually scroll FTBPackPane up because onVisible() is executed before packs are loaded
                 FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
             }

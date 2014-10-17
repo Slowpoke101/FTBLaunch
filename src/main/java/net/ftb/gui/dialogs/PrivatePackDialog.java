@@ -38,61 +38,80 @@ import net.ftb.util.*;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class PrivatePackDialog extends JDialog {
+public class PrivatePackDialog extends JDialog
+{
     private JEditorPane editorPane;
     private JTextField modpackName;
     private JButton remove;
     private JButton add;
     private JButton cancel;
 
-    public PrivatePackDialog() {
+    public PrivatePackDialog()
+    {
         super(LaunchFrame.getInstance(), false);
 
         setupGui();
 
         getRootPane().setDefaultButton(add);
 
-        add.addActionListener(new ActionListener() {
+        add.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
-                if (!modpackName.getText().isEmpty() && DownloadUtils.staticFileExists(modpackName.getText() + ".xml")) {
-                    if (!packExists(modpackName.getText())) {
+            public void actionPerformed (ActionEvent e)
+            {
+                if (!modpackName.getText().isEmpty() && DownloadUtils.staticFileExists(modpackName.getText() + ".xml"))
+                {
+                    if (!packExists(modpackName.getText()))
+                    {
                         Logger.logInfo("Adding: " + modpackName.getText());
                         ModPack.loadXml(modpackName.getText() + ".xml");
                         Settings.getSettings().addPrivatePack(modpackName.getText());
                         Settings.getSettings().save();
                         setVisible(false);
-                    } else {
+                    }
+                    else
+                    {
                         ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ALREADY_ADDED"));
                     }
-                } else {
+                }
+                else
+                {
                     ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ERROR"));
                 }
             }
         });
 
-        cancel.addActionListener(new ActionListener() {
+        cancel.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 setVisible(false);
             }
         });
 
-        remove.addActionListener(new ActionListener() {
+        remove.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
-                String toRemove="";
-                for(String s: codes) {
-                    if(s.equalsIgnoreCase(modpackName.getText()))
+                String toRemove = "";
+                for (String s : codes)
+                {
+                    if (s.equalsIgnoreCase(modpackName.getText()))
                         toRemove = s;
                 }
-                if (!toRemove.isEmpty()) {
+                if (!toRemove.isEmpty())
+                {
                     Settings.getSettings().removePrivatePack(toRemove);
                     Settings.getSettings().save();
-                    try {
-                        for (ModPack pack : ModPack.getPackArray()) {
-                            if (pack.getParentXml().equalsIgnoreCase(toRemove + ".xml")) {
+                    try
+                    {
+                        for (ModPack pack : ModPack.getPackArray())
+                        {
+                            if (pack.getParentXml().equalsIgnoreCase(toRemove + ".xml"))
+                            {
                                 FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + pack.getDir()));
                                 break;
                             }
@@ -100,20 +119,25 @@ public class PrivatePackDialog extends JDialog {
                         ModPack.removePacks(toRemove + ".xml");
                         FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + toRemove + ".xml"));
                         LaunchFrame.getInstance().modPacksPane.filterPacks();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         Logger.logError("Error while deleting private modpack", e);
                     }
                     Logger.logInfo(modpackName.getText() + " " + I18N.getLocaleString("PRIVATEPACK_SECCESS"));
                     modpackName.setText("");
                     setVisible(false);
-                } else {
+                }
+                else
+                {
                     Logger.logInfo(I18N.getLocaleString("PRIVATEPACK_NOTEXISTS"));
                 }
             }
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("PRIVATEPACK_TITLE"));
         setResizable(true);
@@ -145,9 +169,12 @@ public class PrivatePackDialog extends JDialog {
         modpackName.requestFocusInWindow();
         setLocationRelativeTo(getOwner());
     }
-    private boolean packExists(String name) {
-        for(String p :Settings.getSettings().getPrivatePacks()){
-            if(p.equalsIgnoreCase(name))
+
+    private boolean packExists (String name)
+    {
+        for (String p : Settings.getSettings().getPrivatePacks())
+        {
+            if (p.equalsIgnoreCase(name))
                 return true;
         }
         return false;

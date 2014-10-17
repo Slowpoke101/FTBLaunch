@@ -30,7 +30,8 @@ package net.ftb.tracking.google;
  * request.
  * @author Daniel Murphy
  */
-public class AnalyticsRequestData {
+public class AnalyticsRequestData
+{
 
     private String pageTitle = null;
     private String hostName = null;
@@ -69,7 +70,8 @@ public class AnalyticsRequestData {
     private String utmcmd = "(none)";
     private String utmcct = null;
 
-    public void setReferrer (String argSite, String argPage) {
+    public void setReferrer (String argSite, String argPage)
+    {
         utmcmd = "referral";
         utmcct = argPage;
         utmccn = "(referral)";
@@ -77,7 +79,8 @@ public class AnalyticsRequestData {
         utmctr = null;
     }
 
-    public void setSearchReferrer (String argSearchSource, String argSearchKeywords) {
+    public void setSearchReferrer (String argSearchSource, String argSearchKeywords)
+    {
         utmcsr = argSearchSource;
         utmctr = argSearchKeywords;
         utmcmd = "organic";
@@ -88,84 +91,96 @@ public class AnalyticsRequestData {
     /**
      * @return the utmcsr
      */
-    public String getUtmcsr () {
+    public String getUtmcsr ()
+    {
         return utmcsr;
     }
 
     /**
      * @return the utmccn
      */
-    public String getUtmccn () {
+    public String getUtmccn ()
+    {
         return utmccn;
     }
 
     /**
      * @return the utmctr
      */
-    public String getUtmctr () {
+    public String getUtmctr ()
+    {
         return utmctr;
     }
 
     /**
      * @return the utmcmd
      */
-    public String getUtmcmd () {
+    public String getUtmcmd ()
+    {
         return utmcmd;
     }
 
     /**
      * @return the utmcct
      */
-    public String getUtmcct () {
+    public String getUtmcct ()
+    {
         return utmcct;
     }
 
     /**
      * @return the eventAction
      */
-    public String getEventAction () {
+    public String getEventAction ()
+    {
         return eventAction;
     }
 
     /**
      * @return the eventCategory
      */
-    public String getEventCategory () {
+    public String getEventCategory ()
+    {
         return eventCategory;
     }
 
     /**
      * @return the eventLabel
      */
-    public String getEventLabel () {
+    public String getEventLabel ()
+    {
         return eventLabel;
     }
 
     /**
      * @return the eventValue
      */
-    public Integer getEventValue () {
+    public Integer getEventValue ()
+    {
         return eventValue;
     }
 
     /**
      * @return the hostName
      */
-    public String getHostName () {
+    public String getHostName ()
+    {
         return hostName;
     }
 
     /**
      * @return the contentTitle
      */
-    public String getPageTitle () {
+    public String getPageTitle ()
+    {
         return pageTitle;
     }
 
     /**
      * @return the pageURL
      */
-    public String getPageURL () {
+    public String getPageURL ()
+    {
         return pageURL;
     }
 
@@ -174,7 +189,8 @@ public class AnalyticsRequestData {
      * tracking events.
      * @param argEventAction the eventAction to set
      */
-    public void setEventAction (String argEventAction) {
+    public void setEventAction (String argEventAction)
+    {
         eventAction = argEventAction;
     }
 
@@ -183,7 +199,8 @@ public class AnalyticsRequestData {
      * tracking events.
      * @param argEventCategory the eventCategory to set
      */
-    public void setEventCategory (String argEventCategory) {
+    public void setEventCategory (String argEventCategory)
+    {
         eventCategory = argEventCategory;
     }
 
@@ -192,7 +209,8 @@ public class AnalyticsRequestData {
      * tracking events.
      * @param argEventLabel the eventLabel to set
      */
-    public void setEventLabel (String argEventLabel) {
+    public void setEventLabel (String argEventLabel)
+    {
         eventLabel = argEventLabel;
     }
 
@@ -201,7 +219,8 @@ public class AnalyticsRequestData {
      * events.
      * @param argEventValue the eventValue to set
      */
-    public void setEventValue (Integer argEventValue) {
+    public void setEventValue (Integer argEventValue)
+    {
         eventValue = argEventValue;
     }
 
@@ -209,7 +228,8 @@ public class AnalyticsRequestData {
      * The host name of the page
      * @param argHostName the hostName to set
      */
-    public void setHostName (String argHostName) {
+    public void setHostName (String argHostName)
+    {
         hostName = argHostName;
     }
 
@@ -218,7 +238,8 @@ public class AnalyticsRequestData {
      * in Google Analytics
      * @param argContentTitle the contentTitle to set
      */
-    public void setPageTitle (String argContentTitle) {
+    public void setPageTitle (String argContentTitle)
+    {
         pageTitle = argContentTitle;
     }
 
@@ -228,7 +249,8 @@ public class AnalyticsRequestData {
      * put anything here (like "/com/dmurph/test.java").
      * @param argPageURL the pageURL to set
      */
-    public void setPageURL (String argPageURL) {
+    public void setPageURL (String argPageURL)
+    {
         pageURL = argPageURL;
     }
 }

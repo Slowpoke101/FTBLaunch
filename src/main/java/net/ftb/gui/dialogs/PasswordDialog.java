@@ -32,20 +32,25 @@ import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class PasswordDialog extends JDialog {
+public class PasswordDialog extends JDialog
+{
     private JLabel passwordLbl;
     private JPasswordField password;
     private JButton login;
 
-    public PasswordDialog(LaunchFrame instance, boolean modal) {
+    public PasswordDialog(LaunchFrame instance, boolean modal)
+    {
         super(instance, modal);
         setupGui();
 
         getRootPane().setDefaultButton(login);
-        login.addActionListener(new ActionListener() {
+        login.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
-                if (!new String(password.getPassword()).isEmpty()) {
+            public void actionPerformed (ActionEvent event)
+            {
+                if (!new String(password.getPassword()).isEmpty())
+                {
                     LaunchFrame.tempPass = new String(password.getPassword());
                     setVisible(false);
                 }
@@ -53,7 +58,8 @@ public class PasswordDialog extends JDialog {
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("PASSWORD_TITLE"));
         setResizable(true);

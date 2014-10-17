@@ -40,25 +40,29 @@ import net.ftb.util.DownloadUtils;
  * SwingWorker that downloads Authlib. Returns true if successful, false if it
  * fails.
  */
-public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
+public class AuthlibDLWorker extends SwingWorker<Boolean, Void>
+{
     protected String status, reqVersion;
     protected File binDir;
     protected String authlibVersion;
     protected URL jarURLs;
 
-    public AuthlibDLWorker(String DLFolder, String authver) {
+    public AuthlibDLWorker(String DLFolder, String authver)
+    {
         this.binDir = new File(DLFolder);
         this.authlibVersion = authver;
         this.status = "";
     }
 
     @Override
-    protected Boolean doInBackground () {
+    protected Boolean doInBackground ()
+    {
         Benchmark.start("Authlib");
         Logger.logDebug("Loading Authlib...");
         if (!binDir.exists())
             binDir.mkdirs();
-        if (!downloadJars()) {
+        if (!downloadJars())
+        {
             Logger.logError("Authlib Download Failed");
             if (!new File(binDir + File.separator + "authlib-" + authlibVersion + ".jar").exists())
                 return false;
@@ -69,19 +73,26 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         return addToClasspath(binDir + File.separator + "authlib-" + authlibVersion + ".jar");
     }
 
-    protected boolean addToClasspath (String location) {
+    protected boolean addToClasspath (String location)
+    {
         File f = new File(location);
-        try {
-            if (f.exists()) {
+        try
+        {
+            if (f.exists())
+            {
                 addURL(f.toURI().toURL());
                 this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
                 this.getClass().forName("com.mojang.authlib.Agent");
                 this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
                 this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
-            } else {
+            }
+            else
+            {
                 Logger.logError("Authlib file does not exist");
             }
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             Logger.logError(t.getMessage(), t);
             return false;
         }
@@ -90,31 +101,41 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         return true;
     }
 
-    public void addURL (URL u) throws IOException {
+    public void addURL (URL u) throws IOException
+    {
         URLClassLoader sysloader = (URLClassLoader) this.getClass().getClassLoader();
         Class sysclass = URLClassLoader.class;
-        try {
+        try
+        {
             Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
             method.setAccessible(true);
             method.invoke(sysloader, u);
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             Logger.logWarn(t.getMessage(), t);
             throw new IOException("Error, could not add URL to system classloader");
         }
     }
 
-    protected boolean downloadJars () {
-        try {
+    protected boolean downloadJars ()
+    {
+        try
+        {
             jarURLs = new URL(Locations.mc_libs + "com/mojang/authlib/" + authlibVersion + "/authlib-" + authlibVersion + ".jar");
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             Logger.logError(e.getMessage(), e);
             return false;
         }
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[1];
         String hash = "";
-        for (int i = 0; i < 1; i++) {
-            try {
+        for (int i = 0; i < 1; i++)
+        {
+            try
+            {
                 HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
                 conn.setRequestProperty("Cache-Control", "no-transform");
                 conn.setRequestMethod("HEAD");
@@ -123,40 +144,53 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logWarn("Authlib checksum download failed", e);
                 return false;
             }
         }
         boolean downloadSuccess = false;
         if (hash != null && !hash.equals("") && new File(binDir, getFilename(jarURLs)).exists())
-            try {
-                if (hash.toLowerCase().equals(DownloadUtils.fileMD5(new File(binDir, getFilename(jarURLs))).toLowerCase())) {
+            try
+            {
+                if (hash.toLowerCase().equals(DownloadUtils.fileMD5(new File(binDir, getFilename(jarURLs))).toLowerCase()))
+                {
                     Logger.logInfo("Local Authlib Version is good, skipping Download");
                     return true;
                 }
-            } catch (Exception e1) {
+            }
+            catch (Exception e1)
+            {
             }
         int attempt = 0;
         final int attempts = 5;
-        while (!downloadSuccess && (attempt < attempts)) {
-            try {
+        while (!downloadSuccess && (attempt < attempts))
+        {
+            try
+            {
                 attempt++;
                 Logger.logDebug("Connecting.. Try " + attempt + " of " + attempts + " for: " + jarURLs.toURI());
                 URLConnection dlConnection = jarURLs.openConnection();
-                if (dlConnection instanceof HttpURLConnection) {
+                if (dlConnection instanceof HttpURLConnection)
+                {
                     dlConnection.setRequestProperty("Cache-Control", "no-cache, no-transform");
                     dlConnection.connect();
                 }
                 String jarFileName = getFilename(jarURLs);
-                if (new File(binDir, jarFileName).exists()) {
+                if (new File(binDir, jarFileName).exists())
+                {
                     new File(binDir, jarFileName).delete();
                 }
                 InputStream dlStream = dlConnection.getInputStream();
                 FileOutputStream outStream;
-                try {
+                try
+                {
                     outStream = new FileOutputStream(new File(binDir, jarFileName));
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     downloadSuccess = false;
                     Logger.logError("Error while opening authlib file for writing. Check your FTB installation location write access", e);
                     break;
@@ -165,24 +199,31 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 byte[] buffer = new byte[24000];
                 int readLen;
                 int currentDLSize = 0;
-                while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {
+                while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1)
+                {
                     outStream.write(buffer, 0, readLen);
                     currentDLSize += readLen;
                     totalDownloadedSize += readLen;
                     int prog = (int) ((totalDownloadedSize / totalDownloadSize) * 100);
-                    if (prog > 100) {
+                    if (prog > 100)
+                    {
                         prog = 100;
-                    } else if (prog < 0) {
+                    }
+                    else if (prog < 0)
+                    {
                         prog = 0;
                     }
                     setProgress(prog);
                 }
                 dlStream.close();
                 outStream.close();
-                if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[0] || fileSizes[0] <= 0)) {
+                if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[0] || fileSizes[0] <= 0))
+                {
                     downloadSuccess = true;
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 downloadSuccess = false;
                 Logger.logWarn("Connection failed, trying again", e);
             }
@@ -190,21 +231,25 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         return downloadSuccess;
     }
 
-    protected String getFilename (URL url) {
+    protected String getFilename (URL url)
+    {
         String string = url.getFile();
-        if (string.contains("?")) {
+        if (string.contains("?"))
+        {
             string = string.substring(0, string.indexOf('?'));
         }
         return string.substring(string.lastIndexOf('/') + 1);
     }
 
-    protected void setStatus (String newStatus) {
+    protected void setStatus (String newStatus)
+    {
         String oldStatus = status;
         status = newStatus;
         firePropertyChange("status", oldStatus, newStatus);
     }
 
-    public String getStatus () {
+    public String getStatus ()
+    {
         return status;
     }
 }

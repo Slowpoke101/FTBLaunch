@@ -21,34 +21,49 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class LogThread extends Thread {
+public class LogThread extends Thread
+{
     private BlockingQueue<LogEntry> logQueue = new LinkedBlockingQueue<LogEntry>();
     private List<ILogListener> listeners;
 
-    public LogThread(List<ILogListener> listeners) {
+    public LogThread(List<ILogListener> listeners)
+    {
         this.listeners = listeners;
         this.setDaemon(true);
     }
 
-    public void run () {
+    public void run ()
+    {
         LogEntry entry;
         setName("Log dispatcher");
-        try {
-            while ((entry = logQueue.take()) != null) {
-                if (!listeners.isEmpty()) {
+        try
+        {
+            while ((entry = logQueue.take()) != null)
+            {
+                if (!listeners.isEmpty())
+                {
                     List<ILogListener> tempListeners = new ArrayList<ILogListener>();
                     tempListeners.addAll(listeners);
-                    for (ILogListener listener : tempListeners) {
+                    for (ILogListener listener : tempListeners)
+                    {
                         listener.onLogEvent(entry);
                     }
                 }
             }
-        } catch (InterruptedException ignored) { }
+        }
+        catch (InterruptedException ignored)
+        {
+        }
     }
 
-    public void handleLog (LogEntry logEntry) {
-        try {
+    public void handleLog (LogEntry logEntry)
+    {
+        try
+        {
             logQueue.put(logEntry);
-        } catch (InterruptedException ignored) { }
+        }
+        catch (InterruptedException ignored)
+        {
+        }
     }
 }

@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Version {
+public class Version
+{
     public String id;
     public Date time;
     public Date releaseTime;
@@ -36,13 +37,17 @@ public class Version {
     public String jar;
     private List<Library> _libraries;
 
-    public List<Library> getLibraries () {
-        if (_libraries == null) {
+    public List<Library> getLibraries ()
+    {
+        if (_libraries == null)
+        {
             _libraries = new ArrayList<Library>();
             if (libraries == null)
                 return _libraries;
-            for (Library lib : libraries) {
-                if (lib.applies()) {
+            for (Library lib : libraries)
+            {
+                if (lib.applies())
+                {
                     _libraries.add(lib);
                 }
             }
@@ -50,7 +55,8 @@ public class Version {
         return _libraries;
     }
 
-    public String getAssets () {
+    public String getAssets ()
+    {
         return assets == null ? "legacy" : assets;
     }
 }

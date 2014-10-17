@@ -51,7 +51,8 @@ import static net.ftb.download.Locations.MODPACKS;
 import static net.ftb.download.Locations.PRIVATEPACKS;
 
 @SuppressWarnings("serial")
-public class ModManager extends JDialog {
+public class ModManager extends JDialog
+{
     public static boolean update = false, backupCFG = false, backupSave = false, erroneous = false, upToDate = false;
     private static String curVersion = "";
     private JPanel contentPane;
@@ -62,20 +63,26 @@ public class ModManager extends JDialog {
     public static ModManagerWorker worker;
     private static File baseDynamic;
 
-    public class ModManagerWorker extends SwingWorker<Boolean, Void> {
+    public class ModManagerWorker extends SwingWorker<Boolean, Void>
+    {
         @Override
-        protected Boolean doInBackground () {
-            try {
-                if (!upToDate()) {
+        protected Boolean doInBackground ()
+        {
+            try
+            {
+                if (!upToDate())
+                {
                     String installPath = OSUtils.getCacheStorageLocation();
                     ModPack pack = ModPack.getSelectedPack();
                     pack.setUpdated(true);
                     File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
-                    if (modPackZip.exists()) {
+                    if (modPackZip.exists())
+                    {
                         FTBFileUtils.delete(modPackZip);
                     }
                     File animationGif = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
-                    if (animationGif.exists()) {
+                    if (animationGif.exists())
+                    {
                         FTBFileUtils.delete(animationGif);
                     }
                     String dynamicLoc = OSUtils.getCacheStorageLocation();
@@ -83,13 +90,16 @@ public class ModManager extends JDialog {
                     //clearModsFolder(pack);
                     erroneous = !downloadModPack(pack.getUrl(), pack.getDir());
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logError("Error while updating modpack", e);
             }
             return true;
         }
 
-        public String downloadUrl (String filename, String urlString) {
+        public String downloadUrl (String filename, String urlString)
+        {
             BufferedInputStream in = null;
             FileOutputStream fout;
             HttpURLConnection connection = null;
@@ -97,25 +107,33 @@ public class ModManager extends JDialog {
             int amount = 0, startAmount = -1, modPackSize = 0, count, steps = 0;
             int retryCount = 5;
 
-            try {
+            try
+            {
                 fout = new FileOutputStream(filename);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logError("Failed opening output file: " + filename, e);
                 return null;
             }
 
-            do {
-                try {
+            do
+            {
+                try
+                {
                     startAmount = amount;
 
-                    if (amount > 0) {
+                    if (amount > 0)
+                    {
                         Logger.logInfo("Resuming download from offset " + Integer.toString(amount));
                     }
 
                     URL url_ = new URL(urlString);
                     byte data[] = new byte[1024];
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run () {
+                    SwingUtilities.invokeLater(new Runnable()
+                    {
+                        public void run ()
+                        {
                             progressBar.setMaximum(10000);
                         }
                     });
@@ -125,23 +143,31 @@ public class ModManager extends JDialog {
                     connection.setAllowUserInteraction(true);
                     connection.setConnectTimeout(14000);
                     connection.setReadTimeout(20000);
-                    if (amount > 0) {
+                    if (amount > 0)
+                    {
                         connection.setRequestProperty("Range", "bytes=" + amount + "-");
                     }
                     connection.connect();
                     md5 = connection.getHeaderField("Content-MD5");
                     in = new BufferedInputStream(connection.getInputStream());
-                    if (modPackSize == 0) {
+                    if (modPackSize == 0)
+                    {
                         modPackSize = connection.getContentLength();
-                    } else {
-                        if (amount + connection.getContentLength() != modPackSize) {
+                    }
+                    else
+                    {
+                        if (amount + connection.getContentLength() != modPackSize)
+                        {
                             throw new IOException("Resume failed");
-                        } else {
+                        }
+                        else
+                        {
                             Logger.logInfo("Resume started sucessfully");
                         }
                     }
 
-                    while ((count = in.read(data, 0, 1024)) != -1) {
+                    while ((count = in.read(data, 0, 1024)) != -1)
+                    {
                         fout.write(data, 0, count);
 
                         if (count > 0)
@@ -150,48 +176,65 @@ public class ModManager extends JDialog {
                         downloadedPerc += (count * 1.0 / modPackSize) * 100;
                         amount += count;
                         steps++;
-                        if (steps > 100) {
+                        if (steps > 100)
+                        {
                             steps = 0;
                             final String txt = (amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb";
                             final int perc = (int) downloadedPerc * 100;
-                            SwingUtilities.invokeLater(new Runnable() {
-                                public void run () {
+                            SwingUtilities.invokeLater(new Runnable()
+                            {
+                                public void run ()
+                                {
                                     progressBar.setValue(perc);
                                     label.setText(txt);
                                 }
                             });
                         }
                     }
-                } catch (MalformedURLException e) {
+                }
+                catch (MalformedURLException e)
+                {
                     Logger.logError("Error while downloading modpack", e);
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     Logger.logError("Error while downloading modpack", e);
                 }
 
-                try {
-                    if (in != null) {
+                try
+                {
+                    if (in != null)
+                    {
                         in.close();
                     }
-                    if (connection != null) {
+                    if (connection != null)
+                    {
                         connection.disconnect();
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     Logger.logWarn("Error while downloading modpack", e);
                 }
             } while (amount < modPackSize && (amount > startAmount || retryCount-- > 0));
 
-            try {
-                if (fout != null) {
+            try
+            {
+                if (fout != null)
+                {
                     fout.flush();
                     fout.close();
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logWarn("Error while downloading modpack", e);
             }
             return md5;
         }
 
-        protected boolean downloadModPack (String modPackName, String dir) {
+        protected boolean downloadModPack (String modPackName, String dir)
+        {
             Logger.logInfo("Downloading Mod Pack");
             TrackerUtils.sendPageView("net/ftb/tools/ModManager.java", "Modpacks / " + modPackName + " / " + curVersion.replace('_', '.'));
             String dynamicLoc = OSUtils.getCacheStorageLocation();
@@ -208,59 +251,79 @@ public class ModManager extends JDialog {
             baseDynamic.mkdirs();
 
             String md5 = "";
-            try {
+            try
+            {
                 File packFile = new File(baseDynamic, modPackName);
-                if (!dir.equals("mojang_vanilla") && (!packFile.exists() || !DownloadUtils.backupIsValid(packFile, baseLink + modPackName))) {
-                    try {
+                if (!dir.equals("mojang_vanilla") && (!packFile.exists() || !DownloadUtils.backupIsValid(packFile, baseLink + modPackName)))
+                {
+                    try
+                    {
                         new File(baseDynamic, modPackName).createNewFile();
                         md5 = downloadUrl(baseDynamic.getPath() + sep + modPackName, DownloadUtils.getCreeperhostLink(baseLink + modPackName));
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         Logger.logWarn("Error while downloading modpack", e);
                     }
                     String animation = pack.getAnimation();
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
 
-                    if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
-                            downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+                    if (!animation.equalsIgnoreCase("empty") && !animationFile.exists())
+                    {
+                        downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logError("Error validating pack archive", e);
             }
 
-            try {
+            try
+            {
                 if (!dir.equals("mojang_vanilla")
                         && ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic,
-                                modPackName), md5))) {
+                                modPackName), md5)))
+                {
                     Logger.logDebug("Extracting pack.");
                     Logger.logDebug("Purging mods, coremods, instMods");
                     clearModsFolder(pack);
                     FTBFileUtils.delete(new File(installPath, dir + "/minecraft/coremods"));
                     FTBFileUtils.delete(new File(installPath, dir + "/instMods/"));
                     boolean saveExists = false;
-                    if (pack.getBundledMap()) {
-                        try {
-                            if (new File(installPath, dir + "/minecraft/saves").exists()) {
+                    if (pack.getBundledMap())
+                    {
+                        try
+                        {
+                            if (new File(installPath, dir + "/minecraft/saves").exists())
+                            {
                                 saveExists = true;
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
                                 FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves"), new File(installPath, dir + "/minecraft/saves.ftbtmp"), true);
                             }
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e)
+                        {
                             Logger.logError("error backing up map", e);
                         }
                     }
 
                     Logger.logDebug("Extracting pack.");
                     FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
-                    if (pack.getBundledMap() && saveExists) {
-                        try {
+                    if (pack.getBundledMap() && saveExists)
+                    {
+                        try
+                        {
                             if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
-                            if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
+                            if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
+                            {
                                 FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
                             }
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e)
+                        {
                             Logger.logError("error restoring map", e);
                         }
                     }
@@ -272,10 +335,14 @@ public class ModManager extends JDialog {
                     out.close();
                     Logger.logDebug("Pack extracted, version tagged.");
                     return true;
-                } else if (!dir.equals("mojang_vanilla")) {
+                }
+                else if (!dir.equals("mojang_vanilla"))
+                {
                     ErrorUtils.tossError("Error downloading modpack!!!");
                     return false;
-                } else {
+                }
+                else
+                {
                     File version = new File(installPath, dir + sep + "version");
                     BufferedWriter out = new BufferedWriter(new FileWriter(version));
                     out.write(curVersion.replace("_", "."));
@@ -284,7 +351,9 @@ public class ModManager extends JDialog {
                     Logger.logDebug("Vanilla version tagged.");
                     return true;
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logError("Error while extracting modpack", e);
             }
             return false;
@@ -294,7 +363,8 @@ public class ModManager extends JDialog {
     /**
      * Create the frame.
      */
-    public ModManager(JFrame owner, Boolean model) {
+    public ModManager(JFrame owner, Boolean model)
+    {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -318,12 +388,16 @@ public class ModManager extends JDialog {
         label.setBounds(0, 42, 313, 14);
         contentPane.add(label);
 
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             @Override
-            public void windowOpened (WindowEvent arg0) {
-                worker = new ModManagerWorker() {
+            public void windowOpened (WindowEvent arg0)
+            {
+                worker = new ModManagerWorker()
+                {
                     @Override
-                    protected void done () {
+                    protected void done ()
+                    {
                         setVisible(false);
                         super.done();
                     }
@@ -333,10 +407,12 @@ public class ModManager extends JDialog {
         });
     }
 
-    private boolean upToDate () throws IOException {
+    private boolean upToDate () throws IOException
+    {
         ModPack pack = ModPack.getSelectedPack();
         File version = new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "version");
-        if (!version.exists()) {
+        if (!version.exists())
+        {
             version.getParentFile().mkdirs();
             version.createNewFile();
             curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
@@ -347,69 +423,93 @@ public class ModManager extends JDialog {
         in.close();
         int currentVersion, requestedVersion;
         currentVersion = (line != null) ? Integer.parseInt(line.replace(".", "")) : 0;
-        if (!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") && !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) {
+        if (!Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") && !Settings.getSettings().getPackVer().equalsIgnoreCase("newest version"))
+        {
             requestedVersion = Integer.parseInt(Settings.getSettings().getPackVer().trim().replace(".", ""));
-            if (requestedVersion != currentVersion) {
+            if (requestedVersion != currentVersion)
+            {
                 Logger.logInfo("Modpack is out of date.");
                 curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
                 return false;
-            } else {
+            }
+            else
+            {
                 Logger.logInfo("Modpack is up to date.");
                 return true;
             }
-        } else if (Integer.parseInt(pack.getVersion().replace(".", "")) != currentVersion) {
+        }
+        else if (Integer.parseInt(pack.getVersion().replace(".", "")) != currentVersion)
+        {
             Logger.logInfo("Modpack is out of date.");
-            if (LaunchFrame.allowVersionChange) {
+            if (LaunchFrame.allowVersionChange)
+            {
                 curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion().replace(".", "_") : Settings.getSettings().getPackVer())
                         .replace(".", "_");
                 return false;
             }
             ModpackUpdateDialog p = new ModpackUpdateDialog(LaunchFrame.getInstance(), true);
             p.setVisible(true);
-            if (!update) {
+            if (!update)
+            {
                 return true;
             }
-            if (backupCFG) {
+            if (backupCFG)
+            {
                 File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "config_backup");
-                if (destination.exists()) {
+                if (destination.exists())
+                {
                     FTBFileUtils.delete(destination);
                 }
                 FTBFileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "config"), destination);
             }
-            if (backupSave) {
+            if (backupSave)
+            {
                 File destination = new File(OSUtils.getCacheStorageLocation(), "backups" + sep + pack.getDir() + sep + "saves_backup");
-                if (destination.exists()) {
+                if (destination.exists())
+                {
                     FTBFileUtils.delete(destination);
                 }
                 FTBFileUtils.copyFolder(new File(Settings.getSettings().getInstallPath(), pack.getDir() + sep + "minecraft" + sep + "saves"), destination);
             }
             curVersion = pack.getVersion().replace(".", "_");
             return false;
-        } else {
+        }
+        else
+        {
             Logger.logInfo("Modpack is up to date.");
             return true;
         }
     }
 
-    public static void cleanUp () {
+    public static void cleanUp ()
+    {
         ModPack pack = ModPack.getSelectedPack();
         File tempFolder = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
-        for (String file : tempFolder.list()) {
-            if (!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
-                try {
-                    if (file.endsWith(".zip")) {
+        for (String file : tempFolder.list())
+        {
+            if (!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation()))
+            {
+                try
+                {
+                    if (file.endsWith(".zip"))
+                    {
                         Logger.logDebug("retaining modpack file: " + tempFolder + File.separator + file);
-                    } else {
+                    }
+                    else
+                    {
                         FTBFileUtils.delete(new File(tempFolder, file));
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     Logger.logError(e.getMessage(), e);
                 }
             }
         }
     }
 
-    public static void clearModsFolder (ModPack pack) {
+    public static void clearModsFolder (ModPack pack)
+    {
         File modsFolder = new File(Settings.getSettings().getInstallPath(), pack.getDir() + File.separator + "minecraft" + File.separator + "mods");
         clearFolder(modsFolder);
         Logger.logInfo("Mods Folder: " + modsFolder.toString());
@@ -418,18 +518,26 @@ public class ModManager extends JDialog {
         clearFolder(dyn);
     }
 
-    public static void clearFolder (File folder) {
-        if (folder.exists()) {
-            for (String file : folder.list()) {
-                if (new File(folder, file).isDirectory()) {
+    public static void clearFolder (File folder)
+    {
+        if (folder.exists())
+        {
+            for (String file : folder.list())
+            {
+                if (new File(folder, file).isDirectory())
+                {
                     clearFolder(new File(folder, file));
                 }
-                if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
-                    try {
+                if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod"))
+                {
+                    try
+                    {
                         boolean b = FTBFileUtils.delete(new File(folder, file));
                         if (!b)
                             Logger.logInfo("Error deleting " + file);
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         Logger.logWarn(e.getMessage(), e);
 
                     }

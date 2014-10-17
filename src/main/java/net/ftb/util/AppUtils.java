@@ -30,13 +30,15 @@ import net.ftb.log.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class AppUtils {
+public class AppUtils
+{
     /**
      * Reads all of the data from the given stream and returns it as a string.
      * @param stream the stream to read from.
      * @return the data read from the given stream as a string.
      */
-    public static String readString (InputStream stream) {
+    public static String readString (InputStream stream)
+    {
         Scanner scanner = new Scanner(stream).useDelimiter("\\A");
         return scanner.hasNext() ? scanner.next() : "";
     }
@@ -47,7 +49,8 @@ public class AppUtils {
      * @return The document
      * @throws IOException, SAXException if an error occurs when reading from the stream
      */
-    public static Document downloadXML (URL url) throws IOException, SAXException {
+    public static Document downloadXML (URL url) throws IOException, SAXException
+    {
         return getXML(url.openStream());
     }
 
@@ -57,13 +60,19 @@ public class AppUtils {
      * @return The document
      * @throws IOException, SAXException if an error occurs when reading from the stream
      */
-    public static Document getXML (InputStream stream) throws IOException, SAXException {
+    public static Document getXML (InputStream stream) throws IOException, SAXException
+    {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        try {
+        try
+        {
             return docFactory.newDocumentBuilder().parse(stream);
-        } catch (ParserConfigurationException ignored) {
+        }
+        catch (ParserConfigurationException ignored)
+        {
             Logger.logError(ignored.getMessage(), ignored);
-        } catch (UnknownHostException e) {
+        }
+        catch (UnknownHostException e)
+        {
             Logger.logError(e.getMessage(), e);
         }
         return null;
@@ -73,7 +82,8 @@ public class AppUtils {
      * Simple sleep and check locking scheme
      * @param b boolean to check, continue  when true
      */
-    public static void waitForLock (boolean b) {
+    public static void waitForLock (boolean b)
+    {
         waitForLock(b, null);
     }
 
@@ -82,17 +92,21 @@ public class AppUtils {
      * @param b boolean to check, continue when true
      * @param s String to use as locking reason for log messages
      */
-    public static void waitForLock (boolean b, String s) {
-        while (!b) {
-            try {
+    public static void waitForLock (boolean b, String s)
+    {
+        while (!b)
+        {
+            try
+            {
                 Thread.sleep(100);
-                if (s != null) {
+                if (s != null)
+                {
                     Logger.logInfo("Waiting for " + s);
                 }
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e)
+            {
             }
         }
     }
 }
-
-

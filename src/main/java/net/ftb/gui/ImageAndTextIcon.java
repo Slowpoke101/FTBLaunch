@@ -43,7 +43,8 @@ import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 import javax.swing.Icon;
 
-public class ImageAndTextIcon implements Icon {
+public class ImageAndTextIcon implements Icon
+{
 
     /*
      * Keep references to the filename and location so that alternate
@@ -56,7 +57,8 @@ public class ImageAndTextIcon implements Icon {
     ImageObserver imageObserver;
     String description = null;
 
-    protected final static Component component = new Component() {
+    protected final static Component component = new Component()
+    {
     };
     protected final static MediaTracker tracker = new MediaTracker(component);
 
@@ -78,9 +80,11 @@ public class ImageAndTextIcon implements Icon {
      *            a brief textual description of the image
      * @see #ImageIcon(String)
      */
-    public ImageAndTextIcon(URL filename, String desc) {
+    public ImageAndTextIcon(URL filename, String desc)
+    {
         image = Toolkit.getDefaultToolkit().getImage(filename);
-        if (image == null) {
+        if (image == null)
+        {
             return;
         }
         this.description = desc;
@@ -93,14 +97,19 @@ public class ImageAndTextIcon implements Icon {
      * @param image
      *            the image
      */
-    protected void loadImage (Image image) {
-        synchronized (tracker) {
+    protected void loadImage (Image image)
+    {
+        synchronized (tracker)
+        {
             int id = getNextID();
 
             tracker.addImage(image, id);
-            try {
+            try
+            {
                 tracker.waitForID(id, 0);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e)
+            {
                 System.out.println("INTERRUPTED while loading Image");
             }
             loadStatus = tracker.statusID(id, false);
@@ -114,8 +123,10 @@ public class ImageAndTextIcon implements Icon {
     /**
      * Returns an ID to use with the MediaTracker in loading an image.
      */
-    private int getNextID () {
-        synchronized (tracker) {
+    private int getNextID ()
+    {
+        synchronized (tracker)
+        {
             return ++mediaTrackerID;
         }
     }
@@ -128,7 +139,8 @@ public class ImageAndTextIcon implements Icon {
      * @see java.awt.MediaTracker#ERRORED
      * @see java.awt.MediaTracker#COMPLETE
      */
-    public int getImageLoadStatus () {
+    public int getImageLoadStatus ()
+    {
         return loadStatus;
     }
 
@@ -137,7 +149,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return the <code>Image</code> object for this <code>ImageIcon</code>
      */
-    public Image getImage () {
+    public Image getImage ()
+    {
         return image;
     }
 
@@ -147,7 +160,8 @@ public class ImageAndTextIcon implements Icon {
      * @param image
      *            the image
      */
-    public void setImage (Image image) {
+    public void setImage (Image image)
+    {
         this.image = image;
         loadImage(image);
     }
@@ -160,7 +174,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return a brief textual description of the image
      */
-    public String getDescription () {
+    public String getDescription ()
+    {
         return description;
     }
 
@@ -172,7 +187,8 @@ public class ImageAndTextIcon implements Icon {
      * @param description
      *            a brief textual description of the image
      */
-    public void setDescription (String description) {
+    public void setDescription (String description)
+    {
         this.description = description;
     }
 
@@ -192,13 +208,17 @@ public class ImageAndTextIcon implements Icon {
      * @param y
      *            the Y coordinate of the icon's top-left corner
      */
-    public synchronized void paintIcon (Component c, Graphics g, int x, int y) {
-        if (description.length() == 1) {
+    public synchronized void paintIcon (Component c, Graphics g, int x, int y)
+    {
+        if (description.length() == 1)
+        {
             g.drawImage(image, x, y, c);
             g.setColor(Color.WHITE);
             g.setFont(new Font("SansSerif", Font.BOLD, 12));
             g.drawString(description, x + image.getWidth(imageObserver) - 15, y + 15);
-        } else {
+        }
+        else
+        {
             g.drawImage(image, x, y, c);
             g.setColor(Color.WHITE);
             g.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -211,7 +231,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return the width in pixels of this icon
      */
-    public int getIconWidth () {
+    public int getIconWidth ()
+    {
         return width;
     }
 
@@ -220,7 +241,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return the height in pixels of this icon
      */
-    public int getIconHeight () {
+    public int getIconHeight ()
+    {
         return height;
     }
 
@@ -238,7 +260,8 @@ public class ImageAndTextIcon implements Icon {
      * @param observer
      *            the image observer
      */
-    public void setImageObserver (ImageObserver observer) {
+    public void setImageObserver (ImageObserver observer)
+    {
         imageObserver = observer;
     }
 
@@ -247,7 +270,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return the image observer, which may be null
      */
-    public ImageObserver getImageObserver () {
+    public ImageObserver getImageObserver ()
+    {
         return imageObserver;
     }
 
@@ -256,21 +280,25 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @return a string representing this image
      */
-    public String toString () {
-        if (description != null) {
+    public String toString ()
+    {
+        if (description != null)
+        {
             return description;
         }
         return super.toString();
     }
 
-    private void readObject (ObjectInputStream s) throws ClassNotFoundException, IOException {
+    private void readObject (ObjectInputStream s) throws ClassNotFoundException, IOException
+    {
         s.defaultReadObject();
 
         int w = s.readInt();
         int h = s.readInt();
         int[] pixels = (int[]) (s.readObject());
 
-        if (pixels != null) {
+        if (pixels != null)
+        {
             Toolkit tk = Toolkit.getDefaultToolkit();
             ColorModel cm = ColorModel.getRGBdefault();
             image = tk.createImage(new MemoryImageSource(w, h, cm, pixels, 0, w));
@@ -278,21 +306,27 @@ public class ImageAndTextIcon implements Icon {
         }
     }
 
-    private void writeObject (ObjectOutputStream s) throws IOException {
+    private void writeObject (ObjectOutputStream s) throws IOException
+    {
         s.defaultWriteObject();
 
         int w = getIconWidth();
         int h = getIconHeight();
         int[] pixels = image != null ? new int[w * h] : null;
 
-        if (image != null) {
-            try {
+        if (image != null)
+        {
+            try
+            {
                 PixelGrabber pg = new PixelGrabber(image, 0, 0, w, h, pixels, 0, w);
                 pg.grabPixels();
-                if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
+                if ((pg.getStatus() & ImageObserver.ABORT) != 0)
+                {
                     throw new IOException("failed to load image contents");
                 }
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e)
+            {
                 throw new IOException("image load interrupted");
             }
         }
@@ -319,8 +353,10 @@ public class ImageAndTextIcon implements Icon {
      *           this ImageIcon.
      * @since 1.3
      */
-    public AccessibleContext getAccessibleContext () {
-        if (accessibleContext == null) {
+    public AccessibleContext getAccessibleContext ()
+    {
+        if (accessibleContext == null)
+        {
             accessibleContext = new AccessibleImageIcon();
         }
         return accessibleContext;
@@ -340,7 +376,8 @@ public class ImageAndTextIcon implements Icon {
      * 
      * @since 1.3
      */
-    protected class AccessibleImageIcon extends AccessibleContext implements AccessibleIcon, Serializable {
+    protected class AccessibleImageIcon extends AccessibleContext implements AccessibleIcon, Serializable
+    {
 
         /*
          * AccessibleContest implementation -----------------
@@ -353,7 +390,8 @@ public class ImageAndTextIcon implements Icon {
          *         object
          * @see AccessibleRole
          */
-        public AccessibleRole getAccessibleRole () {
+        public AccessibleRole getAccessibleRole ()
+        {
             return AccessibleRole.ICON;
         }
 
@@ -364,7 +402,8 @@ public class ImageAndTextIcon implements Icon {
          *         state set of the object
          * @see AccessibleState
          */
-        public AccessibleStateSet getAccessibleStateSet () {
+        public AccessibleStateSet getAccessibleStateSet ()
+        {
             return null;
         }
 
@@ -376,7 +415,8 @@ public class ImageAndTextIcon implements Icon {
          * @return the Accessible parent of this object -- can be null if this
          *         object does not have an Accessible parent
          */
-        public Accessible getAccessibleParent () {
+        public Accessible getAccessibleParent ()
+        {
             return null;
         }
 
@@ -387,7 +427,8 @@ public class ImageAndTextIcon implements Icon {
          *         does not have an accessible parent.
          * @see #getAccessibleParent
          */
-        public int getAccessibleIndexInParent () {
+        public int getAccessibleIndexInParent ()
+        {
             return -1;
         }
 
@@ -398,7 +439,8 @@ public class ImageAndTextIcon implements Icon {
          * 
          * @return the number of accessible children in the object.
          */
-        public int getAccessibleChildrenCount () {
+        public int getAccessibleChildrenCount ()
+        {
             return 0;
         }
 
@@ -409,7 +451,8 @@ public class ImageAndTextIcon implements Icon {
          *            zero-based index of child
          * @return the nth Accessible child of the object
          */
-        public Accessible getAccessibleChild (int i) {
+        public Accessible getAccessibleChild (int i)
+        {
             return null;
         }
 
@@ -418,7 +461,8 @@ public class ImageAndTextIcon implements Icon {
          * 
          * @return the locale of this object
          */
-        public Locale getLocale () throws IllegalComponentStateException {
+        public Locale getLocale () throws IllegalComponentStateException
+        {
             return null;
         }
 
@@ -433,7 +477,8 @@ public class ImageAndTextIcon implements Icon {
          * 
          * @return the description of the icon
          */
-        public String getAccessibleIconDescription () {
+        public String getAccessibleIconDescription ()
+        {
             return ImageAndTextIcon.this.getDescription();
         }
 
@@ -445,7 +490,8 @@ public class ImageAndTextIcon implements Icon {
          * @param description
          *            the description of the icon
          */
-        public void setAccessibleIconDescription (String description) {
+        public void setAccessibleIconDescription (String description)
+        {
             ImageAndTextIcon.this.setDescription(description);
         }
 
@@ -454,7 +500,8 @@ public class ImageAndTextIcon implements Icon {
          * 
          * @return the height of the icon
          */
-        public int getAccessibleIconHeight () {
+        public int getAccessibleIconHeight ()
+        {
             return ImageAndTextIcon.this.height;
         }
 
@@ -463,15 +510,18 @@ public class ImageAndTextIcon implements Icon {
          * 
          * @return the width of the icon
          */
-        public int getAccessibleIconWidth () {
+        public int getAccessibleIconWidth ()
+        {
             return ImageAndTextIcon.this.width;
         }
 
-        private void readObject (ObjectInputStream s) throws ClassNotFoundException, IOException {
+        private void readObject (ObjectInputStream s) throws ClassNotFoundException, IOException
+        {
             s.defaultReadObject();
         }
 
-        private void writeObject (ObjectOutputStream s) throws IOException {
+        private void writeObject (ObjectOutputStream s) throws IOException
+        {
             s.defaultWriteObject();
         }
     } // AccessibleImageIcon

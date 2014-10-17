@@ -26,8 +26,10 @@ import net.ftb.log.Logger;
 import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 
-public class SelfUpdate {
-    public static void runUpdate (String currentPath, String temporaryUpdatePath) {
+public class SelfUpdate
+{
+    public static void runUpdate (String currentPath, String temporaryUpdatePath)
+    {
         List<String> arguments = Lists.newArrayList();
 
         String separator = System.getProperty("file.separator");
@@ -44,28 +46,40 @@ public class SelfUpdate {
         Logger.logInfo("new: " + temporaryUpdatePath);
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command(arguments);
-        try {
+        try
+        {
             processBuilder.start();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Failed to start self-update process", e);
         }
         System.exit(0);
     }
 
-    public static void main (String[] args) {
-        try {
-            if (OSUtils.getCurrentOS() != OSUtils.OS.UNIX) {
+    public static void main (String[] args)
+    {
+        try
+        {
+            if (OSUtils.getCurrentOS() != OSUtils.OS.UNIX)
+            {
                 Thread.sleep(4000);//why is this here???
             }
-        } catch (InterruptedException ignored) { }
+        }
+        catch (InterruptedException ignored)
+        {
+        }
         String launcherPath = args[0];
         String temporaryUpdatePath = args[1];
         File launcher = new File(launcherPath);
         File temporaryUpdate = new File(temporaryUpdatePath);
-        try {
+        try
+        {
             FTBFileUtils.delete(launcher);
             FTBFileUtils.copyFile(temporaryUpdate, launcher);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Auto Updating Failed", e);
         }
 
@@ -79,9 +93,12 @@ public class SelfUpdate {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command(arguments);
-        try {
+        try
+        {
             processBuilder.start();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Failed to start launcher process after updating", e);
         }
     }

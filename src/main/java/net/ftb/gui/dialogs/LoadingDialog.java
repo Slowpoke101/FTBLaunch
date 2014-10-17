@@ -27,7 +27,8 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 
 @SuppressWarnings("serial")
-public class LoadingDialog extends JDialog {
+public class LoadingDialog extends JDialog
+{
     private JLabel loadStatusLbl;
     private JLabel splashLbl;
     private JProgressBar progressBar;
@@ -36,23 +37,32 @@ public class LoadingDialog extends JDialog {
     private static int BAR_SIZE = 200;
     private static int COUNT = 7;
     private static int INCREMENT = BAR_SIZE / COUNT;
-    private static AtomicInteger  progress = new AtomicInteger(0);
-    
-    public LoadingDialog() {
+    private static AtomicInteger progress = new AtomicInteger(0);
+
+    public LoadingDialog()
+    {
         super();
         setupGui();
         instance = this;
     }
 
-    public static void advance(final String text) {
+    public static void advance (final String text)
+    {
         Logger.logInfo(text);
         final int newValue = progress.getAndAdd(INCREMENT) + INCREMENT;
-        if (instance != null) {
-            if (SwingUtilities.isEventDispatchThread()) {
+        if (instance != null)
+        {
+            if (SwingUtilities.isEventDispatchThread())
+            {
                 doAdvance(text, newValue);
-            } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override public void run () {
+            }
+            else
+            {
+                SwingUtilities.invokeLater(new Runnable()
+                {
+                    @Override
+                    public void run ()
+                    {
                         doAdvance(text, newValue);
                     }
                 });
@@ -60,13 +70,15 @@ public class LoadingDialog extends JDialog {
         }
     }
 
-    private static void doAdvance(String text, int newValue) {
+    private static void doAdvance (String text, int newValue)
+    {
         instance.progressBar.setValue(newValue);
         instance.loadStatusLbl.setText(text);
         instance.repaint();
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("Feed the Beast Launcher"));
         setSize(300, 260);
@@ -75,19 +87,19 @@ public class LoadingDialog extends JDialog {
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         Container panel = getContentPane();
-        
+
         splashLbl = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb_large.png")));
         splashLbl.setBounds(0, 20, 300, 160);
 
         loadStatusLbl = new JLabel("Loading...");
         loadStatusLbl.setHorizontalAlignment(SwingConstants.CENTER);
         loadStatusLbl.setBounds(0, 200, 300, 20);
-        
+
         progressBar = new JProgressBar(0, BAR_SIZE);
         progressBar.setBounds(10, 230, 280, 20);
-        
+
         panel.add(splashLbl);
         panel.add(loadStatusLbl);
         panel.add(progressBar);

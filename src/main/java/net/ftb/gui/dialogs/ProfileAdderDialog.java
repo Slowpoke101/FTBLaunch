@@ -38,7 +38,8 @@ import net.ftb.util.ErrorUtils;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class ProfileAdderDialog extends JDialog {
+public class ProfileAdderDialog extends JDialog
+{
     private String updatecreds = "";
     private JLabel usernameLbl;
     private JTextField username;
@@ -50,19 +51,22 @@ public class ProfileAdderDialog extends JDialog {
     private JButton add;
     private JLabel messageLbl;
 
-    public ProfileAdderDialog(LaunchFrame instance, String unlocalizedMessage, boolean modal) {
+    public ProfileAdderDialog(LaunchFrame instance, String unlocalizedMessage, boolean modal)
+    {
         super(instance, modal);
         setUnlocalizedMessage(unlocalizedMessage);
         preSetup();
     }
 
-    public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
+    public ProfileAdderDialog(LaunchFrame instance, boolean modal)
+    {
         super(instance, modal);
         preSetup();
 
     }
 
-    public void preSetup () {
+    public void preSetup ()
+    {
         setupGui();
 
         getRootPane().setDefaultButton(add);
@@ -70,48 +74,65 @@ public class ProfileAdderDialog extends JDialog {
         savePassword.setSelected(true);
         saveMojangData.setSelected(true);
 
-        username.getDocument().addDocumentListener(new DocumentListener() {
+        username.getDocument().addDocumentListener(new DocumentListener()
+        {
             @Override
-            public void removeUpdate (DocumentEvent arg0) {
+            public void removeUpdate (DocumentEvent arg0)
+            {
                 name.setText(username.getText());
             }
 
             @Override
-            public void insertUpdate (DocumentEvent arg0) {
+            public void insertUpdate (DocumentEvent arg0)
+            {
                 name.setText(username.getText());
             }
 
             @Override
-            public void changedUpdate (DocumentEvent e) {
+            public void changedUpdate (DocumentEvent e)
+            {
             }
         });
 
-        savePassword.addActionListener(new ActionListener() {
+        savePassword.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 password.setEnabled(savePassword.isSelected());
             }
         });
 
-        add.addActionListener(new ActionListener() {
+        add.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
-                if (savePassword.isSelected()) {
-                    if (validate(name.getText(), username.getText(), password.getPassword())) {
+            public void actionPerformed (ActionEvent event)
+            {
+                if (savePassword.isSelected())
+                {
+                    if (validate(name.getText(), username.getText(), password.getPassword()))
+                    {
                         UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
                         UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
-                    } else {
+                    }
+                    else
+                    {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
-                } else {
-                    if (validate(name.getText(), username.getText())) {
+                }
+                else
+                {
+                    if (validate(name.getText(), username.getText()))
+                    {
                         UserManager.addUser(username.getText(), "", name.getText());
                         UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
-                    } else {
+                    }
+                    else
+                    {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
                 }
@@ -119,12 +140,16 @@ public class ProfileAdderDialog extends JDialog {
         });
     }
 
-    public void setUnlocalizedMessage (String editingName) {
-        if (editingName.equals("CHANGEDUUID")) {
+    public void setUnlocalizedMessage (String editingName)
+    {
+        if (editingName.equals("CHANGEDUUID"))
+        {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
             savePassword.setSelected(false);
-        } else if (editingName.equals("OLDCREDS")) {
+        }
+        else if (editingName.equals("OLDCREDS"))
+        {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
             savePassword.setSelected(false);
@@ -132,25 +157,32 @@ public class ProfileAdderDialog extends JDialog {
 
     }
 
-    private boolean validate (String name, String user, char[] pass) {
-        if (!name.isEmpty() && !user.isEmpty() && pass.length > 1) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
+    private boolean validate (String name, String user, char[] pass)
+    {
+        if (!name.isEmpty() && !user.isEmpty() && pass.length > 1)
+        {
+            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user))
+            {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean validate (String name, String user) {
-        if (!name.isEmpty() && !user.isEmpty()) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
+    private boolean validate (String name, String user)
+    {
+        if (!name.isEmpty() && !user.isEmpty())
+        {
+            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user))
+            {
                 return true;
             }
         }
         return false;
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("PROFILEADDER_TITLE"));
         setResizable(true);
@@ -173,7 +205,8 @@ public class ProfileAdderDialog extends JDialog {
         passwordLbl.setLabelFor(password);
         nameLbl.setLabelFor(name);
 
-        if (!updatecreds.equals("")) {
+        if (!updatecreds.equals(""))
+        {
             messageLbl = new JLabel(updatecreds);
             panel.add(messageLbl);
         }

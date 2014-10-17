@@ -26,55 +26,74 @@ import com.google.common.collect.Lists;
 import net.ftb.data.news.NewsArticle;
 import net.ftb.data.news.RSSReader;
 
-public class NewsUtils {
-    
+public class NewsUtils
+{
+
     private static List<NewsArticle> news = null;
     private static DateFormat dateFormatterRss = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
-    public static void initializeNews() {
+
+    public static void initializeNews ()
+    {
         news = RSSReader.readRSS();
     }
-    
+
     /**
      * Gets the HTML code for the news pane.
      * 
      * @return The HTML to display on the news pane
      */
-    public static String getNewsHTML() {
+    public static String getNewsHTML ()
+    {
         // if news not fetched try to fetch. Blocks thread.
-        if(news == null) {
+        if (news == null)
+        {
             NewsUtils.initializeNews();
         }
 
         String html;
         html = "<html>";
-        if (news != null) {
-            for (NewsArticle article : news) {
+        if (news != null)
+        {
+            for (NewsArticle article : news)
+            {
                 html += article.getHTML();
-                if (news.get(news.size() - 1) != article) {
+                if (news.get(news.size() - 1) != article)
+                {
                     html += "<hr/>";
                 }
             }
-        } else {
+        }
+        else
+        {
             html += "No network connection, no news.";
         }
         html += "</html>";
         return html;
 
     }
-    public static ArrayList<String> getPubDates() {
+
+    public static ArrayList<String> getPubDates ()
+    {
         ArrayList<String> s = Lists.newArrayList();
-        if (news != null) {
-            for (NewsArticle n : news) {
+        if (news != null)
+        {
+            for (NewsArticle n : news)
+            {
                 s.add(getUnixDate(n.getDate()));
             }
         }
         return s;
     }
-    private static String getUnixDate(String s) {
-        try {
+
+    private static String getUnixDate (String s)
+    {
+        try
+        {
             Date dte = dateFormatterRss.parse(s);
-            return String.valueOf(dte.getTime()/1000);
-        } catch(Exception e) {
+            return String.valueOf(dte.getTime() / 1000);
+        }
+        catch (Exception e)
+        {
 
         }
         return "00000000";

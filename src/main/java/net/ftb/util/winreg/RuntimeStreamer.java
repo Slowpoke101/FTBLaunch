@@ -17,28 +17,36 @@ import java.io.InputStreamReader;
  * Helper class to fetch the stdout and stderr outputs from started Runtime execs
  * Modified from http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=4
  *****************************************************************************/
-public class RuntimeStreamer extends Thread {
+public class RuntimeStreamer extends Thread
+{
     InputStream is;
     String lines;
 
-    RuntimeStreamer(InputStream is) {
+    RuntimeStreamer(InputStream is)
+    {
         this.is = is;
         this.lines = "";
     }
 
-    public String contents () {
+    public String contents ()
+    {
         return this.lines;
     }
 
-    public void run () {
-        try {
+    public void run ()
+    {
+        try
+        {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 this.lines += line + "\n";
             }
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe)
+        {
             ioe.printStackTrace();
         }
     }
@@ -47,8 +55,10 @@ public class RuntimeStreamer extends Thread {
      * Execute a command and wait for it to finish
      * @return The resulting stdout and stderr outputs concatenated
      ****************************************************************************/
-    public static String execute (String[] cmdArray) {
-        try {
+    public static String execute (String[] cmdArray)
+    {
+        try
+        {
             Runtime runtime = Runtime.getRuntime();
             Process proc = runtime.exec(cmdArray);
             RuntimeStreamer outputStreamer = new RuntimeStreamer(proc.getInputStream());
@@ -59,13 +69,16 @@ public class RuntimeStreamer extends Thread {
             proc.getOutputStream().close();
             proc.waitFor();
             return outputStreamer.contents() + errorStreamer.contents();
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             t.printStackTrace();
         }
         return null;
     }
 
-    public static String execute (String cmd) {
+    public static String execute (String cmd)
+    {
         String[] cmdArray = { cmd };
         return RuntimeStreamer.execute(cmdArray);
     }

@@ -16,7 +16,8 @@ import net.ftb.util.OSUtils.OS;
 /**
  * Helper struct to hold information about one installed java version
  ****************************************************************************/
-public class JavaInfo implements Comparable<JavaInfo> {
+public class JavaInfo implements Comparable<JavaInfo>
+{
     public String path; //! Full path to java.exe executable file
     public String version; //! Version string.
     public String origVersion = "";
@@ -31,7 +32,8 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * Calls 'javaPath -version' and parses the results
      * @param javaPath: path to a java.exe executable
      ****************************************************************************/
-    public JavaInfo(String javaPath) throws Exception{
+    public JavaInfo(String javaPath) throws Exception
+    {
         String versionInfo = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
         String[] tokens = versionInfo.split("\"");
         if (tokens.length < 2)
@@ -49,15 +51,19 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
 
-        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+        if (OSUtils.getCurrentOS() == OS.MACOSX)
+        {
             if (this.major == 1 && (this.minor == 7 || this.minor == 6))
                 this.supportedVersion = true;
-        } else {
+        }
+        else
+        {
             this.supportedVersion = true;
         }
     }
 
-    public JavaInfo(int major, int minor) {
+    public JavaInfo(int major, int minor)
+    {
         this.path = null;
         this.major = major;
         this.minor = minor;
@@ -65,23 +71,28 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.build = 0;
     }
 
-    public boolean isJava8() {
+    public boolean isJava8 ()
+    {
         return this.major == 1 && this.minor == 8;
     }
 
     /**
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
-    public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
+    public String toString ()
+    {
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path
+                + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
     }
 
-    public String verToString () {
+    public String verToString ()
+    {
         return major + "." + minor + "." + revision + "_" + build;
     }
 
     @Override
-    public int compareTo (@SuppressWarnings("NullableProblems") JavaInfo o) {
+    public int compareTo (@SuppressWarnings("NullableProblems") JavaInfo o)
+    {
         if (o.major > major)
             return -1;
         if (o.major < major)

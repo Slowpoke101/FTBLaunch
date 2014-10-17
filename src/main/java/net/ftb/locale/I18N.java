@@ -27,7 +27,8 @@ import com.google.common.collect.Maps;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-public class I18N {
+public class I18N
+{
     private static Properties locales = new Properties();
     private static Properties fallback = new Properties();
     private static File dir = new File(OSUtils.getDynamicStorageLocation(), "locale");
@@ -35,7 +36,8 @@ public class I18N {
     public final static HashMap<Integer, String> localeIndices = Maps.newHashMap();
     public static Locale currentLocale = Locale.enUS;
 
-    public enum Locale {
+    public enum Locale
+    {
         cyGB, daDK, deDE, enUS, enGB, esES, fiFI, frFR, itIT, nlNL, noNO, maHU, ptBR, ptPT, ruRU, svSE, zhCN
     }
 
@@ -43,18 +45,24 @@ public class I18N {
      * Gets the locale properties and stores loads it to locales
      * @param file The locale file
      */
-    private static void getLocaleProperties (String file) {
+    private static void getLocaleProperties (String file)
+    {
         locales.clear();
-        try {
+        try
+        {
             locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
             // clean empty entries
-            for (Enumeration<Object> e = locales.keys(); e.hasMoreElements();) {
-                String key = (String)e.nextElement();
-                if (locales.get(key).equals("")) {
+            for (Enumeration<Object> e = locales.keys(); e.hasMoreElements();)
+            {
+                String key = (String) e.nextElement();
+                if (locales.get(key).equals(""))
+                {
                     locales.remove(key);
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("[i18n] Could not load language file", e);
         }
     }
@@ -62,9 +70,11 @@ public class I18N {
     /**
      * Set available locales and load fallback locale
      */
-    public static void setupLocale () {
+    public static void setupLocale ()
+    {
         localeFiles.put("enUS", "English (US)");
-        synchronized (localeIndices) {
+        synchronized (localeIndices)
+        {
             localeIndices.put(0, "enUS");
         }
         addFiles();
@@ -73,29 +83,38 @@ public class I18N {
     /**
      * Add files from the locale directory
      */
-    public static void addFiles () {
+    public static void addFiles ()
+    {
         int i = 1;
         Properties tmp = new Properties();
-        for (Locale file_: Locale.values()) {
+        for (Locale file_ : Locale.values())
+        {
             String file = file_.toString();
-            try {
+            try
+            {
                 tmp.clear();
                 tmp.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
                 localeFiles.put(file, tmp.getProperty("LOCALE_NAME", file));
-                synchronized (localeIndices) {
+                synchronized (localeIndices)
+                {
                     localeIndices.put(i, file);
                 }
                 i++;
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logWarn("[i18n] Could not load language file", e);
             }
         }
 
-        try {
+        try
+        {
             fallback.clear();
             fallback.load(new InputStreamReader(I18N.class.getResource("/i18n/enUS").openStream(), "UTF8"));
             Logger.logInfo("[i18n] Fallback enUS loaded");
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("[i18n] Could not load fallback file", e);
         }
     }
@@ -104,14 +123,21 @@ public class I18N {
      * Sets the locale for the launcher
      * @param locale the language file to be loaded
      */
-    public static void setLocale (String locale) {
-        if (locale == null) {
+    public static void setLocale (String locale)
+    {
+        if (locale == null)
+        {
             locale = "enUS";
             currentLocale = Locale.enUS;
-        } else {
-            try {
+        }
+        else
+        {
+            try
+            {
                 currentLocale = Locale.valueOf(locale);
-            } catch (IllegalArgumentException e) {
+            }
+            catch (IllegalArgumentException e)
+            {
                 Logger.logWarn("[i18n] Unknown locale " + locale + ". Loaded enUS");
                 currentLocale = Locale.enUS;
             }
@@ -125,7 +151,8 @@ public class I18N {
      * @param key The key for the string
      * @return the default string
      */
-    public static String getFallbackString (String key) {
+    public static String getFallbackString (String key)
+    {
         return fallback.getProperty(key, key);
     }
 
@@ -134,7 +161,8 @@ public class I18N {
      * @param key The key for the string
      * @return The localized string or fallback value
      */
-    public static String getLocaleString (String key) {
+    public static String getLocaleString (String key)
+    {
         return locales.getProperty(key, getFallbackString(key));
     }
 }

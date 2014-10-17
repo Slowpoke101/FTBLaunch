@@ -20,14 +20,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 //Event for any changes that require partial or full UI re-setting up.
-public class StyleUpdateEvent implements ILauncherEvent {
+public class StyleUpdateEvent implements ILauncherEvent
+{
     /**
      *  tab = shared tab changes ex: map/TP swap
      *  style = changes to base colors, or fonts used by the launcher that require re-setting up parts of the UI
      */
-    public enum TYPE {
+    public enum TYPE
+    {
         TAB, STYLE
     }
+
     @Getter
     @Setter
     private TYPE eventType;
@@ -40,7 +43,8 @@ public class StyleUpdateEvent implements ILauncherEvent {
     * constructor for events, must have a type so that listeners know what to refresh!
     * @param type type of style update
      */
-    public StyleUpdateEvent (TYPE type){
+    public StyleUpdateEvent(TYPE type)
+    {
         this.eventType = type;
     }
 }

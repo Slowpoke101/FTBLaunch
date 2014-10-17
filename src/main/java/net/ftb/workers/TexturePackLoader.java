@@ -32,32 +32,42 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class TexturePackLoader extends Thread {
+public class TexturePackLoader extends Thread
+{
 
-    public TexturePackLoader() {
+    public TexturePackLoader()
+    {
     }
 
     @Override
-    public void run () {
-        try {//TODO ASAP thread this!!!
+    public void run ()
+    {
+        try
+        {//TODO ASAP thread this!!!
             Benchmark.start("TexturepackLoader");
             Logger.logInfo("loading texture pack information...");
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.TEXTUREPACKXML)));
-            if (doc == null) {
+            if (doc == null)
+            {
                 Logger.logError("Error: Could not load texture pack data!");
             }
             NodeList texturePacks = doc.getElementsByTagName("texturepack");
-            for (int i = 0; i < texturePacks.getLength(); i++) {
+            for (int i = 0; i < texturePacks.getLength(); i++)
+            {
                 Node texturePack = texturePacks.item(i);
                 NamedNodeMap textureAttr = texturePack.getAttributes();
                 TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(), textureAttr.getNamedItem("version")
                         .getTextContent(), textureAttr.getNamedItem("url").getTextContent(), textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
-                        textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), textureAttr.getNamedItem("description")==null?null:textureAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"),
-                        textureAttr.getNamedItem("resolution").getTextContent(), i));
+                        textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), textureAttr.getNamedItem("description") == null ? null
+                                : textureAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"), textureAttr.getNamedItem("resolution").getTextContent(), i));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error loading texture pack info", e);
-        } finally {
+        }
+        finally
+        {
             TexturepackPane.loaded = true;
             Benchmark.logBenchAs("TexturepackLoader", "Texture Pack Load ");
             LaunchFrame.checkDoneLoading();

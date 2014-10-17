@@ -33,24 +33,28 @@ import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FTBFileUtils;
 
-public class ChooseDir extends JFrame implements ActionListener {
+public class ChooseDir extends JFrame implements ActionListener
+{
     private OptionsPane optionsPane;
     private EditModPackDialog editMPD;
     private FirstRunDialog firstRunDialog;
 
-    public ChooseDir(OptionsPane optionsPane) {
+    public ChooseDir(OptionsPane optionsPane)
+    {
         super();
         this.optionsPane = optionsPane;
         editMPD = null;
     }
 
-    public ChooseDir(EditModPackDialog editMPD) {
+    public ChooseDir(EditModPackDialog editMPD)
+    {
         super();
         optionsPane = null;
         this.editMPD = editMPD;
     }
 
-    public ChooseDir(FirstRunDialog firstRunDialog) {
+    public ChooseDir(FirstRunDialog firstRunDialog)
+    {
         super();
         optionsPane = null;
         editMPD = null;
@@ -58,62 +62,85 @@ public class ChooseDir extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed (ActionEvent e) {
+    public void actionPerformed (ActionEvent e)
+    {
         JFileChooser chooser = new JFileChooser();
         String choosertitle = "Please select an install location";
-        if (optionsPane != null) {
+        if (optionsPane != null)
+        {
             chooser.setCurrentDirectory(new File(Settings.getSettings().getInstallPath()));
             chooser.setDialogTitle(choosertitle);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 Logger.logDebug("getCurrentDirectory(): " + chooser.getCurrentDirectory());
                 Logger.logDebug("getSelectedFile() : " + chooser.getSelectedFile());
                 optionsPane.setInstallFolderText(chooser.getSelectedFile().getPath());
-            } else {
+            }
+            else
+            {
                 Logger.logWarn("No Selection.");
             }
-        } else if (editMPD != null) {
-            if (!Settings.getSettings().getLastAddPath().isEmpty()) {
+        }
+        else if (editMPD != null)
+        {
+            if (!Settings.getSettings().getLastAddPath().isEmpty())
+            {
                 chooser.setCurrentDirectory(new File(Settings.getSettings().getLastAddPath()));
             }
             chooser.setDialogTitle("Please select the mod to install");
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             chooser.setAcceptAllFileFilterUsed(true);
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 File destination = new File(editMPD.folder, chooser.getSelectedFile().getName());
-                if (!destination.exists()) {
-                    try {
+                if (!destination.exists())
+                {
+                    try
+                    {
                         FTBFileUtils.copyFile(chooser.getSelectedFile(), destination);
                         Settings.getSettings().setLastAddPath(chooser.getSelectedFile().getPath());
                         LaunchFrame.getInstance().saveSettings();
-                    } catch (IOException e1) {
+                    }
+                    catch (IOException e1)
+                    {
                         Logger.logError(e1.getMessage());
                     }
                     editMPD.updateLists();
-                } else {
+                }
+                else
+                {
                     ErrorUtils.tossError("File already exists, cannot add mod!");
                 }
-            } else {
+            }
+            else
+            {
                 Logger.logWarn("No Selection.");
             }
-        } else {
+        }
+        else
+        {
             chooser.setCurrentDirectory(new File(Settings.getSettings().getInstallPath()));
             chooser.setDialogTitle(choosertitle);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             chooser.setAcceptAllFileFilterUsed(false);
-            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
                 Logger.logDebug("getCurrentDirectory(): " + chooser.getCurrentDirectory());
                 Logger.logDebug("getSelectedFile() : " + chooser.getSelectedFile());
                 firstRunDialog.setInstallFolderText(chooser.getSelectedFile().getPath());
-            } else {
+            }
+            else
+            {
                 Logger.logWarn("No Selection.");
             }
         }
     }
 
     @Override
-    public Dimension getPreferredSize () {
+    public Dimension getPreferredSize ()
+    {
         return new Dimension(200, 200);
     }
 }

@@ -31,7 +31,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
-public class YNDialog extends JDialog {
+public class YNDialog extends JDialog
+{
     private JLabel messageLbl;
     private JLabel overwriteLbl;
     public JButton overwrite;
@@ -40,7 +41,9 @@ public class YNDialog extends JDialog {
     private String confirmMsg;
     public boolean ready = false;
     public boolean ret = false;
-    public YNDialog(String unlocMessage, String unlocConfirmMessage, String unlocTitle) {
+
+    public YNDialog(String unlocMessage, String unlocConfirmMessage, String unlocTitle)
+    {
         super(LaunchFrame.getInstance(), true);
         message = I18N.getLocaleString(unlocMessage);
         confirmMsg = I18N.getLocaleString(unlocConfirmMessage);
@@ -48,18 +51,22 @@ public class YNDialog extends JDialog {
         ret = false;
         ready = false;
         setupGui();
-        overwrite.addActionListener(new ActionListener() {
+        overwrite.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 ready = true;
                 ret = true;
                 setVisible(false);
             }
         });
 
-        abort.addActionListener(new ActionListener() {
+        abort.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 ret = false;
                 ready = true;
                 setVisible(false);
@@ -68,7 +75,8 @@ public class YNDialog extends JDialog {
 
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setResizable(false);
 

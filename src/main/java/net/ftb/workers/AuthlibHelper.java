@@ -50,61 +50,82 @@ import com.mojang.authlib.exceptions.UserMigratedException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
-public class AuthlibHelper {
+public class AuthlibHelper
+{
     private static String uniqueID;
 
-    protected static LoginResponse authenticateWithAuthlib (String user, String pass, String mojangData, String selectedProfileName) {
+    protected static LoginResponse authenticateWithAuthlib (String user, String pass, String mojangData, String selectedProfileName)
+    {
         String displayName;
         boolean hasMojangData = false;
         boolean hasPassword = false;
         GameProfile selectedProfile = null;
         YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
-        if (user != null) {
-            Logger.logDebug(user.contains("@")?"Email address given":"Username given" + " Not 100% sure, mojangdata might contain different username");
+        if (user != null)
+        {
+            Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
-            if (pass != null && !pass.isEmpty()) {
+            if (pass != null && !pass.isEmpty())
+            {
                 authentication.setPassword(pass);
                 hasPassword = true;
             }
-            if (mojangData != null && !mojangData.isEmpty()) {
+            if (mojangData != null && !mojangData.isEmpty())
+            {
                 Logger.logDebug("mojangData was passed to current method");
                 Map<String, Object> m = decode(mojangData);
-                if (m != null) {
+                if (m != null)
+                {
                     Logger.logDebug("Loading mojangData into authlib");
                     authentication.loadFromStorage(m);
                     hasMojangData = true;
                 }
-            } else {
+            }
+            else
+            {
                 Logger.logDebug("mojangData is null or empty");
             }
-            if (authentication.canLogIn()) {
-                try {
+            if (authentication.canLogIn())
+            {
+                try
+                {
                     authentication.logIn();
-                } catch (UserMigratedException e) {
+                }
+                catch (UserMigratedException e)
+                {
                     Logger.logError(e.toString());
                     ErrorUtils.tossError("Invalid credentials, please make sure to login with your Mojang account.");
                     return null;
-                } catch (InvalidCredentialsException e) {
+                }
+                catch (InvalidCredentialsException e)
+                {
                     Logger.logError("Invalid credentials recieved for user: " + user, e);
-                    if (hasMojangData && hasPassword) {
+                    if (hasMojangData && hasPassword)
+                    {
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
-                    } else {
+                    }
+                    else
+                    {
                         ErrorUtils.tossError("Invalid username or password.");
                         return null;
                     }
-                } catch (AuthenticationUnavailableException e) {
+                }
+                catch (AuthenticationUnavailableException e)
+                {
                     Logger.logDebug("Error while authenticating, trying offline mode");
-                    if (hasMojangData) {
+                    if (hasMojangData)
+                    {
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         if (uniqueID != null && !uniqueID.isEmpty())
                             Logger.logDebug("Setting UUID");
-                            UserManager.setUUID(user, uniqueID);
+                        UserManager.setUUID(user, uniqueID);
                     }
-                    if (uniqueID != null && !uniqueID.isEmpty()) {
+                    if (uniqueID != null && !uniqueID.isEmpty())
+                    {
                         UserManager.setUUID(user, uniqueID);
                         Logger.logDebug("Setting UUID and creating and returning new LoginResponse");
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
@@ -113,21 +134,30 @@ public class AuthlibHelper {
                     Logger.logDebug("failed", e);
                     Logger.logDebug("AuthenticationUnavailableException caused by", e.getCause());
                     return null;
-                } catch (AuthenticationException e) {
+                }
+                catch (AuthenticationException e)
+                {
                     Logger.logError("Unknown error from authlib:", e);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Logger.logError("Unknown authentication error occurred", e);
                 }
-            } else {
+            }
+            else
+            {
                 Logger.logDebug("authentication.canLogIn() returned false");
             }
 
-            if (isValid(authentication)) {
+            if (isValid(authentication))
+            {
                 Logger.logDebug("Authentication is valid ");
                 displayName = authentication.getSelectedProfile().getName();
-                if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
+                if ((authentication.isLoggedIn()) && (authentication.canPlayOnline()))
+                {
                     Logger.logDebug("loggedIn() && CanPlayOnline()");
-                    if ((authentication instanceof YggdrasilUserAuthentication)) {
+                    if ((authentication instanceof YggdrasilUserAuthentication))
+                    {
                         UserManager.setStore(user, encode(authentication.saveForStorage()));
                         UserManager.setUUID(user, authentication.getSelectedProfile().getId().toString());//enables use of offline mode later if needed on newer MC Versions
                         Logger.logDebug("Authentication done, returning LoginResponse");
@@ -136,37 +166,50 @@ public class AuthlibHelper {
                     }
                 }
                 Logger.logDebug("this should never happen: isLoggedIn: " + authentication.isLoggedIn() + " canPlayOnline(): " + authentication.canPlayOnline());
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0 )) {
+            }
+            else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0))
+            {
                 // user has more than one profile
                 Logger.logDebug("User has more than one profile: " + toString(authentication));
-                for (GameProfile profile : authentication.getAvailableProfiles()) {
-                    if (selectedProfileName.equals(profile.getName())) {
+                for (GameProfile profile : authentication.getAvailableProfiles())
+                {
+                    if (selectedProfileName.equals(profile.getName()))
+                    {
                         Logger.logInfo("Selected profile: " + profile.getName());
                         selectedProfile = profile;
                     }
                 }
-                if (selectedProfile == null) {
+                if (selectedProfile == null)
+                {
                     Logger.logInfo("Profile not found, defaulting to first");
                     selectedProfile = authentication.getAvailableProfiles()[0];
                 }
                 Logger.logDebug("Authentication done, returning LoginResponse");
-                return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
-                        selectedProfile.getId().toString(), authentication);
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0 )) {
+                return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(), selectedProfile.getId()
+                        .toString(), authentication);
+            }
+            else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0))
+            {
                 Logger.logDebug("No profiles in mojang account: " + toString(authentication));
                 ErrorUtils.showClickableMessage("You need to own minecraft to play FTB Modpacks", "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
                 return null;
-            } else {
+            }
+            else
+            {
                 Logger.logDebug("this should never happen: " + toString(authentication));
             }
 
-        } else {
+        }
+        else
+        {
             Logger.logDebug("this should never happen");
         }
 
-        if (hasMojangData) {
+        if (hasMojangData)
+        {
             Logger.logError("Failed to authenticate with mojang data, attempting to use username & password");
-            if (!hasPassword) {
+            if (!hasPassword)
+            {
                 new PasswordDialog(LaunchFrame.getInstance(), true).setVisible(true);
                 if (LaunchFrame.tempPass.isEmpty())
                     return null;
@@ -174,10 +217,13 @@ public class AuthlibHelper {
             }
 
             LoginResponse l = authenticateWithAuthlib(user, pass, null, selectedProfileName);
-            if (l == null) {
+            if (l == null)
+            {
                 Logger.logError("Failed to login with username & password");
                 return null;
-            } else {
+            }
+            else
+            {
                 Logger.logDebug("authentication ready, returning LoginResponse from authlib");
                 return l;
             }
@@ -187,17 +233,21 @@ public class AuthlibHelper {
 
     }
 
-    private static boolean isValid (YggdrasilUserAuthentication authentication) {
+    private static boolean isValid (YggdrasilUserAuthentication authentication)
+    {
         boolean ret = true;
-        if (!authentication.isLoggedIn()) {
+        if (!authentication.isLoggedIn())
+        {
             Logger.logDebug("authentication not valid");
             ret = false;
         }
-        if (authentication.getAuthenticatedToken() == null) {
+        if (authentication.getAuthenticatedToken() == null)
+        {
             Logger.logDebug("authentication not valid");
             ret = false;
         }
-        if (authentication.getSelectedProfile() == null) {
+        if (authentication.getSelectedProfile() == null)
+        {
             Logger.logDebug("authentication not valid");
             ret = false;
         }
@@ -205,29 +255,38 @@ public class AuthlibHelper {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> decode (String s) {
-        try {
+    private static Map<String, Object> decode (String s)
+    {
+        try
+        {
             Map<String, Object> ret;
             JsonObject jso = new JsonParser().parse(s).getAsJsonObject();
             ret = (Map<String, Object>) decodeElement(jso);
             return ret;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error decoding Authlib JSON", e);
             return null;
         }
     }
 
-    private static Object decodeElement (JsonElement e) {
-        if (e instanceof JsonObject) {
+    private static Object decodeElement (JsonElement e)
+    {
+        if (e instanceof JsonObject)
+        {
             Map<String, Object> ret = Maps.newLinkedHashMap();
-            for (Map.Entry<String, JsonElement> jse : ((JsonObject) e).entrySet()) {
+            for (Map.Entry<String, JsonElement> jse : ((JsonObject) e).entrySet())
+            {
                 ret.put(jse.getKey(), decodeElement(jse.getValue()));
             }
             return ret;
         }
-        if (e instanceof JsonArray) {
+        if (e instanceof JsonArray)
+        {
             List<Object> ret = Lists.newArrayList();
-            for (JsonElement jse : e.getAsJsonArray()) {
+            for (JsonElement jse : e.getAsJsonArray())
+            {
                 ret.add(decodeElement(jse));
             }
             return ret;
@@ -236,8 +295,10 @@ public class AuthlibHelper {
         return e.getAsString();
     }
 
-    private static String encode (Map<String, Object> m) {
-        try {
+    private static String encode (Map<String, Object> m)
+    {
+        try
+        {
             Gson gson;
             final GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
@@ -247,15 +308,19 @@ public class AuthlibHelper {
             builder.setPrettyPrinting();
             gson = builder.create();
             return gson.toJson(m);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error encoding Authlib JSON", e);
             return null;
         }
 
     }
 
-    public static String toString(YggdrasilUserAuthentication y) {
-        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn() + ", userType=" + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
+    public static String toString (YggdrasilUserAuthentication y)
+    {
+        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn()
+                + ", userType=" + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
     }
 
 }

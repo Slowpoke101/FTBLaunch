@@ -20,8 +20,10 @@ import javax.swing.UIManager;
 
 import net.ftb.data.LauncherStyle;
 
-public class StyleUtil {
-    public static void loadUiStyles () {
+public class StyleUtil
+{
+    public static void loadUiStyles ()
+    {
         LauncherStyle style = LauncherStyle.getCurrentStyle();
         UIManager.put("control", style.control);
         UIManager.put("text", style.text);

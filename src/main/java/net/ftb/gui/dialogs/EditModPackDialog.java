@@ -50,7 +50,8 @@ import net.ftb.util.OSUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
-public class EditModPackDialog extends JDialog {
+public class EditModPackDialog extends JDialog
+{
     private JTabbedPane tabbedPane;
 
     private JPanel formPnl;
@@ -83,11 +84,13 @@ public class EditModPackDialog extends JDialog {
 
     private Tab currentTab = Tab.MODS;
 
-    public enum Tab {
+    public enum Tab
+    {
         MODS, JARMODS, COREMODS, OLD_VERSIONS
     }
 
-    public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
+    public EditModPackDialog(LaunchFrame instance, ModPack modPack)
+    {
         super(instance, true);
         if (modPack != null && modPack.getMcVersion() != null)
             mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
@@ -97,7 +100,7 @@ public class EditModPackDialog extends JDialog {
         jarModsFolder.mkdirs();
 
         setupGui();
-        this.setSize(700,600);
+        this.setSize(700, 600);
         enabledMods = Lists.newArrayList();
         disabledMods = Lists.newArrayList();
 
@@ -108,11 +111,14 @@ public class EditModPackDialog extends JDialog {
 
         addMod.addActionListener(new ChooseDir(this));
 
-        tabbedPane.addChangeListener(new ChangeListener() {
+        tabbedPane.addChangeListener(new ChangeListener()
+        {
             @Override
-            public void stateChanged (ChangeEvent arg0) {
+            public void stateChanged (ChangeEvent arg0)
+            {
                 currentTab = Tab.values()[tabbedPane.getSelectedIndex()];
-                switch (currentTab) {
+                switch (currentTab)
+                {
                 case MODS:
                     folder = modsFolder;
                     break;
@@ -130,24 +136,33 @@ public class EditModPackDialog extends JDialog {
             }
         });
 
-        openFolder.addActionListener(new ActionListener() {
+        openFolder.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 OSUtils.open(folder);
             }
         });
 
-        disableMod.addActionListener(new ActionListener() {
+        disableMod.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
-                if (enabledModsLst.getSelectedIndices().length > 1) {
-                    for (int i = 0; i < enabledModsLst.getSelectedIndices().length; i++) {
+            public void actionPerformed (ActionEvent arg0)
+            {
+                if (enabledModsLst.getSelectedIndices().length > 1)
+                {
+                    for (int i = 0; i < enabledModsLst.getSelectedIndices().length; i++)
+                    {
                         String name = enabledMods.get(enabledModsLst.getSelectedIndices()[i]);
                         new File(folder, name).renameTo(new File(folder, name + ".disabled"));
                     }
                     updateLists();
-                } else {
-                    if (enabledModsLst.getSelectedIndex() >= 0) {
+                }
+                else
+                {
+                    if (enabledModsLst.getSelectedIndex() >= 0)
+                    {
                         String name = enabledMods.get(enabledModsLst.getSelectedIndex());
                         new File(folder, name).renameTo(new File(folder, name + ".disabled"));
                     }
@@ -156,17 +171,24 @@ public class EditModPackDialog extends JDialog {
             }
         });
 
-        enableMod.addActionListener(new ActionListener() {
+        enableMod.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
-                if (disabledModsLst.getSelectedIndices().length > 1) {
-                    for (int i = 0; i < disabledModsLst.getSelectedIndices().length; i++) {
+            public void actionPerformed (ActionEvent arg0)
+            {
+                if (disabledModsLst.getSelectedIndices().length > 1)
+                {
+                    for (int i = 0; i < disabledModsLst.getSelectedIndices().length; i++)
+                    {
                         String name = disabledMods.get(disabledModsLst.getSelectedIndices()[i]);
                         new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
                     }
                     updateLists();
-                } else {
-                    if (disabledModsLst.getSelectedIndex() >= 0) {
+                }
+                else
+                {
+                    if (disabledModsLst.getSelectedIndex() >= 0)
+                    {
                         String name = disabledMods.get(disabledModsLst.getSelectedIndex());
                         new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
                     }
@@ -176,48 +198,64 @@ public class EditModPackDialog extends JDialog {
         });
     }
 
-    private String[] getEnabled () {
+    private String[] getEnabled ()
+    {
         enabledMods.clear();
-        if (folder.exists()) {
-            for (String name : folder.list()) {
-                if (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar") || name.toLowerCase().endsWith(".litemod")) {
+        if (folder.exists())
+        {
+            for (String name : folder.list())
+            {
+                if (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar") || name.toLowerCase().endsWith(".litemod"))
+                {
                     enabledMods.add(name);
                 }
             }
         }
         String[] enabledList = new String[enabledMods.size()];
-        for (int i = 0; i < enabledMods.size(); i++) {
+        for (int i = 0; i < enabledMods.size(); i++)
+        {
             enabledList[i] = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
         }
         return enabledList;
     }
 
-    private String[] getDisabled () {
+    private String[] getDisabled ()
+    {
         disabledMods.clear();
-        if (folder.exists()) {
-            for (String name : folder.list()) {
-                if (name.toLowerCase().endsWith(".zip.disabled")) {
+        if (folder.exists())
+        {
+            for (String name : folder.list())
+            {
+                if (name.toLowerCase().endsWith(".zip.disabled"))
+                {
                     disabledMods.add(name);
-                } else if (name.toLowerCase().endsWith(".jar.disabled")) {
+                }
+                else if (name.toLowerCase().endsWith(".jar.disabled"))
+                {
                     disabledMods.add(name);
-                } else if (name.toLowerCase().endsWith(".litemod.disabled")) {
+                }
+                else if (name.toLowerCase().endsWith(".litemod.disabled"))
+                {
                     disabledMods.add(name);
                 }
             }
         }
         String[] enabledList = new String[disabledMods.size()];
-        for (int i = 0; i < disabledMods.size(); i++) {
+        for (int i = 0; i < disabledMods.size(); i++)
+        {
             enabledList[i] = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
         }
         return enabledList;
     }
 
-    public void updateLists () {
+    public void updateLists ()
+    {
         enabledModsLst.setListData(getEnabled());
         disabledModsLst.setListData(getDisabled());
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("MODS_EDIT_TITLE"));
         setResizable(true);
@@ -247,7 +285,8 @@ public class EditModPackDialog extends JDialog {
         panel.add(tabbedPane);
 
         tabbedPane.addTab(null, new JPanel(new BorderLayout()));
-        if (mcversion <= 152) {
+        if (mcversion <= 152)
+        {
             tabbedPane.addTab(null, new JPanel(new BorderLayout()));
             tabbedPane.addTab(null, new JPanel(new BorderLayout()));
         }
@@ -255,7 +294,8 @@ public class EditModPackDialog extends JDialog {
         tabLabel = new JLabel("Mods");
         tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
         tabbedPane.setTabComponentAt(0, tabLabel);
-        if (mcversion <= 152) {
+        if (mcversion <= 152)
+        {
             tabLabel = new JLabel("JarMods");
             tabLabel.setBorder(new EmptyBorder(8, 15, 5, 15));
             tabbedPane.setTabComponentAt(1, tabLabel);
@@ -290,7 +330,6 @@ public class EditModPackDialog extends JDialog {
         rPnl.add(disabledModsLbl, GuiConstants.WRAP);
         rPnl.add(disabledModsScl, "pushy, " + GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         rPnl.add(addMod, GuiConstants.FILL_SINGLE_LINE);
-
 
         formPnl.setLayout(new MigLayout(new LC().fillY()));
         formPnl.add(lPnl, "push, grow, " + GuiConstants.SPLIT_3);

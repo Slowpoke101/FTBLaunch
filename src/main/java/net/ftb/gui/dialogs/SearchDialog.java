@@ -32,34 +32,42 @@ import net.ftb.gui.panes.*;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class SearchDialog extends JDialog {
+public class SearchDialog extends JDialog
+{
     public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
     public JTextField query = new JTextField(20);
 
-    public SearchDialog(final AbstractModPackPane instance) {
+    public SearchDialog(final AbstractModPackPane instance)
+    {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastPackSearch == null) ? "" : lastPackSearch);
-        query.getDocument().addDocumentListener(new DocumentListener() {
+        query.getDocument().addDocumentListener(new DocumentListener()
+        {
             @Override
-            public void removeUpdate (DocumentEvent arg0) {
+            public void removeUpdate (DocumentEvent arg0)
+            {
                 lastPackSearch = query.getText();
                 instance.filterPacks();
             }
 
             @Override
-            public void insertUpdate (DocumentEvent arg0) {
+            public void insertUpdate (DocumentEvent arg0)
+            {
                 lastPackSearch = query.getText();
                 instance.filterPacks();
             }
 
             @Override
-            public void changedUpdate (DocumentEvent arg0) {
+            public void changedUpdate (DocumentEvent arg0)
+            {
             }
         });
-        query.addActionListener(new ActionListener() {
+        query.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 lastPackSearch = query.getText();
                 instance.filterPacks();
                 setVisible(false);
@@ -67,30 +75,37 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    public SearchDialog(final MapUtils instance) {
+    public SearchDialog(final MapUtils instance)
+    {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastMapSearch == null) ? "" : lastMapSearch);
-        query.getDocument().addDocumentListener(new DocumentListener() {
+        query.getDocument().addDocumentListener(new DocumentListener()
+        {
             @Override
-            public void removeUpdate (DocumentEvent arg0) {
+            public void removeUpdate (DocumentEvent arg0)
+            {
                 lastMapSearch = query.getText();
                 instance.sortMaps();
             }
 
             @Override
-            public void insertUpdate (DocumentEvent arg0) {
+            public void insertUpdate (DocumentEvent arg0)
+            {
                 lastMapSearch = query.getText();
                 instance.sortMaps();
             }
 
             @Override
-            public void changedUpdate (DocumentEvent arg0) {
+            public void changedUpdate (DocumentEvent arg0)
+            {
             }
         });
-        query.addActionListener(new ActionListener() {
+        query.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 lastPackSearch = query.getText();
                 instance.sortMaps();
                 setVisible(false);
@@ -98,30 +113,37 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    public SearchDialog(final TexturepackPane instance) {
+    public SearchDialog(final TexturepackPane instance)
+    {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastTextureSearch == null) ? "" : lastTextureSearch);
-        query.getDocument().addDocumentListener(new DocumentListener() {
+        query.getDocument().addDocumentListener(new DocumentListener()
+        {
             @Override
-            public void removeUpdate (DocumentEvent arg0) {
+            public void removeUpdate (DocumentEvent arg0)
+            {
                 lastTextureSearch = query.getText();
                 instance.sortTexturePacks();
             }
 
             @Override
-            public void insertUpdate (DocumentEvent arg0) {
+            public void insertUpdate (DocumentEvent arg0)
+            {
                 lastTextureSearch = query.getText();
                 instance.sortTexturePacks();
             }
 
             @Override
-            public void changedUpdate (DocumentEvent arg0) {
+            public void changedUpdate (DocumentEvent arg0)
+            {
             }
         });
-        query.addActionListener(new ActionListener() {
+        query.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 lastPackSearch = query.getText();
                 instance.sortTexturePacks();
                 setVisible(false);
@@ -129,7 +151,8 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle("Text Search Filter");
         setResizable(true);

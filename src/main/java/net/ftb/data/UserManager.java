@@ -35,181 +35,241 @@ import net.ftb.log.Logger;
 import net.ftb.util.CryptoUtils;
 import net.ftb.util.OSUtils;
 
-public class UserManager {
+public class UserManager
+{
     public final static ArrayList<User> _users = new ArrayList<User>();
     private File _file;
     private File _oldFile;
 
-    public UserManager(File file, File oldFile) {
+    public UserManager(File file, File oldFile)
+    {
         _file = file;
         _oldFile = oldFile;
         read();
     }
 
-    public void write () throws IOException {
+    public void write () throws IOException
+    {
 
-        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
-                if (_oldFile.exists()) {
-                    _oldFile.delete();
-                }
+        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS)
+        {
+            if (_oldFile.exists())
+            {
+                _oldFile.delete();
+            }
 
-                if (_file.exists()) {
-                    _file.delete();
-                }
+            if (_file.exists())
+            {
+                _file.delete();
+            }
         }
 
         FileOutputStream fileOutputStream = new FileOutputStream(_file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        try {
-            for (User user : _users) {
+        try
+        {
+            for (User user : _users)
+            {
                 objectOutputStream.writeObject(user);
             }
-            
-        } finally {
+
+        }
+        finally
+        {
             objectOutputStream.close();
             fileOutputStream.close();
         }
     }
 
-    public void read () {
-        if (!_file.exists() && !_oldFile.exists()) {
+    public void read ()
+    {
+        if (!_file.exists() && !_oldFile.exists())
+        {
             return;
         }
         _users.clear();
-        if (!OSUtils.verifyUUID()) {
+        if (!OSUtils.verifyUUID())
+        {
             Logger.logError(I18N.getLocaleString("CHANGEDUUID"));
             //TODO: GUI depencency here
             ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "CHANGEDUUID", true);
             p.setVisible(true);
             return;
         }
-        try {
+        try
+        {
             FileInputStream fileInputStream;
-            
-            if(_file.exists()) {
+
+            if (_file.exists())
+            {
                 fileInputStream = new FileInputStream(_file);
-            } else {
+            }
+            else
+            {
                 fileInputStream = new FileInputStream(_oldFile);
             }
-            
+
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            try {
+            try
+            {
                 Object obj;
-                while ((obj = objectInputStream.readObject()) != null) {
-                    if (obj instanceof User) {
+                while ((obj = objectInputStream.readObject()) != null)
+                {
+                    if (obj instanceof User)
+                    {
                         _users.add((User) obj);
                     }
                 }
-            } catch (EOFException ignored) {
-            } finally {
+            }
+            catch (EOFException ignored)
+            {
+            }
+            finally
+            {
                 objectInputStream.close();
                 fileInputStream.close();
             }
-        } catch (StreamCorruptedException e) {
+        }
+        catch (StreamCorruptedException e)
+        {
             Logger.logWarn("Failed to decode logindata. Trying old format");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Failed to decode logindata", e);
         }
 
         // TODO: Remove this in a while once people are unlikely to have old format saved logindata
-        if (_users.isEmpty()) {
+        if (_users.isEmpty())
+        {
             //Logger.logError(I18N.getLocaleString("OLDCREDS"));
             // ProfileAdderDialog p = new ProfileAdderDialog(LaunchFrame.getInstance(), "OLDCREDS", true);
             // p.setVisible(true);
 
-            try {
+            try
+            {
                 BufferedReader read;
-                
-                if(_file.exists()) {
+
+                if (_file.exists())
+                {
                     read = new BufferedReader(new FileReader(_file));
-                } else {
+                }
+                else
+                {
                     read = new BufferedReader(new FileReader(_oldFile));
                 }
-                
+
                 String str;
-                while ((str = read.readLine()) != null) {
+                while ((str = read.readLine()) != null)
+                {
                     str = CryptoUtils.decryptLegacy(str, OSUtils.getMacAddress());
                     _users.add(new User(str));
                 }
                 read.close();
-            } catch (NumberFormatException ex) {
+            }
+            catch (NumberFormatException ex)
+            {
                 // If logindata is new format and empty it will contain bytes 0xae 0xed 0x00 0x05
                 // Catch exception from parseInt => no more stack prints for end users
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.logError("Error while reading logindata", ex);
             }
-            if (_users.isEmpty()) {
+            if (_users.isEmpty())
+            {
                 Logger.logInfo("No users found after decoding old logindata format. Malformed logindata or empty logindata");
             }
         }
     }
 
-    public static void addUser (String username, String password, String name) {
+    public static void addUser (String username, String password, String name)
+    {
         _users.add(new User(username, password, name));
     }
 
-    public static ArrayList<String> getUsernames () {
+    public static ArrayList<String> getUsernames ()
+    {
         ArrayList<String> ret = new ArrayList<String>();
-        for (User user : _users) {
+        for (User user : _users)
+        {
             ret.add(user.getName());
         }
         return ret;
     }
 
-    public static ArrayList<String> getNames () {
+    public static ArrayList<String> getNames ()
+    {
         ArrayList<String> ret = new ArrayList<String>();
-        for (User user : _users) {
+        for (User user : _users)
+        {
             ret.add(user.getName());
         }
         return ret;
     }
 
-    public static String getUsername (String name) {
-        for (User user : _users) {
-            if (user.getName().equals(name)) {
+    public static String getUsername (String name)
+    {
+        for (User user : _users)
+        {
+            if (user.getName().equals(name))
+            {
                 return user.getUsername();
             }
         }
         return "";
     }
 
-    public static String getPassword (String name) {
-        for (User user : _users) {
-            if (user.getName().equals(name)) {
+    public static String getPassword (String name)
+    {
+        for (User user : _users)
+        {
+            if (user.getName().equals(name))
+            {
                 return user.getPassword();
             }
         }
         return "";
     }
 
-    private static User findUser (String name) {
-        for (User user : _users) {
-            if (user.getName().equals(name)) {
+    private static User findUser (String name)
+    {
+        for (User user : _users)
+        {
+            if (user.getName().equals(name))
+            {
                 return user;
             }
         }
         return null;
     }
 
-    public static void removePass (String username) {
-        for (User user : _users) {
-            if (user.getUsername().equals(username)) {
+    public static void removePass (String username)
+    {
+        for (User user : _users)
+        {
+            if (user.getUsername().equals(username))
+            {
                 user.setPassword("");
                 return;
             }
         }
     }
 
-    public static void removeUser (String name) {
+    public static void removeUser (String name)
+    {
         User temp = findUser(name);
-        if (temp != null) {
+        if (temp != null)
+        {
             _users.remove(_users.indexOf(temp));
         }
     }
 
-    public static void updateUser (String oldName, String username, String password, String name) {
+    public static void updateUser (String oldName, String username, String password, String name)
+    {
         User temp = findUser(oldName);
-        if (temp != null) {
+        if (temp != null)
+        {
             _users.get(_users.indexOf(temp)).setUsername(username);
             _users.get(_users.indexOf(temp)).setPassword(password);
             _users.get(_users.indexOf(temp)).setName(name);
@@ -217,50 +277,57 @@ public class UserManager {
     }
 
     //used by authlib helper in order to send key's back to disc for next load
-    public static void setStore (String user, String encode) {
-        if (encode != null && !encode.isEmpty()){
+    public static void setStore (String user, String encode)
+    {
+        if (encode != null && !encode.isEmpty())
+        {
             User temp = findUser(user);
-            if(temp != null)
+            if (temp != null)
                 temp.setStore(encode);
         }
     }
 
     //used by authlib helper in order to send key's back to disc for next load
-    public static String getMojangData (String user) {
+    public static String getMojangData (String user)
+    {
         User temp = findUser(user);
-        if(temp != null)
+        if (temp != null)
             return temp.getDecryptedDatastore();
         return null;
     }
 
-
-    public static String getUUID (String username) {
+    public static String getUUID (String username)
+    {
         User temp = findUser(username);
-        if(temp != null)
+        if (temp != null)
             return temp.getDecryptedDatastore();
         return null;
     }
 
-    public static void setUUID (String username, String uuid) {
+    public static void setUUID (String username, String uuid)
+    {
         User temp = findUser(username);
-        if(temp != null)
+        if (temp != null)
             temp.setUUID(uuid);
     }
 
-    public static void setSaveMojangData (String username, boolean b) {
+    public static void setSaveMojangData (String username, boolean b)
+    {
         User temp = findUser(username);
-        if(temp != null)
+        if (temp != null)
             temp.setSaveMojangData(b);
     }
 
-    public static boolean getSaveMojangData (String username) {
+    public static boolean getSaveMojangData (String username)
+    {
         User temp = findUser(username);
         return temp != null && temp.getSaveMojangData();
     }
 
-    public static String getName ( String username) {
+    public static String getName (String username)
+    {
         User temp = findUser(username);
-        if(temp != null)
+        if (temp != null)
             return temp.getName();
         return null;
     }

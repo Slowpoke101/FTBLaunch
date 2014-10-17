@@ -32,7 +32,8 @@ import net.ftb.util.OSUtils;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class LauncherStyle extends Properties {
+public class LauncherStyle extends Properties
+{
 
     //TODO bump this???
     private static final long serialVersionUID = 6370446700503387209L;
@@ -41,10 +42,12 @@ public class LauncherStyle extends Properties {
 
     private static File baseStylePath;
 
-    static {
+    static
+    {
         baseStylePath = new File(OSUtils.getDynamicStorageLocation(), "launcher_styles");
 
-        if (!baseStylePath.exists()) {
+        if (!baseStylePath.exists())
+        {
             baseStylePath.mkdir();
         }
 
@@ -67,22 +70,29 @@ public class LauncherStyle extends Properties {
     public Color tabPaneForeground = new Color(255, 255, 255);
     public Color headerImageColor = new Color(255, 255, 255);
     public Color headerColor = new Color(243, 119, 31);
-    public Color headerImageHighlightColor = new Color(236, 26,61);
-    public Color headerHighlightColor = new Color(236, 26,61);
+    public Color headerImageHighlightColor = new Color(236, 26, 61);
+    public Color headerHighlightColor = new Color(236, 26, 61);
 
-
-    public void load () {
+    public void load ()
+    {
         this.load(Settings.getSettings().getStyle());
     }
 
-    public void load (String file) {
+    public void load (String file)
+    {
         File filename = new File(baseStylePath, file);
-        if (new File(baseStylePath, file).exists()) {
-            try {
+        if (new File(baseStylePath, file).exists())
+        {
+            try
+            {
                 this.load(new FileReader(filename));
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e)
+            {
                 Logger.logWarn("Could not load style", e);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logWarn("Could not load style", e);
             }
         }
@@ -99,74 +109,99 @@ public class LauncherStyle extends Properties {
         this.filterTextColor = loadColor("filterTextColor", this.filterTextColor);
         this.filterInnerTextColor = loadColor("filterInnerTextColor", this.filterInnerTextColor);
         //todo add all the new color swap stuffs in here!!!
-        try {
+        try
+        {
             this.store(new FileOutputStream(filename), "FTB Style File");
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e)
+        {
             Logger.logWarn("Could not save style", e);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logWarn("Could not save style", e);
         }
     }
 
-    public static String getColorAsString (Color col) {
+    public static String getColorAsString (Color col)
+    {
         return col.getRed() + "," + col.getGreen() + "," + col.getBlue();
     }
 
-    public static Color getStringAsColor (String str) {
+    public static Color getStringAsColor (String str)
+    {
         String[] tokens = str.split(",");
         return new Color(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
     }
 
-    private Color loadColor (String string, Color defaultColor) {
+    private Color loadColor (String string, Color defaultColor)
+    {
         String defaultColorStr = getColorAsString(defaultColor);
-        if (!this.containsKey(string)) {
+        if (!this.containsKey(string))
+        {
             this.setProperty(string, defaultColorStr);
         }
         return getStringAsColor(this.getProperty(string, defaultColorStr));
     }
 
-    public static LauncherStyle getCurrentStyle () {
+    public static LauncherStyle getCurrentStyle ()
+    {
         return currentStyle;
     }
 
-    public static void setCurrentStyle (LauncherStyle currentStyle) {
+    public static void setCurrentStyle (LauncherStyle currentStyle)
+    {
         LauncherStyle.currentStyle = currentStyle;
     }
 
     //convienience method for handling header icons
-    public ImageIcon filterHeaderIcon(URL u){
-        try {
+    public ImageIcon filterHeaderIcon (URL u)
+    {
+        try
+        {
             return changeColor(ImageIO.read(u), headerImageColor, headerColor, headerImageHighlightColor, headerHighlightColor);
-        }catch(Exception e){
+        }
+        catch (Exception e)
+        {
             Logger.logWarn("error changing colors, using default instead");
         }
         return new ImageIcon(u);
     }
-    public ImageIcon changeColor(BufferedImage image, Color toReplace, Color newColor, Color toReplace2, Color newColor2) {
+
+    public ImageIcon changeColor (BufferedImage image, Color toReplace, Color newColor, Color toReplace2, Color newColor2)
+    {
         BufferedImage destImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g = destImage.createGraphics();
         g.drawImage(image, null, 0, 0);
         g.dispose();
-        for (int i = 0; i < destImage.getWidth(); i++) {
-            for (int j = 0; j < destImage.getHeight(); j++) {
-                Color c = new Color(image.getRGB(i,j), true);
-                if (toReplace != null && compareColors(toReplace, c)) {
+        for (int i = 0; i < destImage.getWidth(); i++)
+        {
+            for (int j = 0; j < destImage.getHeight(); j++)
+            {
+                Color c = new Color(image.getRGB(i, j), true);
+                if (toReplace != null && compareColors(toReplace, c))
+                {
                     destImage.setRGB(i, j, getRGB(newColor, c));
                 }
-                if (toReplace2!= null && compareColors(toReplace2, c)) {
-                    destImage.setRGB(i, j,  getRGB(newColor2, c));
+                if (toReplace2 != null && compareColors(toReplace2, c))
+                {
+                    destImage.setRGB(i, j, getRGB(newColor2, c));
                 }
 
             }
         }
         return new ImageIcon(destImage);
     }
-    public boolean compareColors (Color b, Color c){
+
+    public boolean compareColors (Color b, Color c)
+    {
         //ignores transparency, we add this back in in the getRGB method
         return c.getBlue() == b.getBlue() && c.getRed() == b.getRed() && c.getGreen() == b.getGreen();
     }
-    public int getRGB(Color nw, Color oldColorWithTrans){
+
+    public int getRGB (Color nw, Color oldColorWithTrans)
+    {
         return new Color(nw.getRed(), nw.getGreen(), nw.getBlue(), oldColorWithTrans.getAlpha()).getRGB();
     }
 }

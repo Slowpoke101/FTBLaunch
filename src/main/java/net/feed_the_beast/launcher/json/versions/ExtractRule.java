@@ -18,13 +18,16 @@ package net.feed_the_beast.launcher.json.versions;
 
 import java.util.List;
 
-public class ExtractRule {
+public class ExtractRule
+{
     private List<String> exclude;
 
-    public boolean exclude (String name) {
+    public boolean exclude (String name)
+    {
         if (exclude == null)
             return false;
-        for (String s : exclude) {
+        for (String s : exclude)
+        {
             if (name.startsWith(s))
                 return true;
         }

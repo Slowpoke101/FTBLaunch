@@ -20,7 +20,8 @@ import lombok.Getter;
 
 import com.mojang.authlib.UserAuthentication;
 
-public class LoginResponse {
+public class LoginResponse
+{
 
     @Getter
     private UserAuthentication auth;
@@ -33,7 +34,8 @@ public class LoginResponse {
     * @param session - the session ID from authlib
     * @param uniqueID - the user's uuid from authlib
     */
-    public LoginResponse(String version, String dlTicket, String username, String session, String uniqueID, UserAuthentication userAuth) {
+    public LoginResponse(String version, String dlTicket, String username, String session, String uniqueID, UserAuthentication userAuth)
+    {
         this.latestVersion = version;
         this.downloadTicket = dlTicket;
         this.username = username;

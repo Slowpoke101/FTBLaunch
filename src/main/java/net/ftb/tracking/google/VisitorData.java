@@ -18,14 +18,16 @@ package net.ftb.tracking.google;
 
 import java.security.SecureRandom;
 
-public class VisitorData {
+public class VisitorData
+{
     private int visitorId;
     private long timestampFirst;
     private long timestampPrevious;
     private long timestampCurrent;
     private int visits;
 
-    VisitorData(int visitorId, long timestampFirst, long timestampPrevious, long timestampCurrent, int visits) {
+    VisitorData(int visitorId, long timestampFirst, long timestampPrevious, long timestampCurrent, int visits)
+    {
         this.visitorId = visitorId;
         this.timestampFirst = timestampFirst;
         this.timestampPrevious = timestampPrevious;
@@ -33,47 +35,56 @@ public class VisitorData {
         this.visits = visits;
     }
 
-    public void resetSession () {
+    public void resetSession ()
+    {
         long now = now();
         this.timestampPrevious = this.timestampCurrent;
         this.timestampCurrent = now;
         this.visits++;
     }
 
-    private static long now () {
+    private static long now ()
+    {
         return System.currentTimeMillis() / 1000L;
     }
 
-    public int getVisitorId () {
+    public int getVisitorId ()
+    {
         return visitorId;
     }
 
-    public long getTimestampFirst () {
+    public long getTimestampFirst ()
+    {
         return timestampFirst;
     }
 
-    public long getTimestampPrevious () {
+    public long getTimestampPrevious ()
+    {
         return timestampPrevious;
     }
 
-    public long getTimestampCurrent () {
+    public long getTimestampCurrent ()
+    {
         return timestampCurrent;
     }
 
-    public int getVisits () {
+    public int getVisits ()
+    {
         return visits;
     }
 
     /**
      * initializes a new visitor data, with new visitorid
      */
-    public static VisitorData newVisitor () {
+    public static VisitorData newVisitor ()
+    {
         int visitorId = (new SecureRandom().nextInt() & 0x7FFFFFFF);
         long now = now();
         return new VisitorData(visitorId, now, now, now, 1);
     }
 
-    public static VisitorData newSession (int visitorId, long timestampfirst, long timestamplast, int visits) {
+    public static VisitorData newSession (int visitorId, long timestampfirst, long timestamplast, int visits)
+    {
         long now = now();
         return new VisitorData(visitorId, timestampfirst, timestamplast, now, visits + 1);
     }

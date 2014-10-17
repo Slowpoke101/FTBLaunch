@@ -23,7 +23,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class DownloadInfo {
+public class DownloadInfo
+{
     public URL url;
     public File local;
     public String name;
@@ -37,22 +38,27 @@ public class DownloadInfo {
     @Setter
     private DLType backupDLType = DLType.NONE;
 
-    public DownloadInfo() {
+    public DownloadInfo()
+    {
     }
 
-    public DownloadInfo(URL url, File local, String name, Boolean ftbServers) {
+    public DownloadInfo(URL url, File local, String name, Boolean ftbServers)
+    {
         this(url, local, name, null, "md5");
-        if (ftbServers) {
+        if (ftbServers)
+        {
             primaryDLType = DLType.ContentMD5;
             backupDLType = DLType.FTBBackup;
         }
     }
 
-    public DownloadInfo(URL url, File local, String name) {
+    public DownloadInfo(URL url, File local, String name)
+    {
         this(url, local, name, null, "md5");
     }
 
-    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType, DLType primary, DLType backup) {
+    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType, DLType primary, DLType backup)
+    {
         this(url, local, name, hash, hashType);
         if (primary != null)
             this.primaryDLType = primary;
@@ -60,7 +66,8 @@ public class DownloadInfo {
             this.backupDLType = backup;
     }
 
-    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType) {
+    public DownloadInfo(URL url, File local, String name, List<String> hash, String hashType)
+    {
         this.url = url;
         this.local = local;
         this.name = name;
@@ -68,7 +75,8 @@ public class DownloadInfo {
         this.hashType = hashType;
     }
 
-    public enum DLType {
+    public enum DLType
+    {
         ETag, ContentMD5, FTBBackup, NONE
     }
 }

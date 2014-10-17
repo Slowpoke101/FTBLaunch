@@ -26,12 +26,13 @@ import net.ftb.log.LogLevel;
 import net.ftb.log.LogSource;
 import net.ftb.log.LogType;
 
-public class StdOutLogger implements ILogListener {
+public class StdOutLogger implements ILogListener
+{
     // save real System.out and System.err
     // otherwise we'll got nasty loop
     private final static PrintStream realStderr = System.err;
     private final static PrintStream realStdout = System.out;
-    
+
     // DEBUG, EXTENTED, MINIMAL
     // how to write. Debug is only needed if we want to
     // see source of the log message. Hardcoded to EXTENDED
@@ -47,33 +48,42 @@ public class StdOutLogger implements ILogListener {
     @Setter
     private LogLevel logLevel = LogLevel.UNKNOWN;
 
-    public StdOutLogger() {
+    public StdOutLogger()
+    {
     }
 
-    public StdOutLogger(LogLevel logLevel) {
-        this.logLevel  = logLevel;
+    public StdOutLogger(LogLevel logLevel)
+    {
+        this.logLevel = logLevel;
     }
 
-    public StdOutLogger(LogSource logSource) {
+    public StdOutLogger(LogSource logSource)
+    {
         this.logSource = logSource;
     }
 
-    public StdOutLogger(LogLevel logLevel, LogSource logSource) {
-        this.logLevel  = logLevel;
+    public StdOutLogger(LogLevel logLevel, LogSource logSource)
+    {
+        this.logLevel = logLevel;
         this.logSource = logSource;
     }
 
     @Override
-    public void onLogEvent(LogEntry entry) {
+    public void onLogEvent (LogEntry entry)
+    {
         if (logSource != LogSource.ALL && entry.source != logSource)
             return;
 
-        if (!logLevel.includes(entry.level)) {
+        if (!logLevel.includes(entry.level))
+        {
             return;
         }
-        if (entry.level == LogLevel.ERROR) {
+        if (entry.level == LogLevel.ERROR)
+        {
             realStderr.println(entry.toString(logType));
-        } else {
+        }
+        else
+        {
             realStdout.println(entry.toString(logType));
         }
     }

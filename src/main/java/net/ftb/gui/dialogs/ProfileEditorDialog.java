@@ -37,7 +37,8 @@ import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class ProfileEditorDialog extends JDialog {
+public class ProfileEditorDialog extends JDialog
+{
     private JLabel usernameLbl;
     private JTextField username;
     private JLabel passwordLbl;
@@ -48,7 +49,8 @@ public class ProfileEditorDialog extends JDialog {
     private JButton update;
     private JButton remove;
 
-    public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
+    public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal)
+    {
         super(instance, modal);
 
         setupGui();
@@ -58,48 +60,64 @@ public class ProfileEditorDialog extends JDialog {
         username.setText(UserManager.getUsername(editingName));
         name.setText(editingName);
 
-        if (UserManager.getPassword(editingName).isEmpty()) {
+        if (UserManager.getPassword(editingName).isEmpty())
+        {
             password.setEnabled(false);
             savePassword.setSelected(false);
-        } else {
+        }
+        else
+        {
             password.setText(UserManager.getPassword(editingName));
             savePassword.setSelected(true);
         }
 
         saveMojangData.setSelected(UserManager.getSaveMojangData(editingName));
 
-        username.getDocument().addDocumentListener(new DocumentListener() {
+        username.getDocument().addDocumentListener(new DocumentListener()
+        {
             @Override
-            public void removeUpdate (DocumentEvent arg0) {
+            public void removeUpdate (DocumentEvent arg0)
+            {
                 name.setText(username.getText());
             }
 
             @Override
-            public void insertUpdate (DocumentEvent arg0) {
+            public void insertUpdate (DocumentEvent arg0)
+            {
                 name.setText(username.getText());
             }
 
             @Override
-            public void changedUpdate (DocumentEvent e) {
+            public void changedUpdate (DocumentEvent e)
+            {
             }
         });
 
-        savePassword.addActionListener(new ActionListener() {
+        savePassword.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 password.setEnabled(savePassword.isSelected());
             }
         });
 
-        update.addActionListener(new ActionListener() {
+        update.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
-                if (editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))) {
-                    if (savePassword.isSelected()) {
-                        if (password.getPassword().length > 1) {
+            public void actionPerformed (ActionEvent arg0)
+            {
+                if (editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText())))
+                {
+                    if (savePassword.isSelected())
+                    {
+                        if (password.getPassword().length > 1)
+                        {
                             UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
                         }
-                    } else {
+                    }
+                    else
+                    {
                         UserManager.updateUser(editingName, username.getText(), "", name.getText());
                     }
                     UserManager.setSaveMojangData(editingName, saveMojangData.isSelected());
@@ -109,9 +127,11 @@ public class ProfileEditorDialog extends JDialog {
             }
         });
 
-        remove.addActionListener(new ActionListener() {
+        remove.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 UserManager.removeUser(editingName);
                 LaunchFrame.writeUsers(null);
                 setVisible(false);
@@ -119,7 +139,8 @@ public class ProfileEditorDialog extends JDialog {
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("PROFILEDITOR_TITLE"));
         setResizable(true);
@@ -149,7 +170,7 @@ public class ProfileEditorDialog extends JDialog {
         panel.add(nameLbl);
         panel.add(name, GuiConstants.WRAP);
         panel.add(savePassword, GuiConstants.CENTER_SINGLE_LINE);
-        panel.add(saveMojangData,  GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(saveMojangData, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(update, GuiConstants.CENTER_TWO);
         panel.add(remove);
 

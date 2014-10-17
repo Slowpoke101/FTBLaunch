@@ -26,7 +26,8 @@ import net.ftb.log.Logger;
 
 import java.awt.Font;
 
-public class ErrorUtils {
+public class ErrorUtils
+{
     /**
      * Writes error into log and shows error in message dialog
      * <p>
@@ -34,7 +35,8 @@ public class ErrorUtils {
      * If using translated messages consider using {@link #tossError(String output, String log)}
      * @param output String to log and show in message dialog
      */
-    public static void tossError(String output) {
+    public static void tossError (String output)
+    {
         Logger.logError(output);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
@@ -48,7 +50,8 @@ public class ErrorUtils {
      * @param output String to show in message dialog
      * @param log String to log
      */
-    public static void tossError(String log, String output) {
+    public static void tossError (String log, String output)
+    {
         Logger.logError(log);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
@@ -58,12 +61,14 @@ public class ErrorUtils {
      * @param output Strong to log and show in message dialog
      * @param t Exception to to log
      */
-    public static void tossError(String output, Throwable t) {
+    public static void tossError (String output, Throwable t)
+    {
         Logger.logError(output, t);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void tossError(String log, String output , Throwable t) {
+    public static void tossError (String log, String output, Throwable t)
+    {
         Logger.logError(log, t);
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), output, "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
@@ -78,26 +83,30 @@ public class ErrorUtils {
      * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
      *
      */
-    public static int tossOKIgnoreDialog(String message, int severity) {
+    public static int tossOKIgnoreDialog (String message, int severity)
+    {
         Object[] options = { I18N.getLocaleString("BUTTON_OK"), I18N.getLocaleString("BUTTON_IGNORE") };
-        return JOptionPane.showOptionDialog(LaunchFrame.getInstance(),
-                message + "\n" + I18N.getLocaleString("NAG_SCREEN_MESSAGE"), null,
-                JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+        return JOptionPane.showOptionDialog(LaunchFrame.getInstance(), message + "\n" + I18N.getLocaleString("NAG_SCREEN_MESSAGE"), null, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null,
+                options, options[0]);
     }
 
-    public static void showClickableMessage(String message, String url) {
+    public static void showClickableMessage (String message, String url)
+    {
         JLabel l = new JLabel();
         Font font = l.getFont();
         StringBuilder html = new StringBuilder("");
-        html.append("<html><body style=\"" + "font-family:").append(font.getFamily()).append(";").append("font-weight:").append(font.isBold() ? "bold" : "normal").append(";").append("font-size:").append(font.getSize()).append("pt;").append("\">");
+        html.append("<html><body style=\"" + "font-family:").append(font.getFamily()).append(";").append("font-weight:").append(font.isBold() ? "bold" : "normal").append(";").append("font-size:")
+                .append(font.getSize()).append("pt;").append("\">");
 
         html.append(message).append(" ");
-        if ( url != null ){
+        if (url != null)
+        {
             html.append("<br><a href=\"").append(url).append("\">").append(url).append("</a>");
         }
 
         JEditorPane ep = new JEditorPane("text/html", html.toString());
-        ep.addHyperlinkListener(new HyperlinkListener() {
+        ep.addHyperlinkListener(new HyperlinkListener()
+        {
             @Override
             public void hyperlinkUpdate (HyperlinkEvent e)
             {

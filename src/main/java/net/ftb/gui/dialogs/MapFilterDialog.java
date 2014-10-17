@@ -37,7 +37,8 @@ import net.ftb.gui.panes.MapUtils;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
-public class MapFilterDialog extends JDialog {
+public class MapFilterDialog extends JDialog
+{
     private JLabel typeLbl;
     private JComboBox type;
     private JLabel originLbl;
@@ -50,7 +51,8 @@ public class MapFilterDialog extends JDialog {
 
     private MapUtils pane;
 
-    public MapFilterDialog(MapUtils instance) {
+    public MapFilterDialog(MapUtils instance)
+    {
         super(LaunchFrame.getInstance(), true);
         this.pane = instance;
 
@@ -67,10 +69,13 @@ public class MapFilterDialog extends JDialog {
         ArrayList<String> packs = Lists.newArrayList();
         compatiblePack.addItem(I18N.getLocaleString("MAIN_ALL"));
         packs.add(I18N.getLocaleString("MAIN_ALL"));
-        for (int i = 0; i < Map.getMapArray().size(); i++) {
+        for (int i = 0; i < Map.getMapArray().size(); i++)
+        {
             String[] compat = Map.getMap(i).getCompatible();
-            for (String compatable : compat) {
-                if (!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName())) {
+            for (String compatable : compat)
+            {
+                if (!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName()))
+                {
                     packs.add(ModPack.getPack(compatable.trim()).getName());
                     compatiblePack.addItem(ModPack.getPack(compatable.trim()).getName());
                 }
@@ -81,9 +86,11 @@ public class MapFilterDialog extends JDialog {
         origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
         compatiblePack.setModel(new DefaultComboBoxModel(packs.toArray()));
 
-        apply.addActionListener(new ActionListener() {
+        apply.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 pane.compatible = (String) compatiblePack.getSelectedItem();
                 pane.type = (String) type.getSelectedItem();
                 pane.origin = (String) origin.getSelectedItem();
@@ -92,16 +99,20 @@ public class MapFilterDialog extends JDialog {
             }
         });
 
-        cancel.addActionListener(new ActionListener() {
+        cancel.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 setVisible(false);
             }
         });
 
-        search.addActionListener(new ActionListener() {
+        search.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 SearchDialog sd = new SearchDialog(pane);
                 sd.setVisible(true);
                 setVisible(false);
@@ -109,7 +120,8 @@ public class MapFilterDialog extends JDialog {
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
         setResizable(true);

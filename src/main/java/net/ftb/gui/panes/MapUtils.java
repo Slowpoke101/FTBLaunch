@@ -53,7 +53,8 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
+public class MapUtils extends JPanel implements ILauncherPane, MapListener
+{
 
     protected static JPanel maps;
     public static ArrayList<JPanel> mapPanels;
@@ -65,7 +66,6 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     private static int selectedMap = 0;
     protected static boolean mapsAdded = false;
     public static String type = "Client", origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
-
 
     //stuff for swapping between maps/texture packs
     private JButton mapButton;
@@ -80,7 +80,8 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
     private static HashMap<Integer, Map> currentMaps = Maps.newHashMap();
 
-    public MapUtils() {
+    public MapUtils()
+    {
         super();
         instance = this;
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -90,13 +91,15 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     }
 
     @Override
-    public void onVisible () {
+    public void onVisible ()
+    {
         MapUtils.sortMaps();
         MapUtils.updateFilter();
         MapUtils.getInstance().getMapsScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-    public void setup () {
+    public void setup ()
+    {
         mapPanels = new ArrayList<JPanel>();
 
         // TODO: Set loading animation while we wait
@@ -110,10 +113,13 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         filter.setBounds(5, 5, 105, 25);
-        filter.addActionListener(new ActionListener() {
+        filter.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
-                if (loaded) {
+            public void actionPerformed (ActionEvent e)
+            {
+                if (loaded)
+                {
                     MapFilterDialog filterDia = new MapFilterDialog(getInstance());
                     filterDia.setVisible(true);
                 }
@@ -125,9 +131,11 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         mapButton.setBounds(400, 5, 105, 25);
         mapButton.setBackground(UIManager.getColor("control").darker().darker());
         mapButton.setForeground(UIManager.getColor("text").darker());
-        mapButton.addActionListener(new ActionListener() {
+        mapButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 LaunchFrame.getInstance().swapTabs(true);
             }
         });
@@ -135,9 +143,11 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
         textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
         textureButton.setBounds(510, 5, 105, 25);
-        textureButton.addActionListener(new ActionListener() {
+        textureButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 LaunchFrame.getInstance().swapTabs(false);
             }
         });
@@ -182,10 +192,13 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         mapInfo = new JEditorPane();
         mapInfo.setEditable(false);
         mapInfo.setContentType("text/html");
-        mapInfo.addHyperlinkListener(new HyperlinkListener() {
+        mapInfo.addHyperlinkListener(new HyperlinkListener()
+        {
             @Override
-            public void hyperlinkUpdate (HyperlinkEvent event) {
-                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            public void hyperlinkUpdate (HyperlinkEvent event)
+            {
+                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                {
                     OSUtils.browse(event.getURL().toString());
                 }
             }
@@ -207,8 +220,10 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     /*
      * GUI Code to add a map to the selection
      */
-    public static void addMap (Map map) {
-        if (!mapsAdded) {
+    public static void addMap (Map map)
+    {
+        if (!mapsAdded)
+        {
             mapsAdded = true;
             maps.removeAll();
         }
@@ -227,15 +242,18 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         filler.setForeground(Color.white);
         filler.setBounds(58, 6, 378, 42);
         filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
-        MouseAdapter lin = new MouseAdapter() {
+        MouseAdapter lin = new MouseAdapter()
+        {
             @Override
-            public void mouseClicked (MouseEvent e) {
+            public void mouseClicked (MouseEvent e)
+            {
                 selectedMap = mapIndex;
                 updateMaps();
             }
 
             @Override
-            public void mousePressed (MouseEvent e) {
+            public void mousePressed (MouseEvent e)
+            {
                 selectedMap = mapIndex;
                 updateMaps();
             }
@@ -247,10 +265,13 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         p.add(logo);
         mapPanels.add(p);
         maps.add(p);
-        if (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
+        if (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")))
+        {
             maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
             maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-        } else {
+        }
+        else
+        {
             maps.setMinimumSize(new Dimension(420, (currentMaps.size() * 55)));
             maps.setPreferredSize(new Dimension(420, (currentMaps.size() * 55)));
         }
@@ -258,10 +279,13 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
     }
 
     @Override
-    public void onMapAdded (Map map) {
+    public void onMapAdded (Map map)
+    {
         final Map map_ = map;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run () {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run ()
+            {
                 addMap(map_);
                 Logger.logInfo("Adding map " + getMapNum() + " (" + map_.getName() + ")");
                 updateMaps();
@@ -269,7 +293,8 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         });
     }
 
-    public static void sortMaps () {
+    public static void sortMaps ()
+    {
         mapPanels.clear();
         maps.removeAll();
         currentMaps.clear();
@@ -281,23 +306,32 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         HashMap<Integer, List<Map>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<Map>());
         sorted.put(1, new ArrayList<Map>());
-        for (Map map : Map.getMapArray()) {
-            if (originCheck(map) && compatibilityCheck(map) && textSearch(map)) {
-                if (map.isCompatible(ModPack.getSelectedPack(true).getName())) {
+        for (Map map : Map.getMapArray())
+        {
+            if (originCheck(map) && compatibilityCheck(map) && textSearch(map))
+            {
+                if (map.isCompatible(ModPack.getSelectedPack(true).getName()))
+                {
                     sorted.get(1).add(map);
-                } else if (map.isCompatible(ModPack.getSelectedPack(false).getName())) {
+                }
+                else if (map.isCompatible(ModPack.getSelectedPack(false).getName()))
+                {
                     sorted.get(1).add(map);
-                } else {
+                }
+                else
+                {
                     sorted.get(0).add(map);
                 }
             }
         }
-        for (Map map : sorted.get(1)) {
+        for (Map map : sorted.get(1))
+        {
             addMap(map);
             currentMaps.put(counter, map);
             counter++;
         }
-        for (Map map : sorted.get(0)) {
+        for (Map map : sorted.get(0))
+        {
             addMap(map);
             currentMaps.put(counter, map);
             counter++;
@@ -305,13 +339,18 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         updateMaps();
     }
 
-    private static void updateMaps () {
-        for (int i = 0; i < mapPanels.size(); i++) {
-            if (selectedMap == i) {
+    private static void updateMaps ()
+    {
+        for (int i = 0; i < mapPanels.size(); i++)
+        {
+            if (selectedMap == i)
+            {
                 String packs = "";
-                if (Map.getMap(getIndex()).getCompatible() != null) {
+                if (Map.getMap(getIndex()).getCompatible() != null)
+                {
                     packs += "<p>This map works with the following packs:</p><ul>";
-                    for (String name : Map.getMap(getIndex()).getCompatible()) {
+                    for (String name : Map.getMap(getIndex()).getCompatible())
+                    {
                         packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
                     }
                     packs += "</ul>";
@@ -323,18 +362,22 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
                 mapInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + Map.getMap(getIndex()).getImageName() + "' width=400 height=200></img> <br>"
                         + Map.getMap(getIndex()).getInfo() + packs);
                 mapInfo.setCaretPosition(0);
-            } else {
+            }
+            else
+            {
                 mapPanels.get(i).setBackground(UIManager.getColor("control"));
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
     }
 
-    public static int getSelectedMapIndex () {
+    public static int getSelectedMapIndex ()
+    {
         return mapsAdded ? getIndex() : -1;
     }
 
-    public static void updateFilter () {
+    public static void updateFilter ()
+    {
         // TODO: Show Modpack specific filtering
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
@@ -353,33 +396,41 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         LaunchFrame.getInstance().updateFooter();
     }
 
-    private static int getIndex () {
+    private static int getIndex ()
+    {
         return (currentMaps.size() > 0) ? currentMaps.get(selectedMap).getIndex() : selectedMap;
     }
 
-    private static int getMapNum () {
-        if (currentMaps.size() > 0) {
-            if (!origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
+    private static int getMapNum ()
+    {
+        if (currentMaps.size() > 0)
+        {
+            if (!origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")))
+            {
                 return currentMaps.get((mapPanels.size() - 1)).getIndex();
             }
         }
         return mapPanels.size();
     }
 
-    public void updateLocale () {
+    public void updateLocale ()
+    {
         filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
     }
 
-    private static boolean originCheck (Map map) {
+    private static boolean originCheck (Map map)
+    {
         return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team"))
                 || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !map.getAuthor().equalsIgnoreCase("the ftb team"));
     }
 
-    private static boolean compatibilityCheck (Map map) {
+    private static boolean compatibilityCheck (Map map)
+    {
         return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || map.isCompatible(compatible));
     }
 
-    private static boolean textSearch (Map map) {
+    private static boolean textSearch (Map map)
+    {
         String searchString = SearchDialog.lastMapSearch.toLowerCase();
         return ((searchString.isEmpty()) || map.getName().toLowerCase().contains(searchString) || map.getAuthor().toLowerCase().contains(searchString));
     }

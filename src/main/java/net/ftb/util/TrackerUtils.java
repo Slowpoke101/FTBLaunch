@@ -23,10 +23,13 @@ import net.ftb.tracking.piwik.PiwikTracker;
 
 import java.util.Map;
 
-public class TrackerUtils {
+public class TrackerUtils
+{
     public static boolean googleEnabled = true;
     public static boolean piwikEnabled = true;
-    public TrackerUtils() {
+
+    public TrackerUtils()
+    {
     }
 
     /**
@@ -34,7 +37,8 @@ public class TrackerUtils {
      * @param pageUrl URL for Launcher Analytics Page view -- usually the classpath
      * @param pageTitle Entry for view such as pack name & pack version, etc.
      */
-    public static void sendPageView (String pageUrl, String pageTitle) {
+    public static void sendPageView (String pageUrl, String pageTitle)
+    {
         sendPageView(pageUrl, pageTitle, null);
     }
 
@@ -43,22 +47,31 @@ public class TrackerUtils {
      * @param pageUrl URL for Launcher Analytics Page view -- usually the classpath
      * @param pageTitle Entry for view such as pack name & pack version, etc.
      */
-    public static void sendPageView (String pageUrl, String pageTitle, Map<String, String> extraData) {
+    public static void sendPageView (String pageUrl, String pageTitle, Map<String, String> extraData)
+    {
 
-        if (!Settings.getSettings().getSnooper()) {
-            if(googleEnabled) {
+        if (!Settings.getSettings().getSnooper())
+        {
+            if (googleEnabled)
+            {
                 Main.tracker.trackPageViewFromReferrer(pageUrl, pageTitle, "Feed The Beast", "http://www.feed-the-beast.com", "/");
             }
-            if(piwikEnabled) {
-                try {
+            if (piwikEnabled)
+            {
+                try
+                {
                     PiwikTracker p = new PiwikTracker(pageTitle, pageUrl);
-                    if(extraData != null) {
-                        for(Map.Entry<String, String> s: extraData.entrySet()) {
+                    if (extraData != null)
+                    {
+                        for (Map.Entry<String, String> s : extraData.entrySet())
+                        {
                             p.addExtraPair(s.getKey(), s.getValue());
                         }
                     }
                     p.start();
-                } catch(Exception e) {
+                }
+                catch (Exception e)
+                {
                     Logger.logError(e.getMessage(), e);
                 }
             }
