@@ -309,9 +309,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         remove(btnInstallJava);
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
         JavaInfo java = Settings.getSettings().getCurrentJava();
-        JavaInfo javaBackup = Settings.getSettings().getCurrentJava(false);
-
-        // offer java 7 is java 6 or older is detected
+        // offer java 7 if java 6 or older is detected
         if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
             offerJava7("JAVA_OLD_Warning");
         }
@@ -321,10 +319,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
         }
-        else if(javaBackup == null && java.isJava8() || (OSUtils.getCurrentOS() == OS.UNIX && java.isJava8())) {
-            offerJava7("JAVA_NEW_Warning");
-        }
-
         // offer 64-bit java if 32-bit java detected in 64-bit OS
         else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
             addUpdateLabel("JAVA_32BIT_WARNING");

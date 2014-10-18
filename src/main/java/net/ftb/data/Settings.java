@@ -133,21 +133,12 @@ public class Settings extends Properties {
         setProperty("betaChannel", String.valueOf(flag));
     }
 
-
-    @Deprecated
     public String getJavaPath () {
-        return getJavaPath(true);
-    }
-    /**
-     * don't use this to launch w/ use getCurrentJava(boolean canUse8)
-     * @return java's location
-     */
-    public String getJavaPath (boolean allowJava8) {
         String javaPath = getProperty("javaPath", null);
         if (javaPath == null || !new File(javaPath).isFile())
             remove("javaPath");
 
-        javaPath = getProperty("javaPath", getDefaultJavaPath(allowJava8));
+        javaPath = getProperty("javaPath", getDefaultJavaPath());
         if (javaPath == null || !new File(javaPath).isFile())
             ErrorUtils.tossError("Unable to find java; point to java executable file in Advanced Options or game will fail to launch.");
         return javaPath;
@@ -157,52 +148,27 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
-    @Deprecated //use the boolean version instead
     public JavaInfo getCurrentJava () {
-        return getCurrentJava(true);
-    }
-
-    /**
-     * Returns user selected or automatically selected JVM's
-     * JavaInfo object.
-     */
-    public JavaInfo getCurrentJava(boolean canuse8) {
         if (currentJava == null) {
             try {
-                currentJava = new JavaInfo(getJavaPath(true));
+                currentJava = new JavaInfo(getJavaPath());
             } catch (Exception e) {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
-        if(!canuse8 && currentJava.isJava8()) {
-            JavaInfo java = null;
-            try {
-                // this should not never fail
-                java = new JavaInfo(getJavaPath(false));
-            } catch (Exception e) {
-                Logger.logError("Error while creating JavaInfo", e);
-            }
-            if (java != null)
-                return java;
-        }
-
         return currentJava;
     }
 
-    @Deprecated
     public String getDefaultJavaPath () {
-        return getDefaultJavaPath(true);
-    }
-    public String getDefaultJavaPath (boolean allowJava8) {
         JavaInfo javaVersion;
 
         if (OSUtils.getCurrentOS() == OS.MACOSX) {
-            javaVersion = JavaFinder.parseJavaVersion(allowJava8);
+            javaVersion = JavaFinder.parseJavaVersion();
 
             if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path;
         } else if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            javaVersion = JavaFinder.parseJavaVersion(allowJava8);
+            javaVersion = JavaFinder.parseJavaVersion();
 
             if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path.replace(".exe", "w.exe");

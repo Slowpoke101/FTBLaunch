@@ -38,7 +38,6 @@ import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.util.*;
-import net.ftb.util.winreg.JavaInfo;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -379,12 +378,8 @@ public class MCInstaller {
             for (Library lib : base.getLibraries()) {
                 classpath.add(new File(libDir, lib.getPath()));
             }
-            boolean java8Usable = false;
-            //if(packmcversion.startsWith("1.7.10") || packmcversion.startsWith("1.8") || pack.getDir().equals("mojang_vanilla") ||  CommandLineSettings.getSettings().isUseJava8())//TODO re-add this if java 8 ever has issues again
-                java8Usable = true;
-            JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
 
-            Process minecraftProcess = MCLauncher.launchMinecraft(java.path, gameFolder, assetDir, natDir, classpath,
+            Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
