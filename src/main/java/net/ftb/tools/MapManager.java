@@ -37,16 +37,18 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.MapManagerWorker;
 
 import static net.ftb.download.Locations.MAPS;
+
 @SuppressWarnings("serial")
-public class MapManager extends JDialog {
+public class MapManager extends JDialog
+{
     private JPanel contentPane;
     private final JProgressBar progressBar;
     private final JLabel label;
     public static boolean overwrite = false;
     private static String sep = File.separator;
 
-
-    public MapManager(JFrame owner, Boolean model) {
+    public MapManager(JFrame owner, Boolean model)
+    {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -71,25 +73,35 @@ public class MapManager extends JDialog {
         label.setBounds(0, 42, 313, 14);
         contentPane.add(label);
 
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             @Override
-            public void windowOpened (WindowEvent arg0) {
-                MapManagerWorker worker = new MapManagerWorker(overwrite) {
+            public void windowOpened (WindowEvent arg0)
+            {
+                MapManagerWorker worker = new MapManagerWorker(overwrite)
+                {
                     @Override
-                    protected void done () {
+                    protected void done ()
+                    {
                         setVisible(false);
                         super.done();
                     }
+
                     @Override
-                    public void setLabelText(String s) {
+                    public void setLabelText (String s)
+                    {
                         label.setText(s);
                     }
+
                     @Override
-                    public void setProgressBarMaximum (int i){
+                    public void setProgressBarMaximum (int i)
+                    {
                         progressBar.setMaximum(i);
                     }
+
                     @Override
-                    public void setProgressBarValue (int i){
+                    public void setProgressBarValue (int i)
+                    {
                         progressBar.setValue(i);
                     }
 
@@ -99,14 +111,20 @@ public class MapManager extends JDialog {
         });
     }
 
-    public static void cleanUp () {
+    public static void cleanUp ()
+    {
         Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-        File tempFolder = new File(OSUtils.getCacheStorageLocation(),  MAPS.replace("/",sep) + map.getMapName() + sep);
-        for (String file : tempFolder.list()) {
-            if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
-                try {
+        File tempFolder = new File(OSUtils.getCacheStorageLocation(), MAPS.replace("/", sep) + map.getMapName() + sep);
+        for (String file : tempFolder.list())
+        {
+            if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version"))
+            {
+                try
+                {
                     FTBFileUtils.delete(new File(tempFolder, file));
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     Logger.logError(e.getMessage(), e);
                 }
             }

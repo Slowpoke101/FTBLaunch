@@ -35,9 +35,11 @@ import net.feed_the_beast.launcher.json.versions.Version;
 import net.ftb.log.Logger;
 import org.apache.commons.io.IOUtils;
 
-public class JsonFactory {
+public class JsonFactory
+{
     public static final Gson GSON;
-    static {
+    static
+    {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
         builder.registerTypeAdapter(Date.class, new DateAdapter());
@@ -47,53 +49,67 @@ public class JsonFactory {
         GSON = builder.create();
     }
 
-    public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException {
+    public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException
+    {
         FileReader reader = new FileReader(json);
-        Version v =  GSON.fromJson(reader, Version.class);
+        Version v = GSON.fromJson(reader, Version.class);
         reader.close();
         return v;
     }
 
-    public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, IOException {
+    public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, IOException
+    {
         FileReader reader = new FileReader(json);
-        AssetIndex a =  GSON.fromJson(reader, AssetIndex.class);
+        AssetIndex a = GSON.fromJson(reader, AssetIndex.class);
         reader.close();
         return a;
     }
 
-    public static Library loadLibrary(String libJsonObject)throws JsonSyntaxException, JsonIOException {
+    public static Library loadLibrary (String libJsonObject) throws JsonSyntaxException, JsonIOException
+    {
         return GSON.fromJson(libJsonObject, Library.class);
     }
-    public static Update getUpdate(String name, String url) throws IOException{
+
+    public static Update getUpdate (String name, String url) throws IOException
+    {
         Library l = new Library();
         l.name = name;
         return GSON.fromJson(IOUtils.toString(new URL(url + l.getPath())), Update.class);
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> decode (String s) {
-        try {
+    public static Map<String, Object> decode (String s)
+    {
+        try
+        {
             Map<String, Object> ret;
             JsonObject jso = new JsonParser().parse(s).getAsJsonObject();
             ret = (Map<String, Object>) decodeElement(jso);
             return ret;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error decoding JSON", e);
             return null;
         }
     }
 
-    public static Object decodeElement (JsonElement e) {
-        if (e instanceof JsonObject) {
+    public static Object decodeElement (JsonElement e)
+    {
+        if (e instanceof JsonObject)
+        {
             Map<String, Object> ret = Maps.newLinkedHashMap();
-            for (Map.Entry<String, JsonElement> jse : ((JsonObject) e).entrySet()) {
+            for (Map.Entry<String, JsonElement> jse : ((JsonObject) e).entrySet())
+            {
                 ret.put(jse.getKey(), decodeElement(jse.getValue()));
             }
             return ret;
         }
-        if (e instanceof JsonArray) {
+        if (e instanceof JsonArray)
+        {
             List<Object> ret = Lists.newArrayList();
-            for (JsonElement jse : e.getAsJsonArray()) {
+            for (JsonElement jse : e.getAsJsonArray())
+            {
                 ret.add(decodeElement(jse));
             }
             return ret;
@@ -102,18 +118,27 @@ public class JsonFactory {
         return e.getAsString();
     }
 
-    public static String encode (Map<String, Object> m) {
-        try {
+    public static String encode (Map<String, Object> m)
+    {
+        try
+        {
             return GSON.toJson(m);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error encoding JSON", e);
             return null;
         }
     }
-    public static String encodeStrListMap (Map<String, List<String>> m) {
-        try {
+
+    public static String encodeStrListMap (Map<String, List<String>> m)
+    {
+        try
+        {
             return GSON.toJson(m);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error encoding JSON", e);
             return null;
         }

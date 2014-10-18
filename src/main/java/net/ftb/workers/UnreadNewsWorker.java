@@ -24,25 +24,31 @@ import net.ftb.data.Settings;
 import net.ftb.util.Benchmark;
 import net.ftb.util.NewsUtils;
 
-
 /**
  * SwingWorker that checks for unread news. Returns count of unread news
  * done() updates news icon
  */
-public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
+public class UnreadNewsWorker extends SwingWorker<Integer, Void>
+{
     @Override
-    protected Integer doInBackground () {
+    protected Integer doInBackground ()
+    {
         Benchmark.start("UnreadNews");
         int i = 0;
         ArrayList<String> dates = NewsUtils.getPubDates();
         Long lastRead = Long.parseLong(Settings.getSettings().getNewsDate());
         int read = 0;
-        for(String s : dates) {
+        for (String s : dates)
+        {
             long l = Long.parseLong(s);
-            if(!(read == 1)) {
-                if(l>lastRead) {
+            if (!(read == 1))
+            {
+                if (l > lastRead)
+                {
                     i++;
-                } else {
+                }
+                else
+                {
                     read = 1;
                 }
             }

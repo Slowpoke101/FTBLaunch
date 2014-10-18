@@ -29,12 +29,14 @@ import net.ftb.util.ErrorUtils;
 /**
  * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.
  */
-public class LoginWorker extends SwingWorker<String, Void> {
+public class LoginWorker extends SwingWorker<String, Void>
+{
     private String username, password, mojangData, selectedProfile;
     @Getter
     LoginResponse resp;
 
-    public LoginWorker(String username, String password, String mojangData, String selectedProfile) {
+    public LoginWorker(String username, String password, String mojangData, String selectedProfile)
+    {
         super();
         this.username = username;
         this.password = password;
@@ -43,18 +45,26 @@ public class LoginWorker extends SwingWorker<String, Void> {
     }
 
     @Override
-    protected String doInBackground () {
+    protected String doInBackground ()
+    {
         Benchmark.start("LoginWorker");
-        try {
-            if (Main.isAuthlibReadyToUse()) {
-                try {
+        try
+        {
+            if (Main.isAuthlibReadyToUse())
+            {
+                try
+                {
                     LoginResponse resp = AuthlibHelper.authenticateWithAuthlib(username, password, mojangData, selectedProfile);
                     this.resp = resp;
                     Benchmark.logBenchAs("LoginWorker", "Login Worker Run");
-                    if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty()) {
-                        if (resp.getSessionID() != null) {
+                    if (resp != null && resp.getUsername() != null && !resp.getUsername().isEmpty())
+                    {
+                        if (resp.getSessionID() != null)
+                        {
                             return "good";
-                        } else {
+                        }
+                        else
+                        {
                             return "offline";
                         }
                     }
@@ -63,13 +73,19 @@ public class LoginWorker extends SwingWorker<String, Void> {
                     if (resp.getUsername() == null)
                         return "NullUsername";
                     return "bad";
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Logger.logError("Error using authlib", e);
                 }
-            } else {
+            }
+            else
+            {
                 ErrorUtils.tossError("Authlib Unavaible. Please check your log for errors");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
         }
         return "";

@@ -33,7 +33,8 @@ package net.ftb.tracking.google;
  * @author Daniel Murphy
  * 
  */
-public class AnalyticsConfigData {
+public class AnalyticsConfigData
+{
     private final String trackingCode;
     private String encoding = "UTF-8";
     private String screenResolution = null;
@@ -48,7 +49,8 @@ public class AnalyticsConfigData {
      * 
      * @param argTrackingCode
      */
-    public AnalyticsConfigData(String argTrackingCode) {
+    public AnalyticsConfigData(String argTrackingCode)
+    {
         this(argTrackingCode, VisitorData.newVisitor());
     }
 
@@ -57,8 +59,10 @@ public class AnalyticsConfigData {
      * 
      * @param argTrackingCode
      */
-    public AnalyticsConfigData(String argTrackingCode, VisitorData visitorData) {
-        if (argTrackingCode == null) {
+    public AnalyticsConfigData(String argTrackingCode, VisitorData visitorData)
+    {
+        if (argTrackingCode == null)
+        {
             throw new RuntimeException("Tracking code cannot be null");
         }
         trackingCode = argTrackingCode;
@@ -68,56 +72,64 @@ public class AnalyticsConfigData {
     /**
      * @return the colorDepth
      */
-    public String getColorDepth () {
+    public String getColorDepth ()
+    {
         return colorDepth;
     }
 
     /**
      * @return the encoding
      */
-    public String getEncoding () {
+    public String getEncoding ()
+    {
         return encoding;
     }
 
     /**
      * @return the flashVersion
      */
-    public String getFlashVersion () {
+    public String getFlashVersion ()
+    {
         return flashVersion;
     }
 
     /**
      * @return the screenResolution
      */
-    public String getScreenResolution () {
+    public String getScreenResolution ()
+    {
         return screenResolution;
     }
 
     /**
      * @return the trackingCode
      */
-    public String getTrackingCode () {
+    public String getTrackingCode ()
+    {
         return trackingCode;
     }
 
     /**
      * @return the user agent used for the network requests
      */
-    public String getUserAgent () {
+    public String getUserAgent ()
+    {
         return userAgent;
     }
 
     /**
      * @return the userLanguage
      */
-    public String getUserLanguage () {
+    public String getUserLanguage ()
+    {
         return userLanguage;
     }
 
     /**
      * @return the visitor data, used to track unique visitors
      */
-    public VisitorData getVisitorData () {
+    public VisitorData getVisitorData ()
+    {
         return visitorData;
     }
 
@@ -126,7 +138,8 @@ public class AnalyticsConfigData {
      * 
      * @param argColorDepth
      */
-    public void setColorDepth (String argColorDepth) {
+    public void setColorDepth (String argColorDepth)
+    {
         colorDepth = argColorDepth;
     }
 
@@ -136,10 +149,10 @@ public class AnalyticsConfigData {
      * @param argEncoding
      *            the encoding to set
      */
-    public void setEncoding (String argEncoding) {
+    public void setEncoding (String argEncoding)
+    {
         encoding = argEncoding;
     }
-
 
     /**
      * Sets the screen resolution, like "1280x800".
@@ -147,7 +160,8 @@ public class AnalyticsConfigData {
      * @param argScreenResolution
      *            the screenResolution to set
      */
-    public void setScreenResolution (String argScreenResolution) {
+    public void setScreenResolution (String argScreenResolution)
+    {
         screenResolution = argScreenResolution;
     }
 
@@ -157,11 +171,13 @@ public class AnalyticsConfigData {
      * @param argUserLanguage
      *            the userLanguage to set
      */
-    public void setUserLanguage (String argUserLanguage) {
+    public void setUserLanguage (String argUserLanguage)
+    {
         userLanguage = argUserLanguage;
     }
 
-    public void setUserAgent (String userAgent) {
+    public void setUserAgent (String userAgent)
+    {
         this.userAgent = userAgent;
     }
 }

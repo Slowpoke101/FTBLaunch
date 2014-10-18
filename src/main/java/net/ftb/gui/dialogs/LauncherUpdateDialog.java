@@ -34,7 +34,8 @@ import net.ftb.updater.UpdateChecker;
 import net.ftb.util.OSUtils;
 import net.miginfocom.swing.MigLayout;
 
-public class LauncherUpdateDialog extends JDialog {
+public class LauncherUpdateDialog extends JDialog
+{
     private JLabel messageLbl;
     private JLabel extraText;
     private JLabel updateLbl;
@@ -43,37 +44,45 @@ public class LauncherUpdateDialog extends JDialog {
     private JButton abort;
     private boolean usable;
 
-    public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion) {
+    public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion)
+    {
         super(LaunchFrame.getInstance(), true);
         this.usable = Constants.buildNumber > deadVersion;
         setupGui();
 
-        showChangeLog.addActionListener(new ActionListener() {
+        showChangeLog.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 // TODO: Call new frame containing html page?
                 // TODO: beta changelogs???
                 OSUtils.browse("http://feed-the-beast.com/launcher/change-log/" + Constants.buildNumber);//TODO this should use the new version #!!!
             }
         });
 
-        update.addActionListener(new ActionListener() {
+        update.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 setVisible(false);
                 updateChecker.update();
             }
         });
 
-        abort.addActionListener(new ActionListener() {
+        abort.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 setVisible(false);
             }
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("LUNCHERUPDATE_ISAVAILABLETITLE"));
         setResizable(true);

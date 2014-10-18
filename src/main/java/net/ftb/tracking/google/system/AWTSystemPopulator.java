@@ -23,37 +23,47 @@ import java.awt.HeadlessException;
 
 import net.ftb.tracking.google.AnalyticsConfigData;
 
-public class AWTSystemPopulator {
-    public static final void populateConfigData (AnalyticsConfigData data) {
+public class AWTSystemPopulator
+{
+    public static final void populateConfigData (AnalyticsConfigData data)
+    {
         data.setEncoding(System.getProperty("file.encoding"));
         String region = System.getProperty("user.region");
-        if (region == null) {
+        if (region == null)
+        {
             region = System.getProperty("user.country");
         }
         data.setUserLanguage(System.getProperty("user.language") + "-" + region);
-        try {
+        try
+        {
             int screenHeight = 0;
             int screenWidth = 0;
             GraphicsEnvironment ge;
             GraphicsDevice[] gs;
             ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             gs = ge.getScreenDevices();
-            for (GraphicsDevice g : gs) {
+            for (GraphicsDevice g : gs)
+            {
                 DisplayMode dm = g.getDisplayMode();
                 screenWidth += dm.getWidth();
                 screenHeight += dm.getHeight();
             }
-            if (screenHeight != 0 && screenWidth != 0) {
+            if (screenHeight != 0 && screenWidth != 0)
+            {
                 data.setScreenResolution(screenWidth + "x" + screenHeight);
             }
-            if (gs[0] != null) {
+            if (gs[0] != null)
+            {
                 String colorDepth = gs[0].getDisplayMode().getBitDepth() + "";
-                for (int i = 1; i < gs.length; i++) {
+                for (int i = 1; i < gs.length; i++)
+                {
                     colorDepth += ", " + gs[i].getDisplayMode().getBitDepth();
                 }
                 data.setColorDepth(colorDepth);
             }
-        } catch (HeadlessException e) {
+        }
+        catch (HeadlessException e)
+        {
             data.setScreenResolution("NA");
             data.setColorDepth("NA");
         }

@@ -45,7 +45,8 @@ import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("serial")
-public class Settings extends Properties {
+public class Settings extends Properties
+{
     @Getter
     private static Settings settings;
     private File configFile;
@@ -57,34 +58,47 @@ public class Settings extends Properties {
     @Getter
     private boolean noConfig = false;
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             settings = new Settings(new File(OSUtils.getDynamicStorageLocation(), "ftblaunch.cfg"));
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Failed to load settings", e);
         }
     }
 
-    public Settings(File file) throws IOException {
+    public Settings(File file) throws IOException
+    {
         configFile = file;
-        if (file.exists()) {
+        if (file.exists())
+        {
             load(new FileInputStream(file));
-        } else {
+        }
+        else
+        {
             noConfig = true;
         }
     }
 
-    public void save () {
-        try {
+    public void save ()
+    {
+        try
+        {
             FileOutputStream fos = new FileOutputStream(configFile);
             store(fos, "FTBLaunch Config File");
             fos.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Failed to save settings", e);
         }
     }
 
-    public String getRamMax () {
+    public String getRamMax ()
+    {
         if (getCurrentJava().is64bits && OSUtils.getOSTotalMemory() > 6144)//6gb or more default to 2gb of ram for MC
             return getProperty("ramMax", Integer.toString(2048));
         else if (getCurrentJava().is64bits)//on 64 bit java default to 1.5gb newer pack's need more than a gig
@@ -92,57 +106,71 @@ public class Settings extends Properties {
         return getProperty("ramMax", Integer.toString(1024));
     }
 
-    public void setRamMax (String max) {
+    public void setRamMax (String max)
+    {
         setProperty("ramMax", max);
     }
 
-    public String getLastUser () {
+    public String getLastUser ()
+    {
         return getProperty("lastUser", null);
     }
 
-    public void setLastUser (String user) {
+    public void setLastUser (String user)
+    {
         setProperty("lastUser", user);
     }
 
-    public String getInstallPath () {
+    public String getInstallPath ()
+    {
         String commandLinePath = CommandLineSettings.getSettings().getInstallDir();
-        if (commandLinePath != null && !commandLinePath.isEmpty()) {
+        if (commandLinePath != null && !commandLinePath.isEmpty())
+        {
             return commandLinePath;
-        } else {
+        }
+        else
+        {
             return getProperty("installPath", OSUtils.getDefInstallPath());
         }
     }
 
-    public void setInstallPath (String path) {
+    public void setInstallPath (String path)
+    {
         setProperty("installPath", path);
     }
 
-    public Boolean getUseSystemProxy () {
+    public Boolean getUseSystemProxy ()
+    {
         return Boolean.valueOf(getProperty("useSystemProxy", "false"));
     }
 
-    public void setUseSystemProxy (Boolean flag) {
+    public void setUseSystemProxy (Boolean flag)
+    {
         setProperty("useSystemProxy", String.valueOf(flag));
     }
 
-    public boolean isBetaChannel () {
+    public boolean isBetaChannel ()
+    {
         return Boolean.valueOf(getProperty("betaChannel", "false"));
     }
 
-    public void setBetaChannel (boolean flag) {
+    public void setBetaChannel (boolean flag)
+    {
         setProperty("betaChannel", String.valueOf(flag));
     }
 
-
     @Deprecated
-    public String getJavaPath () {
+    public String getJavaPath ()
+    {
         return getJavaPath(true);
     }
+
     /**
      * don't use this to launch w/ use getCurrentJava(boolean canUse8)
      * @return java's location
      */
-    public String getJavaPath (boolean allowJava8) {
+    public String getJavaPath (boolean allowJava8)
+    {
         String javaPath = getProperty("javaPath", null);
         if (javaPath == null || !new File(javaPath).isFile())
             remove("javaPath");
@@ -157,8 +185,10 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
-    @Deprecated //use the boolean version instead
-    public JavaInfo getCurrentJava () {
+    @Deprecated
+    //use the boolean version instead
+    public JavaInfo getCurrentJava ()
+    {
         return getCurrentJava(true);
     }
 
@@ -166,20 +196,29 @@ public class Settings extends Properties {
      * Returns user selected or automatically selected JVM's
      * JavaInfo object.
      */
-    public JavaInfo getCurrentJava(boolean canuse8) {
-        if (currentJava == null) {
-            try {
+    public JavaInfo getCurrentJava (boolean canuse8)
+    {
+        if (currentJava == null)
+        {
+            try
+            {
                 currentJava = new JavaInfo(getJavaPath(true));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
-        if(!canuse8 && currentJava.isJava8()) {
+        if (!canuse8 && currentJava.isJava8())
+        {
             JavaInfo java = null;
-            try {
+            try
+            {
                 // this should not never fail
                 java = new JavaInfo(getJavaPath(false));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logError("Error while creating JavaInfo", e);
             }
             if (java != null)
@@ -190,18 +229,24 @@ public class Settings extends Properties {
     }
 
     @Deprecated
-    public String getDefaultJavaPath () {
+    public String getDefaultJavaPath ()
+    {
         return getDefaultJavaPath(true);
     }
-    public String getDefaultJavaPath (boolean allowJava8) {
+
+    public String getDefaultJavaPath (boolean allowJava8)
+    {
         JavaInfo javaVersion;
 
-        if (OSUtils.getCurrentOS() == OS.MACOSX) {
+        if (OSUtils.getCurrentOS() == OS.MACOSX)
+        {
             javaVersion = JavaFinder.parseJavaVersion(allowJava8);
 
             if (javaVersion != null && javaVersion.path != null)
                 return javaVersion.path;
-        } else if (OSUtils.getCurrentOS() == OS.WINDOWS) {
+        }
+        else if (OSUtils.getCurrentOS() == OS.WINDOWS)
+        {
             javaVersion = JavaFinder.parseJavaVersion(allowJava8);
 
             if (javaVersion != null && javaVersion.path != null)
@@ -212,128 +257,164 @@ public class Settings extends Properties {
         return System.getProperty("java.home") + "/bin/java";
     }
 
-    public void setJavaPath (String path) {
-        if (getDefaultJavaPath().equals(path) || path.isEmpty()) {
+    public void setJavaPath (String path)
+    {
+        if (getDefaultJavaPath().equals(path) || path.isEmpty())
+        {
             remove("javaPath");
-        } else {
+        }
+        else
+        {
             setProperty("javaPath", path);
         }
     }
 
-    public String getStyle () {
+    public String getStyle ()
+    {
         return getProperty("style", "defaultStyle.cfg");
     }
 
-    public void setStyle (String path) {
+    public void setStyle (String path)
+    {
         setProperty("style", path);
     }
 
-    public void setConfigFile (File path) {
+    public void setConfigFile (File path)
+    {
         configFile = path;
     }
 
-    public String getLocale () {
+    public String getLocale ()
+    {
         return getProperty("locale", "enUS");
     }
 
-    public void setLocale (String locale) {
+    public void setLocale (String locale)
+    {
         setProperty("locale", locale);
     }
 
-    public File getConfigFile () {
+    public File getConfigFile ()
+    {
         return configFile;
     }
 
-    public void setLastFTBPack (String name) {
+    public void setLastFTBPack (String name)
+    {
         setProperty("lastFTBPack", name);
     }
 
-    public void setLastThirdPartyPack (String name) {
+    public void setLastThirdPartyPack (String name)
+    {
         setProperty("lastThirdPartyPack", name);
     }
 
-    public String getLastFTBPack () {
+    public String getLastFTBPack ()
+    {
         return getProperty("lastFTBPack", ModPack.getPack(0).getDir());
     }
 
-    public String getLastThirdPartyPack () {
+    public String getLastThirdPartyPack ()
+    {
         return getProperty("lastThirdPartyPack", ModPack.getPack(0).getDir());
     }
 
-    public void setDownloadServer (String server) {
+    public void setDownloadServer (String server)
+    {
         setProperty("downloadServer", server);
     }
 
-    public String getDownloadServer () {
+    public String getDownloadServer ()
+    {
         return getProperty("downloadServer", "Automatic");
     }
 
-    public void setConsoleActive (boolean console) {
+    public void setConsoleActive (boolean console)
+    {
         setProperty("consoleActive", String.valueOf(console));
     }
 
-    public boolean getConsoleActive () {
+    public boolean getConsoleActive ()
+    {
         return Boolean.valueOf(getProperty("consoleActive", "true"));
     }
 
-    public void setOptJavaArgs (boolean console) {
+    public void setOptJavaArgs (boolean console)
+    {
         setProperty("optJavaArgs", String.valueOf(console));
     }
 
-    public boolean getOptJavaArgs () {
+    public boolean getOptJavaArgs ()
+    {
         return Boolean.valueOf(getProperty("optJavaArgs", "false"));
     }
 
-    public void setPackVer (String string) {
+    public void setPackVer (String string)
+    {
         setProperty(ModPack.getSelectedPack().getDir(), string);
         if (ModPack.getSelectedPack().getDir().equals("mojang_vanilla"))
             ModPack.setVanillaPackMCVersion(string.equalsIgnoreCase("Recommended Version") ? ModPack.getSelectedPack().getVersion() : string);
     }
 
-    public String getPackVer () {
+    public String getPackVer ()
+    {
         return getProperty(ModPack.getSelectedPack().getDir(), "Recommended Version");
     }
 
-    public String getPackVer (String packDir) {
+    public String getPackVer (String packDir)
+    {
         return getProperty(packDir, "Recommended Version");
     }
 
-    public String getLastAddPath () {
+    public String getLastAddPath ()
+    {
         return getProperty("lastAddPath", "");
     }
 
-    public void setLastAddPath (String string) {
+    public void setLastAddPath (String string)
+    {
         setProperty("lastAddPath", string);
     }
 
-    public void addPrivatePack (String code) {
-        if (code == null || code.isEmpty()) {
+    public void addPrivatePack (String code)
+    {
+        if (code == null || code.isEmpty())
+        {
             return;
         }
-        if (getProperty("privatePacks") != null) {
+        if (getProperty("privatePacks") != null)
+        {
             ArrayList<String> packList = getPrivatePacks();
-            if (!packList.contains(code)) {
+            if (!packList.contains(code))
+            {
                 packList.add(code);
                 setPrivatePacks(packList);
             }
-        } else {
+        }
+        else
+        {
             setProperty("privatePacks", code);
         }
     }
 
-    public void removePrivatePack (String code) {
+    public void removePrivatePack (String code)
+    {
         ArrayList<String> codes = getPrivatePacks();
-        if (codes.contains(code)) {
+        if (codes.contains(code))
+        {
             codes.remove(code);
         }
         setPrivatePacks(codes);
     }
 
-    public void setPrivatePacks (List<String> codes) {
+    public void setPrivatePacks (List<String> codes)
+    {
         String out = "";
         String sep = "";
-        for (String s : codes) {
-            if (!s.isEmpty()) {
+        for (String s : codes)
+        {
+            if (!s.isEmpty())
+            {
                 out += sep + s;
                 sep = ",";
             }
@@ -341,9 +422,11 @@ public class Settings extends Properties {
         setProperty("privatePacks", out);
     }
 
-    public ArrayList<String> getPrivatePacks () {
+    public ArrayList<String> getPrivatePacks ()
+    {
         String[] temp = getProperty("privatePacks", "").split(",");
-        if (temp.length > 0) {
+        if (temp.length > 0)
+        {
             ArrayList<String> packs = new ArrayList<String>();
             Collections.addAll(packs, temp);
             return packs;
@@ -351,151 +434,202 @@ public class Settings extends Properties {
         return null;
     }
 
-    public void setNewsDate () {
+    public void setNewsDate ()
+    {
         setProperty("newsDate", Long.toString(Calendar.getInstance().getTime().getTime()));
     }
 
-    public String getNewsDate () {
+    public String getNewsDate ()
+    {
         return getProperty("newsDate", Long.toString(new Date(0).getTime()));
     }
 
-    public void setLastExtendedState (int lastExtendedState) {
+    public void setLastExtendedState (int lastExtendedState)
+    {
         setProperty("lastExtendedState", String.valueOf(lastExtendedState));
     }
-    public void setGeneratedID(String uuid) {
+
+    public void setGeneratedID (String uuid)
+    {
         setProperty("trackinguuid", uuid);
     }
-    public String getGeneratedID() {
+
+    public String getGeneratedID ()
+    {
         return getProperty("trackinguuid", "");
     }
 
-    public int getLastExtendedState () {
+    public int getLastExtendedState ()
+    {
         return Integer.valueOf(getProperty("lastExtendedState", String.valueOf(Frame.MAXIMIZED_BOTH)));
     }
 
-    public void setKeepLauncherOpen (boolean state) {
+    public void setKeepLauncherOpen (boolean state)
+    {
         setProperty("keepLauncherOpen", String.valueOf(state));
     }
 
-    public boolean getKeepLauncherOpen () {
+    public boolean getKeepLauncherOpen ()
+    {
         return Boolean.parseBoolean(getProperty("keepLauncherOpen", "false"));
     }
 
-    public void setSnooper (boolean state) {
+    public void setSnooper (boolean state)
+    {
         setProperty("snooperDisable", String.valueOf(state));
     }
 
-    public boolean getSnooper () {
+    public boolean getSnooper ()
+    {
         return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
     }
 
-    public void setDebugLauncher (boolean state) {
+    public void setDebugLauncher (boolean state)
+    {
         setProperty("debugLauncher", String.valueOf(state));
     }
 
-    public boolean getDebugLauncher () {
+    public boolean getDebugLauncher ()
+    {
         return Boolean.parseBoolean(getProperty("debugLauncher", "false"));
     }
 
-    public void setLoaded (boolean state) {
+    public void setLoaded (boolean state)
+    {
         setProperty("loaded", String.valueOf(state));
     }
 
-    public boolean getLoaded () {
+    public boolean getLoaded ()
+    {
         return Boolean.parseBoolean(getProperty("loaded", "false"));
     }
 
-    public String getAdditionalJavaOptions () {
+    public String getAdditionalJavaOptions ()
+    {
         return getProperty("additionalJavaOptions", "");
     }
 
-    public void setAdditionalJavaOptions (String opts) {
+    public void setAdditionalJavaOptions (String opts)
+    {
         setProperty("additionalJavaOptions", opts);
     }
 
-    public void setLastPosition (Point lastPosition) {
+    public void setLastPosition (Point lastPosition)
+    {
         int x = lastPosition.x;
         int y = lastPosition.y;
-        if (x < 0) {
+        if (x < 0)
+        {
             x = 0;
         }
-        if (y < 0) {
+        if (y < 0)
+        {
             y = 0;
         }
         Point p = new Point(x, y);
         setObjectProperty("lastPosition", p);
     }
 
-    public Point getLastPosition () {
+    public Point getLastPosition ()
+    {
         Point lastPosition = (Point) getObjectProperty("lastPosition");
-        if (lastPosition == null) {
+        if (lastPosition == null)
+        {
             lastPosition = new Point(300, 300);
         }
         return lastPosition;
     }
 
-    public int getMinJava8HackVsn() {
+    public int getMinJava8HackVsn ()
+    {
         return Integer.parseInt(getProperty("MinJava8HackVsn", "965"));
     }
-    public void setMinJava8HackVsn(int java8HackVsn) {
+
+    public void setMinJava8HackVsn (int java8HackVsn)
+    {
         setProperty("MinJava8HackVsn", String.valueOf(java8HackVsn));
     }
-    public int getMaxJava8HackVsn() {
+
+    public int getMaxJava8HackVsn ()
+    {
         return Integer.parseInt(getProperty("MaxJava8HackVsn", "1209"));
     }
-    public void setMaxJava8HackVsn(int java8HackVsn) {
+
+    public void setMaxJava8HackVsn (int java8HackVsn)
+    {
         setProperty("MaxJava8HackVsn", String.valueOf(java8HackVsn));
     }
-    public void setLastDimension (Dimension lastDimension) {
+
+    public void setLastDimension (Dimension lastDimension)
+    {
         setObjectProperty("lastDimension", lastDimension);
     }
 
-    public Dimension getLastDimension () {
+    public Dimension getLastDimension ()
+    {
         Dimension lastDimension = (Dimension) getObjectProperty("lastDimension");
-        if (lastDimension == null) {
+        if (lastDimension == null)
+        {
             lastDimension = new Dimension(854, 480);
         }
         return lastDimension;
     }
 
-    public void setObjectProperty (String propertyName, Serializable value) {
+    public void setObjectProperty (String propertyName, Serializable value)
+    {
         setProperty(propertyName, objectToString(value));
     }
 
-    public Object getObjectProperty (String propertyName) {
+    public Object getObjectProperty (String propertyName)
+    {
         return objectFromString(getProperty(propertyName, ""));
     }
 
-    public static Object objectFromString (String s) {
-        if (s == null || s.isEmpty()) {
+    public static Object objectFromString (String s)
+    {
+        if (s == null || s.isEmpty())
+        {
             return null;
         }
         byte[] data = javax.xml.bind.DatatypeConverter.parseBase64Binary(s);
-        try {
+        try
+        {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-            try {
+            try
+            {
                 return ois.readObject();
-            } finally {
+            }
+            finally
+            {
                 ois.close();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Failed to read object from string: " + s, e);
             return null;
         }
     }
 
-    private static String objectToString (Serializable o) {
+    private static String objectToString (Serializable o)
+    {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
+        try
+        {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
-            try {
+            try
+            {
                 oos.writeObject(o);
                 return javax.xml.bind.DatatypeConverter.printBase64Binary(baos.toByteArray());
-            } finally {
+            }
+            finally
+            {
                 baos.close();
                 oos.close();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Failed to write object to string" + o, e);
             return null;
         }
@@ -504,23 +638,28 @@ public class Settings extends Properties {
     /**
      * Simple boolean setting getter
      */
-    public boolean getBoolean(String name) {
+    public boolean getBoolean (String name)
+    {
         return Boolean.valueOf(getProperty(name, "false"));
     }
 
     /**
      * Simple boolean setting setter
      */
-    public void setBoolean(String name, boolean value) {
+    public void setBoolean (String name, boolean value)
+    {
         setProperty(name, String.valueOf(value));
     }
 
     /**
      * Clean all setting from namespace
      */
-    public void cleanNamespace(String name) {
-        for (String s: stringPropertyNames()) {
-            if (s.startsWith(name)) {
+    public void cleanNamespace (String name)
+    {
+        for (String s : stringPropertyNames())
+        {
+            if (s.startsWith(name))
+            {
                 remove(s);
             }
         }

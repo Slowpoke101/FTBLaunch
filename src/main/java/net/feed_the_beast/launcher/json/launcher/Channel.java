@@ -20,7 +20,8 @@ import lombok.Data;
 import net.feed_the_beast.launcher.json.versions.Library;
 
 @Data
-public class Channel {
+public class Channel
+{
     private Library channelUpdate;
     private Library file;
     private int version;

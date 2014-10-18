@@ -32,13 +32,16 @@ import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.OSUtils;
 
-public class PastebinPoster extends Thread {
+public class PastebinPoster extends Thread
+{
     @Override
-    public void run () {
+    public void run ()
+    {
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
-        try {
+        try
+        {
             URL url = new URL("http://paste.feed-the-beast.com/api/create?apikey=b6a30d5f030ce86a2b0723ed0b494cdd");
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Cache-Control", "no-transform");
@@ -50,55 +53,73 @@ public class PastebinPoster extends Thread {
             conn.setDoOutput(true);
             out = conn.getOutputStream();
 
-            out.write(("text=" + URLEncoder.encode(Logger.getLogs(), "utf-8")
-                    + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + " Post created"
-                    + "&private=" + URLEncoder.encode("0", "utf-8")
-                    + "&title=" + URLEncoder.encode("Version: " + Constants.version + "." + Main.getBeta(), "utf-8")
-                    + "&lang=" + URLEncoder.encode("FTB Logs", "utf-8")
-                    + "&name=" + URLEncoder.encode("Launcher")).getBytes());
+            out.write(("text=" + URLEncoder.encode(Logger.getLogs(), "utf-8") + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + " Post created" + "&private="
+                    + URLEncoder.encode("0", "utf-8") + "&title=" + URLEncoder.encode("Version: " + Constants.version + "." + Main.getBeta(), "utf-8") + "&lang="
+                    + URLEncoder.encode("FTB Logs", "utf-8") + "&name=" + URLEncoder.encode("Launcher")).getBytes());
             out.flush();
             out.close();
 
-            if (conn.getResponseCode() == 200) {
+            if (conn.getResponseCode() == 200)
+            {
                 in = conn.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 String line;
                 StringBuilder response = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null)
+                {
                     response.append(line);
                     response.append("\r\n");
                 }
                 reader.close();
                 String result = response.toString().trim();
-                if (result.matches("^https?://.*")) {
+                if (result.matches("^https?://.*"))
+                {
                     Logger.logInfo(result.trim());
                     OSUtils.browse(result.trim());
-                } else {
+                }
+                else
+                {
                     String err = result.trim();
-                    if (err.length() > 100) {
+                    if (err.length() > 100)
+                    {
                         err = err.substring(0, 100);
                     }
                     Logger.logError(err);
                 }
-            } else {
+            }
+            else
+            {
                 Logger.logError("didn't get a 200 response code!");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError(e.getMessage());
-        } finally {
-            if (conn != null) {
+        }
+        finally
+        {
+            if (conn != null)
+            {
                 conn.disconnect();
             }
-            if (in != null) {
-                try {
+            if (in != null)
+            {
+                try
+                {
                     in.close();
-                } catch (IOException ignored) {
+                }
+                catch (IOException ignored)
+                {
                 }
             }
-            if (out != null) {
-                try {
+            if (out != null)
+            {
+                try
+                {
                     out.close();
-                } catch (IOException ignored) {
+                }
+                catch (IOException ignored)
+                {
                 }
             }
         }

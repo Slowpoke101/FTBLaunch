@@ -21,8 +21,9 @@ import com.google.common.collect.Maps;
 import java.util.HashMap;
 
 //Class used for storage of various constants & location information used by various downloading processes
-public class Locations {
-	
+public class Locations
+{
+
     //location of them Mojang server that MC itself & the json's are pulled from
     public static final String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
     //location of them Mojang server that MC's resources are pulled from
@@ -53,7 +54,7 @@ public class Locations {
 
     //maps of JSON pairs of the primary/backup download servers
     public static HashMap<String, String> downloadServers = Maps.newHashMap();
-    public static HashMap<String, String> backupServers =  Maps.newHashMap();
+    public static HashMap<String, String> backupServers = Maps.newHashMap();
 
     //Oracle Java Locations
     public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";
@@ -62,21 +63,21 @@ public class Locations {
     public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
     public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
     public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
-    
+
     // Forum and Feed URL
     public static final String forum = "http://forum.feed-the-beast.com/";
     public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";
-    public static final String MODPACKS ="modpacks/";
-    public static final String PRIVATEPACKS ="privatepacks/";
+    public static final String MODPACKS = "modpacks/";
+    public static final String PRIVATEPACKS = "privatepacks/";
     public static final String TEXTUREPACKS = "texturepacks/";
 
     public static final String MAPXML = "maps.xml";
     public static final String MODPACKXML = "modpacks.xml";
     public static final String THIRDPARTYXML = "thirdparty.xml";
-    public static final String TEXTUREPACKXML= "texturepack.xml";
+    public static final String TEXTUREPACKXML = "texturepack.xml";
     public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 

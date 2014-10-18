@@ -48,7 +48,8 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-public class Main {
+public class Main
+{
     public static JGoogleAnalyticsTracker tracker;
     public static AnalyticsConfigData AnalyticsConfigData = new AnalyticsConfigData("UA-37330489-2");
     @Getter
@@ -73,17 +74,22 @@ public class Main {
      * Launch the application.
      * @param args - CLI arguments
      */
-    public static void main (String[] args) {
+    public static void main (String[] args)
+    {
         Benchmark.start("main");
 
-        try {
+        try
+        {
             jc = new JCommander(CommandLineSettings.getSettings(), args);
-        } catch (ParameterException e) {
+        }
+        catch (ParameterException e)
+        {
             System.out.println(e.getMessage());
             System.exit(0);
         }
 
-        if (CommandLineSettings.getSettings().isHelp()) {
+        if (CommandLineSettings.getSettings().isHelp())
+        {
             jc.setProgramName("FTB_Launcher.jar");
             jc.usage();
             System.exit(0);
@@ -97,16 +103,19 @@ public class Main {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         System.setProperty("java.net.preferIPv4Stack", "true");
 
-        if (Settings.getSettings().getUseSystemProxy()) {
+        if (Settings.getSettings().getUseSystemProxy())
+        {
             // Use system default proxy settings
             System.setProperty("java.net.useSystemProxies", "true");
         }
 
-        if (new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).exists()) {
+        if (new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).exists())
+        {
             new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile).delete();
         }
 
-        if (new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).exists()) {
+        if (new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).exists())
+        {
             new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile).delete();
         }
 
@@ -115,7 +124,7 @@ public class Main {
          */
         int logLevel = CommandLineSettings.getSettings().getVerbosity();
         LogLevel stdoutLogLevel = LogLevel.values()[logLevel];
-        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs()?LogSource.ALL:LogSource.LAUNCHER;
+        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs() ? LogSource.ALL : LogSource.LAUNCHER;
 
         Logger.addListener(new StdOutLogger(stdoutLogLevel, stdoutLogSource));
         /*
@@ -128,11 +137,15 @@ public class Main {
          * Setup LogWriters as soon as possible
          * At first run log will be created same directory with launcher
          */
-        try {
+        try
+        {
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.launcherLogFile), LogSource.LAUNCHER));
             Logger.addListener(new LogWriter(new File(Settings.getSettings().getInstallPath(), Locations.minecraftLogFile), LogSource.EXTERNAL));
-        } catch (IOException e1) {
-            if (!Settings.getSettings().isNoConfig()) {
+        }
+        catch (IOException e1)
+        {
+            if (!Settings.getSettings().isNoConfig())
+            {
                 Logger.logDebug("Could not create LogWriters.", e1);
                 Logger.logError("Check your FTB installation location's write access. Launch button is disabled until installation location is fixed.");
                 Main.disableLaunchButton = true;
@@ -142,14 +155,17 @@ public class Main {
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";
-        try {
+        try
+        {
             Properties props = new Properties();
             props.load(mf.openStream());
             mfStr = props.getProperty("LauncherJenkins");
             if (!mfStr.equals("${LauncherJenkins}"))
                 beta = Integer.parseInt(mfStr);
             Logger.logDebug("FTB Launcher CI Build #: " + beta + ", Git SHA: " + props.getProperty("Git-SHA"));
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
         }
@@ -161,11 +177,15 @@ public class Main {
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, JGoogleAnalyticsTracker.GoogleAnalyticsVersion.V_4_7_2);
         tracker.setEnabled(true);
         TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start / " + Constants.version + "." + beta);
-        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
+        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists())
+        {
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
-            try {
+            try
+            {
                 new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 Logger.logError("Error creating os cache text file");
             }
         }
@@ -182,27 +202,38 @@ public class Main {
         mainGUI(args);
     }
 
-    private static void mainGUI(String[] args) {
+    private static void mainGUI (String[] args)
+    {
         /*
          * Setup GUI style & create and show Splash screen in EDT
          * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
          *  => If this guideline is followed then GUI should work smoothly
          */
-        EventQueue.invokeLater(new Runnable() {
+        EventQueue.invokeLater(new Runnable()
+        {
             @Override
-            public void run () {
+            public void run ()
+            {
                 StyleUtil.loadUiStyles();
-                try {
-                    for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                        if ("Nimbus".equals(info.getName())) {
+                try
+                {
+                    for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+                    {
+                        if ("Nimbus".equals(info.getName()))
+                        {
                             UIManager.setLookAndFeel(info.getClassName());
                             break;
                         }
                     }
-                } catch (Exception e) {
-                    try {
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
                         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                    } catch (Exception e1) {
+                    }
+                    catch (Exception e1)
+                    {
                     }
                 }
                 LaunchFrame.loader = new LoadingDialog();
@@ -214,18 +245,24 @@ public class Main {
         I18N.setupLocale();
         I18N.setLocale(Settings.getSettings().getLocale());
 
-
-        if (Settings.getSettings().isNoConfig()) {
+        if (Settings.getSettings().isNoConfig())
+        {
             Logger.logDebug("FirstRunDialog");
-            try {
-                EventQueue.invokeAndWait(new Runnable() {
+            try
+            {
+                EventQueue.invokeAndWait(new Runnable()
+                {
                     @Override
-                    public void run () {
+                    public void run ()
+                    {
                         FirstRunDialog firstRunDialog = new FirstRunDialog();
                         firstRunDialog.setVisible(true);
                     }
                 });
-            } catch (Exception e) {}
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         // NOTE: this messagage will be missed because laoder is not created when this is executed
@@ -234,49 +271,70 @@ public class Main {
         LoadingDialog.advance("Checking installation location");
 
         File installDir = new File(Settings.getSettings().getInstallPath());
-        if (!installDir.exists()) {
+        if (!installDir.exists())
+        {
             installDir.mkdirs();
         }
 
         // CheckInstallPath() does Error/Warning logging in english
         final CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
-        if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
+        if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN)
+        {
             // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override public void run () {
-                        int result = ErrorUtils
-                                .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+            try
+            {
+                SwingUtilities.invokeAndWait(new Runnable()
+                {
+                    @Override
+                    public void run ()
+                    {
+                        int result = ErrorUtils.tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE
+                                : JOptionPane.WARNING_MESSAGE);
                         // pressing OK or closing dialog does not do anything
-                        if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+                        if (result != 0 && result != JOptionPane.CLOSED_OPTION)
+                        {
                             // if user select ignore we save setting and that type of error will be ignored
-                            if (checkResult.setting != null) {
+                            if (checkResult.setting != null)
+                            {
                                 Settings.getSettings().setBoolean(checkResult.setting, true);
                                 Settings.getSettings().save();
                             }
                         }
                     }
                 });
-            } catch (Exception e) {}
+            }
+            catch (Exception e)
+            {
+            }
         }
 
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run () {
+        try
+        {
+            SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run ()
+                {
                     // Same warnings are logged as errors in MainHelpers.printInfo()
-                    if (!OSUtils.is64BitOS()) {
+                    if (!OSUtils.is64BitOS())
+                    {
                         MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
                     }
-                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
+                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits)
+                    {
                         MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
                     }
                     JavaInfo java = Settings.getSettings().getCurrentJava();
-                    if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
+                    if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7))
+                    {
                         MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
                     }
                 }
             });
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
 
@@ -286,10 +344,12 @@ public class Main {
         /*
          * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
          */
-        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
+        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17")
+        {
             @Override
-            protected void done () {
-                if (disableLaunchButton == false )
+            protected void done ()
+            {
+                if (disableLaunchButton == false)
                     LaunchFrame.getInstance().getLaunch().setEnabled(true);
             }
         };
@@ -297,9 +357,13 @@ public class Main {
 
         LoadingDialog.advance("Creating Console window");
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run () {
-                if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            @Override
+            public void run ()
+            {
+                if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive())
+                {
                     LaunchFrame.con = new LauncherConsole();
                     Logger.addListener(LaunchFrame.con);
                     LaunchFrame.con.refreshLogs();
@@ -311,27 +375,39 @@ public class Main {
         MainHelpers.googleAnalytics();
         LoadingDialog.advance("Creating main window");
 
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run () {
+        try
+        {
+            SwingUtilities.invokeAndWait(new Runnable()
+            {
+                @Override
+                public void run ()
+                {
                     LaunchFrame frame = new LaunchFrame(2);
                     LaunchFrame.setInstance(frame);
 
                     // Set up System Tray
-                    if (SystemTray.isSupported() && !CommandLineSettings.getSettings().isDisableTray()) {
+                    if (SystemTray.isSupported() && !CommandLineSettings.getSettings().isDisableTray())
+                    {
                         LaunchFrame.getInstance().setUpSystemTray();
-                    } else {
+                    }
+                    else
+                    {
                         Logger.logDebug("System Tray not supported");
                     }
                 }
             });
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
 
         LoadingDialog.advance("Setting up Launcher");
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler()
+        {
             @Override
-            public void uncaughtException (Thread t, Throwable e) {
+            public void uncaughtException (Thread t, Throwable e)
+            {
                 Logger.logError("Unhandled exception in " + t.toString(), e);
             }
         });
@@ -343,11 +419,15 @@ public class Main {
          * @TODO ModpacksPane has a display issue with packScroll if the
          * main form is not visible when constructed.
          */
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run () {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            @Override
+            public void run ()
+            {
                 //LaunchFrame.getInstance().setVisible(true);
                 //LaunchFrame.getInstance().toBack();
-            }});
+            }
+        });
 
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);
@@ -357,21 +437,28 @@ public class Main {
         Map.addListener(LaunchFrame.getInstance().mapsPane);
         TexturePack.addListener(LaunchFrame.getInstance().tpPane);
 
-
         /*
          * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
          */
         final int beta_ = beta;
-        UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+        UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_)
+        {
             @Override
-            protected void done () {
-                try {
-                    if (get()) {
+            protected void done ()
+            {
+                try
+                {
+                    if (get())
+                    {
                         LauncherUpdateDialog p = new LauncherUpdateDialog(this, LaunchFrame.getInstance().minUsable);
                         p.setVisible(true);
                     }
-                } catch (InterruptedException e) {
-                } catch (ExecutionException e) {
+                }
+                catch (InterruptedException e)
+                {
+                }
+                catch (ExecutionException e)
+                {
                 }
             }
         };
@@ -379,18 +466,25 @@ public class Main {
         LoadingDialog.advance("Downloading pack data");
     }
 
-    private static ArrayList<String> getXmls () {
+    private static ArrayList<String> getXmls ()
+    {
         ArrayList<String> s = Settings.getSettings().getPrivatePacks();
-        if (s == null) {
+        if (s == null)
+        {
             s = new ArrayList<String>();
         }
-        for (int i = 0; i < s.size(); i++) {
-            if (s.get(i).isEmpty()) {
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s.get(i).isEmpty())
+            {
                 s.remove(i);
                 i--;
-            } else {
+            }
+            else
+            {
                 String temp = s.get(i);
-                if (!temp.endsWith(".xml")) {
+                if (!temp.endsWith(".xml"))
+                {
                     s.remove(i);
                     s.add(i, temp + ".xml");
                 }

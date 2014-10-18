@@ -39,7 +39,8 @@ import net.ftb.util.OSUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 
-public class UpdateChecker extends SwingWorker<Boolean, Void> {
+public class UpdateChecker extends SwingWorker<Boolean, Void>
+{
     private int version;
     private int buildJenk;
     private int beta;//beta release target
@@ -56,7 +57,9 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private boolean useBeta;
     private List<String> betaHash;
     public static String UCString;
-    public UpdateChecker(int version, int minUsable, int buildJenk) {
+
+    public UpdateChecker(int version, int minUsable, int buildJenk)
+    {
         this.version = version;
         this.minUsable = minUsable;
         this.allowBeta = Settings.getSettings().isBetaChannel();
@@ -64,30 +67,41 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         if (buildJenk == 9999999)
             this.allowBeta = false;
         String path = null;
-        try {
+        try
+        {
             path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
             Logger.logDebug("Launcher Install path: " + path);//we need this to make sure that the app behaves correctly when updating
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Couldn't get path to current launcher jar/exe", e);
         }
 
     }
 
     @Override
-    protected Boolean doInBackground () {
+    protected Boolean doInBackground ()
+    {
         loadInfo();
-        try {
+        try
+        {
             FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "updatetemp"));
-        } catch (Exception ignored) { }
+        }
+        catch (Exception ignored)
+        {
+        }
         return this.shouldUpdate();
     }
 
-    private void loadInfo () {
-        try {
+    private void loadInfo ()
+    {
+        try
+        {
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink("version.xml")));
             Update upd = JsonFactory.getUpdate("net.ftb:launcher:beta@json", Locations.FTBMAVENFULL);
-            if (upd.getPrimary().equals("beta")){
+            if (upd.getPrimary().equals("beta"))
+            {
                 Channel beta = upd.getBeta();
                 this.betaJenk = beta.getJenkins();
                 int beta_ = this.beta = beta.getVersion();
@@ -97,16 +111,18 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
                 beta_ = beta_ % 100;
                 betaStr += beta_;
                 betaAddress = beta.getFile().getUrl() + beta.getFile().getPath();
-                if(beta.getFile().checksums != null){
+                if (beta.getFile().checksums != null)
+                {
                     betaHash = beta.getFile().checksums;
                 }
-                if(upd.getRelease() != null){
+                if (upd.getRelease() != null)
+                {
                     //TODO add code here to handle if the releases are in maven!!
                 }
             }
 
-
-            if (doc == null) {
+            if (doc == null)
+            {
                 return;
             }
             NamedNodeMap updateAttributes = doc.getDocumentElement().getAttributes();
@@ -117,67 +133,93 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
             latest_ = latest_ % 100;
             verString += latest_;
             downloadAddress = updateAttributes.getNamedItem("downloadURL").getTextContent();
-            if(updateAttributes.getNamedItem("releaseJenkins")!= null) {
+            if (updateAttributes.getNamedItem("releaseJenkins") != null)
+            {
                 relJenk = Integer.parseInt(updateAttributes.getNamedItem("releaseJenkins").getTextContent());
-            } else {
+            }
+            else
+            {
                 Logger.logInfo("Beta channel hasn't been activated yet!");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error while loading launcher update info", e);
         }
     }
 
-    public boolean shouldUpdate () {
-        Logger.logDebug("updater: buildjenk " + buildJenk + " < betajenk " + betaJenk + "|| version " + version + " < " + beta );
-        Logger.logDebug("latest = "  + latest);
-        if (allowBeta && (buildJenk < betaJenk || version < beta)) {
+    public boolean shouldUpdate ()
+    {
+        Logger.logDebug("updater: buildjenk " + buildJenk + " < betajenk " + betaJenk + "|| version " + version + " < " + beta);
+        Logger.logDebug("latest = " + latest);
+        if (allowBeta && (buildJenk < betaJenk || version < beta))
+        {
             Logger.logInfo("New beta version found. version: " + version + "-" + buildJenk + ", latest: " + beta + "-" + betaJenk);
-            UCString = "BETA version " + betaStr +"-" + betaJenk;
+            UCString = "BETA version " + betaStr + "-" + betaJenk;
             useBeta = true;
             return true;
-        } else if (version == latest && buildJenk < relJenk) {
-            Logger.logInfo("Release version found. version: " + version + "-"+ buildJenk+ ", latest: " + latest);
+        }
+        else if (version == latest && buildJenk < relJenk)
+        {
+            Logger.logInfo("Release version found. version: " + version + "-" + buildJenk + ", latest: " + latest);
             useBeta = false;
-            UCString ="Version " +  verString;
+            UCString = "Version " + verString;
             return true;
-        } else if (version < latest) {
+        }
+        else if (version < latest)
+        {
             Logger.logInfo("New version found. version: " + version + ", latest: " + latest);
             useBeta = false;
-            UCString ="Version " +  verString;
+            UCString = "Version " + verString;
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
-    public void update () {
+
+    public void update ()
+    {
         String path = null;
-        try {
+        try
+        {
             path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
             Logger.logDebug("Launcher Install path: " + path);//we need this to make sure that the app behaves correctly when updating
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Couldn't get path to current launcher jar/exe", e);
         }
         String temporaryUpdatePath = OSUtils.getCacheStorageLocation() + File.separator + "updatetemp" + "/" + path.substring(path.lastIndexOf(File.separator) + 1);
         String extension = path.substring(path.lastIndexOf('.') + 1);
         extension = "exe".equalsIgnoreCase(extension) ? extension : "jar";
-        try {
-            URL updateURL = new URL(!useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress.replace("${ext}", extension).replace("${jenkins}", Integer.toString(betaJenk)).replace("${version}", betaStr));
+        try
+        {
+            URL updateURL = new URL(!useBeta ? DownloadUtils.getCreeperhostLink(downloadAddress + "." + extension) : betaAddress.replace("${ext}", extension)
+                    .replace("${jenkins}", Integer.toString(betaJenk)).replace("${version}", betaStr));
             File temporaryUpdate = new File(temporaryUpdatePath);
             temporaryUpdate.getParentFile().mkdir();
             DownloadUtils.downloadToFile(updateURL, temporaryUpdate);//TODO hash check this !!!!
-            if(useBeta && betaHash != null){
+            if (useBeta && betaHash != null)
+            {
                 String sha = DownloadUtils.fileSHA(temporaryUpdate);
-                if(betaHash.contains(sha))
+                if (betaHash.contains(sha))
                     SelfUpdate.runUpdate(path, temporaryUpdate.getCanonicalPath());
-                else {
+                else
+                {
                     Logger.logDebug("TempPath" + temporaryUpdatePath);
                     throw new IOException("Update Download failed hash check please try again! -- fileSha " + sha);
                 }
-            }else{
+            }
+            else
+            {
                 SelfUpdate.runUpdate(path, temporaryUpdatePath);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error while updating launcher", e);
         }
     }

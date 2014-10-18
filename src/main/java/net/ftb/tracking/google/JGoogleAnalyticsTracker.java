@@ -71,9 +71,11 @@ import net.ftb.log.Logger;
  * </p>
  * @author Daniel Murphy, Stefan Brozinski
  */
-public class JGoogleAnalyticsTracker {
+public class JGoogleAnalyticsTracker
+{
 
-    public static enum DispatchMode {
+    public static enum DispatchMode
+    {
         /**
          * Each tracking call will wait until the http request
          * completes before returning
@@ -96,12 +98,14 @@ public class JGoogleAnalyticsTracker {
     private static Thread backgroundThread = null; // the thread used in 'queued' mode.
     private static boolean backgroundThreadMayRun = false;
 
-    static {
+    static
+    {
         asyncThreadGroup.setMaxPriority(Thread.MIN_PRIORITY);
         asyncThreadGroup.setDaemon(true);
     }
 
-    public static enum GoogleAnalyticsVersion {
+    public static enum GoogleAnalyticsVersion
+    {
         V_4_7_2
     }
 
@@ -111,11 +115,13 @@ public class JGoogleAnalyticsTracker {
     private DispatchMode mode;
     private boolean enabled;
 
-    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion) {
+    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion)
+    {
         this(argConfigData, argVersion, DispatchMode.SINGLE_THREAD);
     }
 
-    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion, DispatchMode argMode) {
+    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion, DispatchMode argMode)
+    {
         gaVersion = argVersion;
         configData = argConfigData;
         createBuilder();
@@ -129,11 +135,14 @@ public class JGoogleAnalyticsTracker {
      * @param argMode the mode to to put the tracker in.  If this is null, the tracker
      * defaults to {@link DispatchMode#SINGLE_THREAD}
      */
-    public void setDispatchMode (DispatchMode argMode) {
-        if (argMode == null) {
+    public void setDispatchMode (DispatchMode argMode)
+    {
+        if (argMode == null)
+        {
             argMode = DispatchMode.SINGLE_THREAD;
         }
-        if (argMode == DispatchMode.SINGLE_THREAD) {
+        if (argMode == DispatchMode.SINGLE_THREAD)
+        {
             startBackgroundThread();
         }
         mode = argMode;
@@ -144,7 +153,8 @@ public class JGoogleAnalyticsTracker {
      * @see DispatchMode
      * @return
      */
-    public DispatchMode getDispatchMode () {
+    public DispatchMode getDispatchMode ()
+    {
         return mode;
     }
 
@@ -152,7 +162,8 @@ public class JGoogleAnalyticsTracker {
      * Convenience method to check if the tracker is in synchronous mode.
      * @return
      */
-    public boolean isSynchronous () {
+    public boolean isSynchronous ()
+    {
         return mode == DispatchMode.SYNCHRONOUS;
     }
 
@@ -160,7 +171,8 @@ public class JGoogleAnalyticsTracker {
      * Convenience method to check if the tracker is in single-thread mode
      * @return
      */
-    public boolean isSingleThreaded () {
+    public boolean isSingleThreaded ()
+    {
         return mode == DispatchMode.SINGLE_THREAD;
     }
 
@@ -168,14 +180,16 @@ public class JGoogleAnalyticsTracker {
      * Convenience method to check if the tracker is in multi-thread mode
      * @return
      */
-    public boolean isMultiThreaded () {
+    public boolean isMultiThreaded ()
+    {
         return mode == DispatchMode.MULTI_THREAD;
     }
 
     /**
      * Resets the session cookie.
      */
-    public void resetSession () {
+    public void resetSession ()
+    {
         builder.resetSession();
     }
 
@@ -184,7 +198,8 @@ public class JGoogleAnalyticsTracker {
      * 
      * @param argEnabled
      */
-    public void setEnabled (boolean argEnabled) {
+    public void setEnabled (boolean argEnabled)
+    {
         enabled = argEnabled;
     }
 
@@ -193,7 +208,8 @@ public class JGoogleAnalyticsTracker {
      * 
      * @return
      */
-    public boolean isEnabled () {
+    public boolean isEnabled ()
+    {
         return enabled;
     }
 
@@ -204,7 +220,8 @@ public class JGoogleAnalyticsTracker {
      * 
      * @param argProxy  The proxy to use
      */
-    public static void setProxy (Proxy argProxy) {
+    public static void setProxy (Proxy argProxy)
+    {
         proxy = (argProxy != null) ? argProxy : Proxy.NO_PROXY;
     }
 
@@ -215,25 +232,33 @@ public class JGoogleAnalyticsTracker {
      * 
      * @param proxyAddr  "addr:port" of the proxy to use; may also be given as URL ("http://addr:port/").
      */
-    public static void setProxy (String proxyAddr) {
-        if (proxyAddr != null) {
+    public static void setProxy (String proxyAddr)
+    {
+        if (proxyAddr != null)
+        {
             Scanner s = new Scanner(proxyAddr);
             // Split into "proxyAddr:proxyPort".
             proxyAddr = null;
             int proxyPort = 8080;
-            try {
+            try
+            {
                 s.findInLine("(http://|)([^:/]+)(:|)([0-9]*)(/|)");
                 MatchResult m = s.match();
-                if (m.groupCount() >= 2) {
+                if (m.groupCount() >= 2)
+                {
                     proxyAddr = m.group(2);
                 }
-                if ((m.groupCount() >= 4) && (!m.group(4).isEmpty())) {
+                if ((m.groupCount() >= 4) && (!m.group(4).isEmpty()))
+                {
                     proxyPort = Integer.parseInt(m.group(4));
                 }
-            } finally {
+            }
+            finally
+            {
                 s.close();
             }
-            if (proxyAddr != null) {
+            if (proxyAddr != null)
+            {
                 SocketAddress sa = new InetSocketAddress(proxyAddr, proxyPort);
                 setProxy(new Proxy(Type.HTTP, sa));
             }
@@ -247,23 +272,31 @@ public class JGoogleAnalyticsTracker {
      * 
      * @param timeoutMillis  The maximum number of milliseconds to wait.
      */
-    public static void completeBackgroundTasks (long timeoutMillis) {
+    public static void completeBackgroundTasks (long timeoutMillis)
+    {
         boolean fifoEmpty;
         boolean asyncThreadsCompleted;
         long absTimeout = System.currentTimeMillis() + timeoutMillis;
-        while (System.currentTimeMillis() < absTimeout) {
-            synchronized (fifo) {
+        while (System.currentTimeMillis() < absTimeout)
+        {
+            synchronized (fifo)
+            {
                 fifoEmpty = (fifo.size() == 0);
             }
-            synchronized (JGoogleAnalyticsTracker.class) {
+            synchronized (JGoogleAnalyticsTracker.class)
+            {
                 asyncThreadsCompleted = (asyncThreadsRunning == 0);
             }
-            if (fifoEmpty && asyncThreadsCompleted) {
+            if (fifoEmpty && asyncThreadsCompleted)
+            {
                 break;
             }
-            try {
+            try
+            {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e)
+            {
                 break;
             }
         }
@@ -281,7 +314,8 @@ public class JGoogleAnalyticsTracker {
      * @param argHostName
      *            the host name for the url
      */
-    public void trackPageView (String argPageURL, String argPageTitle, String argHostName) {
+    public void trackPageView (String argPageURL, String argPageTitle, String argHostName)
+    {
         trackPageViewFromReferrer(argPageURL, argPageTitle, argHostName, "http://www.dmurph.com", "/");
     }
 
@@ -301,8 +335,10 @@ public class JGoogleAnalyticsTracker {
      * @param argReferrerPage
      *            page of the referrer. ex, /mypage.php
      */
-    public void trackPageViewFromReferrer (String argPageURL, String argPageTitle, String argHostName, String argReferrerSite, String argReferrerPage) {
-        if (argPageURL == null) {
+    public void trackPageViewFromReferrer (String argPageURL, String argPageTitle, String argHostName, String argReferrerSite, String argReferrerPage)
+    {
+        if (argPageURL == null)
+        {
             throw new IllegalArgumentException("Page URL cannot be null, Google will not track the data.");
         }
         AnalyticsRequestData data = new AnalyticsRequestData();
@@ -330,8 +366,10 @@ public class JGoogleAnalyticsTracker {
      *            the keywords of the search. ex: java google analytics tracking
      *            utility
      */
-    public void trackPageViewFromSearch (String argPageURL, String argPageTitle, String argHostName, String argSearchSource, String argSearchKeywords) {
-        if (argPageURL == null) {
+    public void trackPageViewFromSearch (String argPageURL, String argPageTitle, String argHostName, String argSearchSource, String argSearchKeywords)
+    {
+        if (argPageURL == null)
+        {
             throw new IllegalArgumentException("Page URL cannot be null, Google will not track the data.");
         }
         AnalyticsRequestData data = new AnalyticsRequestData();
@@ -349,7 +387,8 @@ public class JGoogleAnalyticsTracker {
      * @param argCategory
      * @param argAction
      */
-    public void trackEvent (String argCategory, String argAction) {
+    public void trackEvent (String argCategory, String argAction)
+    {
         trackEvent(argCategory, argAction, null, null);
     }
 
@@ -361,7 +400,8 @@ public class JGoogleAnalyticsTracker {
      * @param argAction
      * @param argLabel
      */
-    public void trackEvent (String argCategory, String argAction, String argLabel) {
+    public void trackEvent (String argCategory, String argAction, String argLabel)
+    {
         trackEvent(argCategory, argAction, argLabel, null);
     }
 
@@ -378,7 +418,8 @@ public class JGoogleAnalyticsTracker {
      * @param argValue
      *            optional
      */
-    public void trackEvent (String argCategory, String argAction, String argLabel, Integer argValue) {
+    public void trackEvent (String argCategory, String argAction, String argLabel, Integer argValue)
+    {
         AnalyticsRequestData data = new AnalyticsRequestData();
         data.setEventCategory(argCategory);
         data.setEventAction(argAction);
@@ -394,30 +435,42 @@ public class JGoogleAnalyticsTracker {
      * @throws NullPointerException
      *             if argData is null or if the URL builder is null
      */
-    public synchronized void makeCustomRequest (AnalyticsRequestData argData) {
-        if (!enabled) {
+    public synchronized void makeCustomRequest (AnalyticsRequestData argData)
+    {
+        if (!enabled)
+        {
             Logger.logInfo("Ignoring tracking request, enabled is false");
             return;
         }
-        if (argData == null) {
+        if (argData == null)
+        {
             throw new NullPointerException("Data cannot be null");
         }
-        if (builder == null) {
+        if (builder == null)
+        {
             throw new NullPointerException("Class was not initialized");
         }
         final String url = builder.buildURL(argData);
-        switch (mode) {
+        switch (mode)
+        {
         case MULTI_THREAD:
-            Thread t = new Thread(asyncThreadGroup, "AnalyticsThread-" + asyncThreadGroup.activeCount()) {
+            Thread t = new Thread(asyncThreadGroup, "AnalyticsThread-" + asyncThreadGroup.activeCount())
+            {
                 @Override
-                public void run () {
-                    synchronized (JGoogleAnalyticsTracker.class) {
+                public void run ()
+                {
+                    synchronized (JGoogleAnalyticsTracker.class)
+                    {
                         asyncThreadsRunning++;
                     }
-                    try {
+                    try
+                    {
                         dispatchRequest(url);
-                    } finally {
-                        synchronized (JGoogleAnalyticsTracker.class) {
+                    }
+                    finally
+                    {
+                        synchronized (JGoogleAnalyticsTracker.class)
+                        {
                             asyncThreadsRunning--;
                         }
                     }
@@ -430,19 +483,23 @@ public class JGoogleAnalyticsTracker {
             dispatchRequest(url);
             break;
         default: // in case it's null, we default to the single-thread
-            synchronized (fifo) {
+            synchronized (fifo)
+            {
                 fifo.addLast(url);
                 fifo.notify();
             }
-            if (!backgroundThreadMayRun) {
+            if (!backgroundThreadMayRun)
+            {
                 Logger.logError("A tracker request has been added to the queue but the background thread isn't running." + url);
             }
             break;
         }
     }
 
-    private static void dispatchRequest (String argURL) {
-        try {
+    private static void dispatchRequest (String argURL)
+    {
+        try
+        {
             URL url = new URL(argURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
             connection.setRequestProperty("Cache-Control", "no-transform");
@@ -450,19 +507,24 @@ public class JGoogleAnalyticsTracker {
             connection.setInstanceFollowRedirects(true);
             connection.connect();
             int responseCode = connection.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
+            if (responseCode != HttpURLConnection.HTTP_OK)
+            {
                 Logger.logError("JGoogleAnalyticsTracker: Error requesting url '{}', received response code {}" + argURL + responseCode);
             }
             //			else {
             //				Logger.logInfo("JGoogleAnalyticsTracker: Tracking success");
             //			}
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error making tracking request", e);
         }
     }
 
-    private void createBuilder () {
-        switch (gaVersion) {
+    private void createBuilder ()
+    {
+        switch (gaVersion)
+        {
         case V_4_7_2:
             builder = new GoogleAnalytics(configData);
             break;
@@ -475,36 +537,52 @@ public class JGoogleAnalyticsTracker {
     /**
      * If the background thread for 'queued' mode is not running, start it now.
      */
-    private synchronized static void startBackgroundThread () {
-        if (backgroundThread == null) {
+    private synchronized static void startBackgroundThread ()
+    {
+        if (backgroundThread == null)
+        {
             backgroundThreadMayRun = true;
-            backgroundThread = new Thread(asyncThreadGroup, "AnalyticsBackgroundThread") {
+            backgroundThread = new Thread(asyncThreadGroup, "AnalyticsBackgroundThread")
+            {
                 @Override
-                public void run () {
+                public void run ()
+                {
                     Logger.logInfo("AnalyticsBackgroundThread started");
-                    while (backgroundThreadMayRun) {
-                        try {
+                    while (backgroundThreadMayRun)
+                    {
+                        try
+                        {
                             String url = null;
-                            synchronized (fifo) {
-                                if (fifo.isEmpty()) {
+                            synchronized (fifo)
+                            {
+                                if (fifo.isEmpty())
+                                {
                                     fifo.wait();
                                 }
-                                if (!fifo.isEmpty()) {
+                                if (!fifo.isEmpty())
+                                {
                                     // Get a reference to the oldest element in the FIFO, but leave it in the FIFO until it is processed.
                                     url = fifo.getFirst();
                                 }
                             }
-                            if (url != null) {
-                                try {
+                            if (url != null)
+                            {
+                                try
+                                {
                                     dispatchRequest(url);
-                                } finally {
+                                }
+                                finally
+                                {
                                     // Now that we have completed the HTTP request to GA, remove the element from the FIFO.
-                                    synchronized (fifo) {
+                                    synchronized (fifo)
+                                    {
                                         fifo.removeFirst();
                                     }
                                 }
                             }
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e)
+                        {
                             Logger.logError("Got exception from dispatch thread", e);
                         }
                     }
@@ -523,15 +601,21 @@ public class JGoogleAnalyticsTracker {
      * 
      * @param timeoutMillis  If nonzero, wait for thread completion before returning.
      */
-    public static void stopBackgroundThread (long timeoutMillis) {
+    public static void stopBackgroundThread (long timeoutMillis)
+    {
         backgroundThreadMayRun = false;
-        synchronized (fifo) {
+        synchronized (fifo)
+        {
             fifo.notify();
         }
-        if ((backgroundThread != null) && (timeoutMillis > 0)) {
-            try {
+        if ((backgroundThread != null) && (timeoutMillis > 0))
+        {
+            try
+            {
                 backgroundThread.join(timeoutMillis);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e)
+            {
             }
             backgroundThread = null;
         }

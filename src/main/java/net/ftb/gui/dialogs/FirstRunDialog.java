@@ -45,7 +45,8 @@ import java.util.Map;
 
 import javax.swing.JComboBox;
 
-public class FirstRunDialog extends JDialog {
+public class FirstRunDialog extends JDialog
+{
 
     private static final long serialVersionUID = 1L;
 
@@ -60,7 +61,8 @@ public class FirstRunDialog extends JDialog {
 
     private JComboBox languageList;
 
-    public FirstRunDialog() {
+    public FirstRunDialog()
+    {
         super(LaunchFrame.getInstance(), true);
 
         setupGUI();
@@ -71,22 +73,29 @@ public class FirstRunDialog extends JDialog {
 
         installPath.setText(OSUtils.getDefInstallPath());
 
-        applyButton.addActionListener(new ActionListener() {
+        applyButton.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 Logger.logDebug("Trying path: " + installPath.getText());
                 CheckInstallPath checkResult = new CheckInstallPath(installPath.getText());
 
-                if (checkResult.action == Action.BLOCK) {
+                if (checkResult.action == Action.BLOCK)
+                {
                     ErrorUtils.tossError(checkResult.message + "\nPlease select again", checkResult.localizedMessage + "\n" + I18N.getLocaleString("CIP_SELECTAGAIN"));
-                } else if (checkResult.action == Action.WARN) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab", checkResult.localizedMessage +
-                            "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
+                }
+                else if (checkResult.action == Action.WARN)
+                {
+                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab",
+                            checkResult.localizedMessage + "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
                     Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
                     Settings.getSettings().save();
-                } else if (checkResult.action == Action.OK) {
+                }
+                else if (checkResult.action == Action.OK)
+                {
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
                     Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
@@ -96,8 +105,9 @@ public class FirstRunDialog extends JDialog {
         });
     }
 
-    private void setupGUI() {
-    	setTitle(I18N.getLocaleString("INSTALL_TITLE"));
+    private void setupGUI ()
+    {
+        setTitle(I18N.getLocaleString("INSTALL_TITLE"));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setResizable(false);
         setLocationRelativeTo(null);
@@ -138,19 +148,24 @@ public class FirstRunDialog extends JDialog {
         contentPanel.add(applyButton);
 
         String[] locales;
-        synchronized (I18N.localeIndices) {
+        synchronized (I18N.localeIndices)
+        {
             locales = new String[I18N.localeIndices.size()];
-            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
+            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet())
+            {
                 Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
                 locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
             }
         }
         languageList = new JComboBox(locales);
-        languageList.addActionListener(new ActionListener() {
+        languageList.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 I18N.setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
-                if (LaunchFrame.getInstance() != null) {
+                if (LaunchFrame.getInstance() != null)
+                {
                     LaunchFrame.getInstance().updateLocale();
                 }
                 updateLocale();
@@ -161,11 +176,13 @@ public class FirstRunDialog extends JDialog {
         contentPanel.add(languageList);
     }
 
-    public void setInstallFolderText(String text) {
+    public void setInstallFolderText (String text)
+    {
         installPath.setText(text);
     }
 
-    private void updateLocale() {
+    private void updateLocale ()
+    {
         setTitle(I18N.getLocaleString("INSTALL_TITLE"));
         messageLbl.setText(I18N.getLocaleString("INSTALL_FIRSTUSE"));
         installPathLbl.setText(I18N.getLocaleString("INSTALL_FOLDER"));

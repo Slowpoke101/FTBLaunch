@@ -48,7 +48,8 @@ import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("serial")
-public class OptionsPane extends JPanel implements ILauncherPane {
+public class OptionsPane extends JPanel implements ILauncherPane
+{
     private JToggleButton tglbtnForceUpdate;
     private JButton installBrowseBtn, advancedOptionsBtn, btnInstallJava = new JButton();
     private JLabel lblJavaVersion, lblInstallFolder, lblRamMaximum, lblLocale, currentRam, lbl32BitWarning = new JLabel();
@@ -58,18 +59,22 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs, useSystemProxy;
     private final Settings settings;
 
-    private FocusListener settingsChangeListener = new FocusListener() {
+    private FocusListener settingsChangeListener = new FocusListener()
+    {
         @Override
-        public void focusLost (FocusEvent e) {
+        public void focusLost (FocusEvent e)
+        {
             saveSettingsInto(settings);
         }
 
         @Override
-        public void focusGained (FocusEvent e) {
+        public void focusGained (FocusEvent e)
+        {
         }
     };
 
-    public OptionsPane(Settings settings) {
+    public OptionsPane(Settings settings)
+    {
         this.settings = settings;
         setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -92,9 +97,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
         tglbtnForceUpdate = new JToggleButton(I18N.getLocaleString("FORCE_UPDATE"));
         tglbtnForceUpdate.setBounds(147, 48, 629, 29);
-        tglbtnForceUpdate.addActionListener(new ActionListener() {
+        tglbtnForceUpdate.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 saveSettingsInto(OptionsPane.this.settings);
             }
         });
@@ -114,16 +121,26 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         ramMaximum.setMinimum(256);
 
         Boolean vm64Bits = Settings.getSettings().getCurrentJava().is64bits;
-        if (vm64Bits != null) {
-            if (vm64Bits) {
+        if (vm64Bits != null)
+        {
+            if (vm64Bits)
+            {
                 ramMaximum.setMaximum((int) ram);
-            } else {
-                if (ram < 1024) {
+            }
+            else
+            {
+                if (ram < 1024)
+                {
                     ramMaximum.setMaximum((int) ram);
-                } else {
-                    if (freeram > 2046) {
+                }
+                else
+                {
+                    if (freeram > 2046)
+                    {
                         ramMaximum.setMaximum(1536);
-                    } else {
+                    }
+                    else
+                    {
                         ramMaximum.setMaximum(1024);
                     }
                 }
@@ -132,9 +149,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         int ramMax = (Integer.parseInt(settings.getRamMax()) > ramMaximum.getMaximum()) ? ramMaximum.getMaximum() : Integer.parseInt(settings.getRamMax());
         ramMaximum.setValue(ramMax);
         currentRam.setText(getAmount());
-        ramMaximum.addChangeListener(new ChangeListener() {
+        ramMaximum.addChangeListener(new ChangeListener()
+        {
             @Override
-            public void stateChanged (ChangeEvent arg0) {
+            public void stateChanged (ChangeEvent arg0)
+            {
                 currentRam.setText(getAmount());
             }
         });
@@ -147,20 +166,25 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(currentRam);
 
         String[] locales;
-        synchronized (I18N.localeIndices) {
+        synchronized (I18N.localeIndices)
+        {
             locales = new String[I18N.localeIndices.size()];
-            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet()) {
+            for (Map.Entry<Integer, String> entry : I18N.localeIndices.entrySet())
+            {
                 Logger.logInfo("[i18n] Added " + entry.getKey().toString() + " " + entry.getValue() + " to options pane");
                 locales[entry.getKey()] = I18N.localeFiles.get(entry.getValue());
             }
         }
         locale = new JComboBox(locales);
         locale.setBounds(190, 130, 222, 25);
-        locale.addActionListener(new ActionListener() {
+        locale.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 I18N.setLocale(I18N.localeIndices.get(locale.getSelectedIndex()));
-                if (LaunchFrame.getInstance() != null) {
+                if (LaunchFrame.getInstance() != null)
+                {
                     LaunchFrame.getInstance().updateLocale();
                 }
             }
@@ -201,9 +225,11 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
         advancedOptionsBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS"));
         advancedOptionsBtn.setBounds(147, 275, 629, 29);
-        advancedOptionsBtn.addActionListener(new ActionListener() {
+        advancedOptionsBtn.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 AdvancedOptionsDialog aod = new AdvancedOptionsDialog();
                 aod.setVisible(true);
             }
@@ -211,19 +237,22 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         advancedOptionsBtn.getModel().setPressed(settings.isForceUpdateEnabled());
         add(advancedOptionsBtn);
 
-        if ((OSUtils.getCurrentOS().equals(OS.WINDOWS) || OSUtils.getCurrentOS().equals(OS.MACOSX)) && JavaFinder.parseJavaVersion() != null && JavaFinder.parseJavaVersion().path != null) {
+        if ((OSUtils.getCurrentOS().equals(OS.WINDOWS) || OSUtils.getCurrentOS().equals(OS.MACOSX)) && JavaFinder.parseJavaVersion() != null && JavaFinder.parseJavaVersion().path != null)
+        {
             lblJavaVersion = new JLabel("Java version: " + JavaFinder.parseJavaVersion().origVersion);
             lblJavaVersion.setBounds(15, 276, 250, 25);
             add(lblJavaVersion);
         }
     }
 
-    public void setInstallFolderText (String text) {
+    public void setInstallFolderText (String text)
+    {
         installFolderTextField.setText(text);
         saveSettingsInto(settings);
     }
 
-    public void saveSettingsInto (Settings settings) {
+    public void saveSettingsInto (Settings settings)
+    {
         settings.setInstallPath(installFolderTextField.getText());
         settings.setForceUpdateEnabled(tglbtnForceUpdate.isSelected());
         settings.setRamMax(String.valueOf(ramMaximum.getValue()));
@@ -235,27 +264,33 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         settings.save();
     }
 
-    public void updateLocale () {
+    public void updateLocale ()
+    {
         lblInstallFolder.setText(I18N.getLocaleString("INSTALL_FOLDER"));
         tglbtnForceUpdate.setText(I18N.getLocaleString("FORCE_UPDATE"));
         lblRamMaximum.setText(I18N.getLocaleString("RAM_MAX"));
         lblLocale.setText(I18N.getLocaleString("LANGUAGE"));
     }
 
-    private String getAmount () {
+    private String getAmount ()
+    {
         int ramMax = ramMaximum.getValue();
         return (ramMax >= 1024) ? Math.round((ramMax / 256) / 4) + "." + (((ramMax / 256) % 4) * 25) + " GB" : ramMax + " MB";
     }
 
     @Override
-    public void onVisible () {
+    public void onVisible ()
+    {
     }
 
-    public void addUpdateJREButton(final String webLink, String unlocMessage){
+    public void addUpdateJREButton (final String webLink, String unlocMessage)
+    {
         btnInstallJava.setText(I18N.getLocaleString(unlocMessage));
-        btnInstallJava.addActionListener(new ActionListener() {
+        btnInstallJava.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 OSUtils.browse(webLink);
             }
         });
@@ -263,7 +298,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         add(btnInstallJava);
     }
 
-    public void addUpdateLabel(final String unlocMessage){
+    public void addUpdateLabel (final String unlocMessage)
+    {
         lbl32BitWarning.setText(I18N.getLocaleString(unlocMessage));
         lbl32BitWarning.setBounds(147, 180, 600, 25);
         lbl32BitWarning.setForeground(Color.red);
@@ -271,40 +307,55 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     }
 
-    public void offerJava7(String reason) {
-        if(OSUtils.getCurrentOS().equals(OS.MACOSX)){
-            if(JavaFinder.java8Found) {//they need the jdk link
+    public void offerJava7 (String reason)
+    {
+        if (OSUtils.getCurrentOS().equals(OS.MACOSX))
+        {
+            if (JavaFinder.java8Found)
+            {//they need the jdk link
                 addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
                 addUpdateLabel("JAVA_NEW_Warning");
-            }else if(OSUtils.canRun7OnMac()){
+            }
+            else if (OSUtils.canRun7OnMac())
+            {
                 addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
                 addUpdateLabel(reason);
-            }else{
+            }
+            else
+            {
                 //TODO deal with old mac's that can't run java 7
             }
         }
-        else if(OSUtils.is64BitOS()){
-            if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+        else if (OSUtils.is64BitOS())
+        {
+            if (OSUtils.getCurrentOS().equals(OS.WINDOWS))
+            {
                 addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
                 addUpdateLabel(reason);
             }
-            else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+            else if (OSUtils.getCurrentOS().equals(OS.UNIX))
+            {
                 addUpdateJREButton(Locations.java64Lin, "DOWNLOAD_JAVA64");
                 addUpdateLabel(reason);
             }
-        }else{
-            if(OSUtils.getCurrentOS().equals(OS.WINDOWS)){
+        }
+        else
+        {
+            if (OSUtils.getCurrentOS().equals(OS.WINDOWS))
+            {
                 addUpdateJREButton(Locations.java32Win, "DOWNLOAD_JAVA32");
                 addUpdateLabel(reason);
             }
-            else if(OSUtils.getCurrentOS().equals(OS.UNIX)){
+            else if (OSUtils.getCurrentOS().equals(OS.UNIX))
+            {
                 addUpdateJREButton(Locations.java32Lin, "DOWNLOAD_JAVA32");
                 addUpdateLabel(reason);
             }
         }
     }
 
-    public void updateJavaLabels() {
+    public void updateJavaLabels ()
+    {
         remove(lbl32BitWarning);
         remove(btnInstallJava);
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
@@ -312,32 +363,39 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         JavaInfo javaBackup = Settings.getSettings().getCurrentJava(false);
 
         // offer java 7 is java 6 or older is detected
-        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
+        if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7))
+        {
             offerJava7("JAVA_OLD_Warning");
         }
 
         // offer 64-bit java 7 is OS X and java 8 detected
-        else if(OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 ||  java.getMinor() > 7)){
+        else if (OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || java.getMinor() > 7))
+        {
             addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
             addUpdateLabel("JAVA_NEW_Warning");
         }
-        else if(javaBackup == null && java.isJava8() || (OSUtils.getCurrentOS() == OS.UNIX && java.isJava8())) {
+        else if (javaBackup == null && java.isJava8() || (OSUtils.getCurrentOS() == OS.UNIX && java.isJava8()))
+        {
             offerJava7("JAVA_NEW_Warning");
         }
 
         // offer 64-bit java if 32-bit java detected in 64-bit OS
-        else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
+        else if (!Settings.getSettings().getCurrentJava().is64bits)
+        {//needs to use proper bit's
             addUpdateLabel("JAVA_32BIT_WARNING");
-            if (OSUtils.getCurrentOS().equals(OS.WINDOWS)) {
-                if (OSUtils.is64BitWindows()) {
+            if (OSUtils.getCurrentOS().equals(OS.WINDOWS))
+            {
+                if (OSUtils.is64BitWindows())
+                {
                     addUpdateJREButton(Locations.java64Win, "DOWNLOAD_JAVA64");
                 }
             }
         }
         repaint();
     }
-    
-    public void updateShowConsole() {
-    	chckbxShowConsole.setSelected(settings.getConsoleActive());
+
+    public void updateShowConsole ()
+    {
+        chckbxShowConsole.setSelected(settings.getConsoleActive());
     }
 }

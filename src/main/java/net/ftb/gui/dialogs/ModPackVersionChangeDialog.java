@@ -37,7 +37,8 @@ import net.ftb.tools.ModManager;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class ModPackVersionChangeDialog extends JDialog {
+public class ModPackVersionChangeDialog extends JDialog
+{
     private JLabel messageLbl;
     private JLabel updateLbl;
     private JTextArea versionLbl;
@@ -47,14 +48,17 @@ public class ModPackVersionChangeDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
+    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion)
+    {
         super(instance, modal);
 
         setupGui(storedVersion, onlineVersion);
 
-        update.addActionListener(new ActionListener() {
+        update.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 LaunchFrame.allowVersionChange = true;
                 LaunchFrame.doVersionBackup = backupCFG.isSelected();
                 Settings.getSettings().setPackVer(onlineVersion);
@@ -63,9 +67,11 @@ public class ModPackVersionChangeDialog extends JDialog {
             }
         });
 
-        abort.addActionListener(new ActionListener() {
+        abort.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 LaunchFrame.allowVersionChange = false;
                 Settings.getSettings().setPackVer(storedVersion);
                 setVisible(false);
@@ -73,7 +79,8 @@ public class ModPackVersionChangeDialog extends JDialog {
         });
     }
 
-    private void setupGui (String storedVersion, String onlineVersion) {
+    private void setupGui (String storedVersion, String onlineVersion)
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
         setResizable(true);
@@ -81,10 +88,13 @@ public class ModPackVersionChangeDialog extends JDialog {
         Container panel = getContentPane();
         panel.setLayout(new MigLayout());
 
-        if (isNewer(onlineVersion, storedVersion)) {
+        if (isNewer(onlineVersion, storedVersion))
+        {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_ISAVALIBLE"));
             updateLbl = new JLabel(I18N.getLocaleString("UPDATE_WICHUPDATE"));
-        } else {
+        }
+        else
+        {
             messageLbl = new JLabel(I18N.getLocaleString("UPDATEMODPACK_DOWNGRADE"));
             updateLbl = new JLabel(I18N.getLocaleString("UPDATE_DOWNGRADE"));
         }
@@ -99,7 +109,6 @@ public class ModPackVersionChangeDialog extends JDialog {
         backupCFG = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPCFG"));
         backupSave = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPSave"));
 
-
         panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(versionLbl, GuiConstants.WRAP);
         panel.add(updateLbl, GuiConstants.CENTER_SINGLE_LINE);
@@ -112,19 +121,25 @@ public class ModPackVersionChangeDialog extends JDialog {
         setLocationRelativeTo(getOwner());
     }
 
-    public boolean isNewer (String onlineVersion, String storedVersion) {
+    public boolean isNewer (String onlineVersion, String storedVersion)
+    {
         if (storedVersion == null || storedVersion.isEmpty())
             return true;
         String[] oV = onlineVersion.split("[._-]");
         String[] sV = storedVersion.split("[._-]");
         Logger.logInfo(onlineVersion + " " + storedVersion);
-        for (int i = 0; i < oV.length; i++) {
-            if (sV.length > i) {
-                if (Integer.parseInt(oV[i]) > Integer.parseInt(sV[i])) {
+        for (int i = 0; i < oV.length; i++)
+        {
+            if (sV.length > i)
+            {
+                if (Integer.parseInt(oV[i]) > Integer.parseInt(sV[i]))
+                {
                     Logger.logInfo(oV[i] + ">" + sV[i]);
                     Logger.logInfo("ret true");
                     return true;
-                } else if (Integer.parseInt(oV[i]) < Integer.parseInt(sV[i])) {
+                }
+                else if (Integer.parseInt(oV[i]) < Integer.parseInt(sV[i]))
+                {
                     return false;
                     //stored would be older in this case
                 }

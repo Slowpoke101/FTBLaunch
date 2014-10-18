@@ -51,7 +51,8 @@ import net.ftb.util.winreg.JavaInfo;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("unchecked")
-public class AdvancedOptionsDialog extends JDialog {
+public class AdvancedOptionsDialog extends JDialog
+{
     private JButton exit;
     private JLabel downloadLocationLbl;
     private static JComboBox downloadLocation;
@@ -77,12 +78,15 @@ public class AdvancedOptionsDialog extends JDialog {
     private final Settings settings = Settings.getSettings();
 
     //TODO add a UI adjustment tab here?
-    public AdvancedOptionsDialog() {
+    public AdvancedOptionsDialog()
+    {
         super(LaunchFrame.getInstance(), true);
         setupGui();
 
-        if (Locations.serversLoaded) {
-            if (Locations.downloadServers.containsKey(settings.getDownloadServer())) {
+        if (Locations.serversLoaded)
+        {
+            if (Locations.downloadServers.containsKey(settings.getDownloadServer()))
+            {
                 downloadLocation.setSelectedItem(settings.getDownloadServer());
             }
         }
@@ -96,9 +100,11 @@ public class AdvancedOptionsDialog extends JDialog {
         debugLauncherVerbose.setSelected(settings.getDebugLauncher());
         betaChannel.setSelected(settings.isBetaChannel());
 
-        FocusAdapter settingsChangeListener = new FocusAdapter() {
+        FocusAdapter settingsChangeListener = new FocusAdapter()
+        {
             @Override
-            public void focusLost (FocusEvent e) {
+            public void focusLost (FocusEvent e)
+            {
                 saveSettingsInto(settings);
             }
         };
@@ -117,48 +123,63 @@ public class AdvancedOptionsDialog extends JDialog {
         snooper.addFocusListener(settingsChangeListener);
         debugLauncherVerbose.addFocusListener(settingsChangeListener);
         betaChannel.addFocusListener(settingsChangeListener);
-        exit.addActionListener(new ActionListener() {
+        exit.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 setVisible(false);
             }
         });
     }
 
-    public static void setDownloadServers () {
+    public static void setDownloadServers ()
+    {
         String downloadserver = Settings.getSettings().getDownloadServer();
         downloadLocation.removeAllItems();
-        for (String server : Locations.downloadServers.keySet()) {
+        for (String server : Locations.downloadServers.keySet())
+        {
             downloadLocation.addItem(server);
         }
-        if (Locations.downloadServers.containsKey(downloadserver)) {
+        if (Locations.downloadServers.containsKey(downloadserver))
+        {
             downloadLocation.setSelectedItem(downloadserver);
         }
     }
 
-    public String[] getDownloadServerNames () {
-        if (!Locations.serversLoaded) {
+    public String[] getDownloadServerNames ()
+    {
+        if (!Locations.serversLoaded)
+        {
             Logger.logWarn("Servers not loaded yet.");
             return new String[] { "Automatic" };
-        } else {
+        }
+        else
+        {
             String[] out = new String[Locations.downloadServers.size()];
-            for (int i = 0; i < out.length; i++) {
+            for (int i = 0; i < out.length; i++)
+            {
                 out[i] = String.valueOf(Locations.downloadServers.keySet().toArray()[i]);
             }
             return out;
         }
     }
 
-    public void saveSettingsInto (Settings settings) {
+    public void saveSettingsInto (Settings settings)
+    {
         settings.setDownloadServer(String.valueOf(downloadLocation.getItemAt(downloadLocation.getSelectedIndex())));
         settings.setLastDimension(new Dimension(Integer.parseInt(mcWindowSizeWidth.getText()), Integer.parseInt(mcWindowSizeHeight.getText())));
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX ) {
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX)
+        {
             settings.setJavaPath(javaPathText.getText());
-        } else {
-            if (javaPath.getSelectedIndex() >= 0) {
+        }
+        else
+        {
+            if (javaPath.getSelectedIndex() >= 0)
+            {
                 settings.setJavaPath(javapaths[javaPath.getSelectedIndex()]);
             }
         }
@@ -173,7 +194,8 @@ public class AdvancedOptionsDialog extends JDialog {
         LaunchFrame.getInstance().optionsPane.updateJavaLabels();
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
         setResizable(true); // false
@@ -184,45 +206,57 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
-        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX)
+        {
             javaPathText = new JTextField();
             String javapath = settings.getJavaPath();
-            if (javapath != null) {
+            if (javapath != null)
+            {
                 javaPathText.setText(javapath);
                 if (!new File(javapath).isFile())
                     javaPathText.setBackground(Color.RED);
-            } else {
+            }
+            else
+            {
                 // this should not happen ever
                 javaPathText.setBackground(Color.RED);
             }
 
-            javaPathText.addKeyListener(new KeyListener() {
+            javaPathText.addKeyListener(new KeyListener()
+            {
                 @Override
-                public void keyTyped (KeyEvent e) {
+                public void keyTyped (KeyEvent e)
+                {
                 }
 
                 @Override
-                public void keyPressed (KeyEvent e){
+                public void keyPressed (KeyEvent e)
+                {
                 }
 
                 @Override
-                public void keyReleased (KeyEvent e) {
+                public void keyReleased (KeyEvent e)
+                {
                     if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile())
                         javaPath.setBackground(Color.RED);
                     else
                         javaPath.setBackground(new Color(40, 40, 40));
                 }
             });
-        } else {
+        }
+        else
+        {
             List<JavaInfo> javas = JavaFinder.findJavas();
             Collections.sort(javas);
             String[] javaslist = new String[javas.size() + 1];
             javapaths = new String[javas.size() + 1];
             int i = -1;
-            for (JavaInfo java : javas) {
+            for (JavaInfo java : javas)
+            {
                 i++;
                 javaslist[i] = java.version;
-                if (java.is64bits) {
+                if (java.is64bits)
+                {
                     javaslist[i] = javaslist[i] + " 64bit";
                 }
                 javapaths[i] = java.path;
@@ -233,12 +267,17 @@ public class AdvancedOptionsDialog extends JDialog {
 
             //TODO: set current selected java
             String selectedJavaPath = Settings.getSettings().getJavaPath();
-            if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
-                javaPath.setSelectedIndex( i + 1);
-            } else {
+            if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath()))
+            {
+                javaPath.setSelectedIndex(i + 1);
+            }
+            else
+            {
                 i = 0;
-                for (JavaInfo java : javas) {
-                    if (java.path.equals(selectedJavaPath)) {
+                for (JavaInfo java : javas)
+                {
+                    if (java.path.equals(selectedJavaPath))
+                    {
                         javaPath.setSelectedIndex(i);
                     }
                     i++;
@@ -271,7 +310,7 @@ public class AdvancedOptionsDialog extends JDialog {
         if (javaPath != null)
             add(javaPath, GuiConstants.WRAP);
         add(additionalJavaOptionsLbl);
-        add(additionalJavaOptions,  GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        add(additionalJavaOptions, GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         add(mcWindowSizeLbl, GuiConstants.FILL_FOUR);
         add(mcWindowSizeWidth);
         add(mcWindowSizeSepLbl);
@@ -285,7 +324,6 @@ public class AdvancedOptionsDialog extends JDialog {
         add(debugLauncherVerbose, GuiConstants.WRAP);
         add(betaChannel, GuiConstants.WRAP);
         add(exit, GuiConstants.CENTER_SINGLE_LINE);
-
 
         pack();
         setLocationRelativeTo(getOwner());

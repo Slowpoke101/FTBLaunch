@@ -19,22 +19,31 @@ import java.security.NoSuchAlgorithmException;
 
 import static net.ftb.download.Locations.MAPS;
 
-public class MapManagerWorker extends SwingWorker<Boolean, Void> {
+public class MapManagerWorker extends SwingWorker<Boolean, Void>
+{
     private static boolean overwrite;
     private double downloadedPerc;
-    public MapManagerWorker (Boolean overwrite) {
+
+    public MapManagerWorker(Boolean overwrite)
+    {
         this.overwrite = overwrite;
     }
+
     @Override
-    protected Boolean doInBackground () throws Exception {
+    protected Boolean doInBackground () throws Exception
+    {
         String installPath = Settings.getSettings().getInstallPath();
         Map map = Map.getSelectedMap();
-        if (new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()).exists()) {
+        if (new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()).exists())
+        {
             MapOverwriteDialog dialog = new MapOverwriteDialog();
             dialog.setVisible(true);
-            if (overwrite) {
+            if (overwrite)
+            {
                 FTBFileUtils.delete(new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + map.getMapName()));
-            } else {
+            }
+            else
+            {
                 Logger.logInfo("Canceled map installation.");
                 return false;
             }
@@ -43,58 +52,72 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         return false;
     }
 
-    public void downloadUrl (String filename, String urlString) throws IOException, NoSuchAlgorithmException {
+    public void downloadUrl (String filename, String urlString) throws IOException, NoSuchAlgorithmException
+    {
         BufferedInputStream in = null;
         FileOutputStream fout = null;
-        try {
+        try
+        {
             URL url_ = new URL(urlString);
             in = new BufferedInputStream(url_.openStream());
             fout = new FileOutputStream(filename);
             byte data[] = new byte[1024];
             int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+            SwingUtilities.invokeLater(new Runnable()
+            {
+                public void run ()
+                {
                     setProgressBarMaximum(10000);
                 }
             });
-            while ((count = in.read(data, 0, 1024)) != -1) {
+            while ((count = in.read(data, 0, 1024)) != -1)
+            {
                 fout.write(data, 0, count);
                 downloadedPerc += (count * 1.0 / mapSize) * 100;
                 amount += count;
                 steps++;
-                if (steps > 100) {
+                if (steps > 100)
+                {
                     steps = 0;
                     final String txt = (amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb";
                     final int perc = (int) downloadedPerc * 100;
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                    SwingUtilities.invokeLater(new Runnable()
+                    {
+                        public void run ()
+                        {
                             setProgressBarValue(perc);
                             setLabelText(txt);
                         }
                     });
                 }
             }
-        } catch( Exception e){
+        }
+        catch (Exception e)
+        {
             Logger.logError(e.getMessage(), e);
-        }finally {
+        }
+        finally
+        {
             in.close();
             fout.flush();
             fout.close();
         }
     }
 
-    protected void downloadMap (String mapName, String dir) throws IOException, NoSuchAlgorithmException {
+    protected void downloadMap (String mapName, String dir) throws IOException, NoSuchAlgorithmException
+    {
         Logger.logInfo("Downloading Map");
         String installPath = OSUtils.getCacheStorageLocation();
         Map map = Map.getSelectedMap();
-        new File(installPath + "/"+ MAPS + dir + "/").mkdirs();
+        new File(installPath + "/" + MAPS + dir + "/").mkdirs();
         new File(installPath + "/" + MAPS + dir + "/" + mapName).createNewFile();
         downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
         FTBFileUtils.extractZipTo(installPath + "/" + MAPS + dir + "/" + mapName, installPath + "/" + MAPS + dir);
         installMap(mapName, dir);
     }
 
-    protected void installMap (String mapName, String dir) throws IOException {
+    protected void installMap (String mapName, String dir) throws IOException
+    {
         Logger.logInfo("Installing Map");
         String installPath = Settings.getSettings().getInstallPath();
         String tempPath = OSUtils.getCacheStorageLocation();
@@ -104,13 +127,19 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         FTBFileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
         TrackerUtils.sendPageView(map.getName() + " Install", "Maps / " + map.getName());
     }
-    public void setLabelText(String s) {
+
+    public void setLabelText (String s)
+    {
 
     }
-    public void setProgressBarMaximum(int i) {
+
+    public void setProgressBarMaximum (int i)
+    {
 
     }
-    public void setProgressBarValue(int i) {
+
+    public void setProgressBarValue (int i)
+    {
 
     }
 }

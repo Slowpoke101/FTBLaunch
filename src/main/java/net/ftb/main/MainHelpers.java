@@ -28,8 +28,10 @@ import java.io.*;
 
 import javax.swing.JOptionPane;
 
-public class MainHelpers {
-    public static void printInfo() {
+public class MainHelpers
+{
+    public static void printInfo ()
+    {
         Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
         Logger.logDebug("System's default JVM: (This is not always used to launch MC)");
         Logger.logDebug("Java version: " + System.getProperty("java.version"));
@@ -45,29 +47,36 @@ public class MainHelpers {
         //hack: I want to trigger JavaFinder here:
         String selectedJavaPath = Settings.getSettings().getJavaPath();
         //then test if preferred and selected java paths differs
-        if (!selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
+        if (!selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath()))
+        {
             Logger.logInfo("Using Java path entered by user: " + selectedJavaPath);
         }
 
-        if (!OSUtils.is64BitOS()) {
+        if (!OSUtils.is64BitOS())
+        {
             Logger.logError("32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
 
-        if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {//unfortunately the easy to find DL links are for 32 bit java
+        if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits)
+        {//unfortunately the easy to find DL links are for 32 bit java
             Logger.logError("32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
         }
 
         JavaInfo java = Settings.getSettings().getCurrentJava();
-        if(java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)){
+        if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7))
+        {
             Logger.logError("Java 6 detected. Java 7 is recommended for most mod packs.");
         }
 
     }
 
-    public static void googleAnalytics() {
+    public static void googleAnalytics ()
+    {
         File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
-        try {
-            if (!credits.exists()) {
+        try
+        {
+            if (!credits.exists())
+            {
                 FileOutputStream fos = new FileOutputStream(credits);
                 OutputStreamWriter osw = new OutputStreamWriter(fos);
 
@@ -101,14 +110,18 @@ public class MainHelpers {
                 TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
             }
 
-
-        } catch (FileNotFoundException e1) {
+        }
+        catch (FileNotFoundException e1)
+        {
             Logger.logError(e1.getMessage());
-        } catch (IOException e1) {
+        }
+        catch (IOException e1)
+        {
             Logger.logError(e1.getMessage());
         }
 
-        if (!Settings.getSettings().getLoaded()) {
+        if (!Settings.getSettings().getLoaded())
+        {
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "OS / " + System.getProperty("os.name") + " : " + System.getProperty("os.arch"));
             TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
             Settings.getSettings().setLoaded(true);
@@ -116,9 +129,11 @@ public class MainHelpers {
 
         File stamp = new File(OSUtils.getDynamicStorageLocation(), "stamp");
         long unixTime = System.currentTimeMillis() / 1000L;
-        long unixts=0;
-        try {
-            if (!stamp.exists()) {
+        long unixts = 0;
+        try
+        {
+            if (!stamp.exists())
+            {
                 FileOutputStream fos = new FileOutputStream(stamp);
                 OutputStreamWriter osw = new OutputStreamWriter(fos);
 
@@ -127,22 +142,29 @@ public class MainHelpers {
                 osw.close();
                 Logger.logInfo("Reporting daily use");
                 TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Daily User (Flat)");
-            } else {
+            }
+            else
+            {
                 FileInputStream fis = new FileInputStream(stamp);
                 int content;
                 StringBuilder timeBuilder = new StringBuilder();
-                while ((content = fis.read()) != -1) {
+                while ((content = fis.read()) != -1)
+                {
                     char c = (char) content;
                     timeBuilder.append(String.valueOf(c));
                 }
                 String time = timeBuilder.toString();
-                try {
+                try
+                {
                     unixts = Long.valueOf(time);
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException e)
+                {
                     Logger.logWarn("Malformed stamp-file. Will be fixed automatically");
                 }
                 unixts = unixts + (24 * 60 * 60);
-                if (unixts < unixTime) {
+                if (unixts < unixTime)
+                {
                     FileOutputStream fos = new FileOutputStream(stamp);
                     OutputStreamWriter osw = new OutputStreamWriter(fos);
 
@@ -154,21 +176,30 @@ public class MainHelpers {
                 }
                 fis.close();
             }
-        } catch (FileNotFoundException e1) {
+        }
+        catch (FileNotFoundException e1)
+        {
             Logger.logError(e1.getMessage());
-        } catch (IOException e1) {
+        }
+        catch (IOException e1)
+        {
             Logger.logError(e1.getMessage());
         }
     }
 
-    public static void tossNag(String setting, String message) {
-        if (!Settings.getSettings().getBoolean(setting)) {
+    public static void tossNag (String setting, String message)
+    {
+        if (!Settings.getSettings().getBoolean(setting))
+        {
             int result = ErrorUtils.tossOKIgnoreDialog(message, JOptionPane.WARNING_MESSAGE);
-            if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+            if (result != 0 && result != JOptionPane.CLOSED_OPTION)
+            {
                 Settings.getSettings().setBoolean(setting, true);
                 Settings.getSettings().save();
             }
-        } else {
+        }
+        else
+        {
             Logger.logDebug("ignored: " + setting);
         }
 

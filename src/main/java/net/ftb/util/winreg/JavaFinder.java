@@ -20,7 +20,8 @@ import net.ftb.util.OSUtils.OS;
 /**
  * Windows-specific java versions finder
  *****************************************************************************/
-public class JavaFinder {
+public class JavaFinder
+{
     public static boolean java8Found = false;
     private static JavaInfo preferred;
     private static JavaInfo backup;
@@ -32,17 +33,23 @@ public class JavaFinder {
      *               or WinRegistry.KEY_WOW64_64KEY to force access to 64-bit registry view
      * @param previous: Insert all entries from this list at the beggining of the results
      *************************************************************************/
-    private static List<String> searchRegistry (String key, int wow64, final List<String> previous) {
+    private static List<String> searchRegistry (String key, int wow64, final List<String> previous)
+    {
         List<String> result = previous;
-        try {
+        try
+        {
             List<String> entries = WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, key, wow64);
-            for (int i = 0; entries != null && i < entries.size(); i++) {
+            for (int i = 0; entries != null && i < entries.size(); i++)
+            {
                 String val = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, key + "\\" + entries.get(i), "JavaHome", wow64);
-                if (!result.contains(val + "\\bin\\java.exe")) {
+                if (!result.contains(val + "\\bin\\java.exe"))
+                {
                     result.add(val + "\\bin\\java.exe");
                 }
             }
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             Logger.logError("Error Searching windows registry for java versions", t);
         }
         return result;
@@ -58,19 +65,21 @@ public class JavaFinder {
      *   WINDIR\system32
      *   WINDIR\SysWOW64
      ****************************************************************************/
-    public static List<JavaInfo> findJavas () {
-        if(OSUtils.getCurrentOS() == OS.MACOSX)
+    public static List<JavaInfo> findJavas ()
+    {
+        if (OSUtils.getCurrentOS() == OS.MACOSX)
             return findMacJavas();
-        
-        if(OSUtils.getCurrentOS() == OS.WINDOWS)
+
+        if (OSUtils.getCurrentOS() == OS.WINDOWS)
             return findWinJavas();
-        
+
         return Lists.newArrayList();
     }
-    
-    protected static List<JavaInfo> findWinJavas() {
+
+    protected static List<JavaInfo> findWinJavas ()
+    {
         List<String> javaExecs = Lists.newArrayList();
-        
+
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_32KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_64KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistry.KEY_WOW64_32KEY, javaExecs);
@@ -81,59 +90,70 @@ public class JavaFinder {
         javaExecs.add(System.getProperty("java.home") + "\\bin\\java.exe");
 
         List<JavaInfo> result = Lists.newArrayList();
-        for (String javaPath : javaExecs) {
+        for (String javaPath : javaExecs)
+        {
             if (!(new File(javaPath).exists()))
                 continue;
-            try {
+            try
+            {
                 result.add(new JavaInfo(javaPath));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logDebug("Error while creating JavaInfo");
             }
         }
         return result;
     }
 
-    protected static String getMacJavaPath(String javaVersion) {
+    protected static String getMacJavaPath (String javaVersion)
+    {
         String versionInfo;
-        
+
         versionInfo = RuntimeStreamer.execute(new String[] { "/usr/libexec/java_home", "-v " + javaVersion });
 
         // Unable to find any JVMs matching version "1.7"
-        if(versionInfo.contains("version \"" + javaVersion + "\"")) {    
+        if (versionInfo.contains("version \"" + javaVersion + "\""))
+        {
             return null;
         }
-        
+
         return versionInfo.trim();
     }
-    
-    protected static List<JavaInfo> findMacJavas() {
+
+    protected static List<JavaInfo> findMacJavas ()
+    {
         List<String> javaExecs = Lists.newArrayList();
         String javaVersion;
-        
+
         javaVersion = getMacJavaPath("1.6");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
-        
+
         javaVersion = getMacJavaPath("1.7");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
 
         javaVersion = getMacJavaPath("1.8");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
 
         javaExecs.add("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
         javaExecs.add(System.getProperty("java.home") + "/bin/java");
 
         List<JavaInfo> result = Lists.newArrayList();
-        for (String javaPath : javaExecs) {
-            File javaFile = new File(javaPath); 
+        for (String javaPath : javaExecs)
+        {
+            File javaFile = new File(javaPath);
             if (!javaFile.exists() || !javaFile.canExecute())
                 continue;
 
-            try {
+            try
+            {
                 result.add(new JavaInfo(javaPath));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.logDebug("Error while creating JavaInfo", e);
             }
         }
@@ -144,37 +164,46 @@ public class JavaFinder {
      * @return: The path to a java.exe that has the same bitness as the OS
      * (or null if no matching java is found)
      ****************************************************************************/
-    public static String getOSBitnessJava () {
+    public static String getOSBitnessJava ()
+    {
         boolean isOS64 = OSUtils.is64BitWindows();
 
         List<JavaInfo> javas = JavaFinder.findJavas();
-        for (JavaInfo java : javas) {
+        for (JavaInfo java : javas)
+        {
             if (java.is64bits == isOS64)
                 return java.path;
         }
         return null;
     }
 
-    public static JavaInfo parseJavaVersion () {
+    public static JavaInfo parseJavaVersion ()
+    {
         // TODO: add command line argument to control this
         return parseJavaVersion(true);
     }
-        /**
-         * Standalone testing - lists all Javas in the system
-         ****************************************************************************/
-    public static JavaInfo parseJavaVersion (boolean canUseJava8) {
-        if (preferred == null) {
+
+    /**
+     * Standalone testing - lists all Javas in the system
+     ****************************************************************************/
+    public static JavaInfo parseJavaVersion (boolean canUseJava8)
+    {
+        if (preferred == null)
+        {
             List<JavaInfo> javas = JavaFinder.findJavas();
             List<JavaInfo> java32 = Lists.newArrayList();
             List<JavaInfo> java64 = Lists.newArrayList();
 
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
-            for (JavaInfo java : javas) {
+            for (JavaInfo java : javas)
+            {
                 Logger.logInfo(java.toString());
-                if (java.isJava8()) {
+                if (java.isJava8())
+                {
                     java8Found = true;
                 }
-                if (java.supportedVersion) {
+                if (java.supportedVersion)
+                {
                     if (preferred == null)
                         preferred = java;
                     if (java.is64bits)
@@ -184,24 +213,28 @@ public class JavaFinder {
                 }
             }
 
-            if (java64.size() > 0) {
-                for (JavaInfo aJava64 : java64) {
+            if (java64.size() > 0)
+            {
+                for (JavaInfo aJava64 : java64)
+                {
                     if (!preferred.is64bits || aJava64.compareTo(preferred) == 1)
                         preferred = aJava64;
                     if (backup == null && !aJava64.isJava8())
                         backup = aJava64;
-                    if(backup != null && !aJava64.isJava8() && aJava64.compareTo(backup) == 1)
+                    if (backup != null && !aJava64.isJava8() && aJava64.compareTo(backup) == 1)
                         backup = aJava64;
                 }
             }
 
-            if (java32.size() > 0) {
-                for (JavaInfo aJava32 : java32) {
+            if (java32.size() > 0)
+            {
+                for (JavaInfo aJava32 : java32)
+                {
                     if (!preferred.is64bits && aJava32.compareTo(preferred) == 1)
                         preferred = aJava32;
                     if (backup == null && !aJava32.isJava8())
                         backup = aJava32;
-                    if(backup != null && !aJava32.isJava8() && aJava32.compareTo(backup) == 1)
+                    if (backup != null && !aJava32.isJava8() && aJava32.compareTo(backup) == 1)
                         backup = aJava32;
 
                 }
@@ -210,15 +243,23 @@ public class JavaFinder {
             Logger.logDebug("Backup(java8 excluded): " + String.valueOf(backup));
         }
 
-        if (preferred != null) {
-            if (backup != null && preferred.isJava8() && !canUseJava8) {
+        if (preferred != null)
+        {
+            if (backup != null && preferred.isJava8() && !canUseJava8)
+            {
                 return backup;
-            } else if (backup == null && preferred.isJava8() && !canUseJava8) {
+            }
+            else if (backup == null && preferred.isJava8() && !canUseJava8)
+            {
                 return null;
-            } else {
+            }
+            else
+            {
                 return preferred;
             }
-        } else {
+        }
+        else
+        {
             return null;
         }
     }

@@ -36,7 +36,8 @@ import net.ftb.gui.panes.AbstractModPackPane;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
-public class ModPackFilterDialog extends JDialog {
+public class ModPackFilterDialog extends JDialog
+{
     private JLabel availabilityLbl;
     private JComboBox availability;
     private JLabel mcVersionLbl;
@@ -47,7 +48,8 @@ public class ModPackFilterDialog extends JDialog {
 
     private AbstractModPackPane pane;
 
-    public ModPackFilterDialog(AbstractModPackPane instance) {
+    public ModPackFilterDialog(AbstractModPackPane instance)
+    {
         super(LaunchFrame.getInstance(), true);
         this.pane = instance;
 
@@ -60,8 +62,10 @@ public class ModPackFilterDialog extends JDialog {
         ArrayList<String> mcVersions = Lists.newArrayList();
         mcVersion.addItem(I18N.getLocaleString("MAIN_ALL"));
         mcVersions.add(I18N.getLocaleString("MAIN_ALL"));
-        for (ModPack pack : ModPack.getPackArray()) {
-            if (!mcVersions.contains(pack.getMcVersion())) {
+        for (ModPack pack : ModPack.getPackArray())
+        {
+            if (!mcVersions.contains(pack.getMcVersion()))
+            {
                 mcVersions.add(pack.getMcVersion());
                 mcVersion.addItem(pack.getMcVersion());
             }
@@ -75,9 +79,11 @@ public class ModPackFilterDialog extends JDialog {
 
         pack();
 
-        apply.addActionListener(new ActionListener() {
+        apply.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 pane.mcVersion = (String) mcVersion.getSelectedItem();
                 pane.avaliability = (String) availability.getSelectedItem();
                 pane.updateFilter();
@@ -85,16 +91,20 @@ public class ModPackFilterDialog extends JDialog {
             }
         });
 
-        cancel.addActionListener(new ActionListener() {
+        cancel.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 setVisible(false);
             }
         });
 
-        search.addActionListener(new ActionListener() {
+        search.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 SearchDialog sd = new SearchDialog(pane);
                 sd.setVisible(true);
                 setVisible(false);
@@ -102,8 +112,8 @@ public class ModPackFilterDialog extends JDialog {
         });
     }
 
-
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("FILTER_TITLE"));
         setResizable(true);

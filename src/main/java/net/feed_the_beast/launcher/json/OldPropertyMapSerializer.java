@@ -27,14 +27,18 @@ import com.google.gson.JsonSerializer;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
-public class OldPropertyMapSerializer implements JsonSerializer<PropertyMap> {
+public class OldPropertyMapSerializer implements JsonSerializer<PropertyMap>
+{
 
     @Override
-    public JsonElement serialize (PropertyMap src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize (PropertyMap src, Type typeOfSrc, JsonSerializationContext context)
+    {
         JsonObject out = new JsonObject();
-        for (String key : src.keySet()) {
+        for (String key : src.keySet())
+        {
             JsonArray jsa = new JsonArray();
-            for (Property p : src.get(key)) {
+            for (Property p : src.get(key))
+            {
                 jsa.add(new JsonPrimitive(p.getValue()));
             }
             out.add(key, jsa);

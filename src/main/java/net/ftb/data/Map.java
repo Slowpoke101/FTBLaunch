@@ -36,7 +36,8 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.MapLoader;
 
-public class Map {
+public class Map
+{
     private String name, author, version, url, mapname, mcversion, logoName, imageName, info, sep = File.separator;
     private String[] compatible;
     private Image logo, image;
@@ -48,14 +49,16 @@ public class Map {
      * Adds a listener to the listeners array
      * @param listener - the MapListener to add
      */
-    public static void addListener (MapListener listener) {
+    public static void addListener (MapListener listener)
+    {
         listeners.add(listener);
     }
 
     /**
      * loads the map.xml and adds it to the maps array in this class
      */
-    public static void loadAll () {
+    public static void loadAll ()
+    {
         MapLoader loader = new MapLoader();
         loader.start();
     }
@@ -64,11 +67,14 @@ public class Map {
      * adds maps to the maps array
      * @param map - a Map instance
      */
-    public static void addMap (Map map) {
-        synchronized (maps) {
+    public static void addMap (Map map)
+    {
+        synchronized (maps)
+        {
             maps.add(map);
         }
-        for (MapListener listener : listeners) {
+        for (MapListener listener : listeners)
+        {
             listener.onMapAdded(map);
         }
     }
@@ -77,7 +83,8 @@ public class Map {
      * Used to get the List of maps
      * @return - the array containing all the maps
      */
-    public static ArrayList<Map> getMapArray () {
+    public static ArrayList<Map> getMapArray ()
+    {
         return maps;
     }
 
@@ -86,7 +93,8 @@ public class Map {
      * @param i - the value in the array
      * @return - the Map based on the i value
      */
-    public static Map getMap (int i) {
+    public static Map getMap (int i)
+    {
         return maps.get(i);
     }
 
@@ -94,7 +102,8 @@ public class Map {
      * Used to grab the currently selected Map based off the selected index from MapsPane
      * @return Map - the currently selected Map
      */
-    public static Map getSelectedMap () {
+    public static Map getSelectedMap ()
+    {
         return getMap(MapUtils.getSelectedMapIndex());
     }
 
@@ -115,7 +124,8 @@ public class Map {
      * @throws NoSuchAlgorithmException
      */
     public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, int idx)
-            throws NoSuchAlgorithmException, IOException {
+            throws NoSuchAlgorithmException, IOException
+    {
         index = idx;
         this.name = name;
         this.author = author;
@@ -131,27 +141,34 @@ public class Map {
         File tempDir = new File(installPath, "Maps" + sep + mapname);
         File verFile = new File(tempDir, "version");
 
-        if (!upToDate(verFile)) {
-            DownloadUtils.saveImage(logo, tempDir,  "png");
-            DownloadUtils.saveImage(image, tempDir,  "png");
+        if (!upToDate(verFile))
+        {
+            DownloadUtils.saveImage(logo, tempDir, "png");
+            DownloadUtils.saveImage(image, tempDir, "png");
 
-        } else {
-            if (!new File(tempDir, logo).exists()) {
-                DownloadUtils.saveImage(logo, tempDir,  "png");
+        }
+        else
+        {
+            if (!new File(tempDir, logo).exists())
+            {
+                DownloadUtils.saveImage(logo, tempDir, "png");
             }
-            if (!new File(tempDir, image).exists()) {
-                DownloadUtils.saveImage(image, tempDir,  "png");
+            if (!new File(tempDir, image).exists())
+            {
+                DownloadUtils.saveImage(image, tempDir, "png");
             }
         }
 
         // image and logo should now exists, if not use placeholder images
-        if (!new File(tempDir, logo).exists()) {
+        if (!new File(tempDir, logo).exists())
+        {
             this.logoName = logo = "logo_ftb.png";
             DownloadUtils.saveImage(logo, tempDir, "png");
         }
         this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
 
-        if (!new File(tempDir, image).exists()) {
+        if (!new File(tempDir, image).exists())
+        {
             this.imageName = image = "default_splash.png";
             DownloadUtils.saveImage(image, tempDir, "png");
         }
@@ -163,10 +180,13 @@ public class Map {
      * @param verFile - the version file to check
      * @return checks the version file against the current map version
      */
-    private boolean upToDate (File verFile) {
+    private boolean upToDate (File verFile)
+    {
         boolean result = true;
-        try {
-            if (!verFile.exists()) {
+        try
+        {
+            if (!verFile.exists())
+            {
                 verFile.getParentFile().mkdirs();
                 verFile.createNewFile();
                 result = false;
@@ -174,16 +194,21 @@ public class Map {
             BufferedReader in = new BufferedReader(new FileReader(verFile));
             String line = in.readLine();
             int storedVersion = -1;
-            if (line != null) {
-                try {
+            if (line != null)
+            {
+                try
+                {
                     storedVersion = Integer.parseInt(line);
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException e)
+                {
                     Logger.logWarn("Automatically fixing malformed version file for " + name, e);
                     line = null;
                 }
             }
 
-            if (line == null || Integer.parseInt(version) > storedVersion) {
+            if (line == null || Integer.parseInt(version) > storedVersion)
+            {
                 BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
                 out.write(version);
                 out.flush();
@@ -191,7 +216,9 @@ public class Map {
                 result = false;
             }
             in.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             Logger.logError("Error while checking map version", e);
         }
         return result;
@@ -201,7 +228,8 @@ public class Map {
      * Used to get index of map
      * @return - the index of the map in the GUI
      */
-    public int getIndex () {
+    public int getIndex ()
+    {
         return index;
     }
 
@@ -209,7 +237,8 @@ public class Map {
      * Used to get name of map
      * @return - the name of the map
      */
-    public String getName () {
+    public String getName ()
+    {
         return name;
     }
 
@@ -217,7 +246,8 @@ public class Map {
      * Used to get Author of map
      * @return - the map's author
      */
-    public String getAuthor () {
+    public String getAuthor ()
+    {
         return author;
     }
 
@@ -225,7 +255,8 @@ public class Map {
      * Used to get the version of the map
      * @return - the maps version
      */
-    public String getVersion () {
+    public String getVersion ()
+    {
         return version;
     }
 
@@ -233,7 +264,8 @@ public class Map {
      * Used to get the URL or File name of the map
      * @return - the maps URL
      */
-    public String getUrl () {
+    public String getUrl ()
+    {
         return url;
     }
 
@@ -241,7 +273,8 @@ public class Map {
      * Used to get an Image variable of the map's logo
      * @return - the maps logo
      */
-    public Image getLogo () {
+    public Image getLogo ()
+    {
         return logo;
     }
 
@@ -249,7 +282,8 @@ public class Map {
      * Used to get an Image variable of the map's splash image
      * @return - the maps splash image
      */
-    public Image getImage () {
+    public Image getImage ()
+    {
         return image;
     }
 
@@ -257,7 +291,8 @@ public class Map {
      * Used to get the array of compatible mod packs
      * @return - the compatible packs
      */
-    public String[] getCompatible () {
+    public String[] getCompatible ()
+    {
         return compatible;
     }
 
@@ -265,7 +300,8 @@ public class Map {
      * Used to get the selected mod pack
      * @return - the compatible pack based on the selected map
      */
-    public String getSelectedCompatible () {
+    public String getSelectedCompatible ()
+    {
         return compatible[LaunchFrame.getSelectedMapInstallIndex()].trim();
     }
 
@@ -273,7 +309,8 @@ public class Map {
      * Used to get the minecraft version required for the map
      * @return - the minecraft version
      */
-    public String getMcVersion () {
+    public String getMcVersion ()
+    {
         return mcversion;
     }
 
@@ -281,7 +318,8 @@ public class Map {
      * Used to get the name of the map
      * @return - the mapname
      */
-    public String getMapName () {
+    public String getMapName ()
+    {
         return mapname;
     }
 
@@ -289,7 +327,8 @@ public class Map {
      * Used to get the info or description of the map
      * @return - the info for the map
      */
-    public String getInfo () {
+    public String getInfo ()
+    {
         return info;
     }
 
@@ -297,7 +336,8 @@ public class Map {
      * Used to get the logo file name
      * @return - the logo name as saved on the repo
      */
-    public String getLogoName () {
+    public String getLogoName ()
+    {
         return logoName;
     }
 
@@ -305,7 +345,8 @@ public class Map {
      * Used to get the splash file name
      * @return - the splash image name as saved on the repo
      */
-    public String getImageName () {
+    public String getImageName ()
+    {
         return imageName;
     }
 
@@ -314,13 +355,17 @@ public class Map {
      * @param packName the name of the pack
      * @return true if the pack is compatible with a map
      */
-    public boolean isCompatible (String packName) {
-        for (String aCompatible : compatible) {
+    public boolean isCompatible (String packName)
+    {
+        for (String aCompatible : compatible)
+        {
             ModPack pack = ModPack.getPack(aCompatible);
-            if (pack == null) {
-                Logger.logDebug("Map is compatible with "  + packName + " , but modpack not found");
+            if (pack == null)
+            {
+                Logger.logDebug("Map is compatible with " + packName + " , but modpack not found");
             }
-            else {
+            else
+            {
                 return pack.getName().equals(packName);
             }
         }

@@ -16,7 +16,8 @@ import java.util.prefs.Preferences;
 
 import net.ftb.log.Logger;
 
-public class WinRegistry {
+public class WinRegistry
+{
     private static final int HKEY_CURRENT_USER = 0x80000001;
     public static final int HKEY_LOCAL_MACHINE = 0x80000002;
     private static final int REG_SUCCESS = 0;
@@ -39,8 +40,10 @@ public class WinRegistry {
     private static Method regDeleteKey = null;
     private static Method regDeleteValue = null;
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", new Class[] { int.class, byte[].class, int.class });
             regOpenKey.setAccessible(true);
             regCloseKey = userClass.getDeclaredMethod("WindowsRegCloseKey", new Class[] { int.class });
@@ -61,12 +64,15 @@ public class WinRegistry {
             regDeleteValue.setAccessible(true);
             regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", new Class[] { int.class, byte[].class });
             regDeleteKey.setAccessible(true);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Logger.logError("Error accessing windows registry classes", e);
         }
     }
 
-    private WinRegistry() {
+    private WinRegistry()
+    {
     }
 
     /**
@@ -82,16 +88,21 @@ public class WinRegistry {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static String readString (int hkey, String key, String valueName, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        if (hkey == HKEY_LOCAL_MACHINE) {
+    public static String readString (int hkey, String key, String valueName, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+    {
+        if (hkey == HKEY_LOCAL_MACHINE)
+        {
             return readString(systemRoot, hkey, key, valueName, wow64);
-        } else if (hkey == HKEY_CURRENT_USER) {
+        }
+        else if (hkey == HKEY_CURRENT_USER)
+        {
             return readString(userRoot, hkey, key, valueName, wow64);
-        } else {
+        }
+        else
+        {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
-
 
     /**
      * Read the value name(s) from a given key
@@ -105,23 +116,28 @@ public class WinRegistry {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static List<String> readStringSubKeys (int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        if (hkey == HKEY_LOCAL_MACHINE) {
+    public static List<String> readStringSubKeys (int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+    {
+        if (hkey == HKEY_LOCAL_MACHINE)
+        {
             return readStringSubKeys(systemRoot, hkey, key, wow64);
-        } else if (hkey == HKEY_CURRENT_USER) {
+        }
+        else if (hkey == HKEY_CURRENT_USER)
+        {
             return readStringSubKeys(userRoot, hkey, key, wow64);
-        } else {
+        }
+        else
+        {
             throw new IllegalArgumentException("hkey=" + hkey);
         }
     }
 
-
-
-
     //========================================================================
-    private static String readString (Preferences root, int hkey, String key, String value, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private static String readString (Preferences root, int hkey, String key, String value, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+    {
         int[] handles = (int[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
-        if (handles[1] != REG_SUCCESS) {
+        if (handles[1] != REG_SUCCESS)
+        {
             return null;
         }
         byte[] valb = (byte[]) regQueryValueEx.invoke(root, handles[0], toCstr(value));
@@ -129,19 +145,21 @@ public class WinRegistry {
         return (valb != null ? new String(valb).trim() : null);
     }
 
-
     //========================================================================
-    private static List<String> readStringSubKeys (Preferences root, int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private static List<String> readStringSubKeys (Preferences root, int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+    {
         List<String> results = new ArrayList<String>();
         int[] handles = (int[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
-        if (handles[1] != REG_SUCCESS) {
+        if (handles[1] != REG_SUCCESS)
+        {
             return null;
         }
         int[] info = (int[]) regQueryInfoKey.invoke(root, handles[0]);
 
         int count = info[0]; // Fix: info[2] was being used here with wrong results. Suggested by davenpcj, confirmed by Petrucio
         int maxlen = info[3]; // value length max
-        for (int index = 0; index < count; index++) {
+        for (int index = 0; index < count; index++)
+        {
             byte[] name = (byte[]) regEnumKeyEx.invoke(root, handles[0], index, maxlen + 1);
             results.add(new String(name).trim());
         }
@@ -151,10 +169,12 @@ public class WinRegistry {
 
     //========================================================================
     // utility
-    private static byte[] toCstr (String str) {
+    private static byte[] toCstr (String str)
+    {
         byte[] result = new byte[str.length() + 1];
 
-        for (int i = 0; i < str.length(); i++) {
+        for (int i = 0; i < str.length(); i++)
+        {
             result[i] = (byte) str.charAt(i);
         }
         result[str.length()] = 0;

@@ -41,13 +41,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
-public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
+public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
+{
     @Getter
     private static ThirdPartyPane instance;
     @Getter
     private JScrollPane packsScroll;
 
-    public ThirdPartyPane() {
+    public ThirdPartyPane()
+    {
         super();
         instance = this;
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -66,10 +68,13 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         filter.setBounds(5, 5, 105, 25);
-        filter.addActionListener(new ActionListener() {
+        filter.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if (loaded) {
+            public void actionPerformed (ActionEvent e)
+            {
+                if (loaded)
+                {
                     // TODO: problem here. How to move into abstract?
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
                     filterDia.setVisible(true);
@@ -95,12 +100,16 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
 
         editModPack = new JButton(I18N.getLocaleString("MODS_EDIT_PACK"));
         editModPack.setBounds(300, 5, 110, 25);
-        editModPack.addActionListener(new ActionListener() {
+        editModPack.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if (packPanels.size() > 0) {
+            public void actionPerformed (ActionEvent e)
+            {
+                if (packPanels.size() > 0)
+                {
                     //TODO: fix by rename?
-                    if (getSelectedThirdPartyModIndex() >= 0) {
+                    if (getSelectedThirdPartyModIndex() >= 0)
+                    {
                         EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(false));
                         empd.setVisible(true);
                     }
@@ -132,10 +141,13 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         packInfo = new JEditorPane();
         packInfo.setEditable(false);
         packInfo.setContentType("text/html");
-        packInfo.addHyperlinkListener(new HyperlinkListener() {
+        packInfo.addHyperlinkListener(new HyperlinkListener()
+        {
             @Override
-            public void hyperlinkUpdate(HyperlinkEvent event) {
-                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            public void hyperlinkUpdate (HyperlinkEvent event)
+            {
+                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                {
                     OSUtils.browse(event.getURL().toString());
                 }
             }
@@ -157,24 +169,35 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         server.setBounds(420, 5, 130, 25);
 
         //TODO: check
-        server.addActionListener(new ActionListener() {
+        server.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 String url;
                 ModPack pack = ModPack.getSelectedPack(false);
-                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !pack.getServerUrl().isEmpty()) {
-                    if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
-                        if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
-                                    : Settings.getSettings().getPackVer().replace(".", "_");
-                            if (pack.isPrivatePack()) {
+                if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !pack.getServerUrl().isEmpty())
+                {
+                    if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0)
+                    {
+                        if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null)
+                        {
+                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
+                                    .getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
+                            if (pack.isPrivatePack())
+                            {
                                 url = DownloadUtils.getCreeperhostLink("privatepacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
-                            } else {
+                            }
+                            else
+                            {
                                 url = DownloadUtils.getCreeperhostLink("modpacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             }
-                            if (DownloadUtils.fileExistsURL(url)) {
+                            if (DownloadUtils.fileExistsURL(url))
+                            {
                                 OSUtils.browse(url);
-                            } else {
+                            }
+                            else
+                            {
                                 ErrorUtils.tossError("Server file for selected version was not found on the server");
                             }
                             TrackerUtils.sendPageView(pack.getName() + " Server Download", "Server Download / " + pack.getName() + " / " + version);
@@ -185,7 +208,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         });
         add(server);
 
-        version = new JComboBox(new String[]{});
+        version = new JComboBox(new String[] {});
         version.setBounds(560, 5, 130, 25);
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
@@ -193,9 +216,11 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
 
         privatePack = new JButton(I18N.getLocaleString("PACK_CODES"));
         privatePack.setBounds(700, 5, 120, 25);
-        privatePack.addActionListener(new ActionListener() {
+        privatePack.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e)
+            {
                 PrivatePackDialog ap = new PrivatePackDialog();
                 ap.setVisible(true);
             }
@@ -205,25 +230,33 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     }
 
     @Override
-    public void onVisible() {
+    public void onVisible ()
+    {
         ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-    public int getSelectedThirdPartyModIndex() {
+    public int getSelectedThirdPartyModIndex ()
+    {
         return modPacksAdded ? getIndex() : -1;
     }
 
-    boolean filterForTab(ModPack pack) {
+    boolean filterForTab (ModPack pack)
+    {
         return (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML));
     }
 
-    String getLastPack() {
+    String getLastPack ()
+    {
         return Settings.getSettings().getLastThirdPartyPack();
     }
 
-    String getPaneShortName() {return "Third Party";}
+    String getPaneShortName ()
+    {
+        return "Third Party";
+    }
 
-    boolean isFTB() {
+    boolean isFTB ()
+    {
         return false;
     }
 }

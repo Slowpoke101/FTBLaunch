@@ -33,7 +33,8 @@ import net.ftb.tools.ModManager;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class ModpackUpdateDialog extends JDialog {
+public class ModpackUpdateDialog extends JDialog
+{
     private JLabel messageLbl;
     private JLabel updateLbl;
     private JButton update;
@@ -41,14 +42,17 @@ public class ModpackUpdateDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
+    public ModpackUpdateDialog(LaunchFrame instance, boolean modal)
+    {
         super(instance, modal);
 
         setupGui();
 
-        update.addActionListener(new ActionListener() {
+        update.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 ModManager.update = true;
                 ModManager.backupCFG = backupCFG.isSelected();
                 ModManager.backupSave = backupSave.isSelected();
@@ -56,16 +60,19 @@ public class ModpackUpdateDialog extends JDialog {
             }
         });
 
-        abort.addActionListener(new ActionListener() {
+        abort.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent arg0) {
+            public void actionPerformed (ActionEvent arg0)
+            {
                 ModManager.update = false;
                 setVisible(false);
             }
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle(I18N.getLocaleString("UPDATEMODPACK_TITLE"));
         setResizable(true);

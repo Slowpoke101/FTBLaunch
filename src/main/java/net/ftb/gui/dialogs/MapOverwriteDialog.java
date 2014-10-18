@@ -31,35 +31,42 @@ import net.ftb.locale.I18N;
 import net.ftb.tools.MapManager;
 import net.miginfocom.swing.MigLayout;
 
-public class MapOverwriteDialog extends JDialog {
+public class MapOverwriteDialog extends JDialog
+{
     private JLabel messageLbl;
     private JLabel overwriteLbl;
     private JButton overwrite;
     private JButton abort;
 
-    public MapOverwriteDialog() {
+    public MapOverwriteDialog()
+    {
         super(LaunchFrame.getInstance(), true);
 
         setupGui();
 
-        overwrite.addActionListener(new ActionListener() {
+        overwrite.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 MapManager.overwrite = true;
                 setVisible(false);
             }
         });
 
-        abort.addActionListener(new ActionListener() {
+        abort.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed (ActionEvent event) {
+            public void actionPerformed (ActionEvent event)
+            {
                 MapManager.overwrite = false;
                 setVisible(false);
             }
         });
     }
 
-    private void setupGui () {
+    private void setupGui ()
+    {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setTitle("WARNING!");
         setResizable(true);
