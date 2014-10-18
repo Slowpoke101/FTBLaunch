@@ -115,7 +115,7 @@ public class Main {
          */
         int logLevel = CommandLineSettings.getSettings().getVerbosity();
         LogLevel stdoutLogLevel = LogLevel.values()[logLevel];
-        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs()?LogSource.ALL:LogSource.LAUNCHER;
+        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs() ? LogSource.ALL : LogSource.LAUNCHER;
 
         Logger.addListener(new StdOutLogger(stdoutLogLevel, stdoutLogSource));
         /*
@@ -182,7 +182,7 @@ public class Main {
         mainGUI(args);
     }
 
-    private static void mainGUI(String[] args) {
+    private static void mainGUI (String[] args) {
         /*
          * Setup GUI style & create and show Splash screen in EDT
          * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
@@ -214,7 +214,6 @@ public class Main {
         I18N.setupLocale();
         I18N.setLocale(Settings.getSettings().getLocale());
 
-
         if (Settings.getSettings().isNoConfig()) {
             Logger.logDebug("FirstRunDialog");
             try {
@@ -225,7 +224,8 @@ public class Main {
                         firstRunDialog.setVisible(true);
                     }
                 });
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         // NOTE: this messagage will be missed because laoder is not created when this is executed
@@ -244,9 +244,10 @@ public class Main {
             // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override public void run () {
-                        int result = ErrorUtils
-                                .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                    @Override
+                    public void run () {
+                        int result = ErrorUtils.tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE
+                                : JOptionPane.WARNING_MESSAGE);
                         // pressing OK or closing dialog does not do anything
                         if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
                             // if user select ignore we save setting and that type of error will be ignored
@@ -257,12 +258,14 @@ public class Main {
                         }
                     }
                 });
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run () {
+                @Override
+                public void run () {
                     // Same warnings are logged as errors in MainHelpers.printInfo()
                     if (!OSUtils.is64BitOS()) {
                         MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
@@ -276,7 +279,8 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
 
@@ -289,7 +293,7 @@ public class Main {
         AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
             @Override
             protected void done () {
-                if (disableLaunchButton == false )
+                if (disableLaunchButton == false)
                     LaunchFrame.getInstance().getLaunch().setEnabled(true);
             }
         };
@@ -298,7 +302,8 @@ public class Main {
         LoadingDialog.advance("Creating Console window");
 
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run () {
+            @Override
+            public void run () {
                 if (!CommandLineSettings.getSettings().isNoConsole() && Settings.getSettings().getConsoleActive()) {
                     LaunchFrame.con = new LauncherConsole();
                     Logger.addListener(LaunchFrame.con);
@@ -313,7 +318,8 @@ public class Main {
 
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run () {
+                @Override
+                public void run () {
                     LaunchFrame frame = new LaunchFrame(2);
                     LaunchFrame.setInstance(frame);
 
@@ -325,7 +331,8 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         LoadingDialog.advance("Setting up Launcher");
 
@@ -344,10 +351,12 @@ public class Main {
          * main form is not visible when constructed.
          */
         SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run () {
+            @Override
+            public void run () {
                 //LaunchFrame.getInstance().setVisible(true);
                 //LaunchFrame.getInstance().toBack();
-            }});
+            }
+        });
 
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);
@@ -356,7 +365,6 @@ public class Main {
 
         Map.addListener(LaunchFrame.getInstance().mapsPane);
         TexturePack.addListener(LaunchFrame.getInstance().tpPane);
-
 
         /*
          * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed

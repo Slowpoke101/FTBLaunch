@@ -84,7 +84,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
         while (!downloadSuccess && (attempt < attempts)) {
             try {
-                if(remoteHash == null)
+                if (remoteHash == null)
                     remoteHash = Lists.newArrayList();
                 hashType = asset.hashType;
                 if (attempt++ > 0) {

@@ -112,8 +112,8 @@ public class LauncherConsole extends JFrame implements ILogListener {
                     }
                 }
                 if (result == 0) {
-                    StringSelection stringSelection = new StringSelection("FTB Launcher logs:\n" + Logger.getLogs()
-                            + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + " Logs copied to clipboard");
+                    StringSelection stringSelection = new StringSelection("FTB Launcher logs:\n" + Logger.getLogs() + "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]"
+                            + " Logs copied to clipboard");
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(stringSelection, null);
                 }
@@ -130,13 +130,13 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 // setup loglevel. If DEBUG selected show also DEBUG messages
                 switch (logType) {
                 case MINIMAL:
-                    logLevel=LogLevel.INFO;
+                    logLevel = LogLevel.INFO;
                     break;
                 case EXTENDED:
-                    logLevel=LogLevel.INFO;
+                    logLevel = LogLevel.INFO;
                     break;
                 case DEBUG:
-                    logLevel=LogLevel.DEBUG;
+                    logLevel = LogLevel.DEBUG;
                     break;
                 }
 
@@ -176,9 +176,9 @@ public class LauncherConsole extends JFrame implements ILogListener {
         panel.add(killMCButton);
 
         // setup log area
-        displayArea = new JTextPane(){
+        displayArea = new JTextPane() {
             @Override
-            public boolean getScrollableTracksViewportWidth() {
+            public boolean getScrollableTracksViewportWidth () {
                 return true;
             }
         };
@@ -200,7 +200,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing (WindowEvent e) {
                 Logger.removeListener(LaunchFrame.con);
                 if (LaunchFrame.trayMenu != null) {
                     LaunchFrame.trayMenu.updateShowConsole(false);
@@ -235,7 +235,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         displayArea.setCaretPosition(displayArea.getDocument().getLength());
     }
 
-    synchronized private void addMessage(LogEntry entry, Document d) {
+    synchronized private void addMessage (LogEntry entry, Document d) {
         SimpleAttributeSet color = null;
         switch (entry.level) {
         case ERROR:
@@ -259,20 +259,20 @@ public class LauncherConsole extends JFrame implements ILogListener {
         }
     }
 
-    public void minecraftStarted() {
+    public void minecraftStarted () {
         killMCButton.setEnabled(true);
     }
-    
-    public void minecraftStopped() {
+
+    public void minecraftStopped () {
         killMCButton.setEnabled(false);
     }
-    
+
     @Override
     public void onLogEvent (final LogEntry entry) {
         // drop unneeded messages as soon as possible
-        if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))){
+        if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))) {
             SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+                public void run () {
                     addMessage(entry, LaunchFrame.con.displayAreaDoc);
                 }
             });

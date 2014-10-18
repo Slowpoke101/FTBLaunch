@@ -27,21 +27,22 @@ import net.ftb.data.news.NewsArticle;
 import net.ftb.data.news.RSSReader;
 
 public class NewsUtils {
-    
+
     private static List<NewsArticle> news = null;
     private static DateFormat dateFormatterRss = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
-    public static void initializeNews() {
+
+    public static void initializeNews () {
         news = RSSReader.readRSS();
     }
-    
+
     /**
      * Gets the HTML code for the news pane.
      * 
      * @return The HTML to display on the news pane
      */
-    public static String getNewsHTML() {
+    public static String getNewsHTML () {
         // if news not fetched try to fetch. Blocks thread.
-        if(news == null) {
+        if (news == null) {
             NewsUtils.initializeNews();
         }
 
@@ -61,7 +62,8 @@ public class NewsUtils {
         return html;
 
     }
-    public static ArrayList<String> getPubDates() {
+
+    public static ArrayList<String> getPubDates () {
         ArrayList<String> s = Lists.newArrayList();
         if (news != null) {
             for (NewsArticle n : news) {
@@ -70,11 +72,12 @@ public class NewsUtils {
         }
         return s;
     }
-    private static String getUnixDate(String s) {
+
+    private static String getUnixDate (String s) {
         try {
             Date dte = dateFormatterRss.parse(s);
-            return String.valueOf(dte.getTime()/1000);
-        } catch(Exception e) {
+            return String.valueOf(dte.getTime() / 1000);
+        } catch (Exception e) {
 
         }
         return "00000000";

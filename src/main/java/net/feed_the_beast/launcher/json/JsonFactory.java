@@ -49,22 +49,23 @@ public class JsonFactory {
 
     public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);
-        Version v =  GSON.fromJson(reader, Version.class);
+        Version v = GSON.fromJson(reader, Version.class);
         reader.close();
         return v;
     }
 
     public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);
-        AssetIndex a =  GSON.fromJson(reader, AssetIndex.class);
+        AssetIndex a = GSON.fromJson(reader, AssetIndex.class);
         reader.close();
         return a;
     }
 
-    public static Library loadLibrary(String libJsonObject)throws JsonSyntaxException, JsonIOException {
+    public static Library loadLibrary (String libJsonObject) throws JsonSyntaxException, JsonIOException {
         return GSON.fromJson(libJsonObject, Library.class);
     }
-    public static Update getUpdate(String name, String url) throws IOException{
+
+    public static Update getUpdate (String name, String url) throws IOException {
         Library l = new Library();
         l.name = name;
         return GSON.fromJson(IOUtils.toString(new URL(url + l.getPath())), Update.class);
@@ -110,6 +111,7 @@ public class JsonFactory {
             return null;
         }
     }
+
     public static String encodeStrListMap (Map<String, List<String>> m) {
         try {
             return GSON.toJson(m);

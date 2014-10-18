@@ -54,7 +54,7 @@ public class TexturePack {
     @Getter
     private int index;
     @Getter
-    private final static ArrayList<TexturePack> texturePackArray =Lists.newArrayList();
+    private final static ArrayList<TexturePack> texturePackArray = Lists.newArrayList();
     private static List<TexturePackListener> listeners = Lists.newArrayList();
 
     public static void addListener (TexturePackListener listener) {
@@ -189,9 +189,8 @@ public class TexturePack {
         for (String aCompatible : compatible) {
             ModPack pack = ModPack.getPack(aCompatible);
             if (pack == null) {
-                Logger.logDebug("Texturepack is compatible with "  + packName + " , but modpack not found");
-            }
-            else {
+                Logger.logDebug("Texturepack is compatible with " + packName + " , but modpack not found");
+            } else {
                 return pack.getName().equals(packName);
             }
         }

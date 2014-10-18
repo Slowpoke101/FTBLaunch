@@ -133,11 +133,11 @@ public class Settings extends Properties {
         setProperty("betaChannel", String.valueOf(flag));
     }
 
-
     @Deprecated
     public String getJavaPath () {
         return getJavaPath(true);
     }
+
     /**
      * don't use this to launch w/ use getCurrentJava(boolean canUse8)
      * @return java's location
@@ -157,7 +157,8 @@ public class Settings extends Properties {
     * Returns user selected or automatically selected JVM's
     * JavaInfo object.
     */
-    @Deprecated //use the boolean version instead
+    @Deprecated
+    //use the boolean version instead
     public JavaInfo getCurrentJava () {
         return getCurrentJava(true);
     }
@@ -166,7 +167,7 @@ public class Settings extends Properties {
      * Returns user selected or automatically selected JVM's
      * JavaInfo object.
      */
-    public JavaInfo getCurrentJava(boolean canuse8) {
+    public JavaInfo getCurrentJava (boolean canuse8) {
         if (currentJava == null) {
             try {
                 currentJava = new JavaInfo(getJavaPath(true));
@@ -174,7 +175,7 @@ public class Settings extends Properties {
                 Logger.logError("Error while creating JavaInfo", e);
             }
         }
-        if(!canuse8 && currentJava.isJava8()) {
+        if (!canuse8 && currentJava.isJava8()) {
             JavaInfo java = null;
             try {
                 // this should not never fail
@@ -193,6 +194,7 @@ public class Settings extends Properties {
     public String getDefaultJavaPath () {
         return getDefaultJavaPath(true);
     }
+
     public String getDefaultJavaPath (boolean allowJava8) {
         JavaInfo javaVersion;
 
@@ -362,10 +364,12 @@ public class Settings extends Properties {
     public void setLastExtendedState (int lastExtendedState) {
         setProperty("lastExtendedState", String.valueOf(lastExtendedState));
     }
-    public void setGeneratedID(String uuid) {
+
+    public void setGeneratedID (String uuid) {
         setProperty("trackinguuid", uuid);
     }
-    public String getGeneratedID() {
+
+    public String getGeneratedID () {
         return getProperty("trackinguuid", "");
     }
 
@@ -434,18 +438,22 @@ public class Settings extends Properties {
         return lastPosition;
     }
 
-    public int getMinJava8HackVsn() {
+    public int getMinJava8HackVsn () {
         return Integer.parseInt(getProperty("MinJava8HackVsn", "965"));
     }
-    public void setMinJava8HackVsn(int java8HackVsn) {
+
+    public void setMinJava8HackVsn (int java8HackVsn) {
         setProperty("MinJava8HackVsn", String.valueOf(java8HackVsn));
     }
-    public int getMaxJava8HackVsn() {
+
+    public int getMaxJava8HackVsn () {
         return Integer.parseInt(getProperty("MaxJava8HackVsn", "1209"));
     }
-    public void setMaxJava8HackVsn(int java8HackVsn) {
+
+    public void setMaxJava8HackVsn (int java8HackVsn) {
         setProperty("MaxJava8HackVsn", String.valueOf(java8HackVsn));
     }
+
     public void setLastDimension (Dimension lastDimension) {
         setObjectProperty("lastDimension", lastDimension);
     }
@@ -504,22 +512,22 @@ public class Settings extends Properties {
     /**
      * Simple boolean setting getter
      */
-    public boolean getBoolean(String name) {
+    public boolean getBoolean (String name) {
         return Boolean.valueOf(getProperty(name, "false"));
     }
 
     /**
      * Simple boolean setting setter
      */
-    public void setBoolean(String name, boolean value) {
+    public void setBoolean (String name, boolean value) {
         setProperty(name, String.valueOf(value));
     }
 
     /**
      * Clean all setting from namespace
      */
-    public void cleanNamespace(String name) {
-        for (String s: stringPropertyNames()) {
+    public void cleanNamespace (String name) {
+        for (String s : stringPropertyNames()) {
             if (s.startsWith(name)) {
                 remove(s);
             }

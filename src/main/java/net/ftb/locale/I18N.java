@@ -49,7 +49,7 @@ public class I18N {
             locales.load(new InputStreamReader(I18N.class.getResource("/i18n/" + file).openStream(), "UTF8"));
             // clean empty entries
             for (Enumeration<Object> e = locales.keys(); e.hasMoreElements();) {
-                String key = (String)e.nextElement();
+                String key = (String) e.nextElement();
                 if (locales.get(key).equals("")) {
                     locales.remove(key);
                 }
@@ -76,7 +76,7 @@ public class I18N {
     public static void addFiles () {
         int i = 1;
         Properties tmp = new Properties();
-        for (Locale file_: Locale.values()) {
+        for (Locale file_ : Locale.values()) {
             String file = file_.toString();
             try {
                 tmp.clear();

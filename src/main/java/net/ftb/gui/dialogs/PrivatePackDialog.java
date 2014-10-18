@@ -82,9 +82,9 @@ public class PrivatePackDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
-                String toRemove="";
-                for(String s: codes) {
-                    if(s.equalsIgnoreCase(modpackName.getText()))
+                String toRemove = "";
+                for (String s : codes) {
+                    if (s.equalsIgnoreCase(modpackName.getText()))
                         toRemove = s;
                 }
                 if (!toRemove.isEmpty()) {
@@ -145,9 +145,10 @@ public class PrivatePackDialog extends JDialog {
         modpackName.requestFocusInWindow();
         setLocationRelativeTo(getOwner());
     }
-    private boolean packExists(String name) {
-        for(String p :Settings.getSettings().getPrivatePacks()){
-            if(p.equalsIgnoreCase(name))
+
+    private boolean packExists (String name) {
+        for (String p : Settings.getSettings().getPrivatePacks()) {
+            if (p.equalsIgnoreCase(name))
                 return true;
         }
         return false;

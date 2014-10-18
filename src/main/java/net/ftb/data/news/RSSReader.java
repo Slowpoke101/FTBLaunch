@@ -31,18 +31,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class RSSReader {
-    
-    public static List<NewsArticle> readRSS() {
+
+    public static List<NewsArticle> readRSS () {
         try {
             List<NewsArticle> news = Lists.newArrayList();
-            
+
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             URL u = new URL(Locations.feedURL);
             Document doc = builder.parse(u.openStream());
             NodeList nodes = doc.getElementsByTagName("item");
-            
-            for(int i=0; i<nodes.getLength(); i++) {
-                Element element = (Element)nodes.item(i);
+
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element element = (Element) nodes.item(i);
                 NewsArticle article = new NewsArticle();
                 article.setTitle(getTextValue(element, "title"));
                 article.setHyperlink(getTextValue(element, "link"));
@@ -50,15 +50,15 @@ public class RSSReader {
                 article.setDate(getTextValue(element, "pubDate"));
                 news.add(article);
             }
-            
+
             return news;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             Logger.logError("News download failed", ex);
             return null;
         }
     }
-    
-    private static String getTextValue(Element doc, String tag) {
+
+    private static String getTextValue (Element doc, String tag) {
         String value = "";
         NodeList nl;
         nl = doc.getElementsByTagName(tag);

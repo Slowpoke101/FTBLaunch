@@ -58,9 +58,10 @@ import java.util.zip.ZipInputStream;
 public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
+
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
-        List<DownloadInfo> assets = gatherAssets(new File(installPath),installPath, isLegacy);
+        List<DownloadInfo> assets = gatherAssets(new File(installPath), installPath, isLegacy);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -139,25 +140,24 @@ public class MCInstaller {
 
             if (new File(gameDir, "pack.json").exists()) {
                 Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
-                if(packjson.jar != null && !packjson.jar.isEmpty())
+                if (packjson.jar != null && !packjson.jar.isEmpty())
                     packmcversion = packjson.jar;
-                if(packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty())
+                if (packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty())
                     packbasejson = packjson.inheritsFrom;
                 Library.Artifact a;
                 for (Library lib : packjson.getLibraries()) {
                     //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                     // These files are shipped inside pack.zip, can't do force update check yet
                     local = new File(root, "libraries/" + lib.getPath());
-                    if(!new File(libDir, lib.getPath()).exists() || forceUpdate){
-                        if (lib.checksums!= null)
-                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1",
-                                                      DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
-                        else if(lib.download != null && lib.download)
+                    if (!new File(libDir, lib.getPath()).exists() || forceUpdate) {
+                        if (lib.checksums != null)
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1", DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
+                        else if (lib.download != null && lib.download)
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                     }
                     a = lib.get_artifact();
-                    if(a.getDomain().equalsIgnoreCase("net.minecraftforge") && (a.getName().equalsIgnoreCase("forge") || a.getName().equalsIgnoreCase("minecraftforge")))
-                        grabJava8CompatFix(a, pack, packmcversion, installDir + "/" + pack.getDir() );
+                    if (a.getDomain().equalsIgnoreCase("net.minecraftforge") && (a.getName().equalsIgnoreCase("forge") || a.getName().equalsIgnoreCase("minecraftforge")))
+                        grabJava8CompatFix(a, pack, packmcversion, installDir + "/" + pack.getDir());
                 }
                 //}
             } else {
@@ -173,7 +173,7 @@ public class MCInstaller {
              */
             //check if our copy exists of the version json if not backup to mojang's copy
             Logger.logDebug("Checking minecraft version json");
-            if(packbasejson == null || packbasejson.isEmpty())
+            if (packbasejson == null || packbasejson.isEmpty())
                 packbasejson = packmcversion;
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
                     + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
@@ -268,21 +268,20 @@ public class MCInstaller {
             Benchmark.start("threading");
             Collection<DownloadInfo> tmp;
             Logger.logDebug("Starting TaskHandler to check MC assets");
-            Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
-                    .withFixedThreads(2*OSUtils.getNumCores())
-                            //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
-                    .apply( new Parallel.F<Map.Entry<String, AssetIndex.Asset>, DownloadInfo>() {
-                        public DownloadInfo apply(Map.Entry<String, AssetIndex.Asset> e) {
+            Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet()).withFixedThreads(2 * OSUtils.getNumCores())
+            //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+                    .apply(new Parallel.F<Map.Entry<String, AssetIndex.Asset>, DownloadInfo>() {
+                        public DownloadInfo apply (Map.Entry<String, AssetIndex.Asset> e) {
                             try {
                                 String name = e.getKey();
-                                AssetIndex.Asset asset = e. getValue();
+                                AssetIndex.Asset asset = e.getValue();
                                 String path = asset.hash.substring(0, 2) + "/" + asset.hash;
                                 final File local = new File(root, "assets/objects/" + path);
                                 if (local.exists() && !asset.hash.equals(DownloadUtils.fileSHA(local))) {
                                     local.delete();
                                 }
                                 if (!local.exists()) {
-                                    return(new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
+                                    return (new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
                                 }
                             } catch (Exception ex) {
                                 Logger.logError("Asset hash check failed", ex);
@@ -304,7 +303,7 @@ public class MCInstaller {
         return null;
     }
 
-    public static void launchMinecraft(String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
+    public static void launchMinecraft (String installDir, ModPack pack, LoginResponse resp, boolean isLegacy) {
         try {
             File packDir = new File(installDir, pack.getDir());
             String gameFolder = installDir + File.separator + pack.getDir() + File.separator + "minecraft";
@@ -315,9 +314,9 @@ public class MCInstaller {
             final String packVer = Settings.getSettings().getPackVer(pack.getDir());
 
             Logger.logInfo("Setting up native libraries for " + pack.getName() + " v " + packVer + " MC " + packmcversion);
-            if(!gameDir.exists())
+            if (!gameDir.exists())
                 gameDir.mkdirs();
-            
+
             if (natDir.exists()) {
                 natDir.delete();
             }
@@ -381,17 +380,17 @@ public class MCInstaller {
             }
             boolean java8Usable = false;
             //if(packmcversion.startsWith("1.7.10") || packmcversion.startsWith("1.8") || pack.getDir().equals("mojang_vanilla") ||  CommandLineSettings.getSettings().isUseJava8())//TODO re-add this if java 8 ever has issues again
-                java8Usable = true;
+            java8Usable = true;
             JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
 
-            Process minecraftProcess = MCLauncher.launchMinecraft(java.path, gameFolder, assetDir, natDir, classpath,
-                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
+            Process minecraftProcess = MCLauncher.launchMinecraft(java.path, gameFolder, assetDir, natDir, classpath, packjson.mainClass != null ? packjson.mainClass : base.mainClass,
+                    packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments, packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings()
+                            .getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
             if (LaunchFrame.con != null)
                 LaunchFrame.con.minecraftStarted();
             StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-            String[] ignore = {"Session ID is token"};
+            String[] ignore = { "Session ID is token" };
             StreamLogger.setIgnore(ignore);
             StreamLogger.doStart();
             String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
@@ -406,7 +405,7 @@ public class MCInstaller {
                 LaunchFrame.getInstance().setVisible(false);
                 LaunchFrame.setProcMonitor(ProcessMonitor.create(minecraftProcess, new Runnable() {
                     @Override
-                    public void run() {
+                    public void run () {
                         if (!Settings.getSettings().getKeepLauncherOpen()) {
                             System.exit(0);
                         } else {
@@ -467,7 +466,6 @@ public class MCInstaller {
         FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
     }
 
-
     public static void extractLegacyJson (File newLoc) {
         try {
             if (!new File(newLoc.getParent()).exists())
@@ -480,11 +478,11 @@ public class MCInstaller {
             Logger.logError("Error extracting legacy json to maven directory");
         }
     }
-    private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase)
-    {
+
+    private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase) {
         String fgVsn = forgeArtifact.getVersion();
-        int vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".")+1));
-        if(vsn_ >=Settings.getSettings().getMinJava8HackVsn() && vsn_ <=Settings.getSettings().getMaxJava8HackVsn()) {
+        int vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1));
+        if (vsn_ >= Settings.getSettings().getMinJava8HackVsn() && vsn_ <= Settings.getSettings().getMaxJava8HackVsn()) {
             Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
             String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
             Library l = JsonFactory.loadLibrary(json);//TODO this should be pulled from the same json file

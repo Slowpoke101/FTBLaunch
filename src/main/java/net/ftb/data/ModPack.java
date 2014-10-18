@@ -65,7 +65,7 @@ public class ModPack {
      * @return map of <String packversion, String MCVersion>
      */
     @Getter
-    private HashMap<String,String> customMCVersions = Maps.newHashMap();
+    private HashMap<String, String> customMCVersions = Maps.newHashMap();
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -99,13 +99,12 @@ public class ModPack {
      */
     public static void addPacks (ArrayList<ModPack> packs_) {
         synchronized (packs) {
-            for(ModPack p :packs_){
+            for (ModPack p : packs_) {
                 packs.add(p);
             }
             Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
-
 
     public static void removePacks (String xml) {
         ArrayList<ModPack> remove = Lists.newArrayList();
@@ -179,6 +178,7 @@ public class ModPack {
             return selectedPack;
         }
     }
+
     /**
      * Constructor for ModPack class
      * @param name - the name of the ModPack
@@ -205,7 +205,8 @@ public class ModPack {
      * @throws NoSuchAlgorithmException
      */
     public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec, String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec,
+            String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -240,22 +241,22 @@ public class ModPack {
         } else {
             this.mods = mods.split("; ");
         }
-        if(oldVersions == null || oldVersions.isEmpty()){
+        if (oldVersions == null || oldVersions.isEmpty()) {
             this.oldVersions = null;
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        if(customMCVersions != null && !customMCVersions.isEmpty()) {
-            String[] tmp =  customMCVersions.split(";");
-            if(tmp == null)
-                tmp = new String[]{customMCVersions};
-            for(String s : tmp) {
+        if (customMCVersions != null && !customMCVersions.isEmpty()) {
+            String[] tmp = customMCVersions.split(";");
+            if (tmp == null)
+                tmp = new String[] { customMCVersions };
+            for (String s : tmp) {
                 String[] s2 = s.split("\\^");
                 this.customMCVersions.put(s2[0], s2[1]);
             }
         }
 
-    String installPath = OSUtils.getCacheStorageLocation();
+        String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
         this.thirdPartyTab = thirdpartyTab;
@@ -429,7 +430,7 @@ public class ModPack {
      * @return - the minecraft version
      */
     public String getMcVersion (String packVersion) {
-        if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
+        if (customMCVersions != null && customMCVersions.containsKey(packVersion)) {
             return customMCVersions.get(packVersion);
         }
         return mcVersion;

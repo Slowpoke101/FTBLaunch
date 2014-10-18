@@ -88,7 +88,7 @@ public final class Parallel {
          * @param e Input element
          * @return transformation result
          */
-        V apply(E e);
+        V apply (E e);
     }
 
     /**
@@ -103,7 +103,7 @@ public final class Parallel {
          * This method is final and cannot be overridden. It applies the action
          * implemented by {@link Action#doAction(Object)}.
          */
-        public final Void apply(E element) {
+        public final Void apply (E element) {
             doAction(element);
             return null;
         }
@@ -114,7 +114,7 @@ public final class Parallel {
          *
          * @param element element to process
          */
-        public abstract void doAction(E element);
+        public abstract void doAction (E element);
     }
 
     /**
@@ -127,27 +127,26 @@ public final class Parallel {
         private Collection<Future<V>> runningTasks = new LinkedList<Future<V>>();
         private ExecutorService executorService;
 
-        public TaskHandler(ExecutorService executor,
-                           Iterable<Callable<V>> tasks, boolean poolSizeCheck, int maxPool, int sleep) {
+        public TaskHandler(ExecutorService executor, Iterable<Callable<V>> tasks, boolean poolSizeCheck, int maxPool, int sleep) {
 
             this.executorService = executor;
             for (Callable<V> task : tasks) {
-                while (poolSizeCheck && (((ThreadPoolExecutor)executor).getTaskCount() - ((ThreadPoolExecutor)executor).getCompletedTaskCount()) > maxPool) {
+                while (poolSizeCheck && (((ThreadPoolExecutor) executor).getTaskCount() - ((ThreadPoolExecutor) executor).getCompletedTaskCount()) > maxPool) {
                     if (Settings.getSettings().getDebugLauncher()) {
                         Logger.logDebug("system time: " + System.currentTimeMillis());
-                        Logger.logDebug("task count: " + (((ThreadPoolExecutor)executor).getTaskCount() - ((ThreadPoolExecutor)executor).getCompletedTaskCount()));
+                        Logger.logDebug("task count: " + (((ThreadPoolExecutor) executor).getTaskCount() - ((ThreadPoolExecutor) executor).getCompletedTaskCount()));
                     }
 
                     try {
                         Thread.sleep(sleep);
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                 }
                 runningTasks.add(executor.submit(task));
             }
         }
 
-        public TaskHandler(ExecutorService executor,
-                           Iterable<Callable<V>> tasks) {
+        public TaskHandler(ExecutorService executor, Iterable<Callable<V>> tasks) {
 
             this.executorService = executor;
             for (Callable<V> task : tasks) {
@@ -161,7 +160,7 @@ public final class Parallel {
          * @return Collection of futures
          * @see Future
          */
-        public Collection<Future<V>> tasks() {
+        public Collection<Future<V>> tasks () {
             return this.runningTasks;
         }
 
@@ -171,8 +170,7 @@ public final class Parallel {
          *
          * @see ExecutorService#awaitTermination(long, TimeUnit)
          */
-        public boolean wait(long timeout, TimeUnit unit)
-                throws InterruptedException {
+        public boolean wait (long timeout, TimeUnit unit) throws InterruptedException {
             return this.executorService.awaitTermination(timeout, unit);
         }
 
@@ -184,17 +182,17 @@ public final class Parallel {
          * @throws InterruptedException
          * @throws ExecutionException
          */
-        public Collection<V> values() throws InterruptedException,
-                ExecutionException {
+        public Collection<V> values () throws InterruptedException, ExecutionException {
             Collection<V> results = new LinkedList<V>();
             for (Future<V> future : this.runningTasks) {
                 V result = future.get();
-                if (result != null) results.add(future.get());
+                if (result != null)
+                    results.add(future.get());
             }
             return results;
         }
 
-        public void shutdown() {
+        public void shutdown () {
             executorService.shutdown();
         }
     }
@@ -226,7 +224,7 @@ public final class Parallel {
          * @param sleepTime Time to sleep(in ms) before trying add more tasks in pool
          * @return a ForEach instance
          */
-        public ForEach<E, V> configurePoolSize(int tasks, int sleepTime) {
+        public ForEach<E, V> configurePoolSize (int tasks, int sleepTime) {
             poolSizeCheck = true;
             sleep = sleepTime;
             maxTasksInPool = tasks;
@@ -241,7 +239,7 @@ public final class Parallel {
          * @param threads number of threads to use
          * @return a ForEach instance
          */
-        public ForEach<E, V> withFixedThreads(int threads) {
+        public ForEach<E, V> withFixedThreads (int threads) {
             this.executor = Executors.newFixedThreadPool(threads);
             return this;
         }
@@ -253,7 +251,7 @@ public final class Parallel {
          * @return the instance of ForEach configured with the new executor
          *         service.
          */
-        public ForEach<E, V> customExecutor(ExecutorService executor) {
+        public ForEach<E, V> customExecutor (ExecutorService executor) {
             this.executor = executor;
             return this;
         }
@@ -278,43 +276,42 @@ public final class Parallel {
          * @param f
          * @return
          */
-        public Callable<TaskHandler<V>> prepare(final F<E, V> f) {
+        public Callable<TaskHandler<V>> prepare (final F<E, V> f) {
             return new Callable<Parallel.TaskHandler<V>>() {
-                public TaskHandler<V> call() throws Exception {
+                public TaskHandler<V> call () throws Exception {
                     return new ForEach<E, V>(elements).apply(f);
                 }
             };
         }
 
-        public TaskHandler<V> apply(F<E, V> f) {
+        public TaskHandler<V> apply (F<E, V> f) {
             return new TaskHandler<V>(executor, map(elements, f), poolSizeCheck, maxTasksInPool, sleep);
         }
 
-        private Iterable<Callable<V>> map(final Iterable<E> elements,
-                                            final F<E, V> f) {
-            return new Iterable<Callable<V>>(){
+        private Iterable<Callable<V>> map (final Iterable<E> elements, final F<E, V> f) {
+            return new Iterable<Callable<V>>() {
                 @Override
-                public Iterator<Callable<V>> iterator() {
+                public Iterator<Callable<V>> iterator () {
                     return new Iterator<Callable<V>>() {
                         Iterator<E> it = elements.iterator();
 
                         @Override
-                        public boolean hasNext() {
+                        public boolean hasNext () {
                             return it.hasNext();
                         }
 
                         @Override
-                        public Callable<V> next() {
+                        public Callable<V> next () {
                             final E e = it.next();
                             return new Callable<V>() {
-                                public V call() throws Exception {
+                                public V call () throws Exception {
                                     return f.apply(e);
                                 }
                             };
                         }
 
                         @Override
-                        public void remove() {
+                        public void remove () {
                             throw new UnsupportedOperationException();
                         }
                     };
@@ -332,16 +329,14 @@ public final class Parallel {
      * @param elements
      * @param task
      */
-    public static <A, V> Collection<V> ForEach(Iterable<A> elements,
-                                               F<A, V> task) {
+    public static <A, V> Collection<V> ForEach (Iterable<A> elements, F<A, V> task) {
         try {
             TaskHandler<V> loop = new ForEach<A, V>(elements).apply(task);
             Collection<V> values = loop.values();
             loop.executorService.shutdown();
             return values;
         } catch (Exception e) {
-            throw new RuntimeException("ForEach method exception. "
-                    + e.getMessage());
+            throw new RuntimeException("ForEach method exception. " + e.getMessage());
         }
     }
 
@@ -353,23 +348,22 @@ public final class Parallel {
      * @param to     upper bound
      * @param action the action to perform in each iteration
      */
-    public static void For(final long from, final long to,
-                           final Action<Long> action) {
+    public static void For (final long from, final long to, final Action<Long> action) {
 
         ForEach(new Iterable<Long>() {
-            public Iterator<Long> iterator() {
+            public Iterator<Long> iterator () {
                 return new Iterator<Long>() {
                     private long current = from;
 
-                    public boolean hasNext() {
+                    public boolean hasNext () {
                         return current < to;
                     }
 
-                    public Long next() {
+                    public Long next () {
                         return current++;
                     }
 
-                    public void remove() {
+                    public void remove () {
                         throw new UnsupportedOperationException();
                     }
                 };

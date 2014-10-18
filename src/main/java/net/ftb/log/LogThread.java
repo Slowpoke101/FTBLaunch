@@ -43,12 +43,14 @@ public class LogThread extends Thread {
                     }
                 }
             }
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 
     public void handleLog (LogEntry logEntry) {
         try {
             logQueue.put(logEntry);
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 }

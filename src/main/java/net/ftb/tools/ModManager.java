@@ -221,7 +221,7 @@ public class ModManager extends JDialog {
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
 
                     if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
-                            downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+                        downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
                     }
                 }
             } catch (Exception e) {

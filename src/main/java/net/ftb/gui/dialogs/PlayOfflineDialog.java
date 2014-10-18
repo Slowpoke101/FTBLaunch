@@ -52,16 +52,16 @@ public class PlayOfflineDialog extends JDialog {
                 boolean legacy = false;
                 if (!pack.getMcVersion().startsWith("14w") && Integer.parseInt(pack.getMcVersion().replaceAll("[^\\d]", "")) < 162)
                     legacy = true;
-                if(pack.getDir().equalsIgnoreCase("mojang_vanilla"))
-                    legacy=false;//vanilla goes direct!!
+                if (pack.getDir().equalsIgnoreCase("mojang_vanilla"))
+                    legacy = false;//vanilla goes direct!!
                 setVisible(false);
                 String unique;
                 if (uuid == null || uuid.isEmpty())
                     unique = "1234567890";
                 else
                     unique = uuid;
-                MCInstaller.launchMinecraft(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(),
-                        new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()), legacy);
+                MCInstaller.launchMinecraft(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack(), new LoginResponse("1", "token", username, "offlinemods", unique, resp.getAuth()),
+                        legacy);
 
             }
         });
@@ -92,7 +92,6 @@ public class PlayOfflineDialog extends JDialog {
         panel.add(text, GuiConstants.WRAP);
         panel.add(abort, GuiConstants.FILL_TWO);
         panel.add(play, GuiConstants.GROW);
-
 
         pack();
         setLocationRelativeTo(getOwner());
