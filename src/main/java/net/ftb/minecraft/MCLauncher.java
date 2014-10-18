@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Map.Entry;
 
-
 import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
@@ -54,8 +53,8 @@ public class MCLauncher {
     private static String gameDirectory;
     private static StringBuilder cpb;
 
-    public static Process launchMinecraft(String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
-                                          String maxPermSize, String version, UserAuthentication authentication, boolean legacy) throws IOException {
+    public static Process launchMinecraft (String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
+            String maxPermSize, String version, UserAuthentication authentication, boolean legacy) throws IOException {
 
         cpb = new StringBuilder("");
         isLegacy = legacy;
@@ -67,7 +66,7 @@ public class MCLauncher {
             cpb.append(OSUtils.getJavaDelimiter());
             cpb.append(f.getAbsolutePath());
         }
-        if(isLegacy)
+        if (isLegacy)
             setupLegacyStuff(gameDirectory, Locations.FORGENAME);
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
@@ -112,7 +111,7 @@ public class MCLauncher {
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
         arguments.add("-Djava.net.preferIPv4Stack=true");
 
-        if(Settings.getSettings().getUseSystemProxy()) {
+        if (Settings.getSettings().getUseSystemProxy()) {
             arguments.add("-Djava.net.useSystemProxies=true");
         }
 
@@ -122,10 +121,10 @@ public class MCLauncher {
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
             Logger.logInfo("Additional java parameters: " + additionalOptions);
-            for(String s : additionalOptions.split("\\s+")) {
-                if(s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true")&& ! isLegacy) {
-                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() :
-                            Settings.getSettings().getPackVer()).replace(".", "_");
+            for (String s : additionalOptions.split("\\s+")) {
+                if (s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true") && !isLegacy) {
+                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer())
+                            .replace(".", "_");
                     TrackerUtils.sendPageView("JarmodAttempt", "JarmodAttempt / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
                     ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
                 } else {
@@ -211,7 +210,7 @@ public class MCLauncher {
                     arguments.add(s);
             }
         }
-        if(!isLegacy) {//legacy is handled separately
+        if (!isLegacy) {//legacy is handled separately
             boolean fullscreen = false;
             if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
                 GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -233,7 +232,6 @@ public class MCLauncher {
             }
         }
 
-
         ProcessBuilder builder = new ProcessBuilder(arguments);
         /*StringBuilder tmp = new StringBuilder();
         for (String a : builder.command())
@@ -245,7 +243,7 @@ public class MCLauncher {
         return builder.start();
     }
 
-    private static void setMemory(List<String> arguments, String rmax) {
+    private static void setMemory (List<String> arguments, String rmax) {
         boolean memorySet = false;
         try {
             int min = 256;
@@ -267,7 +265,7 @@ public class MCLauncher {
         }
     }
 
-    private static File syncAssets(File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException {
+    private static File syncAssets (File assetDir, String indexName) throws JsonSyntaxException, JsonIOException, IOException {
         Logger.logInfo("Syncing Assets:");
         final File objects = new File(assetDir, "objects");
         AssetIndex index = JsonFactory.loadAssetIndex(new File(assetDir, "indexes/{INDEX}.json".replace("{INDEX}", indexName)));
@@ -281,31 +279,30 @@ public class MCLauncher {
         old.addAll(FTBFileUtils.listFiles(targetDir));
 
         Benchmark.reset("threading");
-        Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
-            .withFixedThreads(2*OSUtils.getNumCores())
-            //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
-            .apply( new Parallel.F<Entry<String, Asset>, Void>() {
-                public Void apply(Entry<String, Asset> e) {
-                    Asset asset = e.getValue();
-                    File local = new File(targetDir, e.getKey());
-                    File object = new File(objects, asset.hash.substring(0, 2) + "/" + asset.hash);
+        Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet()).withFixedThreads(2 * OSUtils.getNumCores())
+        //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+                .apply(new Parallel.F<Entry<String, Asset>, Void>() {
+                    public Void apply (Entry<String, Asset> e) {
+                        Asset asset = e.getValue();
+                        File local = new File(targetDir, e.getKey());
+                        File object = new File(objects, asset.hash.substring(0, 2) + "/" + asset.hash);
 
-                    old.remove(local);
+                        old.remove(local);
 
-                    try {
-                        if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
-                            Logger.logInfo("  Changed: " + e.getKey());
-                            FTBFileUtils.copyFile(object, local, true);
-                        } else if (!local.exists()) {
-                            Logger.logInfo("  Added: " + e.getKey());
-                            FTBFileUtils.copyFile(object, local);
-                        }
+                        try {
+                            if (local.exists() && !DownloadUtils.fileSHA(local).equals(asset.hash)) {
+                                Logger.logInfo("  Changed: " + e.getKey());
+                                FTBFileUtils.copyFile(object, local, true);
+                            } else if (!local.exists()) {
+                                Logger.logInfo("  Added: " + e.getKey());
+                                FTBFileUtils.copyFile(object, local);
+                            }
                         } catch (Exception ex) {
-                        Logger.logError("Asset checking failed: ", ex);
+                            Logger.logError("Asset checking failed: ", ex);
+                        }
+                        return null;
                     }
-                    return null;
-                }
-            });
+                });
         try {
             th.shutdown();
             th.wait(60, TimeUnit.SECONDS);
@@ -323,15 +320,15 @@ public class MCLauncher {
         return targetDir;
     }
 
-    public static String parseLegacyArgs(String s) {
+    public static String parseLegacyArgs (String s) {
         if (s.equals("${animation_name}"))
             return (((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
                     + separator + ModPack.getSelectedPack().getAnimation() : "empty"));
         else if (s.equals("${forge_name}"))
             return Locations.FORGENAME;
         else if (s.equals("${pack_name}"))
-            return (ModPack.getSelectedPack().getName() + " v"
-                    + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
+            return (ModPack.getSelectedPack().getName() + " v" + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings
+                    .getSettings().getPackVer()));
         else if (s.equals("${pack_image}"))
             return (OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
         else if (s.equals("${extended_state}"))
@@ -346,7 +343,7 @@ public class MCLauncher {
             return s;
     }
 
-    public static void setupLegacyStuff(String workingDir, String forgename){
+    public static void setupLegacyStuff (String workingDir, String forgename) {
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
         //jarmods are added inside the wrapper
 

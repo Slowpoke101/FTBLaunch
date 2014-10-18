@@ -66,7 +66,7 @@ public class DownloadUtils extends Thread {
     public static String getCreeperhostLink (String file) {
         String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
-        resolved += "/FTB2/" +  file;
+        resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
@@ -388,9 +388,9 @@ public class DownloadUtils extends Thread {
         if (!file.exists()) {
             return "";
         }
-        if(type.equalsIgnoreCase("md5"))
+        if (type.equalsIgnoreCase("md5"))
             return fileMD5(file);
-        if(type.equalsIgnoreCase("sha1"))
+        if (type.equalsIgnoreCase("sha1"))
             return fileSHA(file);
         URL fileUrl = file.toURI().toURL();
         MessageDigest dgest = null;

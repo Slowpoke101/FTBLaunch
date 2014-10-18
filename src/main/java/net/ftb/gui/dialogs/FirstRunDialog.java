@@ -80,8 +80,8 @@ public class FirstRunDialog extends JDialog {
                 if (checkResult.action == Action.BLOCK) {
                     ErrorUtils.tossError(checkResult.message + "\nPlease select again", checkResult.localizedMessage + "\n" + I18N.getLocaleString("CIP_SELECTAGAIN"));
                 } else if (checkResult.action == Action.WARN) {
-                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab", checkResult.localizedMessage +
-                            "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
+                    ErrorUtils.tossError(checkResult.message + "\nPlease change your installation location under options tab",
+                            checkResult.localizedMessage + "\n" + I18N.getLocaleString("CIP_PLEASECHANGE"));
                     setVisible(false);
                     Settings.getSettings().setInstallPath(installPath.getText());
                     Settings.getSettings().setLocale(I18N.localeIndices.get(languageList.getSelectedIndex()));
@@ -96,8 +96,8 @@ public class FirstRunDialog extends JDialog {
         });
     }
 
-    private void setupGUI() {
-    	setTitle(I18N.getLocaleString("INSTALL_TITLE"));
+    private void setupGUI () {
+        setTitle(I18N.getLocaleString("INSTALL_TITLE"));
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         setResizable(false);
         setLocationRelativeTo(null);
@@ -161,11 +161,11 @@ public class FirstRunDialog extends JDialog {
         contentPanel.add(languageList);
     }
 
-    public void setInstallFolderText(String text) {
+    public void setInstallFolderText (String text) {
         installPath.setText(text);
     }
 
-    private void updateLocale() {
+    private void updateLocale () {
         setTitle(I18N.getLocaleString("INSTALL_TITLE"));
         messageLbl.setText(I18N.getLocaleString("INSTALL_FIRSTUSE"));
         installPathLbl.setText(I18N.getLocaleString("INSTALL_FOLDER"));

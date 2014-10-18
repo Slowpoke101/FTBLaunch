@@ -102,22 +102,21 @@ public class ModpackLoader extends Thread {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
                     try {
-                        if(modPackAttr.getNamedItem("author") != null)
+                        if (modPackAttr.getNamedItem("author") != null)
                             isThirdParty = !modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team");
-                        mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
-                                .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
-                                .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
-                                .getTextContent(), modPackAttr.getNamedItem("description")==null?null:modPackAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods")
-                                .getTextContent() : "", modPackAttr.getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "", modPackAttr
-                                .getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "", modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr
-                                .getNamedItem("maxPermSize").getTextContent() : "", offset+i,
-                                (isThirdParty && !privatePack)?(modPackAttr.getNamedItem("private") != null): privatePack, xmlFile, modPackAttr
-                                .getNamedItem("bundledMap") != null, modPackAttr.getNamedItem("customTP") != null, modPackAttr
-                                .getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty, modPackAttr
-                                .getNamedItem("minLaunchSpec")==null?0:Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
-                                .getNamedItem("warning")==null?null:modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n"), modPackAttr
-                                .getNamedItem("customMCVersions")==null?null:modPackAttr.getNamedItem("customMCVersions").getTextContent()
-                         ));
+                        mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(),
+                                modPackAttr.getNamedItem("version").getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr
+                                        .getNamedItem("image").getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr
+                                        .getNamedItem("serverPack").getTextContent(), modPackAttr.getNamedItem("description") == null ? null : modPackAttr.getNamedItem("description").getTextContent()
+                                        .replace("\\n", "\n"), modPackAttr.getNamedItem("mods") != null ? modPackAttr.getNamedItem("mods").getTextContent() : "", modPackAttr
+                                        .getNamedItem("oldVersions") != null ? modPackAttr.getNamedItem("oldVersions").getTextContent() : "",
+                                modPackAttr.getNamedItem("animation") != null ? modPackAttr.getNamedItem("animation").getTextContent() : "",
+                                modPackAttr.getNamedItem("maxPermSize") != null ? modPackAttr.getNamedItem("maxPermSize").getTextContent() : "", offset + i,
+                                (isThirdParty && !privatePack) ? (modPackAttr.getNamedItem("private") != null) : privatePack, xmlFile, modPackAttr.getNamedItem("bundledMap") != null, modPackAttr
+                                        .getNamedItem("customTP") != null, modPackAttr.getNamedItem("minJRE") != null ? modPackAttr.getNamedItem("minJRE").getTextContent() : "1.6", isThirdParty,
+                                modPackAttr.getNamedItem("minLaunchSpec") == null ? 0 : Integer.parseInt(modPackAttr.getNamedItem("minLaunchSpec").getTextContent()), modPackAttr
+                                        .getNamedItem("warning") == null ? null : modPackAttr.getNamedItem("warning").getTextContent().replace("\\n", "\n"), modPackAttr
+                                        .getNamedItem("customMCVersions") == null ? null : modPackAttr.getNamedItem("customMCVersions").getTextContent()));
                     } catch (Exception e) {
                         Logger.logError("Error while updating modpack info", e);
                     }
@@ -131,7 +130,7 @@ public class ModpackLoader extends Thread {
         }
 
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run () {
                 // We need to manually scroll FTBPackPane up because onVisible() is executed before packs are loaded
                 FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
             }

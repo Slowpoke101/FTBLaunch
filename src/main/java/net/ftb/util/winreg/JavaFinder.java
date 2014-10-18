@@ -59,18 +59,18 @@ public class JavaFinder {
      *   WINDIR\SysWOW64
      ****************************************************************************/
     public static List<JavaInfo> findJavas () {
-        if(OSUtils.getCurrentOS() == OS.MACOSX)
+        if (OSUtils.getCurrentOS() == OS.MACOSX)
             return findMacJavas();
-        
-        if(OSUtils.getCurrentOS() == OS.WINDOWS)
+
+        if (OSUtils.getCurrentOS() == OS.WINDOWS)
             return findWinJavas();
-        
+
         return Lists.newArrayList();
     }
-    
-    protected static List<JavaInfo> findWinJavas() {
+
+    protected static List<JavaInfo> findWinJavas () {
         List<String> javaExecs = Lists.newArrayList();
-        
+
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_32KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_64KEY, javaExecs);
         javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistry.KEY_WOW64_32KEY, javaExecs);
@@ -93,33 +93,33 @@ public class JavaFinder {
         return result;
     }
 
-    protected static String getMacJavaPath(String javaVersion) {
+    protected static String getMacJavaPath (String javaVersion) {
         String versionInfo;
-        
+
         versionInfo = RuntimeStreamer.execute(new String[] { "/usr/libexec/java_home", "-v " + javaVersion });
 
         // Unable to find any JVMs matching version "1.7"
-        if(versionInfo.contains("version \"" + javaVersion + "\"")) {    
+        if (versionInfo.contains("version \"" + javaVersion + "\"")) {
             return null;
         }
-        
+
         return versionInfo.trim();
     }
-    
-    protected static List<JavaInfo> findMacJavas() {
+
+    protected static List<JavaInfo> findMacJavas () {
         List<String> javaExecs = Lists.newArrayList();
         String javaVersion;
-        
+
         javaVersion = getMacJavaPath("1.6");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
-        
+
         javaVersion = getMacJavaPath("1.7");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
 
         javaVersion = getMacJavaPath("1.8");
-        if(javaVersion != null)
+        if (javaVersion != null)
             javaExecs.add(javaVersion + "/bin/java");
 
         javaExecs.add("/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java");
@@ -127,7 +127,7 @@ public class JavaFinder {
 
         List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
-            File javaFile = new File(javaPath); 
+            File javaFile = new File(javaPath);
             if (!javaFile.exists() || !javaFile.canExecute())
                 continue;
 
@@ -159,9 +159,10 @@ public class JavaFinder {
         // TODO: add command line argument to control this
         return parseJavaVersion(true);
     }
-        /**
-         * Standalone testing - lists all Javas in the system
-         ****************************************************************************/
+
+    /**
+     * Standalone testing - lists all Javas in the system
+     ****************************************************************************/
     public static JavaInfo parseJavaVersion (boolean canUseJava8) {
         if (preferred == null) {
             List<JavaInfo> javas = JavaFinder.findJavas();
@@ -190,7 +191,7 @@ public class JavaFinder {
                         preferred = aJava64;
                     if (backup == null && !aJava64.isJava8())
                         backup = aJava64;
-                    if(backup != null && !aJava64.isJava8() && aJava64.compareTo(backup) == 1)
+                    if (backup != null && !aJava64.isJava8() && aJava64.compareTo(backup) == 1)
                         backup = aJava64;
                 }
             }
@@ -201,7 +202,7 @@ public class JavaFinder {
                         preferred = aJava32;
                     if (backup == null && !aJava32.isJava8())
                         backup = aJava32;
-                    if(backup != null && !aJava32.isJava8() && aJava32.compareTo(backup) == 1)
+                    if (backup != null && !aJava32.isJava8() && aJava32.compareTo(backup) == 1)
                         backup = aJava32;
 
                 }

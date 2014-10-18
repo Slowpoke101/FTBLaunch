@@ -99,7 +99,6 @@ public class ModPackVersionChangeDialog extends JDialog {
         backupCFG = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPCFG"));
         backupSave = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPSave"));
 
-
         panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(versionLbl, GuiConstants.WRAP);
         panel.add(updateLbl, GuiConstants.CENTER_SINGLE_LINE);

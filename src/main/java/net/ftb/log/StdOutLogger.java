@@ -31,7 +31,7 @@ public class StdOutLogger implements ILogListener {
     // otherwise we'll got nasty loop
     private final static PrintStream realStderr = System.err;
     private final static PrintStream realStdout = System.out;
-    
+
     // DEBUG, EXTENTED, MINIMAL
     // how to write. Debug is only needed if we want to
     // see source of the log message. Hardcoded to EXTENDED
@@ -51,7 +51,7 @@ public class StdOutLogger implements ILogListener {
     }
 
     public StdOutLogger(LogLevel logLevel) {
-        this.logLevel  = logLevel;
+        this.logLevel = logLevel;
     }
 
     public StdOutLogger(LogSource logSource) {
@@ -59,12 +59,12 @@ public class StdOutLogger implements ILogListener {
     }
 
     public StdOutLogger(LogLevel logLevel, LogSource logSource) {
-        this.logLevel  = logLevel;
+        this.logLevel = logLevel;
         this.logSource = logSource;
     }
 
     @Override
-    public void onLogEvent(LogEntry entry) {
+    public void onLogEvent (LogEntry entry) {
         if (logSource != LogSource.ALL && entry.source != logSource)
             return;
 

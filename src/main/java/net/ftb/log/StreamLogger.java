@@ -50,14 +50,14 @@ public class StreamLogger extends Thread {
                     logBuffer = logBuffer.substring(0, nullIndex);
                 }
                 while ((newLineIndex = logBuffer.indexOf("\n")) != -1) {
-                    if ( ignore != null) {
+                    if (ignore != null) {
                         boolean skip = false;
-                        for (String s: ignore) {
+                        for (String s : ignore) {
                             if (logBuffer.substring(0, newLineIndex).contains(s)) {
                                 skip = true;
                             }
                         }
-                        if(!skip) {
+                        if (!skip) {
                             Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
                         }
                     } else {
@@ -95,7 +95,7 @@ public class StreamLogger extends Thread {
      *
      * @param ignore Array containing Strings which are used to ignore lines from LogListeteners
      */
-    public static void setIgnore(String[] ignore) {
+    public static void setIgnore (String[] ignore) {
         instance.ignore = ignore;
     }
 }

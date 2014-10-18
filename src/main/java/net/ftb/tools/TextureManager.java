@@ -50,6 +50,7 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.TrackerUtils;
 import static net.ftb.download.Locations.TEXTUREPACKS;
+
 @SuppressWarnings("serial")
 public class TextureManager extends JDialog {
     private static TexturePack updateTexture;
@@ -256,7 +257,7 @@ public class TextureManager extends JDialog {
                                     packStr = "";
                                 else
                                     packStr = "/" + version;
-                                if (DownloadUtils.fileExists(TEXTUREPACKS+ tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
+                                if (DownloadUtils.fileExists(TEXTUREPACKS + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
                                     updating = true;
                                     TextureManager man = new TextureManager(new JFrame(), true);
                                     man.updateTexture = tp;

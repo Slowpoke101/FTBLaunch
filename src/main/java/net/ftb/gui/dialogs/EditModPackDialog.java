@@ -97,7 +97,7 @@ public class EditModPackDialog extends JDialog {
         jarModsFolder.mkdirs();
 
         setupGui();
-        this.setSize(700,600);
+        this.setSize(700, 600);
         enabledMods = Lists.newArrayList();
         disabledMods = Lists.newArrayList();
 
@@ -290,7 +290,6 @@ public class EditModPackDialog extends JDialog {
         rPnl.add(disabledModsLbl, GuiConstants.WRAP);
         rPnl.add(disabledModsScl, "pushy, " + GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         rPnl.add(addMod, GuiConstants.FILL_SINGLE_LINE);
-
 
         formPnl.setLayout(new MigLayout(new LC().fillY()));
         formPnl.add(lPnl, "push, grow, " + GuiConstants.SPLIT_3);

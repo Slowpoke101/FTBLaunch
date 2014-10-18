@@ -76,7 +76,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         filter.setBounds(5, 5, 105, 25);
         filter.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 if (loaded) {
                     // TODO: problem here. How to move into abstract?
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
@@ -105,7 +105,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         editModPack.setBounds(300, 5, 110, 25);
         editModPack.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
                     //TODO: fix by rename
                     if (getSelectedFTBModIndex() >= 0) {
@@ -142,7 +142,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         packInfo.setContentType("text/html");
         packInfo.addHyperlinkListener(new HyperlinkListener() {
             @Override
-            public void hyperlinkUpdate(HyperlinkEvent event) {
+            public void hyperlinkUpdate (HyperlinkEvent event) {
                 if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
                     OSUtils.browse(event.getURL().toString());
                 }
@@ -167,14 +167,14 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         //TODO: check
         server.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed (ActionEvent event) {
                 String url;
                 ModPack pack = ModPack.getSelectedPack(true);
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedFTBModIndex() >= 0) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
-                                    : Settings.getSettings().getPackVer().replace(".", "_");
+                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
+                                    .getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
                             if (pack.isPrivatePack()) {
                                 url = DownloadUtils.getCreeperhostLink("privatepacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             } else {
@@ -193,7 +193,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         });
         add(server);
 
-        version = new JComboBox(new String[]{});
+        version = new JComboBox(new String[] {});
         version.setBounds(560, 5, 130, 25);
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
@@ -203,7 +203,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
         privatePack.setBounds(700, 5, 120, 25);
         privatePack.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 PrivatePackDialog ap = new PrivatePackDialog();
                 ap.setVisible(true);
             }
@@ -213,25 +213,27 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     }
 
     @Override
-    public void onVisible() {
+    public void onVisible () {
         FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-    public int getSelectedFTBModIndex() {
+    public int getSelectedFTBModIndex () {
         return modPacksAdded ? getIndex() : -1;
     }
 
-    boolean filterForTab(ModPack pack) {
-       return (!pack.isThirdPartyTab());
+    boolean filterForTab (ModPack pack) {
+        return (!pack.isThirdPartyTab());
     }
 
-    String getLastPack() {
+    String getLastPack () {
         return Settings.getSettings().getLastFTBPack();
     }
 
-    String getPaneShortName() {return "FTB";}
+    String getPaneShortName () {
+        return "FTB";
+    }
 
-    boolean isFTB() {
+    boolean isFTB () {
         return true;
     }
 }

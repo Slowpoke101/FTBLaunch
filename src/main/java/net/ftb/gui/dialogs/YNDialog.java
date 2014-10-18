@@ -40,6 +40,7 @@ public class YNDialog extends JDialog {
     private String confirmMsg;
     public boolean ready = false;
     public boolean ret = false;
+
     public YNDialog(String unlocMessage, String unlocConfirmMessage, String unlocTitle) {
         super(LaunchFrame.getInstance(), true);
         message = I18N.getLocaleString(unlocMessage);

@@ -31,7 +31,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * Calls 'javaPath -version' and parses the results
      * @param javaPath: path to a java.exe executable
      ****************************************************************************/
-    public JavaInfo(String javaPath) throws Exception{
+    public JavaInfo(String javaPath) throws Exception {
         String versionInfo = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
         String[] tokens = versionInfo.split("\"");
         if (tokens.length < 2)
@@ -49,7 +49,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
 
-        if(OSUtils.getCurrentOS() == OS.MACOSX) {
+        if (OSUtils.getCurrentOS() == OS.MACOSX) {
             if (this.major == 1 && (this.minor == 7 || this.minor == 6))
                 this.supportedVersion = true;
         } else {
@@ -65,7 +65,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.build = 0;
     }
 
-    public boolean isJava8() {
+    public boolean isJava8 () {
         return this.major == 1 && this.minor == 8;
     }
 
@@ -73,7 +73,8 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
     public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path
+                + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
     }
 
     public String verToString () {

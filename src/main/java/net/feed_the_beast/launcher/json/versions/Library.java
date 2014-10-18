@@ -49,6 +49,7 @@ public class Library {
         }
         return _applies == Action.ALLOW;
     }
+
     @Getter
     private Artifact _artifact = null;
 

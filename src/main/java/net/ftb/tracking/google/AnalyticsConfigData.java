@@ -140,7 +140,6 @@ public class AnalyticsConfigData {
         encoding = argEncoding;
     }
 
-
     /**
      * Sets the screen resolution, like "1280x800".
      * 

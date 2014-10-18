@@ -155,7 +155,7 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX ) {
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
             settings.setJavaPath(javaPathText.getText());
         } else {
             if (javaPath.getSelectedIndex() >= 0) {
@@ -202,7 +202,7 @@ public class AdvancedOptionsDialog extends JDialog {
                 }
 
                 @Override
-                public void keyPressed (KeyEvent e){
+                public void keyPressed (KeyEvent e) {
                 }
 
                 @Override
@@ -234,7 +234,7 @@ public class AdvancedOptionsDialog extends JDialog {
             //TODO: set current selected java
             String selectedJavaPath = Settings.getSettings().getJavaPath();
             if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
-                javaPath.setSelectedIndex( i + 1);
+                javaPath.setSelectedIndex(i + 1);
             } else {
                 i = 0;
                 for (JavaInfo java : javas) {
@@ -271,7 +271,7 @@ public class AdvancedOptionsDialog extends JDialog {
         if (javaPath != null)
             add(javaPath, GuiConstants.WRAP);
         add(additionalJavaOptionsLbl);
-        add(additionalJavaOptions,  GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        add(additionalJavaOptions, GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         add(mcWindowSizeLbl, GuiConstants.FILL_FOUR);
         add(mcWindowSizeWidth);
         add(mcWindowSizeSepLbl);
@@ -285,7 +285,6 @@ public class AdvancedOptionsDialog extends JDialog {
         add(debugLauncherVerbose, GuiConstants.WRAP);
         add(betaChannel, GuiConstants.WRAP);
         add(exit, GuiConstants.CENTER_SINGLE_LINE);
-
 
         pack();
         setLocationRelativeTo(getOwner());

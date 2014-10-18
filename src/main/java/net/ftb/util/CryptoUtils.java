@@ -111,7 +111,7 @@ public class CryptoUtils {
         byte[] keyHardware = OSUtils.getHardwareID();
         try {
             Cipher aes = Cipher.getInstance("AES");
-            if(keyHardware != null && keyHardware.length > 0) {
+            if (keyHardware != null && keyHardware.length > 0) {
                 aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
                 return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
             }

@@ -262,13 +262,13 @@ public class FTBFileUtils {
                 set.add(f);
         }
     }
-    
-    public static void move(File oldFile, File newFile) {
+
+    public static void move (File oldFile, File newFile) {
         try {
-            if(oldFile.exists() && !newFile.exists()) {
+            if (oldFile.exists() && !newFile.exists()) {
                 FileUtils.moveFile(oldFile, newFile);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             Logger.logWarn("Exception occurred while moving " + oldFile.toString() + " : " + e.getMessage());
         }
     }

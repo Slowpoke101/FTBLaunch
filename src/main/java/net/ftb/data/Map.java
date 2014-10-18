@@ -132,15 +132,15 @@ public class Map {
         File verFile = new File(tempDir, "version");
 
         if (!upToDate(verFile)) {
-            DownloadUtils.saveImage(logo, tempDir,  "png");
-            DownloadUtils.saveImage(image, tempDir,  "png");
+            DownloadUtils.saveImage(logo, tempDir, "png");
+            DownloadUtils.saveImage(image, tempDir, "png");
 
         } else {
             if (!new File(tempDir, logo).exists()) {
-                DownloadUtils.saveImage(logo, tempDir,  "png");
+                DownloadUtils.saveImage(logo, tempDir, "png");
             }
             if (!new File(tempDir, image).exists()) {
-                DownloadUtils.saveImage(image, tempDir,  "png");
+                DownloadUtils.saveImage(image, tempDir, "png");
             }
         }
 
@@ -318,9 +318,8 @@ public class Map {
         for (String aCompatible : compatible) {
             ModPack pack = ModPack.getPack(aCompatible);
             if (pack == null) {
-                Logger.logDebug("Map is compatible with "  + packName + " , but modpack not found");
-            }
-            else {
+                Logger.logDebug("Map is compatible with " + packName + " , but modpack not found");
+            } else {
                 return pack.getName().equals(packName);
             }
         }

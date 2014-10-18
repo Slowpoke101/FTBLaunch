@@ -260,9 +260,9 @@ public class OSUtils {
      * @return true if 64-bit OS X
      */
 
-    public static boolean is64BitOSX() {
+    public static boolean is64BitOSX () {
         String line, result = "";
-        if( !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"))) {
+        if (!(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"))) {
             return true;//10.7+ only shipped on hardware capable of using 64 bit java
         }
         try {
@@ -370,7 +370,7 @@ public class OSUtils {
      * @return Unique Id based on hardware
      */
     public static byte[] getHardwareID () {
-        if (hardwareID== null) {
+        if (hardwareID == null) {
             hardwareID = genHardwareID();
         }
         return hardwareID;
@@ -388,6 +388,7 @@ public class OSUtils {
             return null;
         }
     }
+
     private static byte[] genHardwareIDUNIX () {
         String line;
         if (CommandLineSettings.getSettings().isUseMac()) {
@@ -396,35 +397,35 @@ public class OSUtils {
                 line = reader.readLine();
             } catch (Exception e) {
                 Logger.logDebug("failed", e);
-                return new byte[] { };
+                return new byte[] {};
             }
             return line.getBytes();
         } else {
-            return new byte[] { };
+            return new byte[] {};
         }
     }
 
     private static byte[] genHardwareIDMACOSX () {
         String line;
         try {
-            Process command = Runtime.getRuntime().exec(new String[] {"system_profiler", "SPHardwareDataType"});
+            Process command = Runtime.getRuntime().exec(new String[] { "system_profiler", "SPHardwareDataType" });
             BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
             while ((line = in.readLine()) != null) {
                 if (line.contains("Serial Number"))
                     //TODO: does that more checks?
                     return line.split(":")[1].trim().getBytes();
             }
-            return new byte[]{};
+            return new byte[] {};
         } catch (Exception e) {
             Logger.logDebug("failed", e);
-            return new byte[]{};
+            return new byte[] {};
         }
     }
 
-    private static byte[] genHardwareIDWINDOWS() {
+    private static byte[] genHardwareIDWINDOWS () {
         String processOutput;
         try {
-            processOutput = RuntimeStreamer.execute(new String[] {"wmic", "bios", "get", "serialnumber"});
+            processOutput = RuntimeStreamer.execute(new String[] { "wmic", "bios", "get", "serialnumber" });
             /*
              * wmic's output has special formatting:
              * SerialNumber<SP><SP><SP><CR><CR><LF>
@@ -435,13 +436,13 @@ public class OSUtils {
             String line = processOutput.split("\n")[2].trim();
             // at least VM will report serial to be 0. Does real hardware do it?
             if (line.equals("0")) {
-                return new byte[] { };
-            } else{
+                return new byte[] {};
+            } else {
                 return line.trim().getBytes();
             }
         } catch (Exception e) {
             Logger.logDebug("failed", e);
-            return new byte[] { };
+            return new byte[] {};
         }
     }
 
@@ -501,16 +502,16 @@ public class OSUtils {
         environment.remove("JAVA_TOOL_OPTIONS");
         environment.remove("JAVA_OPTIONS");
     }
-    
-    public static StyleSheet makeStyleSheet(String name){
-        try{
+
+    public static StyleSheet makeStyleSheet (String name) {
+        try {
             StyleSheet sheet = new StyleSheet();
             Reader reader = new InputStreamReader(System.class.getResourceAsStream("/css/" + name + ".css"));
             sheet.loadRules(reader, null);
             reader.close();
 
             return sheet;
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
