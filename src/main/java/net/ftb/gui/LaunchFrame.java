@@ -43,14 +43,7 @@ import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.CommandLineSettings;
-import net.ftb.data.Constants;
-import net.ftb.data.LauncherStyle;
-import net.ftb.data.LoginResponse;
-import net.ftb.data.Map;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.data.UserManager;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -829,19 +822,8 @@ public class LaunchFrame extends JFrame {
     }
 
     public void doLaunch () {
+        JavaInfo java = Settings.getSettings().getCurrentJava();
         ModPack pack = ModPack.getSelectedPack();
-
-        // compare mc version and jvm version. Stop startup if no valid JVM found for 1.6/1.7.2 packs
-        String mcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
-        boolean java8Usable = false;
-        //if(mcversion.startsWith("1.7.10") || mcversion.startsWith("1.8")|| pack.getDir().equals("mojang_vanilla") || CommandLineSettings.getSettings().isUseJava8()) //TODO re-add this if java 8 ever has issues again
-            java8Usable = true;
-        JavaInfo java = Settings.getSettings().getCurrentJava(java8Usable);
-        if ( (!java8Usable && java == null) || (!java8Usable && OSUtils.getCurrentOS()==OS.UNIX && java.isJava8())) {
-            ErrorUtils.tossError("Your system only has Java 8 installed which is incompatible with this version of minecraft. Please download Java 7 using the link in the options tab");
-            return;
-        }
-
         // check launcher version
         if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
