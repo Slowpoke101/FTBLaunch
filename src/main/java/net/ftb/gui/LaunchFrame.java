@@ -146,13 +146,18 @@ public class LaunchFrame extends JFrame {
         panel = new JPanel(new BorderLayout());
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            //setBounds(100, 200, 842, 480);
-        //} else {
-            //setBounds(100, 100, 850, 480);
-        //}
-		//setBounds(100, 100, 860, 480);
-        this.setMinimumSize(new Dimension(860, 480));
+        
+        int prefWidth = 835;
+        int prefHeight = 480;
+        this.setMinimumSize(new Dimension(prefWidth, prefHeight));
+        
+        // Determine how much space is used by window decoration, resize accordingly
+        this.pack();
+        Dimension fullWindowSize = this.getContentPane().getSize();
+        this.setMinimumSize(new Dimension(prefWidth + (prefWidth - fullWindowSize.width), prefHeight + (prefHeight - fullWindowSize.height)));
+
+        // Center on screen
+        this.setLocationRelativeTo(null);
 
         footer.setMinimumSize(new Dimension(850, 100));
         footer.setLayout(new BorderLayout());
