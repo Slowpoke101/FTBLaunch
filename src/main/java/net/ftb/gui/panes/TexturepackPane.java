@@ -89,17 +89,14 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     public TexturepackPane() {
         super();
         instance = this;
-        //this.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.setBorder(null);
         
         setLayout(new BorderLayout());
-        //this.setLayout(null);
         
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(1,4));
         buttonsPanel.setMinimumSize(new Dimension(420,25));
-        add(buttonsPanel, BorderLayout.PAGE_START); 
-        
+        add(buttonsPanel, BorderLayout.PAGE_START);        
 
         texturePackPanels = new ArrayList<JPanel>();
 
@@ -173,10 +170,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         
         splitPane = new ObjectInfoSplitPane();
         texturePacks = splitPane.getPacks();
-        textureInfo = splitPane.getPackInfo();
-        //infoScroll = splitPane.getInfoScroll();
+        textureInfo = splitPane.getPackInfo();        
         texturePacksScroll = splitPane.getPacksScroll();
-        add(splitPane); //, BorderLayout.CENTER);
+        add(splitPane);
         
         texturePacks.add(p);
         
@@ -190,48 +186,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 				texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
 		        texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
 			}        	
-        });
+        });        
         
-        
-//        // TODO: Set loading animation while we wait
-//        texturePacks = new JPanel();
-//        texturePacks.setLayout(null);
-//        texturePacks.setOpaque(false);
-//        texturePacks.add(p);
-//
-//        texturePacksScroll = new JScrollPane();
-//        texturePacksScroll.setBounds(-3, 30, 420, 283);
-//        texturePacksScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        texturePacksScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        texturePacksScroll.setWheelScrollingEnabled(true);
-//        texturePacksScroll.setOpaque(false);
-//        texturePacksScroll.setViewportView(texturePacks);
-//        texturePacksScroll.getVerticalScrollBar().setUnitIncrement(19);
-//        add(texturePacksScroll);
-//
-//        textureInfo = new JEditorPane();
-//        textureInfo.setEditable(false);
-//        textureInfo.setContentType("text/html");
-//        textureInfo.addHyperlinkListener(new HyperlinkListener() {
-//            @Override
-//            public void hyperlinkUpdate (HyperlinkEvent event) {
-//                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-//                    OSUtils.browse(event.getURL().toString());
-//                }
-//            }
-//        });
-//        textureInfo.setBounds(420, 210, 410, 90);
-//        textureInfo.setBackground(UIManager.getColor("control").darker().darker());
-//        add(textureInfo);
-//
-//        JScrollPane infoScroll = new JScrollPane();
-//        infoScroll.setBounds(410, 25, 430, 290);
-//        infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        infoScroll.setWheelScrollingEnabled(true);
-//        infoScroll.setViewportView(textureInfo);
-//        infoScroll.setOpaque(false);
-//        add(infoScroll);
+
     }
 
     @Override
@@ -252,7 +209,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         final int texturePackIndex = texturePackPanels.size();
 
         final JPanel p = new JPanel();
-        //p.setBounds(0, (texturePackIndex * 55), 420, 55);
         p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
         
@@ -292,14 +248,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
         texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
         
-//        if (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) && resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
-//            texturePacks.setMinimumSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
-//            texturePacks.setPreferredSize(new Dimension(420, (TexturePack.getTexturePackArray().size()) * 55));
-//        } else {
-//            texturePacks.setMinimumSize(new Dimension(420, (currentTexturePacks.size()) * 55));
-//            texturePacks.setPreferredSize(new Dimension(420, (currentTexturePacks.size()) * 55));
-//        }
-//        texturePacksScroll.revalidate();
     }
 
     @Override

@@ -60,7 +60,6 @@ public abstract class AbstractModPackPane extends JPanel {
     JPanel packs;
     // array to store packs. Upgraded by addPack
     public ArrayList<JPanel> packPanels;
-    //public JScrollPane packsScroll;
 
     int numberOfPacks;
 
@@ -83,48 +82,36 @@ public abstract class AbstractModPackPane extends JPanel {
     protected JScrollPane packsScroll;
     @Getter
     protected ObjectInfoSplitPane splitPane;
-    //protected JSplitPane splitPane;
     
-    
-    //	private JLabel loadingImage;
-    public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL");
+	public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL");
     public  boolean loaded = false;
 
     public AbstractModPackPane() {
     	super();
-        
-        //setBorder(new EmptyBorder(5, 5, 5, 5));
-        setBorder(null);
-        //setLayout(null);
-        
+    	setBorder(null);
         setLayout(new BorderLayout());
-        
-        
+
         // Contains buttons/filter info/selection boxes along top of mod pack panes
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new GridLayout(1,6));
         buttonsPanel.setMinimumSize(new Dimension(420,25));
-        add(buttonsPanel, BorderLayout.PAGE_START); 
-        
-        
-        packPanels = Lists.newArrayList();      
-        
+        add(buttonsPanel, BorderLayout.PAGE_START);
+
+        packPanels = Lists.newArrayList();
 
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
-        //filter.setBounds(5, 5, 105, 25);
         filter.setMinimumSize(new Dimension(105,25));
         filter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (loaded) {
-                    // TODO: problem here. How to move into abstract?  (Fyber fixed)
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(getThis());
                     filterDia.setVisible(true);
                 }
             }
         });
         buttonsPanel.add(filter);
-        
+
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -136,13 +123,11 @@ public abstract class AbstractModPackPane extends JPanel {
         typeLblText += "</body></html>";
 
         typeLbl = new JLabel(typeLblText);
-        //typeLbl.setBounds(115, 5, 175, 25);
         typeLbl.setMinimumSize(new Dimension(175,25));
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
         buttonsPanel.add(typeLbl);
 
         editModPack = new JButton(I18N.getLocaleString("MODS_EDIT_PACK"));
-        //editModPack.setBounds(300, 5, 110, 25);
         editModPack.setMinimumSize(new Dimension(110,25));
         editModPack.addActionListener(new ActionListener() {
             @Override
@@ -158,35 +143,30 @@ public abstract class AbstractModPackPane extends JPanel {
         });
         buttonsPanel.add(editModPack);
 
-        
+
         // stub for a real wait message
         final JPanel p = new JPanel();
         p.setBackground(Color.cyan);;
-        //p.setBounds(0, 0, 420, 55);
         p.setMinimumSize(new Dimension(420,55));
-        //p.setLayout(null);
-        
+
         JTextArea filler = new JTextArea(I18N.getLocaleString("MODS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
-        //filler.setBounds(58, 6, 378, 42);
-        //filler.setMinimumSize(new Dimension(378, 42));
         filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
         //p.add(loadingImage);
         p.add(filler);
-        
+
         splitPane = new ObjectInfoSplitPane();
         packs = splitPane.getPacks();
         packInfo = splitPane.getPackInfo();
         infoScroll = splitPane.getInfoScroll();
         packsScroll = splitPane.getPacksScroll();
         add(splitPane, BorderLayout.CENTER);
-        
+
         packs.add(p);
-        
+
         server = new JButton(I18N.getLocaleString("DOWNLOAD_SERVER"));
-        //server.setBounds(420, 5, 130, 25);
         server.setMinimumSize(new Dimension(130,25));
 
         //TODO: check
@@ -194,9 +174,9 @@ public abstract class AbstractModPackPane extends JPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String url;
-                
+
                 ModPack pack = (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK?ModPack.getSelectedPack(true):ModPack.getSelectedPack(false));
-                
+
                 if ((LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK || LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedPackIndex() >= 0) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
@@ -207,7 +187,7 @@ public abstract class AbstractModPackPane extends JPanel {
                             } else {
                                 url = DownloadUtils.getCreeperhostLink("modpacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
                             }
-                            
+
                             if (DownloadUtils.fileExistsURL(url)) {
                                 OSUtils.browse(url);
                             } else {
@@ -222,14 +202,12 @@ public abstract class AbstractModPackPane extends JPanel {
         buttonsPanel.add(server);
 
         version = new JComboBox(new String[]{});
-        //version.setBounds(560, 5, 130, 25);
         version.setMinimumSize(new Dimension(130,25));
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
         buttonsPanel.add(version);
 
         privatePack = new JButton(I18N.getLocaleString("PACK_CODES"));
-        //privatePack.setBounds(700, 5, 120, 25);
         privatePack.setMinimumSize(new Dimension(120,25));
         privatePack.addActionListener(new ActionListener() {
             @Override
@@ -240,16 +218,16 @@ public abstract class AbstractModPackPane extends JPanel {
         });
 
         buttonsPanel.add(privatePack);
-        
+
         // Resize scrollbar when center divider is moved
-        packsScroll.addComponentListener(new ComponentAdapter() {	
-			@Override			
-			public void componentResized(ComponentEvent e) {				
+        packsScroll.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
 				int itemsPerWidth = packs.getWidth() / 420;
 				if (itemsPerWidth < 1) itemsPerWidth = 1;
 				packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
-		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
-			}        	
+		        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
+			}
         });
     }
 
@@ -275,7 +253,6 @@ public abstract class AbstractModPackPane extends JPanel {
         }
         final int packIndex = packPanels.size();
         final JPanel p = new JPanel();
-        //p.setBounds(0, (packIndex * 55), 420, 55);
         p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
         

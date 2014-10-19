@@ -87,18 +87,14 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         fitterPane.setMinimumSize(new Dimension(840, 320));
         fitterPane.setMaximumSize(new Dimension(840, 320));
         fitterPane.setLayout(null);
-        //fitterPane.setBorder(new LineBorder(Color.red));
-        //this.setBorder(new LineBorder(Color.cyan));
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(fitterPane);       
         
-
-        //fitterPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(fitterPane);
 
         installBrowseBtn = new JButton("...");
         installBrowseBtn.setBounds(786, 11, 49, 28);
         installBrowseBtn.addActionListener(new ChooseDir(this));
-        //fitterPane.setLayout(null);
+
         fitterPane.add(installBrowseBtn);
 
         lblInstallFolder = new JLabel(I18N.getLocaleString("INSTALL_FOLDER"));

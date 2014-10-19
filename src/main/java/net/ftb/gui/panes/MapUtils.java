@@ -89,13 +89,10 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 
     public MapUtils() {
         super();
-        instance = this;
-        //this.setBorder(new EmptyBorder(5, 5, 5, 5));
-        //this.setLayout(null);
+        instance = this;        
         this.setBorder(null);
         setLayout(new BorderLayout());
         setup();
-
     }
 
     @Override
@@ -208,43 +205,8 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
 				maps.setMinimumSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
 				maps.setPreferredSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
 			}        	
-        });
-        
-//        maps.add(p);
-//
-//        mapsScroll = new JScrollPane();
-//        mapsScroll.setBounds(-3, 30, 420, 283);
-//        mapsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        mapsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        mapsScroll.setWheelScrollingEnabled(true);
-//        mapsScroll.setOpaque(false);
-//        mapsScroll.setViewportView(maps);
-//        mapsScroll.getVerticalScrollBar().setUnitIncrement(19);
-//        add(mapsScroll);
-//
-//        mapInfo = new JEditorPane();
-//        mapInfo.setEditable(false);
-//        mapInfo.setContentType("text/html");
-//        mapInfo.addHyperlinkListener(new HyperlinkListener() {
-//            @Override
-//            public void hyperlinkUpdate (HyperlinkEvent event) {
-//                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-//                    OSUtils.browse(event.getURL().toString());
-//                }
-//            }
-//        });
-//        mapInfo.setBounds(420, 210, 410, 90);
-//        mapInfo.setBackground(UIManager.getColor("control").darker().darker());
-//        add(mapInfo);
-//
-//        JScrollPane infoScroll = new JScrollPane();
-//        infoScroll.setBounds(410, 25, 430, 290);
-//        infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        infoScroll.setWheelScrollingEnabled(true);
-//        infoScroll.setViewportView(mapInfo);
-//        infoScroll.setOpaque(false);
-//        add(infoScroll);
+        });        
+
     }
 
     /*
@@ -257,8 +219,7 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         }
 
         final int mapIndex = mapPanels.size();
-        final JPanel p = new JPanel();
-        //p.setBounds(0, (mapIndex * 55), 420, 55);
+        final JPanel p = new JPanel();        
         p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
         
@@ -296,15 +257,6 @@ public class MapUtils  extends JPanel implements ILauncherPane, MapListener{
         maps.setMinimumSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));        
         maps.setPreferredSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
         
-        
-//        if (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
-//            maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-//            maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-//        } else {
-//            maps.setMinimumSize(new Dimension(420, (currentMaps.size() * 55)));
-//            maps.setPreferredSize(new Dimension(420, (currentMaps.size() * 55)));
-//        }
-//        mapsScroll.revalidate();
     }
 
     @Override
