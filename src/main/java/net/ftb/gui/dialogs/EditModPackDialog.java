@@ -87,17 +87,18 @@ public class EditModPackDialog extends JDialog {
         MODS, JARMODS, COREMODS, OLD_VERSIONS
     }
 
-    public EditModPackDialog(LaunchFrame instance, ModPack modPack) {
+    public EditModPackDialog (LaunchFrame instance, ModPack modPack) {
         super(instance, true);
-        if (modPack != null && modPack.getMcVersion() != null)
+        if (modPack != null && modPack.getMcVersion() != null) {
             mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
+        }
         Logger.logInfo("MCVersion: " + mcversion);
         modsFolder.mkdirs();
         coreModsFolder.mkdirs();
         jarModsFolder.mkdirs();
 
         setupGui();
-        this.setSize(700,600);
+        this.setSize(700, 600);
         enabledMods = Lists.newArrayList();
         disabledMods = Lists.newArrayList();
 
@@ -290,7 +291,6 @@ public class EditModPackDialog extends JDialog {
         rPnl.add(disabledModsLbl, GuiConstants.WRAP);
         rPnl.add(disabledModsScl, "pushy, " + GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         rPnl.add(addMod, GuiConstants.FILL_SINGLE_LINE);
-
 
         formPnl.setLayout(new MigLayout(new LC().fillY()));
         formPnl.add(lPnl, "push, grow, " + GuiConstants.SPLIT_3);

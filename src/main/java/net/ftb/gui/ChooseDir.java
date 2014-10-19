@@ -38,19 +38,19 @@ public class ChooseDir extends JFrame implements ActionListener {
     private EditModPackDialog editMPD;
     private FirstRunDialog firstRunDialog;
 
-    public ChooseDir(OptionsPane optionsPane) {
+    public ChooseDir (OptionsPane optionsPane) {
         super();
         this.optionsPane = optionsPane;
         editMPD = null;
     }
 
-    public ChooseDir(EditModPackDialog editMPD) {
+    public ChooseDir (EditModPackDialog editMPD) {
         super();
         optionsPane = null;
         this.editMPD = editMPD;
     }
 
-    public ChooseDir(FirstRunDialog firstRunDialog) {
+    public ChooseDir (FirstRunDialog firstRunDialog) {
         super();
         optionsPane = null;
         editMPD = null;

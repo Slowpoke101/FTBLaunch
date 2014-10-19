@@ -41,14 +41,14 @@ public class CheckInstallPath {
         OK, WARN, BLOCK,
     }
 
-    public CheckInstallPath(String path) {
+    public CheckInstallPath (String path) {
         this(path, false);
     }
 
-    public CheckInstallPath(String path, boolean calledFromLaunchFrame) {
+    public CheckInstallPath (String path, boolean calledFromLaunchFrame) {
         installPath = path;
         File f = new File(path);
-		String defaultLocation = "C:\\FTB";
+        String defaultLocation = "C:\\FTB";
 
         /**
          *  Messages are shown by FirstRunDialog and by LaunchFrame
@@ -61,7 +61,7 @@ public class CheckInstallPath {
         if (!path.matches(pathRegex)) {
             String s = path.replaceAll(pathRegex, "");
             setting = "CIP_badpath";
-            message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as "  + defaultLocation;
+            message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_BADPATH").replace("LIST", s) + defaultLocation;
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
@@ -70,8 +70,7 @@ public class CheckInstallPath {
                 action = Action.OK;
                 Logger.logDebug("User has selected to ignore: \"" + message + "\"");
             }
-        }
-        else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("ProgramFiles")!=null && path.contains(System.getenv("ProgramFiles"))) {
+        } else if (OSUtils.getCurrentOS() == OS.WINDOWS && System.getenv("ProgramFiles") != null && path.contains(System.getenv("ProgramFiles"))) {
             setting = "CIP_programfiles";
             message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_PROGRAMFILES") + defaultLocation;
@@ -82,8 +81,7 @@ public class CheckInstallPath {
                 action = Action.OK;
                 Logger.logDebug("User has selected to ignore: \"" + message + "\"");
             }
-        }
-        else if (OSUtils.getCurrentOS()==OS.WINDOWS && path.contains("Content.IE5")) {
+        } else if (OSUtils.getCurrentOS() == OS.WINDOWS && path.contains("Content.IE5")) {
             setting = "CIP_internetfiles";
             message = "You cannot install FTB to your Temporary Internet Files directory. Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_INTERNETFILES") + defaultLocation;
@@ -106,8 +104,7 @@ public class CheckInstallPath {
                 action = Action.OK;
                 Logger.logDebug("ignored: " + setting);
             }
-        }*/
-        else if (f.isDirectory() && !f.canWrite()) {
+        }*/ else if (f.isDirectory() && !f.canWrite()) {
             setting = "CIP_writeprotect";
             message = "Could not write to the FTB installation directory. Please select a folder which you have permission to write to.";
             localizedMessage = I18N.getLocaleString("CIP_WRITEPROTECT");
@@ -131,8 +128,7 @@ public class CheckInstallPath {
                 action = Action.OK;
                 Logger.logDebug("User has selected to ignore: \"" + message + "\"");
             }
-        }
-        else if ( !calledFromLaunchFrame && !f.exists()) {
+        } else if (!calledFromLaunchFrame && !f.exists()) {
             f.mkdirs();
             if (!f.exists() || !f.canWrite()) {
                 setting = "CIP_create";

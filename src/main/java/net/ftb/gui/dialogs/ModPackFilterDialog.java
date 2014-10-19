@@ -47,7 +47,7 @@ public class ModPackFilterDialog extends JDialog {
 
     private AbstractModPackPane pane;
 
-    public ModPackFilterDialog(AbstractModPackPane instance) {
+    public ModPackFilterDialog (AbstractModPackPane instance) {
         super(LaunchFrame.getInstance(), true);
         this.pane = instance;
 
@@ -101,7 +101,6 @@ public class ModPackFilterDialog extends JDialog {
             }
         });
     }
-
 
     private void setupGui () {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));

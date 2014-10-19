@@ -34,8 +34,9 @@ public class EnumAdaptorFactory implements TypeAdapterFactory {
     @SuppressWarnings("unchecked")
     @Override
     public <T> TypeAdapter<T> create (Gson gson, TypeToken<T> type) {
-        if (!type.getRawType().isEnum())
+        if (!type.getRawType().isEnum()) {
             return null;
+        }
         final Map<String, T> map = Maps.newHashMap();
         for (T c : (T[]) type.getRawType().getEnumConstants()) {
             map.put(c.toString().toLowerCase(Locale.US), c);
@@ -49,8 +50,9 @@ public class EnumAdaptorFactory implements TypeAdapterFactory {
                     return null;
                 }
                 String name = reader.nextString();
-                if (name == null)
+                if (name == null) {
                     return null;
+                }
                 return map.get(name.toLowerCase(Locale.US));
             }
 

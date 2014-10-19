@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
 
 public class TexturePackLoader extends Thread {
 
-    public TexturePackLoader() {
+    public TexturePackLoader () {
     }
 
     @Override
@@ -52,7 +52,9 @@ public class TexturePackLoader extends Thread {
                 NamedNodeMap textureAttr = texturePack.getAttributes();
                 TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(), textureAttr.getNamedItem("version")
                         .getTextContent(), textureAttr.getNamedItem("url").getTextContent(), textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
-                        textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), textureAttr.getNamedItem("description")==null?null:textureAttr.getNamedItem("description").getTextContent().replace("\\n", "\n"),
+                        textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(),
+                        textureAttr.getNamedItem("description") == null ? null : textureAttr.getNamedItem("description").getTextContent().replace(
+                                "\\n", "\n"),
                         textureAttr.getNamedItem("resolution").getTextContent(), i));
             }
         } catch (Exception e) {

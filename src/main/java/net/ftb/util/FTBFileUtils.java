@@ -79,8 +79,9 @@ public class FTBFileUtils {
             if (!destinationFile.exists()) {
                 destinationFile.getParentFile().mkdirs();
                 destinationFile.createNewFile();
-            } else if (!overwrite)
+            } else if (!overwrite) {
                 return;
+            }
             FileChannel sourceStream = null, destinationStream = null;
             try {
                 sourceStream = new FileInputStream(sourceFile).getChannel();
@@ -226,8 +227,9 @@ public class FTBFileUtils {
 
     public static List<File> listDirs (File path) {
         List<File> ret = Lists.newArrayList();
-        if (path.exists())
+        if (path.exists()) {
             listDirs(path, ret);
+        }
         Collections.sort(ret, new Comparator<File>() {
             @Override
             public int compare (File o1, File o2) {
@@ -256,19 +258,20 @@ public class FTBFileUtils {
 
     private static void listFiles (File path, Set<File> set) {
         for (File f : path.listFiles()) {
-            if (f.isDirectory())
+            if (f.isDirectory()) {
                 listFiles(f, set);
-            else
+            } else {
                 set.add(f);
+            }
         }
     }
-    
-    public static void move(File oldFile, File newFile) {
+
+    public static void move (File oldFile, File newFile) {
         try {
-            if(oldFile.exists() && !newFile.exists()) {
+            if (oldFile.exists() && !newFile.exists()) {
                 FileUtils.moveFile(oldFile, newFile);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             Logger.logWarn("Exception occurred while moving " + oldFile.toString() + " : " + e.getMessage());
         }
     }

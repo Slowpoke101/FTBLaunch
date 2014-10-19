@@ -41,7 +41,7 @@ public class ModpackUpdateDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModpackUpdateDialog(LaunchFrame instance, boolean modal) {
+    public ModpackUpdateDialog (LaunchFrame instance, boolean modal) {
         super(instance, modal);
 
         setupGui();

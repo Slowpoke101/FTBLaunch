@@ -60,7 +60,7 @@ public class AuthlibHelper {
         GameProfile selectedProfile = null;
         YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
         if (user != null) {
-            Logger.logDebug(user.contains("@")?"Email address given":"Username given" + " Not 100% sure, mojangdata might contain different username");
+            Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
@@ -100,9 +100,10 @@ public class AuthlibHelper {
                     if (hasMojangData) {
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
-                        if (uniqueID != null && !uniqueID.isEmpty())
+                        if (uniqueID != null && !uniqueID.isEmpty()) {
                             Logger.logDebug("Setting UUID");
-                            UserManager.setUUID(user, uniqueID);
+                        }
+                        UserManager.setUUID(user, uniqueID);
                     }
                     if (uniqueID != null && !uniqueID.isEmpty()) {
                         UserManager.setUUID(user, uniqueID);
@@ -136,7 +137,7 @@ public class AuthlibHelper {
                     }
                 }
                 Logger.logDebug("this should never happen: isLoggedIn: " + authentication.isLoggedIn() + " canPlayOnline(): " + authentication.canPlayOnline());
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0 )) {
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0)) {
                 // user has more than one profile
                 Logger.logDebug("User has more than one profile: " + toString(authentication));
                 for (GameProfile profile : authentication.getAvailableProfiles()) {
@@ -152,7 +153,7 @@ public class AuthlibHelper {
                 Logger.logDebug("Authentication done, returning LoginResponse");
                 return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
                         selectedProfile.getId().toString(), authentication);
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0 )) {
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0)) {
                 Logger.logDebug("No profiles in mojang account: " + toString(authentication));
                 ErrorUtils.showClickableMessage("You need to own minecraft to play FTB Modpacks", "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
                 return null;
@@ -168,8 +169,9 @@ public class AuthlibHelper {
             Logger.logError("Failed to authenticate with mojang data, attempting to use username & password");
             if (!hasPassword) {
                 new PasswordDialog(LaunchFrame.getInstance(), true).setVisible(true);
-                if (LaunchFrame.tempPass.isEmpty())
+                if (LaunchFrame.tempPass.isEmpty()) {
                     return null;
+                }
                 pass = LaunchFrame.tempPass;
             }
 
@@ -254,8 +256,9 @@ public class AuthlibHelper {
 
     }
 
-    public static String toString(YggdrasilUserAuthentication y) {
-        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn() + ", userType=" + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
+    public static String toString (YggdrasilUserAuthentication y) {
+        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn() + ", userType="
+                + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
     }
 
 }

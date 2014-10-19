@@ -39,6 +39,7 @@ import com.google.common.eventbus.EventBus;
 import lombok.Getter;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -115,7 +116,7 @@ public class Main {
          */
         int logLevel = CommandLineSettings.getSettings().getVerbosity();
         LogLevel stdoutLogLevel = LogLevel.values()[logLevel];
-        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs()?LogSource.ALL:LogSource.LAUNCHER;
+        LogSource stdoutLogSource = CommandLineSettings.getSettings().isMcLogs() ? LogSource.ALL : LogSource.LAUNCHER;
 
         Logger.addListener(new StdOutLogger(stdoutLogLevel, stdoutLogSource));
         /*
@@ -146,8 +147,9 @@ public class Main {
             Properties props = new Properties();
             props.load(mf.openStream());
             mfStr = props.getProperty("LauncherJenkins");
-            if (!mfStr.equals("${LauncherJenkins}"))
+            if (!mfStr.equals("${LauncherJenkins}")) {
                 beta = Integer.parseInt(mfStr);
+            }
             Logger.logDebug("FTB Launcher CI Build #: " + beta + ", Git SHA: " + props.getProperty("Git-SHA"));
         } catch (Exception e) {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
@@ -182,7 +184,7 @@ public class Main {
         mainGUI(args);
     }
 
-    private static void mainGUI(String[] args) {
+    private static void mainGUI (String[] args) {
         /*
          * Setup GUI style & create and show Splash screen in EDT
          * NEVER add code with Thread.sleep() or I/O blocking, including network usage in EDT
@@ -214,7 +216,6 @@ public class Main {
         I18N.setupLocale();
         I18N.setLocale(Settings.getSettings().getLocale());
 
-
         if (Settings.getSettings().isNoConfig()) {
             Logger.logDebug("FirstRunDialog");
             try {
@@ -225,7 +226,8 @@ public class Main {
                         firstRunDialog.setVisible(true);
                     }
                 });
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         // NOTE: this messagage will be missed because laoder is not created when this is executed
@@ -257,7 +259,8 @@ public class Main {
                         }
                     }
                 });
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
         try {
@@ -276,7 +279,8 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
 
@@ -289,8 +293,9 @@ public class Main {
         AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
             @Override
             protected void done () {
-                if (disableLaunchButton == false )
+                if (disableLaunchButton == false) {
                     LaunchFrame.getInstance().getLaunch().setEnabled(true);
+                }
             }
         };
         authworker.execute();
@@ -325,7 +330,8 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         LoadingDialog.advance("Setting up Launcher");
 
@@ -347,7 +353,8 @@ public class Main {
             @Override public void run () {
                 //LaunchFrame.getInstance().setVisible(true);
                 //LaunchFrame.getInstance().toBack();
-            }});
+            }
+        });
 
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);

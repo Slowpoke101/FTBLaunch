@@ -37,7 +37,7 @@ public class MapOverwriteDialog extends JDialog {
     private JButton overwrite;
     private JButton abort;
 
-    public MapOverwriteDialog() {
+    public MapOverwriteDialog () {
         super(LaunchFrame.getInstance(), true);
 
         setupGui();

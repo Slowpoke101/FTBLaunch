@@ -78,7 +78,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     public static boolean loaded = false;
 
-    public TexturepackPane() {
+    public TexturepackPane () {
         super();
         instance = this;
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -116,7 +116,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + resolution + "</font>";
         typeLblText += "</body></html>";
 
-
         mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
         mapButton.setBounds(400, 5, 105, 25);
         mapButton.addActionListener(new ActionListener() {
@@ -138,7 +137,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
             }
         });
         add(textureButton);
-
 
         typeLbl = new JLabel(typeLblText);
         typeLbl.setBounds(115, 5, 295, 25);

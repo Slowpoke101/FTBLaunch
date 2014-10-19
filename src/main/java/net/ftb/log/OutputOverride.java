@@ -23,7 +23,7 @@ import java.io.PrintStream;
 public class OutputOverride extends PrintStream {
     final LogLevel level;
 
-    public OutputOverride(OutputStream str, LogLevel type) {
+    public OutputOverride (OutputStream str, LogLevel type) {
         super(str);
         this.level = type;
     }

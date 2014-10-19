@@ -144,8 +144,9 @@ public class ModManager extends JDialog {
                     while ((count = in.read(data, 0, 1024)) != -1) {
                         fout.write(data, 0, count);
 
-                        if (count > 0)
+                        if (count > 0) {
                             retryCount = 5;
+                        }
 
                         downloadedPerc += (count * 1.0 / modPackSize) * 100;
                         amount += count;
@@ -221,7 +222,7 @@ public class ModManager extends JDialog {
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
 
                     if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
-                            downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+                        downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
                     }
                 }
             } catch (Exception e) {
@@ -231,7 +232,7 @@ public class ModManager extends JDialog {
             try {
                 if (!dir.equals("mojang_vanilla")
                         && ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic,
-                                modPackName), md5))) {
+                        modPackName), md5))) {
                     Logger.logDebug("Extracting pack.");
                     Logger.logDebug("Purging mods, coremods, instMods");
                     clearModsFolder(pack);
@@ -254,8 +255,9 @@ public class ModManager extends JDialog {
                     FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
                     if (pack.getBundledMap() && saveExists) {
                         try {
-                            if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
+                            if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
+                            }
                             if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
                                 FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
@@ -294,7 +296,7 @@ public class ModManager extends JDialog {
     /**
      * Create the frame.
      */
-    public ModManager(JFrame owner, Boolean model) {
+    public ModManager (JFrame owner, Boolean model) {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -427,8 +429,9 @@ public class ModManager extends JDialog {
                 if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
                     try {
                         boolean b = FTBFileUtils.delete(new File(folder, file));
-                        if (!b)
+                        if (!b) {
                             Logger.logInfo("Error deleting " + file);
+                        }
                     } catch (IOException e) {
                         Logger.logWarn(e.getMessage(), e);
 

@@ -48,7 +48,7 @@ public class ProfileEditorDialog extends JDialog {
     private JButton update;
     private JButton remove;
 
-    public ProfileEditorDialog(LaunchFrame instance, final String editingName, boolean modal) {
+    public ProfileEditorDialog (LaunchFrame instance, final String editingName, boolean modal) {
         super(instance, modal);
 
         setupGui();
@@ -149,7 +149,7 @@ public class ProfileEditorDialog extends JDialog {
         panel.add(nameLbl);
         panel.add(name, GuiConstants.WRAP);
         panel.add(savePassword, GuiConstants.CENTER_SINGLE_LINE);
-        panel.add(saveMojangData,  GuiConstants.CENTER_SINGLE_LINE);
+        panel.add(saveMojangData, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(update, GuiConstants.CENTER_TWO);
         panel.add(remove);
 

@@ -47,7 +47,7 @@ public class ModPackVersionChangeDialog extends JDialog {
     private JCheckBox backupCFG;
     private JCheckBox backupSave;
 
-    public ModPackVersionChangeDialog(LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
+    public ModPackVersionChangeDialog (LaunchFrame instance, boolean modal, final String storedVersion, final String onlineVersion) {
         super(instance, modal);
 
         setupGui(storedVersion, onlineVersion);
@@ -99,7 +99,6 @@ public class ModPackVersionChangeDialog extends JDialog {
         backupCFG = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPCFG"));
         backupSave = new JCheckBox(I18N.getLocaleString("UPDATEMODPACK_BACKUPSave"));
 
-
         panel.add(messageLbl, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(versionLbl, GuiConstants.WRAP);
         panel.add(updateLbl, GuiConstants.CENTER_SINGLE_LINE);
@@ -113,8 +112,9 @@ public class ModPackVersionChangeDialog extends JDialog {
     }
 
     public boolean isNewer (String onlineVersion, String storedVersion) {
-        if (storedVersion == null || storedVersion.isEmpty())
+        if (storedVersion == null || storedVersion.isEmpty()) {
             return true;
+        }
         String[] oV = onlineVersion.split("[._-]");
         String[] sV = storedVersion.split("[._-]");
         Logger.logInfo(onlineVersion + " " + storedVersion);

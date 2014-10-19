@@ -36,7 +36,7 @@ public class SearchDialog extends JDialog {
     public static String lastPackSearch = "", lastMapSearch = "", lastTextureSearch = "";
     public JTextField query = new JTextField(20);
 
-    public SearchDialog(final AbstractModPackPane instance) {
+    public SearchDialog (final AbstractModPackPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastPackSearch == null) ? "" : lastPackSearch);
@@ -67,7 +67,7 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    public SearchDialog(final MapUtils instance) {
+    public SearchDialog (final MapUtils instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastMapSearch == null) ? "" : lastMapSearch);
@@ -98,7 +98,7 @@ public class SearchDialog extends JDialog {
         });
     }
 
-    public SearchDialog(final TexturepackPane instance) {
+    public SearchDialog (final TexturepackPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
         query.setText((lastTextureSearch == null) ? "" : lastTextureSearch);

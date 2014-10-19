@@ -33,7 +33,7 @@ public class LogEntry {
     private final Map<LogType, String> messageCache = Maps.newHashMap();
     private static final String dateFormatString = "HH:mm:ss";
 
-    public LogEntry() {
+    public LogEntry () {
         Date date = new Date();
         this.dateString = new SimpleDateFormat(dateFormatString).format(date);
         this.location = getLocation(cause);

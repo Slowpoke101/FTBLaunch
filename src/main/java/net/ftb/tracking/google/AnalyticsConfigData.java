@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2010 Daniel Murphy
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -8,10 +8,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -29,9 +29,9 @@ package net.ftb.tracking.google;
  * Data that is client-specific, and should be common for all tracking requests.
  * For convenience most of this data is populated automatically by
  * {@link #populateFromSystem()}.
- * 
+ *
  * @author Daniel Murphy
- * 
+ *
  */
 public class AnalyticsConfigData {
     private final String trackingCode;
@@ -45,19 +45,19 @@ public class AnalyticsConfigData {
 
     /**
      * constructs with the tracking code and a new visitor data.
-     * 
+     *
      * @param argTrackingCode
      */
-    public AnalyticsConfigData(String argTrackingCode) {
+    public AnalyticsConfigData (String argTrackingCode) {
         this(argTrackingCode, VisitorData.newVisitor());
     }
 
     /**
      * constructs with the tracking code using the provided visitor data.
-     * 
+     *
      * @param argTrackingCode
      */
-    public AnalyticsConfigData(String argTrackingCode, VisitorData visitorData) {
+    public AnalyticsConfigData (String argTrackingCode, VisitorData visitorData) {
         if (argTrackingCode == null) {
             throw new RuntimeException("Tracking code cannot be null");
         }
@@ -123,7 +123,7 @@ public class AnalyticsConfigData {
 
     /**
      * Sets the color depth of the user. like 32 bit.
-     * 
+     *
      * @param argColorDepth
      */
     public void setColorDepth (String argColorDepth) {
@@ -132,7 +132,7 @@ public class AnalyticsConfigData {
 
     /**
      * Sets the character encoding of the client. like UTF-8
-     * 
+     *
      * @param argEncoding
      *            the encoding to set
      */
@@ -140,10 +140,9 @@ public class AnalyticsConfigData {
         encoding = argEncoding;
     }
 
-
     /**
      * Sets the screen resolution, like "1280x800".
-     * 
+     *
      * @param argScreenResolution
      *            the screenResolution to set
      */
@@ -153,7 +152,7 @@ public class AnalyticsConfigData {
 
     /**
      * Sets the user language, like "EN-us"
-     * 
+     *
      * @param argUserLanguage
      *            the userLanguage to set
      */

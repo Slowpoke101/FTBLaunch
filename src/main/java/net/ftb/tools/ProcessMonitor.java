@@ -25,7 +25,7 @@ public class ProcessMonitor implements Runnable {
 
     private volatile boolean complete = false;
 
-    private ProcessMonitor(Process proc, Runnable onComplete) {
+    private ProcessMonitor (Process proc, Runnable onComplete) {
         this.proc = proc;
         this.onComplete = onComplete;
     }
@@ -48,8 +48,9 @@ public class ProcessMonitor implements Runnable {
     }
 
     public void stop () {
-        if (proc != null)
+        if (proc != null) {
             proc.destroy();
+        }
     }
 
 }

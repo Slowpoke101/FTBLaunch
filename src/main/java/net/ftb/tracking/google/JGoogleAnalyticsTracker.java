@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2010 Daniel Murphy, Stefan Brozinski
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -8,10 +8,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -111,11 +111,11 @@ public class JGoogleAnalyticsTracker {
     private DispatchMode mode;
     private boolean enabled;
 
-    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion) {
+    public JGoogleAnalyticsTracker (AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion) {
         this(argConfigData, argVersion, DispatchMode.SINGLE_THREAD);
     }
 
-    public JGoogleAnalyticsTracker(AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion, DispatchMode argMode) {
+    public JGoogleAnalyticsTracker (AnalyticsConfigData argConfigData, GoogleAnalyticsVersion argVersion, DispatchMode argMode) {
         gaVersion = argVersion;
         configData = argConfigData;
         createBuilder();
@@ -181,7 +181,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * Sets if the api dispatches tracking requests.
-     * 
+     *
      * @param argEnabled
      */
     public void setEnabled (boolean argEnabled) {
@@ -190,7 +190,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * If the api is dispatching tracking requests (default of true).
-     * 
+     *
      * @return
      */
     public boolean isEnabled () {
@@ -201,7 +201,7 @@ public class JGoogleAnalyticsTracker {
      * Define the proxy to use for all GA tracking requests.
      * <p>
      * Call this static method early (before creating any tracking requests).
-     * 
+     *
      * @param argProxy  The proxy to use
      */
     public static void setProxy (Proxy argProxy) {
@@ -212,7 +212,7 @@ public class JGoogleAnalyticsTracker {
      * Define the proxy to use for all GA tracking requests.
      * <p>
      * Call this static method early (before creating any tracking requests).
-     * 
+     *
      * @param proxyAddr  "addr:port" of the proxy to use; may also be given as URL ("http://addr:port/").
      */
     public static void setProxy (String proxyAddr) {
@@ -244,7 +244,7 @@ public class JGoogleAnalyticsTracker {
      * Wait for background tasks to complete.
      * <p>
      * This works in queued and asynchronous mode.
-     * 
+     *
      * @param timeoutMillis  The maximum number of milliseconds to wait.
      */
     public static void completeBackgroundTasks (long timeoutMillis) {
@@ -271,7 +271,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * Tracks a page view.
-     * 
+     *
      * @param argPageURL
      *            required, Google won't track without it. Ex:
      *            <code>"org/me/javaclass.java"</code>, or anything you want as
@@ -287,7 +287,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * Tracks a page view.
-     * 
+     *
      * @param argPageURL
      *            required, Google won't track without it. Ex:
      *            <code>"org/me/javaclass.java"</code>, or anything you want as
@@ -315,7 +315,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * Tracks a page view.
-     * 
+     *
      * @param argPageURL
      *            required, Google won't track without it. Ex:
      *            <code>"org/me/javaclass.java"</code>, or anything you want as
@@ -345,7 +345,7 @@ public class JGoogleAnalyticsTracker {
     /**
      * Tracks an event. To provide more info about the page, use
      * {@link #makeCustomRequest(AnalyticsRequestData)}.
-     * 
+     *
      * @param argCategory
      * @param argAction
      */
@@ -356,7 +356,7 @@ public class JGoogleAnalyticsTracker {
     /**
      * Tracks an event. To provide more info about the page, use
      * {@link #makeCustomRequest(AnalyticsRequestData)}.
-     * 
+     *
      * @param argCategory
      * @param argAction
      * @param argLabel
@@ -368,7 +368,7 @@ public class JGoogleAnalyticsTracker {
     /**
      * Tracks an event. To provide more info about the page, use
      * {@link #makeCustomRequest(AnalyticsRequestData)}.
-     * 
+     *
      * @param argCategory
      *            required
      * @param argAction
@@ -389,7 +389,7 @@ public class JGoogleAnalyticsTracker {
 
     /**
      * Makes a custom tracking request based from the given data.
-     * 
+     *
      * @param argData
      * @throws NullPointerException
      *             if argData is null or if the URL builder is null
@@ -520,7 +520,7 @@ public class JGoogleAnalyticsTracker {
      * <p>
      * This method is needed for debugging purposes only. Calling it in an application is not really
      * required: The background thread will terminate automatically when the application exits.
-     * 
+     *
      * @param timeoutMillis  If nonzero, wait for thread completion before returning.
      */
     public static void stopBackgroundThread (long timeoutMillis) {

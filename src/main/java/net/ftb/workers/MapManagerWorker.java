@@ -10,6 +10,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
 import javax.swing.*;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,9 +23,11 @@ import static net.ftb.download.Locations.MAPS;
 public class MapManagerWorker extends SwingWorker<Boolean, Void> {
     private static boolean overwrite;
     private double downloadedPerc;
+
     public MapManagerWorker (Boolean overwrite) {
         this.overwrite = overwrite;
     }
+
     @Override
     protected Boolean doInBackground () throws Exception {
         String installPath = Settings.getSettings().getInstallPath();
@@ -53,7 +56,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
             byte data[] = new byte[1024];
             int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
             SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
+                public void run () {
                     setProgressBarMaximum(10000);
                 }
             });
@@ -67,16 +70,16 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
                     final String txt = (amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb";
                     final int perc = (int) downloadedPerc * 100;
                     SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
+                        public void run () {
                             setProgressBarValue(perc);
                             setLabelText(txt);
                         }
                     });
                 }
             }
-        } catch( Exception e){
+        } catch (Exception e) {
             Logger.logError(e.getMessage(), e);
-        }finally {
+        } finally {
             in.close();
             fout.flush();
             fout.close();
@@ -87,7 +90,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         Logger.logInfo("Downloading Map");
         String installPath = OSUtils.getCacheStorageLocation();
         Map map = Map.getSelectedMap();
-        new File(installPath + "/"+ MAPS + dir + "/").mkdirs();
+        new File(installPath + "/" + MAPS + dir + "/").mkdirs();
         new File(installPath + "/" + MAPS + dir + "/" + mapName).createNewFile();
         downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
         FTBFileUtils.extractZipTo(installPath + "/" + MAPS + dir + "/" + mapName, installPath + "/" + MAPS + dir);
@@ -104,13 +107,16 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         FTBFileUtils.copyFile(new File(tempPath, MAPS + dir + "/" + "version"), new File(installPath, map.getSelectedCompatible() + "/minecraft/saves/" + dir + "/version"));
         TrackerUtils.sendPageView(map.getName() + " Install", "Maps / " + map.getName());
     }
-    public void setLabelText(String s) {
+
+    public void setLabelText (String s) {
 
     }
-    public void setProgressBarMaximum(int i) {
+
+    public void setProgressBarMaximum (int i) {
 
     }
-    public void setProgressBarValue(int i) {
+
+    public void setProgressBarValue (int i) {
 
     }
 }

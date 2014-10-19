@@ -50,7 +50,7 @@ public class TexturePackFilterDialog extends JDialog {
 
     private TexturepackPane instance;
 
-    public TexturePackFilterDialog(final TexturepackPane instance) {
+    public TexturePackFilterDialog (final TexturepackPane instance) {
         super(LaunchFrame.getInstance(), true);
         this.instance = instance;
         setupGui();

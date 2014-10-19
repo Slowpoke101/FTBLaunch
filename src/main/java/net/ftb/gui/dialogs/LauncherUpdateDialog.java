@@ -43,7 +43,7 @@ public class LauncherUpdateDialog extends JDialog {
     private JButton abort;
     private boolean usable;
 
-    public LauncherUpdateDialog(final UpdateChecker updateChecker, int deadVersion) {
+    public LauncherUpdateDialog (final UpdateChecker updateChecker, int deadVersion) {
         super(LaunchFrame.getInstance(), true);
         this.usable = Constants.buildNumber > deadVersion;
         setupGui();

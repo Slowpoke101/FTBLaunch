@@ -21,24 +21,24 @@ import net.ftb.gui.dialogs.YNDialog;
 import net.ftb.log.Logger;
 
 public class GameUtils {
-	
-	public static void killMC() {
-		//if Mc is running
+
+    public static void killMC () {
+        //if Mc is running
         if (LaunchFrame.MCRunning) {
             //open confirm dialog for closing MC
-        	YNDialog yn = new YNDialog("KILL_MC_MESSAGE", "KILL_MC_CONFIRM", "KILL_MC_TITLE");
+            YNDialog yn = new YNDialog("KILL_MC_MESSAGE", "KILL_MC_CONFIRM", "KILL_MC_TITLE");
             yn.setVisible(true);
             yn.toFront();
-            
-			if (yn.ready && yn.ret && LaunchFrame.MCRunning && LaunchFrame.getProcMonitor() != null) {
+
+            if (yn.ready && yn.ret && LaunchFrame.MCRunning && LaunchFrame.getProcMonitor() != null) {
                 Logger.logWarn("MC Killed by the user!");
-				LaunchFrame.getProcMonitor().stop();
+                LaunchFrame.getProcMonitor().stop();
             }
-			
+
             yn.setVisible(false);
         } else {
             Logger.logInfo("No Minecraft Process currently running to kill");
         }
-	}
+    }
 
 }

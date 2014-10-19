@@ -33,21 +33,23 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 
 import java.awt.Point;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
-public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
+public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane {
     @Getter
     private static ThirdPartyPane instance;
     @Getter
     private JScrollPane packsScroll;
 
-    public ThirdPartyPane() {
+    public ThirdPartyPane () {
         super();
         instance = this;
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,7 +70,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         filter.setBounds(5, 5, 105, 25);
         filter.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 if (loaded) {
                     // TODO: problem here. How to move into abstract?
                     ModPackFilterDialog filterDia = new ModPackFilterDialog(instance);
@@ -97,7 +99,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         editModPack.setBounds(300, 5, 110, 25);
         editModPack.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
                     //TODO: fix by rename?
                     if (getSelectedThirdPartyModIndex() >= 0) {
@@ -134,7 +136,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         packInfo.setContentType("text/html");
         packInfo.addHyperlinkListener(new HyperlinkListener() {
             @Override
-            public void hyperlinkUpdate(HyperlinkEvent event) {
+            public void hyperlinkUpdate (HyperlinkEvent event) {
                 if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
                     OSUtils.browse(event.getURL().toString());
                 }
@@ -159,13 +161,14 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         //TODO: check
         server.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed (ActionEvent event) {
                 String url;
                 ModPack pack = ModPack.getSelectedPack(false);
                 if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY && !pack.getServerUrl().isEmpty()) {
                     if (packPanels.size() > 0 && getSelectedThirdPartyModIndex() >= 0) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
-                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack.getVersion().replace(".", "_")
+                            String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version"))
+                                    ? pack.getVersion().replace(".", "_")
                                     : Settings.getSettings().getPackVer().replace(".", "_");
                             if (pack.isPrivatePack()) {
                                 url = DownloadUtils.getCreeperhostLink("privatepacks/" + pack.getDir() + "/" + version + "/" + pack.getServerUrl());
@@ -185,7 +188,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         });
         add(server);
 
-        version = new JComboBox(new String[]{});
+        version = new JComboBox(new String[] { });
         version.setBounds(560, 5, 130, 25);
         version.addActionListener(al);
         version.setToolTipText(I18N.getLocaleString("MODPACK_VERSIONS"));
@@ -195,7 +198,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         privatePack.setBounds(700, 5, 120, 25);
         privatePack.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed (ActionEvent e) {
                 PrivatePackDialog ap = new PrivatePackDialog();
                 ap.setVisible(true);
             }
@@ -205,25 +208,27 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     }
 
     @Override
-    public void onVisible() {
+    public void onVisible () {
         ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-    public int getSelectedThirdPartyModIndex() {
+    public int getSelectedThirdPartyModIndex () {
         return modPacksAdded ? getIndex() : -1;
     }
 
-    boolean filterForTab(ModPack pack) {
+    boolean filterForTab (ModPack pack) {
         return (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML));
     }
 
-    String getLastPack() {
+    String getLastPack () {
         return Settings.getSettings().getLastThirdPartyPack();
     }
 
-    String getPaneShortName() {return "Third Party";}
+    String getPaneShortName () {
+        return "Third Party";
+    }
 
-    boolean isFTB() {
+    boolean isFTB () {
         return false;
     }
 }

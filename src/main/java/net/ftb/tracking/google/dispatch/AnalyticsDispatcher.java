@@ -25,7 +25,7 @@ public abstract class AnalyticsDispatcher {
     private String host;
     private int port;
 
-    public AnalyticsDispatcher(String userAgent, String host, int port) {
+    public AnalyticsDispatcher (String userAgent, String host, int port) {
         this.userAgent = userAgent;
         this.host = host;
         this.port = port;

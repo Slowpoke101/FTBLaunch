@@ -22,11 +22,13 @@ public class ExtractRule {
     private List<String> exclude;
 
     public boolean exclude (String name) {
-        if (exclude == null)
+        if (exclude == null) {
             return false;
+        }
         for (String s : exclude) {
-            if (name.startsWith(s))
+            if (name.startsWith(s)) {
                 return true;
+            }
         }
         return false;
     }

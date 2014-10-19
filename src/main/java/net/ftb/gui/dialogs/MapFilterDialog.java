@@ -50,7 +50,7 @@ public class MapFilterDialog extends JDialog {
 
     private MapUtils pane;
 
-    public MapFilterDialog(MapUtils instance) {
+    public MapFilterDialog (MapUtils instance) {
         super(LaunchFrame.getInstance(), true);
         this.pane = instance;
 

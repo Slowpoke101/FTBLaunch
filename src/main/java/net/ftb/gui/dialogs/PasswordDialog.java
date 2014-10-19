@@ -37,7 +37,7 @@ public class PasswordDialog extends JDialog {
     private JPasswordField password;
     private JButton login;
 
-    public PasswordDialog(LaunchFrame instance, boolean modal) {
+    public PasswordDialog (LaunchFrame instance, boolean modal) {
         super(instance, modal);
         setupGui();
 

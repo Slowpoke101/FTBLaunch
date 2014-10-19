@@ -100,7 +100,7 @@ public class LaunchFrame extends JFrame {
     public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
-    
+
     public static TrayMenu trayMenu;
 
     public static boolean allowVersionChange = false;
@@ -110,7 +110,6 @@ public class LaunchFrame extends JFrame {
     public static String tempPass = "";
     public static Panes currentPane = Panes.MODPACK;
     public static LoadingDialog loader;
-
 
     @Getter
     @Setter
@@ -125,7 +124,7 @@ public class LaunchFrame extends JFrame {
     /**
      * Create the frame.
      */
-    public LaunchFrame(final int tab) {
+    public LaunchFrame (final int tab) {
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
         setResizable(false);
         setTitle(Constants.name + " v" + Constants.version);
@@ -250,7 +249,8 @@ public class LaunchFrame extends JFrame {
             public void actionPerformed (ActionEvent event) {
                 if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
                     if (users.getSelectedIndex() > 1 && modPacksPane.packPanels.size() > 0) {
-                        String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack
+                        String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version"))
+                                ? ModPack
                                 .getSelectedPack().getVersion().replace(".", "_")
                                 : Settings.getSettings().getPackVer().replace(".", "_");
                         if (ModPack.getSelectedPack().isPrivatePack()) {
@@ -258,7 +258,8 @@ public class LaunchFrame extends JFrame {
                         } else {
                             OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks/" + ModPack.getSelectedPack().getDir() + "/" + version + "/" + ModPack.getSelectedPack().getServerUrl()));
                         }
-                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + "Server Download", "Server Download / " + ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
+                        TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + "Server Download",
+                                "Server Download / " + ModPack.getSelectedPack().getName() + " / " + ModPack.getSelectedPack().getVersion());
                     }
                 }
             }
@@ -580,7 +581,6 @@ public class LaunchFrame extends JFrame {
         MCInstaller.setupNewStyle(installPath, pack, isLegacy, RESPONSE);
     }
 
-
     /**
      * "Saves" the settings from the GUI controls into the settings class.
      */
@@ -687,10 +687,12 @@ public class LaunchFrame extends JFrame {
         tpInstallLocation.setEnabled(true);
         TextureManager.updating = false;
     }
+
     @Subscribe
-    private void handleEnableObjectsEvent(EnableObjectsEvent e){
+    private void handleEnableObjectsEvent (EnableObjectsEvent e) {
         enableObjects();
     }
+
     /**
      * Download and install mods
      * @return boolean - represents whether it was successful in initializing mods
@@ -705,7 +707,8 @@ public class LaunchFrame extends JFrame {
         while (!man.worker.isDone()) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException ignored) { }
+            } catch (InterruptedException ignored) {
+            }
         }
         if (man.erroneous) {
             return false;
@@ -781,6 +784,7 @@ public class LaunchFrame extends JFrame {
     }
 
     // TODO: Make buttons dynamically sized.
+
     /**
      * updates the buttons/text to language specific
      */
@@ -816,8 +820,8 @@ public class LaunchFrame extends JFrame {
         thirdPartyPane.updateLocale();
         mapsPane.updateLocale();
         tpPane.updateLocale();
-        if(trayMenu != null) {
-        	trayMenu.updateLocale();
+        if (trayMenu != null) {
+            trayMenu.updateLocale();
         }
     }
 
@@ -850,7 +854,8 @@ public class LaunchFrame extends JFrame {
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough
-            ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.", java.toString());
+            ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.",
+                    java.toString());
             return;
         }
     }
@@ -873,23 +878,24 @@ public class LaunchFrame extends JFrame {
         }
     }
 
-    public static void setUpSystemTray() {
-    	trayMenu = new TrayMenu();
-    	
-    	SystemTray tray = SystemTray.getSystemTray();
-    	TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
-    	
-    	trayIcon.setPopupMenu(trayMenu);
-    	trayIcon.setToolTip(Constants.name);
-    	trayIcon.setImageAutoSize(true);
-    	
-    	try {
-			tray.add(trayIcon);
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
+    public static void setUpSystemTray () {
+        trayMenu = new TrayMenu();
+
+        SystemTray tray = SystemTray.getSystemTray();
+        TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(instance.getClass().getResource("/image/logo_ftb.png")));
+
+        trayIcon.setPopupMenu(trayMenu);
+        trayIcon.setToolTip(Constants.name);
+        trayIcon.setImageAutoSize(true);
+
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
-    public static void main(String args[]) {
+
+    public static void main (String args[]) {
         Main.main(args);// just in case someone is launching w/ this as the main class
     }
 }

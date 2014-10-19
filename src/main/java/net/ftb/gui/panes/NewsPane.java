@@ -36,24 +36,24 @@ import net.ftb.util.OSUtils.OS;
 
 @SuppressWarnings("serial")
 public class NewsPane extends JPanel implements ILauncherPane {
-    
+
     private JScrollPane newsPanel;
-    
+
     private final HTMLEditorKit news_kit = new HTMLEditorKit() {
         {
             this.setStyleSheet(OSUtils.makeStyleSheet("news"));
         }
     };
-    
+
     private final JEditorPane news_pane = new JEditorPane("text/html", "") {
         {
             this.setEditable(false);
             this.setEditorKit(news_kit);
             this.addHyperlinkListener(new HyperlinkListener() {
                 @Override
-                public void hyperlinkUpdate(HyperlinkEvent e) {
+                public void hyperlinkUpdate (HyperlinkEvent e) {
                     if (e.getEventType() == EventType.ACTIVATED) {
-                        if(e.getDescription().substring(0, 7).equals("members")) {
+                        if (e.getDescription().substring(0, 7).equals("members")) {
                             OSUtils.browse(Locations.forum + e.getDescription());
                         } else {
                             OSUtils.browse(e.getDescription());
@@ -64,15 +64,15 @@ public class NewsPane extends JPanel implements ILauncherPane {
         }
     };
 
-    public NewsPane() {
+    public NewsPane () {
         super(new BorderLayout());
-        
-        if(OSUtils.getCurrentOS() == OS.WINDOWS) {
+
+        if (OSUtils.getCurrentOS() == OS.WINDOWS) {
             setBorder(new EmptyBorder(-5, 0, -5, 12));
         } else {
             setBorder(new EmptyBorder(-4, 0, -4, -2));
         }
-        
+
         newsPanel = new JScrollPane(this.news_pane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(newsPanel, BorderLayout.CENTER);
@@ -85,5 +85,5 @@ public class NewsPane extends JPanel implements ILauncherPane {
         Settings.getSettings().save();
         LaunchFrame.getInstance().setNewsIcon();
     }
-    
+
 }

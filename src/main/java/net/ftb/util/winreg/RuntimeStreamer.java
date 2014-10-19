@@ -21,7 +21,7 @@ public class RuntimeStreamer extends Thread {
     InputStream is;
     String lines;
 
-    RuntimeStreamer(InputStream is) {
+    RuntimeStreamer (InputStream is) {
         this.is = is;
         this.lines = "";
     }

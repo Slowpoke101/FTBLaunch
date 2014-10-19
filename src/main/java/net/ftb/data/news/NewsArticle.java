@@ -20,21 +20,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class NewsArticle {
-    
+
     @Setter
     private String title;
-    
+
     @Setter
     private String hyperlink;
-    
+
     @Setter
     private String body;
-    
-    public String getHTML() {
+
+    public String getHTML () {
         return "<p id=\"newsHeader\">- <a href=\"" + this.hyperlink + "\">" + this.title + "</a> </p>"
                 + "<p id=\"newsBody\">" + this.body + "</p><br/>";
     }
-    
+
     @Setter
     @Getter
     private String date;

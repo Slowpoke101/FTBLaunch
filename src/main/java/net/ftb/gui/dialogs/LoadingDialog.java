@@ -36,15 +36,15 @@ public class LoadingDialog extends JDialog {
     private static int BAR_SIZE = 200;
     private static int COUNT = 7;
     private static int INCREMENT = BAR_SIZE / COUNT;
-    private static AtomicInteger  progress = new AtomicInteger(0);
-    
-    public LoadingDialog() {
+    private static AtomicInteger progress = new AtomicInteger(0);
+
+    public LoadingDialog () {
         super();
         setupGui();
         instance = this;
     }
 
-    public static void advance(final String text) {
+    public static void advance (final String text) {
         Logger.logInfo(text);
         final int newValue = progress.getAndAdd(INCREMENT) + INCREMENT;
         if (instance != null) {
@@ -60,7 +60,7 @@ public class LoadingDialog extends JDialog {
         }
     }
 
-    private static void doAdvance(String text, int newValue) {
+    private static void doAdvance (String text, int newValue) {
         instance.progressBar.setValue(newValue);
         instance.loadStatusLbl.setText(text);
         instance.repaint();
@@ -75,19 +75,19 @@ public class LoadingDialog extends JDialog {
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         Container panel = getContentPane();
-        
+
         splashLbl = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb_large.png")));
         splashLbl.setBounds(0, 20, 300, 160);
 
         loadStatusLbl = new JLabel("Loading...");
         loadStatusLbl.setHorizontalAlignment(SwingConstants.CENTER);
         loadStatusLbl.setBounds(0, 200, 300, 20);
-        
+
         progressBar = new JProgressBar(0, BAR_SIZE);
         progressBar.setBounds(10, 230, 280, 20);
-        
+
         panel.add(splashLbl);
         panel.add(loadStatusLbl);
         panel.add(progressBar);

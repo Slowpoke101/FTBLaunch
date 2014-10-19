@@ -77,7 +77,7 @@ public class AdvancedOptionsDialog extends JDialog {
     private final Settings settings = Settings.getSettings();
 
     //TODO add a UI adjustment tab here?
-    public AdvancedOptionsDialog() {
+    public AdvancedOptionsDialog () {
         super(LaunchFrame.getInstance(), true);
         setupGui();
 
@@ -104,10 +104,12 @@ public class AdvancedOptionsDialog extends JDialog {
         };
 
         downloadLocation.addFocusListener(settingsChangeListener);
-        if (javaPathText != null)
+        if (javaPathText != null) {
             javaPathText.addFocusListener(settingsChangeListener);
-        if (javaPath != null)
+        }
+        if (javaPath != null) {
             javaPath.addFocusListener(settingsChangeListener);
+        }
         additionalJavaOptions.addFocusListener(settingsChangeListener);
         mcWindowSizeWidth.addFocusListener(settingsChangeListener);
         mcWindowSizeHeight.addFocusListener(settingsChangeListener);
@@ -155,7 +157,7 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX ) {
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
             settings.setJavaPath(javaPathText.getText());
         } else {
             if (javaPath.getSelectedIndex() >= 0) {
@@ -189,8 +191,9 @@ public class AdvancedOptionsDialog extends JDialog {
             String javapath = settings.getJavaPath();
             if (javapath != null) {
                 javaPathText.setText(javapath);
-                if (!new File(javapath).isFile())
+                if (!new File(javapath).isFile()) {
                     javaPathText.setBackground(Color.RED);
+                }
             } else {
                 // this should not happen ever
                 javaPathText.setBackground(Color.RED);
@@ -202,15 +205,16 @@ public class AdvancedOptionsDialog extends JDialog {
                 }
 
                 @Override
-                public void keyPressed (KeyEvent e){
+                public void keyPressed (KeyEvent e) {
                 }
 
                 @Override
                 public void keyReleased (KeyEvent e) {
-                    if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile())
+                    if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile()) {
                         javaPath.setBackground(Color.RED);
-                    else
+                    } else {
                         javaPath.setBackground(new Color(40, 40, 40));
+                    }
                 }
             });
         } else {
@@ -234,7 +238,7 @@ public class AdvancedOptionsDialog extends JDialog {
             //TODO: set current selected java
             String selectedJavaPath = Settings.getSettings().getJavaPath();
             if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
-                javaPath.setSelectedIndex( i + 1);
+                javaPath.setSelectedIndex(i + 1);
             } else {
                 i = 0;
                 for (JavaInfo java : javas) {
@@ -266,12 +270,14 @@ public class AdvancedOptionsDialog extends JDialog {
         add(downloadLocationLbl);
         add(downloadLocation, GuiConstants.WRAP);
         add(javaPathLbl);
-        if (javaPathText != null)
+        if (javaPathText != null) {
             add(javaPathText, GuiConstants.WRAP);
-        if (javaPath != null)
+        }
+        if (javaPath != null) {
             add(javaPath, GuiConstants.WRAP);
+        }
         add(additionalJavaOptionsLbl);
-        add(additionalJavaOptions,  GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        add(additionalJavaOptions, GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
         add(mcWindowSizeLbl, GuiConstants.FILL_FOUR);
         add(mcWindowSizeWidth);
         add(mcWindowSizeSepLbl);
@@ -285,7 +291,6 @@ public class AdvancedOptionsDialog extends JDialog {
         add(debugLauncherVerbose, GuiConstants.WRAP);
         add(betaChannel, GuiConstants.WRAP);
         add(exit, GuiConstants.CENTER_SINGLE_LINE);
-
 
         pack();
         setLocationRelativeTo(getOwner());

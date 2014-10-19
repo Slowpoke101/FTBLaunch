@@ -45,7 +45,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
     @Getter
     private int ready = 0;
 
-    public AssetDownloader(final ProgressMonitor monitor, List<DownloadInfo> downloads) {
+    public AssetDownloader (final ProgressMonitor monitor, List<DownloadInfo> downloads) {
         this.downloads = downloads;
         this.monitor = monitor;
     }
@@ -84,8 +84,9 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
         while (!downloadSuccess && (attempt < attempts)) {
             try {
-                if(remoteHash == null)
+                if (remoteHash == null) {
                     remoteHash = Lists.newArrayList();
+                }
                 hashType = asset.hashType;
                 if (attempt++ > 0) {
                     Logger.logInfo("Connecting.. Try " + attempt + " of " + attempts + " for: " + asset.url);
@@ -155,10 +156,12 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                     output.write(buffer, 0, readLen);
                     currentSize += readLen;
                     int prog = (int) ((currentSize / remoteSize) * 100);
-                    if (prog > 100)
+                    if (prog > 100) {
                         prog = 100;
-                    if (prog < 0)
+                    }
+                    if (prog < 0) {
                         prog = 0;
+                    }
 
                     setProgress(prog);
 
@@ -201,8 +204,9 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                 good = true;
             }
         }
-        if (good || assetHash != null && assetHash.contains(hash))
+        if (good || assetHash != null && assetHash.contains(hash)) {
             return true;
+        }
         Logger.logWarn("Asset hash checking failed: " + asset.name + " " + asset.hashType + " " + hash);//unhashed DL's are not allowed!!!
         asset.local.delete();
         return false;

@@ -28,12 +28,13 @@ public class ObjectUtils {
      * @param backup -if string is null or empty this will be returned
      * @return NonNull string
      */
-    public static String preventNullString (String s,@NonNull String backup) {
+    public static String preventNullString (String s, @NonNull String backup) {
         if (s == null || s.isEmpty()) {
             return backup;
         }
         return s;
     }
+
     /**
      * @param first - First array
      * @param rest - Rest of the arrays

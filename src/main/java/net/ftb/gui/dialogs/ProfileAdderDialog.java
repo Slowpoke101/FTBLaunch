@@ -50,13 +50,13 @@ public class ProfileAdderDialog extends JDialog {
     private JButton add;
     private JLabel messageLbl;
 
-    public ProfileAdderDialog(LaunchFrame instance, String unlocalizedMessage, boolean modal) {
+    public ProfileAdderDialog (LaunchFrame instance, String unlocalizedMessage, boolean modal) {
         super(instance, modal);
         setUnlocalizedMessage(unlocalizedMessage);
         preSetup();
     }
 
-    public ProfileAdderDialog(LaunchFrame instance, boolean modal) {
+    public ProfileAdderDialog (LaunchFrame instance, boolean modal) {
         super(instance, modal);
         preSetup();
 

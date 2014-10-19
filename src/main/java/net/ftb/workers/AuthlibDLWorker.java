@@ -46,7 +46,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
     protected String authlibVersion;
     protected URL jarURLs;
 
-    public AuthlibDLWorker(String DLFolder, String authver) {
+    public AuthlibDLWorker (String DLFolder, String authver) {
         this.binDir = new File(DLFolder);
         this.authlibVersion = authver;
         this.status = "";
@@ -56,12 +56,14 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
     protected Boolean doInBackground () {
         Benchmark.start("Authlib");
         Logger.logDebug("Loading Authlib...");
-        if (!binDir.exists())
+        if (!binDir.exists()) {
             binDir.mkdirs();
+        }
         if (!downloadJars()) {
             Logger.logError("Authlib Download Failed");
-            if (!new File(binDir + File.separator + "authlib-" + authlibVersion + ".jar").exists())
+            if (!new File(binDir + File.separator + "authlib-" + authlibVersion + ".jar").exists()) {
                 return false;
+            }
             Logger.logInfo("Local Authlib copy exists: trying to load it anyway");
         }
         setStatus("Adding Authlib to Classpath");
@@ -129,7 +131,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
             }
         }
         boolean downloadSuccess = false;
-        if (hash != null && !hash.equals("") && new File(binDir, getFilename(jarURLs)).exists())
+        if (hash != null && !hash.equals("") && new File(binDir, getFilename(jarURLs)).exists()) {
             try {
                 if (hash.toLowerCase().equals(DownloadUtils.fileMD5(new File(binDir, getFilename(jarURLs))).toLowerCase())) {
                     Logger.logInfo("Local Authlib Version is good, skipping Download");
@@ -137,6 +139,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 }
             } catch (Exception e1) {
             }
+        }
         int attempt = 0;
         final int attempts = 5;
         while (!downloadSuccess && (attempt < attempts)) {

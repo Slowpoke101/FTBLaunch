@@ -17,11 +17,11 @@
 package net.ftb.data;
 
 public class Constants {
-	
-	public static final String name = "Feed The Beast Launcher";
-	public static final String version = "1.4.4";
+
+    public static final String name = "Feed The Beast Launcher";
+    public static final String version = "1.4.4";
 
     //limit for version component is 99.
-	public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 4 * 1;
+    public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 4 * 1;
 
 }
