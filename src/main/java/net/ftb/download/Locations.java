@@ -56,12 +56,12 @@ public class Locations {
     public static HashMap<String, String> backupServers =  Maps.newHashMap();
 
     //Oracle Java Locations
-    public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87443";
-    public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=86895";
-    public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87437";
-    public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87435";
-    public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
-    public static final String jdkMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=87438";
+    public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97809";
+    public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97807";
+    public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97800";
+    public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97798";
+    public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97801";
+    public static final String jdkMac = "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html";
     
     // Forum and Feed URL
     public static final String forum = "http://forum.feed-the-beast.com/";

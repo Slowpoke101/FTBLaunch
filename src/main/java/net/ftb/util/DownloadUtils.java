@@ -197,7 +197,7 @@ public class DownloadUtils extends Thread {
             connection.setRequestProperty("Cache-Control", "no-transform");
             connection.setRequestMethod("HEAD");
             int code = connection.getResponseCode();
-            return (code != 200);
+            return (code == 200);
         } catch (Exception e) {
             return false;
         }
