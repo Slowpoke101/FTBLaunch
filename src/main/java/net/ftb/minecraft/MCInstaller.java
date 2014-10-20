@@ -61,6 +61,7 @@ public class MCInstaller {
 
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
+        packbasejson = "";
         List<DownloadInfo> assets = gatherAssets(new File(installPath), installPath, isLegacy);
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
@@ -333,6 +334,24 @@ public class MCInstaller {
                 natDir.delete();
             }
             natDir.mkdirs();
+
+            // TODO: fix somehow, in offline mode launchMiunecraft is called directly => setupNewStyle()/gatherAssets() do not initialize packbasejson
+            // done.  Is it sane
+            packbasejson = "";
+            if (new File(gameDir, "pack.json").exists()) {
+                Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                if (packjson.jar != null && !packjson.jar.isEmpty()) {
+                    packmcversion = packjson.jar; // is this needed or not?
+                }
+                if (packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty()) {
+                    packbasejson = packjson.inheritsFrom;
+                }
+            }
+
+            if (packbasejson == null || packbasejson.isEmpty()) {
+                packbasejson = packmcversion;
+            }
+
             Logger.logDebug("packbaseJSON " + packbasejson);
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
