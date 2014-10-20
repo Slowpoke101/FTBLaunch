@@ -250,7 +250,7 @@ public class AdvancedOptionsDialog extends JDialog {
             }
         }
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
-        additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
+        additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions(), 30);
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
         mcWindowSizeWidth = new JTextField(4);
         mcWindowSizeSepLbl = new JLabel("x");
