@@ -50,14 +50,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
         this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
-
-        if (OSUtils.getCurrentOS() == OS.MACOSX) {
-            if (this.major == 1 && (this.minor == 7 || this.minor == 6)) {
-                this.supportedVersion = true;
-            }
-        } else {
-            this.supportedVersion = true;
-        }
+        this.supportedVersion = true;
     }
 
     public JavaInfo (int major, int minor) {
