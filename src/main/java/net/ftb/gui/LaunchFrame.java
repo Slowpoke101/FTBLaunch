@@ -150,7 +150,7 @@ public class LaunchFrame extends JFrame {
 
         //Footer
         footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerLogo.setBounds(20, 20, 42, 42);
+        footerLogo.setBounds(20, 20, 50, 40);
         footerLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -159,7 +159,7 @@ public class LaunchFrame extends JFrame {
         });
 
         footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerCreeper.setBounds(72, 20, 132, 42);
+        footerCreeper.setBounds(78, 20, 132, 42);
         footerCreeper.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -168,7 +168,7 @@ public class LaunchFrame extends JFrame {
         });
 
         footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerTUG.setBounds(212, 20, 132, 42);
+        footerTUG.setBounds(212, 25, 100, 28);
         footerTUG.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
