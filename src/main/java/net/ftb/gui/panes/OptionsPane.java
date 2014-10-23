@@ -273,10 +273,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     public void offerJava7 (String reason) {
         if (OSUtils.getCurrentOS().equals(OS.MACOSX)) {
-            if (JavaFinder.java8Found) {//they need the jdk link
-                addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");
-                addUpdateLabel("JAVA_NEW_Warning");
-            } else if (OSUtils.canRun7OnMac()) {
+            if (OSUtils.canRun7OnMac()) {
                 addUpdateJREButton(Locations.jreMac, "DOWNLOAD_JAVAGOOD");
                 addUpdateLabel(reason);
             } else {
@@ -311,11 +308,6 @@ public class OptionsPane extends JPanel implements ILauncherPane {
             offerJava7("JAVA_OLD_Warning");
         }
 
-        // offer 64-bit java 7 is OS X and java 8 detected
-        else if (OSUtils.getCurrentOS().equals(OS.MACOSX) && (java.getMajor() > 1 || java.getMinor() > 7)) {
-            addUpdateJREButton(Locations.jdkMac, "DOWNLOAD_JAVAGOOD");//they need the jdk link
-            addUpdateLabel("JAVA_NEW_Warning");
-        }
         // offer 64-bit java if 32-bit java detected in 64-bit OS
         else if (!Settings.getSettings().getCurrentJava().is64bits) {//needs to use proper bit's
             addUpdateLabel("JAVA_32BIT_WARNING");
