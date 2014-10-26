@@ -79,7 +79,7 @@ public class LaunchFrame extends JFrame {
     private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
-    private final JButton launch = new JButton(), edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
+    private final JButton launch = new JButton(), edit = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
             tpInstall = new JButton();
 
     private static String[] dropdown_ = { "Select Profile", "Create Profile" };
@@ -189,16 +189,6 @@ public class LaunchFrame extends JFrame {
                 }
             }
         }
-
-        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
-        donate.setBounds(390, 20, 80, 30);
-        donate.setEnabled(false);
-        donate.setToolTipText("Coming Soon...");
-        donate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-            }
-        });
 
         users.setBounds(550, 20, 150, 30);
         users.addActionListener(new ActionListener() {
@@ -325,7 +315,6 @@ public class LaunchFrame extends JFrame {
         footer.add(footerCreeper);
         footer.add(footerTUG);
         footer.add(launch);
-        footer.add(donate);
         footer.add(serverbutton);
         footer.add(mapInstall);
         footer.add(mapInstallLocation);
@@ -791,7 +780,6 @@ public class LaunchFrame extends JFrame {
     public void updateLocale () {
         if (I18N.currentLocale == Locale.deDE) {
             edit.setBounds(420, 20, 120, 30);
-            donate.setBounds(330, 20, 80, 30);
             mapInstall.setBounds(620, 20, 190, 30);
             mapInstallLocation.setBounds(420, 20, 190, 30);
             serverbutton.setBounds(420, 20, 390, 30);
@@ -799,7 +787,6 @@ public class LaunchFrame extends JFrame {
             tpInstall.setBounds(620, 20, 190, 30);
         } else {
             edit.setBounds(480, 20, 60, 30);
-            donate.setBounds(390, 20, 80, 30);
             mapInstall.setBounds(650, 20, 160, 30);
             mapInstallLocation.setBounds(480, 20, 160, 30);
             serverbutton.setBounds(480, 20, 330, 30);
@@ -812,7 +799,6 @@ public class LaunchFrame extends JFrame {
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
-        donate.setText(I18N.getLocaleString("DONATE_BUTTON"));
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
         optionsPane.updateLocale();

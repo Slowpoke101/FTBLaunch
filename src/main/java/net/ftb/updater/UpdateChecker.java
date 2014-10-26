@@ -180,7 +180,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
                     throw new IOException("Update Download failed hash check please try again! -- fileSha " + sha);
                 }
             } else {
-                SelfUpdate.runUpdate(path, temporaryUpdatePath);
+                SelfUpdate.runUpdate(path, temporaryUpdate.getCanonicalPath());
             }
         } catch (Exception e) {
             Logger.logError("Error while updating launcher", e);
