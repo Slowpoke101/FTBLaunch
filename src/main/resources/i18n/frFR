@@ -10,7 +10,7 @@ LAUNCH_BUTTON = Lancer
 PROFILE_CREATE = Créer un profil
 PROFILE_SELECT = Choisir un profil
 DOWNLOAD_SERVER_PACK = Télécharger le pack serveur.
-WARN_32BIT_OS = 
+WARN_32BIT_OS = Système d'explotation 32 bits. la version 64 bits est requise pour la plupart des paquets. Si vous ne pouvez pas, veuillez utiliser le paquet FTB Lite 2.
 WARN_32BIT_JAVA = 
 WARN_JAVA6 = 
 
