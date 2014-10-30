@@ -25,7 +25,6 @@ limitations under the License.
 * you will need project lombok integration installed see http://projectlombok.org/download.html for more info on its IDE integration. Gradle adds this to the classpath for you in the IDE for IDE building
 * To build a jar/exe using gradle run 'gradlew build' to generate the .exe version add 'launch4j' to the end after installing launch4j
 * To generate IDE project with dependencies using gradle run 'gradlew eclipse' or 'gradlew idea' after running a build.
-
 * With Eclipse/idea, import generated project/module and build as usual.
 
 ##Pull Request Standards

@@ -46,7 +46,6 @@ import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
 import org.apache.commons.io.IOUtils;

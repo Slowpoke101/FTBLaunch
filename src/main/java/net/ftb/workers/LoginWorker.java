@@ -20,7 +20,6 @@ import javax.swing.SwingWorker;
 
 import lombok.Getter;
 import net.ftb.data.LoginResponse;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.Benchmark;

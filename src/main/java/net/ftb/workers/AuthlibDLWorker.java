@@ -30,7 +30,6 @@ import java.net.URLConnection;
 import javax.swing.SwingWorker;
 
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.Benchmark;

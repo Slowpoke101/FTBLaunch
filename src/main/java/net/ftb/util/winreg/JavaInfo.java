@@ -3,8 +3,6 @@ package net.ftb.util.winreg;
 import java.util.regex.Pattern;
 
 import lombok.Getter;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
 
 /**
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.

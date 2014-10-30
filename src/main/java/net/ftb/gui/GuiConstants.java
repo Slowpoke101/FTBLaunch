@@ -14,4 +14,3 @@ public class GuiConstants {
     public static final String SEP = ", ";
     public static final String GROW = "grow";
 }
-
