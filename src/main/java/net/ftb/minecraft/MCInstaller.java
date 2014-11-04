@@ -335,8 +335,7 @@ public class MCInstaller {
             }
             natDir.mkdirs();
 
-            // TODO: fix somehow, in offline mode launchMiunecraft is called directly => setupNewStyle()/gatherAssets() do not initialize packbasejson
-            // done.  Is it sane
+            packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
             packbasejson = "";
             if (new File(gameDir, "pack.json").exists()) {
                 Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
@@ -497,7 +496,7 @@ public class MCInstaller {
         FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
     }
 
-    public static void extractLegacyJson (File newLoc) {
+    private static void extractLegacyJson (File newLoc) {
         try {
             if (!new File(newLoc.getParent()).exists()) {
                 new File(newLoc.getParent()).mkdirs();
