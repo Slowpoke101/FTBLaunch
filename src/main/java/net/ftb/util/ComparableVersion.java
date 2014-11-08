@@ -158,6 +158,8 @@ public class ComparableVersion
             ALIASES.put( "ga", "" );
             ALIASES.put( "final", "" );
             ALIASES.put( "cr", "rc" );
+            ALIASES.put( "ea", "beta");
+            ALIASES.put( "pre", "beta");
         }
 
         /**
@@ -369,7 +371,7 @@ public class ComparableVersion
         {
             char c = version.charAt( i );
 
-            if ( c == '.' )
+            if ( c == '.' || c == '_' )
             {
                 if ( i == startIndex )
                 {
