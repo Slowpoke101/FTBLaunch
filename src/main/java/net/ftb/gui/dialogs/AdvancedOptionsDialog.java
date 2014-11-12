@@ -170,7 +170,7 @@ public class AdvancedOptionsDialog extends JDialog {
         settings.setBetaChannel(betaChannel.isSelected());
         settings.save();
         // invalidate current java information
-        settings.setCurrentJava(null);
+        Settings.setCurrentJava(null);
         //update options pane
         LaunchFrame.getInstance().optionsPane.updateJavaLabels();
     }

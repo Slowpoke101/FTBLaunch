@@ -47,6 +47,7 @@ import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.*;
 
+import static com.google.common.net.HttpHeaders.*;
 import static net.ftb.download.Locations.MODPACKS;
 import static net.ftb.download.Locations.PRIVATEPACKS;
 
@@ -121,7 +122,7 @@ public class ModManager extends JDialog {
                     });
 
                     connection = (HttpURLConnection) url_.openConnection();
-                    connection.setRequestProperty("Cache-Control", "no-transform");
+                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setAllowUserInteraction(true);
                     connection.setConnectTimeout(14000);
                     connection.setReadTimeout(20000);
@@ -129,7 +130,7 @@ public class ModManager extends JDialog {
                         connection.setRequestProperty("Range", "bytes=" + amount + "-");
                     }
                     connection.connect();
-                    md5 = connection.getHeaderField("Content-MD5");
+                    md5 = connection.getHeaderField(CONTENT_MD5);
                     in = new BufferedInputStream(connection.getInputStream());
                     if (modPackSize == 0) {
                         modPackSize = connection.getContentLength();

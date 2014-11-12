@@ -27,6 +27,7 @@ import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
 import com.google.common.collect.Lists;
+import static com.google.common.net.HttpHeaders.*;
 import lombok.Getter;
 
 import net.ftb.download.info.DownloadInfo;
@@ -96,21 +97,21 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                 //HTTPURLConnection con = (HttpURLConnection) asset.url.openConnection();
                 URLConnection con = asset.url.openConnection();
                 if (con instanceof HttpURLConnection) {
-                    con.setRequestProperty("Cache-Control", "no-cache, no-transform");
+                    con.setRequestProperty(CACHE_CONTROL, "no-cache, no-transform");
                     ((HttpURLConnection) con).setRequestMethod("HEAD");
                     con.connect();
                 }
 
                 // gather data for basic checks
-                long remoteSize = Long.parseLong(con.getHeaderField("Content-Length"));
+                long remoteSize = Long.parseLong(con.getHeaderField(CONTENT_LENGTH));
                 if (asset.hash == null && asset.getPrimaryDLType() == DLType.ETag) {
                     remoteHash.clear();
-                    remoteHash.add(con.getHeaderField("ETag").replace("\"", ""));
+                    remoteHash.add(con.getHeaderField(ETAG).replace("\"", ""));
                     hashType = "md5";
                 }
                 if (asset.hash == null && asset.getPrimaryDLType() == DLType.ContentMD5) {
                     remoteHash.clear();
-                    remoteHash.add(con.getHeaderField("Content-MD5").replace("\"", ""));
+                    remoteHash.add(con.getHeaderField(CONTENT_MD5).replace("\"", ""));
                     hashType = "md5";
                 }
 
@@ -143,7 +144,7 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                 setStatus("Downloading " + asset.name + "...");
                 con = asset.url.openConnection();
                 if (con instanceof HttpURLConnection) {
-                    con.setRequestProperty("Cache-Control", "no-cache, no-transform");
+                    con.setRequestProperty(CACHE_CONTROL, "no-cache, no-transform");
                     ((HttpURLConnection) con).setRequestMethod("GET");
                     con.connect();
                 }

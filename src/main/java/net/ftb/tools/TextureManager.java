@@ -264,8 +264,8 @@ public class TextureManager extends JDialog {
                                 if (DownloadUtils.fileExists(TEXTUREPACKS + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
                                     updating = true;
                                     TextureManager man = new TextureManager(new JFrame(), true);
-                                    man.updateTexture = tp;
-                                    man.updateModPack = pack;
+                                    TextureManager.updateTexture = tp;
+                                    TextureManager.updateModPack = pack;
                                     man.setVisible(true);
                                 }
                             }

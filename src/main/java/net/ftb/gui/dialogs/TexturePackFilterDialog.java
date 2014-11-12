@@ -81,16 +81,16 @@ public class TexturePackFilterDialog extends JDialog {
         compatiblePack.setModel(new DefaultComboBoxModel(comp.toArray(new String[comp.size()])));
         resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[res.size()])));
 
-        compatiblePack.setSelectedItem(instance.compatible);
-        resolution.setSelectedItem(instance.resolution);
+        compatiblePack.setSelectedItem(TexturepackPane.compatible);
+        resolution.setSelectedItem(TexturepackPane.resolution);
 
         apply.addActionListener(new ActionListener() {
             @SuppressWarnings("static-access")
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                instance.compatible = (String) compatiblePack.getSelectedItem();
-                instance.resolution = (String) resolution.getSelectedItem();
-                instance.updateFilter();
+                TexturepackPane.compatible = (String) compatiblePack.getSelectedItem();
+                TexturepackPane.resolution = (String) resolution.getSelectedItem();
+                TexturepackPane.updateFilter();
                 setVisible(false);
             }
         });

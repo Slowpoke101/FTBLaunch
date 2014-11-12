@@ -25,7 +25,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
     private double downloadedPerc;
 
     public MapManagerWorker (Boolean overwrite) {
-        this.overwrite = overwrite;
+        MapManagerWorker.overwrite = overwrite;
     }
 
     @Override

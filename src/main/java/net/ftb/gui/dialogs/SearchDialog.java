@@ -75,13 +75,13 @@ public class SearchDialog extends JDialog {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
                 lastMapSearch = query.getText();
-                instance.sortMaps();
+                MapUtils.sortMaps();
             }
 
             @Override
             public void insertUpdate (DocumentEvent arg0) {
                 lastMapSearch = query.getText();
-                instance.sortMaps();
+                MapUtils.sortMaps();
             }
 
             @Override
@@ -92,7 +92,7 @@ public class SearchDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                 lastPackSearch = query.getText();
-                instance.sortMaps();
+                MapUtils.sortMaps();
                 setVisible(false);
             }
         });
@@ -106,13 +106,13 @@ public class SearchDialog extends JDialog {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
                 lastTextureSearch = query.getText();
-                instance.sortTexturePacks();
+                TexturepackPane.sortTexturePacks();
             }
 
             @Override
             public void insertUpdate (DocumentEvent arg0) {
                 lastTextureSearch = query.getText();
-                instance.sortTexturePacks();
+                TexturepackPane.sortTexturePacks();
             }
 
             @Override
@@ -123,7 +123,7 @@ public class SearchDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                 lastPackSearch = query.getText();
-                instance.sortTexturePacks();
+                TexturepackPane.sortTexturePacks();
                 setVisible(false);
             }
         });

@@ -42,11 +42,11 @@ import java.util.Scanner;
 import com.google.common.collect.Lists;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
+import static com.google.common.net.HttpHeaders.*;
 import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.log.Logger;
 
 import org.apache.commons.io.IOUtils;
@@ -70,14 +70,14 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 // TODO: should we return null or "" or raise Exception when getting 404 from  server? Otherwise it loops through all servers
                 if (connection.getResponseCode() != 200) {
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
-                    connection.setRequestProperty("Cache-Control", "no-transform");
+                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setRequestMethod("HEAD");
                 } else {
                     break;
@@ -102,13 +102,13 @@ public class DownloadUtils extends Thread {
         boolean good = false;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
                     resolved = "http://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
-                    connection.setRequestProperty("Cache-Control", "no-transform");
+                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setRequestMethod("HEAD");
                 } else {
                     good = true;
@@ -137,14 +137,14 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
-                        connection.setRequestProperty("Cache-Control", "no-transform");
+                        connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                         connection.setRequestMethod("HEAD");
                     } else {
                         break;
@@ -164,7 +164,7 @@ public class DownloadUtils extends Thread {
     public static boolean staticFileExists (String file) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(getStaticCreeperhostLink(file)).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             return (connection.getResponseCode() == 200);
         } catch (Exception e) {
@@ -179,7 +179,7 @@ public class DownloadUtils extends Thread {
     public static boolean fileExists (String file) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(Locations.masterRepo + "/FTB2/" + file).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             return (connection.getResponseCode() == 200);
         } catch (Exception e) {
@@ -194,7 +194,7 @@ public class DownloadUtils extends Thread {
     public static boolean fileExistsURL (String url) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             int code = connection.getResponseCode();
             return (code == 200);
@@ -330,7 +330,7 @@ public class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
-            connection.setRequestProperty("Cache-Control", "no-transform");
+            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             int response = connection.getResponseCode();
             if (response == 200) {
                 scanner = new Scanner(connection.getInputStream());
@@ -341,7 +341,7 @@ public class DownloadUtils extends Thread {
                 for (String server : backupServers.values()) {
                     resolved = "http://" + server + "/md5/FTB2/" + url;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
-                    connection.setRequestProperty("Cache-Control", "no-transform");
+                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     response = connection.getResponseCode();
                     if (response == 200) {
                         scanner = new Scanner(connection.getInputStream());

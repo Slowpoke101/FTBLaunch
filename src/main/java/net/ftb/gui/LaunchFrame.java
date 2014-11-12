@@ -261,7 +261,7 @@ public class LaunchFrame extends JFrame {
         mapInstall.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+                if (MapUtils.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
                     MapManager man = new MapManager(new JFrame(), true);
                     man.setVisible(true);
                     MapManager.cleanUp();
@@ -280,7 +280,7 @@ public class LaunchFrame extends JFrame {
         serverMap.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                if (mapsPane.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
+                if (MapUtils.mapPanels.size() > 0 && getSelectedMapIndex() >= 0) {
                     OSUtils.browse(DownloadUtils.getCreeperhostLink("maps/" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "/"
                             + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "/" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
                 }
@@ -293,7 +293,7 @@ public class LaunchFrame extends JFrame {
         tpInstall.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                if (tpPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
+                if (TexturepackPane.texturePackPanels.size() > 0 && getSelectedTexturePackIndex() >= 0) {
                     TextureManager man = new TextureManager(new JFrame(), true);
                     man.setVisible(true);
                 }
@@ -630,14 +630,14 @@ public class LaunchFrame extends JFrame {
      * @return - Outputs selected map index
      */
     public static int getSelectedMapIndex () {
-        return instance.mapsPane.getSelectedMapIndex();
+        return MapUtils.getSelectedMapIndex();
     }
 
     /**
      * @return - Outputs selected texturepack index
      */
     public static int getSelectedTexturePackIndex () {
-        return instance.tpPane.getSelectedTexturePackIndex();
+        return TexturepackPane.getSelectedTexturePackIndex();
     }
 
     /**
@@ -693,18 +693,18 @@ public class LaunchFrame extends JFrame {
         man.setVisible(true);
         while (man == null) {
         }
-        while (!man.worker.isDone()) {
+        while (!ModManager.worker.isDone()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ignored) {
             }
         }
-        if (man.erroneous) {
+        if (ModManager.erroneous) {
             return false;
         }
         try {
             MCInstaller.installMods(ModPack.getSelectedPack().getDir());
-            man.cleanUp();
+            ModManager.cleanUp();
         } catch (IOException e) {
             Logger.logDebug("Exception: ", e);
         }
@@ -751,7 +751,7 @@ public class LaunchFrame extends JFrame {
                 disableMainButtons();
                 disableMapButtons();
             } else {
-                result = mapsPane.type.equals("Server");
+                result = MapUtils.type.equals("Server");
                 mapInstall.setVisible(!result);
                 mapInstallLocation.setVisible(!result);
                 serverMap.setVisible(result);

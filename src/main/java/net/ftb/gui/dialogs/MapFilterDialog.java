@@ -60,9 +60,9 @@ public class MapFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        type.setSelectedItem(pane.type);
-        origin.setSelectedItem(pane.origin);
-        compatiblePack.setSelectedItem(pane.compatible);
+        type.setSelectedItem(MapUtils.type);
+        origin.setSelectedItem(MapUtils.origin);
+        compatiblePack.setSelectedItem(MapUtils.compatible);
 
         ArrayList<String> packs = Lists.newArrayList();
         compatiblePack.addItem(I18N.getLocaleString("MAIN_ALL"));
@@ -84,10 +84,10 @@ public class MapFilterDialog extends JDialog {
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                pane.compatible = (String) compatiblePack.getSelectedItem();
-                pane.type = (String) type.getSelectedItem();
-                pane.origin = (String) origin.getSelectedItem();
-                pane.updateFilter();
+                MapUtils.compatible = (String) compatiblePack.getSelectedItem();
+                MapUtils.type = (String) type.getSelectedItem();
+                MapUtils.origin = (String) origin.getSelectedItem();
+                MapUtils.updateFilter();
                 setVisible(false);
             }
         });
