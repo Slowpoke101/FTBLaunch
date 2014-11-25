@@ -16,6 +16,11 @@
  */
 package net.ftb.tools;
 
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
+import static com.google.common.net.HttpHeaders.CONTENT_MD5;
+import static net.ftb.download.Locations.MODPACKS;
+import static net.ftb.download.Locations.PRIVATEPACKS;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -45,11 +50,12 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
-import net.ftb.util.*;
-
-import static com.google.common.net.HttpHeaders.*;
-import static net.ftb.download.Locations.MODPACKS;
-import static net.ftb.download.Locations.PRIVATEPACKS;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.ModPackUtil;
+import net.ftb.util.OSUtils;
+import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModManager extends JDialog {
@@ -74,6 +80,8 @@ public class ModManager extends JDialog {
                     File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
                     if (modPackZip.exists()) {
                         FTBFileUtils.delete(modPackZip);
+                        //Also clear out the "default mods" cache entry, if any, to force it to update when next requested
+                        ModPackUtil.clearDefaultModFiles(pack);
                     }
                     File animationGif = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
                     if (animationGif.exists()) {
