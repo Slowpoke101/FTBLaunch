@@ -54,6 +54,11 @@ dependencies {
 	//commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
+    // something depends mockito-all => core not needed
+    //testCompile 'org.mockito:mockito-core:1.+'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.0'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.0'
+    testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.0'
 	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
 }
 
