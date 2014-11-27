@@ -1,16 +1,12 @@
 package net.ftb.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.annotation.Nonnull;
 
@@ -106,75 +102,55 @@ public final class ModPackUtil {
         File modPackZip = new File(installPath, "ModPacks" + File.separator + modpack.getDir() + File.separator + modpack.getUrl());
 
         if (modPackZip.exists()) {
-            try {
-                FileSystem system = FileSystems.newFileSystem(modPackZip.toPath(), null);
+            ZipInputStream zip = null;
 
-                ModVisitor visitor = new ModVisitor();
-                Files.walkFileTree(system.getPath(File.separator), visitor);
-                return visitor.getFileNames();
+            try {
+                zip = new ZipInputStream(new FileInputStream(modPackZip));
+
+                Set<String> fileNames = new HashSet<String>();
+                ZipEntry ze = null;
+
+                while ((ze = zip.getNextEntry()) != null) {
+                    if (!ze.isDirectory()) {
+                        String fileName = ze.getName();
+
+                        if (fileName != null) {
+                            //This is always '/', regardless of the OS - does not match the value of File.separator
+                            int lastSeparator = fileName.lastIndexOf('/');
+                            if (fileName.length() > lastSeparator + 1) {
+                                if (lastSeparator != -1) {
+                                    fileName = fileName.substring(lastSeparator + 1);
+                                }
+
+                                fileNames.add(fileName.toLowerCase());
+                            }
+                        }
+                    }
+                }
+
+                return fileNames;
+
+                //TODO (romeara) - When the launcher is upgraded to Java7, switch to using nio's FileSystem and visitor pattern, 
+                // it is significantly more performant, such as below:
+                // FileSystem system = FileSystems.newFileSystem(modPackZip.toPath(), null);
+                //                
+                // Visitor is an implements of FileVistor
+                // Files.walkFileTree(system.getPath(File.separator), visitor);
+                // return visitor.getFileNames();
             } catch (IOException e) {
                 Logger.logError("Error attempting to read default mods", e);
                 return Sets.newHashSet();
+            } finally {
+                if (zip != null) {
+                    try {
+                        zip.close();
+                    } catch (IOException e) {
+                        Logger.logError("Error attempting to close stream used to read default mods", e);
+                    }
+                }
             }
         }
 
         return Sets.newHashSet();
-    }
-
-    /**
-     * File visitor which can traverse the tree of the a file system looking for mod files
-     */
-    private static final class ModVisitor implements FileVisitor<Path> {
-
-        /** Discovered mod files */
-        private Set<String> fileNames = new HashSet<String>();
-
-        @Override
-        public FileVisitResult preVisitDirectory (Path dir, BasicFileAttributes attrs) throws IOException {
-            //Attempted to limit the searched directories to the "mods", "coremods", and "instMods" directories 
-            //for efficiency, however for some reason it just skipped all the directories instead. Something to 
-            //look into later. Original attempt: 
-            // if (dir.endsWith("minecraft" + File.separator + "mods") 
-            // || dir.endsWith("minecraft" + File.separator + "coremods") 
-            // || dir.endsWith("instMods")) 
-
-            return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFile (Path file, BasicFileAttributes attrs) throws IOException {
-            String fileName = file.getFileName().toString();
-
-            if (isMod(fileName)) {
-                fileNames.add(fileName.toLowerCase());
-            }
-
-            return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFileFailed (Path file, IOException exc) throws IOException {
-            return FileVisitResult.CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult postVisitDirectory (Path dir, IOException exc) throws IOException {
-            return FileVisitResult.CONTINUE;
-        }
-
-        public Set<String> getFileNames () {
-            return fileNames;
-        }
-
-        /**
-         * Determines if the given file is a mod file
-         * @param name The name of the file
-         * @return True if the file is a mod file, false otherwise
-         */
-        private boolean isMod (String name) {
-            //Based on the filtering in the edit mod pack dialog - it limits the available entries in this manner
-            return name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar") || name.toLowerCase().endsWith(".litemod") || name.toLowerCase().endsWith(".zip.disabled")
-                    || name.toLowerCase().endsWith(".jar.disabled") || name.toLowerCase().endsWith(".litemod.disabled");
-        }
     }
 }

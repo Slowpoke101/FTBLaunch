@@ -237,7 +237,7 @@ public class EditModPackDialog extends JDialog {
             Optional<String> defaultFile = defaultFile(defaultMods, disabledMods.get(i));
 
             if (defaultFile.isPresent()) {
-                display = getModDefaultFormatted(display, modPack, defaultFile.get()) + "</font></html>";
+                display = getModDefaultFormatted(display, modPack, defaultFile.get());
             }
             disabledList[i] = display;
         }
@@ -258,7 +258,7 @@ public class EditModPackDialog extends JDialog {
 
         //The additional "mod default" data is orange to separate it from the name of the file visually in the UI. 
         //Orange was selected because  the color scheme of the launcher as a whole seemed to be black/gray/orange
-        builder.append("<html>").append(originalDisplayName).append(" <font color=orange>(");
+        builder.append("<html>").append(originalDisplayName).append(" <font color=rgb(243,119,31)>(");
 
         builder.append(modPack.getName());
 
