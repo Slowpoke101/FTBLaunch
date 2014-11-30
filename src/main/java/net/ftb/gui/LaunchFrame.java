@@ -88,6 +88,7 @@ import net.ftb.util.OSUtils.OS;
 import net.ftb.util.ObjectUtils;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
+import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
@@ -857,15 +858,15 @@ public class LaunchFrame extends JFrame {
         }
 
         // check selected java is at least version specified in pack's XML
-        int[] minSup = pack.getMinJRE();
-        if (minSup.length >= 2 && minSup[0] <= java.getMajor() && minSup[1] <= java.getMinor()) {
+        JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
+        if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
             Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
             Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
             saveSettings();
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough
-            ErrorUtils.tossError("You must use at least java " + minSup[0] + "." + minSup[1] + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.",
+            ErrorUtils.tossError("You must use at least java " + pack.getMinJRE() + " to play this pack! Please go to Options to get a link or Advanced Options enter a path.",
                     java.toString());
             return;
         }

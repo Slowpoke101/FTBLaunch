@@ -46,6 +46,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
+import net.ftb.util.winreg.JavaVersion;
 
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -303,8 +304,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         remove(btnInstallJava);
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
         JavaInfo java = Settings.getSettings().getCurrentJava();
+        JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
         // offer java 7 if java 6 or older is detected
-        if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
+        if (java.isOlder(java7)) {
             offerJava7("JAVA_OLD_Warning");
         }
 

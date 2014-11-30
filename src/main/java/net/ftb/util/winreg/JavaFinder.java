@@ -190,14 +190,14 @@ public class JavaFinder {
 
             if (java64.size() > 0) {
                 for (JavaInfo aJava64 : java64) {
-                    if (!preferred.is64bits || JavaInfo.PREFERRED_SORTING.compare(aJava64, preferred) == 1) {
+                    if (!preferred.is64bits || preferred.isOlder(aJava64)) {
                         preferred = aJava64;
                     }
                 }
             }
             if (java32.size() > 0) {
                 for (JavaInfo aJava32 : java32) {
-                    if (!preferred.is64bits && JavaInfo.PREFERRED_SORTING.compare(aJava32, preferred) == 1) {
+                    if (!preferred.is64bits && preferred.isOlder(aJava32)) {
                         preferred = aJava32;
                     }
                 }

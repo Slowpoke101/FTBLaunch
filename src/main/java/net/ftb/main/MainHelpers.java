@@ -23,6 +23,7 @@ import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
+import net.ftb.util.winreg.JavaVersion;
 
 import java.io.*;
 
@@ -58,7 +59,8 @@ public class MainHelpers {
         }
 
         JavaInfo java = Settings.getSettings().getCurrentJava();
-        if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
+        JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
+        if (java.isOlder(java7)) {
             Logger.logError("Java 6 detected. Java 7 is recommended for most mod packs.");
         }
 

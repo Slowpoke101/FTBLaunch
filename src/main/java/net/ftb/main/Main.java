@@ -33,6 +33,7 @@ import net.ftb.tracking.google.JGoogleAnalyticsTracker;
 import net.ftb.updater.UpdateChecker;
 import net.ftb.util.*;
 import net.ftb.util.winreg.JavaInfo;
+import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.AuthlibDLWorker;
 
 import com.google.common.eventbus.EventBus;
@@ -274,7 +275,8 @@ public class Main {
                         MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
                     }
                     JavaInfo java = Settings.getSettings().getCurrentJava();
-                    if (java.getMajor() < 1 || (java.getMajor() == 1 && java.getMinor() < 7)) {
+                    JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
+                    if (java.isOlder(java7)) {
                         MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
                     }
                 }
