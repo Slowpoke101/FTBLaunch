@@ -370,18 +370,18 @@ public class ModPack {
     }
 
     /**
-     * Gets a formatted name with includes the Mod Pack label and version
+     * Gets a formatted name with includes the Mod Pack label and minecraft version
      * <p>
      * This label is used in places where a list or group of mod packs may contain multiple versions of the 
      * same pack, such as the list of packs supported by a texture pack
      * </p>
-     * @return The name of the mod pack and the version, if provided
+     * @return The name of the mod pack and the minecraft version supported, if provided
      */
     public String getNameWithVersion () {
         StringBuilder name = new StringBuilder(getName());
 
-        if (getVersion() != null) {
-            name.append(" (").append(getVersion()).append(")");
+        if (getMcVersion() != null) {
+            name.append(" (").append(getMcVersion()).append(")");
         }
 
         return name.toString();
