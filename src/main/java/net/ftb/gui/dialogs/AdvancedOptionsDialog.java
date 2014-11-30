@@ -219,13 +219,16 @@ public class AdvancedOptionsDialog extends JDialog {
             });
         } else {
             List<JavaInfo> javas = JavaFinder.findJavas();
-            Collections.sort(javas);
+            Collections.sort(javas, JavaInfo.PREFERRED_SORTING);
+            // if we are going to remove duplicates here => what are duplicates?
+            // * same version + bitness?
+            // * same path?
             String[] javaslist = new String[javas.size() + 1];
             javapaths = new String[javas.size() + 1];
             int i = -1;
             for (JavaInfo java : javas) {
                 i++;
-                javaslist[i] = java.version;
+                javaslist[i] = java.origVersion;
                 if (java.is64bits) {
                     javaslist[i] = javaslist[i] + " 64bit";
                 }

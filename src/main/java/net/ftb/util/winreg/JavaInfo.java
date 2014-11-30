@@ -1,10 +1,9 @@
 package net.ftb.util.winreg;
 
-import java.util.regex.Pattern;
-
 import lombok.Getter;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
+import net.ftb.util.ComparableVersion;
+
+import java.util.Comparator;
 
 /**
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.
@@ -17,94 +16,59 @@ import net.ftb.util.OSUtils.OS;
 /**
  * Helper struct to hold information about one installed java version
  ****************************************************************************/
-public class JavaInfo implements Comparable<JavaInfo> {
+public class JavaInfo extends JavaVersion {
     public String path; //! Full path to java.exe executable file
-    public String version; //! Version string.
-    public String origVersion = "";
-    public boolean supportedVersion = false;
-    public boolean hasJava8;
     public boolean is64bits; //! true for 64-bit javas, false for 32
-    @Getter
-    private int major, minor, revision, build;
-    private static String regex = "[^\\d_.-]";
 
     /**
      * Calls 'javaPath -version' and parses the results
      * @param javaPath: path to a java.exe executable
      ****************************************************************************/
     public JavaInfo (String javaPath) throws Exception {
-        String versionInfo = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
-        String[] tokens = versionInfo.split("\"");
-        if (tokens.length < 2) {
-            throw new Exception("Executable output unsupported");
-        } else {
-            this.version = tokens[1];
-        }
-        this.origVersion = version;
-        this.version = Pattern.compile(regex).matcher(this.version).replaceAll("0");
-        this.is64bits = versionInfo.toUpperCase().contains("64-");
+        super(RuntimeStreamer.execute(new String[] { javaPath, "-version" }), true);
         this.path = javaPath;
-
-        String[] s = this.version.split("[._-]");
-        this.major = Integer.parseInt(s[0]);
-        this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
-        this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
-        this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
-        this.supportedVersion = true;
+        this.is64bits = origStr.toUpperCase().contains("64-");
     }
 
-    public JavaInfo (int major, int minor) {
-        this.path = null;
-        this.major = major;
-        this.minor = minor;
-        this.revision = 0;
-        this.build = 0;
+    public boolean samePath (JavaInfo j) {
+        return this.path.equals(j.path);
+    }
+    public boolean sameBitness (JavaInfo j) {
+        return this.is64bits == j.is64bits;
     }
 
-    public boolean isJava8 () {
-        return this.major == 1 && this.minor == 8;
+    /**
+     * Tests if JavaInfo are identical: same version, same bitness but not always same path
+     *
+     * Used to manually remove duplicate JavaInfos from Collections
+     * @param j other JavaInfo objct to test
+     * @return
+     */
+    public boolean isIdentical (JavaInfo j) {
+        return (this.sameVersion(j) && sameBitness(j));
     }
 
     /**
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
     public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion
-                                                                                                                                                                     ? ""
-                                                                                                                                                                     : " (UNSUPPORTED!)");
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path;
     }
 
     public String verToString () {
-        return major + "." + minor + "." + revision + "_" + build;
+        return major + "." + minor + "." + revision + "_" + update;
     }
 
-    @Override
-    public int compareTo (@SuppressWarnings("NullableProblems") JavaInfo o) {
-        if (o.major > major) {
-            return -1;
+    // PREFERRED sorting compares first bitness then java version
+    public static final Comparator<JavaInfo> PREFERRED_SORTING = new Comparator<JavaInfo>() {
+        public int compare (JavaInfo j1, JavaInfo j2) {
+            if (!j1.is64bits && j2.is64bits) {
+                return -1;
+            } else if (j1.is64bits && !j2.is64bits) {
+                return 1;
+            } else {
+                return j1.comparableVersion.compareTo(j2.comparableVersion);
+            }
         }
-        if (o.major < major) {
-            return 1;
-        }
-        if (o.minor > minor) {
-            return -1;
-        }
-        if (o.minor < minor) {
-            return 1;
-        }
-        if (o.revision > revision) {
-            return -1;
-        }
-        if (o.revision < revision) {
-            return 1;
-        }
-        if (o.build > build) {
-            return -1;
-        }
-        if (o.build < build) {
-            return 1;
-        }
-        return 0;
-    }
-
+    };
 }

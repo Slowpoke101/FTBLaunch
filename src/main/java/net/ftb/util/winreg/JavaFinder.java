@@ -10,6 +10,7 @@ package net.ftb.util.winreg;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -21,8 +22,6 @@ import net.ftb.util.OSUtils.OS;
  * Windows-specific java versions finder
  *****************************************************************************/
 public class JavaFinder {
-    public static boolean java8Found = false;
-
     /**
      * @return: A list of javaExec paths found under this registry key (rooted at HKEY_LOCAL_MACHINE)
      * @param wow64  0 for standard registry access (32-bits for 32-bit app, 64-bits for 64-bits app)
@@ -88,7 +87,8 @@ public class JavaFinder {
             try {
                 result.add(new JavaInfo(javaPath));
             } catch (Exception e) {
-                Logger.logDebug("Error while creating JavaInfo");
+                // This really does not need to be logged.
+                //Logger.logDebug("Error while creating JavaInfo");
             }
         }
         return result;
@@ -169,37 +169,35 @@ public class JavaFinder {
     public static JavaInfo parseJavaVersion () {
         if (preferred == null) {
             List<JavaInfo> javas = JavaFinder.findJavas();
+            Collections.sort(javas, JavaInfo.PREFERRED_SORTING);
             List<JavaInfo> java32 = Lists.newArrayList();
             List<JavaInfo> java64 = Lists.newArrayList();
 
             Logger.logInfo("The FTB Launcher has found the following Java versions installed:");
             for (JavaInfo java : javas) {
                 Logger.logInfo(java.toString());
-                if (java.isJava8()) {
-                    java8Found = true;
+
+                if (preferred == null && java != null) {
+                    preferred = java;
                 }
-                if (java.supportedVersion) {
-                    if (preferred == null && java != null) {
-                        preferred = java;
-                    }
-                    if (java.is64bits) {
-                        java64.add(java);
-                    } else {
-                        java32.add(java);
-                    }
+                if (java.is64bits) {
+                    java64.add(java);
+                } else {
+                    java32.add(java);
                 }
+
             }
 
             if (java64.size() > 0) {
                 for (JavaInfo aJava64 : java64) {
-                    if (!preferred.is64bits || aJava64.compareTo(preferred) == 1) {
+                    if (!preferred.is64bits || JavaInfo.PREFERRED_SORTING.compare(aJava64, preferred) == 1) {
                         preferred = aJava64;
                     }
                 }
             }
             if (java32.size() > 0) {
                 for (JavaInfo aJava32 : java32) {
-                    if (!preferred.is64bits && aJava32.compareTo(preferred) == 1) {
+                    if (!preferred.is64bits && JavaInfo.PREFERRED_SORTING.compare(aJava32, preferred) == 1) {
                         preferred = aJava32;
                     }
                 }
