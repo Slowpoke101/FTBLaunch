@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -38,7 +39,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -46,9 +46,13 @@ import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
+import net.ftb.util.ModPackUtil;
 import net.ftb.util.OSUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
 public class EditModPackDialog extends JDialog {
     private JTabbedPane tabbedPane;
@@ -92,6 +96,7 @@ public class EditModPackDialog extends JDialog {
         if (modPack != null && modPack.getMcVersion() != null) {
             mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
         }
+        
         Logger.logInfo("MCVersion: " + mcversion);
         modsFolder.mkdirs();
         coreModsFolder.mkdirs();
@@ -186,9 +191,22 @@ public class EditModPackDialog extends JDialog {
                 }
             }
         }
+
+        //Look up the default mods contained within the pack
+        ModPack modPack = ModPack.getSelectedPack();
+        Set<String> defaultMods = ModPackUtil.getDefaultModFiles(modPack);
+
         String[] enabledList = new String[enabledMods.size()];
         for (int i = 0; i < enabledMods.size(); i++) {
-            enabledList[i] = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
+            String display = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
+
+            //Add additional info to the displayed entry if the mod is part of the default set
+            Optional<String> defaultFile = defaultFile(defaultMods, enabledMods.get(i));
+
+            if (defaultFile.isPresent()) {
+                display = getModDefaultFormatted(display, modPack, defaultFile.get());
+            }
+            enabledList[i] = display;
         }
         return enabledList;
     }
@@ -206,11 +224,69 @@ public class EditModPackDialog extends JDialog {
                 }
             }
         }
-        String[] enabledList = new String[disabledMods.size()];
+
+        //Look up the default mods contained within the pack
+        ModPack modPack = ModPack.getSelectedPack();
+        Set<String> defaultMods = ModPackUtil.getDefaultModFiles(modPack);
+
+        String[] disabledList = new String[disabledMods.size()];
         for (int i = 0; i < disabledMods.size(); i++) {
-            enabledList[i] = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
+            String display = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
+
+            //Add additional info to the displayed entry if the mod is part of the default set
+            Optional<String> defaultFile = defaultFile(defaultMods, disabledMods.get(i));
+
+            if (defaultFile.isPresent()) {
+                display = getModDefaultFormatted(display, modPack, defaultFile.get());
+            }
+            disabledList[i] = display;
         }
-        return enabledList;
+        return disabledList;
+    }
+
+    /**
+     * Adds formatted content to the displayed entry, including an indicator that the mod was part of the 
+     * default set of shipped mods for the pack, and whether the mod was enabled/disabled by default
+     * 
+     * @param originalDisplayName The original entry for the displayed list
+     * @param modPack The mod pack being edited
+     * @param defaultFile The matched default file in the mod pack
+     * @return A new, formatted entry including the default state information for the entry
+     */
+    private String getModDefaultFormatted (String originalDisplayName, ModPack modPack, String defaultFile) {
+        StringBuilder builder = new StringBuilder();
+
+        //The additional "mod default" data is orange to separate it from the name of the file visually in the UI. 
+        //Orange was selected because  the color scheme of the launcher as a whole seemed to be black/gray/orange
+        builder.append("<html>").append(originalDisplayName).append(" <font color=rgb(243,119,31)>(");
+
+        builder.append(modPack.getName());
+
+        //Add an indicator if the default mod pack comes with this mod disabled
+        if (defaultFile.toLowerCase().endsWith(".disabled")) {
+            builder.append(" [").append(I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL")).append("]");
+        }
+
+        builder.append(")</font></html>");
+
+        return builder.toString();
+    }
+
+    /**
+     * @param defaultMods A set representing mod files as they are initially downloaded in a zip archive
+     * @param fileName The name of the file being added to an enabled/disabled list 
+     * @return The name of the original file, including the original "disabled" state, or an absent optional if no match was made
+     */
+    private Optional<String> defaultFile (Set<String> defaultMods, String fileName) {
+        String alternate = (fileName.endsWith(".disabled") ? fileName.substring(0, fileName.length() - ".disabled".length()) : fileName + ".disabled");
+
+        if (defaultMods.contains(fileName.toLowerCase())) {
+            return Optional.of(fileName.toLowerCase());
+        } else if (defaultMods.contains(alternate.toLowerCase())) {
+            return Optional.of(alternate.toLowerCase());
+        }
+
+        return Optional.absent();
     }
 
     public void updateLists () {
