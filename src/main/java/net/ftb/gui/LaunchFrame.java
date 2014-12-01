@@ -16,12 +16,18 @@
  */
 package net.ftb.gui;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -39,11 +45,16 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.google.common.eventbus.Subscribe;
-
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.*;
+import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Constants;
+import net.ftb.data.LauncherStyle;
+import net.ftb.data.LoginResponse;
+import net.ftb.data.Map;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -52,7 +63,13 @@ import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.gui.dialogs.PlayOfflineDialog;
 import net.ftb.gui.dialogs.ProfileAdderDialog;
 import net.ftb.gui.dialogs.ProfileEditorDialog;
-import net.ftb.gui.panes.*;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ILauncherPane;
+import net.ftb.gui.panes.MapUtils;
+import net.ftb.gui.panes.NewsPane;
+import net.ftb.gui.panes.OptionsPane;
+import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
 import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
@@ -62,11 +79,19 @@ import net.ftb.tools.MapManager;
 import net.ftb.tools.ModManager;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.tools.TextureManager;
-import net.ftb.util.*;
+import net.ftb.util.Benchmark;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
+import net.ftb.util.ObjectUtils;
+import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
+
+import com.google.common.eventbus.Subscribe;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -605,12 +630,12 @@ public class LaunchFrame extends JFrame {
         tpInstallLocation.removeAllItems();
         for (String location : locations) {
             if (location != null && !location.isEmpty()) {
-                tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
+                tpInstallLocation.addItem(ModPack.getPack(location.trim()).getNameWithVersion());
             }
         }
         //TODO:
         // Decide later if we want to do this? How to handle selection from two modpack panes?
-        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getName());
+        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getNameWithVersion());
     }
 
     /**

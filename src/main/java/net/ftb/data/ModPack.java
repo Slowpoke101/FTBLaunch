@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
@@ -42,6 +41,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
 public class ModPack {
@@ -367,6 +367,24 @@ public class ModPack {
      */
     public String getName () {
         return name;
+    }
+
+    /**
+     * Gets a formatted name with includes the Mod Pack label and minecraft version
+     * <p>
+     * This label is used in places where a list or group of mod packs may contain multiple versions of the 
+     * same pack, such as the list of packs supported by a texture pack
+     * </p>
+     * @return The name of the mod pack and the minecraft version supported, if provided
+     */
+    public String getNameWithVersion () {
+        StringBuilder name = new StringBuilder(getName());
+
+        if (getMcVersion() != null) {
+            name.append(" (").append(getMcVersion()).append(")");
+        }
+
+        return name.toString();
     }
 
     /**

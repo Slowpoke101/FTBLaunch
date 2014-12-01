@@ -29,7 +29,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.GuiConstants;
@@ -37,6 +36,8 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
+
+import com.google.common.collect.Lists;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {
@@ -72,8 +73,8 @@ public class TexturePackFilterDialog extends JDialog {
         for (int i = 0; i < textures; i++) {
             List<String> s = TexturePack.getTexturePack(i).getCompatible();
             for (String value : s) {
-                if (!comp.contains(ModPack.getPack(value.trim()).getName())) {
-                    comp.add(ModPack.getPack(value.trim()).getName());
+                if (!comp.contains(ModPack.getPack(value.trim()).getNameWithVersion())) {
+                    comp.add(ModPack.getPack(value.trim()).getNameWithVersion());
                 }
             }
         }
