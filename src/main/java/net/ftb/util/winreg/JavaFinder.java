@@ -81,14 +81,14 @@ public class JavaFinder {
 
         List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
-            if (!(new File(javaPath).exists())) {
+            File javaFile = new File(javaPath);
+            if (!javaFile.exists() || !javaFile.canExecute() || JavaInfo.getJavaInfo(javaPath) == null) {
                 continue;
             }
             try {
                 result.add(JavaInfo.getJavaInfo(javaPath));
             } catch (Exception e) {
-                // This really does not need to be logged.
-                //Logger.logDebug("Error while creating JavaInfo");
+                Logger.logDebug("Error while adding JavaInfo", e);
             }
         }
         return result;
@@ -132,14 +132,14 @@ public class JavaFinder {
         List<JavaInfo> result = Lists.newArrayList();
         for (String javaPath : javaExecs) {
             File javaFile = new File(javaPath);
-            if (!javaFile.exists() || !javaFile.canExecute()) {
+            if (!javaFile.exists() || !javaFile.canExecute() || JavaInfo.getJavaInfo(javaPath) == null) {
                 continue;
             }
 
             try {
                 result.add(JavaInfo.getJavaInfo(javaPath));
             } catch (Exception e) {
-                Logger.logDebug("Error while creating JavaInfo", e);
+                Logger.logDebug("Error while adding JavaInfo", e);
             }
         }
         return result;

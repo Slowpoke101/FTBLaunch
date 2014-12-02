@@ -7,6 +7,7 @@ import com.google.common.collect.Interners;
 import lombok.Getter;
 import net.ftb.util.ComparableVersion;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
 /**
@@ -42,6 +43,7 @@ public class JavaInfo extends JavaVersion {
      * @param javaPath: path to java binary
      * @return
      */
+    @Nullable
     public static JavaInfo getJavaInfo(String javaPath) {
         JavaInfo j = CACHE.getIfPresent(javaPath);
         // TODO: notation to mark that there will not be value for given key?
