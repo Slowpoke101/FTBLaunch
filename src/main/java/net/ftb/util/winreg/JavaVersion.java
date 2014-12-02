@@ -75,4 +75,20 @@ public class JavaVersion {
             return j1.comparableVersion.compareTo(j2.comparableVersion);
         }
     };
+
+    public boolean isOlder (JavaVersion  j1) {
+        return this.comparableVersion.isOlder(j1.comparableVersion);
+    }
+
+    public boolean isOlder (String str) {
+        return this.isOlder(JavaVersion.createJavaVersion(str));
+    }
+
+    public boolean isSameVersion (JavaVersion j1) {
+        return this.comparableVersion.isSameVersion(j1.comparableVersion);
+    }
+
+    public boolean isSameVersion (String str) {
+        return this.isSameVersion(JavaVersion.createJavaVersion(str));
+    }
 }

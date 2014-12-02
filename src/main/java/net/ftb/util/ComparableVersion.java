@@ -469,4 +469,20 @@ public class ComparableVersion
     {
         return canonical.hashCode();
     }
+
+    public boolean isOlder (ComparableVersion  c) {
+        return this.compareTo(c) < 0;
+    }
+
+    public boolean isOlder (String str) {
+        return this.isOlder(new ComparableVersion(str));
+    }
+
+    public boolean isSameVersion (ComparableVersion c) {
+        return this.compareTo(c) == 0;
+    }
+
+    public boolean isSameVersion (String str) {
+        return this.isSameVersion(new ComparableVersion(str));
+    }
 }

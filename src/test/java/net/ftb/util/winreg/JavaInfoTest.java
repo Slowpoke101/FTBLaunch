@@ -142,11 +142,34 @@ public class JavaInfoTest {
         assertEquals(true, JavaVersion.PREFERRED_SORTING.compare(j7, j8) < 0);
 
         JavaVersion j7_99 = null;
+        JavaVersion j7_65 = null;
         try {
             j7_99 = new JavaVersion("1.7.0_99", false);
+            j7_65 = new JavaVersion("1.7.0_65", false);
         } catch (Exception e) {
             fail("Unexcepted exception");
         }
+
+        // test comparison methods, also test polymorphism
         assertEquals(true, JavaVersion.PREFERRED_SORTING.compare(j7, j7_99) < 0 );
+        //info, version
+        assertEquals(true, j7.isOlder(j7_99));
+        assertEquals(false, !j7.isOlder(j7_99));
+        //version, info
+        assertEquals(true, !j7_99.isOlder(j7));
+        //info, version
+        assertEquals(false, j7.isSameVersion(j7_99));
+        //info, version
+        assertEquals(true, j7.isSameVersion(j7_65));
+        //version, version
+        assertEquals(true, j7_65.isSameVersion(j7_65));
+        //info, info
+        assertEquals(true, j7.isSameVersion(j7));
+
+        // dummy test
+        assertEquals(true, j7.isOlder(JavaVersion.createJavaVersion("1.7.0_9999999")));
+        assertEquals(true, j7.isOlder("1.7.0_9999999"));
+        assertEquals(true, j7.isSameVersion("1.7.0_65"));
     }
+
 }
