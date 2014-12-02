@@ -40,51 +40,50 @@ public class CommandLineSettings {
         settings = new CommandLineSettings();
     }
 
-    @Parameter(names = {"--verbose", "-V"}, description = "Level of verbosity: 0=debug, 1=info, 2=warning, 3=error", arity = 1)
+    @Parameter(names = { "--verbose", "-V" }, description = "Level of verbosity: 0=debug, 1=info, 2=warning, 3=error", arity = 1)
     @Getter
     // default = VERBOSE
     private int verbosity = 0;
 
-    @Parameter(names = {"--log-mc", "-m"}, description = "Show messages from minecraft process")
+    @Parameter(names = { "--log-mc", "-m" }, description = "Show messages from minecraft process")
     @Getter
     private boolean mcLogs = false;
 
-    @Parameter(names = {"--no-console", "-c"}, description = "Do not open console window. (Overrides GUI option.)")
+    @Parameter(names = { "--no-console", "-c" }, description = "Do not open console window. (Overrides GUI option.)")
     @Getter
     private boolean noConsole = false;
 
-    @Parameter(names = {"--cache-dir", "-C"}, description = "Cache directory", arity = 1, validateWith = ValidateRequiredValue.class)
+    @Parameter(names = { "--autostart", "-a" }, description = "Automatically start given pack (WIP feature)", arity = 1)
+    @Getter
+    private String packDir;
+
+    @Parameter(names = { "--cache-dir", "-C" }, description = "Cache directory", arity = 1, validateWith = ValidateRequiredValue.class)
     @Getter
     private String cacheDir;
 
-    @Parameter(names = {"--dynamic-dir", "-D"},  description = "Dynamic directory", arity = 1, validateWith = ValidateRequiredValue.class)
+    @Parameter(names = { "--dynamic-dir", "-D" }, description = "Dynamic directory", arity = 1, validateWith = ValidateRequiredValue.class)
     @Getter
     private String dynamicDir;
 
-    @Parameter(names = {"--pack-dir", "-P"}, description = "FTB installation directory", arity = 1, validateWith = ValidateRequiredValue.class)
+    @Parameter(names = { "--pack-dir", "-P" }, description = "FTB installation directory", arity = 1, validateWith = ValidateRequiredValue.class)
     @Getter
     private String installDir;
 
-    @Parameter(names = {"--use-mac", "-M"}, description = "Use mac address as an encryption key")
+    @Parameter(names = { "--use-mac", "-M" }, description = "Use mac address as an encryption key")
     @Getter
     private boolean useMac = false;
 
-    @Parameter(names = {"--help", "-h"}, help = true, description = "Shows help")
+    @Parameter(names = { "--help", "-h" }, help = true, description = "Shows help")
     @Getter
     private boolean help = false;
 
-    @Parameter(names = {"--disable-tray", "-t"}, description = "Disable tray icon")
+    @Parameter(names = { "--disable-tray", "-t" }, description = "Disable tray icon")
     @Getter
     private boolean disableTray = false;
 
-    @Parameter(names = {"--use-java8", "-J"}, description = "Allow use of java 8 in legacy MC versions that have known compatibility issues")
-    @Getter
-    private boolean useJava8 = false;
-
-
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
-        public void validate(String name, String value) throws ParameterException {
+        public void validate (String name, String value) throws ParameterException {
             if (value == null || value.isEmpty()) {
                 // this should never happen because jcommander bug
                 throw new ParameterException("Expected a value after parameter " + name);

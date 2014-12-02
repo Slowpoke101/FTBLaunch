@@ -16,11 +16,9 @@ import net.ftb.util.OSUtils;
 
 public class ObjectInfoSplitPane extends JSplitPane {
 
-	
 	// Space between items in scrolling list
-	static final int verticalItemPadding = 4; 
+	static final int verticalItemPadding = 4;
 
-	
 	@Getter
 	protected JPanel packs;
 	@Getter
@@ -29,8 +27,8 @@ public class ObjectInfoSplitPane extends JSplitPane {
 	protected JEditorPane packInfo;
 	@Getter
 	protected JScrollPane infoScroll;
-	
-	
+
+
 	public ObjectInfoSplitPane()
 	{
         packs = new JPanel();

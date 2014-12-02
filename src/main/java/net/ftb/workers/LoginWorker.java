@@ -34,7 +34,7 @@ public class LoginWorker extends SwingWorker<String, Void> {
     @Getter
     LoginResponse resp;
 
-    public LoginWorker(String username, String password, String mojangData, String selectedProfile) {
+    public LoginWorker (String username, String password, String mojangData, String selectedProfile) {
         super();
         this.username = username;
         this.password = password;
@@ -58,10 +58,12 @@ public class LoginWorker extends SwingWorker<String, Void> {
                             return "offline";
                         }
                     }
-                    if (resp == null)
+                    if (resp == null) {
                         return "nullResponse";
-                    if (resp.getUsername() == null)
+                    }
+                    if (resp.getUsername() == null) {
                         return "NullUsername";
+                    }
                     return "bad";
                 } catch (Exception e) {
                     Logger.logError("Error using authlib", e);

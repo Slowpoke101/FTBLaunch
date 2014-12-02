@@ -45,7 +45,6 @@ import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
-    
     @Getter
 	private static ThirdPartyPane instance;
 
@@ -56,7 +55,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     }
 
     @Override
-    public void onVisible() {
+    public void onVisible () {
         ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
@@ -64,13 +63,15 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         return (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML));
     }
 
-    String getLastPack() {
+    String getLastPack () {
         return Settings.getSettings().getLastThirdPartyPack();
     }
 
-    String getPaneShortName() {return "Third Party";}
+    String getPaneShortName () {
+        return "Third Party";
+    }
 
-    boolean isFTB() {
+    boolean isFTB () {
         return false;
     }
     

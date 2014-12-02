@@ -37,6 +37,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.MapManagerWorker;
 
 import static net.ftb.download.Locations.MAPS;
+
 @SuppressWarnings("serial")
 public class MapManager extends JDialog {
     private JPanel contentPane;
@@ -45,8 +46,7 @@ public class MapManager extends JDialog {
     public static boolean overwrite = false;
     private static String sep = File.separator;
 
-
-    public MapManager(JFrame owner, Boolean model) {
+    public MapManager (JFrame owner, Boolean model) {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -80,16 +80,19 @@ public class MapManager extends JDialog {
                         setVisible(false);
                         super.done();
                     }
+
                     @Override
-                    public void setLabelText(String s) {
+                    public void setLabelText (String s) {
                         label.setText(s);
                     }
+
                     @Override
-                    public void setProgressBarMaximum (int i){
+                    public void setProgressBarMaximum (int i) {
                         progressBar.setMaximum(i);
                     }
+
                     @Override
-                    public void setProgressBarValue (int i){
+                    public void setProgressBarValue (int i) {
                         progressBar.setValue(i);
                     }
 
@@ -101,7 +104,7 @@ public class MapManager extends JDialog {
 
     public static void cleanUp () {
         Map map = Map.getMap(LaunchFrame.getSelectedMapIndex());
-        File tempFolder = new File(OSUtils.getCacheStorageLocation(),  MAPS.replace("/",sep) + map.getMapName() + sep);
+        File tempFolder = new File(OSUtils.getCacheStorageLocation(), MAPS.replace("/", sep) + map.getMapName() + sep);
         for (String file : tempFolder.list()) {
             if (!file.equals(map.getLogoName()) && !file.equals(map.getImageName()) && !file.equalsIgnoreCase("version")) {
                 try {

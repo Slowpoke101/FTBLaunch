@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
 		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
     }
@@ -43,6 +43,7 @@ repositories {
 
 dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
+	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.mojang:authlib:1.5.17'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
@@ -81,7 +82,7 @@ processResources {
 }
 mainClassName = project.mainClass
 group = 'net.ftb'
-version = "1.4.4-${project.buildNum}"
+version = "1.4.5-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6

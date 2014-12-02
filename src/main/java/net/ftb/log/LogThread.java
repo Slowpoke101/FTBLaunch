@@ -25,7 +25,7 @@ public class LogThread extends Thread {
     private BlockingQueue<LogEntry> logQueue = new LinkedBlockingQueue<LogEntry>();
     private List<ILogListener> listeners;
 
-    public LogThread(List<ILogListener> listeners) {
+    public LogThread (List<ILogListener> listeners) {
         this.listeners = listeners;
         this.setDaemon(true);
     }
@@ -43,12 +43,14 @@ public class LogThread extends Thread {
                     }
                 }
             }
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 
     public void handleLog (LogEntry logEntry) {
         try {
             logQueue.put(logEntry);
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException ignored) {
+        }
     }
 }

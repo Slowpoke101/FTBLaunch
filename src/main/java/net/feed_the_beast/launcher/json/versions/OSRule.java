@@ -28,10 +28,12 @@ public class OSRule {
     }
 
     public boolean applies () {
-        if (os == null)
+        if (os == null) {
             return true;
-        if (os.name != null && os.name != OS.getCurrentPlatform())
+        }
+        if (os.name != null && os.name != OS.getCurrentPlatform()) {
             return false;
+        }
         if (os.version != null) {
             try {
                 if (!Pattern.compile(os.version).matcher(OS.VERSION).matches()) {

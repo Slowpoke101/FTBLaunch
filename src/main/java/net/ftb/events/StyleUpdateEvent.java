@@ -28,6 +28,7 @@ public class StyleUpdateEvent implements ILauncherEvent {
     public enum TYPE {
         TAB, STYLE
     }
+
     @Getter
     @Setter
     private TYPE eventType;
@@ -37,10 +38,10 @@ public class StyleUpdateEvent implements ILauncherEvent {
     private String[] eventTarget;
 
     /**
-    * constructor for events, must have a type so that listeners know what to refresh!
-    * @param type type of style update
+     * constructor for events, must have a type so that listeners know what to refresh!
+     * @param type type of style update
      */
-    public StyleUpdateEvent (TYPE type){
+    public StyleUpdateEvent (TYPE type) {
         this.eventType = type;
     }
 }

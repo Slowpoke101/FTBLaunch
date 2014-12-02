@@ -25,7 +25,7 @@ public class VisitorData {
     private long timestampCurrent;
     private int visits;
 
-    VisitorData(int visitorId, long timestampFirst, long timestampPrevious, long timestampCurrent, int visits) {
+    VisitorData (int visitorId, long timestampFirst, long timestampPrevious, long timestampCurrent, int visits) {
         this.visitorId = visitorId;
         this.timestampFirst = timestampFirst;
         this.timestampPrevious = timestampPrevious;

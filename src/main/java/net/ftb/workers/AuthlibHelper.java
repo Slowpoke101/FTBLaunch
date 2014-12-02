@@ -60,7 +60,7 @@ public class AuthlibHelper {
         GameProfile selectedProfile = null;
         YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
         if (user != null) {
-            Logger.logDebug(user.contains("@")?"Email address given":"Username given" + " Not 100% sure, mojangdata might contain different username");
+            Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
             authentication.setUsername(user);
@@ -84,7 +84,7 @@ public class AuthlibHelper {
                     authentication.logIn();
                 } catch (UserMigratedException e) {
                     Logger.logError(e.toString());
-                    ErrorUtils.tossError("Invalid credentials, please make sure to login with your Mojang account.");
+                    ErrorUtils.tossError("Invalid credentials. You have migrated your account. Use account email instead of username");
                     return null;
                 } catch (InvalidCredentialsException e) {
                     Logger.logError("Invalid credentials recieved for user: " + user, e);
@@ -92,7 +92,11 @@ public class AuthlibHelper {
                         uniqueID = authentication.getSelectedProfile().getId().toString();
                         //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
                     } else {
-                        ErrorUtils.tossError("Invalid username or password.");
+                        if (user.contains("@")) {
+                            ErrorUtils.tossError("Invalid username or password. You need use your official and paid minecraft.net account credentials.");
+                        } else {
+                            ErrorUtils.tossError("Invalid username or password. You need use your official and paid minecraft.net account credentials. \nAlso try email address instead of username");
+                        }
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
@@ -100,23 +104,26 @@ public class AuthlibHelper {
                     if (hasMojangData) {
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
-                        if (uniqueID != null && !uniqueID.isEmpty())
+                        if (uniqueID != null && !uniqueID.isEmpty()) {
                             Logger.logDebug("Setting UUID");
-                            UserManager.setUUID(user, uniqueID);
+                        }
+                        UserManager.setUUID(user, uniqueID);
                     }
                     if (uniqueID != null && !uniqueID.isEmpty()) {
                         UserManager.setUUID(user, uniqueID);
                         Logger.logDebug("Setting UUID and creating and returning new LoginResponse");
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
                     }
-                    ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");
+                    ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com");
                     Logger.logDebug("failed", e);
                     Logger.logDebug("AuthenticationUnavailableException caused by", e.getCause());
                     return null;
                 } catch (AuthenticationException e) {
                     Logger.logError("Unknown error from authlib:", e);
+                    Logger.logDebug("AuthenticationException caused by", e.getCause());
                 } catch (Exception e) {
-                    Logger.logError("Unknown authentication error occurred", e);
+                    Logger.logError("Unknown error from authlib: ", e);
+                    Logger.logDebug("Exception caused by", e.getCause());
                 }
             } else {
                 Logger.logDebug("authentication.canLogIn() returned false");
@@ -136,8 +143,9 @@ public class AuthlibHelper {
                     }
                 }
                 Logger.logDebug("this should never happen: isLoggedIn: " + authentication.isLoggedIn() + " canPlayOnline(): " + authentication.canPlayOnline());
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0 )) {
-                // user has more than one profile
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0)) {
+                // user has more than one profile in his mojang acoount
+                Logger.logInfo("You seem to have multiple profiles in  your account. Please contact FTB Launcher team if profiles are not working!");
                 Logger.logDebug("User has more than one profile: " + toString(authentication));
                 for (GameProfile profile : authentication.getAvailableProfiles()) {
                     if (selectedProfileName.equals(profile.getName())) {
@@ -152,9 +160,16 @@ public class AuthlibHelper {
                 Logger.logDebug("Authentication done, returning LoginResponse");
                 return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
                         selectedProfile.getId().toString(), authentication);
-            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0 )) {
-                Logger.logDebug("No profiles in mojang account: " + toString(authentication));
-                ErrorUtils.showClickableMessage("You need to own minecraft to play FTB Modpacks", "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
+            } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0)) {
+                // user has 0 paid profiles in mojang account
+                Logger.logDebug("No paid profiles in mojang account: " + toString(authentication));
+                Logger.logError("You need paid minecraft to play FTB Modpacks...");
+                ErrorUtils.showClickableMessage("You need paid minecraft to play FTB Modpacks:"
+                        + "<ul>"
+                        + "<li>Your login credentials are correct but mojang's authentication server does not find paid profile in your account"
+                        + "<li>If you believe this is error, please try vanilla launcher and minecraft.net before contacting FTB support"
+                        + "</ul>"
+                        , "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
                 return null;
             } else {
                 Logger.logDebug("this should never happen: " + toString(authentication));
@@ -168,8 +183,9 @@ public class AuthlibHelper {
             Logger.logError("Failed to authenticate with mojang data, attempting to use username & password");
             if (!hasPassword) {
                 new PasswordDialog(LaunchFrame.getInstance(), true).setVisible(true);
-                if (LaunchFrame.tempPass.isEmpty())
+                if (LaunchFrame.tempPass.isEmpty()) {
                     return null;
+                }
                 pass = LaunchFrame.tempPass;
             }
 
@@ -254,8 +270,9 @@ public class AuthlibHelper {
 
     }
 
-    public static String toString(YggdrasilUserAuthentication y) {
-        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn() + ", userType=" + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
+    public static String toString (YggdrasilUserAuthentication y) {
+        return "YggdrasilAuthenticationService{profiles=" + Arrays.toString(y.getAvailableProfiles()) + ", selectedProfile=" + y.getSelectedProfile() + ", isLoggedIn=" + y.isLoggedIn() + ", userType="
+                + y.getUserType() + ", canPlayOnline=" + y.canPlayOnline() + "}";
     }
 
 }

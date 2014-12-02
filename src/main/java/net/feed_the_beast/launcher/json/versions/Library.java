@@ -19,6 +19,7 @@ package net.feed_the_beast.launcher.json.versions;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.util.DownloadUtils;
@@ -41,14 +42,16 @@ public class Library {
                 _applies = Action.ALLOW;
             } else {
                 for (OSRule rule : rules) {
-                    if (rule.applies())
+                    if (rule.applies()) {
                         _applies = rule.action;
+                    }
                 }
             }
         }
         return _applies == Action.ALLOW;
     }
 
+    @Getter
     private Artifact _artifact = null;
 
     public String getPath () {
@@ -59,8 +62,9 @@ public class Library {
     }
 
     public String getPathNatives () {
-        if (natives == null)
+        if (natives == null) {
             return null;
+        }
         if (_artifact == null) {
             _artifact = new Artifact(name);
         }
@@ -76,14 +80,19 @@ public class Library {
         return name;
     }
 
-    private class Artifact {
+    public class Artifact {
+        @Getter
         private String domain;
+        @Getter
         private String name;
+        @Getter
         private String version;
+        @Getter
         private String classifier;
+        @Getter
         private String ext = "jar";
 
-        public Artifact(String rep) {
+        public Artifact (String rep) {
             String[] pts = rep.split(":");
             int idx = pts[pts.length - 1].indexOf('@');
             if (idx != -1) {
@@ -93,8 +102,9 @@ public class Library {
             domain = pts[0];
             name = pts[1];
             version = pts[2];
-            if (pts.length > 3)
+            if (pts.length > 3) {
                 classifier = pts[3];
+            }
         }
 
         public String getPath () {
@@ -103,8 +113,9 @@ public class Library {
 
         public String getPath (String classifier) {
             String ret = String.format("%s/%s/%s/%s-%s", domain.replace('.', '/'), name, version, name, version);
-            if (classifier != null)
+            if (classifier != null) {
                 ret += "-" + classifier;
+            }
             return ret + "." + ext;
         }
     }

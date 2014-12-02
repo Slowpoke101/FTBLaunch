@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
 import net.ftb.gui.LaunchFrame;
@@ -42,6 +41,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.workers.ModpackLoader;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
 public class ModPack {
@@ -60,11 +60,12 @@ public class ModPack {
     private int minLaunchSpec;
     @Getter
     private String disclaimer;
+    private static ModPack selectedPack;
     /**
      * @return map of <String packversion, String MCVersion>
      */
     @Getter
-    private HashMap<String,String> customMCVersions = Maps.newHashMap();
+    private HashMap<String, String> customMCVersions = Maps.newHashMap();
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -98,13 +99,12 @@ public class ModPack {
      */
     public static void addPacks (ArrayList<ModPack> packs_) {
         synchronized (packs) {
-            for(ModPack p :packs_){
+            for (ModPack p : packs_) {
                 packs.add(p);
             }
             Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
-
 
     public static void removePacks (String xml) {
         ArrayList<ModPack> remove = Lists.newArrayList();
@@ -152,20 +152,33 @@ public class ModPack {
         return null;
     }
 
+    public static void setSelectedPack (String dir) {
+        selectedPack = getPack(dir);
+    }
+
     /**
      * Used to grab the currently selected ModPack based off the selected index from ModPacksPane
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
-        if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
-            return getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
-        }
-        return getPack(FTBPacksPane.getInstance().getSelectedPackIndex());
+    	if (selectedPack == null) {    	
+    		if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
+    			return getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
+    		}
+    		return getPack(FTBPacksPane.getInstance().getSelectedPackIndex());
+    	} else {
+    		return selectedPack;
+    	}    	
     }
 
     public static ModPack getSelectedPack (boolean isFTBPane) {
-        return isFTBPane?getPack(FTBPacksPane.getInstance().getSelectedPackIndex()):getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());    	
+    	if (selectedPack == null) {
+    		return isFTBPane ? getPack(FTBPacksPane.getInstance().getSelectedPackIndex()) : getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
+    	} else {
+    		return selectedPack;
+    	}
     }
+
     /**
      * Constructor for ModPack class
      * @param name - the name of the ModPack
@@ -191,8 +204,9 @@ public class ModPack {
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
-                   String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec, String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
+    public ModPack (String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
+            String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec,
+            String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -227,22 +241,23 @@ public class ModPack {
         } else {
             this.mods = mods.split("; ");
         }
-        if(oldVersions == null || oldVersions.isEmpty()){
+        if (oldVersions == null || oldVersions.isEmpty()) {
             this.oldVersions = null;
         } else {
             this.oldVersions = oldVersions.split(";");
         }
-        if(customMCVersions != null && !customMCVersions.isEmpty()) {
-            String[] tmp =  customMCVersions.split(";");
-            if(tmp == null)
-                tmp = new String[]{customMCVersions};
-            for(String s : tmp) {
+        if (customMCVersions != null && !customMCVersions.isEmpty()) {
+            String[] tmp = customMCVersions.split(";");
+            if (tmp == null) {
+                tmp = new String[] { customMCVersions };
+            }
+            for (String s : tmp) {
                 String[] s2 = s.split("\\^");
                 this.customMCVersions.put(s2[0], s2[1]);
             }
         }
 
-    String installPath = OSUtils.getCacheStorageLocation();
+        String installPath = OSUtils.getCacheStorageLocation();
         File tempDir = new File(installPath, "ModPacks" + sep + dir);
         File verFile = new File(tempDir, "version");
         this.thirdPartyTab = thirdpartyTab;
@@ -355,6 +370,24 @@ public class ModPack {
     }
 
     /**
+     * Gets a formatted name with includes the Mod Pack label and minecraft version
+     * <p>
+     * This label is used in places where a list or group of mod packs may contain multiple versions of the 
+     * same pack, such as the list of packs supported by a texture pack
+     * </p>
+     * @return The name of the mod pack and the minecraft version supported, if provided
+     */
+    public String getNameWithVersion () {
+        StringBuilder name = new StringBuilder(getName());
+
+        if (getMcVersion() != null) {
+            name.append(" (").append(getMcVersion()).append(")");
+        }
+
+        return name.toString();
+    }
+
+    /**
      * Used to get Author of modpack
      * @return - the modpack's author
      */
@@ -416,7 +449,7 @@ public class ModPack {
      * @return - the minecraft version
      */
     public String getMcVersion (String packVersion) {
-        if(customMCVersions != null && customMCVersions.containsKey(packVersion)) {
+        if (customMCVersions != null && customMCVersions.containsKey(packVersion)) {
             return customMCVersions.get(packVersion);
         }
         return mcVersion;

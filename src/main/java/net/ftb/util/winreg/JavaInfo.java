@@ -13,6 +13,7 @@ import net.ftb.util.OSUtils.OS;
  * JavaFinder - Windows-specific classes to search for all installed versions of java on this system
  * Author: petrucio@stackoverflow (828681)
  *****************************************************************************/
+
 /**
  * Helper struct to hold information about one installed java version
  ****************************************************************************/
@@ -31,13 +32,14 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * Calls 'javaPath -version' and parses the results
      * @param javaPath: path to a java.exe executable
      ****************************************************************************/
-    public JavaInfo(String javaPath) {
+    public JavaInfo (String javaPath) throws Exception {
         String versionInfo = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
         String[] tokens = versionInfo.split("\"");
-        if (tokens.length < 2)
-            this.version = "0.0.0_00";
-        else
+        if (tokens.length < 2) {
+            throw new Exception("Executable output unsupported");
+        } else {
             this.version = tokens[1];
+        }
         this.origVersion = version;
         this.version = Pattern.compile(regex).matcher(this.version).replaceAll("0");
         this.is64bits = versionInfo.toUpperCase().contains("64-");
@@ -48,16 +50,10 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
         this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
         this.build = s.length > 3 ? Integer.parseInt(s[3]) : 0;
-
-        if(OSUtils.getCurrentOS() == OS.MACOSX) {
-            if (this.major == 1 && (this.minor == 7 || this.minor == 6))
-                this.supportedVersion = true;
-        } else {
-            this.supportedVersion = true;
-        }
+        this.supportedVersion = true;
     }
 
-    public JavaInfo(int major, int minor) {
+    public JavaInfo (int major, int minor) {
         this.path = null;
         this.major = major;
         this.minor = minor;
@@ -65,7 +61,7 @@ public class JavaInfo implements Comparable<JavaInfo> {
         this.build = 0;
     }
 
-    public boolean isJava8() {
+    public boolean isJava8 () {
         return this.major == 1 && this.minor == 8;
     }
 
@@ -73,7 +69,9 @@ public class JavaInfo implements Comparable<JavaInfo> {
      * @return Human-readable contents of this JavaInfo instance
      ****************************************************************************/
     public String toString () {
-        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion ? "" : " (UNSUPPORTED!)");
+        return "Java Version: " + origVersion + " sorted as: " + this.verToString() + " " + (this.is64bits ? "64" : "32") + " Bit Java at : " + this.path + (this.supportedVersion
+                                                                                                                                                                     ? ""
+                                                                                                                                                                     : " (UNSUPPORTED!)");
     }
 
     public String verToString () {
@@ -82,22 +80,30 @@ public class JavaInfo implements Comparable<JavaInfo> {
 
     @Override
     public int compareTo (@SuppressWarnings("NullableProblems") JavaInfo o) {
-        if (o.major > major)
+        if (o.major > major) {
             return -1;
-        if (o.major < major)
+        }
+        if (o.major < major) {
             return 1;
-        if (o.minor > minor)
+        }
+        if (o.minor > minor) {
             return -1;
-        if (o.minor < minor)
+        }
+        if (o.minor < minor) {
             return 1;
-        if (o.revision > revision)
+        }
+        if (o.revision > revision) {
             return -1;
-        if (o.revision < revision)
+        }
+        if (o.revision < revision) {
             return 1;
-        if (o.build > build)
+        }
+        if (o.build > build) {
             return -1;
-        if (o.build < build)
+        }
+        if (o.build < build) {
             return 1;
+        }
         return 0;
     }
 

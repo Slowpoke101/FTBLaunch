@@ -72,22 +72,23 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     }
 
     @Override
-    public void onVisible() {
+    public void onVisible () {
         FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-
-    boolean filterForTab(ModPack pack) {
-       return (!pack.isThirdPartyTab());
+    boolean filterForTab (ModPack pack) {
+        return (!pack.isThirdPartyTab());
     }
 
-    String getLastPack() {
+    String getLastPack () {
         return Settings.getSettings().getLastFTBPack();
     }
 
-    String getPaneShortName() {return "FTB";}
+    String getPaneShortName () {
+        return "FTB";
+    }
 
-    boolean isFTB() {
+    boolean isFTB () {
         return true;
     }
 

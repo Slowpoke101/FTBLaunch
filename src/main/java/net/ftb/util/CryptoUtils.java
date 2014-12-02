@@ -81,8 +81,9 @@ public class CryptoUtils {
                 try {
                     aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
                     s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
-                    if (s.startsWith("FDT:") && s.length() > 4)
+                    if (s.startsWith("FDT:") && s.length() > 4) {
                         return s.split(":", 2)[1];// it was decrypted with HW UUID
+                    }
                 } catch (Exception e) {
                     Logger.logDebug("foo", e);
                 }
@@ -91,10 +92,11 @@ public class CryptoUtils {
             // did not open, try again with old mac based key
             aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyMac), "AES"));
             s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
-            if (s.startsWith("FDT:") && s.length() > 4)
+            if (s.startsWith("FDT:") && s.length() > 4) {
                 return s.split(":", 2)[1];//we don't want the decryption test
-            else
+            } else {
                 return decryptLegacy(str, keyMac);
+            }
         } catch (Exception e) {
             Logger.logError("Error Decrypting information, attempting legacy decryption", e);
             return decryptLegacy(str, keyMac);
@@ -111,7 +113,7 @@ public class CryptoUtils {
         byte[] keyHardware = OSUtils.getHardwareID();
         try {
             Cipher aes = Cipher.getInstance("AES");
-            if(keyHardware != null && keyHardware.length > 0) {
+            if (keyHardware != null && keyHardware.length > 0) {
                 aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
                 return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
             }

@@ -84,7 +84,7 @@ public abstract class AbstractModPackPane extends JPanel {
     protected ObjectInfoSplitPane splitPane;
     
 	public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL");
-    public  boolean loaded = false;
+    public boolean loaded = false;
 
     public AbstractModPackPane() {
     	super();
@@ -234,7 +234,7 @@ public abstract class AbstractModPackPane extends JPanel {
     JScrollPane infoScroll;
     final ActionListener al = new ActionListener() {
         @Override
-        public void actionPerformed(ActionEvent arg0) {
+        public void actionPerformed (ActionEvent arg0) {
             if (version.getItemCount() > 0) {
                 Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
                 Settings.getSettings().save();
@@ -245,7 +245,7 @@ public abstract class AbstractModPackPane extends JPanel {
     /*
      * GUI Code to add a modpack to the selection
      */
-    public void addPack(final ModPack pack) {
+    public void addPack (final ModPack pack) {
         if (!modPacksAdded) {
             modPacksAdded = true;
             packs.removeAll();
@@ -269,14 +269,14 @@ public abstract class AbstractModPackPane extends JPanel {
 
         MouseAdapter lin = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked (MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     LaunchFrame.getInstance().doLaunch();
                 }
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed (MouseEvent e) {
                 selectedPack = packIndex;
                 updatePacks();
             }
@@ -301,10 +301,10 @@ public abstract class AbstractModPackPane extends JPanel {
 
     //TODO handle changes & removals here as well!!!
     @Subscribe
-    public void packChange(PackChangeEvent evt) {
+    public void packChange (PackChangeEvent evt) {
         final PackChangeEvent event = evt;
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run () {
                 if (event.getType() == PackChangeEvent.TYPE.ADD) {
                     boolean doneWork = false;
                     if (event.getPacks() != null) {
@@ -328,14 +328,14 @@ public abstract class AbstractModPackPane extends JPanel {
                             loaded = true;
                         }
                     }
-                } else if(event.getType() == PackChangeEvent.TYPE.REMOVE) {
+                } else if (event.getType() == PackChangeEvent.TYPE.REMOVE) {
                     filterPacks();
                 }
             }
         });
     }
 
-    public void updateDatas() {
+    public void updateDatas () {
         currentPacks.clear();
         packMapping.clear();
         int counter = 0;
@@ -349,7 +349,7 @@ public abstract class AbstractModPackPane extends JPanel {
         }
     }
 
-    public void filterPacks() {
+    public void filterPacks () {
         packPanels.clear();
         packs.removeAll();
         currentPacks.clear();
@@ -375,7 +375,7 @@ public abstract class AbstractModPackPane extends JPanel {
 
     // WTF: this does not update packs!!
     // only updating info for selected pack. pulldown menus and info area!
-    void updatePacks() {
+    void updatePacks () {
         for (int i = 0; i < packPanels.size(); i++) {
             if (selectedPack == i && getIndex() >= 0) {
                 ModPack pack = ModPack.getPackArray().get(getIndex());
@@ -419,7 +419,7 @@ public abstract class AbstractModPackPane extends JPanel {
         }
     }
 
-    public void updateFilterText() {
+    public void updateFilterText () {
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
         String typeLblText = "<html><body>";
@@ -432,21 +432,24 @@ public abstract class AbstractModPackPane extends JPanel {
         typeLbl.setText(typeLblText);
     }
 
-    public void updateFilter() {
+    public void updateFilter () {
         updateFilterText();
         filterPacks();
         LaunchFrame.getInstance().updateFooter();
     }
 
-    int getIndex() {
+    int getIndex () {
         if (packMapping.get(selectedPack) == null) {
             return -1;
-        } else
+        } else {
             return packMapping.get(selectedPack);
+        }
     }
 
-    public void updateLocale() {
-        origin = I18N.getLocaleString("MAIN_ALL"); mcVersion = I18N.getLocaleString("MAIN_ALL"); avaliability = I18N.getLocaleString("MAIN_ALL");
+    public void updateLocale () {
+        origin = I18N.getLocaleString("MAIN_ALL");
+        mcVersion = I18N.getLocaleString("MAIN_ALL");
+        avaliability = I18N.getLocaleString("MAIN_ALL");
         filter.setText(I18N.getLocaleString("FILTER_SETTINGS"));
         updateFilterText();
         editModPack.setText(I18N.getLocaleString("MODS_EDIT_PACK"));
@@ -459,16 +462,16 @@ public abstract class AbstractModPackPane extends JPanel {
         }
     }
 
-    boolean avaliabilityCheck(ModPack pack) {
+    boolean avaliabilityCheck (ModPack pack) {
         return (avaliability.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PUBLIC")) && !pack.isPrivatePack())
                 || (avaliability.equalsIgnoreCase(I18N.getLocaleString("FILTER_PRIVATE")) && pack.isPrivatePack());
     }
 
-    boolean mcVersionCheck(ModPack pack) {
+    boolean mcVersionCheck (ModPack pack) {
         return (mcVersion.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (mcVersion.equalsIgnoreCase(pack.getMcVersion()));
     }
 
-    boolean textSearch(ModPack pack) {
+    boolean textSearch (ModPack pack) {
         String searchString = SearchDialog.lastPackSearch.toLowerCase();
         return ((searchString.isEmpty()) || pack.getName().toLowerCase().contains(searchString) || pack.getAuthor().toLowerCase().contains(searchString));
     }

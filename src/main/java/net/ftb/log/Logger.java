@@ -19,6 +19,7 @@ package net.ftb.log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
 public class Logger {
     private static final List<ILogListener> listeners;
     private static final Vector<LogEntry> logEntries;
@@ -61,7 +62,7 @@ public class Logger {
     }
 
     public static void logDebug (String message, Throwable t) {
-        log(message,  LogLevel.DEBUG, t);
+        log(message, LogLevel.DEBUG, t);
     }
 
     public static void logInfo (String message, Throwable t) {

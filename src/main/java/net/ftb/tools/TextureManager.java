@@ -49,7 +49,9 @@ import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.TrackerUtils;
+
 import static net.ftb.download.Locations.TEXTUREPACKS;
+
 @SuppressWarnings("serial")
 public class TextureManager extends JDialog {
     private static TexturePack updateTexture;
@@ -83,13 +85,14 @@ public class TextureManager extends JDialog {
             String packVer = (Settings.getSettings().getPackVer(compDir).equalsIgnoreCase("Recommended Version") ? compPack.getVersion() : Settings.getSettings().getPackVer(compDir))
                     .replace(".", "_");
             String packStr;
-            if (mcversion > 160)
+            if (mcversion > 160) {
                 packStr = "";
-            else
+            } else {
                 packStr = "/" + packVer;
+            }
             if (!compPack.hasCustomTP()
                     && DownloadUtils.fileExists(TEXTUREPACKS + texturePack.getName().replace(" ", "_") + "/" + "master_" + compPack.getMcVersion().replace(".", "_") + packStr + "/"
-                            + texturePack.getUrl())) {
+                    + texturePack.getUrl())) {
                 populateInstalledTextures(compPack);
                 File oldFile = new File(installPath, texturePack.getSelectedCompatible() + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePack.getUrl());
                 if (oldFile.exists()) {
@@ -166,10 +169,11 @@ public class TextureManager extends JDialog {
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep).mkdirs();
             new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName).createNewFile();
             String packStr;
-            if (mcversion > 160)
+            if (mcversion > 160) {
                 packStr = "";
-            else
+            } else {
                 packStr = "/" + packVer;
+            }
             if (downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + texturePackName,
                     DownloadUtils.getCreeperhostLink(TEXTUREPACKS + dir.replace(" ", "_") + "/" + remoteName + packStr + "/" + texturePackName))) {
                 File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + getTPDirectory(mcversion) + sep + "textureVersions");
@@ -196,7 +200,7 @@ public class TextureManager extends JDialog {
         }
     }
 
-    public TextureManager(JFrame owner, Boolean model) {
+    public TextureManager (JFrame owner, Boolean model) {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -252,15 +256,16 @@ public class TextureManager extends JDialog {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("Recommended Version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
                             if (!installedTextures.get(tp.getName().toLowerCase()).equalsIgnoreCase(version)) {
                                 String packStr;
-                                if (mcversion > 160)
+                                if (mcversion > 160) {
                                     packStr = "";
-                                else
+                                } else {
                                     packStr = "/" + version;
-                                if (DownloadUtils.fileExists(TEXTUREPACKS+ tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
+                                }
+                                if (DownloadUtils.fileExists(TEXTUREPACKS + tp.getName().replace(" ", "_") + "/" + pack.getDir() + "/" + packStr + "/" + tp.getUrl())) {
                                     updating = true;
                                     TextureManager man = new TextureManager(new JFrame(), true);
-                                    man.updateTexture = tp;
-                                    man.updateModPack = pack;
+                                    TextureManager.updateTexture = tp;
+                                    TextureManager.updateModPack = pack;
                                     man.setVisible(true);
                                 }
                             }

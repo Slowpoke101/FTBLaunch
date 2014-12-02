@@ -28,6 +28,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,15 +38,17 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
 
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
+import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import net.ftb.util.SwingUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("unchecked")
 public class AdvancedOptionsDialog extends JDialog {
@@ -52,7 +56,9 @@ public class AdvancedOptionsDialog extends JDialog {
     private JLabel downloadLocationLbl;
     private static JComboBox downloadLocation;
     private JLabel javaPathLbl;
-    private JTextField javaPath;
+    private JTextField javaPathText;
+    private static JComboBox javaPath;
+    private String[] javapaths;
     private JLabel additionalJavaOptionsLbl;
     private JTextField additionalJavaOptions;
     private JLabel mcWindowSizeLbl;
@@ -71,7 +77,7 @@ public class AdvancedOptionsDialog extends JDialog {
     private final Settings settings = Settings.getSettings();
 
     //TODO add a UI adjustment tab here?
-    public AdvancedOptionsDialog() {
+    public AdvancedOptionsDialog () {
         super(LaunchFrame.getInstance(), true);
         setupGui();
 
@@ -98,7 +104,12 @@ public class AdvancedOptionsDialog extends JDialog {
         };
 
         downloadLocation.addFocusListener(settingsChangeListener);
-        javaPath.addFocusListener(settingsChangeListener);
+        if (javaPathText != null) {
+            javaPathText.addFocusListener(settingsChangeListener);
+        }
+        if (javaPath != null) {
+            javaPath.addFocusListener(settingsChangeListener);
+        }
         additionalJavaOptions.addFocusListener(settingsChangeListener);
         mcWindowSizeWidth.addFocusListener(settingsChangeListener);
         mcWindowSizeHeight.addFocusListener(settingsChangeListener);
@@ -146,14 +157,20 @@ public class AdvancedOptionsDialog extends JDialog {
         int lastExtendedState = settings.getLastExtendedState();
         settings.setLastExtendedState(autoMaxCheck.isSelected() ? (lastExtendedState | JFrame.MAXIMIZED_BOTH) : (lastExtendedState & ~JFrame.MAXIMIZED_BOTH));
         settings.setLastPosition(new Point(Integer.parseInt(mcWindowPosX.getText()), Integer.parseInt(mcWindowPosY.getText())));
-        settings.setJavaPath(javaPath.getText());
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+            settings.setJavaPath(javaPathText.getText());
+        } else {
+            if (javaPath.getSelectedIndex() >= 0) {
+                settings.setJavaPath(javapaths[javaPath.getSelectedIndex()]);
+            }
+        }
         settings.setAdditionalJavaOptions(additionalJavaOptions.getText());
         settings.setSnooper(snooper.isSelected());
         settings.setDebugLauncher(debugLauncherVerbose.isSelected());
         settings.setBetaChannel(betaChannel.isSelected());
         settings.save();
         // invalidate current java information
-        settings.setCurrentJava(null);
+        Settings.setCurrentJava(null);
         //update options pane
         LaunchFrame.getInstance().optionsPane.updateJavaLabels();
     }
@@ -164,42 +181,76 @@ public class AdvancedOptionsDialog extends JDialog {
         setResizable(true); // false
 
         Container panel = getContentPane();
-        SpringLayout layout = new SpringLayout();
-        getContentPane().setLayout(layout);
+        getContentPane().setLayout(new MigLayout());
 
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));
         downloadLocation = new JComboBox(getDownloadServerNames());
         javaPathLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_JAVA_PATH"));
-        javaPath = new JTextField();
-        String javapath = settings.getJavaPath();
-        if (javapath != null) {
-            javaPath.setText(javapath);
-            if (!new File(javapath).isFile())
-                javaPath.setBackground(Color.RED);
+        if (OSUtils.getCurrentOS() == OSUtils.OS.UNIX) {
+            javaPathText = new JTextField();
+            String javapath = settings.getJavaPath();
+            if (javapath != null) {
+                javaPathText.setText(javapath);
+                if (!new File(javapath).isFile()) {
+                    javaPathText.setBackground(Color.RED);
+                }
+            } else {
+                // this should not happen ever
+                javaPathText.setBackground(Color.RED);
+            }
+
+            javaPathText.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped (KeyEvent e) {
+                }
+
+                @Override
+                public void keyPressed (KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased (KeyEvent e) {
+                    if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile()) {
+                        javaPath.setBackground(Color.RED);
+                    } else {
+                        javaPath.setBackground(new Color(40, 40, 40));
+                    }
+                }
+            });
         } else {
-            // this should not happen ever
-            javaPath.setBackground(Color.RED);
+            List<JavaInfo> javas = JavaFinder.findJavas();
+            Collections.sort(javas);
+            String[] javaslist = new String[javas.size() + 1];
+            javapaths = new String[javas.size() + 1];
+            int i = -1;
+            for (JavaInfo java : javas) {
+                i++;
+                javaslist[i] = java.version;
+                if (java.is64bits) {
+                    javaslist[i] = javaslist[i] + " 64bit";
+                }
+                javapaths[i] = java.path;
+            }
+            javaslist[i + 1] = "Default";
+            javapaths[i + 1] = "";
+            javaPath = new JComboBox(javaslist);
+
+            //TODO: set current selected java
+            String selectedJavaPath = Settings.getSettings().getJavaPath();
+            if (selectedJavaPath.equals(Settings.getSettings().getDefaultJavaPath())) {
+                javaPath.setSelectedIndex(i + 1);
+            } else {
+                i = 0;
+                for (JavaInfo java : javas) {
+                    if (java.path.equals(selectedJavaPath)) {
+                        javaPath.setSelectedIndex(i);
+                    }
+                    i++;
+                }
+            }
         }
-
-        javaPath.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped (KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed (KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased (KeyEvent e) {
-                if (!javaPath.getText().equals("") && !new File(javaPath.getText()).isFile())
-                    javaPath.setBackground(Color.RED);
-                else
-                    javaPath.setBackground(new Color(40, 40, 40));
-            }
-        });
         additionalJavaOptionsLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_ADDJAVAOPTIONS"));
-        additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions());
+        additionalJavaOptions = new JTextField(settings.getAdditionalJavaOptions(), 30);
         mcWindowSizeLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_MCWINDOW_SIZE"));
         mcWindowSizeWidth = new JTextField(4);
         mcWindowSizeSepLbl = new JLabel("x");
@@ -217,157 +268,29 @@ public class AdvancedOptionsDialog extends JDialog {
         downloadLocationLbl.setLabelFor(downloadLocation);
 
         add(downloadLocationLbl);
-        add(downloadLocation);
+        add(downloadLocation, GuiConstants.WRAP);
         add(javaPathLbl);
-        add(javaPath);
+        if (javaPathText != null) {
+            add(javaPathText, GuiConstants.WRAP);
+        }
+        if (javaPath != null) {
+            add(javaPath, GuiConstants.WRAP);
+        }
         add(additionalJavaOptionsLbl);
-        add(additionalJavaOptions);
-        add(mcWindowSizeLbl);
+        add(additionalJavaOptions, GuiConstants.GROW + GuiConstants.SEP + GuiConstants.WRAP);
+        add(mcWindowSizeLbl, GuiConstants.FILL_FOUR);
         add(mcWindowSizeWidth);
         add(mcWindowSizeSepLbl);
-        add(mcWindowSizeHeight);
-        add(mcWindowPosLbl);
+        add(mcWindowSizeHeight, GuiConstants.WRAP);
+        add(mcWindowPosLbl, GuiConstants.FILL_FOUR);
         add(mcWindowPosX);
         add(mcWindowPosSepLbl);
-        add(mcWindowPosY);
-        add(autoMaxCheck);
-        add(snooper);
-        add(debugLauncherVerbose);
-        add(betaChannel);
-        add(exit);
-
-        Spring hSpring;
-        Spring columnWidth;
-
-        hSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.WEST, downloadLocationLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, javaPathLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, additionalJavaOptionsLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowSizeLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowPosLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, autoMaxCheck, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, snooper, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, debugLauncherVerbose, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, betaChannel, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = SwingUtils.springMax(Spring.width(downloadLocationLbl), Spring.width(javaPathLbl), Spring.width(additionalJavaOptionsLbl), Spring.width(mcWindowSizeLbl),
-                Spring.width(mcWindowPosLbl));
-
-        hSpring = SwingUtils.springSum(hSpring, columnWidth, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.WEST, downloadLocation, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, javaPath, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowPosX, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.width(mcWindowSizeWidth);
-        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosX));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, mcWindowSizeWidth, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, mcWindowPosX, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.WEST, mcWindowSizeSepLbl, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowPosSepLbl, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.width(mcWindowSizeSepLbl);
-        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosSepLbl));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-        hSpring = Spring.sum(hSpring, Spring.constant(5));
-
-        layout.putConstraint(SpringLayout.WEST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.WEST, mcWindowPosY, hSpring, SpringLayout.WEST, panel);
-
-        columnWidth = Spring.width(mcWindowSizeHeight);
-        columnWidth = Spring.max(columnWidth, Spring.width(mcWindowPosY));
-
-        hSpring = Spring.sum(hSpring, columnWidth);
-
-        layout.putConstraint(SpringLayout.EAST, downloadLocation, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, javaPath, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, additionalJavaOptions, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, mcWindowSizeHeight, hSpring, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.EAST, mcWindowPosY, hSpring, SpringLayout.WEST, panel);
-
-        hSpring = Spring.sum(hSpring, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, exit, 0, SpringLayout.HORIZONTAL_CENTER, panel);
-
-        layout.putConstraint(SpringLayout.EAST, panel, hSpring, SpringLayout.WEST, panel);
-
-        Spring vSpring;
-        Spring rowHeight;
-
-        vSpring = Spring.constant(10);
-
-        layout.putConstraint(SpringLayout.BASELINE, downloadLocationLbl, 0, SpringLayout.BASELINE, downloadLocation);
-        layout.putConstraint(SpringLayout.NORTH, downloadLocation, vSpring, SpringLayout.NORTH, panel);
-        rowHeight = Spring.height(downloadLocationLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(downloadLocation));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.BASELINE, javaPathLbl, 0, SpringLayout.BASELINE, javaPath);
-        layout.putConstraint(SpringLayout.NORTH, javaPath, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(javaPathLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(javaPath));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.BASELINE, additionalJavaOptionsLbl, 0, SpringLayout.BASELINE, additionalJavaOptions);
-        layout.putConstraint(SpringLayout.NORTH, additionalJavaOptions, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = Spring.height(additionalJavaOptionsLbl);
-        rowHeight = Spring.max(rowHeight, Spring.height(additionalJavaOptions));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
-        layout.putConstraint(SpringLayout.NORTH, mcWindowSizeWidth, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.BASELINE, mcWindowSizeSepLbl, 0, SpringLayout.BASELINE, mcWindowSizeWidth);
-        layout.putConstraint(SpringLayout.NORTH, mcWindowSizeHeight, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = SwingUtils.springMax(Spring.height(mcWindowSizeLbl), Spring.height(mcWindowSizeWidth), Spring.height(mcWindowSizeSepLbl), Spring.height(mcWindowSizeHeight));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.BASELINE, mcWindowPosLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
-        layout.putConstraint(SpringLayout.NORTH, mcWindowPosX, vSpring, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.BASELINE, mcWindowPosSepLbl, 0, SpringLayout.BASELINE, mcWindowPosX);
-        layout.putConstraint(SpringLayout.NORTH, mcWindowPosY, vSpring, SpringLayout.NORTH, panel);
-
-        rowHeight = SwingUtils.springMax(Spring.height(mcWindowPosLbl), Spring.height(mcWindowPosX), Spring.height(mcWindowPosSepLbl), Spring.height(mcWindowPosY));
-
-        vSpring = SwingUtils.springSum(vSpring, rowHeight, Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, autoMaxCheck, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(autoMaxCheck), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, snooper, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(snooper), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, debugLauncherVerbose, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(debugLauncherVerbose), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, betaChannel, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(betaChannel), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.NORTH, exit, vSpring, SpringLayout.NORTH, panel);
-
-        vSpring = SwingUtils.springSum(vSpring, Spring.height(exit), Spring.constant(10));
-
-        layout.putConstraint(SpringLayout.SOUTH, panel, vSpring, SpringLayout.NORTH, panel);
+        add(mcWindowPosY, GuiConstants.WRAP);
+        add(autoMaxCheck, GuiConstants.WRAP);
+        add(snooper, GuiConstants.WRAP);
+        add(debugLauncherVerbose, GuiConstants.WRAP);
+        add(betaChannel, GuiConstants.WRAP);
+        add(exit, GuiConstants.CENTER_SINGLE_LINE);
 
         pack();
         setLocationRelativeTo(getOwner());

@@ -26,14 +26,14 @@ public class LoginResponse {
     private UserAuthentication auth;
 
     /**
-    * Constructor for LoginResponse class
-    * @param version - the version from authlib
-    * @param dlTicket - the ticket from authlib
-    * @param username - the username from authlib
-    * @param session - the session ID from authlib
-    * @param uniqueID - the user's uuid from authlib
-    */
-    public LoginResponse(String version, String dlTicket, String username, String session, String uniqueID, UserAuthentication userAuth) {
+     * Constructor for LoginResponse class
+     * @param version - the version from authlib
+     * @param dlTicket - the ticket from authlib
+     * @param username - the username from authlib
+     * @param session - the session ID from authlib
+     * @param uniqueID - the user's uuid from authlib
+     */
+    public LoginResponse (String version, String dlTicket, String username, String session, String uniqueID, UserAuthentication userAuth) {
         this.latestVersion = version;
         this.downloadTicket = dlTicket;
         this.username = username;
@@ -71,9 +71,9 @@ public class LoginResponse {
     private String sessionID;
 
     /**
-    * Used to grab the user's uuid from response string
-    * @return - the uuid of the user
-    */
+     * Used to grab the user's uuid from response string
+     * @return - the uuid of the user
+     */
     @Getter
     private String uuid;
 

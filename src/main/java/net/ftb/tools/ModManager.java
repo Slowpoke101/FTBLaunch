@@ -16,6 +16,11 @@
  */
 package net.ftb.tools;
 
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
+import static com.google.common.net.HttpHeaders.CONTENT_MD5;
+import static net.ftb.download.Locations.MODPACKS;
+import static net.ftb.download.Locations.PRIVATEPACKS;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -45,11 +50,12 @@ import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.ModpackUpdateDialog;
 import net.ftb.log.Logger;
-import net.ftb.util.*;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.FTBFileUtils;
-
-import static net.ftb.download.Locations.MODPACKS;
-import static net.ftb.download.Locations.PRIVATEPACKS;
+import net.ftb.util.ModPackUtil;
+import net.ftb.util.OSUtils;
+import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModManager extends JDialog {
@@ -74,6 +80,8 @@ public class ModManager extends JDialog {
                     File modPackZip = new File(installPath, "ModPacks" + sep + pack.getDir() + sep + pack.getUrl());
                     if (modPackZip.exists()) {
                         FTBFileUtils.delete(modPackZip);
+                        //Also clear out the "default mods" cache entry, if any, to force it to update when next requested
+                        ModPackUtil.clearDefaultModFiles(pack);
                     }
                     File animationGif = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + sep + pack.getDir() + sep + pack.getAnimation());
                     if (animationGif.exists()) {
@@ -122,7 +130,7 @@ public class ModManager extends JDialog {
                     });
 
                     connection = (HttpURLConnection) url_.openConnection();
-                    connection.setRequestProperty("Cache-Control", "no-transform");
+                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setAllowUserInteraction(true);
                     connection.setConnectTimeout(14000);
                     connection.setReadTimeout(20000);
@@ -130,7 +138,7 @@ public class ModManager extends JDialog {
                         connection.setRequestProperty("Range", "bytes=" + amount + "-");
                     }
                     connection.connect();
-                    md5 = connection.getHeaderField("Content-MD5");
+                    md5 = connection.getHeaderField(CONTENT_MD5);
                     in = new BufferedInputStream(connection.getInputStream());
                     if (modPackSize == 0) {
                         modPackSize = connection.getContentLength();
@@ -145,8 +153,9 @@ public class ModManager extends JDialog {
                     while ((count = in.read(data, 0, 1024)) != -1) {
                         fout.write(data, 0, count);
 
-                        if (count > 0)
+                        if (count > 0) {
                             retryCount = 5;
+                        }
 
                         downloadedPerc += (count * 1.0 / modPackSize) * 100;
                         amount += count;
@@ -222,7 +231,7 @@ public class ModManager extends JDialog {
                     File animationFile = new File(baseDynamic.getPath() + sep + animation);
 
                     if (!animation.equalsIgnoreCase("empty") && !animationFile.exists()) {
-                            downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+                        downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
                     }
                 }
             } catch (Exception e) {
@@ -232,7 +241,7 @@ public class ModManager extends JDialog {
             try {
                 if (!dir.equals("mojang_vanilla")
                         && ((md5 == null || md5.isEmpty()) ? DownloadUtils.backupIsValid(new File(baseDynamic, modPackName), baseLink + modPackName) : DownloadUtils.isValid(new File(baseDynamic,
-                                modPackName), md5))) {
+                        modPackName), md5))) {
                     Logger.logDebug("Extracting pack.");
                     Logger.logDebug("Purging mods, coremods, instMods");
                     clearModsFolder(pack);
@@ -255,8 +264,9 @@ public class ModManager extends JDialog {
                     FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
                     if (pack.getBundledMap() && saveExists) {
                         try {
-                            if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists())
+                            if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves"));
+                            }
                             if (new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
                                 FTBFileUtils.copyFolder(new File(installPath, dir + "/minecraft/saves.ftbtmp"), new File(installPath, dir + "/minecraft/saves"), true);
                                 FTBFileUtils.delete(new File(installPath, dir + "/minecraft/saves.ftbtmp"));
@@ -295,7 +305,7 @@ public class ModManager extends JDialog {
     /**
      * Create the frame.
      */
-    public ModManager(JFrame owner, Boolean model) {
+    public ModManager (JFrame owner, Boolean model) {
         super(owner, model);
         setResizable(false);
         setTitle("Downloading...");
@@ -428,8 +438,9 @@ public class ModManager extends JDialog {
                 if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
                     try {
                         boolean b = FTBFileUtils.delete(new File(folder, file));
-                        if (!b)
+                        if (!b) {
                             Logger.logInfo("Error deleting " + file);
+                        }
                     } catch (IOException e) {
                         Logger.logWarn(e.getMessage(), e);
 

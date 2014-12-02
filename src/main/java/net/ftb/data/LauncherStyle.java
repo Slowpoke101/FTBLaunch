@@ -67,9 +67,8 @@ public class LauncherStyle extends Properties {
     public Color tabPaneForeground = new Color(255, 255, 255);
     public Color headerImageColor = new Color(255, 255, 255);
     public Color headerColor = new Color(243, 119, 31);
-    public Color headerImageHighlightColor = new Color(236, 26,61);
-    public Color headerHighlightColor = new Color(236, 26,61);
-
+    public Color headerImageHighlightColor = new Color(236, 26, 61);
+    public Color headerHighlightColor = new Color(236, 26, 61);
 
     public void load () {
         this.load(Settings.getSettings().getStyle());
@@ -134,15 +133,16 @@ public class LauncherStyle extends Properties {
     }
 
     //convienience method for handling header icons
-    public ImageIcon filterHeaderIcon(URL u){
+    public ImageIcon filterHeaderIcon (URL u) {
         try {
             return changeColor(ImageIO.read(u), headerImageColor, headerColor, headerImageHighlightColor, headerHighlightColor);
-        }catch(Exception e){
+        } catch (Exception e) {
             Logger.logWarn("error changing colors, using default instead");
         }
         return new ImageIcon(u);
     }
-    public ImageIcon changeColor(BufferedImage image, Color toReplace, Color newColor, Color toReplace2, Color newColor2) {
+
+    public ImageIcon changeColor (BufferedImage image, Color toReplace, Color newColor, Color toReplace2, Color newColor2) {
         BufferedImage destImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g = destImage.createGraphics();
@@ -150,23 +150,25 @@ public class LauncherStyle extends Properties {
         g.dispose();
         for (int i = 0; i < destImage.getWidth(); i++) {
             for (int j = 0; j < destImage.getHeight(); j++) {
-                Color c = new Color(image.getRGB(i,j), true);
+                Color c = new Color(image.getRGB(i, j), true);
                 if (toReplace != null && compareColors(toReplace, c)) {
                     destImage.setRGB(i, j, getRGB(newColor, c));
                 }
-                if (toReplace2!= null && compareColors(toReplace2, c)) {
-                    destImage.setRGB(i, j,  getRGB(newColor2, c));
+                if (toReplace2 != null && compareColors(toReplace2, c)) {
+                    destImage.setRGB(i, j, getRGB(newColor2, c));
                 }
 
             }
         }
         return new ImageIcon(destImage);
     }
-    public boolean compareColors (Color b, Color c){
+
+    public boolean compareColors (Color b, Color c) {
         //ignores transparency, we add this back in in the getRGB method
         return c.getBlue() == b.getBlue() && c.getRed() == b.getRed() && c.getGreen() == b.getGreen();
     }
-    public int getRGB(Color nw, Color oldColorWithTrans){
+
+    public int getRGB (Color nw, Color oldColorWithTrans) {
         return new Color(nw.getRed(), nw.getGreen(), nw.getBlue(), oldColorWithTrans.getAlpha()).getRGB();
     }
 }

@@ -16,7 +16,11 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -42,8 +46,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import com.google.common.collect.Maps;
-
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -55,6 +57,8 @@ import net.ftb.gui.dialogs.TexturePackFilterDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
+
+import com.google.common.collect.Maps;
 
 @SuppressWarnings("serial")
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
@@ -86,7 +90,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     public static boolean loaded = false;
 
-    public TexturepackPane() {
+    public TexturepackPane () {
         super();
         instance = this;
         this.setBorder(null);
@@ -127,7 +131,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
         buttonsPanel.add(typeLbl);
         
-
         mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
         mapButton.setBounds(400, 5, 105, 25);
         mapButton.addActionListener(new ActionListener() {
@@ -149,9 +152,6 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
             }
         });
         buttonsPanel.add(textureButton);
-
-
-
 
         
         JTextArea filler = new JTextArea(I18N.getLocaleString("TEXTURE_WAIT_WHILE_LOADING"));
@@ -303,7 +303,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
                     packs += "<p>This texture pack works with the following packs:</p><ul>";
                     for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }
