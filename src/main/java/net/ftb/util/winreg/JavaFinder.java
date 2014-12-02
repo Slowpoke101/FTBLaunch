@@ -85,7 +85,7 @@ public class JavaFinder {
                 continue;
             }
             try {
-                result.add(new JavaInfo(javaPath));
+                result.add(JavaInfo.getJavaInfo(javaPath));
             } catch (Exception e) {
                 // This really does not need to be logged.
                 //Logger.logDebug("Error while creating JavaInfo");
@@ -137,7 +137,7 @@ public class JavaFinder {
             }
 
             try {
-                result.add(new JavaInfo(javaPath));
+                result.add(JavaInfo.getJavaInfo(javaPath));
             } catch (Exception e) {
                 Logger.logDebug("Error while creating JavaInfo", e);
             }

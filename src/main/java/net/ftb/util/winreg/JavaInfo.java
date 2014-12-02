@@ -1,5 +1,9 @@
 package net.ftb.util.winreg;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import lombok.Getter;
 import net.ftb.util.ComparableVersion;
 
@@ -17,17 +21,42 @@ import java.util.Comparator;
  * Helper struct to hold information about one installed java version
  ****************************************************************************/
 public class JavaInfo extends JavaVersion {
+    private static Cache<String, JavaInfo> CACHE;
+    static {
+        CACHE = CacheBuilder.newBuilder().initialCapacity(10).build();
+    }
     public String path; //! Full path to java.exe executable file
     public boolean is64bits; //! true for 64-bit javas, false for 32
 
     /**
-     * Calls 'javaPath -version' and parses the results
-     * @param javaPath: path to a java.exe executable
+     * Creates new JavaInfo using string got from java -version
+     * @param version:
      ****************************************************************************/
-    public JavaInfo (String javaPath) throws Exception {
-        super(RuntimeStreamer.execute(new String[] { javaPath, "-version" }), true);
-        this.path = javaPath;
-        this.is64bits = origStr.toUpperCase().contains("64-");
+    private JavaInfo (String version) throws Exception {
+        super(version, true);
+    }
+
+    /**
+     * Creates new JavaInfo or returns cached JavaInfo object
+     *
+     * @param javaPath: path to java binary
+     * @return
+     */
+    public static JavaInfo getJavaInfo(String javaPath) {
+        JavaInfo j = CACHE.getIfPresent(javaPath);
+        // TODO: notation to mark that there will not be value for given key?
+        if (j == null) {
+            String output = RuntimeStreamer.execute(new String[] { javaPath, "-version" });
+            try {
+                j = new JavaInfo(output);
+            } catch (Exception e) {
+                return null;
+            }
+            j.path = javaPath;
+            j.is64bits = output.toUpperCase().contains("64-");
+            CACHE.put(javaPath, j);
+        }
+        return j;
     }
 
     public boolean samePath (JavaInfo j) {

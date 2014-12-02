@@ -27,7 +27,6 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.support.membermodification.MemberMatcher.method;
 import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
@@ -36,31 +35,17 @@ public class JavaInfoTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
-    @Test(expected = Exception.class)
-    public void badOutPutFromCommandLine() throws Exception{
-        stub(method(RuntimeStreamer.class, "execute", String[].class)).toReturn("");
-        JavaInfo j = new JavaInfo("x");
-    }
-
     @Test
-    public void badOutPutFromCommandLine2() {
+    public void badOutPutFromCommandLine() {
         stub(method(RuntimeStreamer.class, "execute", String[].class)).toReturn("");
-        try {
-            JavaInfo j = new JavaInfo("x");
-            fail("Excepted exception");
-        } catch (Exception e) {
-            //
-        }
+        JavaInfo j = JavaInfo.getJavaInfo("x");
+        assertEquals(null, j);
     }
 
     @Test
     public void javaExecutableNotFound() {
-        try {
-            JavaInfo j = new JavaInfo("not real path. just trying something");
-            fail("Excepted exception");
-        } catch (Exception e) {
-            //
-        }
+        JavaInfo j = JavaInfo.getJavaInfo("not real path. just trying something");
+        assertEquals(null, j);
     }
 
     String java8_32bit =
@@ -78,7 +63,7 @@ public class JavaInfoTest {
 
         JavaInfo j = null;
         try {
-            j = new JavaInfo("XX");
+            j = JavaInfo.getJavaInfo("java8_32bit_parsing");
         } catch (Exception e) {
             fail("Unexcepted Exception");
         }
@@ -89,7 +74,7 @@ public class JavaInfoTest {
         assertEquals(0, j.getRevision());
         assertEquals(25, j.getUpdate());
 
-        assertEquals("XX", j.path);
+        assertEquals("java8_32bit_parsing", j.path);
         assertEquals(new ComparableVersion("1.8.0_25"), j.comparableVersion );
     }
 
@@ -99,7 +84,7 @@ public class JavaInfoTest {
 
         JavaInfo j = null;
         try {
-            j = new JavaInfo("XX");
+            j = JavaInfo.getJavaInfo("java7_65bit_openjdk_parsing");
         } catch (Exception e) {
             fail("Unexcepted Exception");
         }
@@ -110,7 +95,7 @@ public class JavaInfoTest {
         assertEquals(0, j.getRevision());
         assertEquals(65, j.getUpdate());
 
-        assertEquals("XX", j.path);
+        assertEquals("java7_65bit_openjdk_parsing", j.path);
         assertEquals(new ComparableVersion("1.7.0_65"), j.comparableVersion );
     }
 
@@ -118,22 +103,14 @@ public class JavaInfoTest {
      * TODO: add more proper tests for sorting.
      */
     @Test
-    public void samePath() {
-        JavaInfo j7 = null, j8 = null;
+    public void sorting() {
+        JavaInfo j7, j8;
 
         stub(method(RuntimeStreamer.class, "execute", String[].class)).toReturn(java7_64bit_openjdk);
-        try {
-            j7 = new JavaInfo("XX");
-        } catch (Exception e) {
-            fail("Unexcepted Exception");
-        }
+        j7 = JavaInfo.getJavaInfo("sorting_j7");
 
         stub(method(RuntimeStreamer.class, "execute", String[].class)).toReturn(java8_32bit);
-        try {
-            j8 = new JavaInfo("XX");
-        } catch (Exception e) {
-            fail("Unexcepted Exception");
-        }
+        j8 = JavaInfo.getJavaInfo("sorting_j8");
 
         // ATT: bitness
         assertEquals(true,  JavaInfo.PREFERRED_SORTING.compare(j7, j8) > 0);
@@ -143,12 +120,8 @@ public class JavaInfoTest {
 
         JavaVersion j7_99 = null;
         JavaVersion j7_65 = null;
-        try {
-            j7_99 = new JavaVersion("1.7.0_99", false);
-            j7_65 = new JavaVersion("1.7.0_65", false);
-        } catch (Exception e) {
-            fail("Unexcepted exception");
-        }
+        j7_99 = JavaVersion.createJavaVersion("1.7.0_99");
+        j7_65 = JavaVersion.createJavaVersion("1.7.0_65");
 
         // test comparison methods, also test polymorphism
         assertEquals(true, JavaVersion.PREFERRED_SORTING.compare(j7, j7_99) < 0 );

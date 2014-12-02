@@ -156,7 +156,7 @@ public class Settings extends Properties {
     public JavaInfo getCurrentJava () {
         if (currentJava == null) {
             try {
-                currentJava = new JavaInfo(getJavaPath());
+                currentJava = JavaInfo.getJavaInfo(getJavaPath());
             } catch (Exception e) {
                 Logger.logError("Error while creating JavaInfo", e);
             }

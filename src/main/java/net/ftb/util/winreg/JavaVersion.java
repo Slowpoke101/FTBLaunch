@@ -8,21 +8,15 @@ import java.util.Comparator;
 public class JavaVersion {
     public ComparableVersion comparableVersion;
     public String origVersion;
-    public String origStr;
     @Getter
     protected int major, minor, revision, update;
 
-    public JavaVersion (String version) throws Exception{
-        this(version, false);
-    }
-
-    public JavaVersion (int major, int minor) {
-        this.origVersion = null;
-        this.major = major;
-        this.minor = minor;
-        this.revision = 0;
-        this.update = 0;
-        this.comparableVersion = new ComparableVersion(major + "." + minor);
+    public static JavaVersion createJavaVersion(String version) {
+        try {
+            return new JavaVersion(version, false);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -31,7 +25,7 @@ public class JavaVersion {
      * @param full Boolean to indicate if str is full output or only version string
      * @throws Exception
      */
-    public JavaVersion (String str, boolean full) throws Exception {
+    protected JavaVersion (String str, boolean full) throws Exception {
         if (full) {
             String[] tokens = str.split("\"");
             if (tokens.length < 2) {
@@ -44,7 +38,6 @@ public class JavaVersion {
         }
         parseVersionString();
         this.comparableVersion = new ComparableVersion(this.origVersion);
-        this.origStr = str;
     }
 
     private void parseVersionString() {
