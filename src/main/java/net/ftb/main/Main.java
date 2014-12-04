@@ -216,7 +216,7 @@ public class Main {
         I18N.setupLocale();
         I18N.setLocale(Settings.getSettings().getLocale());
 
-        if (Settings.getSettings().isNoConfig()) {
+        if (Settings.getSettings().isNoConfig() && !CommandLineSettings.getSettings().isSkipFirst()) {
             Logger.logDebug("FirstRunDialog");
             try {
                 EventQueue.invokeAndWait(new Runnable() {

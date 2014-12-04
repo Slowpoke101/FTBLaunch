@@ -81,6 +81,10 @@ public class CommandLineSettings {
     @Getter
     private boolean disableTray = false;
 
+    @Parameter(names = { "--skip-first", "-s" }, description = "Skip first time startup dialogue")
+    @Getter
+    private boolean skipFirst = false;
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {
