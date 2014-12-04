@@ -55,7 +55,7 @@ public class ModPack {
     private final static ArrayList<ModPack> packs = Lists.newArrayList();
     private boolean privatePack;
     @Getter
-    private int[] minJRE;
+    private String minJRE;
     @Getter
     private int minLaunchSpec;
     @Getter
@@ -221,12 +221,7 @@ public class ModPack {
         this.hasbundledmap = bundledMap;
         this.hasCustomTP = customTP;
         this.minLaunchSpec = minLaunchSpec;
-        String[] tempJRE = minJRE.split("\\.");
-        List<Integer> tmpIJre = Lists.newArrayList();
-        for (String aTempJRE : tempJRE) {
-            tmpIJre.add(Integer.parseInt(aTempJRE));
-        }
-        this.minJRE = Ints.toArray(tmpIJre);
+        this.minJRE = minJRE;
         if (!animation.isEmpty()) {
             this.animation = animation;
         } else {
