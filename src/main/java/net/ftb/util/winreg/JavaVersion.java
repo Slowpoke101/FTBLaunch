@@ -59,10 +59,6 @@ public class JavaVersion {
         return major + "." + minor + "." + revision + "_" + update;
     }
 
-    public boolean sameVersion(JavaVersion j) {
-        return JavaVersion.PREFERRED_SORTING.compare(this, j) == 0;
-    }
-
     public static final Comparator<JavaVersion> PREFERRED_SORTING = new Comparator<JavaVersion>() {
         public int compare (JavaVersion j1, JavaVersion j2) {
             return j1.comparableVersion.compareTo(j2.comparableVersion);

@@ -2,15 +2,11 @@ package net.ftb.util.winreg;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Interner;
-import com.google.common.collect.Interners;
-import lombok.Getter;
-import net.ftb.util.ComparableVersion;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
 
-/**
+/*
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.
  * Needs WinRegistry.java. Get it at: http://stackoverflow.com/questions/62289/read-write-to-windows-registry-using-java
  *
@@ -76,7 +72,7 @@ public class JavaInfo extends JavaVersion {
      * @return
      */
     public boolean isIdentical (JavaInfo j) {
-        return (this.sameVersion(j) && sameBitness(j));
+        return (this.isSameVersion(j) && sameBitness(j));
     }
 
     /**
