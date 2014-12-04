@@ -17,6 +17,7 @@
 package net.ftb.gui;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -40,18 +41,21 @@ public class ChooseDir extends JFrame implements ActionListener {
 
     public ChooseDir (OptionsPane optionsPane) {
         super();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         this.optionsPane = optionsPane;
         editMPD = null;
     }
 
     public ChooseDir (EditModPackDialog editMPD) {
         super();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         optionsPane = null;
         this.editMPD = editMPD;
     }
 
     public ChooseDir (FirstRunDialog firstRunDialog) {
         super();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
         optionsPane = null;
         editMPD = null;
         this.firstRunDialog = firstRunDialog;
