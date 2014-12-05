@@ -67,14 +67,11 @@ public class NewsPane extends JPanel implements ILauncherPane {
     public NewsPane () {
         super(new BorderLayout());
 
-        if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            setBorder(new EmptyBorder(-5, 0, -5, 12));
-        } else {
-            setBorder(new EmptyBorder(-4, 0, -4, -2));
-        }
+        setBorder(null);
 
         newsPanel = new JScrollPane(this.news_pane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        newsPanel.setBorder(null);
         this.add(newsPanel, BorderLayout.CENTER);
         this.news_pane.setText(NewsUtils.getNewsHTML());
     }
