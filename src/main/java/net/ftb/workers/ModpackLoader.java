@@ -49,9 +49,11 @@ import static net.ftb.download.Locations.THIRDPARTYXML;
 
 public class ModpackLoader extends Thread {
     private ArrayList<String> xmlFiles = Lists.newArrayList();
+    private boolean disableOtherLoader = false;
 
-    public ModpackLoader (ArrayList<String> xmlFiles) {
+    public ModpackLoader (ArrayList<String> xmlFiles, boolean disableOtherLoaders) {
         this.xmlFiles = xmlFiles;
+        this.disableOtherLoader = disableOtherLoaders;
     }
 
     @Override
@@ -146,7 +148,9 @@ public class ModpackLoader extends Thread {
         FTBPacksPane.getInstance().loaded = true;
         ThirdPartyPane.getInstance().loaded = true;
         LaunchFrame.checkDoneLoading();
-        Map.loadAll();
-        TexturePack.loadAll();
+        if (!disableOtherLoader) {
+            Map.loadAll();
+            TexturePack.loadAll();
+        }
     }
 }

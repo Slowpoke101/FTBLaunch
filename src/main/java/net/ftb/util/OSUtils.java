@@ -65,16 +65,37 @@ public class OSUtils {
      * @return a string containing the default install path for the current OS.
      */
     public static String getDefInstallPath () {
-        try {
-            CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
-            File jarFile;
-            jarFile = new File(codeSource.getLocation().toURI().getPath());
-            return jarFile.getParentFile().getPath();
-        } catch (URISyntaxException e) {
-            Logger.logError("Unexcepted error", e);
+        switch (getCurrentOS()) {
+        case WINDOWS:
+            String defaultLocation = "C:\\FTB";
+            File testFile = new File(defaultLocation);
+            // existing directory and we can write
+            if (testFile.canWrite()) {
+                return defaultLocation;
+            }
+
+            // We can create default directory
+            if (testFile.getParentFile().canWrite()) {
+                return defaultLocation;
+            }
+            Logger.logWarn("Can't use default installation location. Using current location of the launcher executable.");
+
+        case MACOSX:
+            return System.getProperty("user.home") + "/FTB";
+        case UNIX:
+            return System.getProperty("user.home") + "/FTB";
+        default:
+            try {
+                CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+                File jarFile;
+                jarFile = new File(codeSource.getLocation().toURI().getPath());
+                return jarFile.getParentFile().getPath();
+            } catch (URISyntaxException e) {
+                Logger.logError("Unexcepted error", e);
+            }
+
+            return System.getProperty("user.home") + System.getProperty("path.separator") + "FTB";
         }
-        Logger.logWarn("Failed to get path for current directory - falling back to user's home directory.");
-        return System.getProperty("user.dir") + "//FTB Pack Install";
     }
 
     /**

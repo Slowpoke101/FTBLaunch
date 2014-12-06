@@ -100,7 +100,6 @@ public class PrivatePackDialog extends JDialog {
                         }
                         ModPack.removePacks(toRemove + ".xml");
                         FTBFileUtils.delete(new File(OSUtils.getCacheStorageLocation(), "ModPacks/" + toRemove + ".xml"));
-                        LaunchFrame.getInstance().modPacksPane.filterPacks();
                     } catch (IOException e) {
                         Logger.logError("Error while deleting private modpack", e);
                     }

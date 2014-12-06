@@ -58,11 +58,11 @@ public class CheckInstallPath {
          *
          */
         String pathRegex = "[\\w:\\\\/ \\-\\.]+";
-        if (!path.matches(pathRegex)) {
-            String s = path.replaceAll(pathRegex, "");
-            setting = "CIP_badpath";
-            message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as " + defaultLocation;
-            localizedMessage = I18N.getLocaleString("CIP_BADPATH").replace("LIST", s) + defaultLocation;
+
+        if (OSUtils.getCurrentOS() == OS.WINDOWS && System.getenv("ProgramFiles") != null && path.contains(System.getenv("ProgramFiles"))) {
+            setting = "CIP_programfiles";
+            message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
+            localizedMessage = I18N.getLocaleString("CIP_PROGRAMFILES") + defaultLocation;
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 Logger.logError(message);
@@ -70,10 +70,11 @@ public class CheckInstallPath {
                 action = Action.OK;
                 Logger.logDebug("User has selected to ignore: \"" + message + "\"");
             }
-        } else if (OSUtils.getCurrentOS() == OS.WINDOWS && System.getenv("ProgramFiles") != null && path.contains(System.getenv("ProgramFiles"))) {
-            setting = "CIP_programfiles";
-            message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
-            localizedMessage = I18N.getLocaleString("CIP_PROGRAMFILES") + defaultLocation;
+        } else if (!path.matches(pathRegex)) {
+            String s = path.replaceAll(pathRegex, "");
+            setting = "CIP_badpath";
+            message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as " + defaultLocation;
+            localizedMessage = I18N.getLocaleString("CIP_BADPATH").replace("LIST", s) + defaultLocation;
             if (!Settings.getSettings().getBoolean(setting)) {
                 action = Action.BLOCK;
                 Logger.logError(message);
