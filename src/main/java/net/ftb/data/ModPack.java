@@ -162,22 +162,22 @@ public class ModPack {
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
-        if (selectedPack == null) {
-            if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
-                return getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
-            }
-            return getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex());
-        } else {
-            return selectedPack;
-        }
+    	if (selectedPack == null) {    	
+    		if(LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY){
+    			return getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
+    		}
+    		return getPack(FTBPacksPane.getInstance().getSelectedPackIndex());
+    	} else {
+    		return selectedPack;
+    	}    	
     }
 
     public static ModPack getSelectedPack (boolean isFTBPane) {
-        if (selectedPack == null) {
-            return isFTBPane ? getPack(FTBPacksPane.getInstance().getSelectedFTBModIndex()) : getPack(ThirdPartyPane.getInstance().getSelectedThirdPartyModIndex());
-        } else {
-            return selectedPack;
-        }
+    	if (selectedPack == null) {
+    		return isFTBPane ? getPack(FTBPacksPane.getInstance().getSelectedPackIndex()) : getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
+    	} else {
+    		return selectedPack;
+    	}
     }
 
     /**

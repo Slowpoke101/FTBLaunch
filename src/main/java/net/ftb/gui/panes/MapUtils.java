@@ -19,6 +19,8 @@ package net.ftb.gui.panes;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -41,6 +43,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import com.google.common.collect.Maps;
+
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.Map;
@@ -57,8 +60,12 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
 
     protected static JPanel maps;
     public static ArrayList<JPanel> mapPanels;
+    
     @Getter
     private static JScrollPane mapsScroll;
+    
+    @Getter
+    ObjectInfoSplitPane splitPane;
 
     private static JLabel typeLbl;
     private static JButton filter;
@@ -81,11 +88,10 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
 
     public MapUtils () {
         super();
-        instance = this;
-        this.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.setLayout(null);
+        instance = this;        
+        this.setBorder(null);
+        setLayout(new BorderLayout());
         setup();
-
     }
 
     @Override
@@ -96,6 +102,13 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     }
 
     public void setup () {
+    	
+    	JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayout(1,4));
+        buttonsPanel.setMinimumSize(new Dimension(420,25));
+        add(buttonsPanel, BorderLayout.PAGE_START);    	
+    	
+    	
         mapPanels = new ArrayList<JPanel>();
 
         // TODO: Set loading animation while we wait
@@ -107,6 +120,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         p.setBounds(0, 0, 420, 55);
         p.setLayout(null);
 
+        
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         filter.setBounds(5, 5, 105, 25);
         filter.addActionListener(new ActionListener() {
@@ -118,30 +132,9 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
                 }
             }
         });
-        getInstance().add(filter);
-
-        mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
-        mapButton.setBounds(400, 5, 105, 25);
-        mapButton.setBackground(UIManager.getColor("control").darker().darker());
-        mapButton.setForeground(UIManager.getColor("text").darker());
-        mapButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(true);
-            }
-        });
-        add(mapButton);
-
-        textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
-        textureButton.setBounds(510, 5, 105, 25);
-        textureButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent arg0) {
-                LaunchFrame.getInstance().swapTabs(false);
-            }
-        });
-        add(textureButton);
-
+        buttonsPanel.add(filter);
+        
+        
         String filterTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterTextColor);
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
 
@@ -157,8 +150,33 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         typeLbl = new JLabel(typeLblText);
         typeLbl.setBounds(115, 5, 295, 25);
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
-        getInstance().add(typeLbl);
+        buttonsPanel.add(typeLbl);
 
+        
+        mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
+        mapButton.setBounds(400, 5, 105, 25);
+        mapButton.setBackground(UIManager.getColor("control").darker().darker());
+        mapButton.setForeground(UIManager.getColor("text").darker());
+        mapButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(true);
+            }
+        });
+        buttonsPanel.add(mapButton);
+        
+
+        textureButton = new JButton(I18N.getLocaleString("SWAP_TEXTURE"));
+        textureButton.setBounds(510, 5, 105, 25);
+        textureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                LaunchFrame.getInstance().swapTabs(false);
+            }
+        });
+        buttonsPanel.add(textureButton);
+        
+        
         JTextArea filler = new JTextArea(I18N.getLocaleString("MAPS_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
@@ -166,41 +184,28 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         filler.setBounds(58, 6, 378, 42);
         filler.setBackground(new Color(255, 255, 255, 0));
         p.add(filler);
+        
+        
+        splitPane = new ObjectInfoSplitPane();
+        maps = splitPane.getPacks();
+        mapInfo = splitPane.getPackInfo();
+        //infoScroll = splitPane.getInfoScroll();
+        mapsScroll = splitPane.getPacksScroll();
+        add(splitPane); //, BorderLayout.CENTER);
+        
         maps.add(p);
+        
+        // Resize scrollbar when center divider is moved
+        mapsScroll.addComponentListener(new ComponentAdapter() {	
+			@Override			
+			public void componentResized(ComponentEvent e) {				
+				int itemsPerWidth = maps.getWidth() / 420;
+				if (itemsPerWidth < 1) itemsPerWidth = 1;
+				maps.setMinimumSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
+				maps.setPreferredSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
+			}        	
+        });        
 
-        mapsScroll = new JScrollPane();
-        mapsScroll.setBounds(-3, 30, 420, 283);
-        mapsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        mapsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        mapsScroll.setWheelScrollingEnabled(true);
-        mapsScroll.setOpaque(false);
-        mapsScroll.setViewportView(maps);
-        mapsScroll.getVerticalScrollBar().setUnitIncrement(19);
-        add(mapsScroll);
-
-        mapInfo = new JEditorPane();
-        mapInfo.setEditable(false);
-        mapInfo.setContentType("text/html");
-        mapInfo.addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate (HyperlinkEvent event) {
-                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    OSUtils.browse(event.getURL().toString());
-                }
-            }
-        });
-        mapInfo.setBounds(420, 210, 410, 90);
-        mapInfo.setBackground(UIManager.getColor("control").darker().darker());
-        add(mapInfo);
-
-        JScrollPane infoScroll = new JScrollPane();
-        infoScroll.setBounds(410, 25, 430, 290);
-        infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        infoScroll.setWheelScrollingEnabled(true);
-        infoScroll.setViewportView(mapInfo);
-        infoScroll.setOpaque(false);
-        add(infoScroll);
     }
 
     /*
@@ -213,9 +218,10 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         }
 
         final int mapIndex = mapPanels.size();
-        final JPanel p = new JPanel();
-        p.setBounds(0, (mapIndex * 55), 420, 55);
+        final JPanel p = new JPanel();        
+        p.setPreferredSize(new Dimension(420,55));
         p.setLayout(null);
+        
         JLabel logo = new JLabel(new ImageIcon(map.getLogo()));
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
@@ -245,15 +251,11 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         p.add(filler);
         p.add(logo);
         mapPanels.add(p);
-        maps.add(p);
-        if (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
-            maps.setMinimumSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-            maps.setPreferredSize(new Dimension(420, (Map.getMapArray().size() * 55)));
-        } else {
-            maps.setMinimumSize(new Dimension(420, (currentMaps.size() * 55)));
-            maps.setPreferredSize(new Dimension(420, (currentMaps.size() * 55)));
-        }
-        mapsScroll.revalidate();
+        maps.add(p);        
+        
+        maps.setMinimumSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));        
+        maps.setPreferredSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
+        
     }
 
     @Override

@@ -471,11 +471,11 @@ public class MCInstaller {
         String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack;
-        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
-            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedThirdPartyModIndex());
-        } else {
-            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedFTBModIndex());
-        }
+
+        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
+            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
+        else
+            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedPackIndex());
 
         String packDir = pack.getDir();
 

@@ -17,13 +17,18 @@
 package net.ftb.gui;
 
 import java.awt.AWTException;
+import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -71,7 +76,6 @@ import net.ftb.gui.panes.OptionsPane;
 import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
-import net.ftb.locale.I18N.Locale;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.minecraft.MCInstaller;
@@ -84,7 +88,6 @@ import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
 import net.ftb.util.ObjectUtils;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
@@ -152,31 +155,39 @@ public class LaunchFrame extends JFrame {
      */
     public LaunchFrame (final int tab) {
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
-        setResizable(false);
+        setResizable(true);
         setTitle(Constants.name + " v" + Constants.version);
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 
-        panel = new JPanel();
+        panel = new JPanel(new BorderLayout());
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            setBounds(100, 100, 842, 480);
-        } else {
-            setBounds(100, 100, 850, 480);
-        }
-        panel.setBounds(0, 0, 850, 480);
-        panel.setLayout(null);
-        footer.setBounds(0, 380, 850, 100);
-        footer.setLayout(null);
-        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-        tabbedPane.setBounds(0, 0, 850, 380);
-        panel.add(tabbedPane);
-        panel.add(footer);
+        
+        int prefWidth = 835;
+        int prefHeight = 480;
+        this.setMinimumSize(new Dimension(prefWidth, prefHeight));
+        
+        // Determine how much space is used by window decoration, resize accordingly
+        this.pack();
+        Dimension fullWindowSize = this.getContentPane().getSize();
+        this.setMinimumSize(new Dimension(prefWidth + (prefWidth - fullWindowSize.width), prefHeight + (prefHeight - fullWindowSize.height)));
+
+        // Center on screen
+        this.setLocationRelativeTo(null);
+
+        footer.setMinimumSize(new Dimension(850, 100));
+        footer.setLayout(new BorderLayout());
+        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);    
+
+        tabbedPane.setMinimumSize(new Dimension(850, 380));
+
+        panel.add(tabbedPane, BorderLayout.CENTER);
+        panel.add(footer, BorderLayout.PAGE_END);
         setContentPane(panel);
 
         //Footer
         footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerLogo.setBounds(20, 20, 50, 40);
+        footerLogo.setMinimumSize(new Dimension(42,42));
         footerLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -185,7 +196,7 @@ public class LaunchFrame extends JFrame {
         });
 
         footerCreeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerCreeper.setBounds(78, 20, 132, 42);
+        footerCreeper.setMinimumSize(new Dimension(132, 42));
         footerCreeper.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -194,7 +205,7 @@ public class LaunchFrame extends JFrame {
         });
 
         footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerTUG.setBounds(212, 25, 100, 28);
+        footerTUG.setMinimumSize(new Dimension(132, 42));
         footerTUG.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -216,7 +227,8 @@ public class LaunchFrame extends JFrame {
             }
         }
 
-        users.setBounds(550, 20, 150, 30);
+        users.setMinimumSize(new Dimension(150,30));
+        users.setMaximumSize(new Dimension(150,30));
         users.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -230,7 +242,7 @@ public class LaunchFrame extends JFrame {
         });
 
         edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-        edit.setBounds(480, 20, 60, 30);
+        edit.setMinimumSize(new Dimension(60,30));
         edit.setVisible(true);
         edit.setEnabled(users.getSelectedIndex() > 1);
         edit.addActionListener(new ActionListener() {
@@ -248,7 +260,7 @@ public class LaunchFrame extends JFrame {
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
-        launch.setBounds(711, 20, 100, 30);
+        launch.setMinimumSize(new Dimension(100,30));
         launch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -256,7 +268,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        serverbutton.setBounds(480, 20, 330, 30);
+        serverbutton.setMinimumSize(new Dimension(330,30));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
         serverbutton.addActionListener(new ActionListener() {
@@ -281,7 +293,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        mapInstall.setBounds(650, 20, 160, 30);
+        mapInstall.setMinimumSize(new Dimension(160,30));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         mapInstall.setVisible(false);
         mapInstall.addActionListener(new ActionListener() {
@@ -296,11 +308,11 @@ public class LaunchFrame extends JFrame {
         });
 
         mapInstallLocation = new JComboBox();
-        mapInstallLocation.setBounds(480, 20, 160, 30);
+        mapInstallLocation.setMinimumSize(new Dimension(160,30));
         mapInstallLocation.setToolTipText("Install to...");
         mapInstallLocation.setVisible(false);
 
-        serverMap.setBounds(480, 20, 330, 30);
+        serverMap.setMinimumSize(new Dimension(330,30));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         serverMap.setVisible(false);
         serverMap.addActionListener(new ActionListener() {
@@ -313,7 +325,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        tpInstall.setBounds(650, 20, 160, 30);
+        tpInstall.setMinimumSize(new Dimension(160,30));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
         tpInstall.setVisible(false);
         tpInstall.addActionListener(new ActionListener() {
@@ -327,26 +339,44 @@ public class LaunchFrame extends JFrame {
         });
 
         tpInstallLocation = new JComboBox();
-        tpInstallLocation.setBounds(480, 20, 160, 30);
+        tpInstallLocation.setMinimumSize(new Dimension(160,30));
         tpInstallLocation.setToolTipText("Install to...");
         tpInstallLocation.setVisible(false);
 
         tpInstallLocLbl.setText("Install to...");
-        tpInstallLocLbl.setBounds(480, 20, 80, 30);
+        tpInstallLocLbl.setMinimumSize(new Dimension(80,30));
         tpInstallLocLbl.setVisible(false);
+		
 
-        footer.add(edit);
-        footer.add(users);
-        footer.add(footerLogo);
-        footer.add(footerCreeper);
-        footer.add(footerTUG);
-        footer.add(launch);
-        footer.add(serverbutton);
-        footer.add(mapInstall);
-        footer.add(mapInstallLocation);
-        footer.add(serverMap);
-        footer.add(tpInstall);
-        footer.add(tpInstallLocation);
+        // Panel for the items in the bottom left
+		JPanel logoPanel = new JPanel();
+        logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+        logoPanel.add(footerLogo);
+        logoPanel.add(footerCreeper);
+        logoPanel.add(footerTUG);
+        
+        // Panel for the items in the bottom right
+		JPanel buttonFooterPanel = new JPanel();
+		buttonFooterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);        
+        buttonFooterPanel.add(edit);
+        buttonFooterPanel.add(users);
+        buttonFooterPanel.add(launch);
+
+        // Buttons for texture pack pane
+        buttonFooterPanel.add(tpInstallLocation);
+        buttonFooterPanel.add(tpInstall);
+
+        // Buttons for custom map pane
+        buttonFooterPanel.add(mapInstallLocation);
+        buttonFooterPanel.add(mapInstall);
+
+        // Button if server map
+        buttonFooterPanel.add(serverMap);        
+
+        footer.add(logoPanel, BorderLayout.LINE_START);
+        footer.add(buttonFooterPanel, BorderLayout.LINE_END);        
+
 
         newsPane = new NewsPane();
         modPacksPane = new FTBPacksPane();
@@ -356,13 +386,14 @@ public class LaunchFrame extends JFrame {
         optionsPane = new OptionsPane(Settings.getSettings());
 
         getRootPane().setDefaultButton(launch);
-        updateLocale();
-
+        updateLocale(); 
+        
         tabbedPane.add(newsPane, 0);
-        tabbedPane.add(optionsPane, 1);
+        tabbedPane.add(optionsPane, 1);        
         tabbedPane.add(modPacksPane, 2);
         tabbedPane.add(thirdPartyPane, 3);
         tabbedPane.add(tpPane, 4);
+
         /*
          * TODO: This will block. Network.
          */
@@ -391,6 +422,20 @@ public class LaunchFrame extends JFrame {
             }
         });
         tabbedPane.setSelectedIndex(tab);
+        
+        
+        
+        panel.addComponentListener(new ComponentAdapter() {
+			// Reset splitter on window resize to avoid being in an unreachable location
+        	@Override
+			public void componentResized(ComponentEvent arg0) {
+				modPacksPane.getSplitPane().resetToPreferredSizes();
+				thirdPartyPane.getSplitPane().resetToPreferredSizes();
+				tpPane.getSplitPane().resetToPreferredSizes();
+				mapsPane.getSplitPane().resetToPreferredSizes();
+			}        	
+        });
+        
     }
 
     public static void checkDoneLoading () {
@@ -804,21 +849,6 @@ public class LaunchFrame extends JFrame {
      * updates the buttons/text to language specific
      */
     public void updateLocale () {
-        if (I18N.currentLocale == Locale.deDE) {
-            edit.setBounds(420, 20, 120, 30);
-            mapInstall.setBounds(620, 20, 190, 30);
-            mapInstallLocation.setBounds(420, 20, 190, 30);
-            serverbutton.setBounds(420, 20, 390, 30);
-            tpInstallLocation.setBounds(420, 20, 190, 30);
-            tpInstall.setBounds(620, 20, 190, 30);
-        } else {
-            edit.setBounds(480, 20, 60, 30);
-            mapInstall.setBounds(650, 20, 160, 30);
-            mapInstallLocation.setBounds(480, 20, 160, 30);
-            serverbutton.setBounds(480, 20, 330, 30);
-            tpInstallLocation.setBounds(480, 20, 160, 30);
-            tpInstall.setBounds(650, 20, 160, 30);
-        }
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
