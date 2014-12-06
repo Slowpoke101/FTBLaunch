@@ -229,6 +229,14 @@ public class Main {
                 });
             } catch (Exception e) {
             }
+        } else if (CommandLineSettings.getSettings().isSkipFirst()) {
+            String installDir = CommandLineSettings.getSettings().getInstallDir();
+            if (installDir == null) {
+                Logger.logWarn("Bad command line argument combination. Please, use both --pack-dir and --skip-first");
+            } else {
+                Settings.getSettings().setInstallPath(installDir);
+                Settings.getSettings().save();
+            }
         }
 
         // NOTE: this messagage will be missed because laoder is not created when this is executed
