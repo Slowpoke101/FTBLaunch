@@ -16,8 +16,8 @@
  */
 package net.ftb.data;
 
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.IParameterValidator;
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import lombok.Getter;
 

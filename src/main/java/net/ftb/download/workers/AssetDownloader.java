@@ -16,24 +16,26 @@
  */
 package net.ftb.download.workers;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URLConnection;
-import java.util.List;
-
-import javax.swing.ProgressMonitor;
-import javax.swing.SwingWorker;
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
+import static com.google.common.net.HttpHeaders.CONTENT_MD5;
+import static com.google.common.net.HttpHeaders.ETAG;
 
 import com.google.common.collect.Lists;
-import static com.google.common.net.HttpHeaders.*;
 import lombok.Getter;
-
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.info.DownloadInfo.DLType;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URLConnection;
+import java.util.List;
+
+import javax.swing.*;
 
 public class AssetDownloader extends SwingWorker<Boolean, Void> {
     private List<DownloadInfo> downloads;

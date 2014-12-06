@@ -16,6 +16,18 @@
  */
 package net.ftb.gui.dialogs;
 
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.gui.GuiConstants;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
+import net.miginfocom.swing.MigLayout;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,19 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JTextField;
-
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.gui.GuiConstants;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
-import net.ftb.util.*;
-import net.miginfocom.swing.MigLayout;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class PrivatePackDialog extends JDialog {

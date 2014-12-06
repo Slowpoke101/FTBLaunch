@@ -3,8 +3,9 @@ package net.ftb.util.winreg;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
+
+import javax.annotation.Nullable;
 
 /*
  * Java Finder by petrucio@stackoverflow(828681) is licensed under a Creative Commons Attribution 3.0 Unported License.
@@ -19,9 +20,11 @@ import java.util.Comparator;
  ****************************************************************************/
 public class JavaInfo extends JavaVersion {
     private static Cache<String, JavaInfo> CACHE;
+
     static {
         CACHE = CacheBuilder.newBuilder().initialCapacity(10).build();
     }
+
     public String path; //! Full path to java.exe executable file
     public boolean is64bits; //! true for 64-bit javas, false for 32
 
@@ -40,7 +43,7 @@ public class JavaInfo extends JavaVersion {
      * @return
      */
     @Nullable
-    public static JavaInfo getJavaInfo(String javaPath) {
+    public static JavaInfo getJavaInfo (String javaPath) {
         JavaInfo j = CACHE.getIfPresent(javaPath);
         // TODO: notation to mark that there will not be value for given key?
         if (j == null) {
@@ -60,6 +63,7 @@ public class JavaInfo extends JavaVersion {
     public boolean samePath (JavaInfo j) {
         return this.path.equals(j.path);
     }
+
     public boolean sameBitness (JavaInfo j) {
         return this.is64bits == j.is64bits;
     }

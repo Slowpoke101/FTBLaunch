@@ -16,13 +16,12 @@
  */
 package net.ftb.util;
 
-import java.io.File;
-
 import net.ftb.data.Settings;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
+
+import java.io.File;
 
 public class CheckInstallPath {
     public String installPath;

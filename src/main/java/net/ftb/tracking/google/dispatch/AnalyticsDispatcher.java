@@ -16,9 +16,9 @@
  */
 package net.ftb.tracking.google.dispatch;
 
-import java.net.URI;
-
 import net.ftb.log.Logger;
+
+import java.net.URI;
 
 public abstract class AnalyticsDispatcher {
     private String userAgent;

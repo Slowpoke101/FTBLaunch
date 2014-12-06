@@ -32,13 +32,19 @@
 
 package net.ftb.util;
 
+import net.ftb.data.Settings;
+import net.ftb.log.Logger;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.*;
-
-import net.ftb.data.Settings;
-import net.ftb.log.Logger;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>This class contains some useful classes and methods to parallelize code in an

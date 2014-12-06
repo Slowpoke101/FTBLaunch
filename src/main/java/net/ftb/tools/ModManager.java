@@ -21,6 +21,18 @@ import static com.google.common.net.HttpHeaders.CONTENT_MD5;
 import static net.ftb.download.Locations.MODPACKS;
 import static net.ftb.download.Locations.PRIVATEPACKS;
 
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.dialogs.ModpackUpdateDialog;
+import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.ModPackUtil;
+import net.ftb.util.OSUtils;
+import net.ftb.util.TrackerUtils;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -35,27 +47,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.ModpackUpdateDialog;
-import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FTBFileUtils;
-import net.ftb.util.ModPackUtil;
-import net.ftb.util.OSUtils;
-import net.ftb.util.TrackerUtils;
 
 @SuppressWarnings("serial")
 public class ModManager extends JDialog {

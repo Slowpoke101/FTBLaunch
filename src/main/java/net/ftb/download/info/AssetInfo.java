@@ -16,14 +16,13 @@
  */
 package net.ftb.download.info;
 
+import net.ftb.download.Locations;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import net.ftb.download.Locations;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public final class AssetInfo extends DownloadInfo {
     public final String etag;

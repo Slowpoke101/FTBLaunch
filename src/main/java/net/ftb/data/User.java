@@ -16,13 +16,13 @@
  */
 package net.ftb.data;
 
+import net.ftb.log.Logger;
+import net.ftb.util.CryptoUtils;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
-import net.ftb.log.Logger;
-import net.ftb.util.CryptoUtils;
 
 public class User implements Serializable {
     /**

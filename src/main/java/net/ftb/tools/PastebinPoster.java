@@ -16,6 +16,11 @@
  */
 package net.ftb.tools;
 
+import net.ftb.data.Constants;
+import net.ftb.log.Logger;
+import net.ftb.main.Main;
+import net.ftb.util.OSUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,11 +31,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import net.ftb.data.Constants;
-import net.ftb.log.Logger;
-import net.ftb.main.Main;
-import net.ftb.util.OSUtils;
 
 public class PastebinPoster extends Thread {
     @Override

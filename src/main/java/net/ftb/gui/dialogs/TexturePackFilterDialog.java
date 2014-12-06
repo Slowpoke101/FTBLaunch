@@ -16,19 +16,7 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.GuiConstants;
@@ -37,7 +25,13 @@ import net.ftb.gui.panes.TexturepackPane;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
 
-import com.google.common.collect.Lists;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class TexturePackFilterDialog extends JDialog {

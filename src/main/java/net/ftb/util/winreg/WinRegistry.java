@@ -8,13 +8,13 @@ package net.ftb.util.winreg;
  * and 64-bits view from a 32-bits JVM (KEY_WOW64_64KEY).
  *****************************************************************************/
 
+import net.ftb.log.Logger;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
-
-import net.ftb.log.Logger;
 
 public class WinRegistry {
     private static final int HKEY_CURRENT_USER = 0x80000001;

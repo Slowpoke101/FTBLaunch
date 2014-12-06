@@ -16,6 +16,9 @@
  */
 package net.ftb.data;
 
+import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,9 +28,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
-
-import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

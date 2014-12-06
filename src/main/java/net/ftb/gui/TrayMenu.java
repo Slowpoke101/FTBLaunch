@@ -16,17 +16,17 @@
  */
 package net.ftb.gui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.GameUtils;
 import net.ftb.util.OSUtils;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class TrayMenu extends PopupMenu {
 

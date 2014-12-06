@@ -16,40 +16,19 @@
  */
 package net.ftb.gui.panes;
 
-import com.google.common.collect.Lists;
-
 import lombok.Getter;
-import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.EditModPackDialog;
-import net.ftb.gui.dialogs.ModPackFilterDialog;
-import net.ftb.gui.dialogs.PrivatePackDialog;
-import net.ftb.locale.I18N;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.TrackerUtils;
 
-import java.awt.Point;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
 @SuppressWarnings("serial")
-public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane  {
+public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane {
     @Getter
-	private static ThirdPartyPane instance;
+    private static ThirdPartyPane instance;
 
-	
-	public ThirdPartyPane() {
+    public ThirdPartyPane () {
         super();
         instance = this;
     }
@@ -59,7 +38,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
         ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
     }
 
-    boolean filterForTab(ModPack pack) {
+    boolean filterForTab (ModPack pack) {
         return (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML));
     }
 
@@ -74,8 +53,8 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     boolean isFTB () {
         return false;
     }
-    
-    AbstractModPackPane getThis() {
-    	return this;
+
+    AbstractModPackPane getThis () {
+        return this;
     }
 }

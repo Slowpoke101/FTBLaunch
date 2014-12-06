@@ -16,20 +16,20 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
+import net.ftb.gui.GuiConstants;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.AbstractModPackPane;
+import net.ftb.gui.panes.MapUtils;
+import net.ftb.gui.panes.TexturepackPane;
+import net.miginfocom.swing.MigLayout;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JDialog;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import net.ftb.gui.GuiConstants;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.*;
-import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class SearchDialog extends JDialog {

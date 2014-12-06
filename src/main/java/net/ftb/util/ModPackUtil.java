@@ -1,5 +1,11 @@
 package net.ftb.util;
 
+import com.beust.jcommander.internal.Sets;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import net.ftb.data.ModPack;
+import net.ftb.log.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,13 +15,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.annotation.Nonnull;
-
-import net.ftb.data.ModPack;
-import net.ftb.log.Logger;
-
-import com.beust.jcommander.internal.Sets;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 /**
  * Utility functions specific to mod packs, such as information on default mods
@@ -30,19 +29,19 @@ public final class ModPackUtil {
         defaultMods = CacheBuilder.newBuilder().initialCapacity(10).build();
     }
 
-    private ModPackUtil() {
+    private ModPackUtil () {
         //Prevent instantiation of the utility class, meant to provide static methods
     }
 
     /**
      * Looks up the set of mod files which are downloaded with a "stock" installation of the mod 
      * pack, before any user customization
-     * 
+     *
      * <p>
      * Uses Java FileSystem to read the mods files from the cached/downloaded zip archive of the mod, 
      * and caches the result to avoid repeated file I/O
      * </p>
-     * 
+     *
      * @param modpack The mod pack to look up default mod entries for
      * @return A set of the mod files found in the default mod archive, or an empty set if the 
      * archive could not be located

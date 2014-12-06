@@ -18,8 +18,16 @@ package net.ftb.main;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.google.common.eventbus.EventBus;
+import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.*;
+import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Constants;
+import net.ftb.data.Map;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
+import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LauncherConsole;
@@ -27,19 +35,25 @@ import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.*;
+import net.ftb.log.LogLevel;
+import net.ftb.log.LogSource;
+import net.ftb.log.LogWriter;
+import net.ftb.log.Logger;
+import net.ftb.log.OutputOverride;
+import net.ftb.log.StdOutLogger;
 import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
 import net.ftb.updater.UpdateChecker;
-import net.ftb.util.*;
+import net.ftb.util.Benchmark;
+import net.ftb.util.CheckInstallPath;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.StyleUtil;
+import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.AuthlibDLWorker;
-
-import com.google.common.eventbus.EventBus;
-import lombok.Getter;
-
-import javax.swing.*;
 
 import java.awt.*;
 import java.io.File;
@@ -49,6 +63,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+
+import javax.swing.*;
 
 public class Main {
     public static JGoogleAnalyticsTracker tracker;

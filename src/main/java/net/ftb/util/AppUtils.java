@@ -16,6 +16,10 @@
  */
 package net.ftb.util;
 
+import net.ftb.log.Logger;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,11 +28,6 @@ import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import net.ftb.log.Logger;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class AppUtils {
     /**

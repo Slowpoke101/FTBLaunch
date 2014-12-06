@@ -8,15 +8,14 @@ package net.ftb.util.winreg;
  * Author: petrucio@stackoverflow (828681)
  *****************************************************************************/
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Windows-specific java versions finder

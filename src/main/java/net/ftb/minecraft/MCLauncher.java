@@ -16,26 +16,7 @@
  */
 package net.ftb.minecraft;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.Map.Entry;
-
 import com.google.common.collect.Lists;
-import net.feed_the_beast.launcher.json.JsonFactory;
-import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
-import net.feed_the_beast.launcher.json.assets.AssetIndex;
-import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.download.Locations;
-import net.ftb.log.Logger;
-import net.ftb.util.*;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -44,6 +25,32 @@ import com.mojang.authlib.UserType;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import com.mojang.util.UUIDTypeAdapter;
+import net.feed_the_beast.launcher.json.JsonFactory;
+import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
+import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.download.Locations;
+import net.ftb.log.Logger;
+import net.ftb.util.Benchmark;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.Parallel;
+import net.ftb.util.TrackerUtils;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 

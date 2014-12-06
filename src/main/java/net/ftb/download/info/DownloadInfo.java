@@ -16,12 +16,12 @@
  */
 package net.ftb.download.info;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class DownloadInfo {
     public URL url;

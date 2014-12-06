@@ -16,36 +16,7 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
@@ -58,20 +29,32 @@ import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils;
 
-import com.google.common.collect.Maps;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class TexturepackPane extends JPanel implements ILauncherPane, TexturePackListener {
-    
-	private static JPanel texturePacks;
-    
-	public static ArrayList<JPanel> texturePackPanels;
-    
+
+    private static JPanel texturePacks;
+
+    public static ArrayList<JPanel> texturePackPanels;
+
     @Getter
     private static JScrollPane texturePacksScroll;
     @Getter
     ObjectInfoSplitPane splitPane;
-    
+
     //stuff for swapping between maps/texture packs
     private JButton mapButton;
     private JButton textureButton;
@@ -94,17 +77,16 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         super();
         instance = this;
         this.setBorder(null);
-        
+
         setLayout(new BorderLayout());
-        
+
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(1,4));
-        buttonsPanel.setMinimumSize(new Dimension(420,25));
-        add(buttonsPanel, BorderLayout.PAGE_START);        
+        buttonsPanel.setLayout(new GridLayout(1, 4));
+        buttonsPanel.setMinimumSize(new Dimension(420, 25));
+        add(buttonsPanel, BorderLayout.PAGE_START);
 
         texturePackPanels = new ArrayList<JPanel>();
 
-        
         filter = new JButton(I18N.getLocaleString("FILTER_SETTINGS"));
         filter.setBounds(5, 5, 105, 25);
         filter.addActionListener(new ActionListener() {
@@ -125,12 +107,12 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\"> / </strong></font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + resolution + "</font>";
         typeLblText += "</body></html>";
-        
+
         typeLbl = new JLabel(typeLblText);
         typeLbl.setBounds(115, 5, 295, 25);
         typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
         buttonsPanel.add(typeLbl);
-        
+
         mapButton = new JButton(I18N.getLocaleString("SWAP_MAP"));
         mapButton.setBounds(400, 5, 105, 25);
         mapButton.addActionListener(new ActionListener() {
@@ -153,41 +135,38 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         });
         buttonsPanel.add(textureButton);
 
-        
         JTextArea filler = new JTextArea(I18N.getLocaleString("TEXTURE_WAIT_WHILE_LOADING"));
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 378, 42);
-        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);        
+        filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
 
         final JPanel p = new JPanel();
         p.setBounds(0, 0, 420, 55);
-        p.setLayout(null);        
+        p.setLayout(null);
         p.add(filler);
-        
-        
-        
+
         splitPane = new ObjectInfoSplitPane();
         texturePacks = splitPane.getPacks();
-        textureInfo = splitPane.getPackInfo();        
+        textureInfo = splitPane.getPackInfo();
         texturePacksScroll = splitPane.getPacksScroll();
         add(splitPane);
-        
+
         texturePacks.add(p);
-        
-        
+
         // Resize scrollbar when center divider is moved
-        texturePacksScroll.addComponentListener(new ComponentAdapter() {	
-			@Override			
-			public void componentResized(ComponentEvent e) {				
-				int itemsPerWidth = texturePacks.getWidth() / 420;
-				if (itemsPerWidth < 1) itemsPerWidth = 1;
-				texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
-		        texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));		        
-			}        	
-        });        
-        
+        texturePacksScroll.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized (ComponentEvent e) {
+                int itemsPerWidth = texturePacks.getWidth() / 420;
+                if (itemsPerWidth < 1) {
+                    itemsPerWidth = 1;
+                }
+                texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
+                texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)) / itemsPerWidth));
+            }
+        });
 
     }
 
@@ -209,9 +188,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         final int texturePackIndex = texturePackPanels.size();
 
         final JPanel p = new JPanel();
-        p.setPreferredSize(new Dimension(420,55));
+        p.setPreferredSize(new Dimension(420, 55));
         p.setLayout(null);
-        
+
         JLabel logo = new JLabel(new ImageIcon(texturePack.getLogo()));
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
@@ -227,7 +206,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         filler.setForeground(LauncherStyle.getCurrentStyle().tabPaneForeground);
         filler.setBounds(58, 6, 378, 42);
         filler.setBackground(LauncherStyle.getCurrentStyle().tabPaneBackground);
-        
+
         MouseAdapter lin = new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent e) {
@@ -235,8 +214,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
                 updateTexturePacks();
             }
         };
-        
-        p.addMouseListener(lin);        
+
+        p.addMouseListener(lin);
         filler.addMouseListener(lin);
         logo.addMouseListener(lin);
         p.add(filler);
@@ -244,10 +223,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         texturePackPanels.add(p);
         texturePacks.add(p);
 
-        
         texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
         texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
-        
+
     }
 
     @Override

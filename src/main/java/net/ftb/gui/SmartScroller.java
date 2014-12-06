@@ -9,11 +9,13 @@ package net.ftb.gui;
  * Add license if we make changes to code
  */
 
-import java.awt.Component;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.JTextComponent;
 
 /**
  *  The SmartScroller will attempt to keep the viewport positioned based on

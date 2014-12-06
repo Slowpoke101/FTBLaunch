@@ -16,18 +16,7 @@
  */
 package net.ftb.tools;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
+import static net.ftb.download.Locations.MAPS;
 
 import net.ftb.data.Map;
 import net.ftb.gui.LaunchFrame;
@@ -36,7 +25,13 @@ import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.workers.MapManagerWorker;
 
-import static net.ftb.download.Locations.MAPS;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class MapManager extends JDialog {

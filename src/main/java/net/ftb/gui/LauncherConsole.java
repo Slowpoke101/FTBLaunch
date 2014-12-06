@@ -16,17 +16,6 @@
  */
 package net.ftb.gui;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
 import net.ftb.data.Constants;
 import net.ftb.download.Locations;
 import net.ftb.locale.I18N;
@@ -39,6 +28,22 @@ import net.ftb.log.Logger;
 import net.ftb.tools.PastebinPoster;
 import net.ftb.util.GameUtils;
 import net.ftb.util.OSUtils;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.*;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 @SuppressWarnings("serial")
 public class LauncherConsole extends JFrame implements ILogListener {

@@ -16,18 +16,6 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-
 import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.gui.GuiConstants;
@@ -35,6 +23,13 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.AbstractModPackPane;
 import net.ftb.locale.I18N;
 import net.miginfocom.swing.MigLayout;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.*;
 
 public class ModPackFilterDialog extends JDialog {
     private JLabel availabilityLbl;

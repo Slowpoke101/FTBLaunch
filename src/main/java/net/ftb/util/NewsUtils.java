@@ -16,15 +16,15 @@
  */
 package net.ftb.util;
 
+import com.google.common.collect.Lists;
+import net.ftb.data.news.NewsArticle;
+import net.ftb.data.news.RSSReader;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-import net.ftb.data.news.NewsArticle;
-import net.ftb.data.news.RSSReader;
 
 public class NewsUtils {
 

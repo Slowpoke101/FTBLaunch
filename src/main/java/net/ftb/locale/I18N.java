@@ -16,16 +16,16 @@
  */
 package net.ftb.locale;
 
+import com.google.common.collect.Maps;
+import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
-
-import com.google.common.collect.Maps;
-import net.ftb.log.Logger;
-import net.ftb.util.OSUtils;
 
 public class I18N {
     private static Properties locales = new Properties();

@@ -16,6 +16,13 @@
  */
 package net.ftb.util;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.log.Logger;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,13 +38,6 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.log.Logger;
-import org.apache.commons.io.FileUtils;
 
 public class FTBFileUtils {
     /**

@@ -16,15 +16,9 @@
  */
 package net.ftb.log;
 
-import java.io.PrintStream;
-
 import lombok.Setter;
 
-import net.ftb.log.ILogListener;
-import net.ftb.log.LogEntry;
-import net.ftb.log.LogLevel;
-import net.ftb.log.LogSource;
-import net.ftb.log.LogType;
+import java.io.PrintStream;
 
 public class StdOutLogger implements ILogListener {
     // save real System.out and System.err

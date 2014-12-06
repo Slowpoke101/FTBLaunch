@@ -16,34 +16,23 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.CheckInstallPath;
+import net.ftb.util.CheckInstallPath.Action;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
-import net.ftb.util.CheckInstallPath.Action;
 
-import javax.swing.JTextField;
-
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class FirstRunDialog extends JDialog {
 

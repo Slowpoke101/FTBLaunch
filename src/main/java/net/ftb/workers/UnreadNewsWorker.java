@@ -16,13 +16,13 @@
  */
 package net.ftb.workers;
 
-import java.util.ArrayList;
-
-import javax.swing.SwingWorker;
-
 import net.ftb.data.Settings;
 import net.ftb.util.Benchmark;
 import net.ftb.util.NewsUtils;
+
+import java.util.ArrayList;
+
+import javax.swing.*;
 
 /**
  * SwingWorker that checks for unread news. Returns count of unread news

@@ -16,19 +16,18 @@
  */
 package net.ftb.data.news;
 
+import com.google.common.collect.Lists;
+import net.ftb.download.Locations;
+import net.ftb.log.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import com.google.common.collect.Lists;
-import net.ftb.download.Locations;
-
-import net.ftb.log.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class RSSReader {
 

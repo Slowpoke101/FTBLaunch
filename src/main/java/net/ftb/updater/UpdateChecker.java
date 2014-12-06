@@ -16,14 +16,6 @@
  */
 package net.ftb.updater;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.swing.SwingWorker;
-
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.launcher.Channel;
 import net.feed_the_beast.launcher.json.launcher.Update;
@@ -35,9 +27,16 @@ import net.ftb.util.AppUtils;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.List;
+
+import javax.swing.*;
 
 public class UpdateChecker extends SwingWorker<Boolean, Void> {
     private int version;

@@ -16,8 +16,6 @@
  */
 package net.ftb.workers;
 
-import java.net.URL;
-
 import net.ftb.data.Map;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -26,11 +24,12 @@ import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
 import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.net.URL;
 
 public class MapLoader extends Thread {
 

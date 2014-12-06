@@ -16,54 +16,18 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
-import com.google.common.collect.Lists;
-
 import lombok.Getter;
-import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.dialogs.EditModPackDialog;
-import net.ftb.gui.dialogs.ModPackFilterDialog;
-import net.ftb.gui.dialogs.PrivatePackDialog;
-import net.ftb.locale.I18N;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.TrackerUtils;
+
+import java.awt.*;
 
 @SuppressWarnings("serial")
 public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {	
 	
     @Getter
-	private static FTBPacksPane instance;
+	p
+    vate static FTBPacksPane instance;
 	
     public FTBPacksPane() 
     {

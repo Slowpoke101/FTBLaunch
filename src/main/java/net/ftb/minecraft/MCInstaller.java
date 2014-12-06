@@ -37,11 +37,15 @@ import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
-import net.ftb.util.*;
+import net.ftb.util.Benchmark;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.Parallel;
+import net.ftb.util.TrackerUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.swing.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -50,10 +54,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import javax.swing.*;
 
 public class MCInstaller {
     private static String packmcversion = new String();
@@ -472,10 +481,11 @@ public class MCInstaller {
 
         ModPack pack;
 
-        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY)
+        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
             pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
-        else
+        } else {
             pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedPackIndex());
+        }
 
         String packDir = pack.getDir();
 

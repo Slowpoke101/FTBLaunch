@@ -16,29 +16,8 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.ChooseDir;
@@ -51,8 +30,17 @@ import net.ftb.util.OSUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class EditModPackDialog extends JDialog {
     private JTabbedPane tabbedPane;
@@ -96,7 +84,7 @@ public class EditModPackDialog extends JDialog {
         if (modPack != null && modPack.getMcVersion() != null) {
             mcversion = Integer.parseInt(modPack.getMcVersion().replaceAll("[^\\d]", ""));
         }
-        
+
         Logger.logInfo("MCVersion: " + mcversion);
         modsFolder.mkdirs();
         coreModsFolder.mkdirs();
@@ -247,7 +235,7 @@ public class EditModPackDialog extends JDialog {
     /**
      * Adds formatted content to the displayed entry, including an indicator that the mod was part of the 
      * default set of shipped mods for the pack, and whether the mod was enabled/disabled by default
-     * 
+     *
      * @param originalDisplayName The original entry for the displayed list
      * @param modPack The mod pack being edited
      * @param defaultFile The matched default file in the mod pack

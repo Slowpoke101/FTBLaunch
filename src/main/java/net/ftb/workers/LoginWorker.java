@@ -16,15 +16,14 @@
  */
 package net.ftb.workers;
 
-import javax.swing.SwingWorker;
-
 import lombok.Getter;
 import net.ftb.data.LoginResponse;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.Benchmark;
 import net.ftb.util.ErrorUtils;
+
+import javax.swing.*;
 
 /**
  * SwingWorker that logs into minecraft.net. Returns a string containing the response received from the server.

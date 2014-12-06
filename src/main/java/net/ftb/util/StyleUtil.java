@@ -16,9 +16,9 @@
  */
 package net.ftb.util;
 
-import javax.swing.UIManager;
-
 import net.ftb.data.LauncherStyle;
+
+import javax.swing.*;
 
 public class StyleUtil {
     public static void loadUiStyles () {

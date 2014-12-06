@@ -16,8 +16,19 @@
  */
 package net.ftb.util;
 
-import java.awt.Desktop;
-import java.io.*;
+import lombok.Getter;
+import net.ftb.data.CommandLineSettings;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
+import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.RuntimeStreamer;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
@@ -30,13 +41,6 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import javax.swing.text.html.StyleSheet;
-
-import lombok.Getter;
-import net.ftb.data.CommandLineSettings;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.log.Logger;
-import net.ftb.util.winreg.JavaFinder;
-import net.ftb.util.winreg.RuntimeStreamer;
 
 public class OSUtils {
     private static byte[] cachedMacAddress;

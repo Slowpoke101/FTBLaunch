@@ -1,40 +1,32 @@
 package net.ftb.gui.panes;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.UIManager;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import lombok.Getter;
 import net.ftb.util.OSUtils;
 
+import java.awt.*;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
 public class ObjectInfoSplitPane extends JSplitPane {
 
-	// Space between items in scrolling list
-	static final int verticalItemPadding = 4;
+    // Space between items in scrolling list
+    static final int verticalItemPadding = 4;
 
-	@Getter
-	protected JPanel packs;
-	@Getter
-	protected JScrollPane packsScroll;	
-	@Getter
-	protected JEditorPane packInfo;
-	@Getter
-	protected JScrollPane infoScroll;
+    @Getter
+    protected JPanel packs;
+    @Getter
+    protected JScrollPane packsScroll;
+    @Getter
+    protected JEditorPane packInfo;
+    @Getter
+    protected JScrollPane infoScroll;
 
-
-	public ObjectInfoSplitPane()
-	{
+    public ObjectInfoSplitPane () {
         packs = new JPanel();
         packs.setLayout(new FlowLayout(FlowLayout.LEFT, 0, verticalItemPadding));
-        packs.setOpaque(false);        
+        packs.setOpaque(false);
 
         packsScroll = new JScrollPane();
         packsScroll.setBorder(null);
@@ -51,7 +43,7 @@ public class ObjectInfoSplitPane extends JSplitPane {
         packInfo.setContentType("text/html");
         packInfo.addHyperlinkListener(new HyperlinkListener() {
             @Override
-            public void hyperlinkUpdate(HyperlinkEvent event) {
+            public void hyperlinkUpdate (HyperlinkEvent event) {
                 if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
                     OSUtils.browse(event.getURL().toString());
                 }
@@ -62,20 +54,19 @@ public class ObjectInfoSplitPane extends JSplitPane {
         packInfo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         infoScroll = new JScrollPane();
-        infoScroll.setMinimumSize(new Dimension(430,290));
+        infoScroll.setMinimumSize(new Dimension(430, 290));
         infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         infoScroll.setWheelScrollingEnabled(true);
         infoScroll.setViewportView(packInfo);
         infoScroll.setOpaque(false);
         infoScroll.setBorder(null);
-        
+
         this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         this.setLeftComponent(packsScroll);
         this.setRightComponent(infoScroll);
         this.setDividerSize(4);
         this.setBorder(null);
-	}
-	
-	
+    }
+
 }

@@ -16,9 +16,8 @@
  */
 package net.ftb.data;
 
-import lombok.Getter;
-
 import com.mojang.authlib.UserAuthentication;
+import lombok.Getter;
 
 public class LoginResponse {
 

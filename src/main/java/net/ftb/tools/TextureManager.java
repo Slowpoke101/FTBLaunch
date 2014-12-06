@@ -16,6 +16,17 @@
  */
 package net.ftb.tools;
 
+import static net.ftb.download.Locations.TEXTUREPACKS;
+
+import com.google.common.collect.Maps;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
+import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.TrackerUtils;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -31,26 +42,8 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import com.google.common.collect.Maps;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.data.TexturePack;
-import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.TrackerUtils;
-
-import static net.ftb.download.Locations.TEXTUREPACKS;
 
 @SuppressWarnings("serial")
 public class TextureManager extends JDialog {

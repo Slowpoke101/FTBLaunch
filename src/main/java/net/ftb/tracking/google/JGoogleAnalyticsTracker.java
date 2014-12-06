@@ -25,6 +25,8 @@
  */
 package net.ftb.tracking.google;
 
+import net.ftb.log.Logger;
+
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -34,8 +36,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
-
-import net.ftb.log.Logger;
 
 /**
  * Common tracking calls are implemented as methods, but if you want to control

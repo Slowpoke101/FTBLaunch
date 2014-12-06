@@ -16,8 +16,17 @@
  */
 package net.ftb.data;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import com.google.common.collect.Lists;
+import lombok.Getter;
+import net.ftb.data.events.TexturePackListener;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.TexturepackPane;
+import net.ftb.log.Logger;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.workers.TexturePackLoader;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,16 +38,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-import lombok.Getter;
-import net.ftb.data.events.TexturePackListener;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.TexturepackPane;
-import net.ftb.log.Logger;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.workers.TexturePackLoader;
 
 public class TexturePack {
     @Getter

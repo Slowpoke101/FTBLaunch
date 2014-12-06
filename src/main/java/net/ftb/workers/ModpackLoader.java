@@ -16,15 +16,8 @@
  */
 package net.ftb.workers;
 
-import java.awt.Point;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-
-import javax.swing.SwingUtilities;
+import static net.ftb.download.Locations.MODPACKXML;
+import static net.ftb.download.Locations.THIRDPARTYXML;
 
 import com.google.common.collect.Lists;
 import net.ftb.data.Map;
@@ -38,14 +31,20 @@ import net.ftb.util.AppUtils;
 import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.OSUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static net.ftb.download.Locations.MODPACKXML;
-import static net.ftb.download.Locations.THIRDPARTYXML;
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.swing.*;
 
 public class ModpackLoader extends Thread {
     private ArrayList<String> xmlFiles = Lists.newArrayList();

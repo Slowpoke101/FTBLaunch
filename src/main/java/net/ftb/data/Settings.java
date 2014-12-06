@@ -16,9 +16,16 @@
  */
 package net.ftb.data;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Point;
+import lombok.Getter;
+import lombok.Setter;
+import net.ftb.log.Logger;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.OSUtils.OS;
+import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
+
+import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,15 +41,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
-import lombok.Getter;
-import lombok.Setter;
-import net.ftb.log.Logger;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.OSUtils.OS;
-import net.ftb.util.winreg.JavaFinder;
-import net.ftb.util.winreg.JavaInfo;
 
 @SuppressWarnings("serial")
 public class Settings extends Properties {

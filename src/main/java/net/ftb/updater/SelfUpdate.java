@@ -16,15 +16,15 @@
  */
 package net.ftb.updater;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import net.ftb.log.Logger;
 import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelfUpdate {
     public static void runUpdate (String currentPath, String temporaryUpdatePath) {

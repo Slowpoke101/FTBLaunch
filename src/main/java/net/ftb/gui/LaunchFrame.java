@@ -16,40 +16,7 @@
  */
 package net.ftb.gui;
 
-import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
+import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.data.CommandLineSettings;
@@ -95,7 +62,23 @@ import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.LoginWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
-import com.google.common.eventbus.Subscribe;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class LaunchFrame extends JFrame {
@@ -162,11 +145,11 @@ public class LaunchFrame extends JFrame {
         panel = new JPanel(new BorderLayout());
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        
+
         int prefWidth = 835;
         int prefHeight = 480;
         this.setMinimumSize(new Dimension(prefWidth, prefHeight));
-        
+
         // Determine how much space is used by window decoration, resize accordingly
         this.pack();
         Dimension fullWindowSize = this.getContentPane().getSize();
@@ -177,7 +160,7 @@ public class LaunchFrame extends JFrame {
 
         footer.setMinimumSize(new Dimension(850, 100));
         footer.setLayout(new BorderLayout());
-        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);    
+        footer.setBackground(LauncherStyle.getCurrentStyle().footerColor);
 
         tabbedPane.setMinimumSize(new Dimension(850, 380));
 
@@ -187,7 +170,7 @@ public class LaunchFrame extends JFrame {
 
         //Footer
         footerLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerLogo.setMinimumSize(new Dimension(42,42));
+        footerLogo.setMinimumSize(new Dimension(42, 42));
         footerLogo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked (MouseEvent event) {
@@ -227,8 +210,8 @@ public class LaunchFrame extends JFrame {
             }
         }
 
-        users.setMinimumSize(new Dimension(150,30));
-        users.setMaximumSize(new Dimension(150,30));
+        users.setMinimumSize(new Dimension(150, 30));
+        users.setMaximumSize(new Dimension(150, 30));
         users.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
@@ -242,7 +225,7 @@ public class LaunchFrame extends JFrame {
         });
 
         edit.setText(I18N.getLocaleString("EDIT_BUTTON"));
-        edit.setMinimumSize(new Dimension(60,30));
+        edit.setMinimumSize(new Dimension(60, 30));
         edit.setVisible(true);
         edit.setEnabled(users.getSelectedIndex() > 1);
         edit.addActionListener(new ActionListener() {
@@ -260,7 +243,7 @@ public class LaunchFrame extends JFrame {
         launch.setText(I18N.getLocaleString("LAUNCH_BUTTON"));
         //TODO: move this or make sure doLaunch() enables it. Only visual bug.
         launch.setEnabled(false);
-        launch.setMinimumSize(new Dimension(100,30));
+        launch.setMinimumSize(new Dimension(100, 30));
         launch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
@@ -268,7 +251,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        serverbutton.setMinimumSize(new Dimension(330,30));
+        serverbutton.setMinimumSize(new Dimension(330, 30));
         serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
         serverbutton.setVisible(false);
         serverbutton.addActionListener(new ActionListener() {
@@ -293,7 +276,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        mapInstall.setMinimumSize(new Dimension(160,30));
+        mapInstall.setMinimumSize(new Dimension(160, 30));
         mapInstall.setText(I18N.getLocaleString("INSTALL_MAP"));
         mapInstall.setVisible(false);
         mapInstall.addActionListener(new ActionListener() {
@@ -308,11 +291,11 @@ public class LaunchFrame extends JFrame {
         });
 
         mapInstallLocation = new JComboBox();
-        mapInstallLocation.setMinimumSize(new Dimension(160,30));
+        mapInstallLocation.setMinimumSize(new Dimension(160, 30));
         mapInstallLocation.setToolTipText("Install to...");
         mapInstallLocation.setVisible(false);
 
-        serverMap.setMinimumSize(new Dimension(330,30));
+        serverMap.setMinimumSize(new Dimension(330, 30));
         serverMap.setText(I18N.getLocaleString("DOWNLOAD_MAP_SERVER"));
         serverMap.setVisible(false);
         serverMap.addActionListener(new ActionListener() {
@@ -325,7 +308,7 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        tpInstall.setMinimumSize(new Dimension(160,30));
+        tpInstall.setMinimumSize(new Dimension(160, 30));
         tpInstall.setText(I18N.getLocaleString("INSTALL_TEXTUREPACK"));
         tpInstall.setVisible(false);
         tpInstall.addActionListener(new ActionListener() {
@@ -339,26 +322,25 @@ public class LaunchFrame extends JFrame {
         });
 
         tpInstallLocation = new JComboBox();
-        tpInstallLocation.setMinimumSize(new Dimension(160,30));
+        tpInstallLocation.setMinimumSize(new Dimension(160, 30));
         tpInstallLocation.setToolTipText("Install to...");
         tpInstallLocation.setVisible(false);
 
         tpInstallLocLbl.setText("Install to...");
-        tpInstallLocLbl.setMinimumSize(new Dimension(80,30));
+        tpInstallLocLbl.setMinimumSize(new Dimension(80, 30));
         tpInstallLocLbl.setVisible(false);
-		
 
         // Panel for the items in the bottom left
-		JPanel logoPanel = new JPanel();
+        JPanel logoPanel = new JPanel();
         logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         logoPanel.add(footerLogo);
         logoPanel.add(footerCreeper);
         logoPanel.add(footerTUG);
-        
+
         // Panel for the items in the bottom right
-		JPanel buttonFooterPanel = new JPanel();
-		buttonFooterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);        
+        JPanel buttonFooterPanel = new JPanel();
+        buttonFooterPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonFooterPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         buttonFooterPanel.add(edit);
         buttonFooterPanel.add(users);
         buttonFooterPanel.add(launch);
@@ -372,11 +354,10 @@ public class LaunchFrame extends JFrame {
         buttonFooterPanel.add(mapInstall);
 
         // Button if server map
-        buttonFooterPanel.add(serverMap);        
+        buttonFooterPanel.add(serverMap);
 
         footer.add(logoPanel, BorderLayout.LINE_START);
-        footer.add(buttonFooterPanel, BorderLayout.LINE_END);        
-
+        footer.add(buttonFooterPanel, BorderLayout.LINE_END);
 
         newsPane = new NewsPane();
         modPacksPane = new FTBPacksPane();
@@ -386,10 +367,10 @@ public class LaunchFrame extends JFrame {
         optionsPane = new OptionsPane(Settings.getSettings());
 
         getRootPane().setDefaultButton(launch);
-        updateLocale(); 
-        
+        updateLocale();
+
         tabbedPane.add(newsPane, 0);
-        tabbedPane.add(optionsPane, 1);        
+        tabbedPane.add(optionsPane, 1);
         tabbedPane.add(modPacksPane, 2);
         tabbedPane.add(thirdPartyPane, 3);
         tabbedPane.add(tpPane, 4);
@@ -422,20 +403,18 @@ public class LaunchFrame extends JFrame {
             }
         });
         tabbedPane.setSelectedIndex(tab);
-        
-        
-        
+
         panel.addComponentListener(new ComponentAdapter() {
-			// Reset splitter on window resize to avoid being in an unreachable location
-        	@Override
-			public void componentResized(ComponentEvent arg0) {
-				modPacksPane.getSplitPane().resetToPreferredSizes();
-				thirdPartyPane.getSplitPane().resetToPreferredSizes();
-				tpPane.getSplitPane().resetToPreferredSizes();
-				mapsPane.getSplitPane().resetToPreferredSizes();
-			}        	
+            // Reset splitter on window resize to avoid being in an unreachable location
+            @Override
+            public void componentResized (ComponentEvent arg0) {
+                modPacksPane.getSplitPane().resetToPreferredSizes();
+                thirdPartyPane.getSplitPane().resetToPreferredSizes();
+                tpPane.getSplitPane().resetToPreferredSizes();
+                mapsPane.getSplitPane().resetToPreferredSizes();
+            }
         });
-        
+
     }
 
     public static void checkDoneLoading () {

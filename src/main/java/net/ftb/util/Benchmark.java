@@ -16,9 +16,9 @@
  */
 package net.ftb.util;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import net.ftb.log.Logger;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Benchmark {
     private static Long baseTime;

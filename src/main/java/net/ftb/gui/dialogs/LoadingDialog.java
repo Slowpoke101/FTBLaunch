@@ -16,15 +16,13 @@
  */
 package net.ftb.gui.dialogs;
 
-import java.awt.Container;
-import java.awt.Toolkit;
+import net.ftb.locale.I18N;
+import net.ftb.log.Logger;
+
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.*;
-
-import net.ftb.gui.LaunchFrame;
-import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
 
 @SuppressWarnings("serial")
 public class LoadingDialog extends JDialog {

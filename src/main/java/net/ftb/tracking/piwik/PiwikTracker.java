@@ -5,15 +5,14 @@ import net.ftb.data.Constants;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 
-import java.awt.HeadlessException;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
-import java.util.Calendar;
 
 public class PiwikTracker extends Thread {
     private final String thingToTrack, urlFrom;

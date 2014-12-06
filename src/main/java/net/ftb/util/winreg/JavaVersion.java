@@ -11,7 +11,7 @@ public class JavaVersion {
     @Getter
     protected int major, minor, revision, update;
 
-    public static JavaVersion createJavaVersion(String version) {
+    public static JavaVersion createJavaVersion (String version) {
         try {
             return new JavaVersion(version, false);
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class JavaVersion {
         this.comparableVersion = new ComparableVersion(this.origVersion);
     }
 
-    private void parseVersionString() {
+    private void parseVersionString () {
         String[] s = this.origVersion.split("[._-]");
         this.major = Integer.parseInt(s[0]);
         this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
@@ -65,7 +65,7 @@ public class JavaVersion {
         }
     };
 
-    public boolean isOlder (JavaVersion  j1) {
+    public boolean isOlder (JavaVersion j1) {
         return this.comparableVersion.isOlder(j1.comparableVersion);
     }
 

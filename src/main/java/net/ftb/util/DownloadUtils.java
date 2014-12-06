@@ -16,8 +16,22 @@
  */
 package net.ftb.util;
 
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
 import static net.ftb.download.Locations.backupServers;
 import static net.ftb.download.Locations.downloadServers;
+
+import com.google.common.collect.Lists;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import lombok.NonNull;
+import net.ftb.data.Settings;
+import net.ftb.download.Locations;
+import net.ftb.gui.LaunchFrame;
+import net.ftb.log.Logger;
+import org.apache.commons.io.IOUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -38,22 +52,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
-
-import com.google.common.collect.Lists;
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
-import static com.google.common.net.HttpHeaders.*;
-import lombok.NonNull;
-import net.ftb.data.Settings;
-import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.log.Logger;
-
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import javax.imageio.ImageIO;
 
