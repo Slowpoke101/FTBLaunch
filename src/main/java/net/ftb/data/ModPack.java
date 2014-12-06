@@ -71,14 +71,15 @@ public class ModPack {
      * Loads the modpack.xml and adds it to the modpack array in this class
      */
     public static void loadXml (ArrayList<String> xmlFile) {
-        ModpackLoader loader = new ModpackLoader(xmlFile);
+        ModpackLoader loader = new ModpackLoader(xmlFile, false);
         loader.start();
     }
 
+    // Used by PrivatePackDialog when adding packs
     public static void loadXml (String xmlFile) {
         ArrayList<String> temp = Lists.newArrayList();
         temp.add(xmlFile);
-        ModpackLoader loader = new ModpackLoader(temp);
+        ModpackLoader loader = new ModpackLoader(temp, true);
         loader.start();
     }
 
