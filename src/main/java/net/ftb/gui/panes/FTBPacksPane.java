@@ -26,8 +26,7 @@ import java.awt.*;
 public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {	
 	
     @Getter
-	p
-    vate static FTBPacksPane instance;
+	private static FTBPacksPane instance;
 	
     public FTBPacksPane() 
     {
