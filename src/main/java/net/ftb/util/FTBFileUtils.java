@@ -118,7 +118,9 @@ public class FTBFileUtils {
      * @param zipLocation - the location of the zip to be extracted
      * @param outputLocation - location to extract to
      */
-    public static void extractZipTo (String zipLocation, String outputLocation) {
+    public static boolean extractZipTo (String zipLocation, String outputLocation) {
+        boolean success = true;
+        boolean backupSuccess = true;
         ZipInputStream zipinputstream = null;
         try {
             byte[] buf = new byte[1024];
@@ -139,17 +141,23 @@ public class FTBFileUtils {
                 zipentry = zipinputstream.getNextEntry();
             }
         } catch (Exception e) {
+            success = false;
             Logger.logError("Error while extracting zip", e);
-            backupExtract(zipLocation, outputLocation);
+            backupSuccess = backupExtract(zipLocation, outputLocation);
         } finally {
             try {
                 zipinputstream.close();
             } catch (IOException e) {
             }
         }
+        if (!success) {
+            return backupSuccess;
+        }
+        return true;
     }
 
-    public static void backupExtract (String zipLocation, String outputLocation) {
+    public static boolean backupExtract (String zipLocation, String outputLocation) {
+        boolean success = true;
         Logger.logInfo("Extracting (Backup way)");
         byte[] buffer = new byte[1024];
         ZipInputStream zis = null;
@@ -177,6 +185,7 @@ public class FTBFileUtils {
             }
         } catch (IOException ex) {
             Logger.logError("Error while extracting zip", ex);
+            success = false;
         } finally {
             try {
                 zis.closeEntry();
@@ -184,6 +193,7 @@ public class FTBFileUtils {
             } catch (IOException e) {
             }
         }
+        return success;
     }
 
     /**

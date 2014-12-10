@@ -254,7 +254,10 @@ public class ModManager extends JDialog {
                     }
 
                     Logger.logDebug("Extracting pack.");
-                    FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath());
+                    if (!FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath())) {
+                        ErrorUtils.tossError("Error downloading modpack!!!");
+                        return false;
+                    }
                     if (pack.getBundledMap() && saveExists) {
                         try {
                             if (new File(installPath, dir + "/minecraft/saves").exists() && new File(installPath, dir + "/minecraft/saves.ftbtmp").exists()) {
