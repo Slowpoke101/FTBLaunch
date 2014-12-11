@@ -423,6 +423,9 @@ public class DownloadUtils extends Thread {
      */
     @Override
     public void run () {
+        boolean bothReposFailed = false;
+        boolean curseFailed = false;
+        boolean creeperFailed = false;
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
             Benchmark.start("DlUtils");
@@ -431,9 +434,27 @@ public class DownloadUtils extends Thread {
             Random r = new Random();
             double choice = r.nextDouble();
             try { // Super catch-all to ensure the launcher always renders
+                String json = null;
+                // Fetch the percentage json first
                 try {
-                    // Fetch the percentage json first
-                    String json = IOUtils.toString(new URL(Locations.masterRepo + "/FTB2/static/balance.json"));
+                    json = IOUtils.toString(new URL(Locations.curseRepo + "/FTB2/static/balance.json"));
+                } catch (IOException e) {
+                    curseFailed = true;
+                }
+
+                if (curseFailed) {
+                    try {
+                        json = IOUtils.toString(new URL(Locations.chRepo + "/FTB2/static/balance.json"));
+                    } catch (IOException e) {
+                        creeperFailed = true;
+                        bothReposFailed = true;
+                    }
+                }
+
+                // ok we got working balance.json
+                if (!bothReposFailed) {
+                    // should we catch network failures here and try to fetch balance from creeperrepo
+                    // and if it also fails we can automatically start parsing hardcoded edges.json
                     JsonElement element = new JsonParser().parse(json);
 
                     if (element != null && element.isJsonObject()) {
@@ -459,33 +480,32 @@ public class DownloadUtils extends Thread {
                             }
                         }
                     }
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Bal");
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance");
                     if (Locations.chEnabled) {
                         // Fetch servers from creeperhost using edges.json first
                         parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
-                        Benchmark.logBenchAs("DlUtils", "Download Utils CH");
+                        Benchmark.logBenchAs("DlUtils", "Download Utils CH edges.json");
                     }
                     // Fetch servers list from curse using edges.json second
                     parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Curse");
-                } catch (IOException e) {
-                    int i = 10;
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Curse edges.json");
 
-                    // If fetching edges.json failed, assume new. is inaccessible
-                    // Try alternate mirrors from the cached server list in resources
+                } else {
+                    //both repos failed. use builtin edges.json, remove previously selected Automatic entry
                     downloadServers.clear();
-
                     Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
                     parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
                 }
 
                 if (downloadServers.size() == 0) {
+                    // only if previous else block was executed and did not find working server. (e.g. network is down)
                     Logger.logError("Could not find any working mirrors! If you are running a software firewall please allow the FTB Launcher permission to use the internet.");
 
                     // Fall back to new. (old system) on critical failure
                     downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
                 } else if (!downloadServers.containsKey("Automatic")) {
-                    // Use a random server from edges.json as the Automatic server
+                    // only if previous else block found working servers
+                    // Use a random server from builtin edges.json as the Automatic server
                     int index = (int) (Math.random() * downloadServers.size());
                     List<String> keys = Lists.newArrayList(downloadServers.keySet());
                     String defaultServer = downloadServers.get(keys.get(index));
@@ -559,6 +579,7 @@ public class DownloadUtils extends Thread {
                 JsonObject jso = element.getAsJsonObject();
                 for (Entry<String, JsonElement> e : jso.entrySet()) {
                     if (testEntries) {
+                        //TODO: this should  be threaded or at least use sensible timeout for connect()
                         try {
                             Logger.logInfo("Testing Server:" + e.getKey());
                             //test that the server will properly handle file DL's if it doesn't throw an error the web daemon should be functional
