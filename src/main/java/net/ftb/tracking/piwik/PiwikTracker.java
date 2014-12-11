@@ -64,11 +64,11 @@ public class PiwikTracker extends Thread {
                 Logger.logDebug("Tracker request failed. Return code: " + result);
             }
         } catch (MalformedURLException e) {
-            Logger.logError("Malformed Tracker URL", e);
+            Logger.logDebug("Malformed Tracker URL", e);
         } catch (HeadlessException e) {
-            Logger.logError("Headless Exception from Piwik", e);
+            Logger.logDebug("Headless Exception from Piwik", e);
         } catch (IOException e) {
-            Logger.logError("Error Contacting tracking server", e);
+            Logger.logDebug("Error Contacting tracking server", e);
         } finally {
             if (con != null) {
                 con.disconnect();

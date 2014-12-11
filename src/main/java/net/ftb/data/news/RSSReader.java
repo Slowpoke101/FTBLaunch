@@ -52,7 +52,7 @@ public class RSSReader {
 
             return news;
         } catch (Exception ex) {
-            Logger.logError("News download failed", ex);
+            Logger.logWarn("News download failed", ex);
             return null;
         }
     }

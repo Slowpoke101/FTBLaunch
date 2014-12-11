@@ -429,7 +429,7 @@ public class DownloadUtils extends Thread {
         setName("DownloadUtils");
         if (!Locations.hasDLInitialized) {
             Benchmark.start("DlUtils");
-            Logger.logInfo("DownloadUtils.run() starting");
+            Logger.logDebug("DownloadUtils.run() starting");
             downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
             Random r = new Random();
             double choice = r.nextDouble();
@@ -493,7 +493,7 @@ public class DownloadUtils extends Thread {
                 } else {
                     //both repos failed. use builtin edges.json, remove previously selected Automatic entry
                     downloadServers.clear();
-                    Logger.logInfo("Primary mirror failed, Trying alternative mirrors");
+                    Logger.logWarn("Primary mirror failed, Trying alternative mirrors");
                     parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
                 }
 
@@ -522,7 +522,7 @@ public class DownloadUtils extends Thread {
 
             // This line absolutely must be hit, or the console will not be shown
             // and the user/we will not even know why an error has occurred. 
-            Logger.logInfo("DL ready");
+            Logger.logDebug("DL ready");
 
             String selectedMirror = Settings.getSettings().getDownloadServer();
             String selectedHost = downloadServers.get(selectedMirror);
@@ -534,7 +534,7 @@ public class DownloadUtils extends Thread {
                 InetAddress ipAddress = InetAddress.getByName(selectedHost);
                 resolvedIP = ipAddress.getHostAddress();
             } catch (UnknownHostException e) {
-                Logger.logError("Failed to resolve selected mirror: " + e.getMessage());
+                Logger.logWarn("Failed to resolve selected mirror: " + e.getMessage());
             }
 
             try {
@@ -552,7 +552,7 @@ public class DownloadUtils extends Thread {
                     }
                 }
             } catch (UnknownHostException e) {
-                Logger.logError("Failed to resolve mirror: " + e.getMessage());
+                Logger.logWarn("Failed to resolve mirror: " + e.getMessage());
             }
 
             Logger.logInfo("Using download server " + selectedMirror + ":" + resolvedMirror + " on host " + resolvedHost + " (" + resolvedIP + ")");
@@ -581,7 +581,7 @@ public class DownloadUtils extends Thread {
                     if (testEntries) {
                         //TODO: this should  be threaded or at least use sensible timeout for connect()
                         try {
-                            Logger.logInfo("Testing Server:" + e.getKey());
+                            Logger.logDebug("Testing Server:" + e.getKey());
                             //test that the server will properly handle file DL's if it doesn't throw an error the web daemon should be functional
                             IOUtils.toString(new URL("http://" + e.getValue().getAsString() + "/" + location));
                             h.put(e.getKey(), e.getValue().getAsString());
