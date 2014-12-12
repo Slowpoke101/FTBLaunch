@@ -150,7 +150,7 @@ jar {
 }
 
 def getCheckedOutGitCommitHash() {
-    def gitFolder = "$projectDir/.git/"
+    def gitFolder = "$projectDir" + File.separator + ".git" + File.separator
     def takeFromHash = 12
     /*
      * '.git/HEAD' contains either

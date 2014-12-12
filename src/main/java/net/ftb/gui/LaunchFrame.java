@@ -60,6 +60,7 @@ import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.LoginWorker;
+import net.ftb.workers.NewsWorker;
 import net.ftb.workers.UnreadNewsWorker;
 
 import java.awt.*;
@@ -360,6 +361,20 @@ public class LaunchFrame extends JFrame {
         footer.add(buttonFooterPanel, BorderLayout.LINE_END);
 
         newsPane = new NewsPane();
+        NewsWorker nw = new NewsWorker() {
+            @Override
+            protected void done () {
+                String html = null;
+                try {
+                    html = get();
+                }
+                catch (InterruptedException e) { }
+                catch (ExecutionException e) { }
+
+                newsPane.setContent(html);
+            }
+        };
+        nw.execute();
         modPacksPane = new FTBPacksPane();
         thirdPartyPane = new ThirdPartyPane();
         mapsPane = new MapUtils();

@@ -319,7 +319,17 @@ public class Main {
         AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
             @Override
             protected void done () {
-                if (disableLaunchButton == false) {
+                boolean workerSuccess = true;
+                try {
+                    workerSuccess = get();
+                } catch (InterruptedException e) { }
+                catch (ExecutionException e) { }
+
+                if (!workerSuccess) {
+                    ErrorUtils.tossError("No usable authlib available. Please check your firewall rules and network connection. Can't start MC without working authlib. Launch button will be disabled.");
+                }
+
+                if (workerSuccess && disableLaunchButton == false) {
                     LaunchFrame.getInstance().getLaunch().setEnabled(true);
                 }
             }

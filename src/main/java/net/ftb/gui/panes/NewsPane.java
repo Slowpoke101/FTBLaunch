@@ -27,6 +27,7 @@ import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
+import lombok.Getter;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
@@ -73,7 +74,7 @@ public class NewsPane extends JPanel implements ILauncherPane {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         newsPanel.setBorder(null);
         this.add(newsPanel, BorderLayout.CENTER);
-        this.news_pane.setText(NewsUtils.getNewsHTML());
+        this.news_pane.setText("No news loaded, please wait");
     }
 
     @Override
@@ -81,6 +82,10 @@ public class NewsPane extends JPanel implements ILauncherPane {
         Settings.getSettings().setNewsDate();
         Settings.getSettings().save();
         LaunchFrame.getInstance().setNewsIcon();
+    }
+
+    public void setContent(String s) {
+        this.news_pane.setText(s);
     }
 
 }
