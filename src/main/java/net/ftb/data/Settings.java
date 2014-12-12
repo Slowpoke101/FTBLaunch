@@ -352,7 +352,7 @@ public class Settings extends Properties {
     }
 
     public boolean getKeepLauncherOpen () {
-        return Boolean.parseBoolean(getProperty("keepLauncherOpen", "false"));
+        return Boolean.parseBoolean(getProperty("keepLauncherOpen", "true"));
     }
 
     public void setSnooper (boolean state) {
