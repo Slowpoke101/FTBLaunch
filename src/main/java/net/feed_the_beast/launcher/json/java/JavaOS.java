@@ -10,9 +10,9 @@ public class JavaOS {
 
     @Getter
     @SerializedName("32")
-    private Entry bits32;
+    private JavaType bits32;
     @Getter
     @SerializedName("64")
-    private Entry bits64;
+    private JavaType bits64;
 
 }

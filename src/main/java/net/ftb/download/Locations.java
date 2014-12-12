@@ -58,6 +58,7 @@ public class Locations {
     public static HashMap<String, String> backupServers = Maps.newHashMap();
 
     //Oracle Java Locations
+    //TODO remove these when we autodownload for FTB
     public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97809";
     public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97807";
     public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97800";

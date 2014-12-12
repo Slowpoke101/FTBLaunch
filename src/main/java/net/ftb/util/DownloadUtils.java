@@ -310,6 +310,20 @@ public class DownloadUtils extends Thread {
         Logger.logInfo("Remote: " + md5.toUpperCase());
         return md5.equalsIgnoreCase(result);
     }
+    /**
+     * Checks the file for corruption.
+     * @param file - File to check
+     * @param sha1 - remote MD5 to compare against
+     * @return boolean representing if it is valid
+     * @throws IOException
+     */
+    public static boolean isSHA1Valid (File file, String sha1) throws IOException {
+        String result = fileSHA(file);
+        Logger.logInfo("Local: " + result.toUpperCase());
+        Logger.logInfo("Remote: " + sha1.toUpperCase());
+        return sha1.equalsIgnoreCase(result);
+    }
+
 
     /**
      * Checks the file for corruption.

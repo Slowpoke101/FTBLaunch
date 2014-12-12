@@ -30,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
@@ -279,9 +280,7 @@ public class FTBFileUtils {
             }
         }
     }
-
-    public static boolean extractLZMA (String inputLocation, File output) throws IOException {
-        LZMAInputStream lis = new LZMAInputStream(new BufferedInputStream(new FileInputStream(new File(inputLocation))));
+    public static boolean extractLZMA (LZMAInputStream lis, File output) throws IOException {
         OutputStream fos = new FileOutputStream(output);
         byte[] buf = new byte[8192];
         try {
@@ -298,6 +297,11 @@ public class FTBFileUtils {
             return false;
         }
         return true;
+    }
+
+    public static boolean extractLZMA (String inputLocation, File output) throws IOException {
+        LZMAInputStream lis = new LZMAInputStream(new BufferedInputStream(new FileInputStream(new File(inputLocation))));
+        return extractLZMA(lis,output);
     }
 
     public static void move (File oldFile, File newFile) {
