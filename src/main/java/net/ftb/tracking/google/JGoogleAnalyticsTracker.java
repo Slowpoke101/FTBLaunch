@@ -457,7 +457,7 @@ public class JGoogleAnalyticsTracker {
             //				Logger.logInfo("JGoogleAnalyticsTracker: Tracking success");
             //			}
         } catch (Exception e) {
-            Logger.logError("Error making tracking request", e);
+            Logger.logDebug("Error making tracking request", e);
         }
     }
 
