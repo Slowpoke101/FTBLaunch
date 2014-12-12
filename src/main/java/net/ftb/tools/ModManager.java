@@ -91,7 +91,8 @@ public class ModManager extends JDialog {
             return true;
         }
 
-        public String downloadUrl (String filename, String urlString) {
+        public String downloadUrl (String filename, String urlString) throws Exception{
+            boolean failed = false;
             BufferedInputStream in = null;
             FileOutputStream fout;
             HttpURLConnection connection = null;
@@ -167,8 +168,10 @@ public class ModManager extends JDialog {
                     }
                 } catch (MalformedURLException e) {
                     Logger.logError("Error while downloading modpack", e);
+                    failed = true;
                 } catch (IOException e) {
                     Logger.logError("Error while downloading modpack", e);
+                    failed = true;
                 }
 
                 try {
@@ -190,6 +193,10 @@ public class ModManager extends JDialog {
                 }
             } catch (IOException e) {
                 Logger.logWarn("Error while downloading modpack", e);
+            }
+
+            if (failed) {
+                throw new Exception("Modpack download failed");
             }
             return md5;
         }
@@ -228,7 +235,8 @@ public class ModManager extends JDialog {
                     }
                 }
             } catch (Exception e) {
-                Logger.logError("Error validating pack archive", e);
+                ErrorUtils.tossError("Error while downloading modpack", e);
+                return false;
             }
 
             try {
