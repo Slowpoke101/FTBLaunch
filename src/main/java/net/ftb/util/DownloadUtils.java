@@ -441,6 +441,7 @@ public class DownloadUtils extends Thread {
                 } catch (IOException e) {
                     curseFailed = true;
                 }
+                Benchmark.logBenchAs("DlUtils", "Download Utils Balance (curse)");
 
                 if (curseFailed) {
                     try {
@@ -449,6 +450,7 @@ public class DownloadUtils extends Thread {
                         creeperFailed = true;
                         bothReposFailed = true;
                     }
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance (creeper)");
                 }
 
                 // ok we got working balance.json
@@ -495,6 +497,7 @@ public class DownloadUtils extends Thread {
                     downloadServers.clear();
                     Logger.logWarn("Primary mirror failed, Trying alternative mirrors");
                     parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Builtin servers tested");
                 }
 
                 if (downloadServers.size() == 0) {
