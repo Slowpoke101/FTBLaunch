@@ -42,6 +42,7 @@ public class NewsUtils {
      */
     public static String getNewsHTML () {
         // if news not fetched try to fetch. Blocks thread.
+        Benchmark.start("NewsUtils");
         if (news == null) {
             NewsUtils.initializeNews();
         }
@@ -59,6 +60,7 @@ public class NewsUtils {
             html += "No network connection, no news.";
         }
         html += "</html>";
+        Benchmark.logBench("NewsUtils");
         return html;
 
     }
