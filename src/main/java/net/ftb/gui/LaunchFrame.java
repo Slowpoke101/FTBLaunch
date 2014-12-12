@@ -147,7 +147,7 @@ public class LaunchFrame extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        int prefWidth = 835;
+        int prefWidth = 850;
         int prefHeight = 480;
         this.setMinimumSize(new Dimension(prefWidth, prefHeight));
 
