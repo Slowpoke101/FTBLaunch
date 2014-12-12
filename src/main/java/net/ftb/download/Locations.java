@@ -29,6 +29,8 @@ public class Locations {
     public static final String mc_res = "http://resources.download.minecraft.net/";
     //location of them Mojang server that hosts the Minecraft Maven host
     public static final String mc_libs = "https://libraries.minecraft.net/";
+    //locations of mojang's launcher metadata json -- stores JRE locations
+    public static final String MC_LAUNCHER_META = "https://launchermeta.mojang.com/mc/launcher.json";
     //location of the FTB maven repo within the FTB2/static part of the repository
     public static final String ftb_maven = "maven/";
 

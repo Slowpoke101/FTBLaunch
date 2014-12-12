@@ -3,6 +3,7 @@ package net.ftb.tracking.piwik;
 import com.google.common.hash.Hashing;
 import net.ftb.data.Constants;
 import net.ftb.data.Settings;
+import net.ftb.download.Locations;
 import net.ftb.log.Logger;
 
 import java.awt.*;
@@ -45,7 +46,7 @@ public class PiwikTracker extends Thread {
             }
             Calendar time = Calendar.getInstance();
 
-            String s = "http://stats.feed-the-beast.com/piwik.php?action_name="
+            String s = Locations.PIWIK + "/piwik.php?action_name="
                     + PiwikUtils.urlEncode(thingToTrack)
                     + extraParamaters
                     + "&url=" + PiwikUtils.urlEncode(urlFrom)

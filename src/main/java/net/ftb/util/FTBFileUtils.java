@@ -22,12 +22,15 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import org.apache.commons.io.FileUtils;
+import org.tukaani.xz.LZMAInputStream;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
 import java.util.Comparator;
@@ -274,6 +277,26 @@ public class FTBFileUtils {
                 set.add(f);
             }
         }
+    }
+
+    public static boolean extractLZMA (String inputLocation, File output) throws IOException {
+        LZMAInputStream lis = new LZMAInputStream(new BufferedInputStream(new FileInputStream(new File(inputLocation))));
+        OutputStream fos = new FileOutputStream(output);
+        byte[] buf = new byte[8192];
+        try {
+            try {
+                int size;
+                while ((size = lis.read(buf)) != -1) {
+                    fos.write(buf, 0, size);
+                }
+            } finally {
+                lis.close();
+                fos.close();
+            }
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
     public static void move (File oldFile, File newFile) {
