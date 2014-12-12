@@ -201,9 +201,9 @@ public class AdvancedOptionsDialog extends JDialog {
                 @Override
                 public void keyReleased (KeyEvent e) {
                     if (!javaPathText.getText().equals("") && !new File(javaPathText.getText()).isFile()) {
-                        javaPath.setBackground(Color.RED);
+                        javaPathText.setBackground(Color.RED);
                     } else {
-                        javaPath.setBackground(new Color(40, 40, 40));
+                        javaPathText.setBackground(new Color(40, 40, 40));
                     }
                 }
             });
