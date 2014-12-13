@@ -22,9 +22,11 @@ import java.net.URL;
  */
 public class RelaunchManager {
     private static boolean is64;
+    private static boolean isWin;
 
     public static void inspectForRelaunch (String args[]) {
         JavaInfo java = Settings.getSettings().getCurrentJava();
+        isWin = OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS;
         JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
         JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
         is64 = OSUtils.is64BitOS();
@@ -89,17 +91,22 @@ public class RelaunchManager {
                         //todo test java, if fails delete the java as well
                         FTBFileUtils.delete(tempZipF);
                         FTBFileUtils.delete(tempLZMAF);
+
                     } else {
                         //error downloading -- hash NFG
                     }
                 } catch (IOException e) {
-
                 }
             }
-            if(run) {
-
+            if (run) {
+                launch(new File(out, "bin/java" + (isWin ? ".exe" : "")), args);//TODO how to handle exe launcher & app launcher here
             }
         }
+
+    }
+
+    private static void launch (File fl, String[] args) {
+        //append the arg to not run the relaunching
 
     }
 }
