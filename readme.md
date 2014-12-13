@@ -28,6 +28,14 @@ limitations under the License.
 
 * With Eclipse/idea, import generated project/module and build as usual.
 
+## Java Language Level
+* Java 7 is required to compile this project. This project will run safely on java 6 machines
+* Java 7 Classes/methods may be used in the net.ftb.j7 package only.
+* Usage of the net.ftb.j7 package in other parts of the project must shield these calls from java 6 systems using new.ftb.utils.OSUtils.canUseJ7Utils()
+* This project does not use new language features such as diamond operators, etc.
+
+* The gradle Animal Sniffer plugin is used to ensure that java 7 classes don't end up outside this package.
+
 ##Pull Request Standards
 * Indent with spaces(4)
 * Avoid trailing whitespace

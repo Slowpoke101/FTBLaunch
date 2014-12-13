@@ -3,8 +3,10 @@ package net.ftb.relaunch;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.java.Entry;
 import net.feed_the_beast.launcher.json.java.MojangLauncher;
+import net.ftb.data.CommandLineSettings;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.FTBFileUtils;
@@ -14,29 +16,50 @@ import net.ftb.util.winreg.JavaVersion;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Created by progwml6 on 12/12/14.
+ * @author progwml6
  */
 public class RelaunchManager {
     private static boolean is64;
     private static boolean isWin;
+    private static String WIN_TEMPLATE = "${LOC}\\bin\\java.exe %*";
+    private static String POSIX_TEMPLATE = "${LOC}/bin/java $@";
 
     public static void inspectForRelaunch (String args[]) {
-        JavaInfo java = Settings.getSettings().getCurrentJava();
-        isWin = OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS;
-        JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
-        JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
-        is64 = OSUtils.is64BitOS();
-        if (java.isOlder(java7)) {
-            inspect(args, java, java7);
-        } else if (java.isOlder(java8)) {
-            // in the future we might need to get people on java 8
-            // however... if javafx is not installed we will ask for a java DL
-        } else {
-            //we aren't gonna prompt java 8 users to update to mojang's java
+        if (!CommandLineSettings.getSettings().isNoRelaunch()) {
+            JavaInfo java = Settings.getSettings().getCurrentJava();
+            isWin = OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS;
+            JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
+            JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
+            is64 = OSUtils.is64BitOS();
+            if (java.isOlder(java7)) {
+                inspect(args, java, java7);
+            } else if (java.isOlder(java8)) {
+                try {
+                    Class.forName("javafx.scene.control.Label");
+                } catch (Exception e) {
+                    Logger.logWarn("JAVAFX not found requesting java download anyway");
+                    inspect(args, java, java8);
+                }
+                // in the future we might need to get people on java 8
+                // however... if javafx is not installed we will ask for a java DL
+            } else {
+                //we aren't gonna prompt java 8 users to update to mojang's java unless javafx is missing
+                try {
+                    Class.forName("javafx.scene.control.Label");
+                } catch (Exception e) {
+                    Logger.logWarn("JAVAFX not found requesting java download anyway");
+                    inspect(args, java, java);
+                }
+
+            }
         }
     }
 
@@ -44,20 +67,35 @@ public class RelaunchManager {
         Entry mj = null;
 
         try {
-            MojangLauncher ml = JsonFactory.GSON.fromJson(IOUtils.toString(new URL(Locations.MC_LAUNCHER_META)), MojangLauncher.class);
+            MojangLauncher ml = null;
             switch (OSUtils.getCurrentOS()) {
             case WINDOWS:
                 if (is64) {
                     mj = ml.getWindows().getBits64().getJre();
                 } else {
-                    mj = ml.getWindows().getBits64().getJre();
+                    mj = ml.getWindows().getBits32().getJre();
                 }
+                ml = JsonFactory.GSON.fromJson(IOUtils.toString(new URL(Locations.MC_LAUNCHER_META)), MojangLauncher.class);
                 break;
             case MACOSX:
-                //not currently supported
+                ml = JsonFactory.GSON.fromJson(IOUtils.toString(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.FTB_JAVA_META))), MojangLauncher.class);
+                if (OSUtils.canRun8OnMac()) {
+                    mj = ml.getMac().getBits64().getJre();
+                } else if (OSUtils.canRun7OnMac() && ml.getMac().getBackup64() != null) {
+                    mj = ml.getMac().getBackup64().getJre();//grab java 7
+                } else {
+                    Logger.logWarn("Mac is running 10.5 or 10.6, There is no java 7+ available for this version!");
+                }
+                //if they can't run java 7+ properly we can't help unfortunately
                 break;
             case UNIX:
-                //not currently supported
+                ml = JsonFactory.GSON.fromJson(IOUtils.toString(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.FTB_JAVA_META))), MojangLauncher.class);
+                if (is64) {
+                    mj = ml.getLinux().getBits64().getJre();
+                } else {
+                    mj = ml.getLinux().getBits32().getJre();
+                }
+
                 break;
             case OTHER:
                 //never supported
@@ -91,7 +129,7 @@ public class RelaunchManager {
                         //todo test java, if fails delete the java as well
                         FTBFileUtils.delete(tempZipF);
                         FTBFileUtils.delete(tempLZMAF);
-
+                        createShellWrapper(outLocation);
                     } else {
                         //error downloading -- hash NFG
                     }
@@ -99,14 +137,52 @@ public class RelaunchManager {
                 }
             }
             if (run) {
-                launch(new File(out, "bin/java" + (isWin ? ".exe" : "")), args);//TODO how to handle exe launcher & app launcher here
+                launch(outLocation + File.separator + "bin" + File.separator + "java" + (isWin ? ".exe" : ""), args);//TODO how to handle exe launcher & app launcher here
             }
         }
 
     }
 
-    private static void launch (File fl, String[] args) {
-        //append the arg to not run the relaunching
+    private static void launch (String path, String[] args) {
+        List<String> arguments = new ArrayList<String>();
 
+        String separator = System.getProperty("file.separator");
+        arguments.add(path);
+        arguments.add("-jar");
+        arguments.add(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        Collections.addAll(arguments, args);
+        arguments.add("--no-relaunch");
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command(arguments);
+        try {
+            processBuilder.start();
+        } catch (IOException e) {
+            Logger.logError("Failed relaunch the launcher", e);
+        }
+
+    }
+
+    //shell wrapper for server downloads to be able to easily run on our java's
+    private static void createShellWrapper (String loc) {
+        try {
+            String fl = OSUtils.getDynamicStorageLocation();
+            if (isWin) {
+                fl += File.separator + "FTBJava.bat";
+            } else {
+                fl += File.separator + "FTBJava.sh";
+            }
+            FileWriter fw = new FileWriter(fl);
+            if (isWin) {
+                fw.write(WIN_TEMPLATE.replace("${LOC}", loc));
+            } else {
+                fw.write(POSIX_TEMPLATE.replace("${LOC}", loc));
+            }
+            fw.close();
+            File f = new File(fl);
+            f.setExecutable(true);
+        } catch (IOException ioe) {
+
+        }
     }
 }

@@ -80,6 +80,9 @@ public class Locations {
     public static final String MODPACKXML = "modpacks.xml";
     public static final String THIRDPARTYXML = "thirdparty.xml";
     public static final String TEXTUREPACKXML = "texturepack.xml";
+
+    public static final  String FTB_JAVA_META = "javameta.json";
+
     public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 

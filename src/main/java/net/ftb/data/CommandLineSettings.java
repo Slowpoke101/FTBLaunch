@@ -85,6 +85,11 @@ public class CommandLineSettings {
     @Getter
     private boolean skipFirst = false;
 
+    @Parameter(names = { "--no-relaunch", "-n" }, description = "don't relaunch the launcher or attempt to pull java down")
+    @Getter
+    private boolean noRelaunch = false;
+
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {

@@ -4,6 +4,7 @@ import com.beust.jcommander.internal.Sets;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.ftb.data.ModPack;
+import net.ftb.j7.utils.NewModpackUtils;
 import net.ftb.log.Logger;
 
 import java.io.File;
@@ -96,6 +97,9 @@ public final class ModPackUtil {
      * archive could not be located
      */
     private static Set<String> loadDefaultMods (@Nonnull ModPack modpack) {
+        if(OSUtils.canUseJ7Utils()) {
+            return NewModpackUtils.loadDefaultMods(modpack);
+        }
         //This was written based on ModManager's update routine
         String installPath = OSUtils.getCacheStorageLocation();
         File modPackZip = new File(installPath, "ModPacks" + File.separator + modpack.getDir() + File.separator + modpack.getUrl());
@@ -129,13 +133,6 @@ public final class ModPackUtil {
 
                 return fileNames;
 
-                //TODO (romeara) - When the launcher is upgraded to Java7, switch to using nio's FileSystem and visitor pattern, 
-                // it is significantly more performant, such as below:
-                // FileSystem system = FileSystems.newFileSystem(modPackZip.toPath(), null);
-                //                
-                // Visitor is an implements of FileVistor
-                // Files.walkFileTree(system.getPath(File.separator), visitor);
-                // return visitor.getFileNames();
             } catch (IOException e) {
                 Logger.logError("Error attempting to read default mods", e);
                 return Sets.newHashSet();

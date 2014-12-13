@@ -18,9 +18,12 @@ package net.ftb.util;
 
 import lombok.Getter;
 import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaInfo;
+import net.ftb.util.winreg.JavaVersion;
 import net.ftb.util.winreg.RuntimeStreamer;
 
 import java.awt.*;
@@ -45,7 +48,7 @@ import javax.swing.text.html.StyleSheet;
 public class OSUtils {
     private static byte[] cachedMacAddress;
     private static String cachedUserHome;
-
+    private static JavaVersion JAVA7;
     /**
      * gets the number of cores for use in DL threading
      *
@@ -62,6 +65,7 @@ public class OSUtils {
     static {
         cachedUserHome = System.getProperty("user.home");
         numCores = Runtime.getRuntime().availableProcessors();
+        JAVA7 = JavaVersion.createJavaVersion("1.7.0");
     }
 
     /**
@@ -522,6 +526,9 @@ public class OSUtils {
         return getCurrentOS() == OS.MACOSX && !(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"));
     }
 
+    public static boolean canRun8OnMac() {
+        return canRun7OnMac() && !System.getProperty("os.version").startsWith("10.7");
+    }
     /**
      * Removes environment variables which may cause faulty JVM memory allocations
      */
@@ -543,5 +550,9 @@ public class OSUtils {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean canUseJ7Utils () {
+        return !Settings.getSettings().getCurrentJava().isOlder(JAVA7);
     }
 }

@@ -14,5 +14,8 @@ public class JavaOS {
     @Getter
     @SerializedName("64")
     private JavaType bits64;
+    @Getter
+    //added by FTB for downloading java 7 when 8 can't be used
+    private JavaType backup64;
 
 }

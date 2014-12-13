@@ -8,4 +8,8 @@ import lombok.Getter;
 public class MojangLauncher {
     @Getter
     private JavaOS windows;
+    @Getter
+    private JavaOS mac;
+    @Getter
+    private JavaOS linux;
 }

@@ -23,6 +23,7 @@ import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import org.apache.commons.io.FileUtils;
 import org.tukaani.xz.LZMAInputStream;
+import org.tukaani.xz.lzma.LZMAEncoder;
 
 import java.io.BufferedInputStream;
 import java.io.File;
