@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -339,6 +340,13 @@ public class ModManager extends JDialog {
                 worker = new ModManagerWorker() {
                     @Override
                     protected void done () {
+                        try {
+                            get();
+                        } catch (InterruptedException e) {
+                            Logger.logDebug("Swingworker Exception", e);
+                        } catch (ExecutionException e) {
+                            Logger.logDebug("Swingworker Exception", e.getCause());
+                        }
                         setVisible(false);
                         super.done();
                     }

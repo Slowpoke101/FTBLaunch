@@ -368,8 +368,11 @@ public class LaunchFrame extends JFrame {
                 try {
                     html = get();
                 }
-                catch (InterruptedException e) { }
-                catch (ExecutionException e) { }
+                catch (InterruptedException e) {
+                    Logger.logDebug("Swingworker Exception", e);
+                } catch (ExecutionException e) {
+                    Logger.logDebug("Swingworker Exception", e.getCause());
+                }
 
                 newsPane.setContent(html);
             }
@@ -475,7 +478,9 @@ public class LaunchFrame extends JFrame {
                         LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
                     }
                 } catch (InterruptedException e) {
+                    Logger.logDebug("Swingworker Exception", e);
                 } catch (ExecutionException e) {
+                    Logger.logDebug("Swingworker Exception", e.getCause());
                 }
             }
         };
@@ -535,6 +540,8 @@ public class LaunchFrame extends JFrame {
                         Logger.logError("Error while logging in", err);
                         PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username, UserManager.getUUID(username), getResp());
                         d.setVisible(true);
+                    } else {
+                        Logger.logDebug("Swingworker Exception", err.getCause());
                     }
                     enableObjects();
                     return;

@@ -41,6 +41,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -224,6 +225,13 @@ public class TextureManager extends JDialog {
                 TexturePackManagerWorker worker = new TexturePackManagerWorker() {
                     @Override
                     protected void done () {
+                        try {
+                            get();
+                        } catch (InterruptedException e) {
+                            Logger.logDebug("Swingworker Exception", e);
+                        } catch (ExecutionException e) {
+                            Logger.logDebug("Swingworker Exception", e.getCause());
+                        }
                         setVisible(false);
                         super.done();
                     }
