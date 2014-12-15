@@ -264,7 +264,7 @@ public class ModManager extends JDialog {
 
                     Logger.logDebug("Extracting pack.");
                     if (!FTBFileUtils.extractZipTo(baseDynamic.getPath() + sep + modPackName, baseDynamic.getPath())) {
-                        ErrorUtils.tossError("Error downloading modpack!!!");
+                        ErrorUtils.tossError("Error unzipping modpack!!!");
                         return false;
                     }
                     if (pack.getBundledMap() && saveExists) {
