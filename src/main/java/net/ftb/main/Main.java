@@ -322,8 +322,11 @@ public class Main {
                 boolean workerSuccess = true;
                 try {
                     workerSuccess = get();
-                } catch (InterruptedException e) { }
-                catch (ExecutionException e) { }
+                } catch (InterruptedException e) {
+                    Logger.logDebug("Swingworker Exception", e);
+                } catch (ExecutionException e) {
+                    Logger.logDebug("Swingworker Exception", e.getCause());
+                }
 
                 if (!workerSuccess) {
                     ErrorUtils.tossError("No usable authlib available. Please check your firewall rules and network connection. Can't start MC without working authlib. Launch button will be disabled.");
@@ -414,7 +417,9 @@ public class Main {
                         p.setVisible(true);
                     }
                 } catch (InterruptedException e) {
+                    Logger.logDebug("Swingworker Exception", e);
                 } catch (ExecutionException e) {
+                    Logger.logDebug("Swingworker Exception", e.getCause());
                 }
             }
         };

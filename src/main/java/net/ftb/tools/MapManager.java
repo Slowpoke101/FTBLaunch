@@ -29,6 +29,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -72,6 +73,13 @@ public class MapManager extends JDialog {
                 MapManagerWorker worker = new MapManagerWorker(overwrite) {
                     @Override
                     protected void done () {
+                        try {
+                            get();
+                        } catch (InterruptedException e) {
+                            Logger.logDebug("Swingworker Exception", e);
+                        } catch (ExecutionException e) {
+                            Logger.logDebug("Swingworker Exception", e.getCause());
+                        }
                         setVisible(false);
                         super.done();
                     }
