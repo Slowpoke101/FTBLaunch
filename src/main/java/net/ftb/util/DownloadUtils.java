@@ -322,8 +322,10 @@ public class DownloadUtils extends Thread {
         Logger.logInfo("Issue with new md5 method, attempting to use backup method.");
         String content = null;
         Scanner scanner = null;
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
-                : Locations.masterRepo;
+        //String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : Locations.masterRepo;
+
+        // Only curse has /md5/ do not try to use creeperrepo even if user has selected it
+        String resolved = Locations.curseRepo;
         resolved += "/md5/FTB2/" + url;
         HttpURLConnection connection = null;
         try {
