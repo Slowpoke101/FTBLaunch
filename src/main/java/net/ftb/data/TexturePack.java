@@ -189,7 +189,7 @@ public class TexturePack {
         for (String aCompatible : compatible) {
             ModPack pack = ModPack.getPack(aCompatible);
             if (pack == null) {
-                Logger.logDebug("Texturepack is compatible with " + packName + " , but modpack not found");
+                Logger.logDebug("Texturepack is compatible with " + aCompatible + " , but modpack not found");
             } else {
                 return pack.getName().equals(packName);
             }

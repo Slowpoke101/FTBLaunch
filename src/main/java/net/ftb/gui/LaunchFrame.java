@@ -677,7 +677,13 @@ public class LaunchFrame extends JFrame {
         tpInstallLocation.removeAllItems();
         for (String location : locations) {
             if (location != null && !location.isEmpty()) {
-                tpInstallLocation.addItem(ModPack.getPack(location.trim()).getNameWithVersion());
+                ModPack m = ModPack.getPack(location.trim());
+                if (m == null) {
+                    Logger.logWarn("Can't find modpack: " + location);
+                    continue;
+                }
+                String s = m.getNameWithVersion();
+                tpInstallLocation.addItem(s);
             }
         }
         //TODO:
