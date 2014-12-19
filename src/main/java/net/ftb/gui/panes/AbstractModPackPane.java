@@ -113,7 +113,7 @@ public abstract class AbstractModPackPane extends JPanel {
 
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + avaliability + "</font>";
         typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
@@ -423,7 +423,7 @@ public abstract class AbstractModPackPane extends JPanel {
         String filterInnerTextColor = LauncherStyle.getColorAsString(LauncherStyle.getCurrentStyle().filterInnerTextColor);
         String typeLblText = "<html><body>";
         typeLblText += "<strong><font color=rgb\"(" + filterTextColor + ")\">Filter: </strong></font>";
-        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + origin + "</font>";
+        typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + avaliability + "</font>";
         typeLblText += "<font color=rgb\"(" + filterTextColor + ")\"> / </font>";
         typeLblText += "<font color=rgb\"(" + filterInnerTextColor + ")\">" + mcVersion + "</font>";
         typeLblText += "</body></html>";
