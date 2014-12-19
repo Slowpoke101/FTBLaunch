@@ -79,7 +79,7 @@ public abstract class AbstractModPackPane extends JPanel {
     @Getter
     protected ObjectInfoSplitPane splitPane;
 
-    public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL");
+    public String origin = I18N.getLocaleString("MAIN_ALL"), mcVersion = I18N.getLocaleString("MAIN_ALL"), avaliability = I18N.getLocaleString("MAIN_ALL"), searchString="";
     public boolean loaded = false;
 
     public AbstractModPackPane () {
@@ -471,8 +471,8 @@ public abstract class AbstractModPackPane extends JPanel {
     }
 
     boolean textSearch (ModPack pack) {
-        String searchString = SearchDialog.lastPackSearch.toLowerCase();
-        return ((searchString.isEmpty()) || pack.getName().toLowerCase().contains(searchString) || pack.getAuthor().toLowerCase().contains(searchString));
+        String s  = searchString.toLowerCase();
+        return ((s.isEmpty()) || pack.getName().toLowerCase().contains(s) || pack.getAuthor().toLowerCase().contains(s));
     }
 
     abstract boolean filterForTab (ModPack pack);
