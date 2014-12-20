@@ -63,12 +63,17 @@ public class TexturePackFilterDialog extends JDialog {
         }
 
         ArrayList<String> comp = Lists.newArrayList();
+        final ArrayList<String> compNoVersion = Lists.newArrayList();
         comp.add(I18N.getLocaleString("MAIN_ALL"));
+        compNoVersion.add(I18N.getLocaleString("MAIN_ALL"));
+
         for (int i = 0; i < textures; i++) {
             List<String> s = TexturePack.getTexturePack(i).getCompatible();
             for (String value : s) {
-                if (!comp.contains(ModPack.getPack(value.trim()).getNameWithVersion())) {
-                    comp.add(ModPack.getPack(value.trim()).getNameWithVersion());
+                ModPack pack = ModPack.getPack(value.trim());
+                if ( pack != null && !comp.contains(pack.getNameWithVersion())) {
+                    comp.add(pack.getNameWithVersion());
+                    compNoVersion.add(pack.getName());
                 }
             }
         }
@@ -76,14 +81,14 @@ public class TexturePackFilterDialog extends JDialog {
         compatiblePack.setModel(new DefaultComboBoxModel(comp.toArray(new String[comp.size()])));
         resolution.setModel(new DefaultComboBoxModel(res.toArray(new String[res.size()])));
 
-        compatiblePack.setSelectedItem(TexturepackPane.compatible);
+        compatiblePack.setSelectedIndex(compNoVersion.indexOf(TexturepackPane.compatible));
         resolution.setSelectedItem(TexturepackPane.resolution);
 
         apply.addActionListener(new ActionListener() {
             @SuppressWarnings("static-access")
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                TexturepackPane.compatible = (String) compatiblePack.getSelectedItem();
+                TexturepackPane.compatible = compNoVersion.get(compatiblePack.getSelectedIndex());
                 TexturepackPane.resolution = (String) resolution.getSelectedItem();
                 TexturepackPane.updateFilter();
                 setVisible(false);
