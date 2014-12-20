@@ -208,7 +208,8 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
 
-        JTextArea filler = new JTextArea(map.getName() + " (v." + map.getVersion() + ")\n" + "By " + map.getAuthor());
+        ModPack pack = ModPack.getPack(map.getCompatible()[0]);
+        JTextArea filler = new JTextArea(map.getName() + " (v." + map.getVersion() + ")\n" + "By " + map.getAuthor() + " for MC v" + (pack != null ? pack.getMcVersion() : "unknown"));
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(Color.white);
@@ -295,7 +296,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
                 if (Map.getMap(getIndex()).getCompatible() != null) {
                     packs += "<p>This map works with the following packs:</p><ul>";
                     for (String name : Map.getMap(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }

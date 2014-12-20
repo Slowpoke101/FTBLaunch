@@ -56,13 +56,17 @@ public class MapFilterDialog extends JDialog {
         this.pane = instance;
 
         ArrayList<String> packs = Lists.newArrayList();
+        final ArrayList<String> packsNoVersion = Lists.newArrayList();
         packs.add(I18N.getLocaleString("MAIN_ALL"));
+        packsNoVersion.add(I18N.getLocaleString("MAIN_ALL"));
+
         for (int i = 0; i < Map.getMapArray().size(); i++) {
             String[] compat = Map.getMap(i).getCompatible();
             for (String compatable : compat) {
                 ModPack pack = ModPack.getPack(compatable.trim());
-                if (!compatable.isEmpty() && !packs.contains(pack.getName())) {
-                    packs.add(pack.getName());
+                if (!compatable.isEmpty() && pack != null && !packs.contains(pack.getNameWithVersion())) {
+                    packs.add(pack.getNameWithVersion());
+                    packsNoVersion.add(pack.getName());
                 }
             }
         }
@@ -74,11 +78,12 @@ public class MapFilterDialog extends JDialog {
         type.setSelectedItem(MapUtils.type);
         origin.setSelectedItem(MapUtils.origin);
         compatiblePack.setSelectedItem(MapUtils.compatible);
+        compatiblePack.setSelectedIndex(packsNoVersion.indexOf(MapUtils.compatible));
 
         apply.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                MapUtils.compatible = (String) compatiblePack.getSelectedItem();
+                MapUtils.compatible = packsNoVersion.get(compatiblePack.getSelectedIndex());
                 MapUtils.type = (String) type.getSelectedItem();
                 MapUtils.origin = (String) origin.getSelectedItem();
                 MapUtils.updateFilter();
