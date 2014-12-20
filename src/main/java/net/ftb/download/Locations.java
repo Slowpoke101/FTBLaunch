@@ -32,7 +32,7 @@ public class Locations {
     //location of the FTB maven repo within the FTB2/static part of the repository
     public static final String ftb_maven = "maven/";
 
-    public static final String chRepo = "http://new.creeperrepo.net";
+    public static final String chRepo = "http://www.creeperrepo.net";
     public static final String curseRepo = "http://ftb.cursecdn.com";
     //this changes based on the primary automatic server in the balancing logic
     //DO NOT ACCESS UNILL 1st DL thread has finished setting up!!!!

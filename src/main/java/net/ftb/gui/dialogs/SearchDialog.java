@@ -39,17 +39,17 @@ public class SearchDialog extends JDialog {
     public SearchDialog (final AbstractModPackPane instance) {
         super(LaunchFrame.getInstance(), true);
         setupGui();
-        query.setText((lastPackSearch == null) ? "" : lastPackSearch);
+        query.setText((instance.searchString == null) ? "" : lastPackSearch);
         query.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate (DocumentEvent arg0) {
-                lastPackSearch = query.getText();
+                instance.searchString = query.getText();
                 instance.filterPacks();
             }
 
             @Override
             public void insertUpdate (DocumentEvent arg0) {
-                lastPackSearch = query.getText();
+                instance.searchString = query.getText();
                 instance.filterPacks();
             }
 
@@ -60,7 +60,7 @@ public class SearchDialog extends JDialog {
         query.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                lastPackSearch = query.getText();
+                instance.searchString = query.getText();
                 instance.filterPacks();
                 setVisible(false);
             }

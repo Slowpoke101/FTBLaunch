@@ -115,6 +115,9 @@ PRIVATEPACK_ALREADY_ADDED = Private Pack is already added
 
 # Filter
 FILTER_PACKTYPE = Mod Pack Type:
+FILTER_ORIGIN = Map Maker:
+FILTER_3THPARTY = Third Party
+FILTER_FTB = FTB
 FILTER_COMPERTIBLEPACK = Compatible Pack:
 FILTER_APPLY = Apply Filter
 FILTER_SEARCHMAP = Search Maps
@@ -167,6 +170,8 @@ MAIN_CANCEL = Cancel
 MAIN_SUBMIT = Submit
 MAIN_REMOVE = Remove
 MAIN_ADD = Add
+MAIN_CLIENT = Client
+MAIN_SERVER = Server
 BUTTON_IGNORE = Ignore
 BUTTON_OK = OK
 NAG_SCREEN_MESSAGE = Click OK to continue or IGNORE to skip this warning in future

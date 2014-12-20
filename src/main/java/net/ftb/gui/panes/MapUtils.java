@@ -58,7 +58,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     private static JButton filter;
     private static int selectedMap = 0;
     protected static boolean mapsAdded = false;
-    public static String type = "Client", origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
+    public static String type = I18N.getLocaleString("MAIN_CLIENT"), origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
 
     //stuff for swapping between maps/texture packs
     private JButton mapButton;
@@ -208,7 +208,8 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         logo.setBounds(6, 6, 42, 42);
         logo.setVisible(true);
 
-        JTextArea filler = new JTextArea(map.getName() + " (v." + map.getVersion() + ")\n" + "By " + map.getAuthor());
+        ModPack pack = ModPack.getPack(map.getCompatible()[0]);
+        JTextArea filler = new JTextArea(map.getName() + " (v." + map.getVersion() + ")\n" + "By " + map.getAuthor() + " for MC v" + (pack != null ? pack.getMcVersion() : "unknown"));
         filler.setBorder(null);
         filler.setEditable(false);
         filler.setForeground(Color.white);
@@ -295,7 +296,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
                 if (Map.getMap(getIndex()).getCompatible() != null) {
                     packs += "<p>This map works with the following packs:</p><ul>";
                     for (String name : Map.getMap(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getName() : name) + "</li>";
+                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name) + "</li>";
                     }
                     packs += "</ul>";
                 }
@@ -354,7 +355,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     }
 
     private static boolean originCheck (Map map) {
-        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team"))
+        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_FTB")) && map.getAuthor().equalsIgnoreCase("the ftb team"))
                 || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !map.getAuthor().equalsIgnoreCase("the ftb team"));
     }
 
