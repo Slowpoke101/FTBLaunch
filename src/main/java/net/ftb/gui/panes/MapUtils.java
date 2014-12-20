@@ -58,7 +58,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     private static JButton filter;
     private static int selectedMap = 0;
     protected static boolean mapsAdded = false;
-    public static String type = "Client", origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
+    public static String type = I18N.getLocaleString("MAIN_CLIENT"), origin = I18N.getLocaleString("MAIN_ALL"), compatible = I18N.getLocaleString("MAIN_ALL");
 
     //stuff for swapping between maps/texture packs
     private JButton mapButton;
@@ -354,7 +354,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     }
 
     private static boolean originCheck (Map map) {
-        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase("ftb") && map.getAuthor().equalsIgnoreCase("the ftb team"))
+        return (origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_FTB")) && map.getAuthor().equalsIgnoreCase("the ftb team"))
                 || (origin.equalsIgnoreCase(I18N.getLocaleString("FILTER_3THPARTY")) && !map.getAuthor().equalsIgnoreCase("the ftb team"));
     }
 

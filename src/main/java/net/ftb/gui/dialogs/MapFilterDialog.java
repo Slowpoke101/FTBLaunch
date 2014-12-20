@@ -55,26 +55,25 @@ public class MapFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        type.setSelectedItem(MapUtils.type);
-        origin.setSelectedItem(MapUtils.origin);
-        compatiblePack.setSelectedItem(MapUtils.compatible);
-
         ArrayList<String> packs = Lists.newArrayList();
-        compatiblePack.addItem(I18N.getLocaleString("MAIN_ALL"));
         packs.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < Map.getMapArray().size(); i++) {
             String[] compat = Map.getMap(i).getCompatible();
             for (String compatable : compat) {
-                if (!compatable.isEmpty() && !packs.contains(ModPack.getPack(compatable.trim()).getName())) {
-                    packs.add(ModPack.getPack(compatable.trim()).getName());
-                    compatiblePack.addItem(ModPack.getPack(compatable.trim()).getName());
+                ModPack pack = ModPack.getPack(compatable.trim());
+                if (!compatable.isEmpty() && !packs.contains(pack.getName())) {
+                    packs.add(pack.getName());
                 }
             }
         }
 
-        type.setModel(new DefaultComboBoxModel(new String[] { "Client", "Server" }));
-        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), "FTB", I18N.getLocaleString("FILTER_3THPARTY") }));
+        type.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_CLIENT"), I18N.getLocaleString("MAIN_SERVER") }));
+        origin.setModel(new DefaultComboBoxModel(new String[] { I18N.getLocaleString("MAIN_ALL"), I18N.getLocaleString("FILTER_FTB"), I18N.getLocaleString("FILTER_3THPARTY") }));
         compatiblePack.setModel(new DefaultComboBoxModel(packs.toArray()));
+
+        type.setSelectedItem(MapUtils.type);
+        origin.setSelectedItem(MapUtils.origin);
+        compatiblePack.setSelectedItem(MapUtils.compatible);
 
         apply.addActionListener(new ActionListener() {
             @Override
