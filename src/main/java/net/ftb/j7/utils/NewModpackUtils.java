@@ -3,7 +3,6 @@ package net.ftb.j7.utils;
 import com.google.common.collect.Sets;
 import net.ftb.data.ModPack;
 import net.ftb.log.Logger;
-import net.ftb.util.ModPackUtil;
 import net.ftb.util.OSUtils;
 
 import java.io.File;
@@ -20,7 +19,15 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-public class NewModpackUtils{
+/**
+ * @author romeara
+ * adapted from PR to this class by progwml6
+ */
+public class NewModpackUtils {
+    private NewModpackUtils () {
+
+    }
+
     /**
      * Performs file system lookup and reading of the default mods in the archive
      * @param modpack The mod pack to look up
@@ -46,6 +53,7 @@ public class NewModpackUtils{
 
         return Sets.newHashSet();
     }
+
     /**
      * File visitor which can traverse the tree of the a file system looking for mod files
      */

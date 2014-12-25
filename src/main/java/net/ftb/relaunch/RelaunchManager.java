@@ -9,6 +9,7 @@ import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.winreg.JavaInfo;
@@ -84,7 +85,8 @@ public class RelaunchManager {
                 } else if (OSUtils.canRun7OnMac() && ml.getMac().getBackup64() != null) {
                     mj = ml.getMac().getBackup64().getJre();//grab java 7
                 } else {
-                    Logger.logWarn("Mac is running 10.5 or 10.6, There is no java 7+ available for this version!");
+                    String s = "Mac is running 10.5 or 10.6, There is no java 7+ available for this version! \n We highly reccomend updating in order to continue using minecraft in the future!";
+                    ErrorUtils.tossError(s, s);
                 }
                 //if they can't run java 7+ properly we can't help unfortunately
                 break;
