@@ -71,7 +71,7 @@ public class OSUtils {
     public static String getDefInstallPath () {
         switch (getCurrentOS()) {
         case WINDOWS:
-            String defaultLocation = "C:\\FTB";
+            String defaultLocation = "c:\\ftb";
             File testFile = new File(defaultLocation);
             // existing directory and we can write
             if (testFile.canWrite()) {
@@ -85,9 +85,9 @@ public class OSUtils {
             Logger.logWarn("Can't use default installation location. Using current location of the launcher executable.");
 
         case MACOSX:
-            return System.getProperty("user.home") + "/FTB";
+            return System.getProperty("user.home") + "/ftb";
         case UNIX:
-            return System.getProperty("user.home") + "/FTB";
+            return System.getProperty("user.home") + "/ftb";
         default:
             try {
                 CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
