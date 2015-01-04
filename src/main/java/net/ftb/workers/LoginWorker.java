@@ -68,7 +68,7 @@ public class LoginWorker extends SwingWorker<String, Void> {
                     Logger.logError("Error using authlib", e);
                 }
             } else {
-                ErrorUtils.tossError("Authlib Unavaible. Please check your log for errors");
+                ErrorUtils.tossError("Authlib Unavaible. Please check your log for errors. If you contact FTB support attach launcher log or link to log in your request.");
             }
         } catch (Exception e) {
             ErrorUtils.tossError("Exception occurred, minecraft servers might be down. Check @ help.mojang.com");

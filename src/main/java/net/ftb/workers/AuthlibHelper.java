@@ -92,9 +92,18 @@ public class AuthlibHelper {
                         //could be bad or expired keys, etc. will re-run w/o auth data to refresh and error after password was entered
                     } else {
                         if (user.contains("@")) {
-                            ErrorUtils.tossError("Invalid username or password. You need use your official and paid minecraft.net account credentials.");
+                            ErrorUtils.showClickableMessage("Invalid username or password!"
+                                    + "<ul>"
+                                    + "<li> Check your username and password. If you use OLD non-migrated account try using username instead of email."
+                                    + "<li>You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
+                                    + "</ul>"
+                                    , null);
                         } else {
-                            ErrorUtils.tossError("Invalid username or password. You need use your official and paid minecraft.net account credentials. \nAlso try email address instead of username");
+                            ErrorUtils.showClickableMessage("Invalid username or password. "
+                                    + "<ul>"
+                                    + "<li> Check your username and password. If you use new mojang account try using email instead of username."
+                                    + "<li>You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
+                                    , null);
                         }
                         return null;
                     }
@@ -162,8 +171,7 @@ public class AuthlibHelper {
             } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length == 0)) {
                 // user has 0 paid profiles in mojang account
                 Logger.logDebug("No paid profiles in mojang account: " + toString(authentication));
-                Logger.logError("You need paid minecraft to play FTB Modpacks...");
-                ErrorUtils.showClickableMessage("You need paid minecraft to play FTB Modpacks:"
+                ErrorUtils.showClickableMessage("You need paid minecraft account to play FTB Modpacks:"
                         + "<ul>"
                         + "<li>Your login credentials are correct but mojang's authentication server does not find paid profile in your account"
                         + "<li>If you believe this is error, please try vanilla launcher and minecraft.net before contacting FTB support"

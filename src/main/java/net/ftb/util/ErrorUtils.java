@@ -89,6 +89,7 @@ public class ErrorUtils {
         JLabel l = new JLabel();
         Font font = l.getFont();
         StringBuilder html = new StringBuilder("");
+        Logger.logDebug(message);
         html.append("<html><body style=\"" + "font-family:").append(font.getFamily()).append(";").append("font-weight:").append(font.isBold() ? "bold" : "normal").append(";").append("font-size:")
                 .append(font.getSize()).append("pt;").append("\">");
 

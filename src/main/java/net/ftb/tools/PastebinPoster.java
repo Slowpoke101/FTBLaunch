@@ -19,8 +19,10 @@ package net.ftb.tools;
 import net.ftb.data.Constants;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
+import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ public class PastebinPoster extends Thread {
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
+        boolean failed = false;
         try {
             URL url = new URL("http://paste.feed-the-beast.com/api/create?apikey=b6a30d5f030ce86a2b0723ed0b494cdd");
             conn = (HttpURLConnection) url.openConnection();
@@ -78,12 +81,15 @@ public class PastebinPoster extends Thread {
                     if (err.length() > 100) {
                         err = err.substring(0, 100);
                     }
+                    failed = true;
                     Logger.logError(err);
                 }
             } else {
+                failed = true;
                 Logger.logError("didn't get a 200 response code!");
             }
         } catch (IOException e) {
+            failed = true;
             Logger.logError(e.getMessage());
         } finally {
             if (conn != null) {
@@ -101,6 +107,15 @@ public class PastebinPoster extends Thread {
                 } catch (IOException ignored) {
                 }
             }
+        }
+
+        if (failed) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override public void run () {
+                    ErrorUtils.tossError("Log upload failed. Use \"Copy to clipboard\" button and \n"
+                            + "manually paste log into paste.feed-the-beast.com");
+                }
+            });
         }
     }
 }
