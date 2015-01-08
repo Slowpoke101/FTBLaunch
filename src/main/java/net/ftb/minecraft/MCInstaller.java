@@ -482,16 +482,10 @@ public class MCInstaller {
         String installpath = Settings.getSettings().getInstallPath();
         String temppath = OSUtils.getCacheStorageLocation();
 
-        ModPack pack;
+        ModPack pack = ModPack.getSelectedPack();
         List<String> blacklist = Lists.newArrayList();
         if (!softUpdate) {
             blacklist.add("options.txt");
-        }
-
-        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
-            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
-        } else {
-            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedPackIndex());
         }
 
         String packDir = pack.getDir();

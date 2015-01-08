@@ -332,6 +332,8 @@ public class Main {
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
 
+        ModPack.loadXml(getXmls());
+
         // Store this in the cache (local) storage, since it's machine specific.
         userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 
@@ -420,7 +422,7 @@ public class Main {
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);
 
-        ModPack.loadXml(getXmls());
+        //ModPack.loadXml(getXmls());
 
         Map.addListener(LaunchFrame.getInstance().mapsPane);
         TexturePack.addListener(LaunchFrame.getInstance().tpPane);

@@ -37,6 +37,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     @Override
     public void onVisible () {
         FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
+        ModPack.setSelectedPack(FTBPacksPane.getInstance().selectedPack);
     }
 
     boolean filterForTab (ModPack pack) {
