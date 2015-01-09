@@ -166,16 +166,7 @@ public class ModPack {
             return selectedPack;
         }
     }
-
-    /**
-     *
-     * @param isFTBPane whether to select FTB pane or  ThirdParty pane
-     * @return ModPack - currently selected modpack in GUI
-     */
-    public static ModPack getSelectedPack (boolean isFTBPane) {
-            return isFTBPane ? FTBPacksPane.getInstance().getSelectedPack() : ThirdPartyPane.getInstance().getSelectedPack();
-    }
-
+    
     /**
      * Constructor for ModPack class
      * @param name - the name of the ModPack

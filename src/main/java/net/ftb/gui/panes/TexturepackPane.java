@@ -252,9 +252,9 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         sorted.put(1, new ArrayList<TexturePack>());
         for (TexturePack texturePack : TexturePack.getTexturePackArray()) {
             if (compatibilityCheck(texturePack) && resolutionCheck(texturePack) && textSearch(texturePack)) {
-                if (texturePack.isCompatible(ModPack.getSelectedPack(true).getName())) {
+                if (texturePack.isCompatible(FTBPacksPane.getInstance().getSelectedPack().getName())) {
                     sorted.get(1).add(texturePack);
-                } else if (texturePack.isCompatible(ModPack.getSelectedPack(false).getName())) {
+                } else if (texturePack.isCompatible(ThirdPartyPane.getInstance().getName())) {
                     sorted.get(1).add(texturePack);
                 } else {
                     sorted.get(0).add(texturePack);

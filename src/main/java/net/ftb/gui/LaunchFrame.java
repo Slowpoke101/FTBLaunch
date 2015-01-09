@@ -915,6 +915,15 @@ public class LaunchFrame extends JFrame {
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         ModPack pack = ModPack.getSelectedPack();
+
+        // save ´pack being launched
+        if (instance.currentPane == Panes.MODPACK) {
+            Settings.getSettings().setLastFTBPack(FTBPacksPane.getInstance().getSelectedPack().getDir());
+        } else {
+            Settings.getSettings().setLastThirdPartyPack(ThirdPartyPane.getInstance().getSelectedPack().getDir());
+        }
+        saveSettings();
+
         // check launcher version
         if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
@@ -935,12 +944,6 @@ public class LaunchFrame extends JFrame {
         // check selected java is at least version specified in pack's XML
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
         if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
-            if (pack == ModPack.getSelectedPack(true)) {
-                Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-            } else {
-                Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-            }
-            saveSettings();
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough
