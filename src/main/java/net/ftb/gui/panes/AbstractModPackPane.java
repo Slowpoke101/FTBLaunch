@@ -196,7 +196,7 @@ public abstract class AbstractModPackPane extends JPanel {
                 }
             }
         });
-        buttonsPanel.add(server);
+       // buttonsPanel.add(server);
 
         version = new JComboBox(new String[] { });
         version.setMinimumSize(new Dimension(130, 25));
@@ -214,7 +214,7 @@ public abstract class AbstractModPackPane extends JPanel {
             }
         });
 
-        buttonsPanel.add(privatePack);
+        //buttonsPanel.add(privatePack);
 
         // Resize scrollbar when center divider is moved
         packsScroll.addComponentListener(new ComponentAdapter() {

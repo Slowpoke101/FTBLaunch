@@ -40,15 +40,8 @@ public class ProfileAdderDialog extends JDialog {
     private JPasswordField password;
     private JLabel nameLbl;
     private JTextField name;
-    private JCheckBox savePassword, saveMojangData;
     private JButton add;
     private JLabel messageLbl;
-
-    public ProfileAdderDialog (LaunchFrame instance, String unlocalizedMessage, boolean modal) {
-        super(instance, modal);
-        setUnlocalizedMessage(unlocalizedMessage);
-        preSetup();
-    }
 
     public ProfileAdderDialog (LaunchFrame instance, boolean modal) {
         super(instance, modal);
@@ -61,8 +54,6 @@ public class ProfileAdderDialog extends JDialog {
 
         getRootPane().setDefaultButton(add);
 
-        savePassword.setSelected(true);
-        saveMojangData.setSelected(true);
 
         username.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -80,35 +71,18 @@ public class ProfileAdderDialog extends JDialog {
             }
         });
 
-        savePassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent event) {
-                password.setEnabled(savePassword.isSelected());
-            }
-        });
 
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent event) {
-                if (savePassword.isSelected()) {
-                    if (validate(name.getText(), username.getText(), password.getPassword())) {
-                        UserManager.addUser(username.getText(), new String(password.getPassword()), name.getText());
-                        UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
-                        LaunchFrame.writeUsers(name.getText());
-                        setVisible(false);
-                    } else {
-                        ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
-                    }
-                } else {
                     if (validate(name.getText(), username.getText())) {
-                        UserManager.addUser(username.getText(), "", name.getText());
-                        UserManager.setSaveMojangData(username.getText(), saveMojangData.isSelected());
+                        UserManager.addUser(username.getText(), name.getText());
+                        UserManager.setSaveMojangData(username.getText(), false);
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PROFILADDER_ERROR"));
                     }
-                }
             }
         });
     }
@@ -117,18 +91,16 @@ public class ProfileAdderDialog extends JDialog {
         if (editingName.equals("CHANGEDUUID")) {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
-            savePassword.setSelected(false);
         } else if (editingName.equals("OLDCREDS")) {
             updatecreds = I18N.getLocaleString(editingName);
             password.setEnabled(false);
-            savePassword.setSelected(false);
         }
 
     }
 
     private boolean validate (String name, String user, char[] pass) {
         if (!name.isEmpty() && !user.isEmpty() && pass.length > 1) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
+            if (!UserManager.getUsernames().contains(name) && !UserManager.getUsernames().contains(user)) {
                 return true;
             }
         }
@@ -137,7 +109,7 @@ public class ProfileAdderDialog extends JDialog {
 
     private boolean validate (String name, String user) {
         if (!name.isEmpty() && !user.isEmpty()) {
-            if (!UserManager.getNames().contains(name) && !UserManager.getUsernames().contains(user)) {
+            if (!UserManager.getUsernames().contains(name) && !UserManager.getUsernames().contains(user)) {
                 return true;
             }
         }
@@ -159,8 +131,6 @@ public class ProfileAdderDialog extends JDialog {
         password = new JPasswordField(16);
         nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
         name = new JTextField(16);
-        savePassword = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEPASSWORD"));
-        saveMojangData = new JCheckBox(I18N.getLocaleString("PROFILEADDER_SAVEMOJANGDATA"));
         add = new JButton(I18N.getLocaleString("MAIN_ADD"));
 
         usernameLbl.setLabelFor(username);
@@ -175,10 +145,6 @@ public class ProfileAdderDialog extends JDialog {
         panel.add(username, GuiConstants.WRAP);
         panel.add(passwordLbl);
         panel.add(password, GuiConstants.WRAP);
-        panel.add(nameLbl);
-        panel.add(name, GuiConstants.WRAP);
-        panel.add(savePassword, GuiConstants.CENTER_SINGLE_LINE);
-        panel.add(saveMojangData, GuiConstants.CENTER_SINGLE_LINE);
         panel.add(add, "center, wrap, span");
 
         pack();

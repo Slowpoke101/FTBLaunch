@@ -252,7 +252,7 @@ public class Settings extends Properties {
     }
 
     public boolean getOptJavaArgs () {
-        return Boolean.valueOf(getProperty("optJavaArgs", "false"));
+        return Boolean.valueOf(getProperty("optJavaArgs", "true"));
     }
 
     public void setPackVer (String string) {
@@ -352,7 +352,7 @@ public class Settings extends Properties {
     }
 
     public boolean getKeepLauncherOpen () {
-        return Boolean.parseBoolean(getProperty("keepLauncherOpen", "false"));
+        return Boolean.parseBoolean(getProperty("keepLauncherOpen", "true"));
     }
 
     public void setSnooper (boolean state) {

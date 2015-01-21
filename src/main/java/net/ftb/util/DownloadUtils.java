@@ -479,7 +479,7 @@ public class DownloadUtils extends Thread {
                             LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
                         }
                         if (jso != null && jso.get("chEnabled") != null) {
-                            Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
+                            Locations.chEnabled = false;
                         }
                         if (jso != null && jso.get("repoSplitCurse") != null) {
                             JsonElement e = jso.get("repoSplitCurse");

@@ -99,14 +99,14 @@ targetCompatibility = 1.6
 animalsniffer {
     signature = "org.codehaus.mojo.signature:java16:+@signature"
     ignores = ["net.ftb.j7"]
-
+    skip = true
 }
 
 shadowJar  {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
   dependencies {
-    exclude(dependency('com.mojang:authlib'))
+    //exclude(dependency('com.mojang:authlib')) //we shade everything for pax!
     exclude(dependency('org.projectlombok:lombok'))
   }
   classifier = ''

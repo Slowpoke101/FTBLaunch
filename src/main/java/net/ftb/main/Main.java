@@ -22,7 +22,6 @@ import com.google.common.eventbus.EventBus;
 import lombok.Getter;
 import lombok.Setter;
 import net.ftb.data.CommandLineSettings;
-import net.ftb.data.Constants;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -32,7 +31,6 @@ import net.ftb.download.Locations;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
-import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.LogLevel;
@@ -43,17 +41,14 @@ import net.ftb.log.OutputOverride;
 import net.ftb.log.StdOutLogger;
 import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
-import net.ftb.updater.UpdateChecker;
 import net.ftb.util.Benchmark;
 import net.ftb.util.CheckInstallPath;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.StyleUtil;
-import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
-import net.ftb.workers.AuthlibDLWorker;
 
 import java.awt.*;
 import java.io.File;
@@ -62,7 +57,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 
@@ -176,18 +170,7 @@ public class Main {
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
-        AnalyticsConfigData.setUserAgent("Java/" + System.getProperty("java.version") + " (" + System.getProperty("os.name") + "; " + System.getProperty("os.arch") + ")");
         tracker = new JGoogleAnalyticsTracker(AnalyticsConfigData, JGoogleAnalyticsTracker.GoogleAnalyticsVersion.V_4_7_2);
-        tracker.setEnabled(true);
-        TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start / " + Constants.version + "." + beta);
-        if (!new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + "." + beta + ".txt").exists()) {
-            TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher " + Constants.version + "." + beta + " OS " + OSUtils.getOSString());
-            try {
-                new File(OSUtils.getDynamicStorageLocation(), "FTBOSSent" + Constants.version + ".txt").createNewFile();
-            } catch (IOException e) {
-                Logger.logError("Error creating os cache text file");
-            }
-        }
 
         MainHelpers.printInfo();
 
@@ -233,27 +216,8 @@ public class Main {
         I18N.setupLocale();
         I18N.setLocale(Settings.getSettings().getLocale());
 
-        if (Settings.getSettings().isNoConfig() && !CommandLineSettings.getSettings().isSkipFirst()) {
-            Logger.logDebug("FirstRunDialog");
-            try {
-                EventQueue.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run () {
-                        FirstRunDialog firstRunDialog = new FirstRunDialog();
-                        firstRunDialog.setVisible(true);
-                    }
-                });
-            } catch (Exception e) {
-            }
-        } else if (CommandLineSettings.getSettings().isSkipFirst()) {
-            String installDir = CommandLineSettings.getSettings().getInstallDir();
-            if (installDir == null) {
-                Logger.logWarn("Bad command line argument combination. Please, use both --pack-dir and --skip-first");
-            } else {
-                Settings.getSettings().setInstallPath(installDir);
-                Settings.getSettings().save();
-            }
-        }
+        Settings.getSettings().setInstallPath(OSUtils.getCacheStorageLocation() + File.separator + "install");
+
 
         // NOTE: this messagage will be missed because laoder is not created when this is executed
         // should we invokeAndWait when creating LoadingDialog?
@@ -310,31 +274,8 @@ public class Main {
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
 
-        // Store this in the cache (local) storage, since it's machine specific.
-        userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
-
-        /*
-         * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
-         */
-        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
-            @Override
-            protected void done () {
-                boolean workerSuccess = true;
-                try {
-                    workerSuccess = get();
-                } catch (InterruptedException e) { }
-                catch (ExecutionException e) { }
-
-                if (!workerSuccess) {
-                    ErrorUtils.tossError("No usable authlib available. Please check your firewall rules and network connection. Can't start MC without working authlib. Launch button will be disabled.");
-                }
-
-                if (workerSuccess && disableLaunchButton == false) {
-                    LaunchFrame.getInstance().getLaunch().setEnabled(true);
-                }
-            }
-        };
-        authworker.execute();
+        userManager = new UserManager();
+        Main.setAuthlibReadyToUse(true);
 
         LoadingDialog.advance("Creating Console window");
 
@@ -353,8 +294,6 @@ public class Main {
         LoadingDialog.advance("Creating main window");
 
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override public void run () {
                     LaunchFrame frame = new LaunchFrame(2);
                     LaunchFrame.setInstance(frame);
 
@@ -364,9 +303,8 @@ public class Main {
                     } else {
                         Logger.logDebug("System Tray not supported");
                     }
-                }
-            });
         } catch (Exception e) {
+            Logger.logError("error creating frame", e);
         }
 
         LoadingDialog.advance("Setting up Launcher");
@@ -385,13 +323,9 @@ public class Main {
          * @TODO ModpacksPane has a display issue with packScroll if the
          * main form is not visible when constructed.
          */
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run () {
-                //LaunchFrame.getInstance().setVisible(true);
-                //LaunchFrame.getInstance().toBack();
-            }
-        });
-
+        if(LaunchFrame.getInstance() == null){
+            Logger.logError("launchframe null");
+        }
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);
 
@@ -405,7 +339,8 @@ public class Main {
          * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
          */
         final int beta_ = beta;
-        UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+        //pax south needs manual launcher build pushes!
+        /*UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
             @Override
             protected void done () {
                 try {
@@ -418,7 +353,7 @@ public class Main {
                 }
             }
         };
-        updateChecker.execute();
+        updateChecker.execute();*/
         LoadingDialog.advance("Downloading pack data");
     }
 
@@ -439,8 +374,8 @@ public class Main {
                 }
             }
         }
-        s.add(0, "modpacks.xml");
-        s.add(1, "thirdparty.xml");
+        s.add(0, Locations.MODPACKXML);
+        s.add(1, Locations.THIRDPARTYXML);
         return s;
     }
 }

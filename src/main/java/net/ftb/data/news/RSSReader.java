@@ -19,10 +19,12 @@ package net.ftb.data.news;
 import com.google.common.collect.Lists;
 import net.ftb.download.Locations;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 
@@ -36,7 +38,8 @@ public class RSSReader {
             List<NewsArticle> news = Lists.newArrayList();
 
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            URL u = new URL(Locations.feedURL);
+            File f = new File(OSUtils.getCacheStorageLocation() + File.separator + Locations.feedURL);
+            URL u = f.toURI().toURL();
             Document doc = builder.parse(u.openStream());
             NodeList nodes = doc.getElementsByTagName("item");
 

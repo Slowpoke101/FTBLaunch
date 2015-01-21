@@ -23,7 +23,6 @@ import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import org.apache.commons.io.FileUtils;
 import org.tukaani.xz.LZMAInputStream;
-import org.tukaani.xz.lzma.LZMAEncoder;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -31,7 +30,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
@@ -281,28 +279,52 @@ public class FTBFileUtils {
             }
         }
     }
+
     public static boolean extractLZMA (LZMAInputStream lis, File output) throws IOException {
-        OutputStream fos = new FileOutputStream(output);
-        byte[] buf = new byte[8192];
-        try {
-            try {
-                int size;
-                while ((size = lis.read(buf)) != -1) {
-                    fos.write(buf, 0, size);
-                }
-            } finally {
-                lis.close();
-                fos.close();
-            }
-        } catch (IOException e) {
-            return false;
+        if (!output.exists()) {
+            output.mkdirs();
         }
-        return true;
+        boolean success = true;
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = null;
+        ZipEntry ze;
+        try {
+            if (!output.exists()) {
+                output.mkdir();
+            }
+            zis = new ZipInputStream(lis);
+            ze = zis.getNextEntry();
+            while (ze != null) {
+                File newFile = new File(output, ze.getName());
+                newFile.getParentFile().mkdirs();
+                if (!ze.isDirectory()) {
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.flush();
+                    fos.close();
+                }
+                ze = zis.getNextEntry();
+            }
+        } catch (IOException ex) {
+            Logger.logError("Error while extracting zip", ex);
+            success = false;
+        } finally {
+            try {
+                zis.closeEntry();
+                zis.close();
+            } catch (IOException e) {
+            }
+        }
+        return success;
     }
 
     public static boolean extractLZMA (String inputLocation, File output) throws IOException {
         LZMAInputStream lis = new LZMAInputStream(new BufferedInputStream(new FileInputStream(new File(inputLocation))));
-        return extractLZMA(lis,output);
+        return extractLZMA(lis, output);
+
     }
 
     public static void move (File oldFile, File newFile) {

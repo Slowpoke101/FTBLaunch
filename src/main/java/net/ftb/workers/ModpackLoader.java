@@ -64,12 +64,12 @@ public class ModpackLoader extends Thread {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
-            try {
+            //try {
                 modPackFile.getParentFile().mkdirs();
-                DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
-            } catch (IOException e) {
-                Logger.logWarn("Failed to load modpacks, loading from backup", e);
-            }
+                //DownloadUtils.downloadToFile(new URL(DownloadUtils.getStaticCreeperhostLink(xmlFile)), modPackFile);
+            //} catch (IOException e) {
+            //    Logger.logWarn("Failed to load modpacks, loading from backup", e);
+            //}
             Logger.logInfo("Loading modpack information for " + xmlFile + "...");
             InputStream modPackStream = null;
             try {

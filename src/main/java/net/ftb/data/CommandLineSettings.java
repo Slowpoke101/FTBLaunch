@@ -87,7 +87,7 @@ public class CommandLineSettings {
 
     @Parameter(names = { "--no-relaunch", "-n" }, description = "don't relaunch the launcher or attempt to pull java down")
     @Getter
-    private boolean noRelaunch = false;
+    private boolean noRelaunch = true;
 
 
     public static class ValidateRequiredValue implements IParameterValidator {

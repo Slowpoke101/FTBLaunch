@@ -38,7 +38,7 @@ public class MapLoader extends Thread {
 
     @Override
     public void run () {
-        try {//TODO ASAP THREAD THIS!!!
+      /*  try {//TODO ASAP THREAD THIS!!!
             Benchmark.start("MapLoader");
             Logger.logInfo("loading map information...");
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.MAPXML)));
@@ -61,6 +61,6 @@ public class MapLoader extends Thread {
             MapUtils.loaded = true;
             Benchmark.logBenchAs("MapLoader", "MapLoader run ");
             LaunchFrame.checkDoneLoading();
-        }
+        }*/
     }
 }

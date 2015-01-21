@@ -38,7 +38,7 @@ public class TexturePackLoader extends Thread {
 
     @Override
     public void run () {
-        try {//TODO ASAP thread this!!!
+       /* try {//TODO ASAP thread this!!!
             Benchmark.start("TexturepackLoader");
             Logger.logInfo("loading texture pack information...");
             Document doc = AppUtils.downloadXML(new URL(DownloadUtils.getStaticCreeperhostLink(Locations.TEXTUREPACKXML)));
@@ -62,6 +62,6 @@ public class TexturePackLoader extends Thread {
             TexturepackPane.loaded = true;
             Benchmark.logBenchAs("TexturepackLoader", "Texture Pack Load ");
             LaunchFrame.checkDoneLoading();
-        }
+        }*/
     }
 }

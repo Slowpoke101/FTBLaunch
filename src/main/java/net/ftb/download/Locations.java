@@ -68,7 +68,7 @@ public class Locations {
 
     // Forum and Feed URL
     public static final String forum = "http://forum.feed-the-beast.com/";
-    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
+    public static final String feedURL = "index.rss";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";
@@ -76,10 +76,10 @@ public class Locations {
     public static final String PRIVATEPACKS = "privatepacks/";
     public static final String TEXTUREPACKS = "texturepacks/";
 
-    public static final String MAPXML = "maps.xml";
-    public static final String MODPACKXML = "modpacks.xml";
-    public static final String THIRDPARTYXML = "thirdparty.xml";
-    public static final String TEXTUREPACKXML = "texturepack.xml";
+    public static final String MAPXML = "maps2.xml";
+    public static final String MODPACKXML = "paxsouth.xml";
+    public static final String THIRDPARTYXML = "vanillamc.xml";
+    public static final String TEXTUREPACKXML = "texturepack2.xml";
 
     public static final  String FTB_JAVA_META = "javameta.json";
 
@@ -91,6 +91,7 @@ public class Locations {
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
     public static final String TUGLOGO = "/image/logo_TUG.png";
+    public static final String CURSELOGO = "/image/logo_curse.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";
     public static final String launcherLogFile = "FTBLauncherLog.txt";

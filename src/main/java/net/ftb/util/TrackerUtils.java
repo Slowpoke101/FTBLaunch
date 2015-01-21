@@ -24,8 +24,8 @@ import net.ftb.tracking.piwik.PiwikTracker;
 import java.util.Map;
 
 public class TrackerUtils {
-    public static boolean googleEnabled = true;
-    public static boolean piwikEnabled = true;
+    public static boolean googleEnabled = false;
+    public static boolean piwikEnabled = false;
 
     public TrackerUtils () {
     }

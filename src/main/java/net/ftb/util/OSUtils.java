@@ -73,26 +73,6 @@ public class OSUtils {
      * @return a string containing the default install path for the current OS.
      */
     public static String getDefInstallPath () {
-        switch (getCurrentOS()) {
-        case WINDOWS:
-            String defaultLocation = "C:\\FTB";
-            File testFile = new File(defaultLocation);
-            // existing directory and we can write
-            if (testFile.canWrite()) {
-                return defaultLocation;
-            }
-
-            // We can create default directory
-            if (testFile.getParentFile().canWrite()) {
-                return defaultLocation;
-            }
-            Logger.logWarn("Can't use default installation location. Using current location of the launcher executable.");
-
-        case MACOSX:
-            return System.getProperty("user.home") + "/FTB";
-        case UNIX:
-            return System.getProperty("user.home") + "/FTB";
-        default:
             try {
                 CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
                 File jarFile;
@@ -101,9 +81,7 @@ public class OSUtils {
             } catch (URISyntaxException e) {
                 Logger.logError("Unexcepted error", e);
             }
-
-            return System.getProperty("user.home") + System.getProperty("path.separator") + "FTB";
-        }
+            return System.getProperty("user.home") + File.pathSeparator + "FTBtemp";
     }
 
     /**
@@ -111,19 +89,15 @@ public class OSUtils {
      * @return string containing dynamic storage location
      */
     public static String getDynamicStorageLocation () {
-        if (CommandLineSettings.getSettings().getDynamicDir() != null && !CommandLineSettings.getSettings().getDynamicDir().isEmpty()) {
-            return CommandLineSettings.getSettings().getDynamicDir();
+        try {
+            CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+            File jarFile;
+            jarFile = new File(codeSource.getLocation().toURI().getPath());
+            return jarFile.getParentFile().getPath() + File.separator + "FTBtemp";
+        } catch (URISyntaxException e) {
+            Logger.logError("Unexcepted error", e);
         }
-        switch (getCurrentOS()) {
-        case WINDOWS:
-            return System.getenv("APPDATA") + "/ftblauncher/";
-        case MACOSX:
-            return cachedUserHome + "/Library/Application Support/ftblauncher/";
-        case UNIX:
-            return cachedUserHome + "/.ftblauncher/";
-        default:
-            return getDefInstallPath() + "/temp/";
-        }
+        return System.getProperty("user.home") + System.getProperty("path.separator") + "FTBtemp";
     }
 
     /**
@@ -133,23 +107,15 @@ public class OSUtils {
      * @return string containing cache storage location
      */
     public static String getCacheStorageLocation () {
-        if (CommandLineSettings.getSettings().getCacheDir() != null && !CommandLineSettings.getSettings().getCacheDir().isEmpty()) {
-            return CommandLineSettings.getSettings().getCacheDir();
+        try {
+            CodeSource codeSource = LaunchFrame.class.getProtectionDomain().getCodeSource();
+            File jarFile;
+            jarFile = new File(codeSource.getLocation().toURI().getPath());
+            return jarFile.getParentFile().getPath() + File.separator + "FTBtemp";
+        } catch (URISyntaxException e) {
+            Logger.logError("Unexcepted error", e);
         }
-        switch (getCurrentOS()) {
-        case WINDOWS:
-            if (System.getenv("LOCALAPPDATA") != null && System.getenv("LOCALAPPDATA").length() > 5) {
-                return System.getenv("LOCALAPPDATA") + "/ftblauncher/";
-            } else {
-                return System.getenv("APPDATA") + "/ftblauncher/";
-            }
-        case MACOSX:
-            return cachedUserHome + "/Library/Application Support/ftblauncher/";
-        case UNIX:
-            return cachedUserHome + "/.ftblauncher/";
-        default:
-            return getDefInstallPath() + "/temp/";
-        }
+        return System.getProperty("user.home") + System.getProperty("path.separator") + "FTBtemp";
     }
 
     public static void createStorageLocations () {

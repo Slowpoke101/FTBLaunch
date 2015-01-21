@@ -88,7 +88,7 @@ public class ProfileEditorDialog extends JDialog {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                if (editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getNames().contains(name.getText()))) {
+                if (editingName.equals(name.getText()) || (!UserManager.getUsernames().contains(username.getText()) && !UserManager.getUsernames().contains(name.getText()))) {
                     if (savePassword.isSelected()) {
                         if (password.getPassword().length > 1) {
                             UserManager.updateUser(editingName, username.getText(), new String(password.getPassword()), name.getText());
