@@ -76,7 +76,7 @@ public class ProfileAdderDialog extends JDialog {
             @Override
             public void actionPerformed (ActionEvent event) {
                     if (validate(name.getText(), username.getText())) {
-                        UserManager.addUser(username.getText(), name.getText());
+                        UserManager.addUser(username.getText(), password.getText());
                         UserManager.setSaveMojangData(username.getText(), false);
                         LaunchFrame.writeUsers(name.getText());
                         setVisible(false);
@@ -110,6 +110,7 @@ public class ProfileAdderDialog extends JDialog {
     private boolean validate (String name, String user) {
         if (!name.isEmpty() && !user.isEmpty()) {
             if (!UserManager.getUsernames().contains(name) && !UserManager.getUsernames().contains(user)) {
+
                 return true;
             }
         }
@@ -131,7 +132,7 @@ public class ProfileAdderDialog extends JDialog {
         password = new JPasswordField(16);
         nameLbl = new JLabel(I18N.getLocaleString("PROFILEADDER_NAME"));
         name = new JTextField(16);
-        add = new JButton(I18N.getLocaleString("MAIN_ADD"));
+        add = new JButton("Launch");
 
         usernameLbl.setLabelFor(username);
         passwordLbl.setLabelFor(password);

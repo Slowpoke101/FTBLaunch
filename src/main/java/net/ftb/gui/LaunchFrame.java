@@ -366,6 +366,7 @@ public class LaunchFrame extends JFrame {
                 }
             });
             Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+            getInstance().launch.setEnabled(true);
         }
         if (callCount == 2) {
             Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
@@ -854,7 +855,9 @@ public class LaunchFrame extends JFrame {
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
         if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
             Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
+            try{
             Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
+            }catch(Exception e) {}
             saveSettings();
             Main.getUserManager().read();
             if (UserManager._users.size() >= 1 && ModPack.getSelectedPack() != null) {
