@@ -108,7 +108,8 @@ public class AuthlibHelper {
                         return null;
                     }
                 } catch (AuthenticationUnavailableException e) {
-                    Logger.logDebug("Error while authenticating, trying offline mode");
+                    Logger.logDebug("Error while authenticating, trying offline mode", e);
+                    Logger.logDebug("AuthenticationUnavailableException caused by", e.getCause());
                     if (hasMojangData) {
                         //if the UUID is valid we can proceed to offline mode later
                         uniqueID = authentication.getSelectedProfile().getId().toString();
@@ -123,8 +124,6 @@ public class AuthlibHelper {
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
                     }
                     ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com");
-                    Logger.logDebug("failed", e);
-                    Logger.logDebug("AuthenticationUnavailableException caused by", e.getCause());
                     return null;
                 } catch (AuthenticationException e) {
                     Logger.logError("Unknown error from authlib:", e);

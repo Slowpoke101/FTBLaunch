@@ -59,6 +59,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
@@ -169,6 +170,7 @@ public class Main {
             }
             Logger.logDebug("FTB Launcher CI Build #: " + beta + ", Git SHA: " + props.getProperty("Git-SHA"));
         } catch (Exception e) {
+            Logger.logError("Check your launcher binary's path. It might contain unsupported characters");
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
         }
@@ -210,6 +212,16 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run () {
+                try {
+                    String path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
+                    path = URLDecoder.decode(path, "UTF-8");
+                    if (path.contains("!"))
+                        ErrorUtils.tossError("Warning current location of the launcher binary contains character: \"!\", \n"
+                                + "which is not supported. Please move launcher binary and try again");
+                } catch (Exception e) {
+                    Logger.logError("Couldn't get path to current launcher jar/exe", e);
+                }
+
                 StyleUtil.loadUiStyles();
                 try {
                     for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
