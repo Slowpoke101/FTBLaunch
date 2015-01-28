@@ -480,7 +480,7 @@ public class OSUtils {
      */
     public static void browse (String url) {
         try {
-            if (Desktop.isDesktopSupported()) {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(url));
             } else if (getCurrentOS() == OS.UNIX && (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists())) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
@@ -502,7 +502,7 @@ public class OSUtils {
             return;
         }
         try {
-            if (Desktop.isDesktopSupported()) {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.OPEN)) {
                 Desktop.getDesktop().open(path);
             } else if (getCurrentOS() == OS.UNIX) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
