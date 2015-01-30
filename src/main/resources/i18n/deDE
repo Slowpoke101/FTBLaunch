@@ -10,15 +10,15 @@ LAUNCH_BUTTON = Starten
 PROFILE_CREATE = Profil erstellen
 PROFILE_SELECT = Profil auswählen
 DOWNLOAD_SERVER_PACK = Serverpack downloaden
-WARN_32BIT_OS = 
-WARN_32BIT_JAVA = 
-WARN_JAVA6 = 
+WARN_32BIT_OS = 32bit Betriebssystem. Für die meisten Mod-Packs wird ein 64bit-System benötigt. Falls du Probleme hast, verusche das FTB Lite 2 Pack.
+WARN_32BIT_JAVA =  32bit Java Installation auf 64bit Betriebssystem. Für die meisten Mod-Packs wird ein 64bit-Java benötigt. Falls du Probleme hast, verusche das FTB Lite 2 Pack.
+WARN_JAVA6 = Java 6 gefunden. Für die meisten Modpacks ist Java 7 empfohlen.
 
 # Console
 CONSOLE_TITLE = Konsole
 CONSOLE_COPYCLIP = Bericht in Zwischenablage kopieren
 CONSOLE_CLIP_CONFIRM = Möchtest du den gesamten Bericht in deine Zwischenablage kopieren?
-CONSOLE_PASTE = Auf pastebin.com hochladen
+CONSOLE_PASTE = Log hochladen
 CONSOLE_SUPPORT = Support benötigt? Klick mich!
 
 # Map Tab
@@ -39,7 +39,7 @@ RAM_MAX = RAM Maximum (MB)
 LANGUAGE = Sprache
 SHOW_CONSOLE = Konsole anzeigen?
 OPT_JAVA_ARGS = Optimierungs-Argumente für schnelle Computer benutzen?
-USE_SYSTEM_PROXY = 
+USE_SYSTEM_PROXY = Proxy zum herunterladen benutzen?
 REOPEN_LAUNCHER = Launcher erneut öffnen, nachdem Minecraft beendet wurde
 ADVANCED_OPTIONS = Erweiterte Optionen
 INSTALL_FIRSTUSE = Da dies das erste Mal ist, dass du diesen Launcher verwendest, empfehlen wir, das Installationsverzeichnis zu bestimmen.
@@ -57,8 +57,8 @@ FILTER_SETTINGS = Filtern
 MODS_EDIT_PACK = Modpack bearbeiten
 MODS_WAIT_WHILE_LOADING = Bitte warten während die Mods geladen werden...
 DOWNLOAD_SERVER = Server herunterladen
-MODPACK_VERSIONS = 
-PACK_CODES = 
+MODPACK_VERSIONS = Modpack Versionen
+PACK_CODES =  Pack Codes
 
 # EditModPackDialog
 MODS_EDIT_ENABLED_LABEL = Aktivierte Mods
@@ -70,10 +70,10 @@ MODS_EDIT_DISABLE_MOD = deaktivieren >>
 MODS_EDIT_TITLE = Modpack bearbeiten
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Bitte warten während die Maps geladen werden...
+MAPS_WAIT_WHILE_LOADING = Bitte warten, während die Maps geladen werden...
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Bitte warten während die Texture Packs geladen werden...
+TEXTURE_WAIT_WHILE_LOADING = Bitte warten, während die Texture Packs geladen werden...
 
 # Advanced  Options
 ADVANCED_OPTIONS_TITLE = Erweiterte Einstellungen
@@ -82,7 +82,7 @@ ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft Fenster Größe:
 ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft Fenster Position:
 ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Automatisch Vollbild?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Schalte Google Analytics aus
-ADVANCED_OPTIONS_JAVA_PATH = 
+ADVANCED_OPTIONS_JAVA_PATH = Pfad zu Java:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Zusätzliche Java-Parameter:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher-Debugging
 ADVANCED_OPTIONS_BETA = Benutzung der Beta-Version des Launchers erlaubt?
@@ -95,7 +95,7 @@ UPDATE_DOWNGRADE = Möchtest du downgraden?
 LUNCHERUPDATE_ISAVAILABLE = von dem Launcher ist verfügbar.
 LUNCHERUPDATE_CHANGELOG = Änderungen
 LUNCHERUPDATE_ISAVAILABLETITLE = Launcher Update ist verfügbar.
-LUNCHERUPDATE_CURRENTDEAD = 
+LUNCHERUPDATE_CURRENTDEAD = Dein Launcher MUSS geupdated werden. \n Grund: Keine Möglichkeit Modpacks zu starten.
 
 # Modpack Update
 UPDATEMODPACK_ISAVALIBLE = Eine neue Modpackversion ist verfügbar!
@@ -111,7 +111,7 @@ PRIVATEPACK_ERROR = Ungültiges Private Pack.
 PRIVATEPACK_TEXT = Gib den Private Code ein, den du vom Private Pack Besitzer bekommen hast, und klicke hinzufügen. Das Pack wird dann deiner Modpack Liste hinzufügt und automatisch beim Start geladen. Wenn du das Private Pack entfernen möchtest, gib einfach den Code nochmal ein und klicke entfernen.
 PRIVATEPACK_SECCESS = Erfolgreich gelöscht.
 PRIVATEPACK_NOTEXISTS = Falscher Packname.
-PRIVATEPACK_ALREADY_ADDED = 
+PRIVATEPACK_ALREADY_ADDED =  Das Pack wurde betreits hinzugefügt.
 
 # Filter
 FILTER_PACKTYPE = Modpacktyp:
@@ -167,26 +167,26 @@ MAIN_CANCEL = Abbrechen
 MAIN_SUBMIT = Abschicken
 MAIN_REMOVE = Löschen
 MAIN_ADD = Hinzufügen
-BUTTON_IGNORE = 
-BUTTON_OK = 
-NAG_SCREEN_MESSAGE = 
+BUTTON_IGNORE = Ignorieren
+BUTTON_OK =  OK
+NAG_SCREEN_MESSAGE = Um diese Nachricht in Zukunft zu überspringen, klicke OK oder Ignorieren
 
 # First run dialog
-INSTALL_TITLE = 
-INSTALL_LANGUAGE = 
-INSTALL_CHANGE = 
+INSTALL_TITLE = Erstmaliges Ausführen
+INSTALL_LANGUAGE = Sprache
+INSTALL_CHANGE = Ändern
 
 # System Tray
-TRAY_QUIT = 
-TRAY_FTB_WEBSITE = 
+TRAY_QUIT = Beenden
+TRAY_FTB_WEBSITE = FTB Website
 
 # CheckInstallPath
-CIP_BADPATH = 
-CIP_PROGRAMFILES = 
-CIP_INTERNETFILES = 
-CIP_USERPROFILE = 
-CIP_WRITEPROTECT = 
-CIP_EXISTS = 
-CIP_CREATE = 
-CIP_SELECTAGAIN = 
-CIP_PLEASECHANGE = 
+CIP_BADPATH = Nicht unterstütztes Installationsverzeichnis. Forge unterstützt folgende \nZeichen nicht: LIST Bitte wähle ein eines Verzeichnis aus
+CIP_PROGRAMFILES = Installation in C:\Program Files\ oder ähnlich wird nicht unterstützt. \nBitte wähle ein eines Verzeichnis aus
+CIP_INTERNETFILES = Du kannst FTB nicht in deinen temporären Internetdateiverzeichnis installieren. \nBitte wähle ein eines Verzeichnis aus
+CIP_USERPROFILE = Das Installieren in C:\Users\<username> ist nicht empholen und kann Probleme verursachen. \nWir emphelen ein anderes Verzeichnis, wie
+CIP_WRITEPROTECT = Konnte nicht in das Installationsverzeichnis schreiben. \nBitte wähle ein Verzeichnis für welches du Schreibrechte besitzt.
+CIP_EXISTS = FTB Installationsverzeichnis nicht gefunden.
+CIP_CREATE = Konnte Installationsverzeichnis nicht erstellen.
+CIP_SELECTAGAIN = Wähle bitte erneut aus
+CIP_PLEASECHANGE = Bitte wähle dein Installationsverzeich.nis im Optionen-Tab neu aus.
