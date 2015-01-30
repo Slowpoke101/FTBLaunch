@@ -1,0 +1,197 @@
+LOCALE_NAME = Québécois
+LOCALE_LOADED = Fichier de langue québécoise chargé !
+
+# Footer
+DONATE_BUTTON = Donner
+
+# Main Tab
+EDIT_BUTTON = Éditer
+LAUNCH_BUTTON = Lancer
+PROFILE_CREATE = Créer un profil
+PROFILE_SELECT = Choisir un profil
+DOWNLOAD_SERVER_PACK = Télécharger le modpack du serveur
+WARN_32BIT_OS = Système d'exploitation 32 bits. Une version 64 bits est requise pour la plupart des modpacks. Si vous avez des problèmes, veuillez essayer le pack FTB Lite 2.
+WARN_32BIT_JAVA = Java 32 bits dans un système d'exploitation 64 bits. Une version 64 bits de Java est requise pour la plupart des modpacks. Si vous avez des problèmes, veuillez essayer le pack FTB Lite 2.
+WARN_JAVA6 = Java 6 détecté. Java 7 est recommandé pour la plupart des modpacks.
+
+# Console
+CONSOLE_TITLE = Console
+CONSOLE_COPYCLIP = Copier en mémoire
+CONSOLE_CLIP_CONFIRM = Voulez-vous copier le log complet en mémoire ?
+CONSOLE_PASTE = Uploader un log
+CONSOLE_SUPPORT = Besoin d'aide ? Cliquez ici !
+
+# Map Tab
+INSTALL_MAP = Installer la map
+DOWNLOAD_MAP_SERVER = Télécharger la map du serveur
+
+#tab swapping
+SWAP_MAP = Maps
+SWAP_TEXTURE = Texture packs
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Installer le texture pack
+
+# Options pane
+INSTALL_FOLDER = Dossier d'installation :
+FORCE_UPDATE = Forcer la mise à jour
+RAM_MAX = RAM maximum (Mo) :
+LANGUAGE = Langue :
+SHOW_CONSOLE = Afficher la console
+OPT_JAVA_ARGS = Utiliser les arguments d'optimisation
+USE_SYSTEM_PROXY = Utiliser le proxy Internet pour télécharger
+REOPEN_LAUNCHER = Rouvrir le lanceur à la fermeture du jeu
+ADVANCED_OPTIONS = Options avancées
+INSTALL_FIRSTUSE = Puisque c'est votre première utilisation du lanceur, nous vous recommandons de définir le dossier d'installation.
+DOWNLOAD_JAVA64 = Télécharger Java 64 bits
+DOWNLOAD_JAVA32 = Télécharger Java 32 bits
+DOWNLOAD_JAVAGOOD = Télécharger Java recommandé
+JAVA_OLD_Warning = Java trop vieux. Java 7 est recommandé pour la plupart des modpacks FTB.
+JAVA_NEW_Warning = Java 8 n'est pas supporté (Minecraft ne supporte pas Java 8 sur Mac).
+JAVA_32BIT_WARNING = Votre système utilise une version 32 bits de Java. Cela va limiter Minecraft à 1.5 Go de RAM.
+
+# Shared strings
+FILTER_SETTINGS = Filtres...
+
+# Modpacks pane
+MODS_EDIT_PACK = Éditer le pack
+MODS_WAIT_WHILE_LOADING = Veuillez patienter. Chargement des mods en cours...
+DOWNLOAD_SERVER = Version serveur
+MODPACK_VERSIONS = Versions du modpack
+PACK_CODES = Codes de pack
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Mods activés
+MODS_EDIT_DISABLED_LABEL = Mods désactivés
+MODS_EDIT_OPEN_FOLDER = Ouvrir le dossier
+MODS_EDIT_ADD_MOD = Ajouter un mod
+MODS_EDIT_ENABLE_MOD = << Activer
+MODS_EDIT_DISABLE_MOD = Désactiver >>
+MODS_EDIT_TITLE = Éditeur de modpack
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Veuillez patienter. Chargement des maps en cours...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Veuillez patienter. Chargement des texture packs en cours...
+
+# Advanced Options
+ADVANCED_OPTIONS_TITLE = Options avancées
+ADVANCED_OPTIONS_DLLOCATION = Lieu de téléchargement :
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Taille de la fenêtre :
+ADVANCED_OPTIONS_MCWINDOW_POS = Position de la fenêtre :
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Agrandissement maximum automatique
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Désactiver le suivi de Google Analytic
+ADVANCED_OPTIONS_JAVA_PATH = Chemin vers Java :
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Paramètres Java de plus :
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Débogage supplémentaire du lanceur
+ADVANCED_OPTIONS_BETA = Permettre l'utilisation des versions Beta
+
+# Update
+UPDATE_WICHUPDATE = Voulez-vous mettre à jour ?
+UPDATE_DOWNGRADE = Voulez-vous "downgrader" ?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = du lanceur est disponible.
+LUNCHERUPDATE_CHANGELOG = Voir le changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Mise à jour du lanceur disponible
+LUNCHERUPDATE_CURRENTDEAD = Votre lanceur actuel doit être mis à jour pour une des raisons suivantes : \n n'est pas capable de lancer/mettre à jour Minecraft ou des packs !
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Une nouvelle version du modpack est disponible !
+UPDATEMODPACK_BACKUPCFG = Faire un backup des fichiers config ?
+UPDATEMODPACK_BACKUPSave = Faire un backup des sauvegardes ?
+UPDATEMODPACK_TITLE = Mise à jour du modpack disponible
+UPDATEMODPACK_DOWNGRADE = La version installée est plus récente que la version sélectionnée
+UPDATEMODPACK_FROM_TO_VERSION = Version actuelle : %LOCALVER%\nVersion sélectionnée : %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = Interface de pack privé
+PRIVATEPACK_ERROR = Pack privé invalide.
+PRIVATEPACK_TEXT = Tapez le code privé obtenu du propriétaire privé du pack et cliquez sur Ajout, le pack sera alors dans votre liste de packs. Il se chargera automatiquement au démarrage. Si vous voulez enlever un pack privé, tapez encore le code, et cliquez sur Enlever.
+PRIVATEPACK_SECCESS = enlevé avec succès.
+PRIVATEPACK_NOTEXISTS = Nom de pack incorrect.
+PRIVATEPACK_ALREADY_ADDED = Le pack privé est déjà ajouté.
+
+# Filter
+FILTER_PACKTYPE = Type de modpack :
+FILTER_ORIGIN = Map maker :
+FILTER_3THPARTY = Map tierce
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = Pack compatible :
+FILTER_APPLY = Appliquer le filtre
+FILTER_SEARCHMAP = Chercher les maps
+FILTER_TITLE = Filtres
+FILTER_PUBLIC = Listé
+FILTER_PRIVATE = Non listé
+FILTER_MODPACKAVALIABILITY = Disponibilité :
+FILTER_MCVERSION = Version de Minecraft :
+FILTER_RESULUTION = Résolution du modpack :
+FILTER_TEXSEARCH = Chercher les packs
+FILTER_SEARCHPACK = Chercher
+
+# Play Offline
+PLAYOFFLINE_WANNA = Quelque chose ne va pas...\nVoulez-vous jouer hors ligne ?
+
+# Password
+PASSWORD_PASSLABEL = Mot de passe :
+PASSWORD_TITLE = Entrez le mot de passe
+
+# Profile
+OLDCREDS = Données d'authentification manquantes ou anciennes : veuillez mettre à jour.
+CHANGEDUUID = Un changement a été détecté au matériel de l'utilisateur qui empêche le lanceur d'accéder à vos références, veuillez les entrer de nouveau.
+PROFILEADDER_USERNAME = Nom d'utilisateur/courriel :
+PROFILEADDER_PASSWORD = Mot de passe :
+PROFILEADDER_NAME = Nom du profil :
+PROFILEADDER_SAVEPASSWORD = Se souvenir du mot de passe
+PROFILEADDER_TITLE = Créateur de profil
+PROFILADDER_ERROR = Impossible de créer le profil.
+PROFILEADDER_UPDATE = Updater
+PROFILEDITOR_TITLE = Éditeur de profil
+PROFILEADDER_SAVEMOJANGDATA = Se souvenir du jeton d'auth.
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Avertissement ! Il y a déjà une map sous ce nom !
+MAPOVERRIDE_WISHOVERRIDE = Voulez-vous l'écraser ?
+
+# Force Kill MC
+KILL_MC = Tuer Minecraft
+KILL_MC_TITLE = Tuer Minecraft ?
+KILL_MC_MESSAGE = Avertissement ! Cela peut causer de la corruption, et devrait être utilisé seulement si le jeu est gelé !
+KILL_MC_CONFIRM = Voulez-vous vraiment tuer le processus de Minecraft ?
+
+# Main
+MAIN_EXIT = EXIT
+MAIN_APPLY = Appliquer
+MAIN_YES = Oui
+MAIN_NO = Non
+MAIN_ALL = Tout
+MAIN_CANCEL = Annuler
+MAIN_SUBMIT = Envoyer
+MAIN_REMOVE = Enlever
+MAIN_ADD = Ajout
+MAIN_CLIENT = Client
+MAIN_SERVER = Serveur
+BUTTON_IGNORE = Ignorer
+BUTTON_OK = OK
+NAG_SCREEN_MESSAGE = Cliquez sur OK pour continuer ou sur Ignorer pour passer cet avertissement à l'avenir
+
+# First run dialog
+INSTALL_TITLE = Première utilisation
+INSTALL_LANGUAGE = Langue...
+INSTALL_CHANGE = Changer
+
+# System Tray
+TRAY_QUIT = Quitter
+TRAY_FTB_WEBSITE = Site web de FTB
+
+# CheckInstallPath
+CIP_BADPATH = Dossier d'installation non supporté. Forge ne supporte pas les caractères\nsuivants : LIST Veuillez choisir un nouvel emplacement, comme
+CIP_PROGRAMFILES = Installer sous C:\Program Files\ ou similaire n'est pas supporté.\nVeuillez choisir un nouvel emplacement, comme
+CIP_INTERNETFILES = Vous ne pouvez pas installer FTB à votre dossier de fichiers Internet temporaires.\nVeuillez choisir un nouvel emplacement, comme
+CIP_USERPROFILE = Installer sous C:\Users\<username> n'est pas recommandé et peut causer des problèmes.\nVeuillez choisir un nouvel emplacement, comme
+CIP_WRITEPROTECT = Impossible d'écrire au dossier d'installation de FTB.\nVeuillez sélectionner un dossier auquel vous avez la permission d'écrire.
+CIP_EXISTS = Dossier d'installation de FTB non trouvé !
+CIP_CREATE = Impossible de créer l'emplacement de l'installation de FTB
+CIP_SELECTAGAIN = Veuillez choisir de nouveau !
+CIP_PLEASECHANGE = Veuillez changer votre emplacement d'installation sous l'onglet Options.
