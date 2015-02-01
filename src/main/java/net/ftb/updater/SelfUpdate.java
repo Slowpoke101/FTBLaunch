@@ -66,6 +66,7 @@ public class SelfUpdate {
         try {
             FTBFileUtils.delete(launcher);
             FTBFileUtils.copyFile(temporaryUpdate, launcher);
+            launcher.setExecutable(true);
         } catch (IOException e) {
             Logger.logError("Auto Updating Failed", e);
         }
