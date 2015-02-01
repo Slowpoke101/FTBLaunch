@@ -475,11 +475,15 @@ public class MCInstaller {
      * @param modPackName - The pack to install (should already be downloaded)
      * @throws IOException
      */
-    public static void installMods (String modPackName) throws IOException {
+    public static void installMods (String modPackName, boolean softUpdate) throws IOException {
         String installpath = Settings.getSettings().getInstallPath();
         String temppath = OSUtils.getCacheStorageLocation();
 
         ModPack pack;
+        List<String> blacklist = Lists.newArrayList();
+        if (!softUpdate) {
+            blacklist.add("options.txt");
+        }
 
         if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
             pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
@@ -501,7 +505,7 @@ public class MCInstaller {
         Logger.logDebug("source: " + source);
         Logger.logDebug("packDir: " + packDir);
 
-        FTBFileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"));
+        FTBFileUtils.copyFolder(source, new File(installpath, packDir + "/minecraft/"), blacklist);
         FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/instMods/"), new File(installpath, packDir + "/instMods/"));
         FTBFileUtils.copyFolder(new File(temppath, "ModPacks/" + packDir + "/libraries/"), new File(installpath, "/libraries/"), false);
     }
