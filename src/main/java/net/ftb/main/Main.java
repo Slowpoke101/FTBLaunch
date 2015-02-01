@@ -56,6 +56,7 @@ import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.AuthlibDLWorker;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -66,6 +67,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 
 public class Main {
     public static JGoogleAnalyticsTracker tracker;
@@ -229,6 +231,13 @@ public class Main {
                             UIManager.setLookAndFeel(info.getClassName());
                             break;
                         }
+                    }
+                    if (OSUtils.getCurrentOS()==OSUtils.OS.MACOSX) {
+                        InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
+                        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+                        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+                        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+                        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.META_DOWN_MASK), DefaultEditorKit.selectAllAction);
                     }
                 } catch (Exception e) {
                     try {
