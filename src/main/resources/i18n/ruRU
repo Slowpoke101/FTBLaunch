@@ -115,6 +115,9 @@ PRIVATEPACK_ALREADY_ADDED = Частный пакет уже добавлен
 
 # Filter
 FILTER_PACKTYPE = Тип пакета модов:
+FILTER_ORIGIN = 
+FILTER_3THPARTY = 
+FILTER_FTB = 
 FILTER_COMPERTIBLEPACK = Совместимый пакет:
 FILTER_APPLY = Применить фильтр
 FILTER_SEARCHMAP = Искать карты
@@ -167,6 +170,8 @@ MAIN_CANCEL = Отмена
 MAIN_SUBMIT = Подтвердить
 MAIN_REMOVE = Удалить
 MAIN_ADD = Добавить
+MAIN_CLIENT = 
+MAIN_SERVER = 
 BUTTON_IGNORE = Игнорировать
 BUTTON_OK = ОК
 NAG_SCREEN_MESSAGE = Нажмите OK, чтобы продолжить, или ИГНОРИРОВАТЬ, чтобы пропустить это предупреждение в будущем

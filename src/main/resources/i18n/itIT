@@ -115,6 +115,9 @@ PRIVATEPACK_ALREADY_ADDED = Pacchetto privato già aggiunto
 
 # Filter
 FILTER_PACKTYPE = Tipo di ModPack:
+FILTER_ORIGIN = 
+FILTER_3THPARTY = 
+FILTER_FTB = 
 FILTER_COMPERTIBLEPACK = Pacchetto compatibile:
 FILTER_APPLY = Applica Filtro
 FILTER_SEARCHMAP = Cerca Mappa
@@ -167,6 +170,8 @@ MAIN_CANCEL = Cancella
 MAIN_SUBMIT = Invia
 MAIN_REMOVE = Rimuovi
 MAIN_ADD = Agguingi
+MAIN_CLIENT = 
+MAIN_SERVER = 
 BUTTON_IGNORE = Ignora
 BUTTON_OK = Ok
 NAG_SCREEN_MESSAGE = Clicca OK per continuare o IGNORA per tralasciare questo avvertimento in futuro
