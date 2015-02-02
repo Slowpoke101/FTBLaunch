@@ -428,8 +428,14 @@ public class Main {
         /*
          * Run UpdateChecker swingworker. done() will open LauncherUpdateDialog if needed
          */
-        final int beta_ = beta;
-        UpdateChecker updateChecker = new UpdateChecker(Constants.buildNumber, LaunchFrame.getInstance().minUsable, beta_) {
+        int beta_ = beta;
+        int v = CommandLineSettings.getSettings().getManualVersion();
+        int b = CommandLineSettings.getSettings().getManualBuildNumber();
+        UpdateChecker updateChecker = new UpdateChecker(
+                (v == 0  ? Constants.buildNumber : v),
+                LaunchFrame.getInstance().minUsable,
+                (b == 0 ? beta_ : b)
+        ) {
             @Override
             protected void done () {
                 try {

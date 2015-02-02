@@ -85,6 +85,14 @@ public class CommandLineSettings {
     @Getter
     private boolean skipFirst = false;
 
+    @Parameter(names = {"--set-version"}, description = "Set version")
+    @Getter
+    private int manualVersion = 0;
+
+    @Parameter(names = {"--set-build"}, description = "Set build number")
+    @Getter
+    private int manualBuildNumber = 0;
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {
