@@ -46,10 +46,18 @@ public class FTBFileUtils {
      * @throws IOException
      */
     public static void copyFolder (File sourceFolder, File destinationFolder) throws IOException {
-        copyFolder(sourceFolder, destinationFolder, true);
+        copyFolder(sourceFolder, destinationFolder, true, null);
+    }
+
+    public static void copyFolder (File sourceFolder, File destinationFolder, List<String> blacklist) throws IOException {
+        copyFolder(sourceFolder, destinationFolder, true, blacklist);
     }
 
     public static void copyFolder (File sourceFolder, File destinationFolder, boolean overwrite) throws IOException {
+        copyFolder(sourceFolder, destinationFolder, overwrite, null);
+    }
+
+    public static void copyFolder (File sourceFolder, File destinationFolder, boolean overwrite, List<String> blacklist) throws IOException {
         if (sourceFolder.isDirectory()) {
             if (!destinationFolder.exists()) {
                 destinationFolder.mkdirs();
@@ -58,9 +66,9 @@ public class FTBFileUtils {
             for (String file : files) {
                 File srcFile = new File(sourceFolder, file);
                 File destFile = new File(destinationFolder, file);
-                copyFolder(srcFile, destFile, overwrite);
+                copyFolder(srcFile, destFile, overwrite, blacklist);
             }
-        } else {
+        } else if ( blacklist == null || !blacklist.contains(sourceFolder)) {
             copyFile(sourceFolder, destinationFolder, overwrite);
         }
     }

@@ -598,6 +598,7 @@ public class LaunchFrame extends JFrame {
 
         final String installPath = Settings.getSettings().getInstallPath();
         final ModPack pack = ModPack.getSelectedPack();
+        boolean softUpdate = false;
 
         Logger.logDebug("ForceUpdate: " + Settings.getSettings().isForceUpdateEnabled());
         Logger.logDebug("installPath: " + installPath);
@@ -606,8 +607,13 @@ public class LaunchFrame extends JFrame {
 
         File verFile = new File(installPath, pack.getDir() + File.separator + "version");
 
+        if (verFile.exists()) {
+            softUpdate = true;
+        }
+
         if (Settings.getSettings().isForceUpdateEnabled() && verFile.exists()) {
             verFile.delete();
+            softUpdate = false;
             Logger.logDebug("Pack found and delete attempted");
         }
 
@@ -624,7 +630,7 @@ public class LaunchFrame extends JFrame {
                 }
             }
 
-            if (!initializeMods()) {
+            if (!initializeMods(softUpdate)) {
                 Logger.logDebug("initializeMods: Failed to Init mods! Aborting to menu.");
                 enableObjects();
                 return;
@@ -764,7 +770,7 @@ public class LaunchFrame extends JFrame {
      * Download and install mods
      * @return boolean - represents whether it was successful in initializing mods
      */
-    private boolean initializeMods () {
+    private boolean initializeMods (boolean softUpdate) {
         Logger.logDebug("pack dir...");
         Logger.logInfo(ModPack.getSelectedPack().getDir());
         ModManager man = new ModManager(new JFrame(), true);
@@ -781,7 +787,7 @@ public class LaunchFrame extends JFrame {
             return false;
         }
         try {
-            MCInstaller.installMods(ModPack.getSelectedPack().getDir());
+            MCInstaller.installMods(ModPack.getSelectedPack().getDir(), softUpdate);
             ModManager.cleanUp();
         } catch (IOException e) {
             Logger.logDebug("Exception: ", e);
