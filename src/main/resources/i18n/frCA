@@ -75,7 +75,7 @@ MAPS_WAIT_WHILE_LOADING = Veuillez patienter. Chargement des maps en cours...
 # TexturePack pane
 TEXTURE_WAIT_WHILE_LOADING = Veuillez patienter. Chargement des texture packs en cours...
 
-# Advanced Options
+# Advanced  Options
 ADVANCED_OPTIONS_TITLE = Options avancées
 ADVANCED_OPTIONS_DLLOCATION = Lieu de téléchargement :
 ADVANCED_OPTIONS_MCWINDOW_SIZE = Taille de la fenêtre :
