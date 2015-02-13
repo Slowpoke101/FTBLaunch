@@ -40,6 +40,7 @@ import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.Parallel;
 import net.ftb.util.TrackerUtils;
+import net.ftb.util.winreg.JavaVersion;
 
 import java.awt.*;
 import java.io.File;
@@ -88,27 +89,29 @@ public class MCLauncher {
 
         setMemory(arguments, rmax);
 
-        if (OSUtils.getCurrentOS().equals(OSUtils.OS.WINDOWS)) {
-            if (!OSUtils.is64BitWindows()) {
-                if (maxPermSize == null || maxPermSize.isEmpty()) {
-                    if (OSUtils.getOSTotalMemory() > 2046) {
-                        maxPermSize = "192m";
-                        Logger.logInfo("Defaulting PermSize to 192m");
-                    } else {
-                        maxPermSize = "128m";
-                        Logger.logInfo("Defaulting PermSize to 128m");
+        if (Settings.getSettings().getCurrentJava().isOlder(JavaVersion.createJavaVersion("1.8.0"))) {
+            if (OSUtils.getCurrentOS().equals(OSUtils.OS.WINDOWS)) {
+                if (!OSUtils.is64BitWindows()) {
+                    if (maxPermSize == null || maxPermSize.isEmpty()) {
+                        if (OSUtils.getOSTotalMemory() > 2046) {
+                            maxPermSize = "192m";
+                            Logger.logInfo("Defaulting PermSize to 192m");
+                        } else {
+                            maxPermSize = "128m";
+                            Logger.logInfo("Defaulting PermSize to 128m");
+                        }
                     }
                 }
             }
-        }
 
-        if (maxPermSize == null || maxPermSize.isEmpty()) {
-            // 64-bit or Non-Windows
-            maxPermSize = "256m";
-            Logger.logInfo("Defaulting PermSize to 256m");
-        }
+            if (maxPermSize == null || maxPermSize.isEmpty()) {
+                // 64-bit or Non-Windows
+                maxPermSize = "256m";
+                Logger.logInfo("Defaulting PermSize to 256m");
+            }
 
-        arguments.add("-XX:PermSize=" + maxPermSize);
+            arguments.add("-XX:PermSize=" + maxPermSize);
+        }
         arguments.add("-Djava.library.path=" + nativesDir.getAbsolutePath());
         arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
         arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
@@ -143,8 +146,9 @@ public class MCLauncher {
             }
         }
         if (Settings.getSettings().getOptJavaArgs()) {
-            Logger.logInfo("Adding Optimization Arguments");
-            Collections.addAll(arguments, "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation".split("\\s+"));
+            String optArgs = "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
+            Logger.logInfo("Adding Optimization Arguments: " + optArgs);
+            Collections.addAll(arguments, optArgs.split("\\s+"));
         }
 
         //Undocumented environment variable to control JVM
