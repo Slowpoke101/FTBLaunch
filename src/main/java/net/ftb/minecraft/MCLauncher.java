@@ -73,6 +73,8 @@ public class MCLauncher {
             cpb.append(OSUtils.getJavaDelimiter());
             cpb.append(f.getAbsolutePath());
         }
+        cpb.deleteCharAt(0);
+
         if (isLegacy) {
             setupLegacyStuff(gameDirectory, Locations.FORGENAME);
         }
@@ -124,7 +126,7 @@ public class MCLauncher {
         }
 
         arguments.add("-cp");
-        arguments.add(System.getProperty("java.class.path") + cpb.toString());
+        arguments.add(cpb.toString());
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
@@ -240,11 +242,14 @@ public class MCLauncher {
                 arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getHeight())));
             }
         }
+
         ProcessBuilder builder = new ProcessBuilder(arguments);
-        /*StringBuilder tmp = new StringBuilder();
+        /*
+        StringBuilder tmp = new StringBuilder();
         for (String a : builder.command())
             tmp.append(a).append(" \n");
-        Logger.logInfo("Launching: \n" + tmp.toString());*/
+        Logger.logInfo("Launching: \n" + tmp.toString());
+        //*/
         builder.directory(gameDir);
         builder.redirectErrorStream(true);
         OSUtils.cleanEnvVars(builder.environment());
