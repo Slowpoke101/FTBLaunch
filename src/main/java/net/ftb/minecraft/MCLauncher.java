@@ -124,7 +124,7 @@ public class MCLauncher {
         }
 
         arguments.add("-cp");
-        arguments.add(cpb.toString());
+        arguments.add(System.getProperty("java.class.path") + cpb.toString());
 
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
@@ -240,12 +240,11 @@ public class MCLauncher {
                 arguments.add(String.valueOf(Math.abs((int) Settings.getSettings().getLastDimension().getHeight())));
             }
         }
-
         ProcessBuilder builder = new ProcessBuilder(arguments);
         /*StringBuilder tmp = new StringBuilder();
         for (String a : builder.command())
-            tmp.append(a).append(' ');
-        Logger.logInfo("Launching: " + tmp.toString());*/
+            tmp.append(a).append(" \n");
+        Logger.logInfo("Launching: \n" + tmp.toString());*/
         builder.directory(gameDir);
         builder.redirectErrorStream(true);
         OSUtils.cleanEnvVars(builder.environment());
