@@ -22,13 +22,10 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.RuntimeStreamer;
+import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
@@ -39,6 +36,7 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.swing.text.html.StyleSheet;
 
@@ -54,6 +52,8 @@ public class OSUtils {
     @Getter
     private static int numCores;
     private static byte[] hardwareID;
+
+    private static UUID clientUUID;
 
     public static enum OS {
         WINDOWS, UNIX, MACOSX, OTHER,
@@ -544,4 +544,51 @@ public class OSUtils {
             return null;
         }
     }
+
+    public static UUID getClientToken() {
+        if (clientUUID != null) {
+            return clientUUID;
+        } else {
+            String s = null;
+
+            File tokenFile = new File(getCacheStorageLocation() + File.separator + "clientToken");
+            if (tokenFile.exists() && tokenFile.isFile()) {
+                try {
+                    s = FileUtils.readFileToString(tokenFile);
+                } catch (IOException e) {
+                    s = null;
+                    Logger.logError("Client token read failed:", e);
+                }
+            }
+
+            if (s != null) {
+                try {
+                    clientUUID = UUID.fromString(s);
+                } catch (IllegalArgumentException e) {
+                    Logger.logError("Client token read failed", e);
+                    clientUUID = createUUID();
+                }
+            } else {
+                clientUUID = createUUID();
+            }
+            return clientUUID;
+        }
+    }
+
+    public static void setClientToken(UUID u) {
+        File tokenFile = new File(getCacheStorageLocation() + File.separator + "clientToken");
+        try {
+            FileUtils.writeStringToFile(tokenFile, u.toString());
+        } catch (IOException e) {
+            Logger.logError("Client token write failed", e);
+        }
+    }
+
+    private static UUID createUUID() {
+        UUID u =  UUID.randomUUID();
+        setClientToken(u);
+        return u;
+    }
+
+
 }

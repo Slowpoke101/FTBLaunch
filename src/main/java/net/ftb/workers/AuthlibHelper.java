@@ -41,6 +41,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
+import net.ftb.util.OSUtils;
 
 import java.io.File;
 import java.net.Proxy;
@@ -57,7 +58,8 @@ public class AuthlibHelper {
         boolean hasMojangData = false;
         boolean hasPassword = false;
         GameProfile selectedProfile = null;
-        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
+        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, OSUtils.getClientToken().toString()).createUserAuthentication(
+                Agent.MINECRAFT);
         if (user != null) {
             Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
