@@ -62,6 +62,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.0'
     testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.0'
 	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
 }
 
 project.ext {
@@ -178,10 +179,10 @@ if (project.hasProperty("local_maven")) {
         }
     }
 }
-if (project.hasProperty("remote_maven")) {
-	apply plugin: 'maven'
+if (project.hasProperty("remote_maven") && project.hasProperty("ftp_pass")) {
+    apply plugin: 'maven'
     uploadArchives {
-		repositories.mavenDeployer {
+        repositories.mavenDeployer {
             configuration = configurations.deployerJars
             repository(url: "ftp://${remote_maven}") {
                 authentication(userName: "${ftp_username}", password: "${ftp_pass}")
@@ -189,3 +190,14 @@ if (project.hasProperty("remote_maven")) {
         }
     }
 }
+    if (project.hasProperty("remote_maven") && project.hasProperty("sftp_pass")) {
+        apply plugin: 'maven'
+        uploadArchives {
+            repositories.mavenDeployer {
+                configuration = configurations.deployerJars
+                repository(url: "sftp://${remote_maven}") {
+                    authentication(userName: "${ftp_username}", password: "${sftp_pass}")
+                }
+            }
+        }
+    }
