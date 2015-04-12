@@ -1,0 +1,197 @@
+LOCALE_NAME = Polski
+LOCALE_LOADED = Język Polski załadowany!
+
+# Footer
+DONATE_BUTTON = Dotacja
+
+# Main Tab
+EDIT_BUTTON = Edytuj
+LAUNCH_BUTTON = Uruchom
+PROFILE_CREATE = Utwórz Profil
+PROFILE_SELECT = Wybierz Profil
+DOWNLOAD_SERVER_PACK = Pobierz Paczkę Serwerową
+WARN_32BIT_OS = 32-bitowy system operacyjny. Dla większości paczek wymagany jest 64-bitowy system. Jeśli masz problemy, spróbuj użyć paczki FTB Lite 2.
+WARN_32BIT_JAVA = 32-bitowa Java na 64-bitowym systemie operacyjnym. 64-bitowa Java jest wymagana dla większości paczek. Jeśli masz problemy, spróbuj użyć paczki FTB Lite 2.
+WARN_JAVA6 = Wykryto Java 6. Java 7 jest zalecana dla większości paczek.
+
+# Console
+CONSOLE_TITLE = Konsola
+CONSOLE_COPYCLIP = Kopiuj do schowka
+CONSOLE_CLIP_CONFIRM = Czy chcesz skopiować cały dziennik do schowka?
+CONSOLE_PASTE = Wyślij Dziennik
+CONSOLE_SUPPORT = Potrzebujesz pomocy? Wciśnij mnie!
+
+# Map Tab
+INSTALL_MAP = Instaluj Mapę
+DOWNLOAD_MAP_SERVER = Pobierz Mapę Serwerową
+
+#tab swapping
+SWAP_MAP = Mapy
+SWAP_TEXTURE = Paczki Tekstur
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = Instaluj Paczkę Tekstur
+
+# Options pane
+INSTALL_FOLDER = Folder instalacji...
+FORCE_UPDATE = Wymuszona aktualizacja?
+RAM_MAX = Maksymalny RAM(MB)
+LANGUAGE = Język
+SHOW_CONSOLE = Pokazać Konsolę?
+OPT_JAVA_ARGS= Używać Arg. Optymalizujących dla szybkich komputerów?
+USE_SYSTEM_PROXY = Używać Proxy Internetowego do pobierania plików?
+REOPEN_LAUNCHER = Uruchomić launcher po wyjściu z Minecraft'a?
+ADVANCED_OPTIONS = Opcje Zaawansowane
+INSTALL_FIRSTUSE = Jako że używasz po raz pierwszy launcher'a, sugeruje ustawienie folderu instalacji.
+DOWNLOAD_JAVA64 = Pobierz Java 64-bit
+DOWNLOAD_JAVA32 = Pobierz Java 32-bit
+DOWNLOAD_JAVAGOOD = Pobierz zalecaną Javę
+JAVA_OLD_Warning = Java za stara. Java 7 jest zalecana dla większości paczek FTB.
+JAVA_NEW_Warning = Java 8 nie jest wspierana. (Minecraft nie wspiera Javy 8 na Mac.)
+JAVA_32BIT_WARNING = Twój system używa 32-bitowej wersji Javy. To ograniczy Używanie przez Minecraft'a pamięci RAM do 1.5GB.
+
+# Shared strings
+FILTER_SETTINGS = Ustawienia Filtru
+
+# Modpacks pane
+MODS_EDIT_PACK = Edytuj Paczkę Modów
+MODS_WAIT_WHILE_LOADING = Proszę poczekać, mody są ładowane...
+DOWNLOAD_SERVER = Pobierz Serwer
+MODPACK_VERSIONS = Wersja Paczki
+PACK_CODES = Kod Paczki
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Mody włączone
+MODS_EDIT_DISABLED_LABEL = Mody wyłączone
+MODS_EDIT_OPEN_FOLDER = Otwórz folder
+MODS_EDIT_ADD_MOD = Dodaj mod
+MODS_EDIT_ENABLE_MOD = << Włącz
+MODS_EDIT_DISABLE_MOD = Wyłącz >>
+MODS_EDIT_TITLE = Edytor Paczki Modów
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = Proszę poczekać, mapy są ładowane...
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = Proszę poczekać, paczki tekstur są ładowane...
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = Opcje Zaawansowane
+ADVANCED_OPTIONS_DLLOCATION = Lokalizacja Pobierania:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Rozmiar okna Minecraft'a:
+ADVANCED_OPTIONS_MCWINDOW_POS = Pozycja okna Minecraft'a:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Maksymalizacja?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Wyłącz Google Analytic Tracking
+ADVANCED_OPTIONS_JAVA_PATH = Ścieżka Javy:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Dodatkowe parametry Javy:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Dodatkowe debugowania launchera
+ADVANCED_OPTIONS_BETA= Zezwól Na Używanie Wersji Beta Launchera
+
+# Update
+UPDATE_WICHUPDATE = Czy chcesz zaktualizować?
+UPDATE_DOWNGRADE = Czy chcesz przywrócić poprzednią wersję?
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = launcher'a jest dostępne.
+LUNCHERUPDATE_CHANGELOG = Wyświetl listę zmian
+LUNCHERUPDATE_ISAVAILABLETITLE = Aktualizacja Launchera Jest Dostępna
+LUNCHERUPDATE_CURRENTDEAD = Twój launcher musi zostać zaktualizowany przez jeden z tych powodów: \n nie jest możliwe poprawne uruchomienie/aktualizacja Minecraft'a albo paczek!
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Nowa wersja paczki jest dostępna!
+UPDATEMODPACK_BACKUPCFG = Stworzyć kopię konfiguracji?
+UPDATEMODPACK_BACKUPSave = Stworzyć kopię zapisów?
+UPDATEMODPACK_TITLE = Dostępna Jest Aktualizacja Paczki Modów
+UPDATEMODPACK_DOWNGRADE = Wersja zainstalowana jest nowsza od wybranej
+UPDATEMODPACK_FROM_TO_VERSION = Aktualna Wersja: %LOCALVER%\nWybrana Wersja: %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = Interfejs Prywatnych Paczek
+PRIVATEPACK_ERROR = Nieprawidłowy Kod Paczki.
+PRIVATEPACK_TEXT = Wprowadź prywatny kod paczki, który dostaniesz od autora a następnie wciśnij dodaj, paczka pojawi się na liście. Jeżeli chcesz usunąć prywatną paczkę, wpisz ponownie jej kod i wciśnij usuń.
+PRIVATEPACK_SECCESS = Usunięto z powodzeniem.
+PRIVATEPACK_NOTEXISTS = Nieprawidłowa nazwa paczki.
+PRIVATEPACK_ALREADY_ADDED = Prywatna Paczka została wcześniej dodana
+
+# Filter
+FILTER_PACKTYPE = Typ Paczki Modów:
+FILTER_ORIGIN = Twórca Mapy:
+FILTER_3THPARTY = Third Party
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = Kompatybilne Paczki:
+FILTER_APPLY = Zastosuj filtr
+FILTER_SEARCHMAP = Szukaj Map
+FILTER_TITLE = Filtruj
+FILTER_PUBLIC = Wymienione
+FILTER_PRIVATE = Niewymienione
+FILTER_MODPACKAVALIABILITY = Dostępność Paczki Modów:
+FILTER_MCVERSION = Wersja Minecraft'a:
+FILTER_RESULUTION = Rozdzielczość Paczki Modów:
+FILTER_TEXSEARCH = Szukaj Paczek
+FILTER_SEARCHPACK = Szukaj
+
+# Play Offline
+PLAYOFFLINE_WANNA = Coś poszło nie tak..\nCzy chcesz zagrać w trybie offline ?
+
+# Password
+PASSWORD_PASSLABEL = Hasło: 
+PASSWORD_TITLE = Proszę podać hasło 
+
+# Profile
+OLDCREDS = Znaleziono stary format logowania albo brakuje danych logowania proszę zaktualizować.
+CHANGEDUUID = Wykryto zmiany sprzętowe, co uniemożliwia dostęp launcher'a do poświadczeń użytkownika, proszę wprowadzić je ponownie.
+PROFILEADDER_USERNAME = Nazwa Użytkownika/Adres E-mail:
+PROFILEADDER_PASSWORD = Hasło:
+PROFILEADDER_NAME = Nazwa Profilu:
+PROFILEADDER_SAVEPASSWORD = Zapamiętaj Hasło
+PROFILEADDER_TITLE = Tworzenie Profilu
+PROFILADDER_ERROR = Nie Można Stworzyć Profilu.
+PROFILEADDER_UPDATE = Aktualizuj
+PROFILEDITOR_TITLE = Edytor Profilu
+PROFILEADDER_SAVEMOJANGDATA = Zapamiętaj token auth
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = Uwaga! Mapa o takiej nazwie już istnieje!
+MAPOVERRIDE_WISHOVERRIDE = Czy chcesz ją nadpisać?
+
+# Force Kill MC
+KILL_MC = Zabij Minecraft'a
+KILL_MC_TITLE = Zabić Minecraft'a?
+KILL_MC_MESSAGE = Uwaga! To może spowodować uszkodzenia, używaj tylko jeśli gra jest zamrożona!
+KILL_MC_CONFIRM = Czy jesteś pewien że chcesz zabić proces Minecraft'a?
+
+# Main
+MAIN_EXIT = Zamknij
+MAIN_APPLY = Zastosuj
+MAIN_YES = Tak
+MAIN_NO = Nie
+MAIN_ALL = Wszystkie
+MAIN_CANCEL = Anuluj
+MAIN_SUBMIT = Zgłoś
+MAIN_REMOVE = Usuń
+MAIN_ADD = Dodaj
+MAIN_CLIENT = Klient
+MAIN_SERVER = Serwer
+BUTTON_IGNORE = Ignoruj
+BUTTON_OK = OK
+NAG_SCREEN_MESSAGE = Wciśnij OK aby kontynuować albo IGNORUJ aby pominąć to ostrzeżenie w przyszłości
+
+# First run dialog
+INSTALL_TITLE = Pierwsze Uruchomienie
+INSTALL_LANGUAGE = Język ...
+INSTALL_CHANGE = Zmień
+
+# System Tray
+TRAY_QUIT = Wyjdź
+TRAY_FTB_WEBSITE = Strona FTB
+
+# CheckInstallPath
+CIP_BADPATH = Nie wspierany folder instalacji. Forge nie wspiera następujących \nzaków: LIST Proszę o wybranie nowego miejsca, takiego jak 
+CIP_PROGRAMFILES = Instalacja w C:\Program Files\ albo podobnym jest niewspierana. \nProszę o wybranie nowego miejsca, takiego jak 
+CIP_INTERNETFILES = Nie możesz zainstalować FTB do twojego folderu Temporary Internet Files . \nProszę o wybranie nowego miejsca, takiego jak
+CIP_USERPROFILE = Instalacja w C:\Users\<nazwa> jest niezalecana i może tworzyć problemy. \nSugerujemy wybranie nowego miejsca, takiego jak
+CIP_WRITEPROTECT = Nie można zapisać do folderu instalacyjnego FTB. \nProszę o wybranie miejsca do którego masz uprawnienia.
+CIP_EXISTS = Folder instalacyjny FTB nie znaleziony!
+CIP_CREATE = NIe można utworzyć miejsca instalacji FTB
+CIP_SELECTAGAIN = Prosze wybierz ponownie!
+CIP_PLEASECHANGE = Prosze zmień miejsce instalacji w zakładce options.
