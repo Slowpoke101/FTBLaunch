@@ -481,7 +481,7 @@ public class OSUtils {
     public static void browse (String url) {
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI(url));
+                Desktop.getDesktop().browse(new URI(url.replace(" ", "+")));
             } else if (getCurrentOS() == OS.UNIX && (new File("/usr/bin/xdg-open").exists() || new File("/usr/local/bin/xdg-open").exists())) {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
                 new ProcessBuilder("xdg-open", url).start();
