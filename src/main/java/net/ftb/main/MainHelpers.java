@@ -169,13 +169,15 @@ public class MainHelpers {
 
     public static void tossNag (String setting, String message) {
         if (!Settings.getSettings().getBoolean(setting)) {
+            Logger.logDebug("Displaying nagging screen: " + message);
             int result = ErrorUtils.tossOKIgnoreDialog(message, JOptionPane.WARNING_MESSAGE);
             if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
+                Logger.logDebug("... user selected to ignore warning");
                 Settings.getSettings().setBoolean(setting, true);
                 Settings.getSettings().save();
             }
         } else {
-            Logger.logDebug("ignored: " + setting);
+            Logger.logDebug("Not displaying nag screen(ignored): " + setting);
         }
 
     }

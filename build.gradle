@@ -42,6 +42,7 @@ repositories {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.3.1'
@@ -148,6 +149,13 @@ macAppBundle {
 jar {
     manifest {
         attributes 'Main-Class': project.mainClass, 'Launcher-Jenkins': project.buildNum
+    }
+}
+
+// e.g. ./gradlew --daemon  runshadow -Pargs="--help"
+runShadow {
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+')
     }
 }
 
