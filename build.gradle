@@ -42,6 +42,7 @@ repositories {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.3.1'
@@ -62,6 +63,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.0'
     testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.0'
 	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
 }
 
 project.ext {
@@ -89,7 +91,7 @@ processResources {
 }
 mainClassName = project.mainClass
 group = 'net.ftb'
-version = "1.4.5-${project.buildNum}"
+version = "1.4.6-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -150,6 +152,13 @@ jar {
     }
 }
 
+// e.g. ./gradlew --daemon  runshadow -Pargs="--help"
+runShadow {
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+')
+    }
+}
+
 def getCheckedOutGitCommitHash() {
     def gitFolder = "$projectDir" + File.separator + ".git" + File.separator
     def takeFromHash = 12
@@ -178,10 +187,10 @@ if (project.hasProperty("local_maven")) {
         }
     }
 }
-if (project.hasProperty("remote_maven")) {
-	apply plugin: 'maven'
+if (project.hasProperty("remote_maven") && project.hasProperty("ftp_pass")) {
+    apply plugin: 'maven'
     uploadArchives {
-		repositories.mavenDeployer {
+        repositories.mavenDeployer {
             configuration = configurations.deployerJars
             repository(url: "ftp://${remote_maven}") {
                 authentication(userName: "${ftp_username}", password: "${ftp_pass}")
@@ -189,3 +198,14 @@ if (project.hasProperty("remote_maven")) {
         }
     }
 }
+    if (project.hasProperty("remote_maven") && project.hasProperty("sftp_pass")) {
+        apply plugin: 'maven'
+        uploadArchives {
+            repositories.mavenDeployer {
+                configuration = configurations.deployerJars
+                repository(url: "sftp://${remote_maven}") {
+                    authentication(userName: "${ftp_username}", password: "${sftp_pass}")
+                }
+            }
+        }
+    }

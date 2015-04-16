@@ -41,6 +41,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.PasswordDialog;
 import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
+import net.ftb.util.OSUtils;
 
 import java.io.File;
 import java.net.Proxy;
@@ -57,7 +58,8 @@ public class AuthlibHelper {
         boolean hasMojangData = false;
         boolean hasPassword = false;
         GameProfile selectedProfile = null;
-        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, "1").createUserAuthentication(Agent.MINECRAFT);
+        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, OSUtils.getClientToken().toString()).createUserAuthentication(
+                Agent.MINECRAFT);
         if (user != null) {
             Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
@@ -153,17 +155,33 @@ public class AuthlibHelper {
             } else if (authentication.getSelectedProfile() == null && (authentication.getAvailableProfiles() != null && authentication.getAvailableProfiles().length != 0)) {
                 // user has more than one profile in his mojang acoount
                 Logger.logInfo("You seem to have multiple profiles in  your account. Please contact FTB Launcher team if profiles are not working!");
-                Logger.logDebug("User has more than one profile: " + toString(authentication));
+                Logger.logDebug("User has more than one profile:\n" + toString(authentication));
                 for (GameProfile profile : authentication.getAvailableProfiles()) {
                     if (selectedProfileName.equals(profile.getName())) {
                         Logger.logInfo("Selected profile: " + profile.getName());
                         selectedProfile = profile;
+                        break;
                     }
                 }
                 if (selectedProfile == null) {
                     Logger.logInfo("Profile not found, defaulting to first");
                     selectedProfile = authentication.getAvailableProfiles()[0];
                 }
+
+                // change profile and get new accessToken
+                try {
+                    authentication.selectGameProfile(selectedProfile);
+                } catch (Exception e) {
+                    // TODO: proper exception handling
+                    Logger.logError("failed: ", e);
+                    return null;
+                }
+
+                Logger.logDebug("game profile selected:\n" + toString(authentication));
+                selectedProfile = authentication.getSelectedProfile();
+
+                // TODO: add auth token saving.
+
                 Logger.logDebug("Authentication done, returning LoginResponse");
                 return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfile.getName(), authentication.getAuthenticatedToken(),
                         selectedProfile.getId().toString(), authentication);

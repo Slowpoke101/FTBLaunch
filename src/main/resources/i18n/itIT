@@ -7,131 +7,131 @@ DONATE_BUTTON = Dona!
 # Main Tab
 EDIT_BUTTON = Modifica
 LAUNCH_BUTTON = Gioca
-PROFILE_CREATE = Crea Profilo
-PROFILE_SELECT = Seleziona Profilo
-DOWNLOAD_SERVER_PACK = Scarica la versione server qui!
-WARN_32BIT_OS = Sistema operativo 32-bit. 64-bit è richiesto per la maggior parte delle mod packs. Se hai problemi, per favore prova il FTB Lite 2 pack.
-WARN_32BIT_JAVA = 32-bit Java in sistema operativo 64-bit. 64-bit Java è richiesto per la maggior parte delle mod packs. Se hai problemi, per favore prova il FTB Lite 2 pack.
-WARN_JAVA6 = Java 6 rilevato. Java 7 è richiesto per la maggior parte delle mod packs.
+PROFILE_CREATE = Crea profilo
+PROFILE_SELECT = Seleziona profilo
+DOWNLOAD_SERVER_PACK = Scarica server
+WARN_32BIT_OS = Il sistema operativo è a 32-bit. 64-bit è richiesto dalla maggior parte dei modpack. Se hai problemi, prova il pacchetto FTB Lite 2.
+WARN_32BIT_JAVA = Java a 32-bit nel sistema operativo a 64-bit. Java a 64-bit è richiesto dalla maggior parte dei modpack. Se hai problemi, prova il pacchetto FTB Lite 2.
+WARN_JAVA6 = E' stato rilevato Java 6. Java 7 è raccomandato per la maggior parte dei modpack.
 
 # Console
 CONSOLE_TITLE = Console
-CONSOLE_COPYCLIP = Copia a clipboard
-CONSOLE_CLIP_CONFIRM = Vuoi copiare tutto il log sul  tuo clipboard?
+CONSOLE_COPYCLIP = Copia sui Appunti
+CONSOLE_CLIP_CONFIRM = Vuoi copiare tutto il log sui tuoi Appunti?
 CONSOLE_PASTE = Copia su pastebin.com
-CONSOLE_SUPPORT = Bisogno di aiuto? Cliccami!
+CONSOLE_SUPPORT = Serve aiuto? Cliccami!
 
 # Map Tab
-INSTALL_MAP = Installa la Mappa
-DOWNLOAD_MAP_SERVER = Scarica la mappa server
+INSTALL_MAP = Installa la mappa
+DOWNLOAD_MAP_SERVER = Scarica il server della mappa
 
 #tab swapping
 SWAP_MAP = Mappe
-SWAP_TEXTURE = TexturePacks
+SWAP_TEXTURE = Texture pack
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Installa la texture pack
 
 # Options pane
-INSTALL_FOLDER = Cartella d'installazione 
-FORCE_UPDATE = Aggiornamento forzato?
+INSTALL_FOLDER = Cartella di installazione 
+FORCE_UPDATE = Forza aggiornamento?
 RAM_MAX = RAM Massima (MB)
 LANGUAGE = Lingua
 SHOW_CONSOLE = Mostra Console?
-OPT_JAVA_ARGS = Usa Optimization Arguments per computer veloce?
+OPT_JAVA_ARGS = Usa Optimization Arguments per computer veloci?
 USE_SYSTEM_PROXY = Usa Internet Proxy per scaricare i file?
-REOPEN_LAUNCHER = Riapri il launcher dopo essere uscito da minecraft?
-ADVANCED_OPTIONS = Opzioni Avanzate
-INSTALL_FIRSTUSE = Essendo questa la tua prima volta che usi il launcher, vi sugeriamo scegliere la cartella d'installazione.
-DOWNLOAD_JAVA64 = Scarica Java 64-bit
-DOWNLOAD_JAVA32 = Scarica Java 32-bit
+REOPEN_LAUNCHER = Riapri il launcher dopo aver chiuso minecraft?
+ADVANCED_OPTIONS = Opzioni avanzate
+INSTALL_FIRSTUSE = Poichè è la prima volta che usi il launcher, ti sugeriamo di scegliere la cartella di installazione.
+DOWNLOAD_JAVA64 = Scarica Java a 64-bit
+DOWNLOAD_JAVA32 = Scarica Java a 32-bit
 DOWNLOAD_JAVAGOOD = Scarica Java raccomandato
-JAVA_OLD_Warning = Java troppo vecchio. Java 7 è raccomandato per la maggior parte dei pacchetti FTB.
-JAVA_NEW_Warning = Java 8 non è supportata. (Minecraft non supporta java 8 su Mac.)
-JAVA_32BIT_WARNING = Il tuo sistema usa una versione 32-bit di Java. Questo limiterà Minecraft a 1.5gb di RAM.
+JAVA_OLD_Warning = Java è troppo vecchio. Java 7 è raccomandato per la maggior parte dei pacchetti FTB.
+JAVA_NEW_Warning = Java 8 non è supportata. (Minecraft non supporta Java 8 su Mac.)
+JAVA_32BIT_WARNING = Il tuo sistema usa una versione a 32-bit di Java. Questo limiterà Minecraft a 1.5 GB di RAM.
 
 # Shared strings
-FILTER_SETTINGS = Filtro 
+FILTER_SETTINGS = Modifica filtro 
 
 # Modpacks pane
-MODS_EDIT_PACK = Modifica ModPack
-MODS_WAIT_WHILE_LOADING = Per favore attendi mentre i modpack si stanno caricando...
-DOWNLOAD_SERVER = Scarica Server
-MODPACK_VERSIONS = Versione Modpack
+MODS_EDIT_PACK = Modifica modpack
+MODS_WAIT_WHILE_LOADING = Per favore, attendi mentre i modpack si caricano...
+DOWNLOAD_SERVER = Scarica server
+MODPACK_VERSIONS = Versione modpack
 PACK_CODES = Codici per pacchetti
 
 # EditModPackDialog
-MODS_EDIT_ENABLED_LABEL = Attiva mods
-MODS_EDIT_DISABLED_LABEL = Disabilita mods
+MODS_EDIT_ENABLED_LABEL = Attiva mod
+MODS_EDIT_DISABLED_LABEL = Disabilita mod
 MODS_EDIT_OPEN_FOLDER = Apri cartella
 MODS_EDIT_ADD_MOD = Aggiungi mod
 MODS_EDIT_ENABLE_MOD = << Abilita
 MODS_EDIT_DISABLE_MOD = Disabilita >>
-MODS_EDIT_TITLE = ModPack Modificatore
+MODS_EDIT_TITLE = Modificatore Modpack
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre le mappe si stanno caricando...
+MAPS_WAIT_WHILE_LOADING = Per favore attendi mentre le mappe si caricano...
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre le texturepack si stanno caricando...
+TEXTURE_WAIT_WHILE_LOADING = Per favore attendi mentre le texture pack si caricano...
 
 # Advanced  Options
-ADVANCED_OPTIONS_TITLE = Opzioni Avanzate
-ADVANCED_OPTIONS_DLLOCATION = Luogo di Installazione:
+ADVANCED_OPTIONS_TITLE = Opzioni avanzate
+ADVANCED_OPTIONS_DLLOCATION = Luogo di installazione:
 ADVANCED_OPTIONS_MCWINDOW_SIZE = Dimensioni finestra di Minecraft:
 ADVANCED_OPTIONS_MCWINDOW_POS = Posizione finestra di Minecraft:
-ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Auto Massimizzato?
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Massimizzato automaticamente?
 ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Disabilita Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Java Path:
-ADVANCED_OPTIONS_ADDJAVAOPTIONS = Parametri Java Aggiuntivia:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Parametri Java Aggiuntivi:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Extra Launcher Debugging
-ADVANCED_OPTIONS_BETA = Permeti di usare versioni beta del Launcher?
+ADVANCED_OPTIONS_BETA = Permeti di usare versioni bete del launcher?
 
 # Update
 UPDATE_WICHUPDATE = Desideri aggiornare?
 UPDATE_DOWNGRADE = Desideri tornare a una versione vecchia?
 
 # LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = del launcher è avviabile.
-LUNCHERUPDATE_CHANGELOG = Vedi Changelog
-LUNCHERUPDATE_ISAVAILABLETITLE = Aggiornamento del Launcher avviabile.
-LUNCHERUPDATE_CURRENTDEAD = Il tuo Launcher deve essere aggiornato per uno dei seguenti motivi: \n non riesce a lanciare/aggiornare propriamente minecraft o pacchetti!
+LUNCHERUPDATE_ISAVAILABLE = del launcher è disponibile.
+LUNCHERUPDATE_CHANGELOG = Vedi changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = Aggiornamento del launcher disponibile.
+LUNCHERUPDATE_CURRENTDEAD = Il tuo launcher deve essere aggiornato per uno dei seguenti motivi: \n non riesce a lanciare/aggiornare propriamente minecraft o pacchetti!
 
 # Modpack Update
-UPDATEMODPACK_ISAVALIBLE = Una nuova versione del pacchetto è avviabile!
-UPDATEMODPACK_BACKUPCFG = Back-up file config?
-UPDATEMODPACK_BACKUPSave = Back-up Salvataggi?
-UPDATEMODPACK_TITLE = Aggiornamento del pacchetto è avviabile
-UPDATEMODPACK_DOWNGRADE = La versione installata è più nuova di quella selezionata
-UPDATEMODPACK_FROM_TO_VERSION = Versione Corrente: %LOCALVER%\nVersione Selezionata: %ONLINEVER%
+UPDATEMODPACK_ISAVALIBLE = Una nuova versione del pacchetto è disponibile!
+UPDATEMODPACK_BACKUPCFG = Back-up configurazioni?
+UPDATEMODPACK_BACKUPSave = Back-up salvataggi?
+UPDATEMODPACK_TITLE = Aggiornamento del pacchetto è disponibile
+UPDATEMODPACK_DOWNGRADE = La versione installata è più recente di quella selezionata
+UPDATEMODPACK_FROM_TO_VERSION = Versione corrente: %LOCALVER%\nVersione selezionata: %ONLINEVER%
 
 # Private Pack
-PRIVATEPACK_TITLE = Interfaccia Pacchetto Privato
-PRIVATEPACK_ERROR = Pacchetto Privato Invalido.
-PRIVATEPACK_TEXT = Scrivi qui il codice ottenuto dal proprietario del pacchetto privato e clicca aggiungi, il pacchetto si troverà nella tua lista di pacchetti. Sarà automaticamente scaricato quando lanciato. Se desideri rimuovere un pacchetto privato, scrivi il codice di nuovo, e clicca rimuovi.
+PRIVATEPACK_TITLE = Interfaccia Pacchetti Privati
+PRIVATEPACK_ERROR = Pacchetto privato invalido.
+PRIVATEPACK_TEXT = Scrivi qui il codice ottenuto dal proprietario del pacchetto e clicca aggiungi. Il pacchetto si troverà nella tua lista dei pacchetti e sarà automaticamente scaricato quando lanciato. Se desideri rimuovere un pacchetto privato, riscrivi il codice e clicca rimuovi.
 PRIVATEPACK_SECCESS = Rimosso con successo.
 PRIVATEPACK_NOTEXISTS = Nome del pacchetto errato.
 PRIVATEPACK_ALREADY_ADDED = Pacchetto privato già aggiunto
 
 # Filter
-FILTER_PACKTYPE = Tipo di ModPack:
-FILTER_ORIGIN = 
-FILTER_3THPARTY = 
-FILTER_FTB = 
+FILTER_PACKTYPE = Tipo di modpack:
+FILTER_ORIGIN = Creatore mappa
+FILTER_3THPARTY = Partito terzo
+FILTER_FTB = FTB
 FILTER_COMPERTIBLEPACK = Pacchetto compatibile:
-FILTER_APPLY = Applica Filtro
-FILTER_SEARCHMAP = Cerca Mappa
+FILTER_APPLY = Applica filtro
+FILTER_SEARCHMAP = Cerca mappa
 FILTER_TITLE = Filtro
-FILTER_PUBLIC = In Lista
+FILTER_PUBLIC = In lista
 FILTER_PRIVATE = Non in lista
-FILTER_MODPACKAVALIABILITY = Disponibilità ModPack:
+FILTER_MODPACKAVALIABILITY = Disponibilità modpack:
 FILTER_MCVERSION = Versione Minecraft:
-FILTER_RESULUTION = Risoluzione Texture:
-FILTER_TEXSEARCH = Cerca Pacchetto
+FILTER_RESULUTION = Risoluzione texture:
+FILTER_TEXSEARCH = Cerca pacchetto
 FILTER_SEARCHPACK = Cerca
 
 # Play Offline
-PLAYOFFLINE_WANNA = Qualcosa non è andata nel modo giusto..\nVorresti giocare Offline?
+PLAYOFFLINE_WANNA = Qualcosa non è andata nel modo giusto..\nVuoi giocare Offline?
 
 # Password
 PASSWORD_PASSLABEL = Password: 
@@ -139,15 +139,15 @@ PASSWORD_TITLE = Per favore scrivi Password
 
 # Profile
 OLDCREDS = Trovato vecchio Login Data oppure manca: per favore aggiorna.
-CHANGEDUUID = Una modifica è stata rivelata al hardware che previene il launcher ad acceder alle tue credentials, per favore riaggiungili.
-PROFILEADDER_USERNAME = Username/Indirizzo Email:
+CHANGEDUUID = Una modifica è stata rivelata nel hardware che previene il launcher dall'accedere alle tue credenziali, per favore rimodificali.
+PROFILEADDER_USERNAME = Username/Indirizzo email:
 PROFILEADDER_PASSWORD = Password:
-PROFILEADDER_NAME = Nome Profilo:
-PROFILEADDER_SAVEPASSWORD = Ricorda Password
-PROFILEADDER_TITLE = Creatore Profilo
-PROFILADDER_ERROR = Incapace di creare profili.
+PROFILEADDER_NAME = Nome profilo:
+PROFILEADDER_SAVEPASSWORD = Ricorda password
+PROFILEADDER_TITLE = Creatore profilo
+PROFILADDER_ERROR = Incapace di creare il profiloi.
 PROFILEADDER_UPDATE = Aggiorna
-PROFILEDITOR_TITLE = Modifica Profilo
+PROFILEDITOR_TITLE = Modifica profilo
 PROFILEADDER_SAVEMOJANGDATA = Ricorda autore
 
 # Map Override
@@ -157,8 +157,8 @@ MAPOVERRIDE_WISHOVERRIDE = Vuoi sovrascriverlo?
 # Force Kill MC
 KILL_MC = Uccidere Minecraft
 KILL_MC_TITLE = Uccidere Minecraft?
-KILL_MC_MESSAGE = Attenzione! Queso cauca una corruzione, e dovrebbe soltanto essere usato se il gioco congelato!
-KILL_MC_CONFIRM = Sei sicuro di voler Uccidere Minecraft?
+KILL_MC_MESSAGE = Attenzione! Queso causa una corruzione, e dovrebbe soltanto essere usato se il gioco è congelato!
+KILL_MC_CONFIRM = Sei sicuro di voler uccidere Minecraft?
 
 # Main
 MAIN_EXIT = ESCI
@@ -170,11 +170,11 @@ MAIN_CANCEL = Cancella
 MAIN_SUBMIT = Invia
 MAIN_REMOVE = Rimuovi
 MAIN_ADD = Agguingi
-MAIN_CLIENT = 
-MAIN_SERVER = 
+MAIN_CLIENT = Client
+MAIN_SERVER = Server
 BUTTON_IGNORE = Ignora
 BUTTON_OK = Ok
-NAG_SCREEN_MESSAGE = Clicca OK per continuare o IGNORA per tralasciare questo avvertimento in futuro
+NAG_SCREEN_MESSAGE = Clicca Ok per continuare o Ignora per tralasciare questo avvertimento in futuro
 
 # First run dialog
 INSTALL_TITLE = Prima Volta
@@ -186,12 +186,12 @@ TRAY_QUIT = Esci
 TRAY_FTB_WEBSITE = Sito FTB
 
 # CheckInstallPath
-CIP_BADPATH = Luogo di installazione non supportata. Forge non supporta i seguenti \ncharacter(s): LISTA Per favore seleziona un nuovo luogo come
-CIP_PROGRAMFILES = Installare sotto C:\Program Files\ o simili non è supportato. \nPer favore seleziona un nuovo luogo come
-CIP_INTERNETFILES = Non puoi installare FTB nel tuo Temporary Internet Files directory. \nPer favore seleziona un nuovo luogo come
-CIP_USERPROFILE = Installare sotto C:\Users\<username> non è raccomandato e può causare problemi. \nConsigliamo di selezionare un nuovo luogo come
-CIP_WRITEPROTECT = Non è possibile scrivere nel luogo d'installazione di FTB. \nPer favore seleziona un cartella in cui hai permesso di scrivere.
-CIP_EXISTS = Non è stata trovata il luogo d'installazione di FTB!
-CIP_CREATE = Non è possibile creare il luogo d'installazione di FTB
+CIP_BADPATH = Luogo di installazione non supportata. Forge non supporta i seguenti \ncharacter(s): LISTA Per favore seleziona un'altra cartella come
+CIP_PROGRAMFILES = Installare sotto C:\Program Files\ o simili non è supportato. \nPer favore seleziona un'altra cartella come
+CIP_INTERNETFILES = Non puoi installare FTB nel tuo directory Temporary Internet Files. \nPer favore seleziona un'altra cartella come
+CIP_USERPROFILE = Installare sotto C:\Users\<username> non è raccomandato e può causare problemi. \nConsigliamo di selezionare un'altra cartella come
+CIP_WRITEPROTECT = Non è possibile scrivere nel luogo di installazione di FTB. \nPer favore seleziona un cartella in cui hai permesso di scrivere.
+CIP_EXISTS = Non è stata trovata il luogo di installazione di FTB!
+CIP_CREATE = Non è possibile creare il luogo di installazione di FTB
 CIP_SELECTAGAIN = Per favore seleziona di nuovo!
-CIP_PLEASECHANGE = Per favore cambia il luogo d'installazione sotto il tab delle opzioni.
+CIP_PLEASECHANGE = Per favore cambia il luogo di installazione sotto il tab delle opzioni.

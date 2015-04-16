@@ -246,7 +246,7 @@ public class EditModPackDialog extends JDialog {
 
         //The additional "mod default" data is orange to separate it from the name of the file visually in the UI. 
         //Orange was selected because  the color scheme of the launcher as a whole seemed to be black/gray/orange
-        builder.append("<html>").append(originalDisplayName).append(" <font color=rgb(243,119,31)>(");
+        builder.append("<html>").append("<font color=rgb(255,255,255)>" + originalDisplayName + "</font>").append(" <font color=rgb(243,119,31)>(");
 
         builder.append(modPack.getName());
 

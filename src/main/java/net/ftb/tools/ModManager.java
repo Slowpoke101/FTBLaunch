@@ -110,6 +110,7 @@ public class ModManager extends JDialog {
 
             do {
                 try {
+                    failed = false;
                     startAmount = amount;
 
                     if (amount > 0) {
