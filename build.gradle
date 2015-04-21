@@ -191,7 +191,7 @@ if (project.hasProperty("remote_maven") && project.hasProperty("sftp_pass")) {
         uploadArchives {
             repositories.mavenDeployer {
                 configuration = configurations.deployerJars
-                repository(url: "sftp://${remote_maven}") {
+                repository(url: "scp://${remote_maven}") {
                     authentication(userName: "${ftp_username}", password: "${sftp_pass}")
                 }
             }
