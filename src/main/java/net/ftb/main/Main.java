@@ -337,7 +337,7 @@ public class Main {
         /*
          * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
          */
-        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
+        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.21") {
             @Override
             protected void done () {
                 boolean workerSuccess = true;
