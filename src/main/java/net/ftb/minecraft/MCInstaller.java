@@ -527,12 +527,21 @@ public class MCInstaller {
 
     private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase) {
         String fgVsn = forgeArtifact.getVersion();
+        String fgRelease;
         int vsn_ = 0;
-        if (fgVsn.contains("-")) {
-            vsn_ = Integer.parseInt(fgVsn.substring((StringUtils.lastIndexOf(fgVsn, ".") + 1), (fgVsn.lastIndexOf("-"))));
-        } else {
-            vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1));
+        int count = StringUtils.countMatches(fgVsn, "-");
+        if (count == 2) {
+            // forge > 1291 has three subsection, third section is name of the branch
+            // e.g. 1.7.10-10.13.2.1352-1.7.10 or
+            fgRelease = fgVsn.substring((StringUtils.indexOf(fgVsn, "-") + 1), (StringUtils.lastIndexOf(fgVsn, "-")));
+            fgRelease = fgRelease.substring(StringUtils.lastIndexOf(fgRelease, ".") + 1);
+            vsn_ = Integer.parseInt(fgRelease);
+        } else if (count == 1 || count == 0) {
+            // e.g. 1.7.10-10.13.2.1291 or 9.11.1.965
+            fgRelease = fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1);
+            vsn_ = Integer.parseInt(fgRelease);
         }
+
         if (vsn_ >= Settings.getSettings().getMinJava8HackVsn() && vsn_ <= Settings.getSettings().getMaxJava8HackVsn()) {
             Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
             String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
