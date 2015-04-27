@@ -527,7 +527,12 @@ public class MCInstaller {
 
     private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase) {
         String fgVsn = forgeArtifact.getVersion();
-        int vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1));
+        int vsn_ = 0;
+        if (fgVsn.contains("-")) {
+            vsn_ = Integer.parseInt(fgVsn.substring((StringUtils.lastIndexOf(fgVsn, ".") + 1), (fgVsn.lastIndexOf("-"))));
+        } else {
+            vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1));
+        }
         if (vsn_ >= Settings.getSettings().getMinJava8HackVsn() && vsn_ <= Settings.getSettings().getMaxJava8HackVsn()) {
             Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
             String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
