@@ -580,6 +580,8 @@ public class LaunchFrame extends JFrame {
         String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
                 .getVersion() : Settings.getSettings().getPackVer();
 
+        Logger.logDebug("verFile: " + storedVersion + " onlineVersion/getPackVer(): " + Settings.getSettings().getPackVer() + " onlineVersion/getVersion(): " + pack.getVersion());
+
         if (storedVersion.isEmpty()) {
             // Always allow updates from a version that isn't installed at all
             allowVersionChange = true;
