@@ -213,9 +213,9 @@ public class DownloadUtils extends Thread {
             if (!fullDebug) {
                 connection.setRequestMethod("HEAD");
             }
-            Logger.logInfo("CF-RAY: " + connection.getHeaderField("CF-RAY"));
+            Logger.logDebug("CF-RAY: " + connection.getHeaderField("CF-RAY"));
             if (fullDebug) {
-                Logger.logInfo("CF Debug Info: " + connection.getContent().toString());
+                Logger.logDebug("CF Debug Info: \n" + IOUtils.toString(connection.getInputStream()));
             }
             ret = connection.getResponseCode() == 200;
             IOUtils.close(connection);
