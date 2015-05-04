@@ -213,9 +213,9 @@ public class DownloadUtils extends Thread {
             if (!fullDebug) {
                 connection.setRequestMethod("HEAD");
             }
-            Logger.logInfo("CF-RAY: " + connection.getHeaderField("CF-RAY"));
+            Logger.logDebug("CF-RAY: " + connection.getHeaderField("CF-RAY"));
             if (fullDebug) {
-                Logger.logInfo("CF Debug Info: " + connection.getContent().toString());
+                Logger.logDebug("CF Debug Info: \n" + IOUtils.toString(connection.getInputStream()));
             }
             ret = connection.getResponseCode() == 200;
             IOUtils.close(connection);
@@ -469,7 +469,7 @@ public class DownloadUtils extends Thread {
                         if (jso != null && jso.get("chEnabled") != null) {
                             Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
                         }
-                        if (jso != null && jso.get("repoSplitCurse") != null) {
+                        if (jso != null && jso.get("repoSplitCurse") != null && Locations.chEnabled) {
                             JsonElement e = jso.get("repoSplitCurse");
                             Logger.logDebug("Balance Settings: " + e.getAsDouble() + " > " + choice);
                             if (e != null && e.getAsDouble() > choice) {
