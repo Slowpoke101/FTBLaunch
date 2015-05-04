@@ -469,7 +469,7 @@ public class DownloadUtils extends Thread {
                         if (jso != null && jso.get("chEnabled") != null) {
                             Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
                         }
-                        if (jso != null && jso.get("repoSplitCurse") != null) {
+                        if (jso != null && jso.get("repoSplitCurse") != null && Locations.chEnabled) {
                             JsonElement e = jso.get("repoSplitCurse");
                             Logger.logDebug("Balance Settings: " + e.getAsDouble() + " > " + choice);
                             if (e != null && e.getAsDouble() > choice) {
