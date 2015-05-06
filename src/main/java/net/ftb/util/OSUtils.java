@@ -374,7 +374,7 @@ public class OSUtils {
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface network = networkInterfaces.nextElement();
                 byte[] mac = network.getHardwareAddress();
-                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint()) {
+                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint() && network.getName().substring(0,3) != "ham") {
                     Logger.logDebug("Interface: " + network.getDisplayName() + " : " + network.getName());
                     cachedMacAddress = new byte[mac.length * 10];
                     for (int i = 0; i < cachedMacAddress.length; i++) {
