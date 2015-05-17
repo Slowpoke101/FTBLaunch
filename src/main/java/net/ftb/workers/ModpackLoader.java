@@ -76,6 +76,7 @@ public class ModpackLoader extends Thread {
             InputStream modPackStream = null;
             try {
                 modPackStream = new FileInputStream(modPackFile);
+                Logger.logDebug("MD5: " + DownloadUtils.fileMD5(modPackFile) + " Size: " + modPackFile.length());
             } catch (IOException e) {
                 Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
             }
