@@ -240,6 +240,7 @@ public class DownloadUtils extends Thread {
      * @param file The file to save to.
      *
      * TODO: how to handle partial downloads? Old file is overwritten as soon as FileOutputStream is created.
+     *       how to handle headers? in some cases we want to print those and in other we don't
      */
     public static void downloadToFile (URL url, File file) throws IOException {
         file.getParentFile().mkdirs();
