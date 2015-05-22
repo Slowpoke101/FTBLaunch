@@ -61,6 +61,9 @@ public class AuthlibHelper {
         YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, OSUtils.getClientToken().toString()).createUserAuthentication(
                 Agent.MINECRAFT);
         if (user != null) {
+            if (!user.equals(selectedProfileName)) {
+                Logger.logWarn("Username and profilename differs. You should edit profile name only if you use it to select particular profile if you have multiple profiles in your mojang account");
+            }
             Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");
             Logger.logInfo("Beginning authlib authentication attempt");
             Logger.logInfo("successfully created YggdrasilAuthenticationService");
@@ -118,12 +121,13 @@ public class AuthlibHelper {
                         if (uniqueID != null && !uniqueID.isEmpty()) {
                             Logger.logDebug("Setting UUID");
                         }
-                        UserManager.setUUID(user, uniqueID);
+                        UserManager.setUUID(selectedProfileName, uniqueID);
                     }
                     if (uniqueID != null && !uniqueID.isEmpty()) {
-                        UserManager.setUUID(user, uniqueID);
+                        UserManager.setUUID(selectedProfileName, uniqueID);
                         Logger.logDebug("Setting UUID and creating and returning new LoginResponse");
-                        return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", user, null, uniqueID, authentication);
+                        // user or selectedProfileName. LoginResponse.username is not really used at all
+                        return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", selectedProfileName, null, uniqueID, authentication);
                     }
                     ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com");
                     return null;
@@ -144,8 +148,10 @@ public class AuthlibHelper {
                 if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
                     Logger.logDebug("loggedIn() && CanPlayOnline()");
                     if ((authentication instanceof YggdrasilUserAuthentication)) {
-                        UserManager.setStore(user, encode(authentication.saveForStorage()));
-                        UserManager.setUUID(user, authentication.getSelectedProfile().getId().toString());//enables use of offline mode later if needed on newer MC Versions
+
+                        String s = encode(authentication.saveForStorage());
+                        UserManager.setStore(selectedProfileName, s);
+                        UserManager.setUUID(selectedProfileName, authentication.getSelectedProfile().getId().toString());//enables use of offline mode later if needed on newer MC Versions
                         Logger.logDebug("Authentication done, returning LoginResponse");
                         return new LoginResponse(Integer.toString(authentication.getAgent().getVersion()), "token", displayName, authentication.getAuthenticatedToken(), authentication
                                 .getSelectedProfile().getId().toString(), authentication);
