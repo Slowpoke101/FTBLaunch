@@ -314,11 +314,11 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run () {
                     // Same warnings are logged as errors in MainHelpers.printInfo()
-                    if (!OSUtils.is64BitOS()) {
-                        MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
+                    if (!OSUtils.is64BitOS() && !CommandLineSettings.getSettings().isDisableJVMBitnessCheck()) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_32BIT_OS"), JOptionPane.WARNING_MESSAGE);
                     }
-                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
-                        MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
+                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits && !CommandLineSettings.getSettings().isDisableJVMBitnessCheck() ) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_32BIT_JAVA"), JOptionPane.WARNING_MESSAGE);
                     }
                     JavaInfo java = Settings.getSettings().getCurrentJava();
                     JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");

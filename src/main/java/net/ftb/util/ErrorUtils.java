@@ -85,7 +85,7 @@ public class ErrorUtils {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
     }
 
-    public static void showClickableMessage (String message, String url) {
+    public static void showClickableMessage (String message, int severity) {
         JLabel l = new JLabel();
         Font font = l.getFont();
         StringBuilder html = new StringBuilder("");
@@ -94,9 +94,6 @@ public class ErrorUtils {
                 .append(font.getSize()).append("pt;").append("\">");
 
         html.append(message).append(" ");
-        if (url != null) {
-            html.append("<br><a href=\"").append(url).append("\">").append(url).append("</a>");
-        }
 
         JEditorPane ep = new JEditorPane("text/html", html.toString());
         ep.addHyperlinkListener(new HyperlinkListener() {
@@ -108,6 +105,6 @@ public class ErrorUtils {
             }
         });
         ep.setEditable(false);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep, null, severity);
     }
 }
