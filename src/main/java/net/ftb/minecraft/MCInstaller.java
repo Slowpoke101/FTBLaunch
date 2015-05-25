@@ -21,10 +21,7 @@ import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
-import net.ftb.data.LauncherStyle;
-import net.ftb.data.LoginResponse;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
@@ -426,10 +423,14 @@ public class MCInstaller {
             if (LaunchFrame.con != null) {
                 LaunchFrame.con.minecraftStarted();
             }
-            StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-            String[] ignore = { "Session ID is token" };
-            StreamLogger.setIgnore(ignore);
-            StreamLogger.doStart();
+            if (!CommandLineSettings.getSettings().isDisableMCLogging()) {
+                StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+                String[] ignore = { "Session ID is token" };
+                StreamLogger.setIgnore(ignore);
+                StreamLogger.doStart();
+            } else {
+                Logger.logWarn("Not logging MC messages via launcher!");
+            }
             Logger.logDebug("MC PID: " + OSUtils.getPID(minecraftProcess));
             String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName(), "Launched / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
