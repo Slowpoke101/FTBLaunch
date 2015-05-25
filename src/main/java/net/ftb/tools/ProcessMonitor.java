@@ -33,6 +33,7 @@ public class ProcessMonitor implements Runnable {
     public void run () {
         try {
             proc.waitFor();
+            Logger.logInfo("MC process exited. return value: " + proc.exitValue());
         } catch (InterruptedException e) {
             Logger.logError("ProcessMonitor interrupted", e);
         }
