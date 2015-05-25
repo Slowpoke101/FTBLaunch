@@ -16,6 +16,8 @@
  */
 package net.ftb.util;
 
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 import lombok.Getter;
 import net.ftb.data.CommandLineSettings;
 import net.ftb.gui.LaunchFrame;
@@ -28,6 +30,7 @@ import java.awt.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -590,5 +593,62 @@ public class OSUtils {
         return u;
     }
 
+    /**
+     *
+     * @return pid of the running process. -1 if fail
+     */
+    public static long getPID () {
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        String pid = name.split("@")[0];
+        long numericpid = -1;
+        try {
+            numericpid = Long.parseLong(pid);
+        } catch (Exception e) {
+            numericpid = -1;
+            Logger.logDebug("failed", e);
+        }
+        return numericpid;
+    }
 
+    public static long getPID (Process process) {
+        // windows
+        if (process.getClass().getName().equals("java.lang.Win32Process") ||
+                process.getClass().getName().equals("java.lang.ProcessImpl")) {
+            long pid = -1;
+            try {
+                Field f = process.getClass().getDeclaredField("handle");
+                f.setAccessible(true);
+                pid = Kernel32.INSTANCE.GetProcessId((Long) f.get(process));
+
+            } catch (Exception e) {
+                pid = -1;
+                Logger.logDebug("failed", e);
+            }
+
+            return pid;
+        }
+
+        if (process.getClass().getName().equals("java.lang.UNIXProcess")) {
+        /* get the PID on unix/linux systems */
+            long pid = -1;
+            try {
+                Field f = process.getClass().getDeclaredField("pid");
+                f.setAccessible(true);
+                pid = f.getInt(process);
+
+            } catch (Throwable e) {
+                pid = -1;
+                Logger.logDebug("failed", e);
+            }
+            return pid;
+        }
+
+        Logger.logWarn("Unable to find getpid implementation");
+        return -1;
+    }
+
+    static interface Kernel32 extends Library {
+        public static Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
+        public int GetProcessId (Long hProcess);
+    }
 }

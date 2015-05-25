@@ -160,6 +160,7 @@ public class Main {
             }
         }
         Logger.logDebug("Launcher arguments: " + Arrays.toString(args));
+        Logger.logDebug("Launcher PID: " + OSUtils.getPID());
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";

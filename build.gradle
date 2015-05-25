@@ -54,6 +54,7 @@ dependencies {
     compile 'com.beust:jcommander:1.30' // TODO: update to 1.48 or higher as soon as we drop java 6 support
     compile 'com.google.code.findbugs:jsr305:1.3.9'//nonnull annotations
     compile 'org.tukaani:xz:1.5' // LZMA support
+    compile 'net.java.dev.jna:jna:4.1.0'
     //commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'

@@ -430,6 +430,7 @@ public class MCInstaller {
             String[] ignore = { "Session ID is token" };
             StreamLogger.setIgnore(ignore);
             StreamLogger.doStart();
+            Logger.logDebug("MC PID: " + OSUtils.getPID(minecraftProcess));
             String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName(), "Launched / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
             try {
