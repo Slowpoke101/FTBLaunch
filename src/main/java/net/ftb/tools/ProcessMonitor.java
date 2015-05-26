@@ -16,18 +16,25 @@
  */
 package net.ftb.tools;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.ftb.log.Logger;
+import net.ftb.util.OSUtils;
 
 public class ProcessMonitor implements Runnable {
 
     private final Process proc;
     private final Runnable onComplete;
+    @Getter
+    @Setter
+    long pid;
 
     private volatile boolean complete = false;
 
     private ProcessMonitor (Process proc, Runnable onComplete) {
         this.proc = proc;
         this.onComplete = onComplete;
+        this.pid = OSUtils.getPID(proc);
     }
 
     public void run () {

@@ -647,6 +647,34 @@ public class OSUtils {
         return -1;
     }
 
+    public static boolean genThreadDump(long pid) {
+        if (OSUtils.getCurrentOS()==OS.WINDOWS) {
+            // TODO: implement
+            Logger.logError("Not implemented yet / Might fail");
+            try {
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec(new String[] { "sendsignal.exe", Long.toString(pid) });
+            } catch (Exception e) {
+                Logger.logError("Failed. You need to install sendsignal.exe in your path to eanble this functionality");
+                Logger.logError("Failed", e);
+                return false;
+            }
+            return true;
+        } else if (OSUtils.getCurrentOS()==OS.UNIX || OSUtils.getCurrentOS()==OS.MACOSX) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(new String[] { "kill", "-3", Long.toString(pid) });
+            } catch (Exception e) {
+                Logger.logError("Failed", e);
+                return false;
+            }
+            return true;
+        } else {
+            Logger.logError("Unable to find genThreadDump implementation");
+            return false;
+        }
+    }
+
     static interface Kernel32 extends Library {
         public static Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
         public int GetProcessId (Long hProcess);
