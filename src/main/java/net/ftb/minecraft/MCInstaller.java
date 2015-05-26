@@ -420,9 +420,7 @@ public class MCInstaller {
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
-            if (LaunchFrame.con != null) {
-                LaunchFrame.con.minecraftStarted();
-            }
+
             if (!CommandLineSettings.getSettings().isDisableMCLogging()) {
                 StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
                 String[] ignore = { "Session ID is token" };
@@ -467,6 +465,9 @@ public class MCInstaller {
                         LaunchFrame.MCRunning = false;
                     }
                 }));
+                if (LaunchFrame.con != null) {
+                    LaunchFrame.con.minecraftStarted();
+                }
             }
         } catch (Exception e) {
             Logger.logError("Error while running launchMinecraft()", e);
