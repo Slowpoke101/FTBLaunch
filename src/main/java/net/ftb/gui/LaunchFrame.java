@@ -89,6 +89,7 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
+    private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CURSELOGO)));
     private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
@@ -185,6 +186,15 @@ public class LaunchFrame extends JFrame {
             @Override
             public void mouseClicked (MouseEvent event) {
                 OSUtils.browse("http://billing.creeperhost.net/link.php?id=2");
+            }
+        });
+
+        footerCurse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerCurse.setMinimumSize(new Dimension(118, 29));
+        footerCurse.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+                OSUtils.browse(Locations.CURSEVOICE);
             }
         });
 
@@ -336,6 +346,7 @@ public class LaunchFrame extends JFrame {
         logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         logoPanel.add(footerLogo);
         logoPanel.add(footerCreeper);
+        logoPanel.add(footerCurse);
         logoPanel.add(footerTUG);
 
         // Panel for the items in the bottom right
