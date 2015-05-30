@@ -22,6 +22,7 @@ import static net.ftb.download.Locations.THIRDPARTYXML;
 import com.google.common.collect.Lists;
 import net.ftb.data.Map;
 import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
@@ -76,7 +77,9 @@ public class ModpackLoader extends Thread {
             InputStream modPackStream = null;
             try {
                 modPackStream = new FileInputStream(modPackFile);
-                Logger.logDebug("MD5: " + DownloadUtils.fileMD5(modPackFile) + " Size: " + modPackFile.length());
+                if (Settings.getSettings().getDebugLauncher()) {
+                    Logger.logDebug("MD5: " + DownloadUtils.fileMD5(modPackFile) + " Size: " + modPackFile.length());
+                }
             } catch (IOException e) {
                 Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
             }

@@ -56,11 +56,11 @@ public class MainHelpers {
         }
 
         if (!OSUtils.is64BitOS()) {
-            Logger.logError("32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+            Logger.logError("32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite packs.");
         }
 
         if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {//unfortunately the easy to find DL links are for 32 bit java
-            Logger.logError("32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.");
+            Logger.logError("32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite packs.");
         }
 
         JavaInfo java = Settings.getSettings().getCurrentJava();

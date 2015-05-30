@@ -54,6 +54,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private LogSource logSource = LogSource.ALL;
     private LogLevel logLevel = LogLevel.INFO;
     private JButton killMCButton;
+    private JButton threadDumpButton;
     private final Document displayAreaDoc;
     private final Font FONT = new Font("Monospaced", 0, 12);
 
@@ -180,6 +181,17 @@ public class LauncherConsole extends JFrame implements ILogListener {
         });
         panel.add(killMCButton);
 
+        threadDumpButton = new JButton(I18N.getLocaleString("TD_MC"));
+        threadDumpButton.setEnabled(false);
+        threadDumpButton.setVisible(true);
+        threadDumpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                GameUtils.threadDumpMC();
+            }
+        });
+        panel.add(threadDumpButton);
+
         // setup log area
         displayArea = new JTextPane() {
             @Override
@@ -266,10 +278,12 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
     public void minecraftStarted () {
         killMCButton.setEnabled(true);
+        threadDumpButton.setEnabled(true);
     }
 
     public void minecraftStopped () {
         killMCButton.setEnabled(false);
+        threadDumpButton.setEnabled(false);
     }
 
     @Override

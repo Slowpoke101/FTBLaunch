@@ -93,6 +93,14 @@ public class CommandLineSettings {
     @Getter
     private int manualBuildNumber = 0;
 
+    @Parameter(names = {"--disable-bitness-checks"}, description = "Disable JVM bitness check nagging screens")
+    @Getter
+    private boolean disableJVMBitnessCheck = false;
+
+    @Parameter(names = {"--disable-mc-logging"}, description = "Disable MC logging")
+    @Getter
+    private boolean disableMCLogging = false;
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {

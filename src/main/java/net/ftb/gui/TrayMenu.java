@@ -36,11 +36,13 @@ public class TrayMenu extends PopupMenu {
         super();
 
         killMCButton.setLabel(I18N.getLocaleString("KILL_MC"));
+        threadDumpMCButton.setLabel(I18N.getLocaleString("TD_MC"));
         quitButton.setLabel(I18N.getLocaleString("TRAY_QUIT"));
         ftbWebsite.setLabel(I18N.getLocaleString("TRAY_FTB_WEBSITE"));
         showConsole.setLabel(I18N.getLocaleString("SHOW_CONSOLE"));
 
         this.add(this.killMCButton);
+        this.add(this.threadDumpMCButton);
         this.addSeparator();
         this.add(this.showConsole);
         this.addSeparator();
@@ -50,6 +52,7 @@ public class TrayMenu extends PopupMenu {
 
     public void updateLocale () {
         killMCButton.setLabel(I18N.getLocaleString("KILL_MC"));
+        threadDumpMCButton.setLabel(I18N.getLocaleString("TD_MC"));
         quitButton.setLabel(I18N.getLocaleString("TRAY_QUIT"));
         ftbWebsite.setLabel(I18N.getLocaleString("TRAY_FTB_WEBSITE"));
         showConsole.setLabel(I18N.getLocaleString("SHOW_CONSOLE"));
@@ -61,6 +64,17 @@ public class TrayMenu extends PopupMenu {
                 @Override
                 public void actionPerformed (ActionEvent arg0) {
                     GameUtils.killMC();
+                }
+            });
+        }
+    };
+
+    private final MenuItem threadDumpMCButton = new MenuItem() {
+        {
+            this.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed (ActionEvent arg0) {
+                    GameUtils.threadDumpMC();
                 }
             });
         }

@@ -43,6 +43,7 @@ import net.ftb.log.Logger;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
 
+import javax.swing.*;
 import java.io.File;
 import java.net.Proxy;
 import java.util.Arrays;
@@ -97,15 +98,18 @@ public class AuthlibHelper {
                             ErrorUtils.showClickableMessage("Invalid username or password!"
                                     + "<ul>"
                                     + "<li> Check your username and password. If you use OLD non-migrated account try using username instead of email."
-                                    + "<li>You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
-                                    + "</ul>"
-                                    , null);
+                                    + "<li> You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
+                                    + "</ul>",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
                         } else {
                             ErrorUtils.showClickableMessage("Invalid username or password. "
                                     + "<ul>"
                                     + "<li> Check your username and password. If you use new mojang account try using email instead of username."
-                                    + "<li>You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
-                                    , null);
+                                    + "<li> You need to use  paid minecraft account credentials. Mojang account without paid MC won't work."
+                                    + "<ul>",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
                         }
                         return null;
                     }
@@ -190,10 +194,12 @@ public class AuthlibHelper {
                 Logger.logDebug("No paid profiles in mojang account: " + toString(authentication));
                 ErrorUtils.showClickableMessage("You need paid minecraft account to play FTB Modpacks:"
                         + "<ul>"
-                        + "<li>Your login credentials are correct but mojang's authentication server does not find paid profile in your account"
-                        + "<li>If you believe this is error, please try vanilla launcher and minecraft.net before contacting FTB support"
+                        + "<li> Your login credentials are correct but mojang's authentication server does not find paid profile in your account"
+                        + "<li> If you believe this is error, please try vanilla launcher and minecraft.net before contacting FTB support"
                         + "</ul>"
-                        , "https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo");
+                        + "<br><a href=\"https://help.mojang.com/customer/portal/articles/1218766-can-only-play-minecraft-demo\">click here for more info</a>",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 return null;
             } else {
                 Logger.logDebug("this should never happen: " + toString(authentication));
