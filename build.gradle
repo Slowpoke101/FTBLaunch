@@ -100,6 +100,7 @@ targetCompatibility = 1.6
 
 animalsniffer {
     signature = "org.codehaus.mojo.signature:java16:+@signature"
+    // this probably does not ignore tests from net.ftb.j7.* It ignores tests with dependencies to net.ftb.j7.  @See @IgnoreJRERequirement if not working
     ignores = ["net.ftb.j7"]
 
 }
