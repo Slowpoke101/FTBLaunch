@@ -19,14 +19,7 @@ package net.ftb.gui;
 import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.CommandLineSettings;
-import net.ftb.data.Constants;
-import net.ftb.data.LauncherStyle;
-import net.ftb.data.LoginResponse;
-import net.ftb.data.Map;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.data.UserManager;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -114,6 +107,7 @@ public class LaunchFrame extends JFrame {
     public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
+    public int tab;
 
     public static TrayMenu trayMenu;
 
@@ -139,6 +133,7 @@ public class LaunchFrame extends JFrame {
      * Create the frame.
      */
     public LaunchFrame (final int tab) {
+        this.tab = tab;
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
         setResizable(true);
         setTitle(Constants.name + " v" + Constants.version);
@@ -431,7 +426,6 @@ public class LaunchFrame extends JFrame {
                 }
             }
         });
-        tabbedPane.setSelectedIndex(tab);
 
         panel.addComponentListener(new ComponentAdapter() {
             // Reset splitter on window resize to avoid being in an unreachable location
@@ -452,11 +446,32 @@ public class LaunchFrame extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run () {
                     LoadingDialog.advance("Opening main window");
+                    Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+
+                    // set last run packs active
+                    Logger.logDebug("Last used packs: " + Settings.getSettings().getLastFTBPack() + " " + Settings.getSettings().getLastThirdPartyPack());
+                    FTBPacksPane.getInstance().setSelectedPack(ModPack.getPack(Settings.getSettings().getLastFTBPack()));
+                    ThirdPartyPane.getInstance().setSelectedPack(ModPack.getPack(Settings.getSettings().getLastThirdPartyPack()));
+                    // update panes
+                    FTBPacksPane.getInstance().filterPacks();
+                    ThirdPartyPane.getInstance().filterPacks();
+
+                    // indicate things are ready to use
+                    FTBPacksPane.getInstance().loaded = true;
+                    ThirdPartyPane.getInstance().loaded = true;
+
+                    // ugly hacks which does not even work
+                    // TODO: someone: how to fix this?
+                    //FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
+                    instance.tabbedPane.setSelectedIndex(instance.tab);
+
                     instance.setVisible(true);
                     instance.toFront();
+
                     //TODO: add checks if loader is disabled
                     loader.setVisible(false);
                     loader.dispose();
+
                     Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
                     String packDir = CommandLineSettings.getSettings().getPackDir();
                     if (packDir != null) {
@@ -465,9 +480,13 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             });
-            Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+            Map.loadAll();
+            TexturePack.loadAll();
         }
         if (callCount == 2) {
+            Benchmark.logBenchAs("main", "Launcher Startup(maps or texturepacks loaded)");
+        }
+        if (callCount == 3) {
             Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
         }
     }
@@ -707,7 +726,7 @@ public class LaunchFrame extends JFrame {
         }
         //TODO:
         // Decide later if we want to do this? How to handle selection from two modpack panes?
-        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getNameWithVersion());
+        //tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getNameWithVersion());
     }
 
     /**
@@ -896,6 +915,15 @@ public class LaunchFrame extends JFrame {
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         ModPack pack = ModPack.getSelectedPack();
+
+        // save ´pack being launched
+        if (instance.currentPane == Panes.MODPACK) {
+            Settings.getSettings().setLastFTBPack(FTBPacksPane.getInstance().getSelectedPack().getDir());
+        } else {
+            Settings.getSettings().setLastThirdPartyPack(ThirdPartyPane.getInstance().getSelectedPack().getDir());
+        }
+        saveSettings();
+
         // check launcher version
         if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
@@ -916,9 +944,6 @@ public class LaunchFrame extends JFrame {
         // check selected java is at least version specified in pack's XML
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
         if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
-            Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-            Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-            saveSettings();
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough

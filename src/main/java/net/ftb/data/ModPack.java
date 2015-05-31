@@ -86,7 +86,6 @@ public class ModPack {
     public static void addPack (ModPack pack) {
         synchronized (packs) {
             packs.add(pack);
-            Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, new ArrayList<ModPack>().add(pack)));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
@@ -99,7 +98,6 @@ public class ModPack {
             for (ModPack p : packs_) {
                 packs.add(p);
             }
-            Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, packs_));//MAKE SURE TO REMOVE FROM LISTENER!!
         }
     }
 
@@ -153,29 +151,22 @@ public class ModPack {
         selectedPack = getPack(dir);
     }
 
+    public static void setSelectedPack (ModPack pack) {
+        selectedPack = pack;
+    }
+
     /**
-     * Used to grab the currently selected ModPack based off the selected index from ModPacksPane
+     * Used to grab the currently selected ModPack to being launched
      * @return ModPack - the currently selected ModPack
      */
     public static ModPack getSelectedPack () {
         if (selectedPack == null) {
-            if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
-                return getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
-            }
-            return getPack(FTBPacksPane.getInstance().getSelectedPackIndex());
+            return null;
         } else {
             return selectedPack;
         }
     }
-
-    public static ModPack getSelectedPack (boolean isFTBPane) {
-        if (selectedPack == null) {
-            return isFTBPane ? getPack(FTBPacksPane.getInstance().getSelectedPackIndex()) : getPack(ThirdPartyPane.getInstance().getSelectedPackIndex());
-        } else {
-            return selectedPack;
-        }
-    }
-
+    
     /**
      * Constructor for ModPack class
      * @param name - the name of the ModPack

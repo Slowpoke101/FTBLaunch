@@ -141,21 +141,15 @@ public class ModpackLoader extends Thread {
             }
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run () {
-                // We need to manually scroll FTBPackPane up because onVisible() is executed before packs are loaded
-                FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
-            }
-        });
         Logger.logDebug("All packlists loaded");
         Benchmark.logBenchAs("ModpackLoader", "Modpack Loader Init");
-        //if (!FTBPacksPane.loaded) {
-        FTBPacksPane.getInstance().loaded = true;
-        ThirdPartyPane.getInstance().loaded = true;
+
         LaunchFrame.checkDoneLoading();
         if (!disableOtherLoader) {
-            Map.loadAll();
-            TexturePack.loadAll();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run () {
+                }
+            });
         }
     }
 }
