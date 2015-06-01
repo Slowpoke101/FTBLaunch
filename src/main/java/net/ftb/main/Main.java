@@ -178,6 +178,8 @@ public class Main {
             beta = 9999999;
         }
 
+        System.setProperty("http.agent", "FTB Launcher/" + Constants.version);
+
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
          */
