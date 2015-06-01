@@ -261,13 +261,17 @@ public class ModPack {
         // image and logo should now exists, if not use placeholder images
         if (!new File(tempDir, logo).exists()) {
             this.logoName = logo = "logo_ftb.png";
-            DownloadUtils.saveImage(logo, tempDir, "png");
+            if (!new File(tempDir, logo).exists()) {
+                DownloadUtils.saveImage(logo, tempDir, "png");
+            }
         }
         this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
 
         if (!new File(tempDir, image).exists()) {
             this.imageName = image = "default_splash.png";
-            DownloadUtils.saveImage(image, tempDir, "png");
+            if (!new File(tempDir, image).exists()) {
+                DownloadUtils.saveImage(image, tempDir, "png");
+            }
         }
         this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
     }
