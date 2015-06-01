@@ -73,6 +73,8 @@ public class DownloadUtils extends Thread {
             for (String server : downloadServers.values()) {
                 // TODO: should we return null or "" or raise Exception when getting 404 from  server? Otherwise it loops through all servers
                 if (connection.getResponseCode() != 200) {
+                    Logger.logDebug("failed");
+                    AppUtils.debugConnection(connection);
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -104,6 +106,8 @@ public class DownloadUtils extends Thread {
             connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
+                    Logger.logDebug("failed");
+                    AppUtils.debugConnection(connection);
                     resolved = "http://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -140,6 +144,8 @@ public class DownloadUtils extends Thread {
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
+                        Logger.logDebug("failed");
+                        AppUtils.debugConnection(connection);
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
                         connection.setRequestProperty(CACHE_CONTROL, "no-transform");
