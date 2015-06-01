@@ -113,6 +113,12 @@ public class OSUtils {
         if (CommandLineSettings.getSettings().getDynamicDir() != null && !CommandLineSettings.getSettings().getDynamicDir().isEmpty()) {
             return CommandLineSettings.getSettings().getDynamicDir();
         }
+
+        String sysenv = System.getProperty("FTB_DYN_STORAGE_LOCATION");
+        if(!sysenv.equals("")){
+          return sysenv;
+        }
+
         switch (getCurrentOS()) {
         case WINDOWS:
             return System.getenv("APPDATA") + "/ftblauncher/";
@@ -135,6 +141,12 @@ public class OSUtils {
         if (CommandLineSettings.getSettings().getCacheDir() != null && !CommandLineSettings.getSettings().getCacheDir().isEmpty()) {
             return CommandLineSettings.getSettings().getCacheDir();
         }
+
+        String sysenv = System.getProperty("FTB_CACHE_STORAGE_LOCATION");
+        if(!sysenv.equals("")){
+          return sysenv;
+        }
+        
         switch (getCurrentOS()) {
         case WINDOWS:
             if (System.getenv("LOCALAPPDATA") != null && System.getenv("LOCALAPPDATA").length() > 5) {
