@@ -38,6 +38,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ModPack {
@@ -77,6 +79,13 @@ public class ModPack {
         temp.add(xmlFile);
         ModpackLoader loader = new ModpackLoader(temp, true);
         loader.start();
+
+        // ugly hack but required
+        try {
+            loader.join();
+        } catch (InterruptedException e) { }
+
+        Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, true,xmlFile));
     }
 
     /**
@@ -102,22 +111,15 @@ public class ModPack {
     }
 
     public static void removePacks (String xml) {
-        ArrayList<ModPack> remove = Lists.newArrayList();
-        int removed = -1; // TODO: if private xmls ever contain more than one modpack, we need to change this
+        ModPack packToRemove = null;
         for (ModPack pack : packs) {
             if (pack.getParentXml().equalsIgnoreCase(xml)) {
-                remove.add(pack);
+                packToRemove = pack;
+                break;
             }
         }
-        for (ModPack pack : remove) {
-            removed = pack.getIndex();
-            packs.remove(pack);
-        }
-        for (ModPack pack : packs) {
-            if (removed != -1 && pack.getIndex() > removed) {
-                pack.setIndex(pack.getIndex() - 1);
-            }
-        }
+        packs.remove(packToRemove);
+
         Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
     }
 
@@ -250,24 +252,31 @@ public class ModPack {
             DownloadUtils.saveImage(image, tempDir, "png");
 
         } else {
+            // it is faster now. Enable this after network code is fixed and faster!
+            /*
             if (!new File(tempDir, logo).exists()) {
                 DownloadUtils.saveImage(logo, tempDir, "png");
             }
             if (!new File(tempDir, image).exists()) {
                 DownloadUtils.saveImage(image, tempDir, "png");
             }
+            */
         }
 
         // image and logo should now exists, if not use placeholder images
         if (!new File(tempDir, logo).exists()) {
             this.logoName = logo = "logo_ftb.png";
-            DownloadUtils.saveImage(logo, tempDir, "png");
+            if (!new File(tempDir, logo).exists()) {
+                DownloadUtils.saveImage(logo, tempDir, "png");
+            }
         }
         this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
 
         if (!new File(tempDir, image).exists()) {
             this.imageName = image = "default_splash.png";
-            DownloadUtils.saveImage(image, tempDir, "png");
+            if (!new File(tempDir, image).exists()) {
+                DownloadUtils.saveImage(image, tempDir, "png");
+            }
         }
         this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
     }
@@ -548,4 +557,22 @@ public class ModPack {
             }
         }
     }
+
+    public static void sortPacks() {
+        Collections.sort(packs, SORT_BY_INDEX);
+    }
+
+    public static Comparator<ModPack> SORT_BY_INDEX = new Comparator<ModPack>() {
+        @Override
+        public int compare (ModPack p1, ModPack p2) {
+            if (p1.index < p2.index) {
+                return -1;
+            } else if (p1.index == p2.index) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+
+    };
 }
