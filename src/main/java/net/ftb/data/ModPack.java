@@ -79,6 +79,13 @@ public class ModPack {
         temp.add(xmlFile);
         ModpackLoader loader = new ModpackLoader(temp, true);
         loader.start();
+
+        // ugly hack but required
+        try {
+            loader.join();
+        } catch (InterruptedException e) { }
+
+        Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.ADD, true,xmlFile));
     }
 
     /**
@@ -104,13 +111,14 @@ public class ModPack {
     }
 
     public static void removePacks (String xml) {
-        ArrayList<ModPack> remove = Lists.newArrayList();
-        int removed = -1; // TODO: if private xmls ever contain more than one modpack, we need to change this
+        ModPack packToRemove = null;
         for (ModPack pack : packs) {
             if (pack.getParentXml().equalsIgnoreCase(xml)) {
-                remove.add(pack);
+                packToRemove = pack;
+                break;
             }
         }
+        packs.remove(packToRemove);
 
         Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
     }

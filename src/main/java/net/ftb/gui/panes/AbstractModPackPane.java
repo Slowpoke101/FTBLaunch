@@ -305,8 +305,7 @@ public abstract class AbstractModPackPane extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
                 if (event.getType() == PackChangeEvent.TYPE.ADD) {
-                    // TODO: implement something new here later if needed
-                    return;
+                    filterPacks();
                 } else if (event.getType() == PackChangeEvent.TYPE.FILTER) {
                     filterPacks();
                 } else if (event.getType() == PackChangeEvent.TYPE.REMOVE) {

@@ -20,13 +20,9 @@ import static net.ftb.download.Locations.MODPACKXML;
 import static net.ftb.download.Locations.THIRDPARTYXML;
 
 import com.google.common.collect.Lists;
-import net.ftb.data.Map;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
-import net.ftb.data.TexturePack;
 import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.FTBPacksPane;
-import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
 import net.ftb.util.*;
 import org.w3c.dom.Document;
@@ -34,20 +30,16 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.*;
 
 public class ModpackLoader extends Thread {
     private ArrayList<String> xmlFiles = Lists.newArrayList();
@@ -93,10 +85,10 @@ public class ModpackLoader extends Thread {
         }
 
         @Override public void run () {
-            foo(xmlFile, offset);
+            handleXML(xmlFile, offset);
         }
 
-        private void foo (String xmlFile, int offset) {
+        private void handleXML (String xmlFile, int offset) {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
