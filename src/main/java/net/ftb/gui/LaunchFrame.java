@@ -443,6 +443,14 @@ public class LaunchFrame extends JFrame {
     public static void checkDoneLoading () {
         int callCount = checkDoneLoadingCallCount.incrementAndGet();
         if (callCount == 1) {
+            Benchmark.start("Waiting for main window");
+            while (LaunchFrame.instance == null) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {}
+            }
+            Benchmark.logBench("Waiting for main window");
+
             SwingUtilities.invokeLater(new Runnable() {
                 public void run () {
                     LoadingDialog.advance("Opening main window");

@@ -38,6 +38,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ModPack {
@@ -544,4 +546,22 @@ public class ModPack {
             }
         }
     }
+
+    public static void sortPacks() {
+        Collections.sort(packs, SORT_BY_INDEX);
+    }
+
+    public static Comparator<ModPack> SORT_BY_INDEX = new Comparator<ModPack>() {
+        @Override
+        public int compare (ModPack p1, ModPack p2) {
+            if (p1.index < p2.index) {
+                return -1;
+            } else if (p1.index == p2.index) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+
+    };
 }

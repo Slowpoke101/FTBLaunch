@@ -28,10 +28,7 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.panes.FTBPacksPane;
 import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
-import net.ftb.util.AppUtils;
-import net.ftb.util.Benchmark;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.OSUtils;
+import net.ftb.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -43,13 +40,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
 public class ModpackLoader extends Thread {
     private ArrayList<String> xmlFiles = Lists.newArrayList();
     private boolean disableOtherLoader = false;
+    private static int offset = 0;
 
     public ModpackLoader (ArrayList<String> xmlFiles, boolean disableOtherLoaders) {
         this.xmlFiles = xmlFiles;
@@ -58,10 +61,42 @@ public class ModpackLoader extends Thread {
 
     @Override
     public void run () {
-        //TODO ASAP thread this
         Benchmark.start("ModpackLoader");
-        xmls:
+
+        ExecutorService executor = new ThreadPoolExecutor(4, 4, 5L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(8), new ThreadPoolExecutor.CallerRunsPolicy());
+
         for (String xmlFile : xmlFiles) {
+            executor.submit(new XmlHtmlRunnable(xmlFile, offset));
+            offset = offset + 100;
+        }
+
+        executor.shutdown();
+        try {
+            executor.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Logger.logError("failed", e);
+        }
+
+        // everything added sort packs
+        ModPack.sortPacks();
+
+        Benchmark.logBenchAs("ModpackLoader", "All modpack lists loaded");
+        LaunchFrame.checkDoneLoading();
+    }
+
+    private class XmlHtmlRunnable implements Runnable {
+        private String xmlFile;
+        private int offset;
+        public XmlHtmlRunnable(String xmlFile, int offset) {
+            this.xmlFile = xmlFile;
+            this.offset = offset;
+        }
+
+        @Override public void run () {
+            foo(xmlFile, offset);
+        }
+
+        private void foo (String xmlFile, int offset) {
             boolean privatePack = !xmlFile.equalsIgnoreCase(MODPACKXML) && !xmlFile.equalsIgnoreCase(THIRDPARTYXML);//this is for stuff that is stored under privatepacks on the repo
             boolean isThirdParty = !xmlFile.equalsIgnoreCase(THIRDPARTYXML);
             File modPackFile = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + xmlFile);
@@ -74,11 +109,12 @@ public class ModpackLoader extends Thread {
                 Logger.logWarn("Failed to load modpacks, loading from backup", e);
             }
             Logger.logInfo("Loading modpack information for " + xmlFile + "...");
+
             InputStream modPackStream = null;
             try {
                 modPackStream = new FileInputStream(modPackFile);
                 if (Settings.getSettings().getDebugLauncher()) {
-                    Logger.logDebug("MD5: " + DownloadUtils.fileMD5(modPackFile) + " Size: " + modPackFile.length());
+                    Logger.logDebug(xmlFile + " MD5: " + DownloadUtils.fileMD5(modPackFile) + " Size: " + modPackFile.length());
                 }
             } catch (IOException e) {
                 Logger.logWarn("Failed to read modpack file - falling back to direct download", e);
@@ -96,17 +132,17 @@ public class ModpackLoader extends Thread {
                     doc = AppUtils.getXML(modPackStream);
                 } catch (Exception e) {
                     Logger.logError("Exception reading modpack file", e);
-                    continue;
+                    return;
                 }
                 if (doc == null) {
                     Logger.logError("Error: could not load modpack data!");
-                    continue;
+                    return;
                 }
                 NodeList modPacks = doc.getElementsByTagName("modpack");
                 ArrayList<ModPack> mp = Lists.newArrayList();
                 // ATT: this is not thread safe. Only one thread can run rest of the code!
                 // proper fix: ModPack.add() should assign indexes for modpacks
-                int offset = ModPack.getPackArray().isEmpty() ? 0 : ModPack.getPackArray().size();
+
                 for (int i = 0; i < modPacks.getLength(); i++) {
                     Node modPackNode = modPacks.item(i);
                     NamedNodeMap modPackAttr = modPackNode.getAttributes();
@@ -133,23 +169,13 @@ public class ModpackLoader extends Thread {
                         Logger.logError("Error while updating modpack info", e);
                     }
                 }
+
                 ModPack.addPacks(mp);
                 try {
                     modPackStream.close();
                 } catch (IOException e) {
                 }
             }
-        }
-
-        Logger.logDebug("All packlists loaded");
-        Benchmark.logBenchAs("ModpackLoader", "Modpack Loader Init");
-
-        LaunchFrame.checkDoneLoading();
-        if (!disableOtherLoader) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run () {
-                }
-            });
         }
     }
 }
