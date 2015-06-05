@@ -109,15 +109,7 @@ public class ModPack {
                 remove.add(pack);
             }
         }
-        for (ModPack pack : remove) {
-            removed = pack.getIndex();
-            packs.remove(pack);
-        }
-        for (ModPack pack : packs) {
-            if (removed != -1 && pack.getIndex() > removed) {
-                pack.setIndex(pack.getIndex() - 1);
-            }
-        }
+
         Main.getEventBus().post(new PackChangeEvent(PackChangeEvent.TYPE.REMOVE, true, xml));//makes sure the pack gets removed from the pane
     }
 
