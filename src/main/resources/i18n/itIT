@@ -160,6 +160,13 @@ KILL_MC_TITLE = Uccidere Minecraft?
 KILL_MC_MESSAGE = Attenzione! Queso causa una corruzione, e dovrebbe soltanto essere usato se il gioco è congelato!
 KILL_MC_CONFIRM = Sei sicuro di voler uccidere Minecraft?
 
+# Thread dump MC
+TD_MC = 
+TD_MC_TITLE = 
+TD_MC_MESSAGE = 
+TD_MC_CONFIRM = 
+TD_MC_FAIL_MESSAGE = 
+
 # Main
 MAIN_EXIT = ESCI
 MAIN_APPLY = Applica

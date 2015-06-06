@@ -160,6 +160,13 @@ KILL_MC_TITLE = 强制结束Minecraft吗？
 KILL_MC_MESSAGE = 警告！这可能导致不可预料的事情发生，只有当Minecraft无响应的时候才适合这种结束方法
 KILL_MC_CONFIRM = 你确定要强制结束Minecraft？
 
+# Thread dump MC
+TD_MC = 
+TD_MC_TITLE = 
+TD_MC_MESSAGE = 
+TD_MC_CONFIRM = 
+TD_MC_FAIL_MESSAGE = 
+
 # Main
 MAIN_EXIT = 推出
 MAIN_APPLY = 应用
