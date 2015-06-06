@@ -38,7 +38,7 @@ FORCE_UPDATE = Wymuszona aktualizacja?
 RAM_MAX = Maksymalny RAM(MB)
 LANGUAGE = Język
 SHOW_CONSOLE = Pokazać Konsolę?
-OPT_JAVA_ARGS= Używać Arg. Optymalizujących dla szybkich komputerów?
+OPT_JAVA_ARGS = Używać Arg. Optymalizujących dla szybkich komputerów?
 USE_SYSTEM_PROXY = Używać Proxy Internetowego do pobierania plików?
 REOPEN_LAUNCHER = Uruchomić launcher po wyjściu z Minecraft'a?
 ADVANCED_OPTIONS = Opcje Zaawansowane
@@ -85,7 +85,7 @@ ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Wyłącz Google Analytic Tracking
 ADVANCED_OPTIONS_JAVA_PATH = Ścieżka Javy:
 ADVANCED_OPTIONS_ADDJAVAOPTIONS = Dodatkowe parametry Javy:
 ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Dodatkowe debugowania launchera
-ADVANCED_OPTIONS_BETA= Zezwól Na Używanie Wersji Beta Launchera
+ADVANCED_OPTIONS_BETA = Zezwól Na Używanie Wersji Beta Launchera
 
 # Update
 UPDATE_WICHUPDATE = Czy chcesz zaktualizować?
@@ -159,6 +159,13 @@ KILL_MC = Zabij Minecraft'a
 KILL_MC_TITLE = Zabić Minecraft'a?
 KILL_MC_MESSAGE = Uwaga! To może spowodować uszkodzenia, używaj tylko jeśli gra jest zamrożona!
 KILL_MC_CONFIRM = Czy jesteś pewien że chcesz zabić proces Minecraft'a?
+
+# Thread dump MC
+TD_MC = 
+TD_MC_TITLE = 
+TD_MC_MESSAGE = 
+TD_MC_CONFIRM = 
+TD_MC_FAIL_MESSAGE = 
 
 # Main
 MAIN_EXIT = Zamknij
