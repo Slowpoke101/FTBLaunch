@@ -101,6 +101,10 @@ public class CommandLineSettings {
     @Getter
     private boolean disableMCLogging = false;
 
+    @Parameter(names = {"--disable-news"}, description = "Disable contents of news pane")
+    @Getter
+    private boolean disableNews = false;
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {

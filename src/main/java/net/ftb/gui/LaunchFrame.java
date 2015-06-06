@@ -366,24 +366,26 @@ public class LaunchFrame extends JFrame {
         footer.add(logoPanel, BorderLayout.LINE_START);
         footer.add(buttonFooterPanel, BorderLayout.LINE_END);
 
-        newsPane = new NewsPane();
-        NewsWorker nw = new NewsWorker() {
-            @Override
-            protected void done () {
-                String html = null;
-                try {
-                    html = get();
-                }
-                catch (InterruptedException e) {
-                    Logger.logDebug("Swingworker Exception", e);
-                } catch (ExecutionException e) {
-                    Logger.logDebug("Swingworker Exception", e.getCause());
-                }
 
-                newsPane.setContent(html);
-            }
-        };
-        nw.execute();
+        newsPane = new NewsPane();
+        if (!CommandLineSettings.getSettings().isDisableNews()) {
+            NewsWorker nw = new NewsWorker() {
+                @Override
+                protected void done () {
+                    String html = null;
+                    try {
+                        html = get();
+                    } catch (InterruptedException e) {
+                        Logger.logDebug("Swingworker Exception", e);
+                    } catch (ExecutionException e) {
+                        Logger.logDebug("Swingworker Exception", e.getCause());
+                    }
+
+                    newsPane.setContent(html);
+                }
+            };
+            nw.execute();
+        }
         modPacksPane = new FTBPacksPane();
         thirdPartyPane = new ThirdPartyPane();
         mapsPane = new MapUtils();

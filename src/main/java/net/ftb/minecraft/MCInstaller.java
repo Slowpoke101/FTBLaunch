@@ -34,13 +34,7 @@ import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
-import net.ftb.util.Benchmark;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FTBFileUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.Parallel;
-import net.ftb.util.TrackerUtils;
+import net.ftb.util.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -427,6 +421,8 @@ public class MCInstaller {
                 StreamLogger.setIgnore(ignore);
                 StreamLogger.doStart();
             } else {
+                // stderr is combined with stdout
+                AppUtils.voidInputStream(minecraftProcess.getInputStream());
                 Logger.logWarn("Not logging MC messages via launcher!");
             }
             Logger.logDebug("MC PID: " + OSUtils.getPID(minecraftProcess));

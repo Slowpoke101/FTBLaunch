@@ -92,6 +92,29 @@ public class AppUtils {
             }
         }
     }
+
+    public static void voidInputStream(InputStream is) {
+        InputStreamVoider voider = new InputStreamVoider(is);
+        voider.start();
+    }
+
+    private static class InputStreamVoider extends Thread {
+        private InputStream is;
+
+        public InputStreamVoider(InputStream is) {
+            this.is = is;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (is.read() != -1) {
+                    // do nothing just keep stream empty
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
 }
 
 
