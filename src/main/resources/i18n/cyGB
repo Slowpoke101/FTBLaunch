@@ -10,59 +10,59 @@ LAUNCH_BUTTON = Cychwyn
 PROFILE_CREATE = Creu Proffil
 PROFILE_SELECT = Dewis Proffil
 DOWNLOAD_SERVER_PACK = Lawrlwytho Mod Pack Gweinydd
-WARN_32BIT_OS = 
-WARN_32BIT_JAVA = 
-WARN_JAVA6 = 
+WARN_32BIT_OS = Rydych yn rhedeg system 32-did. <ul><li>Mae angen system 64-did ar gyfer y rhanfwyaf o mod packs. <li>Bydd cof yn cael ei gyfyngu i 1GB ar systemau 32-did <li>Os oes unrhyw broblemau, triwch y pecynnau FTB Lite.</ul>
+WARN_32BIT_JAVA = Rydych yn rhedeg Java 32-did ar system 64-did. Mae angen Java 64-did ar gyfer y rhanfwyaf o mod packs. <li>Bydd cof yn cael ei gyfyngu i 1GB gyda Java 32-did <li>Os oes unrhyw broblemau, triwch y pecynnau FTB Lite. <li>Mae'n bosib gyweirio'r broblem yma gan lawrlwytho a gosodi Java 64-did oddi ar <a href="http://java.com/en/download/manual.jsp">wefan Oracle</a>.</ul>
+WARN_JAVA6 = Rydych yn rhedeg Java 6. Awgrymwyd Java 7 ar gyfer y rhanfwyaf o mod packs.
 
 # Console
-CONSOLE_TITLE = 
-CONSOLE_COPYCLIP = 
-CONSOLE_CLIP_CONFIRM = 
-CONSOLE_PASTE = 
-CONSOLE_SUPPORT = 
+CONSOLE_TITLE = Consol
+CONSOLE_COPYCLIP = Copïo i'r clipfwrdd
+CONSOLE_CLIP_CONFIRM = Ydych eisiau gopïo'r holl log i'ch clipfwrdd?
+CONSOLE_PASTE = Llwytho'r log i fyny
+CONSOLE_SUPPORT = Angen cymorth? Cliciwch yma!
 
 # Map Tab
 INSTALL_MAP = Gosod Map
 DOWNLOAD_MAP_SERVER = Lawrlwytho Map Gweinydd
 
 #tab swapping
-SWAP_MAP = 
-SWAP_TEXTURE = 
+SWAP_MAP = Mapiau
+SWAP_TEXTURE = Pecynnau Ansawdd
 
 # TexturePack Tab
 INSTALL_TEXTUREPACK = Gosod Pecyn Ansawdd
 
 # Options pane
 INSTALL_FOLDER = Ffolder gosodiad...
-FORCE_UPDATE = Gorfodi diweddaru?
+FORCE_UPDATE = Gorfodi diweddariad?
 RAM_MAX = Uchafswm RAM (MB)
 LANGUAGE = Iaith
-SHOW_CONSOLE = 
-OPT_JAVA_ARGS = 
-USE_SYSTEM_PROXY = 
-REOPEN_LAUNCHER = 
+SHOW_CONSOLE = Dangos y consol?
+OPT_JAVA_ARGS = Defnyddio paramedrau optimeiddiad ar gyfer cyfrifiaduron cyflym?
+USE_SYSTEM_PROXY = Defnyddio Dirprwy Rhyngrwyd i lawrlwytho ffeiliau?
+REOPEN_LAUNCHER = Ail-agor y lawnsiwr ar ôl cau Minecraft?
 ADVANCED_OPTIONS = Dewisiadau Uwch
-INSTALL_FIRSTUSE = 
-DOWNLOAD_JAVA64 = 
-DOWNLOAD_JAVA32 = 
-DOWNLOAD_JAVAGOOD = 
-JAVA_OLD_Warning = 
-JAVA_NEW_Warning = 
-JAVA_32BIT_WARNING = 
+INSTALL_FIRSTUSE = Gan yr ydych yn defnyddio'r lawnsiwr am y tro cyntaf, awgrymwyd dewis y ffolder gosodiad.
+DOWNLOAD_JAVA64 = Lawrlwytho Java 64-did
+DOWNLOAD_JAVA32 = Lawrlwytho Java 32-did
+DOWNLOAD_JAVAGOOD = Lawrlwytho Java awgrymedig
+JAVA_OLD_Warning = Mae fersiwn eich Java yn rhy hen. Awgrymwyd Java 7 ar gyfer y rhanfwyaf o becynnau FTB.
+JAVA_NEW_Warning = Ni gynhelir Java 8. (Ni all Minecraft gynnal Java 8 ar Mac.)
+JAVA_32BIT_WARNING = Rydych yn rhedeg fersiwn 32-did o Java. Bydd hyn yn cyfyngu Minecraft i 1.5GB o RAM.
 
 # Shared strings
-FILTER_SETTINGS = Gosodiadau Hidlo
+FILTER_SETTINGS = Gosodiadau Hidlydd
 
 # Modpacks pane
 MODS_EDIT_PACK = Golygu Mod Pack
-MODS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mods yn cael eu llwytho os gwelwch yn dda...
-DOWNLOAD_SERVER = 
-MODPACK_VERSIONS = 
-PACK_CODES = 
+MODS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mods yn cael eu lwytho os gwelwch yn dda...
+DOWNLOAD_SERVER = Lawrlwytho Gweinydd
+MODPACK_VERSIONS = Fersiynau y Mod Pack
+PACK_CODES = Codau Pecynnau
 
 # EditModPackDialog
-MODS_EDIT_ENABLED_LABEL = Mods wedi'u Galluogi
-MODS_EDIT_DISABLED_LABEL = Mods wedi'u Analluogi
+MODS_EDIT_ENABLED_LABEL = Mods wedi'u alluogi
+MODS_EDIT_DISABLED_LABEL = Mods wedi'u analluogi
 MODS_EDIT_OPEN_FOLDER = Agor Ffolder
 MODS_EDIT_ADD_MOD = Ychwanegu Mod
 MODS_EDIT_ENABLE_MOD = << Galluogi
@@ -70,135 +70,135 @@ MODS_EDIT_DISABLE_MOD = Analluogi >>
 MODS_EDIT_TITLE = Golygydd Mod Pack
 
 # Maps pane
-MAPS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mapiau yn cael eu llwytho os gwelwch yn dda...
+MAPS_WAIT_WHILE_LOADING = Disgwyliwch tra mae mapiau yn cael eu lwytho os gwelwch yn dda...
 
 # TexturePack pane
-TEXTURE_WAIT_WHILE_LOADING = Disgwyliwch tra mae pecynnau ansawdd yn cael eu llwytho os gwelwch yn dda...
+TEXTURE_WAIT_WHILE_LOADING = Disgwyliwch tra mae pecynnau ansawdd yn cael eu lwytho os gwelwch yn dda...
 
 # Advanced  Options
-ADVANCED_OPTIONS_TITLE = 
-ADVANCED_OPTIONS_DLLOCATION = 
-ADVANCED_OPTIONS_MCWINDOW_SIZE = 
-ADVANCED_OPTIONS_MCWINDOW_POS = 
-ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 
-ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 
-ADVANCED_OPTIONS_JAVA_PATH = 
-ADVANCED_OPTIONS_ADDJAVAOPTIONS = 
-ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 
-ADVANCED_OPTIONS_BETA = 
+ADVANCED_OPTIONS_TITLE = Dewisiadau Uwch
+ADVANCED_OPTIONS_DLLOCATION = Lleoliad lawrlwytho:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Maint ffenestr Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_POS = Safle ffenestr Minecraft:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Mwyhau yn awtomatig?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Analluogi tracio Google Analytics
+ADVANCED_OPTIONS_JAVA_PATH = Llwybr Java:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Paramedrau ychwanegol Java:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Dadfygio Lawnsiwr Ychwanegol
+ADVANCED_OPTIONS_BETA = Caniatáu fersiynau 'Beta' o'r lawnsiwr?
 
 # Update
-UPDATE_WICHUPDATE = 
-UPDATE_DOWNGRADE = 
+UPDATE_WICHUPDATE = Hoffech chi ddiweddaru?
+UPDATE_DOWNGRADE = Hoffech chi israddio?
 
 # LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = 
-LUNCHERUPDATE_CHANGELOG = 
-LUNCHERUPDATE_ISAVAILABLETITLE = 
-LUNCHERUPDATE_CURRENTDEAD = 
+LUNCHERUPDATE_ISAVAILABLE = o'r lawnsiwr ar gael.
+LUNCHERUPDATE_CHANGELOG = Arolygu'r Newidiadau
+LUNCHERUPDATE_ISAVAILABLETITLE = Diweddariad ar gael
+LUNCHERUPDATE_CURRENTDEAD = Mae angen uwchraddio eich lawnsiwr presennol oherwydd y ganlyn: \n ni all lawnsio/ddiweddaru Minecraft neu'r pecynnau yn gywir!
 
 # Modpack Update
-UPDATEMODPACK_ISAVALIBLE = 
-UPDATEMODPACK_BACKUPCFG = 
-UPDATEMODPACK_BACKUPSave = 
-UPDATEMODPACK_TITLE = 
-UPDATEMODPACK_DOWNGRADE = 
-UPDATEMODPACK_FROM_TO_VERSION = 
+UPDATEMODPACK_ISAVALIBLE = Mae fersiwn newydd o'r mod pack ar gael!
+UPDATEMODPACK_BACKUPCFG = Creu copïau cadw o'r ffeiliau ffurfweddu?
+UPDATEMODPACK_BACKUPSave = Creu copïau cadw o'ch arbediadau?
+UPDATEMODPACK_TITLE = Diweddariad Mod Pack ar gael
+UPDATEMODPACK_DOWNGRADE = Mae'r fersiwn a osodwyd yn barod yn ddiweddarach na'r fersiwn a ddewiswyd
+UPDATEMODPACK_FROM_TO_VERSION = Fersiwn presennol: %LOCALVER%\nFersiwn a ddewiswyd: %ONLINEVER%
 
 # Private Pack
-PRIVATEPACK_TITLE = 
-PRIVATEPACK_ERROR = 
-PRIVATEPACK_TEXT = 
-PRIVATEPACK_SECCESS = 
-PRIVATEPACK_NOTEXISTS = 
-PRIVATEPACK_ALREADY_ADDED = 
+PRIVATEPACK_TITLE = Rhyngwyneb Pecyn Preifat
+PRIVATEPACK_ERROR = Pecyn preifat annilys.
+PRIVATEPACK_TEXT = Teipiwch i fewn y côd preifat a dderbynwch gan berchennog y pecyn preifat ac yna cliciwch Ychwanegu. Bydd y pecyn wedi hynny yn eich rhestr pecynnau, a bydd hefyd yn cael ei lwytho ar bob cychwyn. Os hoffech chi ddileu becyn preifat, teipiwch y côd eto a cliciwch Dileu.
+PRIVATEPACK_SECCESS = wedi ei ddileu yn llwyddiannus.
+PRIVATEPACK_NOTEXISTS = Enw pecyn anghywir.
+PRIVATEPACK_ALREADY_ADDED = Mae'r pecyn preifat wedi ei ychwanegu yn barod
 
 # Filter
-FILTER_PACKTYPE = 
-FILTER_ORIGIN = 
-FILTER_3THPARTY = 
-FILTER_FTB = 
-FILTER_COMPERTIBLEPACK = 
-FILTER_APPLY = 
-FILTER_SEARCHMAP = 
-FILTER_TITLE = 
-FILTER_PUBLIC = 
-FILTER_PRIVATE = 
-FILTER_MODPACKAVALIABILITY = 
-FILTER_MCVERSION = 
-FILTER_RESULUTION = 
-FILTER_TEXSEARCH = 
-FILTER_SEARCHPACK = 
+FILTER_PACKTYPE = Math y Mod Pack:
+FILTER_ORIGIN = Creawdwr y Map:
+FILTER_3THPARTY = Trydydd Parti
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = Pecyn Cytûn:
+FILTER_APPLY = Gweithredu Hidlydd
+FILTER_SEARCHMAP = Chwilio Maps
+FILTER_TITLE = Hidlydd
+FILTER_PUBLIC = Rhestredig
+FILTER_PRIVATE = Anrhestredig
+FILTER_MODPACKAVALIABILITY = Argaeledd Mod Pack:
+FILTER_MCVERSION = Fersiwn Minecraft:
+FILTER_RESULUTION = Cydraniad Mod Pack:
+FILTER_TEXSEARCH = Chwilio Pecynnau
+FILTER_SEARCHPACK = Chwilio
 
 # Play Offline
-PLAYOFFLINE_WANNA = 
+PLAYOFFLINE_WANNA = Mi aeth rhywbeth yn anghywir..\nHoffech chi chwarae all-lein?
 
 # Password
-PASSWORD_PASSLABEL = 
-PASSWORD_TITLE = 
+PASSWORD_PASSLABEL = Cyfrinair:
+PASSWORD_TITLE = Angen Mewngofnodi
 
 # Profile
-OLDCREDS = 
-CHANGEDUUID = 
-PROFILEADDER_USERNAME = 
-PROFILEADDER_PASSWORD = 
-PROFILEADDER_NAME = 
-PROFILEADDER_SAVEPASSWORD = 
-PROFILEADDER_TITLE = 
-PROFILADDER_ERROR = 
-PROFILEADDER_UPDATE = 
-PROFILEDITOR_TITLE = 
-PROFILEADDER_SAVEMOJANGDATA = 
+OLDCREDS = Mae'r data mewngofnodi yn hen neu ar goll: diweddarwch os gwelwch yn dda.
+CHANGEDUUID = Canfodwyd newid yn eich caledwedd sy'n rhwystro y lawnsiwr rhag gweld eich cymwysterau. Mewngofnodwch eto os gwelwch yn dda.
+PROFILEADDER_USERNAME = Enw Defnyddiwr/Cyfeiriad E-bost:
+PROFILEADDER_PASSWORD = Cyfrinair:
+PROFILEADDER_NAME = Enw Proffil:
+PROFILEADDER_SAVEPASSWORD = Cofio Cyfrinair
+PROFILEADDER_TITLE = Creu Proffil
+PROFILADDER_ERROR = Methu creu'r proffil.
+PROFILEADDER_UPDATE = Diweddaru
+PROFILEDITOR_TITLE = Golygu Proffil
+PROFILEADDER_SAVEMOJANGDATA = Cofio tocyn awdurdodiad
 
 # Map Override
-MAPOVERRIDE_FOUNDERROR = 
-MAPOVERRIDE_WISHOVERRIDE = 
+MAPOVERRIDE_FOUNDERROR = Rhybudd! Mae yna fap gyda'r enw yna yn barod!
+MAPOVERRIDE_WISHOVERRIDE = Hoffech chi ei drosysgrifo?
 
 # Force Kill MC
-KILL_MC = 
-KILL_MC_TITLE = 
-KILL_MC_MESSAGE = 
-KILL_MC_CONFIRM = 
+KILL_MC = Lladd Minecraft
+KILL_MC_TITLE = Lladd Minecraft?
+KILL_MC_MESSAGE = Rhybudd! Gall hyn achosi llygredd a ddylai ond ei ddefnyddio os ydi'r gêm wedi rhewi!
+KILL_MC_CONFIRM = Ydych chi wir eisiau lladd y broses Minecraft?
 
 # Thread dump MC
-TD_MC = 
-TD_MC_TITLE = 
-TD_MC_MESSAGE = 
-TD_MC_CONFIRM = 
-TD_MC_FAIL_MESSAGE = 
+TD_MC = Cynhyrchu dymp edefyn Minecraft
+TD_MC_TITLE = Cynhyrchu dymp edefyn Minecraft?
+TD_MC_MESSAGE = <html>Bydd hyn yn achosi Minecraft i greu dymp edefyn (thread dump).<br>Defnyddiwch hwn yn unig os y gofynnir, neu os ydych yn gwybod beth i'w wneud.<br>Mae gofyn am raglen ychwangeol ar systemau Windows.</html>
+TD_MC_CONFIRM = Ydych chi wir eisiau cynhyrchu dymp edefyn Minecraft?
+TD_MC_FAIL_MESSAGE = Methu cynhyrchu dymp edefyn! <ul><li>Os ydych yn defnyddio system Windows, mae angen lawrlwytho'r rhaglen ychwanegol o <a href="https://github.com/walware/statet/raw/master/de.walware.statet.r.console.core/win32/x86_64/sendsignal.exe">GitHub. Cliciwch yma!</a> Ychwanegwch y rhaglen i'r newidyn amgylched PATH<li>Arolygwch y log ar gyfer fwy o wybodaeth os ydych yn rhedeg system gwahanol, neu wedi lawrlwytho'r rhaglen yn barod</ul>
 
 # Main
-MAIN_EXIT = 
-MAIN_APPLY = 
-MAIN_YES = 
-MAIN_NO = 
-MAIN_ALL = 
-MAIN_CANCEL = 
-MAIN_SUBMIT = 
-MAIN_REMOVE = 
-MAIN_ADD = 
-MAIN_CLIENT = 
-MAIN_SERVER = 
-BUTTON_IGNORE = 
-BUTTON_OK = 
-NAG_SCREEN_MESSAGE = 
+MAIN_EXIT = Gadael
+MAIN_APPLY = Gweithredu
+MAIN_YES = Iawn
+MAIN_NO = Na
+MAIN_ALL = Popeth
+MAIN_CANCEL = Canslo
+MAIN_SUBMIT = Cyflwyno
+MAIN_REMOVE = Dileu
+MAIN_ADD = Ychwanegu
+MAIN_CLIENT = Cleient
+MAIN_SERVER = Gweinydd
+BUTTON_IGNORE = Anwybyddu
+BUTTON_OK = Iawn
+NAG_SCREEN_MESSAGE = Cliciwch Iawn i barhau, neu Anwybyddu i sgipio'r rhybudd yma yn y dyfodol
 
 # First run dialog
-INSTALL_TITLE = 
-INSTALL_LANGUAGE = 
-INSTALL_CHANGE = 
+INSTALL_TITLE = Rhediad Cyntaf
+INSTALL_LANGUAGE = Iaith ...
+INSTALL_CHANGE = Newid
 
 # System Tray
-TRAY_QUIT = 
-TRAY_FTB_WEBSITE = 
+TRAY_QUIT = Gadael
+TRAY_FTB_WEBSITE = Gwefan FTB
 
 # CheckInstallPath
-CIP_BADPATH = 
-CIP_PROGRAMFILES = 
-CIP_INTERNETFILES = 
-CIP_USERPROFILE = 
-CIP_WRITEPROTECT = 
-CIP_EXISTS = 
-CIP_CREATE = 
-CIP_SELECTAGAIN = 
-CIP_PLEASECHANGE = 
+CIP_BADPATH = Cyfeiriadur gosodiad annilys. Tydi Forge ddim yn deall y nod(au) \ncanlynol: LIST Dewisiwch lleoliad newydd fel
+CIP_PROGRAMFILES = Ni gynhelir gosodiad o dan C:\Program Files\ neu debyg. \nDewisiwch lleoliad newydd fel
+CIP_INTERNETFILES = Ni allwch osodi FTB i'ch gyfeiriadur Temporary Internet Files. \nDewisiwch lleoliad newydd fel
+CIP_USERPROFILE = Tydi gosodiad o dan C:\Users\<username> ddim yn awgrymedig a gall achosi problemau. \nAwgrymwyd dewis lleoliad newydd fel
+CIP_WRITEPROTECT = Methu ysgrifennu i'r cyfeiriadur gosodiad FTB. \nDewisiwch gyfeiriadur ble gennych ganiatâd i ysgrifennu iddo.
+CIP_EXISTS = Methu ffeindio cyfeiriadur gosodiad FTB!
+CIP_CREATE = Methu creu cyfeiriadur gosodiad FTB
+CIP_SELECTAGAIN = Dewisiwch eto!
+CIP_PLEASECHANGE = Newidiwch y lleoliad gosodiad o dan y tab 'Options'.
