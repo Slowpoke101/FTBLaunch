@@ -59,6 +59,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -96,6 +97,13 @@ public class Main {
      */
     public static void main (String[] args) {
         Benchmark.start("main");
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException (Thread t, Throwable e) {
+                Logger.logError("Unhandled exception in " + t.toString(), e);
+            }
+        });
 
         try {
             jc = new JCommander(CommandLineSettings.getSettings(), args);
@@ -268,6 +276,7 @@ public class Main {
                     }
                 });
             } catch (Exception e) {
+                Logger.logDebug("failed", e.getCause());
             }
         } else if (CommandLineSettings.getSettings().isSkipFirst()) {
             String installDir = CommandLineSettings.getSettings().getInstallDir();
@@ -309,6 +318,7 @@ public class Main {
                     }
                 });
             } catch (Exception e) {
+                Logger.logDebug("failed", e.getCause());
             }
         }
 
@@ -330,6 +340,7 @@ public class Main {
                 }
             });
         } catch (Exception e) {
+            Logger.logDebug("failed", e.getCause());
         }
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
@@ -395,17 +406,12 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {
+        } catch (InvocationTargetException e) {
+            Logger.logDebug("failed", e.getCause());
+        } catch (InterruptedException e) {
         }
 
         LoadingDialog.advance("Setting up Launcher");
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException (Thread t, Throwable e) {
-                Logger.logError("Unhandled exception in " + t.toString(), e);
-            }
-        });
 
         /*
          * Show the main form but hide it behind any active windows until
