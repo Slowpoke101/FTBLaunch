@@ -12,7 +12,7 @@ PROFILE_SELECT = Select Profile
 DOWNLOAD_SERVER_PACK = Download Server ModPack
 WARN_32BIT_OS = 32-bit operating system. <ul><li>64-bit OS is required for most mod packs. <li>Memory is limited to 1 GB in 32-bit systems <li>If you have issues, please try the FTB Lite packs.</ul>
 WARN_32BIT_JAVA = 32-bit Java on 64-bit operating system. <ul><li>64-bit Java is required for most mod packs. <li>Memory is limited to 1 GB with 32-bit Java <li>If you have issues, please try the FTB Lite packs. <li>This problem can be fixed downloading and installing 64-bit java from <a href="http://java.com/en/download/manual.jsp">Oracle's website.</a></ul>
-WARN_JAVA6 = Java 6 detected. Java 7 is recommended for most mod packs.
+WARN_JAVA6 = Java 6 detected. <ul><li>Java 7 or newer is required for most modpacks. <li>This problem can be fixed downloading and installing newer java from <a href="http://java.com/en/download/manual.jsp">Oracle's website.</a></ul>
 
 # Console
 CONSOLE_TITLE = Console
