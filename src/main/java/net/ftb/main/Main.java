@@ -334,8 +334,8 @@ public class Main {
                     }
                     JavaInfo java = Settings.getSettings().getCurrentJava();
                     JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
-                    if (java.isOlder(java7)) {
-                        MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
+                    if (java.isOlder(java7) && !CommandLineSettings.getSettings().isDisableJVMVersionCheck()) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_JAVA6"), JOptionPane.WARNING_MESSAGE);
                     }
                 }
             });

@@ -97,6 +97,10 @@ public class CommandLineSettings {
     @Getter
     private boolean disableJVMBitnessCheck = false;
 
+    @Parameter(names = {"--disable-jvm-version-checks"}, description = "Disable JVM version check nagging screens")
+    @Getter
+    private boolean disableJVMVersionCheck = false;
+
     @Parameter(names = {"--disable-mc-logging"}, description = "Disable MC logging")
     @Getter
     private boolean disableMCLogging = false;

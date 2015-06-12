@@ -95,7 +95,7 @@ public class Logger {
 
     private static String getLogs (LogType type) {
         StringBuilder logStringBuilder = new StringBuilder();
-        for (LogEntry entry : logEntries) {
+        for (LogEntry entry : getLogEntries()) {
             logStringBuilder.append(entry.toString(type)).append("\n");
         }
         return logStringBuilder.toString();

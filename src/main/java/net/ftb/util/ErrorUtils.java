@@ -85,6 +85,14 @@ public class ErrorUtils {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
     }
 
+    /**
+     *
+     * @param message Message to show in dialog.
+     * @param severity
+     *
+     * HTML tag can be used to format and add links into message.
+     * &lt;html&gt; and &lt;body&gt; are automatic added
+     */
     public static void showClickableMessage (String message, int severity) {
         JLabel l = new JLabel();
         Font font = l.getFont();
