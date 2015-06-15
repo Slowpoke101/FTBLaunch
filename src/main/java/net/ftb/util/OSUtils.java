@@ -20,6 +20,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import lombok.Getter;
 import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
@@ -32,14 +33,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.security.CodeSource;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.swing.text.html.StyleSheet;
 
@@ -57,6 +53,41 @@ public class OSUtils {
     private static byte[] hardwareID;
 
     private static UUID clientUUID;
+
+    public static Proxy getProxy (String url) {
+        // this is set explicitly with command line define or by our proxy setting
+        String system = System.getProperty("java.net.useSystemProxies");
+        // System-wide setting from java control panel or command line define
+        String socks = System.getProperty("socksProxyHost");
+
+        if (system != null && system.equals("true")) {
+            Logger.logDebug("Detected system proxy");
+        }
+        if (socks != null && !socks.isEmpty()) {
+            Logger.logDebug("Detected socks proxy");
+        }
+
+        java.util.List<Proxy> l = null;
+        try {
+            l = ProxySelector.getDefault().select(new URI(url));
+            if (l != null) {
+                for (Proxy p: l) {
+                    InetSocketAddress address = (InetSocketAddress) p.address();
+                    if (address == null) {
+                        Logger.logDebug("ProxySelector: type: " + p.type() + ", no proxy for " + url);
+                    } else {
+                        Logger.logDebug("ProxySelector: type: " + p.type() + ", for " + url);
+                    }
+                }
+                // correct? Can' decide without feedback
+                return l.get(0);
+            }
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+        }
+        Logger.logWarn("Proxy was turned on but ProxySelector did not returned proxies for " + url);
+        return Proxy.NO_PROXY;
+    }
 
     public static enum OS {
         WINDOWS, UNIX, MACOSX, OTHER,

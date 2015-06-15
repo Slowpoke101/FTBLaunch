@@ -430,6 +430,9 @@ public class DownloadUtils extends Thread {
         boolean curseFailed = false;
         boolean creeperFailed = false;
         setName("DownloadUtils");
+        // test for proxies
+        OSUtils.getProxy(Locations.curseRepo);
+        OSUtils.getProxy(Locations.chRepo);
         if (!Locations.hasDLInitialized) {
             Benchmark.start("DlUtils");
             Logger.logDebug("DownloadUtils.run() starting");
