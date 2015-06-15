@@ -59,7 +59,9 @@ public class AuthlibHelper {
         boolean hasMojangData = false;
         boolean hasPassword = false;
         GameProfile selectedProfile = null;
-        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(Proxy.NO_PROXY, OSUtils.getClientToken().toString()).createUserAuthentication(
+        // TODO: use reflection to get URL from YggdrasilUserAuthentication
+        Proxy proxy = OSUtils.getProxy("https://authserver.mojang.com/authenticate");
+        YggdrasilUserAuthentication authentication = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(proxy, OSUtils.getClientToken().toString()).createUserAuthentication(
                 Agent.MINECRAFT);
         if (user != null) {
             Logger.logDebug(user.contains("@") ? "Email address given" : "Username given" + " Not 100% sure, mojangdata might contain different username");

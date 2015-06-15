@@ -16,14 +16,23 @@
  */
 package net.ftb.util;
 
+import com.google.common.base.Joiner;
+import net.ftb.data.Settings;
 import net.ftb.log.Logger;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -113,6 +122,70 @@ public class AppUtils {
                 }
             } catch (IOException e) {
             }
+        }
+    }
+
+    public static String MapListToString(Map<String, List<String>> l) {
+        Joiner.MapJoiner mapJoiner = Joiner.on('\n').withKeyValueSeparator("=").useForNull("NULL");
+        return mapJoiner.join(l);
+    }
+
+    public static String ConnectionToString(URLConnection c) {
+        boolean failed = false;
+        HttpURLConnection conn = (HttpURLConnection) c;
+        try {
+            if (conn.getErrorStream() != null) {
+                return IOUtils.toString(conn.getErrorStream(), Charsets.UTF_8);
+            } else if (conn.getInputStream() != null) {
+                return IOUtils.toString(conn.getInputStream(), Charsets.UTF_8);
+            } else {
+                return null;
+            }
+        } catch (FileNotFoundException e) {
+            // ignore this
+        } catch (IOException e) {
+            failed = true;
+        } catch (Exception e) {
+            failed = true;
+            Logger.logDebug("failed", e);
+        }
+
+        if (failed) {
+            try {
+                return IOUtils.toString(c.getInputStream(), Charsets.UTF_8);
+            } catch (Exception e) {
+                Logger.logDebug("failed", e);
+            }
+        }
+
+        return null;
+    }
+
+    public static void debugConnection(URLConnection c) {
+        if (Settings.getSettings().getDebugLauncher()) {
+            if (!(c instanceof HttpURLConnection)) {
+                Logger.logDebug("Something bad just happened.");
+            }
+
+            // for IP we need to use reflection or pass url here and rely on dns caching
+            // ref: https://community.oracle.com/thread/2149226
+
+
+            HttpURLConnection conn = (HttpURLConnection) c;
+            int responseCode;
+            try {
+                responseCode = conn.getResponseCode();
+            } catch (Exception e) {
+                responseCode = -1;
+                Logger.logDebug("failed" ,e);
+            }
+
+
+            Logger.logDebug("Request type: " + conn.getRequestMethod());
+            Logger.logDebug("URL: " + conn.getURL());
+            Logger.logDebug("Response code: " + responseCode);
+            Logger.logDebug("Headers:\n" + AppUtils.MapListToString(conn.getHeaderFields()));
+            Logger.logDebug("Message body\n" + AppUtils.ConnectionToString(conn));
         }
     }
 }
