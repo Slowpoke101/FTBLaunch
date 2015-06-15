@@ -124,6 +124,7 @@ public class DownloadUtils extends Thread {
             return resolved;
         } else {
             Logger.logWarn("Using backupLink for " + file);
+            TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup","HEAD_failed");
             return backupLink;
         }
     }
