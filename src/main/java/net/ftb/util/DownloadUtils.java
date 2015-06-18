@@ -107,7 +107,7 @@ public class DownloadUtils extends Thread {
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
                     Logger.logDebug("failed");
-                    AppUtils.debugConnection(connection);
+                    AppUtils.debugConnection(connection, connection.getResponseCode()!=404);
                     resolved = "http://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -124,6 +124,10 @@ public class DownloadUtils extends Thread {
             return resolved;
         } else {
             Logger.logWarn("Using backupLink for " + file);
+            //TODO: remove this logger later
+            if (!file.contains("1.8")) {
+                Logger.logDebug("failed. IP: " + AppUtils.getExternalIP());
+            }
             TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup","HEAD_failed");
             return backupLink;
         }
