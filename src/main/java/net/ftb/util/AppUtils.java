@@ -24,9 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -188,6 +186,18 @@ public class AppUtils {
             Logger.logDebug("Message body\n" + AppUtils.ConnectionToString(conn));
         }
     }
+
+    public static String getExternalIP() {
+        try {
+            URL url = new URL("http://checkip.amazonaws.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            return in.readLine();
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+        }
+        return null;
+    }
+
 }
 
 
