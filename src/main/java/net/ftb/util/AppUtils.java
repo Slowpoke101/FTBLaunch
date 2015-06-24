@@ -160,7 +160,11 @@ public class AppUtils {
     }
 
     public static void debugConnection(URLConnection c) {
-        if (Settings.getSettings().getDebugLauncher()) {
+        debugConnection(c, false);
+    }
+
+    public static void debugConnection(URLConnection c, boolean forceDebug) {
+        if (Settings.getSettings().getDebugLauncher() || forceDebug) {
             if (!(c instanceof HttpURLConnection)) {
                 Logger.logDebug("Something bad just happened.");
             }
