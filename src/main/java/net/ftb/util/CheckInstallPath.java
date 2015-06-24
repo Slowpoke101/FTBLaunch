@@ -59,39 +59,22 @@ public class CheckInstallPath {
         String pathRegex = "[\\w:\\\\/ \\-\\.]+";
 
         if (OSUtils.getCurrentOS() == OS.WINDOWS && System.getenv("ProgramFiles") != null && path.contains(System.getenv("ProgramFiles"))) {
-            setting = "CIP_programfiles";
             message = "Installing under C:\\Program Files\\ or similar is not supported. Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_PROGRAMFILES") + defaultLocation;
-            if (!Settings.getSettings().getBoolean(setting)) {
-                action = Action.BLOCK;
-                Logger.logError(message);
-            } else {
-                action = Action.OK;
-                Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-            }
+            action = Action.BLOCK;
+            Logger.logError(message);
         } else if (!path.matches(pathRegex)) {
             String s = path.replaceAll(pathRegex, "");
-            setting = "CIP_badpath";
             message = "Unsupported installation directory. Forge does not support following character(s): " + s + " Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_BADPATH").replace("LIST", s) + defaultLocation;
-            if (!Settings.getSettings().getBoolean(setting)) {
-                action = Action.BLOCK;
-                Logger.logError(message);
-            } else {
-                action = Action.OK;
-                Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-            }
+            action = Action.BLOCK;
+            Logger.logError(message);
         } else if (OSUtils.getCurrentOS() == OS.WINDOWS && path.contains("Content.IE5")) {
             setting = "CIP_internetfiles";
             message = "You cannot install FTB to your Temporary Internet Files directory. Please select a new location such as " + defaultLocation;
             localizedMessage = I18N.getLocaleString("CIP_INTERNETFILES") + defaultLocation;
-            if (!Settings.getSettings().getBoolean(setting)) {
-                action = Action.BLOCK;
-                Logger.logError(message);
-            } else {
-                action = Action.OK;
-                Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-            }
+            action = Action.BLOCK;
+            Logger.logError(message);
         } /*
         else if (OSUtils.getCurrentOS()==OS.WINDOWS && System.getenv("USERPROFILE")!=null && path.contains(System.getenv("USERPROFILE"))) {
             setting = "CIP_userprofile";
@@ -105,42 +88,24 @@ public class CheckInstallPath {
                 Logger.logDebug("ignored: " + setting);
             }
         }*/ else if (f.isDirectory() && !f.canWrite()) {
-            setting = "CIP_writeprotect";
             message = "Could not write to the FTB installation directory. Please select a folder which you have permission to write to.";
             localizedMessage = I18N.getLocaleString("CIP_WRITEPROTECT");
-            if (!Settings.getSettings().getBoolean(setting)) {
-                action = Action.BLOCK;
-                Logger.logError(message);
-            } else {
-                action = Action.OK;
-                Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-            }
+            action = Action.BLOCK;
+            Logger.logError(message);
         }
         // special case. This must be ignored at InstallDirectoryDialog
         else if (calledFromLaunchFrame && !f.exists()) {
-            setting = "CIP_exists";
             message = "FTB installation directory not found!";
             localizedMessage = I18N.getLocaleString("CIP_EXISTS");
-            if (!Settings.getSettings().getBoolean(setting)) {
-                action = Action.BLOCK;
-                Logger.logError(message);
-            } else {
-                action = Action.OK;
-                Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-            }
+            action = Action.BLOCK;
+            Logger.logError(message);
         } else if (!calledFromLaunchFrame && !f.exists()) {
             f.mkdirs();
             if (!f.exists() || !f.canWrite()) {
-                setting = "CIP_create";
                 message = "Could not create FTB installation location";
                 localizedMessage = I18N.getLocaleString("CIP_CREATE");
-                if (!Settings.getSettings().getBoolean(setting)) {
-                    action = Action.BLOCK;
-                    Logger.logError(message);
-                } else {
-                    action = Action.OK;
-                    Logger.logDebug("User has selected to ignore: \"" + message + "\"");
-                }
+                action = Action.BLOCK;
+                Logger.logError(message);
             }
         } else {
             action = Action.OK;

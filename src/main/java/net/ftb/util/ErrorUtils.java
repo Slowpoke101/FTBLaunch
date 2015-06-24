@@ -101,7 +101,7 @@ public class ErrorUtils {
         html.append("<html><body style=\"" + "font-family:").append(font.getFamily()).append(";").append("font-weight:").append(font.isBold() ? "bold" : "normal").append(";").append("font-size:")
                 .append(font.getSize()).append("pt;").append("\">");
 
-        html.append(message).append(" ");
+        html.append(message).append(" ").append("</html>");
 
         JEditorPane ep = new JEditorPane("text/html", html.toString());
         ep.addHyperlinkListener(new HyperlinkListener() {

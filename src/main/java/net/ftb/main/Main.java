@@ -300,21 +300,13 @@ public class Main {
 
         // CheckInstallPath() does Error/Warning logging in english
         final CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
-        if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
-            // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
+        if (!CommandLineSettings.getSettings().isDisableInstallLocChecks() &&
+                (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN))
+        {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override public void run () {
-                        int result = ErrorUtils
-                                .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
-                        // pressing OK or closing dialog does not do anything
-                        if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
-                            // if user select ignore we save setting and that type of error will be ignored
-                            if (checkResult.setting != null) {
-                                Settings.getSettings().setBoolean(checkResult.setting, true);
-                                Settings.getSettings().save();
-                            }
-                        }
+                        ErrorUtils.showClickableMessage(checkResult.localizedMessage, JOptionPane.ERROR_MESSAGE);
                     }
                 });
             } catch (Exception e) {

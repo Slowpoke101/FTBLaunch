@@ -107,7 +107,8 @@ public class DownloadUtils extends Thread {
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
                     Logger.logDebug("failed");
-                    AppUtils.debugConnection(connection);
+                    // TODO: remove responseCode test later.
+                    AppUtils.debugConnection(connection, connection.getResponseCode()!=404);
                     resolved = "http://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -124,7 +125,11 @@ public class DownloadUtils extends Thread {
             return resolved;
         } else {
             Logger.logWarn("Using backupLink for " + file);
-            TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup","HEAD_failed");
+            if (!file.contains("1.8")) {
+                // FTB hosts own version.json fails. If we are here something failed. Why?
+                Logger.logError("HEAD request for " + file + " failed. Please Send log to launcher team and provide your public IP address if possible.");
+                TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup", "HEAD_failed: " + file);
+        }
             return backupLink;
         }
     }
