@@ -575,4 +575,13 @@ public class ModPack {
         }
 
     };
+
+    public static ModPack findByXML (String s) {
+        for (ModPack p: packs) {
+            if (p.getParentXml().equals(s)) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

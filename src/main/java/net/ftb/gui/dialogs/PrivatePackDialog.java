@@ -20,6 +20,8 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.gui.GuiConstants;
 import net.ftb.gui.LaunchFrame;
+import net.ftb.gui.panes.FTBPacksPane;
+import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -62,6 +64,20 @@ public class PrivatePackDialog extends JDialog {
                         Settings.getSettings().addPrivatePack(modpackName.getText());
                         Settings.getSettings().save();
                         setVisible(false);
+
+                        ModPack pack = ModPack.findByXML(modpackName.getText() + ".xml");
+                        if (pack != null) {
+                            JScrollBar jb;
+                            if (pack.isThirdPartyTab()) {
+                                LaunchFrame.getInstance().tabbedPane.setSelectedIndex(3);
+                                jb = ThirdPartyPane.getInstance().getPacksScroll().getVerticalScrollBar();
+
+                            } else {
+                                LaunchFrame.getInstance().tabbedPane.setSelectedIndex(2);
+                                jb = FTBPacksPane.getInstance().getPacksScroll().getVerticalScrollBar();
+                            }
+                            jb.setValue(jb.getMaximum());
+                        }
                     } else {
                         ErrorUtils.tossError(I18N.getLocaleString("PRIVATEPACK_ALREADY_ADDED"));
                     }
