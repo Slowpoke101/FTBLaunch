@@ -59,6 +59,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -96,6 +97,13 @@ public class Main {
      */
     public static void main (String[] args) {
         Benchmark.start("main");
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException (Thread t, Throwable e) {
+                Logger.logError("Unhandled exception in " + t.toString(), e);
+            }
+        });
 
         try {
             jc = new JCommander(CommandLineSettings.getSettings(), args);
@@ -160,6 +168,7 @@ public class Main {
             }
         }
         Logger.logDebug("Launcher arguments: " + Arrays.toString(args));
+        Logger.logDebug("Launcher PID: " + OSUtils.getPID());
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
         String mfStr = "";
@@ -176,6 +185,8 @@ public class Main {
             Logger.logError("Error getting beta information, assuming beta channel not usable!", e);
             beta = 9999999;
         }
+
+        System.setProperty("http.agent", "FTB Launcher/" + Constants.version);
 
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics
@@ -265,6 +276,7 @@ public class Main {
                     }
                 });
             } catch (Exception e) {
+                Logger.logDebug("failed", e.getCause());
             }
         } else if (CommandLineSettings.getSettings().isSkipFirst()) {
             String installDir = CommandLineSettings.getSettings().getInstallDir();
@@ -288,24 +300,17 @@ public class Main {
 
         // CheckInstallPath() does Error/Warning logging in english
         final CheckInstallPath checkResult = new CheckInstallPath(Settings.getSettings().getInstallPath(), true);
-        if (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN) {
-            // ErrorUtils.tossOKIgnoreDialog() does not write logs => can be called with localized strings
+        if (!CommandLineSettings.getSettings().isDisableInstallLocChecks() &&
+                (checkResult.action == CheckInstallPath.Action.BLOCK || checkResult.action == CheckInstallPath.Action.WARN))
+        {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override public void run () {
-                        int result = ErrorUtils
-                                .tossOKIgnoreDialog(checkResult.localizedMessage, (checkResult.action == CheckInstallPath.Action.BLOCK) ? JOptionPane.ERROR_MESSAGE : JOptionPane.WARNING_MESSAGE);
-                        // pressing OK or closing dialog does not do anything
-                        if (result != 0 && result != JOptionPane.CLOSED_OPTION) {
-                            // if user select ignore we save setting and that type of error will be ignored
-                            if (checkResult.setting != null) {
-                                Settings.getSettings().setBoolean(checkResult.setting, true);
-                                Settings.getSettings().save();
-                            }
-                        }
+                        ErrorUtils.showClickableMessage(checkResult.localizedMessage, JOptionPane.ERROR_MESSAGE);
                     }
                 });
             } catch (Exception e) {
+                Logger.logDebug("failed", e.getCause());
             }
         }
 
@@ -313,23 +318,26 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override public void run () {
                     // Same warnings are logged as errors in MainHelpers.printInfo()
-                    if (!OSUtils.is64BitOS()) {
-                        MainHelpers.tossNag("launcher_32OS", I18N.getLocaleString("WARN_32BIT_OS"));
+                    if (!OSUtils.is64BitOS() && !CommandLineSettings.getSettings().isDisableJVMBitnessCheck()) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_32BIT_OS"), JOptionPane.WARNING_MESSAGE);
                     }
-                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits) {
-                        MainHelpers.tossNag("launcher_32java", I18N.getLocaleString("WARN_32BIT_JAVA"));
+                    if (OSUtils.is64BitOS() && !Settings.getSettings().getCurrentJava().is64bits && !CommandLineSettings.getSettings().isDisableJVMBitnessCheck() ) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_32BIT_JAVA"), JOptionPane.WARNING_MESSAGE);
                     }
                     JavaInfo java = Settings.getSettings().getCurrentJava();
                     JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");
-                    if (java.isOlder(java7)) {
-                        MainHelpers.tossNag("launcher_java6", I18N.getLocaleString("WARN_JAVA6"));
+                    if (java.isOlder(java7) && !CommandLineSettings.getSettings().isDisableJVMVersionCheck()) {
+                        ErrorUtils.showClickableMessage(I18N.getLocaleString("WARN_JAVA6"), JOptionPane.WARNING_MESSAGE);
                     }
                 }
             });
         } catch (Exception e) {
+            Logger.logDebug("failed", e.getCause());
         }
         // NOTE: this is also missed
         LoadingDialog.advance("Loading user data");
+
+        ModPack.loadXml(getXmls());
 
         // Store this in the cache (local) storage, since it's machine specific.
         userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));
@@ -337,7 +345,7 @@ public class Main {
         /*
          * Execute AuthlibDLWorker swingworker. done() will enable launch button as soon as possible
          */
-        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.17") {
+        AuthlibDLWorker authworker = new AuthlibDLWorker(OSUtils.getDynamicStorageLocation() + File.separator + "authlib" + File.separator, "1.5.21") {
             @Override
             protected void done () {
                 boolean workerSuccess = true;
@@ -390,17 +398,12 @@ public class Main {
                     }
                 }
             });
-        } catch (Exception e) {
+        } catch (InvocationTargetException e) {
+            Logger.logDebug("failed", e.getCause());
+        } catch (InterruptedException e) {
         }
 
         LoadingDialog.advance("Setting up Launcher");
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException (Thread t, Throwable e) {
-                Logger.logError("Unhandled exception in " + t.toString(), e);
-            }
-        });
 
         /*
          * Show the main form but hide it behind any active windows until
@@ -419,7 +422,7 @@ public class Main {
         eventBus.register(LaunchFrame.getInstance().thirdPartyPane);
         eventBus.register(LaunchFrame.getInstance().modPacksPane);
 
-        ModPack.loadXml(getXmls());
+        //ModPack.loadXml(getXmls());
 
         Map.addListener(LaunchFrame.getInstance().mapsPane);
         TexturePack.addListener(LaunchFrame.getInstance().tpPane);

@@ -36,6 +36,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     @Override
     public void onVisible () {
         ThirdPartyPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
+        ModPack.setSelectedPack(ThirdPartyPane.getInstance().selectedPack);
     }
 
     boolean filterForTab (ModPack pack) {

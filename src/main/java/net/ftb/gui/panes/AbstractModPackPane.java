@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
+import lombok.Setter;
 import net.ftb.data.LauncherStyle;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
@@ -28,7 +29,6 @@ import net.ftb.gui.LaunchFrame;
 import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
-import net.ftb.gui.dialogs.SearchDialog;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
@@ -57,7 +57,6 @@ public abstract class AbstractModPackPane extends JPanel {
     // array to store packs. Upgraded by addPack
     public ArrayList<JPanel> packPanels;
 
-    int numberOfPacks;
 
     JLabel typeLbl;
     JButton filter, editModPack;
@@ -66,11 +65,12 @@ public abstract class AbstractModPackPane extends JPanel {
 
     JButton privatePack;
     JComboBox version;
-    int selectedPack = 0;
+
     boolean modPacksAdded = false;
-    // pack hashes. Updated by updateDatas()
-    HashMap<Integer, ModPack> currentPacks = Maps.newHashMap();
-    HashMap<Integer, Integer> packMapping = Maps.newHashMap();
+    HashMap<ModPack, JPanel> panelByPack = Maps.newHashMap();
+    @Setter
+    @Getter
+    ModPack selectedPack;
 
     JEditorPane packInfo;
 
@@ -130,10 +130,8 @@ public abstract class AbstractModPackPane extends JPanel {
             public void actionPerformed (ActionEvent e) {
                 if (packPanels.size() > 0) {
                     //TODO: fix by rename
-                    if (getSelectedPackIndex() >= 0) {
-                        EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), ModPack.getSelectedPack(true));
-                        empd.setVisible(true);
-                    }
+                    EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), selectedPack);
+                    empd.setVisible(true);
                 }
             }
         });
@@ -171,10 +169,10 @@ public abstract class AbstractModPackPane extends JPanel {
             public void actionPerformed (ActionEvent event) {
                 String url;
 
-                ModPack pack = (LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK ? ModPack.getSelectedPack(true) : ModPack.getSelectedPack(false));
+                ModPack pack = selectedPack;
 
                 if ((LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK || LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) && !pack.getServerUrl().isEmpty()) {
-                    if (packPanels.size() > 0 && getSelectedPackIndex() >= 0) {
+                    if (packPanels.size() > 0 ) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version"))
                                     ? pack.getVersion().replace(".", "_")
@@ -244,7 +242,7 @@ public abstract class AbstractModPackPane extends JPanel {
     /*
      * GUI Code to add a modpack to the selection
      */
-    public void addPack (final ModPack pack) {
+    public JPanel addPack (final ModPack pack) {
         if (!modPacksAdded) {
             modPacksAdded = true;
             packs.removeAll();
@@ -276,8 +274,9 @@ public abstract class AbstractModPackPane extends JPanel {
 
             @Override
             public void mousePressed (MouseEvent e) {
-                selectedPack = packIndex;
-                updatePacks();
+                ModPack.setSelectedPack(pack);
+                selectedPack = pack;
+                updateInfoScreen();
             }
         };
 
@@ -294,8 +293,9 @@ public abstract class AbstractModPackPane extends JPanel {
 
         //packsScroll.revalidate();
         if (pack.getDir().equalsIgnoreCase(getLastPack())) {
-            selectedPack = packIndex;
+            selectedPack = pack;
         }
+        return p;
     }
 
     //TODO handle changes & removals here as well!!!
@@ -305,28 +305,9 @@ public abstract class AbstractModPackPane extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             public void run () {
                 if (event.getType() == PackChangeEvent.TYPE.ADD) {
-                    boolean doneWork = false;
-                    if (event.getPacks() != null) {
-                        for (ModPack p : event.getPacks()) {
-                            if (filterForTab(p)) {
-                                addPack(p);
-                                //TODO: fix
-                                Logger.logInfo("Adding " + getPaneShortName() + " Pack: " + packPanels.size() + " (" + p.getName() + ")");
-                                doneWork = true;
-                                numberOfPacks++;
-                            }
-                        }
-                        if (doneWork) {
-                            if (!currentPacks.isEmpty()) {
-                                updateDatas();
-                                updatePacks();
-                            } else {
-                                updateDatas();
-                                updatePacks();
-                            }
-                            loaded = true;
-                        }
-                    }
+                    filterPacks();
+                } else if (event.getType() == PackChangeEvent.TYPE.FILTER) {
+                    filterPacks();
                 } else if (event.getType() == PackChangeEvent.TYPE.REMOVE) {
                     filterPacks();
                 }
@@ -334,27 +315,11 @@ public abstract class AbstractModPackPane extends JPanel {
         });
     }
 
-    public void updateDatas () {
-        currentPacks.clear();
-        packMapping.clear();
-        int counter = 0;
-        // Are we going to save list of modpack there or here?!
-        for (ModPack pack : ModPack.getPackArray()) {
-            if (filterForTab(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                currentPacks.put(counter, pack);
-                packMapping.put(counter, pack.getIndex());
-                counter++;
-            }
-        }
-    }
-
     public void filterPacks () {
+        // TODO add sorting. How, where?
         packPanels.clear();
         packs.removeAll();
-        currentPacks.clear();
-        packMapping.clear();
-        int counter = 0;
-        selectedPack = 0;
+        selectedPack = null;
         packInfo.setText("");
         // all removed, repaint
         packs.repaint();
@@ -362,23 +327,23 @@ public abstract class AbstractModPackPane extends JPanel {
         //modPacksAdded = false;
         for (ModPack pack : ModPack.getPackArray()) {
             if (filterForTab(pack) && mcVersionCheck(pack) && avaliabilityCheck(pack) && textSearch(pack)) {
-                currentPacks.put(counter, pack);
-                packMapping.put(counter, pack.getIndex());
-                addPack(pack);
-                counter++;
+                JPanel p = addPack(pack);
+                panelByPack.put(pack, p);
             }
         }
-        updateDatas();
-        updatePacks();
+        updateInfoScreen();
     }
 
     // WTF: this does not update packs!!
     // only updating info for selected pack. pulldown menus and info area!
-    void updatePacks () {
-        for (int i = 0; i < packPanels.size(); i++) {
-            if (selectedPack == i && getIndex() >= 0) {
-                ModPack pack = ModPack.getPackArray().get(getIndex());
-                if (pack != null) {
+    public void updateInfoScreen () {
+        // make all colors and cursors normal in left side list
+        for (JPanel p: panelByPack.values()) {
+            p.setBackground(UIManager.getColor("control"));
+            p.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+                ModPack pack = selectedPack;
+                if (pack != null && panelByPack.get(selectedPack)!= null) {
                     String mods = "";
                     if (pack.getMods() != null) {
                         mods += "<p>This pack contains the following mods by default:</p><ul>";
@@ -387,14 +352,15 @@ public abstract class AbstractModPackPane extends JPanel {
                         }
                         mods += "</ul>";
                     }
-                    packPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
-                    packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+                    panelByPack.get(selectedPack).setBackground(UIManager.getColor("control").darker().darker());
+                    panelByPack.get(selectedPack).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     File tempDir = new File(OSUtils.getCacheStorageLocation(), "ModPacks" + File.separator + pack.getDir());
                     packInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>"
                             + pack.getInfo() + mods);
                     packInfo.setCaretPosition(0);
 
-                    if (ModPack.getSelectedPack(isFTB()).getServerUrl().equals("") || ModPack.getSelectedPack(isFTB()).getServerUrl() == null) {
+                    if (selectedPack.getServerUrl().equals("") || selectedPack.getServerUrl() == null) {
                         server.setEnabled(false);
                     } else {
                         server.setEnabled(true);
@@ -410,12 +376,9 @@ public abstract class AbstractModPackPane extends JPanel {
                         version.setSelectedItem(tempVer);
                     }
                     version.addActionListener(al);
-                }
-            } else {
-                packPanels.get(i).setBackground(UIManager.getColor("control"));
-                packPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
             }
-        }
+        //}
     }
 
     public void updateFilterText () {
@@ -435,14 +398,6 @@ public abstract class AbstractModPackPane extends JPanel {
         updateFilterText();
         filterPacks();
         LaunchFrame.getInstance().updateFooter();
-    }
-
-    int getIndex () {
-        if (packMapping.get(selectedPack) == null) {
-            return -1;
-        } else {
-            return packMapping.get(selectedPack);
-        }
     }
 
     public void updateLocale () {
@@ -484,9 +439,4 @@ public abstract class AbstractModPackPane extends JPanel {
     abstract boolean isFTB ();
 
     abstract AbstractModPackPane getThis ();
-
-    public int getSelectedPackIndex () {
-        return modPacksAdded ? getIndex() : -1;
-    }
-
 }

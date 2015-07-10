@@ -160,6 +160,13 @@ KILL_MC_TITLE = Закрыть Minecraft?
 KILL_MC_MESSAGE = Внимание! Это может вызвать повреждение сохранения и должно использоваться только при зависании игры!
 KILL_MC_CONFIRM = Вы уверены, что хотите закрыть процесс Minecraft?
 
+# Thread dump MC
+TD_MC = 
+TD_MC_TITLE = 
+TD_MC_MESSAGE = 
+TD_MC_CONFIRM = 
+TD_MC_FAIL_MESSAGE = 
+
 # Main
 MAIN_EXIT = ВЫХОД
 MAIN_APPLY = Применить

@@ -17,6 +17,7 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
 		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
+        classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
     }
 }
 
@@ -28,6 +29,7 @@ apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'launch4j'
 apply plugin: 'macAppBundle'
+apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
 
 configurations {
     deployerJars
@@ -46,14 +48,15 @@ dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.3.1'
-	compile 'com.mojang:authlib:1.5.17'
+    compile 'com.mojang:authlib:1.5.21'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
 	compile 'com.google.guava:guava:18.0'
-    compile 'com.beust:jcommander:1.30'
+    compile 'com.beust:jcommander:1.30' // TODO: update to 1.48 or higher as soon as we drop java 6 support
     compile 'com.google.code.findbugs:jsr305:1.3.9'//nonnull annotations
     compile 'org.tukaani:xz:1.5' // LZMA support
+    compile 'net.java.dev.jna:jna:4.1.0'
     //commons lang3 via authlib
     //commons io via authlib
     testCompile 'junit:junit:4.10'
@@ -62,7 +65,6 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4:1.6.0'
     testCompile 'org.powermock:powermock-api-mockito:1.6.0'
     testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.0'
-	deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
     deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
 }
 
@@ -91,10 +93,18 @@ processResources {
 }
 mainClassName = project.mainClass
 group = 'net.ftb'
-version = "1.4.6-${project.buildNum}"
+version = "1.4.8-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
+animalsniffer {
+    signature = "org.codehaus.mojo.signature:java16:+@signature"
+    // this probably does not ignore tests from net.ftb.j7.* It ignores tests with dependencies to net.ftb.j7.  @See @IgnoreJRERequirement if not working
+    ignores = ["net.ftb.j7"]
+
+}
+
 shadowJar  {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
@@ -187,18 +197,7 @@ if (project.hasProperty("local_maven")) {
         }
     }
 }
-if (project.hasProperty("remote_maven") && project.hasProperty("ftp_pass")) {
-    apply plugin: 'maven'
-    uploadArchives {
-        repositories.mavenDeployer {
-            configuration = configurations.deployerJars
-            repository(url: "ftp://${remote_maven}") {
-                authentication(userName: "${ftp_username}", password: "${ftp_pass}")
-            }
-        }
-    }
-}
-    if (project.hasProperty("remote_maven") && project.hasProperty("sftp_pass")) {
+if (project.hasProperty("remote_maven") && project.hasProperty("sftp_pass")) {
         apply plugin: 'maven'
         uploadArchives {
             repositories.mavenDeployer {

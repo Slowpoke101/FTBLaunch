@@ -73,6 +73,8 @@ public class DownloadUtils extends Thread {
             for (String server : downloadServers.values()) {
                 // TODO: should we return null or "" or raise Exception when getting 404 from  server? Otherwise it loops through all servers
                 if (connection.getResponseCode() != 200) {
+                    Logger.logDebug("failed");
+                    AppUtils.debugConnection(connection);
                     resolved = "http://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -104,6 +106,9 @@ public class DownloadUtils extends Thread {
             connection.setRequestMethod("HEAD");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
+                    Logger.logDebug("failed");
+                    // TODO: remove responseCode test later.
+                    AppUtils.debugConnection(connection, connection.getResponseCode()!=404);
                     resolved = "http://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -120,6 +125,11 @@ public class DownloadUtils extends Thread {
             return resolved;
         } else {
             Logger.logWarn("Using backupLink for " + file);
+            if (!file.contains("1.8")) {
+                // FTB hosts own version.json fails. If we are here something failed. Why?
+                Logger.logError("HEAD request for " + file + " failed. Please Send log to launcher team and provide your public IP address if possible.");
+                TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup", "HEAD_failed: " + file);
+        }
             return backupLink;
         }
     }
@@ -140,6 +150,8 @@ public class DownloadUtils extends Thread {
             if (connection.getResponseCode() != 200) {
                 for (String server : downloadServers.values()) {
                     if (connection.getResponseCode() != 200) {
+                        Logger.logDebug("failed");
+                        AppUtils.debugConnection(connection);
                         resolved = "http://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
                         connection.setRequestProperty(CACHE_CONTROL, "no-transform");
@@ -213,9 +225,9 @@ public class DownloadUtils extends Thread {
             if (!fullDebug) {
                 connection.setRequestMethod("HEAD");
             }
-            Logger.logInfo("CF-RAY: " + connection.getHeaderField("CF-RAY"));
+            Logger.logDebug("CF-RAY: " + connection.getHeaderField("CF-RAY"));
             if (fullDebug) {
-                Logger.logInfo("CF Debug Info: " + connection.getContent().toString());
+                Logger.logDebug("CF Debug Info: \n" + IOUtils.toString(connection.getInputStream()));
             }
             ret = connection.getResponseCode() == 200;
             IOUtils.close(connection);
@@ -240,6 +252,7 @@ public class DownloadUtils extends Thread {
      * @param file The file to save to.
      *
      * TODO: how to handle partial downloads? Old file is overwritten as soon as FileOutputStream is created.
+     *       how to handle headers? in some cases we want to print those and in other we don't
      */
     public static void downloadToFile (URL url, File file) throws IOException {
         file.getParentFile().mkdirs();
@@ -429,6 +442,9 @@ public class DownloadUtils extends Thread {
         boolean curseFailed = false;
         boolean creeperFailed = false;
         setName("DownloadUtils");
+        // test for proxies
+        OSUtils.getProxy(Locations.curseRepo);
+        OSUtils.getProxy(Locations.chRepo);
         if (!Locations.hasDLInitialized) {
             Benchmark.start("DlUtils");
             Logger.logDebug("DownloadUtils.run() starting");
@@ -469,7 +485,7 @@ public class DownloadUtils extends Thread {
                         if (jso != null && jso.get("chEnabled") != null) {
                             Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
                         }
-                        if (jso != null && jso.get("repoSplitCurse") != null) {
+                        if (jso != null && jso.get("repoSplitCurse") != null && Locations.chEnabled) {
                             JsonElement e = jso.get("repoSplitCurse");
                             Logger.logDebug("Balance Settings: " + e.getAsDouble() + " > " + choice);
                             if (e != null && e.getAsDouble() > choice) {

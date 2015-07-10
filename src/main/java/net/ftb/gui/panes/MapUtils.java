@@ -267,9 +267,9 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         sorted.put(1, new ArrayList<Map>());
         for (Map map : Map.getMapArray()) {
             if (originCheck(map) && compatibilityCheck(map) && textSearch(map)) {
-                if (map.isCompatible(ModPack.getSelectedPack(true).getName())) {
+                if (map.isCompatible(FTBPacksPane.getInstance().getSelectedPack().getName())) {
                     sorted.get(1).add(map);
-                } else if (map.isCompatible(ModPack.getSelectedPack(false).getName())) {
+                } else if (map.isCompatible(ThirdPartyPane.getInstance().getSelectedPack().getName())) {
                     sorted.get(1).add(map);
                 } else {
                     sorted.get(0).add(map);

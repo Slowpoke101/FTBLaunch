@@ -160,6 +160,13 @@ KILL_MC_TITLE = Minecraft töten?
 KILL_MC_MESSAGE = Warnung! Das kann Instanzen beschädigen und sollte nur benutzt werden, wenn das Spiel eingefroren ist!
 KILL_MC_CONFIRM = Bist du dir sicher, dass du den Minecraft-Prozess töten willst?
 
+# Thread dump MC
+TD_MC = 
+TD_MC_TITLE = 
+TD_MC_MESSAGE = 
+TD_MC_CONFIRM = 
+TD_MC_FAIL_MESSAGE = 
+
 # Main
 MAIN_EXIT = Schließen
 MAIN_APPLY = Annehmen

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class PackChangeEvent implements ILauncherEvent {
     public enum TYPE {
-        ADD, CHANGE, REMOVE
+        ADD, CHANGE, REMOVE, FILTER
     }
 
     @Getter

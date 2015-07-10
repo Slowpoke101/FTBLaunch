@@ -93,6 +93,26 @@ public class CommandLineSettings {
     @Getter
     private int manualBuildNumber = 0;
 
+    @Parameter(names = {"--disable-bitness-checks"}, description = "Disable JVM bitness check nagging screens")
+    @Getter
+    private boolean disableJVMBitnessCheck = false;
+
+    @Parameter(names = {"--disable-jvm-version-checks"}, description = "Disable JVM version check nagging screens")
+    @Getter
+    private boolean disableJVMVersionCheck = false;
+
+    @Parameter(names = {"--disable-installation-location-checks"}, description = "Disable installation location checks")
+    @Getter
+    private boolean disableInstallLocChecks = false;
+
+    @Parameter(names = {"--disable-mc-logging"}, description = "Disable MC logging")
+    @Getter
+    private boolean disableMCLogging = false;
+
+    @Parameter(names = {"--disable-news"}, description = "Disable contents of news pane")
+    @Getter
+    private boolean disableNews = false;
+
     public static class ValidateRequiredValue implements IParameterValidator {
         @Override
         public void validate (String name, String value) throws ParameterException {

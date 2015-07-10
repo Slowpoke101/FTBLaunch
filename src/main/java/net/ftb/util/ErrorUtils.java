@@ -85,7 +85,15 @@ public class ErrorUtils {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
     }
 
-    public static void showClickableMessage (String message, String url) {
+    /**
+     *
+     * @param message Message to show in dialog.
+     * @param severity
+     *
+     * HTML tag can be used to format and add links into message.
+     * &lt;html&gt; and &lt;body&gt; are automatic added
+     */
+    public static void showClickableMessage (String message, int severity) {
         JLabel l = new JLabel();
         Font font = l.getFont();
         StringBuilder html = new StringBuilder("");
@@ -93,10 +101,7 @@ public class ErrorUtils {
         html.append("<html><body style=\"" + "font-family:").append(font.getFamily()).append(";").append("font-weight:").append(font.isBold() ? "bold" : "normal").append(";").append("font-size:")
                 .append(font.getSize()).append("pt;").append("\">");
 
-        html.append(message).append(" ");
-        if (url != null) {
-            html.append("<br><a href=\"").append(url).append("\">").append(url).append("</a>");
-        }
+        html.append(message).append(" ").append("</html>");
 
         JEditorPane ep = new JEditorPane("text/html", html.toString());
         ep.addHyperlinkListener(new HyperlinkListener() {
@@ -108,6 +113,6 @@ public class ErrorUtils {
             }
         });
         ep.setEditable(false);
-        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep);
+        JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep, null, severity);
     }
 }

@@ -16,8 +16,11 @@
  */
 package net.ftb.util;
 
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 import lombok.Getter;
 import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
@@ -28,15 +31,11 @@ import java.awt.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.security.CodeSource;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.swing.text.html.StyleSheet;
 
@@ -54,6 +53,41 @@ public class OSUtils {
     private static byte[] hardwareID;
 
     private static UUID clientUUID;
+
+    public static Proxy getProxy (String url) {
+        // this is set explicitly with command line define or by our proxy setting
+        String system = System.getProperty("java.net.useSystemProxies");
+        // System-wide setting from java control panel or command line define
+        String socks = System.getProperty("socksProxyHost");
+
+        if (system != null && system.equals("true")) {
+            Logger.logDebug("Detected system proxy");
+        }
+        if (socks != null && !socks.isEmpty()) {
+            Logger.logDebug("Detected socks proxy");
+        }
+
+        java.util.List<Proxy> l = null;
+        try {
+            l = ProxySelector.getDefault().select(new URI(url));
+            if (l != null) {
+                for (Proxy p: l) {
+                    InetSocketAddress address = (InetSocketAddress) p.address();
+                    if (address == null) {
+                        Logger.logDebug("ProxySelector: type: " + p.type() + ", no proxy for " + url);
+                    } else {
+                        Logger.logDebug("ProxySelector: type: " + p.type() + ", for " + url);
+                    }
+                }
+                // correct? Can' decide without feedback
+                return l.get(0);
+            }
+        } catch (Exception e) {
+            Logger.logDebug("failed", e);
+        }
+        Logger.logWarn("Proxy was turned on but ProxySelector did not returned proxies for " + url);
+        return Proxy.NO_PROXY;
+    }
 
     public static enum OS {
         WINDOWS, UNIX, MACOSX, OTHER,
@@ -374,7 +408,7 @@ public class OSUtils {
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface network = networkInterfaces.nextElement();
                 byte[] mac = network.getHardwareAddress();
-                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint()) {
+                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint() && network.getName().substring(0,3) != "ham") {
                     Logger.logDebug("Interface: " + network.getDisplayName() + " : " + network.getName());
                     cachedMacAddress = new byte[mac.length * 10];
                     for (int i = 0; i < cachedMacAddress.length; i++) {
@@ -590,5 +624,90 @@ public class OSUtils {
         return u;
     }
 
+    /**
+     *
+     * @return pid of the running process. -1 if fail
+     */
+    public static long getPID () {
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        String pid = name.split("@")[0];
+        long numericpid = -1;
+        try {
+            numericpid = Long.parseLong(pid);
+        } catch (Exception e) {
+            numericpid = -1;
+            Logger.logDebug("failed", e);
+        }
+        return numericpid;
+    }
 
+    public static long getPID (Process process) {
+        // windows
+        if (process.getClass().getName().equals("java.lang.Win32Process") ||
+                process.getClass().getName().equals("java.lang.ProcessImpl")) {
+            long pid = -1;
+            try {
+                Field f = process.getClass().getDeclaredField("handle");
+                f.setAccessible(true);
+                pid = Kernel32.INSTANCE.GetProcessId((Long) f.get(process));
+
+            } catch (Exception e) {
+                pid = -1;
+                Logger.logDebug("failed", e);
+            }
+
+            return pid;
+        }
+
+        if (process.getClass().getName().equals("java.lang.UNIXProcess")) {
+        /* get the PID on unix/linux systems */
+            long pid = -1;
+            try {
+                Field f = process.getClass().getDeclaredField("pid");
+                f.setAccessible(true);
+                pid = f.getInt(process);
+
+            } catch (Throwable e) {
+                pid = -1;
+                Logger.logDebug("failed", e);
+            }
+            return pid;
+        }
+
+        Logger.logWarn("Unable to find getpid implementation");
+        return -1;
+    }
+
+    public static boolean genThreadDump(long pid) {
+        if (OSUtils.getCurrentOS()==OS.WINDOWS) {
+            // TODO: implement
+            Logger.logError("Not implemented yet / Might fail");
+            try {
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec(new String[] { "sendsignal.exe", Long.toString(pid) });
+            } catch (Exception e) {
+                Logger.logError("Failed. You need to install sendsignal.exe in your path to eanble this functionality");
+                Logger.logError("Failed", e);
+                return false;
+            }
+            return true;
+        } else if (OSUtils.getCurrentOS()==OS.UNIX || OSUtils.getCurrentOS()==OS.MACOSX) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(new String[] { "kill", "-3", Long.toString(pid) });
+            } catch (Exception e) {
+                Logger.logError("Failed", e);
+                return false;
+            }
+            return true;
+        } else {
+            Logger.logError("Unable to find genThreadDump implementation");
+            return false;
+        }
+    }
+
+    static interface Kernel32 extends Library {
+        public static Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
+        public int GetProcessId (Long hProcess);
+    }
 }

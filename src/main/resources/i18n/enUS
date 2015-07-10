@@ -10,9 +10,9 @@ LAUNCH_BUTTON = Launch
 PROFILE_CREATE = Create Profile
 PROFILE_SELECT = Select Profile
 DOWNLOAD_SERVER_PACK = Download Server ModPack
-WARN_32BIT_OS = 32-bit operating system. 64-bit is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.
-WARN_32BIT_JAVA = 32-bit Java in 64-bit operating system. 64-bit Java is required for most mod packs. If you have issues, please try the FTB Lite 2 pack.
-WARN_JAVA6 = Java 6 detected. Java 7 is recommended for most mod packs.
+WARN_32BIT_OS = Detected 32-bit operating system. <ul><li>64-bit operating system is required to use largest modpacks <li>Memory will be limited to 1 GB in 32-bit operating systems <li>If you have issues, please try the FTB Lite packs or other smaller packs.<li>Support channels can't help you with this problem. If you want to play newest/largest packs you need to use 64-bit operating system and java</ul>
+WARN_32BIT_JAVA = Detected 32-bit Java on 64-bit operating system. <ul><li>64-bit Java is required to use largest modpacks. <li>Memory will be limited to 1 GB with 32-bit Java <li>If you have issues, please try the FTB Lite packs or other smaller packs. <li>This problem can be fixed by downloading and installing 64-bit java from <a href="http://java.com/en/download/manual.jsp">Oracle's website.</a><li>After installing 64-bit java remember to increase memory allocation to 2-4 GB in options tab</ul>
+WARN_JAVA6 = Detected Java 6. <ul><li>Java 7 or newer is required to use newest modpacks. <li>This problem can be fixed by downloading and installing newer java from <a href="http://java.com/en/download/manual.jsp">Oracle's website.</a><li>If your operating system does not support java 7 or newer then you can NOT run newest packs</ul>
 
 # Console
 CONSOLE_TITLE = Console
@@ -159,6 +159,13 @@ KILL_MC = Kill Minecraft
 KILL_MC_TITLE = Kill Minecraft?
 KILL_MC_MESSAGE = Warning! This can cause corruption, and should only be used if the game is frozen!
 KILL_MC_CONFIRM = Are you sure you want to Kill the Minecraft Process?
+
+# Thread dump MC
+TD_MC = Generate Minecraft thread dump
+TD_MC_TITLE = Generate Minecraft thread dump?
+TD_MC_MESSAGE = <html>This will cause Minecraft to create thread dump.<br>Use this only if asked or if you know what are you doing.<br>Requires extra binary with Windows OS</html>
+TD_MC_CONFIRM = Are you sure you want to generate Minecraft thread dump?
+TD_MC_FAIL_MESSAGE = Thread dump generation failed! <ul><li>If you use Windows OS you need to download extra binary from <a href="https://github.com/walware/statet/raw/master/de.walware.statet.r.console.core/win32/x86_64/sendsignal.exe">GitHub. Click here!</a> Add binary into path<li>Consult log for more information if run other OS or have downloaded the binary</ul>
 
 # Main
 MAIN_EXIT = EXIT

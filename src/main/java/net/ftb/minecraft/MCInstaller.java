@@ -21,10 +21,7 @@ import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
-import net.ftb.data.LauncherStyle;
-import net.ftb.data.LoginResponse;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
@@ -37,13 +34,7 @@ import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
-import net.ftb.util.Benchmark;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.FTBFileUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.Parallel;
-import net.ftb.util.TrackerUtils;
+import net.ftb.util.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -423,13 +414,18 @@ public class MCInstaller {
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy);
             LaunchFrame.MCRunning = true;
-            if (LaunchFrame.con != null) {
-                LaunchFrame.con.minecraftStarted();
+
+            if (!CommandLineSettings.getSettings().isDisableMCLogging()) {
+                StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+                String[] ignore = { "Session ID is token" };
+                StreamLogger.setIgnore(ignore);
+                StreamLogger.doStart();
+            } else {
+                // stderr is combined with stdout
+                AppUtils.voidInputStream(minecraftProcess.getInputStream());
+                Logger.logWarn("Not logging MC messages via launcher!");
             }
-            StreamLogger.prepare(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
-            String[] ignore = { "Session ID is token" };
-            StreamLogger.setIgnore(ignore);
-            StreamLogger.doStart();
+            Logger.logDebug("MC PID: " + OSUtils.getPID(minecraftProcess));
             String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_");
             TrackerUtils.sendPageView(ModPack.getSelectedPack().getName(), "Launched / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
             try {
@@ -465,6 +461,9 @@ public class MCInstaller {
                         LaunchFrame.MCRunning = false;
                     }
                 }));
+                if (LaunchFrame.con != null) {
+                    LaunchFrame.con.minecraftStarted();
+                }
             }
         } catch (Exception e) {
             Logger.logError("Error while running launchMinecraft()", e);
@@ -479,16 +478,10 @@ public class MCInstaller {
         String installpath = Settings.getSettings().getInstallPath();
         String temppath = OSUtils.getCacheStorageLocation();
 
-        ModPack pack;
+        ModPack pack = ModPack.getSelectedPack();
         List<String> blacklist = Lists.newArrayList();
         if (!softUpdate) {
             blacklist.add("options.txt");
-        }
-
-        if (LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) {
-            pack = ModPack.getPack(LaunchFrame.getInstance().thirdPartyPane.getSelectedPackIndex());
-        } else {
-            pack = ModPack.getPack(LaunchFrame.getInstance().modPacksPane.getSelectedPackIndex());
         }
 
         String packDir = pack.getDir();
@@ -527,7 +520,21 @@ public class MCInstaller {
 
     private static void grabJava8CompatFix (Library.Artifact forgeArtifact, ModPack pack, String packmcversion, String installBase) {
         String fgVsn = forgeArtifact.getVersion();
-        int vsn_ = Integer.parseInt(fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1));
+        String fgRelease;
+        int vsn_ = 0;
+        int count = StringUtils.countMatches(fgVsn, "-");
+        if (count == 2) {
+            // forge > 1291 has three subsection, third section is name of the branch
+            // e.g. 1.7.10-10.13.2.1352-1.7.10 or
+            fgRelease = fgVsn.substring((StringUtils.indexOf(fgVsn, "-") + 1), (StringUtils.lastIndexOf(fgVsn, "-")));
+            fgRelease = fgRelease.substring(StringUtils.lastIndexOf(fgRelease, ".") + 1);
+            vsn_ = Integer.parseInt(fgRelease);
+        } else if (count == 1 || count == 0) {
+            // e.g. 1.7.10-10.13.2.1291 or 9.11.1.965
+            fgRelease = fgVsn.substring(StringUtils.lastIndexOf(fgVsn, ".") + 1);
+            vsn_ = Integer.parseInt(fgRelease);
+        }
+
         if (vsn_ >= Settings.getSettings().getMinJava8HackVsn() && vsn_ <= Settings.getSettings().getMaxJava8HackVsn()) {
             Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
             String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";

@@ -56,11 +56,11 @@ public class Locations {
     public static HashMap<String, String> backupServers = Maps.newHashMap();
 
     //Oracle Java Locations
-    public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97809";
-    public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97807";
-    public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97800";
+    public static final String java64Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=107100";
+    public static final String java32Win = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=106238";
+    public static final String java64Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=106240";
     public static final String java32Lin = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97798";
-    public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=97801";
+    public static final String jreMac = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=106241";
     public static final String jdkMac = "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html";
 
     // Forum and Feed URL
@@ -82,9 +82,12 @@ public class Locations {
 
     public static final String PIWIK = "http://stats.feed-the-beast.com/";
 
+    public static final String CURSEVOICE = "http://beta.cursevoice.com/games/minecraft";
+
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
     public static final String TUGLOGO = "/image/logo_TUG.png";
+    public static final String CURSELOGO = "/image/logo_curse.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";
     public static final String launcherLogFile = "FTBLauncherLog.txt";

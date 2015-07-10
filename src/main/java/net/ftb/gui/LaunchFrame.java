@@ -19,14 +19,7 @@ package net.ftb.gui;
 import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.CommandLineSettings;
-import net.ftb.data.Constants;
-import net.ftb.data.LauncherStyle;
-import net.ftb.data.LoginResponse;
-import net.ftb.data.Map;
-import net.ftb.data.ModPack;
-import net.ftb.data.Settings;
-import net.ftb.data.UserManager;
+import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -89,6 +82,7 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
+    private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CURSELOGO)));
     private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
@@ -113,6 +107,7 @@ public class LaunchFrame extends JFrame {
     public MapUtils mapsPane;
     public TexturepackPane tpPane;
     public OptionsPane optionsPane;
+    public int tab;
 
     public static TrayMenu trayMenu;
 
@@ -138,6 +133,7 @@ public class LaunchFrame extends JFrame {
      * Create the frame.
      */
     public LaunchFrame (final int tab) {
+        this.tab = tab;
         setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
         setResizable(true);
         setTitle(Constants.name + " v" + Constants.version);
@@ -185,6 +181,15 @@ public class LaunchFrame extends JFrame {
             @Override
             public void mouseClicked (MouseEvent event) {
                 OSUtils.browse("http://billing.creeperhost.net/link.php?id=2");
+            }
+        });
+
+        footerCurse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        footerCurse.setMinimumSize(new Dimension(118, 29));
+        footerCurse.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked (MouseEvent event) {
+                OSUtils.browse(Locations.CURSEVOICE);
             }
         });
 
@@ -336,6 +341,7 @@ public class LaunchFrame extends JFrame {
         logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         logoPanel.add(footerLogo);
         logoPanel.add(footerCreeper);
+        logoPanel.add(footerCurse);
         logoPanel.add(footerTUG);
 
         // Panel for the items in the bottom right
@@ -360,24 +366,26 @@ public class LaunchFrame extends JFrame {
         footer.add(logoPanel, BorderLayout.LINE_START);
         footer.add(buttonFooterPanel, BorderLayout.LINE_END);
 
-        newsPane = new NewsPane();
-        NewsWorker nw = new NewsWorker() {
-            @Override
-            protected void done () {
-                String html = null;
-                try {
-                    html = get();
-                }
-                catch (InterruptedException e) {
-                    Logger.logDebug("Swingworker Exception", e);
-                } catch (ExecutionException e) {
-                    Logger.logDebug("Swingworker Exception", e.getCause());
-                }
 
-                newsPane.setContent(html);
-            }
-        };
-        nw.execute();
+        newsPane = new NewsPane();
+        if (!CommandLineSettings.getSettings().isDisableNews()) {
+            NewsWorker nw = new NewsWorker() {
+                @Override
+                protected void done () {
+                    String html = null;
+                    try {
+                        html = get();
+                    } catch (InterruptedException e) {
+                        Logger.logDebug("Swingworker Exception", e);
+                    } catch (ExecutionException e) {
+                        Logger.logDebug("Swingworker Exception", e.getCause());
+                    }
+
+                    newsPane.setContent(html);
+                }
+            };
+            nw.execute();
+        }
         modPacksPane = new FTBPacksPane();
         thirdPartyPane = new ThirdPartyPane();
         mapsPane = new MapUtils();
@@ -420,7 +428,6 @@ public class LaunchFrame extends JFrame {
                 }
             }
         });
-        tabbedPane.setSelectedIndex(tab);
 
         panel.addComponentListener(new ComponentAdapter() {
             // Reset splitter on window resize to avoid being in an unreachable location
@@ -438,14 +445,43 @@ public class LaunchFrame extends JFrame {
     public static void checkDoneLoading () {
         int callCount = checkDoneLoadingCallCount.incrementAndGet();
         if (callCount == 1) {
+            Benchmark.start("Waiting for main window");
+            while (LaunchFrame.instance == null) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {}
+            }
+            Benchmark.logBench("Waiting for main window");
+
             SwingUtilities.invokeLater(new Runnable() {
                 public void run () {
                     LoadingDialog.advance("Opening main window");
+                    Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+
+                    // set last run packs active
+                    Logger.logDebug("Last used packs: " + Settings.getSettings().getLastFTBPack() + " " + Settings.getSettings().getLastThirdPartyPack());
+                    FTBPacksPane.getInstance().setSelectedPack(ModPack.getPack(Settings.getSettings().getLastFTBPack()));
+                    ThirdPartyPane.getInstance().setSelectedPack(ModPack.getPack(Settings.getSettings().getLastThirdPartyPack()));
+                    // update panes
+                    FTBPacksPane.getInstance().filterPacks();
+                    ThirdPartyPane.getInstance().filterPacks();
+
+                    // indicate things are ready to use
+                    FTBPacksPane.getInstance().loaded = true;
+                    ThirdPartyPane.getInstance().loaded = true;
+
+                    // ugly hacks which does not even work
+                    // TODO: someone: how to fix this?
+                    //FTBPacksPane.getInstance().getPacksScroll().getViewport().setViewPosition(new Point(0, 0));
+                    instance.tabbedPane.setSelectedIndex(instance.tab);
+
                     instance.setVisible(true);
                     instance.toFront();
+
                     //TODO: add checks if loader is disabled
                     loader.setVisible(false);
                     loader.dispose();
+
                     Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
                     String packDir = CommandLineSettings.getSettings().getPackDir();
                     if (packDir != null) {
@@ -454,9 +490,13 @@ public class LaunchFrame extends JFrame {
                     }
                 }
             });
-            Benchmark.logBenchAs("main", "Launcher Startup(Modpacks loaded)");
+            Map.loadAll();
+            TexturePack.loadAll();
         }
         if (callCount == 2) {
+            Benchmark.logBenchAs("main", "Launcher Startup(maps or texturepacks loaded)");
+        }
+        if (callCount == 3) {
             Benchmark.logBenchAs("main", "Launcher Startup(maps and texturepacks loaded)");
         }
     }
@@ -580,6 +620,8 @@ public class LaunchFrame extends JFrame {
         String onlineVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? pack
                 .getVersion() : Settings.getSettings().getPackVer();
 
+        Logger.logDebug("verFile: " + storedVersion + " onlineVersion/getPackVer(): " + Settings.getSettings().getPackVer() + " onlineVersion/getVersion(): " + pack.getVersion());
+
         if (storedVersion.isEmpty()) {
             // Always allow updates from a version that isn't installed at all
             allowVersionChange = true;
@@ -694,7 +736,7 @@ public class LaunchFrame extends JFrame {
         }
         //TODO:
         // Decide later if we want to do this? How to handle selection from two modpack panes?
-        tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getNameWithVersion());
+        //tpInstallLocation.setSelectedItem(ModPack.getSelectedPack(true).getNameWithVersion());
     }
 
     /**
@@ -883,6 +925,15 @@ public class LaunchFrame extends JFrame {
     public void doLaunch () {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         ModPack pack = ModPack.getSelectedPack();
+
+        // save ´pack being launched
+        if (instance.currentPane == Panes.MODPACK) {
+            Settings.getSettings().setLastFTBPack(FTBPacksPane.getInstance().getSelectedPack().getDir());
+        } else {
+            Settings.getSettings().setLastThirdPartyPack(ThirdPartyPane.getInstance().getSelectedPack().getDir());
+        }
+        saveSettings();
+
         // check launcher version
         if (ModPack.getSelectedPack().getMinLaunchSpec() > Constants.buildNumber) {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
@@ -903,9 +954,6 @@ public class LaunchFrame extends JFrame {
         // check selected java is at least version specified in pack's XML
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
         if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
-            Settings.getSettings().setLastFTBPack(ModPack.getSelectedPack(true).getDir());
-            Settings.getSettings().setLastThirdPartyPack(ModPack.getSelectedPack(false).getDir());
-            saveSettings();
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough
