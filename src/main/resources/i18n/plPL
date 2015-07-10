@@ -161,11 +161,11 @@ KILL_MC_MESSAGE = Uwaga! To może spowodować uszkodzenia, używaj tylko jeśli 
 KILL_MC_CONFIRM = Czy jesteś pewien że chcesz zabić proces Minecraft'a?
 
 # Thread dump MC
-TD_MC = 
-TD_MC_TITLE = 
-TD_MC_MESSAGE = 
-TD_MC_CONFIRM = 
-TD_MC_FAIL_MESSAGE = 
+TD_MC              = Wygeneruj zrzut wątku Minecraft'a
+TD_MC_TITLE        = Wygenerować zrzut wątku Minecrafta'a?
+TD_MC_MESSAGE      = <html>To spowoduje utworzenie zrzutu wątku Minecrafta.<br>Użyj tego tylko jeśli zostałeś o to poproszony lub wiesz co robisz.<br>Wymaga dodatkowego pliku binarnego w systemie Windows</html>
+TD_MC_CONFIRM      = Jesteś pewny że chcesz utworzyć zrzut wtąku Minecraft'a?
+TD_MC_FAIL_MESSAGE = Nie powiodło się utorzenie zrzutu wątku! <ul><li>Jeżeli urzywasz systemu Windows, musisz pobrać dodatkowy plik binarny z: <a href="https://github.com/walware/statet/raw/master/de.walware.statet.r.console.core/win32/x86_64/sendsignal.exe">GitHub. Kliknij tutaj!</a> Dodaj plik binarny do ścieżki<li>Zapoznaj się z logiem jeżeli posiadasz inny system lub jeżeli pobrałeś plik binarny</ul>
 
 # Main
 MAIN_EXIT = Zamknij
