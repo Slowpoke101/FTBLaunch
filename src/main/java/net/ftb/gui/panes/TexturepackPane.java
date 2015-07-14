@@ -247,14 +247,16 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         int counter = 0;
         selectedTexturePack = 0;
         texturePacks.repaint();
+        ModPack FTBPack = FTBPacksPane.getInstance().getSelectedPack();
+        ModPack ThirdpartyPack = ThirdPartyPane.getInstance().getSelectedPack();
         HashMap<Integer, List<TexturePack>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<TexturePack>());
         sorted.put(1, new ArrayList<TexturePack>());
         for (TexturePack texturePack : TexturePack.getTexturePackArray()) {
             if (compatibilityCheck(texturePack) && resolutionCheck(texturePack) && textSearch(texturePack)) {
-                if (texturePack.isCompatible(FTBPacksPane.getInstance().getSelectedPack().getName())) {
+                if (FTBPack != null && texturePack.isCompatible(FTBPack.getName())) {
                     sorted.get(1).add(texturePack);
-                } else if (texturePack.isCompatible(ThirdPartyPane.getInstance().getName())) {
+                } else if (ThirdpartyPack != null &&texturePack.isCompatible(ThirdpartyPack.getName())) {
                     sorted.get(1).add(texturePack);
                 } else {
                     sorted.get(0).add(texturePack);

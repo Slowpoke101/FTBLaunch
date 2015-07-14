@@ -262,14 +262,16 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         maps.repaint();
         LaunchFrame.updateMapInstallLocs(new String[] { "" });
         mapInfo.setText("");
+        ModPack FTBPack = FTBPacksPane.getInstance().getSelectedPack();
+        ModPack ThirdpartyPack = ThirdPartyPane.getInstance().getSelectedPack();
         HashMap<Integer, List<Map>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<Map>());
         sorted.put(1, new ArrayList<Map>());
         for (Map map : Map.getMapArray()) {
             if (originCheck(map) && compatibilityCheck(map) && textSearch(map)) {
-                if (map.isCompatible(FTBPacksPane.getInstance().getSelectedPack().getName())) {
+                if (FTBPack != null && map.isCompatible(FTBPack.getName())) {
                     sorted.get(1).add(map);
-                } else if (map.isCompatible(ThirdPartyPane.getInstance().getSelectedPack().getName())) {
+                } else if (ThirdpartyPack != null && map.isCompatible(ThirdpartyPack.getName())) {
                     sorted.get(1).add(map);
                 } else {
                     sorted.get(0).add(map);
