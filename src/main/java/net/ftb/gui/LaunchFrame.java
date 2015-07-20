@@ -83,7 +83,6 @@ public class LaunchFrame extends JFrame {
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
     private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CURSELOGO)));
-    private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     @Getter
     private final JButton launch = new JButton(), edit = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(),
@@ -190,15 +189,6 @@ public class LaunchFrame extends JFrame {
             @Override
             public void mouseClicked (MouseEvent event) {
                 OSUtils.browse(Locations.CURSEVOICE);
-            }
-        });
-
-        footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerTUG.setMinimumSize(new Dimension(132, 42));
-        footerTUG.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked (MouseEvent event) {
-                OSUtils.browse("http://feed-the-beast.com/tug");
             }
         });
 
@@ -342,7 +332,6 @@ public class LaunchFrame extends JFrame {
         logoPanel.add(footerLogo);
         logoPanel.add(footerCreeper);
         logoPanel.add(footerCurse);
-        logoPanel.add(footerTUG);
 
         // Panel for the items in the bottom right
         JPanel buttonFooterPanel = new JPanel();
