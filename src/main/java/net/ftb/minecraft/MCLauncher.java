@@ -77,7 +77,7 @@ public class MCLauncher {
         cpb.deleteCharAt(0);
 
         if (isLegacy) {
-            setupLegacyStuff(gameDirectory, Locations.FORGENAME);
+            setupLegacyStuff(gameDirectory, Locations.FORGENAME, version);
         }
         //Logger.logInfo("ClassPath: " + cpb.toString());
 
@@ -363,13 +363,20 @@ public class MCLauncher {
         }
     }
 
-    public static void setupLegacyStuff (String workingDir, String forgename) {
+    public static void setupLegacyStuff (String workingDir, String forgename, String mcVersion) {
         File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
         //jarmods are added inside the wrapper
 
-        cpb.append(OSUtils.getJavaDelimiter());
-        cpb.append(new File(instModsDir, forgename).getAbsolutePath());
-        cpb.append(new File(new File(workingDir, "bin"), Locations.OLDMCJARNAME).getAbsolutePath());
+        // false: basically old code
+        // true: correct code, fixes beta a but breaks retro smp/ssp
+
+        if (mcVersion.equals("1.4.2")) {
+            cpb.append(OSUtils.getJavaDelimiter());
+            cpb.append(new File(instModsDir, forgename).getAbsolutePath());
+
+            cpb.append(OSUtils.getJavaDelimiter());
+            cpb.append(new File(new File(workingDir, "bin"), Locations.OLDMCJARNAME).getAbsolutePath());
+        }
         File libsDir = new File(workingDir, "lib/");
         if (libsDir.isDirectory()) {
             String[] files = libsDir.list();
