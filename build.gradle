@@ -14,9 +14,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
-		classpath 'edu.sc.seis.gradle:macappbundle:2.0.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'edu.sc.seis.gradle:macappbundle:2.1.1'
         classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
     }
 }
@@ -93,7 +93,7 @@ processResources {
 }
 mainClassName = project.mainClass
 group = 'net.ftb'
-version = "1.4.8-${project.buildNum}"
+version = "1.4.9-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
