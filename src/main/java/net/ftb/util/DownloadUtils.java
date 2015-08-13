@@ -103,7 +103,7 @@ public class DownloadUtils extends Thread {
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
             connection.setRequestProperty(CACHE_CONTROL, "no-transform");
-            connection.setRequestMethod("HEAD");
+            connection.setRequestMethod("GET");
             for (String server : downloadServers.values()) {
                 if (connection.getResponseCode() != 200) {
                     Logger.logDebug("failed");
@@ -127,8 +127,8 @@ public class DownloadUtils extends Thread {
             Logger.logWarn("Using backupLink for " + file);
             if (!file.contains("1.8")) {
                 // FTB hosts own version.json fails. If we are here something failed. Why?
-                Logger.logError("HEAD request for " + file + " failed. Please Send log to launcher team and provide your public IP address if possible.");
-                TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup", "HEAD_failed: " + file);
+                Logger.logError("GET request for " + file + " failed. Please Send log to launcher team and provide your public IP address if possible.");
+                TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup", "GET_failed: " + file);
         }
             return backupLink;
         }

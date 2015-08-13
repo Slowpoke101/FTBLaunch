@@ -188,6 +188,9 @@ public class AppUtils {
             Logger.logDebug("Response code: " + responseCode);
             Logger.logDebug("Headers:\n" + AppUtils.MapListToString(conn.getHeaderFields()));
             Logger.logDebug("Message body\n" + AppUtils.ConnectionToString(conn));
+            if (conn.getURL().toString().contains("ftb.cursecdn.com")) {
+                DownloadUtils.CloudFlareInspector("http://ftb.cursecdn.com/", true);
+            }
         }
     }
 
