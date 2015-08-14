@@ -943,6 +943,8 @@ public class LaunchFrame extends JFrame {
         // check selected java is at least version specified in pack's XML
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
         if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
+            Logger.logDebug("Selected user: saved password: " + (UserManager.getPassword(users.getSelectedItem().toString()).length() > 0));
+            Logger.logDebug("Selected user: will save auth token if online: " + UserManager.getSaveMojangData(users.getSelectedItem().toString()));
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),
                     UserManager.getMojangData(users.getSelectedItem().toString()), UserManager.getName(users.getSelectedItem().toString()));
         } else {//user can't run pack-- JRE not high enough
