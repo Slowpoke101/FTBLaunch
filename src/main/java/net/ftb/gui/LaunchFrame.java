@@ -118,7 +118,6 @@ public class LaunchFrame extends JFrame {
     private JPanel footer = new JPanel();
     private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource(Locations.FTBLOGO)));
     private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CHLOGO)));
-    private JLabel footerTUG = new JLabel(new ImageIcon(this.getClass().getResource(Locations.TUGLOGO)));
     private JLabel footerCurse = new JLabel(new ImageIcon(this.getClass().getResource(Locations.CURSELOGO)));
     private JLabel tpInstallLocLbl = new JLabel();
     private boolean tpEnabled = true;
@@ -177,14 +176,6 @@ public class LaunchFrame extends JFrame {
             }
         });
 
-        footerTUG.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        footerTUG.setMinimumSize(new Dimension(132, 42));
-        footerTUG.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked (MouseEvent event) {
-                OSUtils.browse("http://feed-the-beast.com/tug");
-            }
-        });
 
         dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
         dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
@@ -252,7 +243,6 @@ public class LaunchFrame extends JFrame {
         logoPanel.setBackground(LauncherStyle.getCurrentStyle().footerColor);
         logoPanel.add(footerLogo);
         logoPanel.add(footerCreeper);
-        logoPanel.add(footerTUG);
         logoPanel.add(footerCurse);
 
         // Panel for the items in the bottom right
@@ -456,7 +446,10 @@ public class LaunchFrame extends JFrame {
                         iti.setImage(LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png")).getImage());
                         LaunchFrame.getInstance().tabbedPane.setIconAt(0, iti);
                     } else {
-                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
+                        ImageAndTextIcon iti = new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news.png"), Integer.toString(1));
+                        iti.setImage(LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png")).getImage());
+                        LaunchFrame.getInstance().tabbedPane.setIconAt(0, iti);
+                        //LaunchFrame.getInstance().tabbedPane.setIconAt(0, LauncherStyle.getCurrentStyle().filterHeaderIcon(this.getClass().getResource("/image/tabs/news.png")));
                     }
                 } catch (InterruptedException e) {
                 } catch (ExecutionException e) {
@@ -620,7 +613,7 @@ public class LaunchFrame extends JFrame {
 
         File verFile = new File(installPath, pack.getDir() + File.separator + "version");
         File hash = new File(installPath, pack.getDir() + File.separator + "hash");
-        if (pack.getDir().equalsIgnoreCase("PaxSouth2015Map")) {
+        if (pack.getDir().equalsIgnoreCase("PaxPrime2015Map")) {
             if (hash.exists()) {
                 try {
                     String hashLocal = FileUtils.readFileToString(hash);
@@ -642,7 +635,7 @@ public class LaunchFrame extends JFrame {
 
                 }
             }
-
+        }
             if (Settings.getSettings().isForceUpdateEnabled() && verFile.exists()) {
                 verFile.delete();
                 Logger.logDebug("Pack found and delete attempted");
@@ -677,7 +670,6 @@ public class LaunchFrame extends JFrame {
                 isLegacy = false;
             }
             MCInstaller.setupNewStyle(installPath, pack, isLegacy, RESPONSE);
-        }
     }
 
     /**
