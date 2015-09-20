@@ -134,11 +134,15 @@ public class AuthlibHelper {
                     ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com");
                     return null;
                 } catch (AuthenticationException e) {
-                    Logger.logError("Unknown error from authlib:", e);
+                    Logger.logDebug("Unknown error from authlib:", e);
                     Logger.logDebug("AuthenticationException caused by", e.getCause());
+                    ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com.");
+                    return null;
                 } catch (Exception e) {
-                    Logger.logError("Unknown error from authlib: ", e);
+                    Logger.logDebug("Unknown error from authlib: ", e);
                     Logger.logDebug("Exception caused by", e.getCause());
+                    ErrorUtils.tossError("Minecraft authentication servers might be down. Check @ help.mojang.com");
+                    return null;
                 }
             } else {
                 Logger.logDebug("authentication.canLogIn() returned false");
