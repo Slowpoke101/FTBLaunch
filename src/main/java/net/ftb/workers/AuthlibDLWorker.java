@@ -21,18 +21,17 @@ import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
+import net.ftb.util.SSLUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLConnection;
+import java.net.*;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLException;
 import javax.swing.*;
 
 /**
@@ -114,9 +113,10 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[1];
         String hash = "";
+        HttpsURLConnection conn = null;
         for (int i = 0; i < 1; i++) {
             try {
-                HttpURLConnection conn = (HttpURLConnection) jarURLs.openConnection();
+                conn = (HttpsURLConnection) jarURLs.openConnection();
                 conn.setRequestProperty("Cache-Control", "no-transform");
                 conn.setRequestMethod("HEAD");
                 conn.connect();
@@ -124,6 +124,17 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
                 fileSizes[i] = conn.getContentLength();
                 conn.disconnect();
                 totalDownloadSize += fileSizes[i];
+
+                //SSLUtils.printServerCertChain("libraries.minecraft.net", 443);
+            } catch (SSLException e) {
+                Logger.logWarn("Authlib checksum download failed, please check log for bad SSL certificates", e);
+                SSLUtils.printServerCertChain("libraries.minecraft.net", 443);
+                return false;
+            } catch (SocketException e) {
+                Logger.logWarn("Generic socket exception", e);
+                Logger.logDebug("Trying to fetch cert chain");
+                SSLUtils.printServerCertChain("libraries.minecraft.net", 443);
+                return false;
             } catch (Exception e) {
                 Logger.logWarn("Authlib checksum download failed", e);
                 return false;
