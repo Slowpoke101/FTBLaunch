@@ -1,3 +1,28 @@
+/*
+ * This file is part of FTB Launcher.
+ *
+ * Copyright © 2015, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
+ * FTB Launcher is licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * Original code from http://nodsw.com/blog/leeland/2006/12/06-no-more-unable-find-valid-certification-path-requested-target
+ * Java 7 fix from http://infposs.blogspot.fi/2013/06/installcert-and-java-7.html
+ *
+ * Adapted code for FTB launcher: removed keychain modification, added more error handling and using launcher's logging system
+ */
+
+
 package net.ftb.util;
 
 import net.ftb.log.Logger;
@@ -12,8 +37,6 @@ import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-// source for certificate fetcher: http://infposs.blogspot.fi/2013/06/installcert-and-java-7.html
 
 public class SSLUtils {
 
