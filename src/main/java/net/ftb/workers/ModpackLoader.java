@@ -64,7 +64,10 @@ public class ModpackLoader extends Thread {
 
         executor.shutdown();
         try {
-            executor.awaitTermination(60, TimeUnit.SECONDS);
+            // 256 kbps connection speed uses ~280 seconds. Double that and warn user if initial pack data download fails
+            if (!executor.awaitTermination(10*60, TimeUnit.SECONDS)) {
+                Logger.logWarn("Impartial Modpack information. Please restart launcher to continue download");
+            }
         } catch (InterruptedException e) {
             Logger.logError("failed", e);
         }
@@ -142,6 +145,7 @@ public class ModpackLoader extends Thread {
                         if (modPackAttr.getNamedItem("author") != null) {
                             isThirdParty = !modPackAttr.getNamedItem("author").getTextContent().equalsIgnoreCase("the ftb team");
                         }
+                        Logger.logDebug("Adding pack " + (offset + i)  + " (" + modPackAttr.getNamedItem("name").getTextContent() + ")");
                         mp.add(new ModPack(modPackAttr.getNamedItem("name").getTextContent(), modPackAttr.getNamedItem("author").getTextContent(), modPackAttr.getNamedItem("version")
                                 .getTextContent(), modPackAttr.getNamedItem("logo").getTextContent(), modPackAttr.getNamedItem("url").getTextContent(), modPackAttr.getNamedItem("image")
                                 .getTextContent(), modPackAttr.getNamedItem("dir").getTextContent(), modPackAttr.getNamedItem("mcVersion").getTextContent(), modPackAttr.getNamedItem("serverPack")
