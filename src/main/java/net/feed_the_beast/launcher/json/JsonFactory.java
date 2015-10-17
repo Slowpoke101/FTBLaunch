@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.launcher.RetiredPacks;
 import net.feed_the_beast.launcher.json.launcher.Update;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
@@ -46,6 +47,13 @@ public class JsonFactory {
         builder.enableComplexMapKeySerialization();
         builder.setPrettyPrinting();
         GSON = builder.create();
+    }
+
+    public static RetiredPacks getRetiredPacks (File json) throws JsonSyntaxException, JsonIOException, IOException {
+        FileReader reader = new FileReader(json);
+        RetiredPacks packs = GSON.fromJson(reader, RetiredPacks.class);
+        reader.close();
+        return packs;
     }
 
     public static Version loadVersion (File json) throws JsonSyntaxException, JsonIOException, IOException {
