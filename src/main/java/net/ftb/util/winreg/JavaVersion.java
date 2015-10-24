@@ -1,6 +1,7 @@
 package net.ftb.util.winreg;
 
 import lombok.Getter;
+import net.ftb.log.Logger;
 import net.ftb.util.ComparableVersion;
 
 import java.util.Comparator;
@@ -9,7 +10,7 @@ public class JavaVersion {
     public ComparableVersion comparableVersion;
     public String origVersion;
     @Getter
-    protected int major, minor, revision, update;
+    protected int major=-1, minor=-1, revision=-1, update=-1;
 
     public static JavaVersion createJavaVersion (String version) {
         try {
@@ -42,10 +43,14 @@ public class JavaVersion {
 
     private void parseVersionString () {
         String[] s = this.origVersion.split("[._-]");
-        this.major = Integer.parseInt(s[0]);
-        this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
-        this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
-        this.update = s.length > 3 ? Integer.parseInt(s[3]) : 0;
+        try {
+            this.major = Integer.parseInt(s[0]);
+            this.minor = s.length > 1 ? Integer.parseInt(s[1]) : 0;
+            this.revision = s.length > 2 ? Integer.parseInt(s[2]) : 0;
+            this.update = s.length > 3 ? Integer.parseInt(s[3]) : 0;
+        } catch (NumberFormatException e) {
+            Logger.logDebug("failed", e);
+        }
     }
 
     /**
