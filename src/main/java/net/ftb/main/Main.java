@@ -54,6 +54,7 @@ import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.AuthlibDLWorker;
+import net.ftb.workers.RetiredPacksLoader;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -338,6 +339,15 @@ public class Main {
         LoadingDialog.advance("Loading user data");
 
         ModPack.loadXml(getXmls());
+
+        // not good location for this. Loader must wait until other packs are loaded....
+        try {
+            RetiredPacksLoader retiredPacksLoader = new RetiredPacksLoader(new URL(Locations.masterRepo + "/FTB2/static/hiddenpacks.json"),
+                    OSUtils.getCacheStorageLocation(), Settings.getSettings().getInstallPath());
+            retiredPacksLoader.start();
+        } catch (Exception e) {
+            Logger.logDebug("RetiredPacksLoader failed", e);
+        }
 
         // Store this in the cache (local) storage, since it's machine specific.
         userManager = new UserManager(new File(OSUtils.getCacheStorageLocation(), "logindata"), new File(OSUtils.getDynamicStorageLocation(), "logindata"));

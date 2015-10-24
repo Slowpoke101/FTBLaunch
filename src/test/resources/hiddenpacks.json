@@ -1,0 +1,12 @@
+{
+  "mapping": {
+    "local_directory": "pack_code",
+    "LapitosGalacticraft": "LapitosGalacticraft",
+    "InfamyDynamicWarfare": "Infamy",
+    "Voxel": "Voxel",
+    "NewWorldModPack": "NewWorldModPack",
+    "divinerpg": "RPGImmersion", 
+    "VoxelModPack": "VoxelModPack",
+    "MagicFarm": "MagicFarm"
+  }
+}
