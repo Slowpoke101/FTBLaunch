@@ -643,8 +643,8 @@ public class OSUtils {
 
     public static long getPID (Process process) {
         // windows
-        if (process.getClass().getName().equals("java.lang.Win32Process") ||
-                process.getClass().getName().equals("java.lang.ProcessImpl")) {
+        if (getCurrentOS()==OS.WINDOWS && (process.getClass().getName().equals("java.lang.Win32Process") ||
+                process.getClass().getName().equals("java.lang.ProcessImpl"))) {
             long pid = -1;
             try {
                 Field f = process.getClass().getDeclaredField("handle");
@@ -659,7 +659,9 @@ public class OSUtils {
             return pid;
         }
 
-        if (process.getClass().getName().equals("java.lang.UNIXProcess")) {
+        // java 9 removes java.lang.UNIXProcess and uses revised java.lang.ProcessImple which includes field pid
+        // http://openjdk.java.net/jeps/102
+        if (process.getClass().getName().equals("java.lang.UNIXProcess") || process.getClass().getName().equals("java.lang.ProcessImpl")) {
         /* get the PID on unix/linux systems */
             long pid = -1;
             try {
