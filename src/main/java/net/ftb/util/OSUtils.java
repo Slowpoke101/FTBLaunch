@@ -708,6 +708,17 @@ public class OSUtils {
         }
     }
 
+    public static void printGPUinformation() {
+        if (getCurrentOS() == OS.WINDOWS) {
+            String result = RuntimeStreamer.execute(new String[] { "wmic", "path", "win32_VideoController",
+                    "get", "description,adapterRAM,driverDate,DriverVersion,InstalledDisplayDrivers"
+            });
+            Logger.logDebug("GPU information:\n" + result.replace("\n\n", "\n").trim().replaceAll("[ ]*\n", "\n"));
+        } else {
+            // not implemented yet
+        }
+    }
+
     static interface Kernel32 extends Library {
         public static Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("kernel32", Kernel32.class);
         public int GetProcessId (Long hProcess);
