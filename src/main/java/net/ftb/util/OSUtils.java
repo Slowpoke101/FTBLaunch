@@ -682,8 +682,34 @@ public class OSUtils {
 
     public static boolean genThreadDump(long pid) {
         if (OSUtils.getCurrentOS()==OS.WINDOWS) {
-            // TODO: implement
-            Logger.logError("Not implemented yet / Might fail");
+            File directory = null;
+            File sendsignal = null;
+            try {
+                directory = new File(OSUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+            } catch (Exception e) {
+                Logger.logDebug("failed" , e);
+            }
+
+            if (directory != null && directory.exists() && directory.isDirectory()) {
+                sendsignal = new File(directory, "sendsignal.exe");
+                if (!sendsignal.exists()) {
+                    // try to download file automatically
+                    try {
+                        Logger.logInfo("Downloading sendsignal.exe");
+                        String address;
+                        if (is64BitOS()) {
+                            address = DownloadUtils.getCreeperhostLink("launcher/tools/sendsignal.exe ");
+                        } else {
+                            address = DownloadUtils.getCreeperhostLink("launcher/tools/sendsignal32.exe ");
+                        }
+                        DownloadUtils.downloadToFile(sendsignal.getCanonicalPath(), address);
+                    } catch (Exception e) {
+                        Logger.logDebug("failed" , e);
+                    }
+                }
+            }
+
+            // Now file is downloaded by the launcher or user. Try to run sendsignal.exe from %path% or %cd%
             try {
                 Runtime runtime = Runtime.getRuntime();
                 runtime.exec(new String[] { "sendsignal.exe", Long.toString(pid) });
