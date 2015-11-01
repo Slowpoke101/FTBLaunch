@@ -47,6 +47,7 @@ public class MainHelpers {
         Logger.logInfo("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " (" + (OSUtils.is64BitOS() ? "64-bit" : "32-bit") + ")");
         Logger.logInfo("Launcher Install Dir: " + Settings.getSettings().getInstallPath());
         Logger.logInfo("System memory: " + OSUtils.getOSFreeMemory() + "M free, " + OSUtils.getOSTotalMemory() + "M total");
+        OSUtils.printGPUinformation();
 
         //hack: I want to trigger JavaFinder here:
         String selectedJavaPath = Settings.getSettings().getJavaPath();

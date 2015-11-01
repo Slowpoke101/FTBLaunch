@@ -643,8 +643,8 @@ public class OSUtils {
 
     public static long getPID (Process process) {
         // windows
-        if (process.getClass().getName().equals("java.lang.Win32Process") ||
-                process.getClass().getName().equals("java.lang.ProcessImpl")) {
+        if (getCurrentOS()==OS.WINDOWS && (process.getClass().getName().equals("java.lang.Win32Process") ||
+                process.getClass().getName().equals("java.lang.ProcessImpl"))) {
             long pid = -1;
             try {
                 Field f = process.getClass().getDeclaredField("handle");
@@ -659,7 +659,9 @@ public class OSUtils {
             return pid;
         }
 
-        if (process.getClass().getName().equals("java.lang.UNIXProcess")) {
+        // java 9 removes java.lang.UNIXProcess and uses revised java.lang.ProcessImple which includes field pid
+        // http://openjdk.java.net/jeps/102
+        if (process.getClass().getName().equals("java.lang.UNIXProcess") || process.getClass().getName().equals("java.lang.ProcessImpl")) {
         /* get the PID on unix/linux systems */
             long pid = -1;
             try {
@@ -680,8 +682,34 @@ public class OSUtils {
 
     public static boolean genThreadDump(long pid) {
         if (OSUtils.getCurrentOS()==OS.WINDOWS) {
-            // TODO: implement
-            Logger.logError("Not implemented yet / Might fail");
+            File directory = null;
+            File sendsignal = null;
+            try {
+                directory = new File(OSUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
+            } catch (Exception e) {
+                Logger.logDebug("failed" , e);
+            }
+
+            if (directory != null && directory.exists() && directory.isDirectory()) {
+                sendsignal = new File(directory, "sendsignal.exe");
+                if (!sendsignal.exists()) {
+                    // try to download file automatically
+                    try {
+                        Logger.logInfo("Downloading sendsignal.exe");
+                        String address;
+                        if (is64BitOS()) {
+                            address = DownloadUtils.getCreeperhostLink("launcher/tools/sendsignal.exe ");
+                        } else {
+                            address = DownloadUtils.getCreeperhostLink("launcher/tools/sendsignal32.exe ");
+                        }
+                        DownloadUtils.downloadToFile(sendsignal.getCanonicalPath(), address);
+                    } catch (Exception e) {
+                        Logger.logDebug("failed" , e);
+                    }
+                }
+            }
+
+            // Now file is downloaded by the launcher or user. Try to run sendsignal.exe from %path% or %cd%
             try {
                 Runtime runtime = Runtime.getRuntime();
                 runtime.exec(new String[] { "sendsignal.exe", Long.toString(pid) });
@@ -703,6 +731,17 @@ public class OSUtils {
         } else {
             Logger.logError("Unable to find genThreadDump implementation");
             return false;
+        }
+    }
+
+    public static void printGPUinformation() {
+        if (getCurrentOS() == OS.WINDOWS) {
+            String result = RuntimeStreamer.execute(new String[] { "wmic", "path", "win32_VideoController",
+                    "get", "description,adapterRAM,driverDate,DriverVersion,InstalledDisplayDrivers"
+            });
+            Logger.logDebug("GPU information:\n" + result.replace("\n\n", "\n").trim().replaceAll("[ ]*\n", "\n"));
+        } else {
+            // not implemented yet
         }
     }
 
