@@ -739,7 +739,12 @@ public class OSUtils {
             String result = RuntimeStreamer.execute(new String[] { "wmic", "path", "win32_VideoController",
                     "get", "description,adapterRAM,driverDate,DriverVersion,InstalledDisplayDrivers"
             });
-            Logger.logDebug("GPU information:\n" + result.replace("\n\n", "\n").trim().replaceAll("[ ]*\n", "\n"));
+            if (result != null) {
+                Logger.logDebug("GPU information:\n" + result.replace("\n\n", "\n").trim().replaceAll("[ ]*\n", "\n"));
+            } else {
+                Logger.logError("Getting GPU information failed!! Launcher has detected windows path environment variable issues, "
+                        + "please see http://support.feed-the-beast.com/t/windows-path-issues/19630 for more information.");
+            }
         } else {
             // not implemented yet
         }
