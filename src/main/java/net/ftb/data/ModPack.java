@@ -252,15 +252,12 @@ public class ModPack {
             DownloadUtils.saveImage(image, tempDir, "png");
 
         } else {
-            // it is faster now. Enable this after network code is fixed and faster!
-            /*
             if (!new File(tempDir, logo).exists()) {
                 DownloadUtils.saveImage(logo, tempDir, "png");
             }
             if (!new File(tempDir, image).exists()) {
                 DownloadUtils.saveImage(image, tempDir, "png");
             }
-            */
         }
 
         // image and logo should now exists, if not use placeholder images
