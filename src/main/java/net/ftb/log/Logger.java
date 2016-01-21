@@ -16,23 +16,26 @@
  */
 package net.ftb.log;
 
-import java.util.ArrayList;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.NoSuchElementException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Logger {
-    private static final List<ILogListener> listeners;
-    private static final Vector<LogEntry> logEntries;
-    private static LogThread logThread;
+    private static final List<ILogListener> listeners = new CopyOnWriteArrayList<ILogListener>();
+    private static final ConcurrentIterable<LogEntry> logEntries = new ConcurrentIterable<LogEntry>();
+    private static LogThread logThread = new LogThread(listeners);
+    private static PrintStream standardErrorPrintStream = new PrintStream(new FileOutputStream(FileDescriptor.err));
 
     /**
      * Default constructor
      * creates lists for listeners and log messages, creates and starts log dispather thread
      */
     static {
-        listeners = new ArrayList<ILogListener>();
-        logEntries = new Vector<LogEntry>();
-        logThread = new LogThread(listeners);
         logThread.start();
     }
 
@@ -77,6 +80,21 @@ public class Logger {
         log(message, LogLevel.ERROR, t);
     }
 
+    /**
+     * Used to log an error which occurs while logging. Logs directly to standard error
+     * Use only in cases where logging properly could cause recursive errors, for example
+     * an error writing to a log file -> log -> tries to write to log file
+     */
+    public static void logLoggingError(String error, Throwable t) {
+        if (error != null) {
+            standardErrorPrintStream.append(error).append('\n');
+        }
+        if (t != null) {
+            t.printStackTrace(standardErrorPrintStream);
+        }
+        standardErrorPrintStream.flush();
+    }
+
     public static void addListener (ILogListener listener) {
         listeners.add(listener);
     }
@@ -85,8 +103,8 @@ public class Logger {
         listeners.remove(listener);
     }
 
-    public static List<LogEntry> getLogEntries () {
-        return new Vector<LogEntry>(logEntries);
+    public static Iterable<LogEntry> getLogEntries () {
+        return logEntries;
     }
 
     public static String getLogs () {
@@ -99,5 +117,64 @@ public class Logger {
             logStringBuilder.append(entry.toString(type)).append("\n");
         }
         return logStringBuilder.toString();
+    }
+
+    /**
+     * Simple iterable data structure which can be iterated while being modified,
+     * and is backed by an array. More compact than a ConcurrentLinkedQueue
+     */
+    private static class ConcurrentIterable<T> implements Iterable<T> {
+        int length = 0;
+        private Object[] entries = new Object[0];
+
+        @Override
+        public Iterator<T> iterator () {
+            return new Iterator<T>() {
+                int position = 0;
+                Object next = getNext();
+
+                @Override
+                public boolean hasNext () {
+                    return next != null;
+                }
+
+                @Override
+                public T next () {
+                    Object current = next;
+
+                    if (current == null) {
+                        throw new NoSuchElementException();
+                    }
+
+                    next = getNext();
+                    return (T) current;
+                }
+
+                @Override
+                public void remove () {
+                    throw new UnsupportedOperationException("remove");
+                }
+
+                private Object getNext () {
+                    Object[] currentEntries = entries;
+                    int currentLength = length;
+
+                    if (position >= currentLength || position >= currentEntries.length) {
+                        return null;
+                    }
+
+                    return currentEntries[position++];
+                }
+            };
+        }
+
+        public void add (T entry) {
+            synchronized (this) {
+                if (entries.length == length) {
+                    entries = Arrays.copyOf(entries, entries.length == 0 ? 64 : (entries.length + (entries.length >> 1)));
+                }
+                entries[length++] = entry;
+            }
+        }
     }
 }
