@@ -18,12 +18,14 @@ package net.ftb.log;
 
 import lombok.Getter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 public class StreamLogger extends Thread {
-    private final InputStream is;
+    private final BufferedReader br;
     private final LogEntry logInfo;
     private String[] ignore;
 
@@ -32,40 +34,26 @@ public class StreamLogger extends Thread {
 
     private StreamLogger (InputStream from, LogEntry logInfo) {
         instance = this;
-        this.is = from;
+        this.br = new BufferedReader(new InputStreamReader(from, Charset.forName("UTF-8")));
         this.logInfo = logInfo;
     }
 
     @Override
     public void run () {
-        byte buffer[] = new byte[4096];
-        String logBuffer = "";
-        int newLineIndex;
-        int nullIndex;
+        String line;
         try {
-            while (is.read(buffer) > 0) {
-                logBuffer += new String(buffer).replace("\r\n", "\n");
-                nullIndex = logBuffer.indexOf(0);
-                if (nullIndex != -1) {
-                    logBuffer = logBuffer.substring(0, nullIndex);
-                }
-                while ((newLineIndex = logBuffer.indexOf("\n")) != -1) {
-                    if (ignore != null) {
-                        boolean skip = false;
-                        for (String s : ignore) {
-                            if (logBuffer.substring(0, newLineIndex).contains(s)) {
-                                skip = true;
-                            }
+            while ((line = br.readLine()) != null) {
+                boolean skip = false;
+                if (ignore != null) {
+                    for (String s : ignore) {
+                        if (line.contains(s)) {
+                            skip = true;
                         }
-                        if (!skip) {
-                            Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
-                        }
-                    } else {
-                        Logger.log(new LogEntry().copyInformation(logInfo).message(logBuffer.substring(0, newLineIndex)));
                     }
-                    logBuffer = logBuffer.substring(newLineIndex + 1);
                 }
-                Arrays.fill(buffer, (byte) 0);
+                if (!skip) {
+                    Logger.log(new LogEntry(false).copyInformation(logInfo).message(line));
+                }
             }
         } catch (IOException e) {
             Logger.logError("Error while reading log messages from external source(minecraft process)", e);

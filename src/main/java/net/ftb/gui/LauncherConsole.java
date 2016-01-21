@@ -38,15 +38,24 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.*;
 import javax.swing.text.Document;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 @SuppressWarnings("serial")
 public class LauncherConsole extends JFrame implements ILogListener {
+    private static final Font FONT = new Font("Monospaced", 0, 12);
+    // Process at most LOG_CHUNK_SIZE log records at once so that console doesn't freeze for a long time
+    // when lots of logs show up simultaneously
+    private static final int LOG_CHUNK_SIZE = 25000;
     private final JTextPane displayArea;
     private final JComboBox logTypeComboBox;
     private LogType logType = LogType.MINIMAL;
@@ -55,8 +64,9 @@ public class LauncherConsole extends JFrame implements ILogListener {
     private LogLevel logLevel = LogLevel.INFO;
     private JButton killMCButton;
     private JButton threadDumpButton;
-    private final Document displayAreaDoc;
-    private final Font FONT = new Font("Monospaced", 0, 12);
+    private Document displayAreaDoc;
+    private final AtomicBoolean queuedRecordsInProgress = new AtomicBoolean();
+    private final Queue<LogRecord> logRecords = new ConcurrentLinkedQueue<LogRecord>();
 
     private SimpleAttributeSet RED = new SimpleAttributeSet();
     private SimpleAttributeSet YELLOW = new SimpleAttributeSet();
@@ -229,50 +239,95 @@ public class LauncherConsole extends JFrame implements ILogListener {
     }
 
     synchronized public void refreshLogs () {
-        try {
-            displayAreaDoc.remove(0, displayAreaDoc.getLength());
-        } catch (Exception e) {
-            // ignore
-        }
+        // Write messages to new blank document which is not being displayed
+        displayAreaDoc = new DefaultStyledDocument();
 
-        List<LogEntry> entries = Logger.getLogEntries();
-        for (LogEntry entry : entries) {
-            if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))) {
-                addMessage(entry, this.displayAreaDoc);
+        // Add all log entries to list and display them
+        Queue<LogRecord> records = new LinkedList<LogRecord>();
+        for (LogEntry entry : Logger.getLogEntries()) {
+            if (shouldProcess(entry)) {
+                records.add(getLogRecord(entry));
             }
         }
-        try {
-            displayAreaDoc.remove(0, 1);
-        } catch (Exception e) {
-            //ignore
+        displayMessages(records, -1);
+
+        // Remove newline from start
+        if (displayAreaDoc.getLength() != 0) {
+            try {
+                displayAreaDoc.remove(0, 1);
+            } catch (BadLocationException ignored) {
+                // ignore
+            }
         }
+
+        // Swap to displaying new document
+        displayArea.setDocument(displayAreaDoc);
     }
 
     public void scrollToBottom () {
         displayArea.setCaretPosition(displayArea.getDocument().getLength());
     }
 
-    synchronized private void addMessage (LogEntry entry, Document d) {
+    synchronized private void displayMessage (String message, SimpleAttributeSet attributes, Document d) {
+        try {
+            d.insertString(d.getLength(), message, attributes);
+        } catch (Exception e) {
+            Logger.logLoggingError(null, e);
+        }
+    }
+
+    private synchronized void displayMessages (Queue<LogRecord> logRecords, int limit) {
+        StringBuilder b = new StringBuilder();
+
+        SimpleAttributeSet lastAttributes = null;
+        while (true) {
+            LogRecord r = --limit == 0 ? null : logRecords.poll();
+
+            if (r == null || r.attributes != lastAttributes) {
+                if (b.length() != 0) {
+                    displayMessage(b.toString(), lastAttributes, displayAreaDoc);
+                    b.setLength(0);
+                }
+
+                if (r == null) {
+                    if (limit == 0) {
+                        runLogQueue();
+                    }
+                    return;
+                }
+
+                lastAttributes = r.attributes;
+            }
+
+            b.append('\n').append(r.message);
+        }
+    }
+
+    private LogRecord getLogRecord (LogEntry entry) {
         SimpleAttributeSet color = null;
         switch (entry.level) {
-        case ERROR:
-            color = RED;
-            break;
-        case WARN:
-            color = YELLOW;
-        case INFO:
-            break;
-        case DEBUG:
-            break;
-        case UNKNOWN:
-            break;
-        default:
-            break;
+            case ERROR:
+                color = RED;
+                break;
+            case WARN:
+                color = YELLOW;
+                break;
+            case INFO:
+            case DEBUG:
+            case UNKNOWN:
+            default:
+                break;
         }
-        try {
-            d.insertString(d.getLength(), "\n" + entry.toString(logType), color);
-        } catch (Exception e) {
-            //ignore
+        return new LogRecord(entry.toString(logType), color);
+    }
+
+    private static class LogRecord {
+        public final String message;
+        public final SimpleAttributeSet attributes;
+
+        private LogRecord (String message, SimpleAttributeSet attributes) {
+            this.message = message;
+            this.attributes = attributes;
         }
     }
 
@@ -286,15 +341,37 @@ public class LauncherConsole extends JFrame implements ILogListener {
         threadDumpButton.setEnabled(false);
     }
 
+    private boolean shouldProcess(LogEntry entry) {
+        return (logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level));
+    }
+
     @Override
     public void onLogEvent (final LogEntry entry) {
-        // drop unneeded messages as soon as possible
-        if ((logSource == LogSource.ALL || entry.source == logSource) && (logLevel == LogLevel.DEBUG || logLevel.includes(entry.level))) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run () {
-                    addMessage(entry, LaunchFrame.con.displayAreaDoc);
-                }
-            });
+        if (!shouldProcess(entry)) {
+            return;// drop unneeded messages as soon as possible
         }
+
+        logRecords.add(getLogRecord(entry));
+
+        runLogQueue();
+    }
+
+    private void runLogQueue() {
+        if (!queuedRecordsInProgress.compareAndSet(false, true)) {
+            return;// Already queued message display with invokeLater, no need to do it again
+        }
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    if (!queuedRecordsInProgress.compareAndSet(true, false)) {
+                        throw new IllegalStateException("Unexpected queuedRecords value: false");
+                    }
+                    displayMessages(logRecords, LOG_CHUNK_SIZE);
+                } catch (Throwable t) {
+                    Logger.logLoggingError(null, t);
+                }
+            }
+        });
     }
 }

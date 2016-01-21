@@ -18,6 +18,7 @@ package net.ftb.log;
 
 public enum LogType {
     DEBUG, EXTENDED, MINIMAL;
+    public static final int indexCount = LogType.values().length;
 
     public boolean includes (LogType other) {
         return other.compareTo(this) >= 0;
