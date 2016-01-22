@@ -18,13 +18,18 @@ package net.ftb.log;
 
 public enum LogType {
     DEBUG, EXTENDED, MINIMAL;
-    public static final int indexCount = LogType.values().length;
+
+    private final String name;
+
+    LogType () {
+        name = name().substring(0, 1) + name().substring(1).toLowerCase();
+    }
 
     public boolean includes (LogType other) {
-        return other.compareTo(this) >= 0;
+        return (other.ordinal() - this.ordinal()) >= 0;
     }
 
     public String toString () {
-        return name().substring(0, 1) + name().substring(1).toLowerCase();
+        return name;
     }
 }

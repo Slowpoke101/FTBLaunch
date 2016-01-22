@@ -26,7 +26,6 @@ public class LogEntry {
     private Throwable cause;
     private String location;
     private final Date date;
-    private String[] messageCache;
     private static final ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue () {
@@ -96,21 +95,17 @@ public class LogEntry {
     }
 
     public String toString (LogType type) {
-        if (messageCache != null && messageCache[type.ordinal()] != null) {
-            return messageCache[type.ordinal()];
-        }
         StringBuilder entryMessage = new StringBuilder();
         if (source != LogSource.EXTERNAL) {
-            if (type.includes(LogType.EXTENDED)) {
+            boolean extended = type.includes(LogType.EXTENDED);
+            if (extended) {
                 entryMessage.append("[").append(dateFormat.get().format(date)).append("] ");
-            }
-            if (type.includes(LogType.EXTENDED)) {
                 entryMessage.append("[").append(level).append("] ");
             }
             if (type.includes(LogType.DEBUG)) {
                 entryMessage.append("in ").append(source).append(" ");
             }
-            if (location != null && type.includes(LogType.EXTENDED)) {
+            if (extended && location != null) {
                 entryMessage.append(location).append(": ");
             }
         }
@@ -123,14 +118,8 @@ public class LogEntry {
                 }
             }
         }
-        String message = entryMessage.toString();
 
-        if (messageCache == null) {
-            messageCache = new String[LogType.indexCount];
-        }
-        messageCache[type.ordinal()] = message;
-
-        return message;
+        return entryMessage.toString();
     }
 
     private static String getLocation (Throwable t) {

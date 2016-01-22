@@ -37,8 +37,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,6 +57,10 @@ public class LauncherConsole extends JFrame implements ILogListener {
     // Process at most LOG_CHUNK_SIZE log records at once so that console doesn't freeze for a long time
     // when lots of logs show up simultaneously
     private static final int LOG_CHUNK_SIZE = 25000;
+    // When we hit MAX_LENGTH MB of text, trim to TRIM_TO_LENGTH MB
+    private static final int TEXTAREA_TRIM_TO_LENGTH = 5 * 1024 * 1024;
+    private static final int TEXTAREA_MAX_LENGTH = 8 * 1024 * 1024;
+    private boolean enableLengthLimit = true;
     private final JTextPane displayArea;
     private final JComboBox logTypeComboBox;
     private LogType logType = LogType.MINIMAL;
@@ -180,6 +185,18 @@ public class LauncherConsole extends JFrame implements ILogListener {
         });
         panel.add(ircButton);
 
+        JToggleButton toggleLimitingButton = new JToggleButton(I18N.getLocaleString("CONSOLE_TOGGLE_LIMIT"));
+        toggleLimitingButton.setSelected(true);
+        toggleLimitingButton.setVisible(true);
+        toggleLimitingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent arg0) {
+                enableLengthLimit = !enableLengthLimit;
+                refreshLogs();
+            }
+        });
+        panel.add(toggleLimitingButton);
+
         killMCButton = new JButton(I18N.getLocaleString("KILL_MC"));
         killMCButton.setEnabled(false);
         killMCButton.setVisible(true);
@@ -243,13 +260,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
         displayAreaDoc = new DefaultStyledDocument();
 
         // Add all log entries to list and display them
-        Queue<LogRecord> records = new LinkedList<LogRecord>();
-        for (LogEntry entry : Logger.getLogEntries()) {
-            if (shouldProcess(entry)) {
-                records.add(getLogRecord(entry));
-            }
-        }
-        displayMessages(records, -1);
+        displayMessagesReverse(Logger.getReverseLogEntries());
 
         // Remove newline from start
         if (displayAreaDoc.getLength() != 0) {
@@ -262,10 +273,12 @@ public class LauncherConsole extends JFrame implements ILogListener {
 
         // Swap to displaying new document
         displayArea.setDocument(displayAreaDoc);
+
+        scrollToBottom();
     }
 
     public void scrollToBottom () {
-        displayArea.setCaretPosition(displayArea.getDocument().getLength());
+        displayArea.setCaretPosition(displayAreaDoc.getLength());
     }
 
     synchronized private void displayMessage (String message, SimpleAttributeSet attributes, Document d) {
@@ -290,6 +303,7 @@ public class LauncherConsole extends JFrame implements ILogListener {
                 }
 
                 if (r == null) {
+                    trimTextArea();
                     if (limit == 0) {
                         runLogQueue();
                     }
@@ -300,6 +314,67 @@ public class LauncherConsole extends JFrame implements ILogListener {
             }
 
             b.append('\n').append(r.message);
+        }
+    }
+
+    private synchronized void displayMessagesReverse (Iterable<LogEntry> reverse) {
+        ArrayDeque<String> stringQueue = new ArrayDeque<String>();
+        StringBuilder b = new StringBuilder();
+        SimpleAttributeSet lastAttributes = null;
+
+        Iterator<LogEntry> iterator = reverse.iterator();
+        while (true) {
+            boolean hasNext = iterator.hasNext();
+            LogEntry entry = hasNext ? iterator.next() : null;
+
+            if (hasNext && !shouldProcess(entry)) {
+                continue;
+            }
+
+            LogRecord r = hasNext ? getLogRecord(entry) : null;
+            if (r == null || r.attributes != lastAttributes) {
+                if (!stringQueue.isEmpty()) {
+                    while (!stringQueue.isEmpty()) {
+                        String next = stringQueue.removeLast();
+                        b.append('\n').append(next);
+                    }
+
+                    try {
+                        displayAreaDoc.insertString(0, b.toString(), lastAttributes);
+                    } catch (Exception e) {
+                        Logger.logLoggingError(null, e);
+                    }
+                    if (enableLengthLimit && displayAreaDoc.getLength() >= TEXTAREA_TRIM_TO_LENGTH) {
+                        return;
+                    }
+                    b.setLength(0);
+                }
+
+                if (r == null) {
+                    trimTextArea();
+                    return;
+                }
+
+                lastAttributes = r.attributes;
+            }
+
+            stringQueue.add(r.message);
+        }
+    }
+
+    private synchronized void trimTextArea () {
+        if (!enableLengthLimit)
+            return;
+
+        int length = displayAreaDoc.getLength();
+        if (displayAreaDoc.getLength() >= TEXTAREA_MAX_LENGTH) {
+            int cutoffIndex = length - TEXTAREA_TRIM_TO_LENGTH;
+            try {
+                // Trim to cutoffIndex + next new line within 1024 characters. If no newlines found, just trim to cutoff
+                displayAreaDoc.remove(0, cutoffIndex + displayAreaDoc.getText(cutoffIndex, 1024).indexOf('\n') + 1);
+            } catch (BadLocationException e) {
+                Logger.logLoggingError(null, e);
+            }
         }
     }
 

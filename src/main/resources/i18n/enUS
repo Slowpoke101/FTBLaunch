@@ -20,6 +20,7 @@ CONSOLE_COPYCLIP = Copy to clipboard
 CONSOLE_CLIP_CONFIRM = Do you want to copy the full log to your clipboard?
 CONSOLE_PASTE = Upload Log
 CONSOLE_SUPPORT = Need support? Click me!
+CONSOLE_TOGGLE_LIMIT = Limit Logs
 
 # Map Tab
 INSTALL_MAP = Install Map

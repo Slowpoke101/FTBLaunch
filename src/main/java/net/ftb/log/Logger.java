@@ -85,7 +85,7 @@ public class Logger {
      * Use only in cases where logging properly could cause recursive errors, for example
      * an error writing to a log file -> log -> tries to write to log file
      */
-    public static void logLoggingError(String error, Throwable t) {
+    public static void logLoggingError (String error, Throwable t) {
         if (error != null) {
             standardErrorPrintStream.append(error).append('\n');
         }
@@ -105,6 +105,10 @@ public class Logger {
 
     public static Iterable<LogEntry> getLogEntries () {
         return logEntries;
+    }
+
+    public static Iterable<LogEntry> getReverseLogEntries () {
+        return logEntries.reverse();
     }
 
     public static String getLogs () {
@@ -129,41 +133,14 @@ public class Logger {
 
         @Override
         public Iterator<T> iterator () {
-            return new Iterator<T>() {
-                int position = 0;
-                Object next = getNext();
+            return new Itr<T>(entries, length, 0);
+        }
 
+        public Iterable<T> reverse () {
+            return new Iterable<T>() {
                 @Override
-                public boolean hasNext () {
-                    return next != null;
-                }
-
-                @Override
-                public T next () {
-                    Object current = next;
-
-                    if (current == null) {
-                        throw new NoSuchElementException();
-                    }
-
-                    next = getNext();
-                    return (T) current;
-                }
-
-                @Override
-                public void remove () {
-                    throw new UnsupportedOperationException("remove");
-                }
-
-                private Object getNext () {
-                    Object[] currentEntries = entries;
-                    int currentLength = length;
-
-                    if (position >= currentLength || position >= currentEntries.length) {
-                        return null;
-                    }
-
-                    return currentEntries[position++];
+                public Iterator<T> iterator () {
+                    return new ReverseItr<T>(entries, length);
                 }
             };
         }
@@ -174,6 +151,64 @@ public class Logger {
                     entries = Arrays.copyOf(entries, entries.length == 0 ? 64 : (entries.length + (entries.length >> 1)));
                 }
                 entries[length++] = entry;
+            }
+        }
+
+        private static class Itr<T> implements Iterator<T> {
+            final Object[] entries;
+            final int length;
+            int position;
+            Object next;
+
+            private Itr (Object[] entries, int length, int position) {
+                this.entries = entries;
+                this.length = length;
+                this.position = position;
+                next = getNext();
+            }
+
+            @Override
+            public boolean hasNext () {
+                return next != null;
+            }
+
+            @Override
+            public T next () {
+                Object current = next;
+
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
+
+                next = getNext();
+                return (T) current;
+            }
+
+            @Override
+            public void remove () {
+                throw new UnsupportedOperationException("remove");
+            }
+
+            protected Object getNext () {
+                if (position >= length || position >= entries.length) {
+                    return null;
+                }
+
+                return entries[position++];
+            }
+        }
+
+        private static class ReverseItr<T> extends Itr<T> {
+            private ReverseItr (Object[] entries, int length) {
+                super(entries, length, length - 1);
+            }
+
+            protected Object getNext () {
+                if (position == -1 || position >= entries.length) {
+                    return null;
+                }
+
+                return entries[position--];
             }
         }
     }
