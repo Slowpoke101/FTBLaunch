@@ -16,9 +16,12 @@
  */
 package net.feed_the_beast.launcher.json.versions;
 
+import com.google.common.collect.Maps;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Version {
     public String id;
@@ -35,6 +38,8 @@ public class Version {
     public String inheritsFrom;
     public String jar;
     private List<Library> _libraries;
+    public Asset assetIndex;
+    private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 
     public List<Library> getLibraries () {
         if (_libraries == null) {

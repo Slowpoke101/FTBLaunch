@@ -18,7 +18,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
 		classpath 'gradle.plugin.edu.sc.seis:macAppBundle:2.1.1'
         classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
