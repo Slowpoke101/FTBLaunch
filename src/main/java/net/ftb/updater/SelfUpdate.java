@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelfUpdate {
+    private SelfUpdate() {
+    }
+
     public static void runUpdate (String currentPath, String temporaryUpdatePath) {
         List<String> arguments = Lists.newArrayList();
 

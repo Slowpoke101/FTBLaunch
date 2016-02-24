@@ -36,6 +36,9 @@ public class Logger {
         logThread.start();
     }
 
+    private Logger() {
+    }
+
     public static void log (LogEntry entry) {
         logEntries.add(entry);
         logThread.handleLog(entry);

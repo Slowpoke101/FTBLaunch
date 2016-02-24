@@ -21,6 +21,9 @@ import net.ftb.tracking.google.AnalyticsConfigData;
 import java.awt.*;
 
 public class AWTSystemPopulator {
+    private AWTSystemPopulator() {
+    }
+
     public static final void populateConfigData (AnalyticsConfigData data) {
         data.setEncoding(System.getProperty("file.encoding"));
         String region = System.getProperty("user.region");

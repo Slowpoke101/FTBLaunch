@@ -21,6 +21,9 @@ import net.ftb.data.LauncherStyle;
 import javax.swing.*;
 
 public class StyleUtil {
+    private StyleUtil() {
+    }
+
     public static void loadUiStyles () {
         LauncherStyle style = LauncherStyle.getCurrentStyle();
         UIManager.put("control", style.control);

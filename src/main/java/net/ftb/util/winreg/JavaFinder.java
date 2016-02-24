@@ -21,6 +21,9 @@ import java.util.List;
  * Windows-specific java versions finder
  *****************************************************************************/
 public class JavaFinder {
+    private JavaFinder() {
+    }
+
     /**
      * @return: A list of javaExec paths found under this registry key (rooted at HKEY_LOCAL_MACHINE)
      * @param wow64  0 for standard registry access (32-bits for 32-bit app, 64-bits for 64-bits app)

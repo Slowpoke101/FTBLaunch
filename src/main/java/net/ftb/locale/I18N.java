@@ -35,6 +35,9 @@ public class I18N {
     public final static HashMap<Integer, String> localeIndices = Maps.newHashMap();
     public static Locale currentLocale = Locale.enUS;
 
+    private I18N() {
+    }
+
     public enum Locale {
         cyGB, daDK, deDE, enGB, enUS, esES, fiFI, frCA, frFR, itIT, maHU, nlNL, noNO, plPL, ptBR, ptPT, ruRU, svSE, zhCN
     }

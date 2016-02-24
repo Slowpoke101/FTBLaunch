@@ -54,6 +54,9 @@ import java.util.Map;
 public class AuthlibHelper {
     private static String uniqueID;
 
+    private AuthlibHelper() {
+    }
+
     protected static LoginResponse authenticateWithAuthlib (String user, String pass, String mojangData, String selectedProfileName) {
         String displayName;
         boolean hasMojangData = false;

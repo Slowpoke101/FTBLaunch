@@ -24,4 +24,6 @@ public class Constants {
     //limit for version component is 99.
     public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 12 * 1;
 
+    private Constants() {
+    }
 }

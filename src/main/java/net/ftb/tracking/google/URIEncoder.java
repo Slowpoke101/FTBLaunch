@@ -30,6 +30,9 @@ package net.ftb.tracking.google;
 public class URIEncoder {
     private static String mark = "-_.!~*'()\"";
 
+    private URIEncoder() {
+    }
+
     public static String encodeURI (String argString) {
         StringBuilder uri = new StringBuilder(); // Encoded URL
         char[] chars = argString.toCharArray();

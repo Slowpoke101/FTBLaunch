@@ -7,6 +7,9 @@ import java.net.URLEncoder;
 
 public class PiwikUtils {
 
+    private PiwikUtils() {
+    }
+
     public static String urlEncode (String in) {
         String output;
         try {

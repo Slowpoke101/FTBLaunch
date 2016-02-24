@@ -49,6 +49,9 @@ public class JsonFactory {
         GSON = builder.create();
     }
 
+    private JsonFactory() {
+    }
+
     public static RetiredPacks getRetiredPacks (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);
         RetiredPacks packs = GSON.fromJson(reader, RetiredPacks.class);

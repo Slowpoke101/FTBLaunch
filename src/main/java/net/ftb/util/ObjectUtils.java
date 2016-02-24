@@ -22,6 +22,9 @@ import java.util.Arrays;
 
 public class ObjectUtils {
 
+    private ObjectUtils() {
+    }
+
     /**
      *
      * @param s - string to check

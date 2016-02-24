@@ -92,6 +92,9 @@ public class Main {
     @Getter
     private static boolean disableLaunchButton = false;
 
+    private Main() {
+    }
+
     /**
      * Launch the application.
      * @param args - CLI arguments
