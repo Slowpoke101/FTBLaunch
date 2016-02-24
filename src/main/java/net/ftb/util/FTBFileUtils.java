@@ -154,7 +154,8 @@ public class FTBFileUtils {
             backupSuccess = backupExtract(zipLocation, outputLocation);
         } finally {
             try {
-                zipinputstream.close();
+                if(zipinputstream != null)
+                    zipinputstream.close();
             } catch (IOException e) {
             }
         }
@@ -196,8 +197,10 @@ public class FTBFileUtils {
             success = false;
         } finally {
             try {
-                zis.closeEntry();
-                zis.close();
+                if(zis != null) {
+                    zis.closeEntry();
+                    zis.close();
+                }
             } catch (IOException e) {
             }
         }
