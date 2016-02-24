@@ -916,7 +916,7 @@ public class LaunchFrame extends JFrame {
         ModPack pack = ModPack.getSelectedPack();
 
         // save ´pack being launched
-        if (instance.currentPane == Panes.MODPACK) {
+        if (LaunchFrame.currentPane == Panes.MODPACK) {
             Settings.getSettings().setLastFTBPack(FTBPacksPane.getInstance().getSelectedPack().getDir());
         } else {
             Settings.getSettings().setLastThirdPartyPack(ThirdPartyPane.getInstance().getSelectedPack().getDir());

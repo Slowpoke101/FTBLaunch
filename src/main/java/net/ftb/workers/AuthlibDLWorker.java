@@ -74,10 +74,10 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         try {
             if (f.exists()) {
                 addURL(f.toURI().toURL());
-                this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
-                this.getClass().forName("com.mojang.authlib.Agent");
-                this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
-                this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
+                AuthlibDLWorker.class.forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
+                AuthlibDLWorker.class.forName("com.mojang.authlib.Agent");
+                AuthlibDLWorker.class.forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
+                AuthlibDLWorker.class.forName("com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication");
             } else {
                 Logger.logError("Authlib file does not exist");
             }
