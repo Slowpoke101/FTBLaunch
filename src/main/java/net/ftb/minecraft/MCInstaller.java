@@ -63,7 +63,7 @@ public class MCInstaller {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
         List<DownloadInfo> assets = gatherAssets(new File(installPath), installPath, isLegacy);
-        if (assets != null && assets.size() > 0) {
+        if (assets != null && !assets.isEmpty()) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
             final ProgressMonitor prog = new ProgressMonitor(LaunchFrame.getInstance(), "Downloading Files...", "", 0, 100);
