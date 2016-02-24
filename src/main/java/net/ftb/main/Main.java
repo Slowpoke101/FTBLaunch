@@ -445,9 +445,9 @@ public class Main {
         int v = CommandLineSettings.getSettings().getManualVersion();
         int b = CommandLineSettings.getSettings().getManualBuildNumber();
         UpdateChecker updateChecker = new UpdateChecker(
-                (v == 0  ? Constants.buildNumber : v),
+                v == 0  ? Constants.buildNumber : v,
                 LaunchFrame.getInstance().minUsable,
-                (b == 0 ? beta_ : b)
+                b == 0 ? beta_ : b
         ) {
             @Override
             protected void done () {

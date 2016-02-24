@@ -256,7 +256,7 @@ public class JGoogleAnalyticsTracker {
                 fifoEmpty = (fifo.size() == 0);
             }
             synchronized (JGoogleAnalyticsTracker.class) {
-                asyncThreadsCompleted = (asyncThreadsRunning == 0);
+                asyncThreadsCompleted = asyncThreadsRunning == 0;
             }
             if (fifoEmpty && asyncThreadsCompleted) {
                 break;

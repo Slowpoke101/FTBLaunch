@@ -293,7 +293,7 @@ public class OSUtils {
     public static boolean is64BitWindows () {
         String arch = System.getenv("PROCESSOR_ARCHITECTURE");
         String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-        return (arch.endsWith("64") || (wow64Arch != null && wow64Arch.endsWith("64")));
+        return (arch.endsWith("64") || wow64Arch != null && wow64Arch.endsWith("64"));
     }
 
     /**

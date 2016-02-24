@@ -47,7 +47,7 @@ public class Benchmark {
      * @return how many ms since timer was started
      */
     private static Long bench (String name) {
-        return (System.currentTimeMillis() - startTimes.get(name));
+        return System.currentTimeMillis() - startTimes.get(name);
     }
 
     /**

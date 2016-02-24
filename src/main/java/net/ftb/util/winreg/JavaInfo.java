@@ -76,7 +76,7 @@ public class JavaInfo extends JavaVersion {
      * @return
      */
     public boolean isIdentical (JavaInfo j) {
-        return (this.isSameVersion(j) && sameBitness(j));
+        return this.isSameVersion(j) && sameBitness(j);
     }
 
     /**

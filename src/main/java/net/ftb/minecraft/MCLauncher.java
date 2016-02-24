@@ -341,23 +341,23 @@ public class MCLauncher {
 
     public static String parseLegacyArgs (String s) {
         if (s.equals("${animation_name}")) {
-            return (((!ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty")) ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
-                    + separator + ModPack.getSelectedPack().getAnimation() : "empty"));
+            return !ModPack.getSelectedPack().getAnimation().equalsIgnoreCase("empty") ? OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir()
+                    + separator + ModPack.getSelectedPack().getAnimation() : "empty";
         } else if (s.equals("${forge_name}")) {
             return Locations.FORGENAME;
         } else if (s.equals("${pack_name}")) {
-            return (ModPack.getSelectedPack().getName() + " v"
-                            + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer()));
+            return ModPack.getSelectedPack().getName() + " v"
+                            + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() : Settings.getSettings().getPackVer());
         } else if (s.equals("${pack_image}")) {
-            return (OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
+            return OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName();
         } else if (s.equals("${extended_state}")) {
-            return (String.valueOf(Settings.getSettings().getLastExtendedState()));
+            return String.valueOf(Settings.getSettings().getLastExtendedState());
         } else if (s.equals("${width}")) {
-            return (String.valueOf(Settings.getSettings().getLastDimension().getWidth()));
+            return String.valueOf(Settings.getSettings().getLastDimension().getWidth());
         } else if (s.equals("${height}")) {
-            return (String.valueOf(Settings.getSettings().getLastDimension().getHeight()));
+            return String.valueOf(Settings.getSettings().getLastDimension().getHeight());
         } else if (s.equals("${minecraft_jar}")) {
-            return (gameDirectory + File.separator + "bin" + File.separator + Locations.OLDMCJARNAME);
+            return gameDirectory + File.separator + "bin" + File.separator + Locations.OLDMCJARNAME;
         } else {
             return s;
         }
@@ -382,7 +382,7 @@ public class MCLauncher {
             String[] files = libsDir.list();
             Arrays.sort(files);
             for (String name : files) {
-                if ((name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
+                if (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
                     cpb.append(OSUtils.getJavaDelimiter());
                     cpb.append(new File(libsDir, name).getAbsolutePath());
                 }

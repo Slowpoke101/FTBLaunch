@@ -236,8 +236,8 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         mapPanels.add(p);
         maps.add(p);
 
-        maps.setMinimumSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
-        maps.setPreferredSize(new Dimension(420, (mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
+        maps.setMinimumSize(new Dimension(420, mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
+        maps.setPreferredSize(new Dimension(420, mapPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
 
     }
 
@@ -346,7 +346,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     private static int getMapNum () {
         if (currentMaps.size() > 0) {
             if (!origin.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
-                return currentMaps.get((mapPanels.size() - 1)).getIndex();
+                return currentMaps.get(mapPanels.size() - 1).getIndex();
             }
         }
         return mapPanels.size();
@@ -362,11 +362,11 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     }
 
     private static boolean compatibilityCheck (Map map) {
-        return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || map.isCompatible(compatible));
+        return compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || map.isCompatible(compatible);
     }
 
     private static boolean textSearch (Map map) {
         String searchString = SearchDialog.lastMapSearch.toLowerCase();
-        return ((searchString.isEmpty()) || map.getName().toLowerCase().contains(searchString) || map.getAuthor().toLowerCase().contains(searchString));
+        return (searchString.isEmpty() || map.getName().toLowerCase().contains(searchString) || map.getAuthor().toLowerCase().contains(searchString));
     }
 }

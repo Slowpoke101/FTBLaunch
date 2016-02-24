@@ -293,7 +293,7 @@ public class MCInstaller {
                                     local.delete();
                                 }
                                 if (!local.exists()) {
-                                    return (new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1"));
+                                    return new DownloadInfo(new URL(Locations.mc_res + path), local, name, Lists.newArrayList(asset.hash), "sha1");
                                 }
                             } catch (Exception ex) {
                                 Logger.logError("Asset hash check failed", ex);
@@ -526,7 +526,7 @@ public class MCInstaller {
         if (count == 2) {
             // forge > 1291 has three subsection, third section is name of the branch
             // e.g. 1.7.10-10.13.2.1352-1.7.10 or
-            fgRelease = fgVsn.substring((StringUtils.indexOf(fgVsn, "-") + 1), (StringUtils.lastIndexOf(fgVsn, "-")));
+            fgRelease = fgVsn.substring(StringUtils.indexOf(fgVsn, "-") + 1, StringUtils.lastIndexOf(fgVsn, "-"));
             fgRelease = fgRelease.substring(StringUtils.lastIndexOf(fgRelease, ".") + 1);
             vsn_ = Integer.parseInt(fgRelease);
         } else if (count == 1 || count == 0) {

@@ -210,7 +210,7 @@ public class ModManager extends JDialog {
             String installPath = Settings.getSettings().getInstallPath();
             ModPack pack = ModPack.getSelectedPack();
             //clearModsFolder(pack);
-            String baseLink = (pack.isPrivatePack() ? PRIVATEPACKS + dir + "/" + curVersion + "/" : MODPACKS + dir + "/" + curVersion + "/");
+            String baseLink = pack.isPrivatePack() ? PRIVATEPACKS + dir + "/" + curVersion + "/" : MODPACKS + dir + "/" + curVersion + "/";
             baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 
             Logger.logDebug("pack dir: " + dir);

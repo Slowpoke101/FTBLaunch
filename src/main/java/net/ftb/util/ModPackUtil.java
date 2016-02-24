@@ -86,7 +86,7 @@ public final class ModPackUtil {
     private static String getModpackCacheKey (@Nonnull ModPack modpack) {
         //Using the directory combined with the URL, because this is used as the cached download location for each mod,
         //and should therefore be guaranteed unique per modpack
-        return (modpack.getDir() + ":" + modpack.getUrl());
+        return modpack.getDir() + ":" + modpack.getUrl();
     }
 
     /**

@@ -63,7 +63,7 @@ public class PackChangeEvent implements ILauncherEvent {
         names = new String[packs.size()];
         int cnt = 0;
         for (ModPack pack : packs) {
-            names[cnt] = (pack.getName());
+            names[cnt] = pack.getName();
             cnt++;
         }
     }

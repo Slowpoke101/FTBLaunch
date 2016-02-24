@@ -68,11 +68,11 @@ public class Library {
         if (_artifact == null) {
             _artifact = new Artifact(name);
         }
-        return _artifact.getPath(natives.get(OS.CURRENT).replace("${arch}", (Settings.getSettings().getCurrentJava().is64bits ? "64" : "32")));
+        return _artifact.getPath(natives.get(OS.CURRENT).replace("${arch}", Settings.getSettings().getCurrentJava().is64bits ? "64" : "32"));
     }
 
     public String getUrl () {
-        return (url == null ? (localRepo ? DownloadUtils.getCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs) : url);
+        return (url == null ? localRepo ? DownloadUtils.getCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs : url);
     }
 
     @Override
