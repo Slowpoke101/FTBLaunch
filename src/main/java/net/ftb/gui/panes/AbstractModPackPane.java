@@ -248,7 +248,6 @@ public abstract class AbstractModPackPane extends JPanel {
             packs.removeAll();
             packs.repaint();
         }
-        final int packIndex = packPanels.size();
         final JPanel p = new JPanel();
         p.setPreferredSize(new Dimension(420, 55));
         p.setLayout(null);

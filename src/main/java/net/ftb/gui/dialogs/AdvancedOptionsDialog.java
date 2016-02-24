@@ -170,7 +170,6 @@ public class AdvancedOptionsDialog extends JDialog {
         setTitle(I18N.getLocaleString("ADVANCED_OPTIONS_TITLE"));
         setResizable(true); // false
 
-        Container panel = getContentPane();
         getContentPane().setLayout(new MigLayout());
 
         downloadLocationLbl = new JLabel(I18N.getLocaleString("ADVANCED_OPTIONS_DLLOCATION"));

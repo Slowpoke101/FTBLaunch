@@ -440,7 +440,6 @@ public class DownloadUtils extends Thread {
     public void run () {
         boolean bothReposFailed = false;
         boolean curseFailed = false;
-        boolean creeperFailed = false;
         setName("DownloadUtils");
         // test for proxies
         OSUtils.getProxy(Locations.curseRepo);
