@@ -93,7 +93,7 @@ public class ModManager extends JDialog {
         }
 
         public String downloadUrl (String filename, String urlString) throws Exception{
-            boolean failed = false;
+            boolean failed;
             BufferedInputStream in = null;
             FileOutputStream fout;
             HttpURLConnection connection = null;

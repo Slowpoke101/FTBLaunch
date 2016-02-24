@@ -107,7 +107,7 @@ public final class ModPackUtil {
                 zip = new ZipInputStream(new FileInputStream(modPackZip));
 
                 Set<String> fileNames = new HashSet<String>();
-                ZipEntry ze = null;
+                ZipEntry ze;
 
                 while ((ze = zip.getNextEntry()) != null) {
                     if (!ze.isDirectory()) {

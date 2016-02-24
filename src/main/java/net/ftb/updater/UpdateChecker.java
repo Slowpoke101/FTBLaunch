@@ -64,7 +64,7 @@ public class UpdateChecker extends SwingWorker<Boolean, Void> {
         if (buildJenk == 9999999) {
             this.allowBeta = false;
         }
-        String path = null;
+        String path;
         try {
             path = new File(LaunchFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath();
             path = URLDecoder.decode(path, "UTF-8");
