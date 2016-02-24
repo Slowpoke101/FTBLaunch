@@ -76,7 +76,7 @@ public class Map {
      * Used to get the List of maps
      * @return - the array containing all the maps
      */
-    public static ArrayList<Map> getMapArray () {
+    public static List<Map> getMapArray () {
         return maps;
     }
 

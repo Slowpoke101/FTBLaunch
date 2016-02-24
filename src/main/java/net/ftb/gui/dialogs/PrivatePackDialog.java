@@ -36,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -97,7 +98,7 @@ public class PrivatePackDialog extends JDialog {
         remove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
+                List<String> codes = Settings.getSettings().getPrivatePacks();
                 String toRemove = "";
                 for (String s : codes) {
                     if (s.equalsIgnoreCase(modpackName.getText())) {

@@ -46,7 +46,7 @@ import javax.swing.*;
 public class MapUtils extends JPanel implements ILauncherPane, MapListener {
 
     protected static JPanel maps;
-    public static ArrayList<JPanel> mapPanels;
+    public static List<JPanel> mapPanels;
 
     @Getter
     private static JScrollPane mapsScroll;
@@ -71,7 +71,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     @Getter
     private static MapUtils instance;
 
-    private static HashMap<Integer, Map> currentMaps = Maps.newHashMap();
+    private static java.util.Map<Integer, Map> currentMaps = Maps.newHashMap();
 
     public MapUtils () {
         super();
@@ -264,7 +264,7 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
         mapInfo.setText("");
         ModPack FTBPack = FTBPacksPane.getInstance().getSelectedPack();
         ModPack ThirdpartyPack = ThirdPartyPane.getInstance().getSelectedPack();
-        HashMap<Integer, List<Map>> sorted = Maps.newHashMap();
+        java.util.Map<Integer, List<Map>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<Map>());
         sorted.put(1, new ArrayList<Map>());
         for (Map map : Map.getMapArray()) {

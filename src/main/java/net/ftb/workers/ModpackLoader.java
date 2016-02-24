@@ -42,7 +42,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ModpackLoader extends Thread {
-    private ArrayList<String> xmlFiles = Lists.newArrayList();
+    private List<String> xmlFiles = Lists.newArrayList();
     private boolean disableOtherLoader = false;
     private static int offset = 0;
 

@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -55,8 +56,8 @@ public class MapFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        ArrayList<String> packs = Lists.newArrayList();
-        final ArrayList<String> packsNoVersion = Lists.newArrayList();
+        List<String> packs = Lists.newArrayList();
+        final List<String> packsNoVersion = Lists.newArrayList();
         packs.add(I18N.getLocaleString("MAIN_ALL"));
         packsNoVersion.add(I18N.getLocaleString("MAIN_ALL"));
 

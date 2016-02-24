@@ -20,6 +20,7 @@ import lombok.Getter;
 import net.ftb.data.ModPack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PackChangeEvent implements ILauncherEvent {
     public enum TYPE {
@@ -37,7 +38,7 @@ public class PackChangeEvent implements ILauncherEvent {
      * make sure to null check when using getter !!!!
      */
     @Getter
-    private ArrayList<ModPack> packs;
+    private List<ModPack> packs;
 
     /**
      *

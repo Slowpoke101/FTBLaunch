@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -48,7 +49,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
     private static JPanel texturePacks;
 
-    public static ArrayList<JPanel> texturePackPanels;
+    public static List<JPanel> texturePackPanels;
 
     @Getter
     private static JScrollPane texturePacksScroll;
@@ -69,7 +70,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     @Getter
     private static TexturepackPane instance;
 
-    private static HashMap<Integer, TexturePack> currentTexturePacks = Maps.newHashMap();
+    private static Map<Integer, TexturePack> currentTexturePacks = Maps.newHashMap();
 
     public static boolean loaded = false;
 
@@ -249,7 +250,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         texturePacks.repaint();
         ModPack FTBPack = FTBPacksPane.getInstance().getSelectedPack();
         ModPack ThirdpartyPack = ThirdPartyPane.getInstance().getSelectedPack();
-        HashMap<Integer, List<TexturePack>> sorted = Maps.newHashMap();
+        Map<Integer, List<TexturePack>> sorted = Maps.newHashMap();
         sorted.put(0, new ArrayList<TexturePack>());
         sorted.put(1, new ArrayList<TexturePack>());
         for (TexturePack texturePack : TexturePack.getTexturePackArray()) {

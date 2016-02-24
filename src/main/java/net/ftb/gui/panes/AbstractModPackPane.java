@@ -46,6 +46,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -55,7 +57,7 @@ public abstract class AbstractModPackPane extends JPanel {
     // container for packs. Upgraded by appPack()
     JPanel packs;
     // array to store packs. Upgraded by addPack
-    public ArrayList<JPanel> packPanels;
+    public List<JPanel> packPanels;
 
 
     JLabel typeLbl;
@@ -67,7 +69,7 @@ public abstract class AbstractModPackPane extends JPanel {
     JComboBox version;
 
     boolean modPacksAdded = false;
-    HashMap<ModPack, JPanel> panelByPack = Maps.newHashMap();
+    Map<ModPack, JPanel> panelByPack = Maps.newHashMap();
     @Setter
     @Getter
     ModPack selectedPack;

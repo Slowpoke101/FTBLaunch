@@ -25,14 +25,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class I18N {
     private static Properties locales = new Properties();
     private static Properties fallback = new Properties();
     private static File dir = new File(OSUtils.getDynamicStorageLocation(), "locale");
-    public static HashMap<String, String> localeFiles = Maps.newHashMap();
-    public final static HashMap<Integer, String> localeIndices = Maps.newHashMap();
+    public static Map<String, String> localeFiles = Maps.newHashMap();
+    public final static Map<Integer, String> localeIndices = Maps.newHashMap();
     public static Locale currentLocale = Locale.enUS;
 
     public enum Locale {

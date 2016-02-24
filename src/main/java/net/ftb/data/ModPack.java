@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 public class ModPack {
     private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
@@ -63,7 +65,7 @@ public class ModPack {
      * @return map of <String packversion, String MCVersion>
      */
     @Getter
-    private HashMap<String, String> customMCVersions = Maps.newHashMap();
+    private Map<String, String> customMCVersions = Maps.newHashMap();
 
     /**
      * Loads the modpack.xml and adds it to the modpack array in this class
@@ -102,7 +104,7 @@ public class ModPack {
      * Adds modpack to the modpacks array
      * @param packs_ - an array list of ModPack instances
      */
-    public static void addPacks (ArrayList<ModPack> packs_) {
+    public static void addPacks (List<ModPack> packs_) {
         synchronized (packs) {
             for (ModPack p : packs_) {
                 packs.add(p);
@@ -127,7 +129,7 @@ public class ModPack {
      * Used to get the List of modpacks
      * @return - the array containing all the modpacks
      */
-    public static ArrayList<ModPack> getPackArray () {
+    public static List<ModPack> getPackArray () {
         return packs;
     }
 

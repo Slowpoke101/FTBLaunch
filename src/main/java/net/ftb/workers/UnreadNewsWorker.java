@@ -21,6 +21,7 @@ import net.ftb.util.Benchmark;
 import net.ftb.util.NewsUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -33,7 +34,7 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
     protected Integer doInBackground () {
         Benchmark.start("UnreadNews");
         int i = 0;
-        ArrayList<String> dates = NewsUtils.getPubDates();
+        List<String> dates = NewsUtils.getPubDates();
         Long lastRead = Long.parseLong(Settings.getSettings().getNewsDate());
         int read = 0;
         for (String s : dates) {
