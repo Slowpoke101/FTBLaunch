@@ -19,8 +19,8 @@ buildscript {
 
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		classpath 'gradle.plugin.edu.sc.seis:macAppBundle:2.1.1'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+		classpath 'gradle.plugin.edu.sc.seis:macAppBundle:2.1.5'
         classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:+"
     }
 }
@@ -31,7 +31,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'launch4j'
+apply plugin: 'net.minecraftforge.gradle.launch4j'
 apply plugin: 'edu.sc.seis.macAppBundle'
 apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
 
@@ -144,7 +144,9 @@ afterEvaluate {
 		jar = project.tasks.jar.getArchivePath().getPath()
 		outfile = project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe")
 		mainClassName = project.mainClass
-	}
+        initialHeapPercent = 5;
+        maxHeapPercent = 100;
+    }
 }
 
 artifacts {
