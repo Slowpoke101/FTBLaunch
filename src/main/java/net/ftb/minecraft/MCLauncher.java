@@ -62,7 +62,7 @@ public class MCLauncher {
     private static StringBuilder cpb;
 
     public static Process launchMinecraft (String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
-            String maxPermSize, String version, UserAuthentication authentication, boolean legacy) throws IOException {
+            String maxPermSize, String version, UserAuthentication authentication, boolean legacy, String versionType) throws IOException {
 
         cpb = new StringBuilder("");
         isLegacy = legacy;
@@ -220,6 +220,8 @@ public class MCLauncher {
                     arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
                 } else if (isLegacy) {
                     arguments.add(parseLegacyArgs(s));
+                } else if(s.equals("${version_type}")) {
+                    arguments.add(versionType);
                 } else {
                     arguments.add(s);
                 }
