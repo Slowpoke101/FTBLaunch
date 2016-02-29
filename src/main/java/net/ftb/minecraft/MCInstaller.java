@@ -124,7 +124,7 @@ public class MCInstaller {
      */
     private static List<DownloadInfo> gatherAssets (final File root, String installDir, boolean isLegacy) {
         try {
-            Logger.logInfo("Checking local assets file, for MC version" + packmcversion + " Please wait! ");
+            Logger.logInfo("Checking local assets file, for MC version " + packmcversion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
             File local;
