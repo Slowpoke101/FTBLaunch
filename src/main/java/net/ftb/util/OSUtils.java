@@ -452,12 +452,21 @@ public class OSUtils {
     private static byte[] genHardwareIDUNIX () {
         String line;
         if (CommandLineSettings.getSettings().isUseMac()) {
+            BufferedReader reader = null;
             try {
-                BufferedReader reader = new BufferedReader(new FileReader("/etc/machine-id"));
+                reader = new BufferedReader(new FileReader("/etc/machine-id"));
                 line = reader.readLine();
             } catch (Exception e) {
                 Logger.logDebug("failed", e);
                 return new byte[] { };
+            } finally {
+                if(reader != null)
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        Logger.logWarn("Error while generating Hardware ID UNIX", e);
+                    }
+
             }
             return line.getBytes();
         } else {
