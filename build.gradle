@@ -138,6 +138,11 @@ createApp.dependsOn(copyMainJar)
 copyMainJar.dependsOn(shadowJar)
 shadowJar.dependsOn(jar)
 
+configurations.archives.with {
+    artifacts.remove artifacts.find { it.archiveTask.is distZip }
+    artifacts.remove artifacts.find { it.archiveTask.is distTar }
+}
+
 afterEvaluate {
 	launch4j {
 		icon = file("src/main/resources/exe/icon.ico").getCanonicalPath()
