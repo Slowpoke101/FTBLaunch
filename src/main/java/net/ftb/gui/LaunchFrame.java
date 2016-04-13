@@ -673,7 +673,7 @@ public class LaunchFrame extends JFrame {
         } catch (Exception e1) {
         }
         boolean isLegacy = true;
-        if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("1.9") || pack.getMcVersion().startsWith("14w")|| pack.getMcVersion().startsWith("15w")|| pack.getMcVersion().startsWith("16w")) {
+        if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("1.9") || pack.getMcVersion().startsWith("1.10") || pack.getMcVersion().startsWith("14w")|| pack.getMcVersion().startsWith("15w")|| pack.getMcVersion().startsWith("16w")) {
             isLegacy = false;
         }
         MCInstaller.setupNewStyle(installPath, pack, isLegacy, RESPONSE);

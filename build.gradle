@@ -52,7 +52,7 @@ dependencies {
     compile 'org.swinglabs.swingx:swingx-all:1.6.4'
 	compile 'com.miglayout:miglayout-swing:4.2'
 	compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.mojang:authlib:1.5.21'
+    compile 'com.mojang:authlib:1.5.22'
     compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
 	compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 	compile 'org.projectlombok:lombok:1.12.6'
@@ -136,6 +136,7 @@ createApp.dependsOn.remove(copyToResourcesJava)
 build.dependsOn(createAppZip)
 createApp.dependsOn(copyMainJar)
 copyMainJar.dependsOn(shadowJar)
+shadowJar.dependsOn(jar)
 
 afterEvaluate {
 	launch4j {
