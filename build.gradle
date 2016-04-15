@@ -204,5 +204,8 @@ license {
     exclude 'net/ftb/util/Parallel.java'
     exclude 'net/ftb/tracking/**/*.java'
     exclude 'net/ftb/util/winreg/**/*.java'
+    exclude 'net/ftb/gui/SmartScroller.java'
+    exclude 'net/ftb/util/ComparableVersion.java'
+    exclude 'net/ftb/util/Comparable*VersionTest.java'
     newLine = false
 }
