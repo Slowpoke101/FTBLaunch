@@ -441,6 +441,9 @@ public class ModPack {
         if (customMCVersions != null && customMCVersions.containsKey(packVersion)) {
             return customMCVersions.get(packVersion);
         }
+        if(getDir().equals("mojang_vanilla")) {
+            return packVersion;
+        }
         return mcVersion;
     }
 
