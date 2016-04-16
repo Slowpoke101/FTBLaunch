@@ -76,89 +76,89 @@ MAPS_WAIT_WHILE_LOADING = Veuilllez patienter pendant le chargement des cartes..
 TEXTURE_WAIT_WHILE_LOADING = Veuilllez patienter pendant le chargement des packs de texture...
 
 # Advanced  Options
-ADVANCED_OPTIONS_TITLE = 
-ADVANCED_OPTIONS_DLLOCATION = 
-ADVANCED_OPTIONS_MCWINDOW_SIZE = 
-ADVANCED_OPTIONS_MCWINDOW_POS = 
-ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 
-ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 
-ADVANCED_OPTIONS_JAVA_PATH = 
-ADVANCED_OPTIONS_ADDJAVAOPTIONS = 
-ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 
-ADVANCED_OPTIONS_BETA = 
+ADVANCED_OPTIONS_TITLE = Options avancées
+ADVANCED_OPTIONS_DLLOCATION = Adresse de téléchargement :
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Taille de la fenêtre Minecraft :
+ADVANCED_OPTIONS_MCWINDOW_POS = Position de la fenêtre Minecraft :
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = Maximiser la fenêtre ?
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Désactiver le pistage Google Analytics
+ADVANCED_OPTIONS_JAVA_PATH = Chemin de JAVA :
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Paramètres aditionnels de JAVA :
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = Débogage supplémentaire du lanceur 
+ADVANCED_OPTIONS_BETA = Permettre l'utilisation de la version Beta du lanceur ?
 
 # Update
-UPDATE_WICHUPDATE = 
-UPDATE_DOWNGRADE = 
+UPDATE_WICHUPDATE = Souhaitez-vous mettre à jour ?
+UPDATE_DOWNGRADE =  Souhaitez-vous la version antérieure ?
 
 # LUNCHERUPDATE
-LUNCHERUPDATE_ISAVAILABLE = 
-LUNCHERUPDATE_CHANGELOG = 
-LUNCHERUPDATE_ISAVAILABLETITLE = 
-LUNCHERUPDATE_CURRENTDEAD = 
+LUNCHERUPDATE_ISAVAILABLE = du lanceur est disponible.
+LUNCHERUPDATE_CHANGELOG = Voir le journal des changements
+LUNCHERUPDATE_ISAVAILABLETITLE = Mise à jour du lanceur est disponible
+LUNCHERUPDATE_CURRENTDEAD = Votre lanceur actuel doit être mise à jour pour l'une des raisons suivantes : \n ne pas être capable de lancer/mettre à jour Minecraft ou les paquets correctement !
 
 # Modpack Update
-UPDATEMODPACK_ISAVALIBLE = 
-UPDATEMODPACK_BACKUPCFG = 
-UPDATEMODPACK_BACKUPSave = 
-UPDATEMODPACK_TITLE = 
-UPDATEMODPACK_DOWNGRADE = 
-UPDATEMODPACK_FROM_TO_VERSION = 
+UPDATEMODPACK_ISAVALIBLE = Une nouvelle version du packets de mod est disponible !
+UPDATEMODPACK_BACKUPCFG = Sauvegarder les fichiers de config. ?
+UPDATEMODPACK_BACKUPSave = Sauvegarger les fichiers de sauvegarde ?
+UPDATEMODPACK_TITLE = Mise à jour de paquets de mod disponible
+UPDATEMODPACK_DOWNGRADE = La version installée est plus récente que la version choisie
+UPDATEMODPACK_FROM_TO_VERSION = Version courante : %LOCALVER%\nVersion choisie : %ONLINEVER%
 
 # Private Pack
-PRIVATEPACK_TITLE = 
-PRIVATEPACK_ERROR = 
-PRIVATEPACK_TEXT = 
-PRIVATEPACK_SECCESS = 
-PRIVATEPACK_NOTEXISTS = 
-PRIVATEPACK_ALREADY_ADDED = 
+PRIVATEPACK_TITLE = Interface de paquet privé
+PRIVATEPACK_ERROR = Paquet privé non-valide
+PRIVATEPACK_TEXT = Saisissez le code privé que vous avez obtenu du propriétaire du paquet privé et cliquez ajouter, le paquet sera alors dans votre liste de paquet. il sera automatiquement chargé au démarrage. Si vous souhaitez supprimer un paquet privé, saisissez de nouveau le code, et cliquez supprimer.
+PRIVATEPACK_SECCESS = Supprimé avec succès.
+PRIVATEPACK_NOTEXISTS = Nom de paquet incorrect.
+PRIVATEPACK_ALREADY_ADDED = Ce paquet privé est déjà ajouté.
 
 # Filter
-FILTER_PACKTYPE = 
-FILTER_ORIGIN = 
-FILTER_3THPARTY = 
-FILTER_FTB = 
-FILTER_COMPERTIBLEPACK = 
-FILTER_APPLY = 
-FILTER_SEARCHMAP = 
-FILTER_TITLE = 
-FILTER_PUBLIC = 
-FILTER_PRIVATE = 
-FILTER_MODPACKAVALIABILITY = 
-FILTER_MCVERSION = 
-FILTER_RESULUTION = 
-FILTER_TEXSEARCH = 
-FILTER_SEARCHPACK = 
+FILTER_PACKTYPE = Type de paquet de mod :
+FILTER_ORIGIN = Créateur de la carte :
+FILTER_3THPARTY = Tiece partie
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = Paquet compatible :
+FILTER_APPLY = Appliquer le filtre
+FILTER_SEARCHMAP = Rechercher des cartes :
+FILTER_TITLE = Filtres
+FILTER_PUBLIC = Listé
+FILTER_PRIVATE = Non-listé
+FILTER_MODPACKAVALIABILITY = Disponibilité du paquet de mod :
+FILTER_MCVERSION = Version de Minecraft :
+FILTER_RESULUTION = Résolution du paquet de mod :
+FILTER_TEXSEARCH = Chercher paquets
+FILTER_SEARCHPACK = Rechercher
 
 # Play Offline
-PLAYOFFLINE_WANNA = 
+PLAYOFFLINE_WANNA = Quelque chose s'est mal passé..\nVoudriez-vous jouer Hors ligne ?
 
 # Password
-PASSWORD_PASSLABEL = 
-PASSWORD_TITLE = 
+PASSWORD_PASSLABEL = Mot de passe :
+PASSWORD_TITLE = Veuillez entrer votre mot de passe
 
 # Profile
-OLDCREDS = 
-CHANGEDUUID = 
-PROFILEADDER_USERNAME = 
-PROFILEADDER_PASSWORD = 
-PROFILEADDER_NAME = 
-PROFILEADDER_SAVEPASSWORD = 
-PROFILEADDER_TITLE = 
-PROFILADDER_ERROR = 
-PROFILEADDER_UPDATE = 
-PROFILEDITOR_TITLE = 
-PROFILEADDER_SAVEMOJANGDATA = 
+OLDCREDS = De vieilles données de paramètres ont été trouvées ou les données de connection sont manquantes : Veuillez mettre à jour.
+CHANGEDUUID =Uun changement a été détecté dans le matériel utilisateurs empèchant le lanceur d'accéder a votre identité, Veuillez les re-saisir.
+PROFILEADDER_USERNAME = Pseudo/Adr. email :
+PROFILEADDER_PASSWORD = Mot de passe :
+PROFILEADDER_NAME = Nom du profil :
+PROFILEADDER_SAVEPASSWORD = Se souvenir du mot de passe
+PROFILEADDER_TITLE = Créateur de profil
+PROFILADDER_ERROR = Impossible de créer le profil
+PROFILEADDER_UPDATE = Mise à jour
+PROFILEDITOR_TITLE = Editeur de profil
+PROFILEADDER_SAVEMOJANGDATA = Se souvenir du jeton d'auth.
 
 # Map Override
-MAPOVERRIDE_FOUNDERROR = 
-MAPOVERRIDE_WISHOVERRIDE = 
+MAPOVERRIDE_FOUNDERROR = Attention ! il y a déjà une carte du même nom !
+MAPOVERRIDE_WISHOVERRIDE = Voulez-vous l'écraser ?
 
 # Force Kill MC
-KILL_MC = 
-KILL_MC_TITLE = 
-KILL_MC_MESSAGE = 
-KILL_MC_CONFIRM = 
+KILL_MC = Tuer le processus Minecraft
+KILL_MC_TITLE = Tuer le processus Minecraft ?
+KILL_MC_MESSAGE = Attention ! Ceci peut provoquer de la corruption, et doit seulement être utilisé si le jeu est gelé !
+KILL_MC_CONFIRM = Etes vous sur de vouloir tuer le processus de Minecraft ?
 
 # Thread dump MC
 TD_MC = 
@@ -168,29 +168,29 @@ TD_MC_CONFIRM =
 TD_MC_FAIL_MESSAGE = 
 
 # Main
-MAIN_EXIT = 
-MAIN_APPLY = 
-MAIN_YES = 
-MAIN_NO = 
-MAIN_ALL = 
-MAIN_CANCEL = 
-MAIN_SUBMIT = 
-MAIN_REMOVE = 
-MAIN_ADD = 
-MAIN_CLIENT = 
-MAIN_SERVER = 
-BUTTON_IGNORE = 
-BUTTON_OK = 
-NAG_SCREEN_MESSAGE = 
+MAIN_EXIT = SORTIR
+MAIN_APPLY = Appliquer
+MAIN_YES = Oui
+MAIN_NO = Non
+MAIN_ALL = Tout
+MAIN_CANCEL = Annuler
+MAIN_SUBMIT = Envoyer
+MAIN_REMOVE = Supprimer
+MAIN_ADD = Ajouter
+MAIN_CLIENT = Client
+MAIN_SERVER = Serveur
+BUTTON_IGNORE = Ignorer
+BUTTON_OK = OK
+NAG_SCREEN_MESSAGE = Cliquez sur OK pour continuer ou IGNORER pour éviter cet avertissement dans l'avenir
 
 # First run dialog
-INSTALL_TITLE = 
-INSTALL_LANGUAGE = 
-INSTALL_CHANGE = 
+INSTALL_TITLE = Premier lancement
+INSTALL_LANGUAGE = Installation de la langue...
+INSTALL_CHANGE = Changer
 
 # System Tray
-TRAY_QUIT = 
-TRAY_FTB_WEBSITE = 
+TRAY_QUIT = Quitter
+TRAY_FTB_WEBSITE = Site Web de FTB
 
 # CheckInstallPath
 CIP_BADPATH = 
