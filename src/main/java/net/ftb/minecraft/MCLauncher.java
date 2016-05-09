@@ -146,7 +146,7 @@ public class MCLauncher {
             }
         }
         if (Settings.getSettings().getOptJavaArgs()) {
-            String optArgs = "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
+            String optArgs = "-XX:+UseG1GC -XX:+UseStringDeduplication -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
             Logger.logInfo("Adding Optimization Arguments: " + optArgs);
             Collections.addAll(arguments, optArgs.split("\\s+"));
         }
