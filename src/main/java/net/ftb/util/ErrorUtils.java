@@ -113,6 +113,8 @@ public class ErrorUtils {
             }
         });
         ep.setEditable(false);
+        Logger.logDebug("Dsiplaying dialog");
         JOptionPane.showMessageDialog(LaunchFrame.getInstance(), ep, null, severity);
+        Logger.logDebug("Returned from dialog");
     }
 }
