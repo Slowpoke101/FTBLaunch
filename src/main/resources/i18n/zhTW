@@ -1,0 +1,204 @@
+LOCALE_NAME = 中文（台灣）
+LOCALE_LOADED = 已載入中文（台灣）語系檔！
+
+# Footer
+DONATE_BUTTON = 贊助
+
+# Main Tab
+EDIT_BUTTON = 編輯
+LAUNCH_BUTTON = 啟動
+PROFILE_CREATE = 新增帳號
+PROFILE_SELECT = 選擇帳號
+DOWNLOAD_SERVER_PACK = 下載伺服器模組包
+WARN_32BIT_OS = 偵測到您正在使用 32 位元的 Java。<ul><li>部分大型模組包需要 64 位元的作業系統才能順利開啟<li>32 位元的 Java 無法使用大於 1.5GB 的記憶體<li>如果無法開啟，請試試看 FTB Lite 或小型模組包<li>支援頻道無法處理這個問題。如果您想遊玩最新或大型模組包，請使用 64 位元的作業系統跟 Java</ul>
+WARN_32BIT_JAVA = 偵測到您正在 64 位元的作業系統上使用 32 位元的 Java。<ul><li>部分大型模組包需要 64 位元的作業系統才能順利開啟<li>32 位元的 Java 無法使用大於 1GB 的記憶體<li>如果無法開啟，請試試看 FTB Lite 或小型模組包<li>此問題可被輕易解決，請從 <a href="http：//java.com/en/download/manual.jsp">Oracle 的網站</a>安裝 64 位元的 Java<li>安裝完 64 位元的 Java 後，請記得在設定選單調整記憶體設定</ul>
+WARN_JAVA6 = 偵測到您正在使用 Java 6。<ul><li>部分較新的模組包必須使用 Java 7 或更新版本才能順利開啟。<li>此問題可被輕易解決，請從 <a href="http：//java.com/en/download/manual.jsp">Oracle 的網站</a>下載並安裝較新版的 Java<li>如果您的作業系統不支援 Java 7，那麼您將無法遊玩較新的模組包</ul>
+
+# Console
+CONSOLE_TITLE = Console
+CONSOLE_COPYCLIP = 複製到剪貼簿
+CONSOLE_CLIP_CONFIRM = 您確定要複製完整記錄檔到您的剪貼簿嗎？
+CONSOLE_PASTE = 上傳記錄檔
+CONSOLE_SUPPORT = 需要幫忙嗎？點我！
+
+# Map Tab
+INSTALL_MAP = 安裝地圖
+DOWNLOAD_MAP_SERVER = 下載伺服器地圖
+
+#tab swapping
+SWAP_MAP = 地圖
+SWAP_TEXTURE = 材質包
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = 安裝材質包
+
+# Options pane
+INSTALL_FOLDER = 安裝資料夾
+FORCE_UPDATE = 強制更新？
+RAM_MAX = 最大記憶體使用量（MB）
+LANGUAGE = 語言
+SHOW_CONSOLE = 顯示主控台
+OPT_JAVA_ARGS= 使用適用於較快速電腦的優化參數
+USE_SYSTEM_PROXY = 使用 Proxy 伺服器下載檔案
+REOPEN_LAUNCHER = 關閉 Minecraft 後自動重新開啟啟動器
+ADVANCED_OPTIONS = 進階選項
+INSTALL_FIRSTUSE = 由於這是您第一次使用此啟動器，我們建議您先設定安裝目錄。
+DOWNLOAD_JAVA64 = 下載 64 位元的 Java
+DOWNLOAD_JAVA32 = 下載 32 位元的 Java
+DOWNLOAD_JAVAGOOD = 下載 Java 建議版
+JAVA_OLD_Warning = Java 版本過舊，建議使用 Java 7 以上的版本。
+JAVA_NEW_Warning = 不支援 Java 8。（Mac 上的 Minecraft 不相容於 Java 8）
+JAVA_32BIT_WARNING = 您正在使用 32 位元的 Java，Minecraft 將只能使用 1.5GB 的記憶體。
+
+# Shared strings
+FILTER_SETTINGS = 篩選器設定
+
+# Modpacks pane
+MODS_EDIT_PACK = 編輯模組包
+MODS_WAIT_WHILE_LOADING = 請稍後，正在載入模組列表…
+DOWNLOAD_SERVER = 下載伺服器
+MODPACK_VERSIONS = 模組包版本
+PACK_CODES = 模組包代碼
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = 啟用的模組
+MODS_EDIT_DISABLED_LABEL = 停用的模組
+MODS_EDIT_OPEN_FOLDER = 開啟資料夾
+MODS_EDIT_ADD_MOD = 新增模組
+MODS_EDIT_ENABLE_MOD = << 啟用
+MODS_EDIT_DISABLE_MOD = 停用 >>
+MODS_EDIT_TITLE = 模組包編輯器
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = 請稍後，正在載入地圖列表…
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = 請稍後，正在載入材質包列表…
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = 進階選項
+ADVANCED_OPTIONS_DLLOCATION = 下載位置
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft 視窗大小
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft 視窗位置
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = 自動最大化
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = 停用 Google Analytic 追蹤
+ADVANCED_OPTIONS_JAVA_PATH = Java 位置
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Java 參數
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 顯示除錯訊息
+ADVANCED_OPTIONS_BETA= 允許使用測試版的啟動器
+
+# Update
+UPDATE_WICHUPDATE = 您確定要更新嗎？
+UPDATE_DOWNGRADE = 您確定要降低版本嗎？
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = 版的啟動器已可下載。
+LUNCHERUPDATE_CHANGELOG = 檢視 Changelog
+LUNCHERUPDATE_ISAVAILABLETITLE = 啟動器有新的更新
+LUNCHERUPDATE_CURRENTDEAD = 由於下列原因，你必須更新啟動器：\n 可能無法正常開啟或更新模組包！
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = 模組包有新版本！
+UPDATEMODPACK_BACKUPCFG = 備份 Config
+UPDATEMODPACK_BACKUPSave = 備份遊戲世界
+UPDATEMODPACK_TITLE = 模組包有新的更新
+UPDATEMODPACK_DOWNGRADE = 已安裝的版本比選擇的版本低
+UPDATEMODPACK_FROM_TO_VERSION = 已安裝的版本： %LOCALVER%\n選擇的版本： %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = 私人模組包
+PRIVATEPACK_ERROR = 代碼錯誤
+PRIVATEPACK_TEXT = 輸入模組包代碼，並點選「新增」以加入私人模組包。將會在啟動自動載入。如果您想移除私人模組包，再次輸入模組包代碼，並點選「移除」。
+PRIVATEPACK_SECCESS = 已成功移除。
+PRIVATEPACK_NOTEXISTS = 錯誤的私人模組包
+PRIVATEPACK_ALREADY_ADDED = 此非公開模組包已經加入過了
+
+# Filter
+FILTER_PACKTYPE = 模組包類型：
+FILTER_ORIGIN = 地圖作者：
+FILTER_3THPARTY = 第三方
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = 相容的模組包：
+FILTER_APPLY = 套用篩選器
+FILTER_SEARCHMAP = 搜尋地圖
+FILTER_TITLE = 篩選器
+FILTER_PUBLIC = 公開模組包
+FILTER_PRIVATE = 私人模組包
+FILTER_MODPACKAVALIABILITY = 模組包類型：
+FILTER_MCVERSION = Minecraft 版本：
+FILTER_RESULUTION = 材質包解析度：
+FILTER_TEXSEARCH = 搜尋材質包
+FILTER_SEARCHPACK = 搜尋
+
+# Play Offline
+PLAYOFFLINE_WANNA = 發生錯誤…\n您想要以離線模式開啟模組包嗎？
+
+# Password
+PASSWORD_PASSLABEL = 輸入密碼： 
+PASSWORD_TITLE = 請輸入密碼
+
+# Profile
+OLDCREDS = 找不到登入資料或為舊版登入資料：請更新。
+CHANGEDUUID = 無法存取資料，請重新輸入.
+PROFILEADDER_USERNAME = 使用者名稱或電子郵件：
+PROFILEADDER_PASSWORD = 密碼：
+PROFILEADDER_NAME = 名稱：
+PROFILEADDER_SAVEPASSWORD = 記住密碼
+PROFILEADDER_TITLE = 建立帳號
+PROFILADDER_ERROR = 建立失敗。
+PROFILEADDER_UPDATE = 更新
+PROFILEDITOR_TITLE = 帳號編輯器
+PROFILEADDER_SAVEMOJANGDATA = 記住驗證 Token
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = 警告！已經有相同名稱的地圖了！
+MAPOVERRIDE_WISHOVERRIDE = 您確定要覆蓋嗎？
+
+# Force Kill MC
+KILL_MC = 強制停止 Minecraft
+KILL_MC_TITLE = 強制停止 Minecraft
+KILL_MC_MESSAGE = 警告！只能在遊戲卡住時使用！
+KILL_MC_CONFIRM = 您確定要強制停止 Minecraft 嗎？
+
+# Thread dump MC
+TD_MC = 產生 Minecraft 執行緒傾印檔
+TD_MC_TITLE = 產生 Minecraft 執行緒傾印檔
+TD_MC_MESSAGE = <html>將會促使 Minecraft 產生執行緒傾印檔，<br>進行前請先確認您知道您在做什麼。<br>點選「是」後啟動器將會自動下載適用於 Windows 的附加執行檔<br><br></html>
+TD_MC_CONFIRM = 您確定要產生 Minecraft 執行緒傾印檔嗎？
+TD_MC_FAIL_MESSAGE = 產生失敗！</ul>
+
+# Main
+MAIN_EXIT = 離開
+MAIN_APPLY = 套用
+MAIN_YES = 是
+MAIN_NO = 否
+MAIN_ALL = 全部
+MAIN_CANCEL = 取消
+MAIN_SUBMIT = 送出
+MAIN_REMOVE = 移除
+MAIN_ADD = 新增
+MAIN_CLIENT = 玩家端
+MAIN_SERVER = 伺服器
+BUTTON_IGNORE = 忽略
+BUTTON_OK = 確定
+NAG_SCREEN_MESSAGE = 點選「確定」以繼續，或點選「忽略」以忽略此警告
+
+# First run dialog
+INSTALL_TITLE = 第一次執行
+INSTALL_LANGUAGE = 語言…
+INSTALL_CHANGE = 變更
+
+# System Tray
+TRAY_QUIT = 退出
+TRAY_FTB_WEBSITE = FTB 官網
+
+# CheckInstallPath
+CIP_BADPATH = 不支援的安裝目錄。Forge 不支援下列的特殊字元：\n LIST 請選擇新的安裝目錄，像是 
+CIP_PROGRAMFILES = 無法安裝於 C:\Program Files\ 。 \n請選擇新的安裝目錄，像是 
+CIP_INTERNETFILES = 無法安裝於 Temporary Internet Files 。 \n請選擇新的安裝目錄，像是 
+CIP_USERPROFILE = 不建議安裝於 C：\Users\<username> 下，這可能會產生問題。\n我們建議您選擇新的安裝目錄，像是 
+CIP_WRITEPROTECT = 無法寫入 FTB 安裝目錄。 \n請選擇您有權限寫入的目錄
+CIP_EXISTS = 找不到 FTB 安裝目錄！
+CIP_CREATE = 無法新增 FTB 安裝位置
+CIP_SELECTAGAIN = 請再次選擇！
+CIP_PLEASECHANGE = 請在「設定」選單中更改安裝位置。
