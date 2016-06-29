@@ -125,7 +125,7 @@ public class DownloadUtils extends Thread {
             return resolved;
         } else {
             Logger.logWarn("Using backupLink for " + file);
-            if (!file.contains("1.8") || !file.contains("1.9") || !file.contains("1.10") || !file.contains("1.11")|| !file.contains("1.12")) {
+            if (!file.contains("1.8") && !file.contains("1.9") && !file.contains("1.10") && !file.contains("1.11") && !file.contains("1.12")) {
                 // FTB hosts own version.json fails. If we are here something failed. Why?
                 Logger.logError("GET request for " + file + " failed. Please Send log to launcher team and provide your public IP address if possible.");
                 TrackerUtils.sendPageView("getStaticCreeperhostLinkOrBackup", "GET_failed: " + file);
@@ -378,7 +378,7 @@ public class DownloadUtils extends Thread {
         if (content != null) {
             Logger.logInfo("Remote: " + content.toUpperCase());
         } else {
-            Logger.logError("could not find remote hash for " + url );
+            Logger.logError("could not find remote hash for " + url);
         }
         return content.equalsIgnoreCase(result);
     }
