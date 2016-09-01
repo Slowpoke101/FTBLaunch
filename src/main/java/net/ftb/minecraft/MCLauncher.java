@@ -116,6 +116,7 @@ public class MCLauncher {
         arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
         arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
         arguments.add("-Duser.home=" + gameDir.getParentFile().getAbsolutePath());
+        arguments.add("-Duser.language=en");
 
         if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
             arguments.add("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
