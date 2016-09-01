@@ -77,10 +77,12 @@ public class CryptoUtils {
         try {
             Cipher aes = Cipher.getInstance("AES");
             if (keyHardware != null && keyHardware.length > 0) {
+                Logger.logDebug("trying with hardware id");
                 try {
                     aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
                     s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
                     if (s.startsWith("FDT:") && s.length() > 4) {
+                        Logger.logDebug("hardware id ok");
                         return s.split(":", 2)[1];// it was decrypted with HW UUID
                     }
                 } catch (Exception e) {
@@ -89,11 +91,14 @@ public class CryptoUtils {
             }
 
             // did not open, try again with old mac based key
+            Logger.logDebug("Tryinng with mac address");
             aes.init(Cipher.DECRYPT_MODE, new SecretKeySpec(pad(keyMac), "AES"));
             s = new String(aes.doFinal(Base64.decodeBase64(str)), "utf8");
             if (s.startsWith("FDT:") && s.length() > 4) {
+                Logger.logDebug("mac address ok");
                 return s.split(":", 2)[1];//we don't want the decryption test
             } else {
+                Logger.logDebug("Trying some legacy");
                 return decryptLegacy(str, keyMac);
             }
         } catch (Exception e) {
@@ -113,10 +118,14 @@ public class CryptoUtils {
         try {
             Cipher aes = Cipher.getInstance("AES");
             if (keyHardware != null && keyHardware.length > 0) {
+                Logger.logDebug("trying hardware id");
                 aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyHardware), "AES"));
+                Logger.logDebug("hardware id ok");
                 return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
             }
+            Logger.logDebug("trying mac address");
             aes.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(pad(keyMac), "AES"));
+            Logger.logDebug("mac address ok");
             return Base64.encodeBase64String(aes.doFinal(("FDT:" + str).getBytes("utf8")));
         } catch (Exception e) {
             Logger.logError("Error Encrypting information, reverting to legacy format", e);
