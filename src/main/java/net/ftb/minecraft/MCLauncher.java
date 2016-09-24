@@ -61,6 +61,9 @@ public class MCLauncher {
     private static String gameDirectory;
     private static StringBuilder cpb;
 
+    private MCLauncher() {
+    }
+
     public static Process launchMinecraft (String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
             String maxPermSize, String version, UserAuthentication authentication, boolean legacy, String versionType) throws IOException {
 

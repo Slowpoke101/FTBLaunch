@@ -35,6 +35,9 @@ import java.io.OutputStreamWriter;
 import javax.swing.*;
 
 public class MainHelpers {
+    private MainHelpers() {
+    }
+
     public static void printInfo () {
         Logger.logInfo("FTBLaunch starting up (version " + Constants.version + " Build: " + Constants.buildNumber + ")");
         Logger.logDebug("System's default JVM: (This is not always used to launch MC)");

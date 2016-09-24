@@ -40,6 +40,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class FTBFileUtils {
+    private FTBFileUtils() {
+    }
+
     /**
      * @param sourceFolder - the folder to be moved
      * @param destinationFolder - where to move to

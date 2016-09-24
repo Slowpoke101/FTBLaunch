@@ -25,6 +25,9 @@ import javax.swing.*;
 
 public class GameUtils {
 
+    private GameUtils() {
+    }
+
     public static void killMC () {
         //if Mc is running
         if (LaunchFrame.MCRunning) {

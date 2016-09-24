@@ -54,6 +54,9 @@ public class OSUtils {
 
     private static UUID clientUUID;
 
+    private OSUtils() {
+    }
+
     public static Proxy getProxy (String url) {
         // this is set explicitly with command line define or by our proxy setting
         String system = System.getProperty("java.net.useSystemProxies");

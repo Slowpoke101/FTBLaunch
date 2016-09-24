@@ -29,6 +29,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class CryptoUtils {
 
+    private CryptoUtils() {
+    }
+
     /**
      * Newer implementation available if possible use {@link #decrypt(String str)}
      * @param str string to decrypt

@@ -38,6 +38,9 @@ import java.security.cert.X509Certificate;
 
 public class SSLUtils {
 
+    private SSLUtils() {
+    }
+
     /**
      *
      * @param s host name to test

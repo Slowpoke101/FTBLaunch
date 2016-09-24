@@ -37,6 +37,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RSSReader {
 
+    private RSSReader() {
+    }
+
     public static List<NewsArticle> readRSS () {
         try {
             List<NewsArticle> news = Lists.newArrayList();

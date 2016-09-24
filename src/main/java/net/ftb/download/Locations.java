@@ -95,4 +95,6 @@ public class Locations {
     public static final String launcherLogFile = "FTBLauncherLog.txt";
     public static final String minecraftLogFile = "MinecraftLog.txt";
 
+    private Locations() {
+    }
 }

@@ -31,6 +31,9 @@ public class NewsUtils {
     private static List<NewsArticle> news = null;
     private static DateFormat dateFormatterRss = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
+    private NewsUtils() {
+    }
+
     public static void initializeNews () {
         news = RSSReader.readRSS();
     }

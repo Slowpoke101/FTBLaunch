@@ -27,6 +27,9 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 public class ErrorUtils {
+    private ErrorUtils() {
+    }
+
     /**
      * Writes error into log and shows error in message dialog
      * <p>

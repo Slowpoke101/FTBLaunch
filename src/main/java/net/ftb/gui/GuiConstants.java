@@ -29,5 +29,8 @@ public class GuiConstants {
     public static final String FILL_SINGLE_LINE = "wrap, span, grow";
     public static final String SEP = ", ";
     public static final String GROW = "grow";
+
+    private GuiConstants() {
+    }
 }
 

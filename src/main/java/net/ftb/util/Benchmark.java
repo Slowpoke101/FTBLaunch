@@ -24,6 +24,9 @@ public class Benchmark {
     private static Long baseTime;
     private static ConcurrentHashMap<String, Long> startTimes = new ConcurrentHashMap<String, Long>();
 
+    private Benchmark() {
+    }
+
     /**
      * adds a new named timer for benchmarking
      */

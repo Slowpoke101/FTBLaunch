@@ -59,6 +59,9 @@ public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
 
+    private MCInstaller() {
+    }
+
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
