@@ -915,7 +915,7 @@ public class LaunchFrame extends JFrame {
         JavaInfo java = Settings.getSettings().getCurrentJava();
         ModPack pack = ModPack.getSelectedPack();
 
-        // save ´pack being launched
+        // save pack being launched
         if (instance.currentPane == Panes.MODPACK) {
             Settings.getSettings().setLastFTBPack(FTBPacksPane.getInstance().getSelectedPack().getDir());
         } else {
@@ -928,6 +928,11 @@ public class LaunchFrame extends JFrame {
             ErrorUtils.tossError("Please update your launcher in order to launch this pack! This can be done by restarting your launcher, an update dialog will pop up.");
             return;
         }
+
+        //TODO take these 3 things and setup a new nag screen, also update the default logic
+        long osfreeram = OSUtils.getOSFreeMemory();
+        long ostotalram = OSUtils.getOSTotalMemory();
+        String existingsetting = Settings.getSettings().getRamMax();
 
         // check if user profile is selected
         if (users.getSelectedIndex() <= 1) {
