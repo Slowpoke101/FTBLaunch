@@ -43,7 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class ModPack {
-    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml;
+    private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, maxPermSize, sep = File.separator, xml, minClientRam;
     private String[] mods, oldVersions;
     private Image logo, image;
     private int index;
@@ -196,7 +196,7 @@ public class ModPack {
      */
     public ModPack (String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions,
             String animation, String maxPermSize, int idx, boolean privatePack, String xml, boolean bundledMap, boolean customTP, String minJRE, boolean thirdpartyTab, int minLaunchSpec,
-            String disclaimer, String customMCVersions) throws IOException, NoSuchAlgorithmException {
+            String disclaimer, String customMCVersions, String minClientRam) throws IOException, NoSuchAlgorithmException {
         index = idx;
         this.name = name;
         this.author = author;
@@ -221,6 +221,7 @@ public class ModPack {
         imageName = image;
         this.info = info;
         this.disclaimer = disclaimer;
+        this.minClientRam = minClientRam;
         if (mods.isEmpty()) {
             this.mods = null;
         } else {
