@@ -280,7 +280,7 @@ public class Settings extends Properties {
             return;
         }
         if (getProperty("privatePacks") != null) {
-            ArrayList<String> packList = getPrivatePacks();
+            List<String> packList = getPrivatePacks();
             if (!packList.contains(code)) {
                 packList.add(code);
                 setPrivatePacks(packList);
@@ -291,7 +291,7 @@ public class Settings extends Properties {
     }
 
     public void removePrivatePack (String code) {
-        ArrayList<String> codes = getPrivatePacks();
+        List<String> codes = getPrivatePacks();
         if (codes.contains(code)) {
             codes.remove(code);
         }

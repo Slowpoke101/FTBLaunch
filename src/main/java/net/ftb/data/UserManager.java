@@ -34,9 +34,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserManager {
-    public final static ArrayList<User> _users = new ArrayList<User>();
+    public final static List<User> _users = new ArrayList<User>();
     private File _file;
     private File _oldFile;
 
@@ -148,7 +149,7 @@ public class UserManager {
         _users.add(new User(username, password, name));
     }
 
-    public static ArrayList<String> getUsernames () {
+    public static List<String> getUsernames () {
         ArrayList<String> ret = new ArrayList<String>();
         for (User user : _users) {
             ret.add(user.getName());

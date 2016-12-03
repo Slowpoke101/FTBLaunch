@@ -53,7 +53,7 @@ public class TexturePack {
     @Getter
     private int index;
     @Getter
-    private final static ArrayList<TexturePack> texturePackArray = Lists.newArrayList();
+    private final static List<TexturePack> texturePackArray = Lists.newArrayList();
     private static List<TexturePackListener> listeners = Lists.newArrayList();
 
     public static void addListener (TexturePackListener listener) {

@@ -54,7 +54,7 @@ public class TexturePackFilterDialog extends JDialog {
 
         int textures = TexturePack.getTexturePackArray().size();
 
-        ArrayList<String> res = Lists.newArrayList();
+        List<String> res = Lists.newArrayList();
         res.add(I18N.getLocaleString("MAIN_ALL"));
         for (int i = 0; i < textures; i++) {
             if (!res.contains(TexturePack.getTexturePack(i).getResolution())) {
@@ -62,8 +62,8 @@ public class TexturePackFilterDialog extends JDialog {
             }
         }
 
-        ArrayList<String> comp = Lists.newArrayList();
-        final ArrayList<String> compNoVersion = Lists.newArrayList();
+        List<String> comp = Lists.newArrayList();
+        final List<String> compNoVersion = Lists.newArrayList();
         comp.add(I18N.getLocaleString("MAIN_ALL"));
         compNoVersion.add(I18N.getLocaleString("MAIN_ALL"));
 

@@ -49,6 +49,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
@@ -595,7 +596,7 @@ public class DownloadUtils extends Thread {
      * @param location - location to test on the repo ex: edges.json would test ${repoURL}/edges.json
      */
     @NonNull
-    public void parseJSONtoMap (URL u, String name, HashMap<String, String> h, boolean testEntries, String location) {
+    public void parseJSONtoMap (URL u, String name, Map<String, String> h, boolean testEntries, String location) {
         try {
             String json = IOUtils.toString(u);
             JsonElement element = new JsonParser().parse(json);

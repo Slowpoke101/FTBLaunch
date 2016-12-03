@@ -41,6 +41,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
@@ -56,7 +57,7 @@ public class TextureManager extends JDialog {
     private final JLabel label;
     public static boolean updating = false;
     private static String sep = File.separator;
-    private static HashMap<String, String> installedTextures;
+    private static Map<String, String> installedTextures;
 
     private class TexturePackManagerWorker extends SwingWorker<Boolean, Void> {
         @Override

@@ -27,7 +27,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -52,7 +52,7 @@ public class ModPackFilterDialog extends JDialog {
 
         this.pane = instance;
 
-        ArrayList<String> mcVersions = Lists.newArrayList();
+        List<String> mcVersions = Lists.newArrayList();
         mcVersion.addItem(I18N.getLocaleString("MAIN_ALL"));
         mcVersions.add(I18N.getLocaleString("MAIN_ALL"));
         for (ModPack pack : ModPack.getPackArray()) {
