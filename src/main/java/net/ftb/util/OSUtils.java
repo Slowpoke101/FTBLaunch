@@ -529,7 +529,7 @@ public class OSUtils {
                 // Work-around to support non-GNOME Linux desktop environments with xdg-open installed
                 new ProcessBuilder("xdg-open", url).start();
             } else {
-                Logger.logWarn("Could not open Java Download url, not supported");
+                Logger.logWarn("Could not open Java Download url in web browser: " + url);
             }
         } catch (Exception e) {
             Logger.logError("Could not open link: " + url, e);
