@@ -66,8 +66,8 @@ public class Locations {
     public static final String jdkMac = "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html";
 
     // Forum and Feed URL
-    public static final String forum = "http://forum.feed-the-beast.com/";
-    public static final String feedURL = "http://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
+    public static final String forum = "https://forum.feed-the-beast.com/";
+    public static final String feedURL = "https://forum.feed-the-beast.com/forum/modpack-and-launcher-news.35/index.rss";
 
     //folder constants all slashes must be web safe... replace w/ system slash on win
     public static final String MAPS = "Maps/";
