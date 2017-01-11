@@ -17,25 +17,24 @@
 package net.ftb.data.news;
 
 import com.google.common.collect.Lists;
-import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.log.Logger;
 import net.ftb.util.AppUtils;
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class RSSReader {
+public final class RSSReader {
+
+    private RSSReader () {
+    }
 
     public static List<NewsArticle> readRSS () {
         try {

@@ -55,7 +55,7 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class DownloadUtils extends Thread {
+public final class DownloadUtils extends Thread {
 
     /**
      * @param file - the name of the file, as saved to the repo (including extension)

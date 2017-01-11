@@ -20,7 +20,10 @@ import lombok.NonNull;
 
 import java.util.Arrays;
 
-public class ObjectUtils {
+public final class ObjectUtils {
+
+    private ObjectUtils () {
+    }
 
     /**
      *

@@ -27,7 +27,10 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-public class CryptoUtils {
+public final class CryptoUtils {
+
+    private CryptoUtils () {
+    }
 
     /**
      * Newer implementation available if possible use {@link #decrypt(String str)}
