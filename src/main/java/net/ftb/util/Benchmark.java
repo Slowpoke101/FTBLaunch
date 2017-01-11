@@ -20,9 +20,12 @@ import net.ftb.log.Logger;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Benchmark {
+public final class Benchmark {
     private static Long baseTime;
     private static ConcurrentHashMap<String, Long> startTimes = new ConcurrentHashMap<String, Long>();
+
+    private Benchmark () {
+    }
 
     /**
      * adds a new named timer for benchmarking

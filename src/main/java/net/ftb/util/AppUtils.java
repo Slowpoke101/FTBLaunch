@@ -36,7 +36,11 @@ import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class AppUtils {
+public final class AppUtils {
+
+    private AppUtils () {
+    }
+
     /**
      * Reads all of the data from the given stream and returns it as a string.
      * @param stream the stream to read from.

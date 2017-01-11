@@ -23,7 +23,7 @@ import net.ftb.log.Logger;
 
 import javax.swing.*;
 
-public class GameUtils {
+public final class GameUtils {
 
     public static void killMC () {
         //if Mc is running
@@ -60,7 +60,7 @@ public class GameUtils {
 
             yn.setVisible(false);
 
-            if (ret == false) {
+            if (!ret) {
                 ErrorUtils.showClickableMessage(I18N.getLocaleString("TD_MC_FAIL_MESSAGE"), JOptionPane.ERROR_MESSAGE);
             }
         } else {

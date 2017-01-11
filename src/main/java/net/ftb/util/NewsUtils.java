@@ -22,14 +22,16 @@ import net.ftb.data.news.RSSReader;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewsUtils {
+public final class NewsUtils {
 
     private static List<NewsArticle> news = null;
     private static DateFormat dateFormatterRss = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+
+    private NewsUtils () {
+    }
 
     public static void initializeNews () {
         news = RSSReader.readRSS();
@@ -47,31 +49,33 @@ public class NewsUtils {
             NewsUtils.initializeNews();
         }
 
-        String html;
-        html = "<html>";
+        final StringBuilder newsBuilder = new StringBuilder();
+
+        newsBuilder.append("<html>");
         if (news != null) {
             for (NewsArticle article : news) {
-                html += article.getHTML();
+                newsBuilder.append(article.getHTML());
                 if (news.get(news.size() - 1) != article) {
-                    html += "<hr/>";
+                    newsBuilder.append("<hr/>");
                 }
             }
         } else {
-            html += "No network connection, no news.";
+            newsBuilder.append("No network connection, no news.");
         }
-        html += "</html>";
+        newsBuilder.append("</html>");
         Benchmark.logBench("NewsUtils");
-        return html;
-
+        return newsBuilder.toString();
     }
 
-    public static ArrayList<String> getPubDates () {
-        ArrayList<String> s = Lists.newArrayList();
+    public static List<String> getPubDates () {
+        final List<String> s = Lists.newArrayList();
+
         if (news != null) {
             for (NewsArticle n : news) {
                 s.add(getUnixDate(n.getDate()));
             }
         }
+
         return s;
     }
 
@@ -79,8 +83,7 @@ public class NewsUtils {
         try {
             Date dte = dateFormatterRss.parse(s);
             return String.valueOf(dte.getTime() / 1000);
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
         return "00000000";
     }

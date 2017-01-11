@@ -20,9 +20,9 @@ import net.ftb.data.Settings;
 import net.ftb.util.Benchmark;
 import net.ftb.util.NewsUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.SwingWorker;
 
 /**
  * SwingWorker that checks for unread news. Returns count of unread news
@@ -33,7 +33,7 @@ public class UnreadNewsWorker extends SwingWorker<Integer, Void> {
     protected Integer doInBackground () {
         Benchmark.start("UnreadNews");
         int i = 0;
-        ArrayList<String> dates = NewsUtils.getPubDates();
+        final List<String> dates = NewsUtils.getPubDates();
         Long lastRead = Long.parseLong(Settings.getSettings().getNewsDate());
         int read = 0;
         for (String s : dates) {

@@ -20,26 +20,38 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import lombok.Getter;
 import net.ftb.data.CommandLineSettings;
-import net.ftb.data.Settings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.RuntimeStreamer;
 import org.apache.commons.io.FileUtils;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.*;
+import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.CodeSource;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.swing.text.html.StyleSheet;
 
-public class OSUtils {
+public final class OSUtils {
     private static byte[] cachedMacAddress;
     private static String cachedUserHome;
 
@@ -53,6 +65,9 @@ public class OSUtils {
     private static byte[] hardwareID;
 
     private static UUID clientUUID;
+
+    private OSUtils () {
+    }
 
     public static Proxy getProxy (String url) {
         // this is set explicitly with command line define or by our proxy setting

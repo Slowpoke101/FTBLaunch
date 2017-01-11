@@ -46,7 +46,6 @@ public final class ModPackUtil {
     }
 
     private ModPackUtil () {
-        //Prevent instantiation of the utility class, meant to provide static methods
     }
 
     /**

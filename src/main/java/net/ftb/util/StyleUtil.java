@@ -20,9 +20,13 @@ import net.ftb.data.LauncherStyle;
 
 import javax.swing.*;
 
-public class StyleUtil {
+public final class StyleUtil {
+
+    private StyleUtil () {
+    }
+
     public static void loadUiStyles () {
-        LauncherStyle style = LauncherStyle.getCurrentStyle();
+        final LauncherStyle style = LauncherStyle.getCurrentStyle();
         UIManager.put("control", style.control);
         UIManager.put("text", style.text);
         UIManager.put("nimbusBase", style.nimbusBase);
@@ -32,4 +36,5 @@ public class StyleUtil {
         UIManager.put("info", style.info);
         UIManager.put("nimbusSelectionBackground", style.nimbusSelectionBackground);
     }
+
 }
