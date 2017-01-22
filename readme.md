@@ -5,7 +5,7 @@ Note: some classes used in this project come from the community, and as such are
 please see the links in the headers of those java files for more information about the source & the open source license used.
 FTB's code uses the following license:
 ##The license
-Copyright 2012-2014 FTB Launcher Contributors
+Copyright 2012-2017 FTB Launcher Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
