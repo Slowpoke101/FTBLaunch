@@ -19,10 +19,10 @@ package net.ftb.data;
 public final class Constants {
 
     public static final String name = "Feed The Beast Launcher";
-    public static final String version = "1.4.13";
+    public static final String version = "1.4.14";
 
     //limit for version component is 99.
-    public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 13 * 1;
+    public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 14 * 1;
 
     private Constants () {
     }
