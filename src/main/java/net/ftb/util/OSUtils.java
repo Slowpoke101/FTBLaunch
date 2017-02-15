@@ -585,10 +585,6 @@ public final class OSUtils {
         environment.remove("_JAVA_OPTIONS");
         environment.remove("JAVA_TOOL_OPTIONS");
         environment.remove("JAVA_OPTIONS");
-
-        if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-            environment.put("__COMPAT_LAYER", "WIN8RTM");
-        }
     }
 
     public static StyleSheet makeStyleSheet (String name) {
