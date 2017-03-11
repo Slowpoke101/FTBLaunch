@@ -123,7 +123,11 @@ public class MCLauncher {
         }
 
         // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
-        //arguments.add("-Djava.net.preferIPv4Stack=true");
+
+
+        if (!Settings.getSettings().getAllowIpv6()) {
+            arguments.add("-Djava.net.preferIPv4Stack=true");
+        }
 
         if (Settings.getSettings().getUseSystemProxy()) {
             arguments.add("-Djava.net.useSystemProxies=true");
