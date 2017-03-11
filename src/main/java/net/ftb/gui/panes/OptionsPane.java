@@ -65,7 +65,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private JSlider ramMaximum;
     private JComboBox locale;
     private JTextField installFolderTextField;
-    private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs, useSystemProxy;
+    private JCheckBox chckbxShowConsole, keepLauncherOpen, optJavaArgs, useSystemProxy, allowIpv6;
     private final Settings settings;
 
     private JPanel fitterPane;
@@ -218,6 +218,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         useSystemProxy.addFocusListener(settingsChangeListener);
         fitterPane.add(useSystemProxy);
 
+        allowIpv6 = new JCheckBox(I18N.getLocaleString("IPV6_SUPPORT"));
+        allowIpv6.setBounds(540, 235, 300, 25);
+        allowIpv6.setSelected(settings.getAllowIpv6());
+        allowIpv6.addFocusListener(settingsChangeListener);
+        fitterPane.add(allowIpv6);
+
         advancedOptionsBtn = new JButton(I18N.getLocaleString("ADVANCED_OPTIONS"));
         advancedOptionsBtn.setBounds(147, 275, 629, 29);
         advancedOptionsBtn.addActionListener(new ActionListener() {
@@ -251,6 +257,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         settings.setOptJavaArgs(optJavaArgs.isSelected());
         settings.setKeepLauncherOpen(keepLauncherOpen.isSelected());
         settings.setUseSystemProxy(useSystemProxy.isSelected());
+        settings.setAllowIpv6(allowIpv6.isSelected());
         settings.save();
     }
 
