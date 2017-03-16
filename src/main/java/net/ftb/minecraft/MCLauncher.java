@@ -40,6 +40,7 @@ import net.ftb.util.FTBFileUtils;
 import net.ftb.util.OSUtils;
 import net.ftb.util.Parallel;
 import net.ftb.util.TrackerUtils;
+import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
 
 import java.awt.*;
@@ -148,6 +149,11 @@ public class MCLauncher {
         }
         if (Settings.getSettings().getOptJavaArgs()) {
             String optArgs = "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
+            JavaInfo java = Settings.getSettings().getCurrentJava();
+            JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
+            if(java8.isOlder(java)) {
+                optArgs = "-XX:+UseG1GC";
+            }
             Logger.logInfo("Adding Optimization Arguments: " + optArgs);
             Collections.addAll(arguments, optArgs.split("\\s+"));
         }
