@@ -81,7 +81,6 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         byte[] buffer = new byte[24000];
         boolean downloadSuccess = false;
         List<String> remoteHash = asset.hash;
-        String hashType;
         int attempt = 0;
         final int attempts = 5;
 
