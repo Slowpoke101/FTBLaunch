@@ -40,7 +40,7 @@ public class ThirdPartyPane extends AbstractModPackPane implements ILauncherPane
     }
 
     boolean filterForTab (ModPack pack) {
-        return (pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML));
+        return pack.isThirdPartyTab() && !pack.getParentXml().contains(Locations.MODPACKXML);
     }
 
     String getLastPack () {

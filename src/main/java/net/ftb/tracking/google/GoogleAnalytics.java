@@ -124,13 +124,13 @@ public class GoogleAnalytics {
 
         sb.append("&utmcc=__utma%3D").append(hostnameHash).append(".").append(visitorId).append(".").append(timestampFirst).append(".").append(timestampPrevious).append(".").append(timestampCurrent)
                 .append(".").append(visits).append("%3B%2B__utmz%3D").append(hostnameHash).append(".").append(timestampCurrent).append(".1.1.utmcsr%3D").append(utmcsr).append("%7Cutmccn%3D")
-                .append(utmccn).append("%7Cutmcmd%3D").append(utmcmd).append((utmctr != null ? "%7Cutmctr%3D" + utmctr : "")).append((utmcct != null ? "%7Cutmcct%3D" + utmcct : ""))
+                .append(utmccn).append("%7Cutmcmd%3D").append(utmcmd).append(utmctr != null ? "%7Cutmctr%3D" + utmctr : "").append(utmcct != null ? "%7Cutmcct%3D" + utmcct : "")
                 .append("%3B&gaq=1");
         return sb.toString();
     }
 
     private String getURIString (String argString) {
-        return (argString == null ? null : URIEncoder.encodeURI(argString));
+        return argString == null ? null : URIEncoder.encodeURI(argString);
     }
 
     private int hostnameHash (String hostname) {

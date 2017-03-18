@@ -151,7 +151,7 @@ public class AuthlibHelper {
             if (isValid(authentication)) {
                 Logger.logDebug("Authentication is valid ");
                 displayName = authentication.getSelectedProfile().getName();
-                if ((authentication.isLoggedIn()) && (authentication.canPlayOnline())) {
+                if (authentication.isLoggedIn() && (authentication.canPlayOnline())) {
                     Logger.logDebug("loggedIn() && CanPlayOnline()");
                     if ((authentication instanceof YggdrasilUserAuthentication)) {
                         UserManager.setStore(user, encode(authentication.saveForStorage()));

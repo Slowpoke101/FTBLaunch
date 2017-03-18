@@ -266,7 +266,7 @@ public class EditModPackDialog extends JDialog {
      * @return The name of the original file, including the original "disabled" state, or an absent optional if no match was made
      */
     private Optional<String> defaultFile (Set<String> defaultMods, String fileName) {
-        String alternate = (fileName.endsWith(".disabled") ? fileName.substring(0, fileName.length() - ".disabled".length()) : fileName + ".disabled");
+        String alternate = fileName.endsWith(".disabled") ? fileName.substring(0, fileName.length() - ".disabled".length()) : fileName + ".disabled";
 
         if (defaultMods.contains(fileName.toLowerCase())) {
             return Optional.of(fileName.toLowerCase());

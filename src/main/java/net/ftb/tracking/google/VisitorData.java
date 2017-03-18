@@ -68,7 +68,7 @@ public class VisitorData {
      * initializes a new visitor data, with new visitorid
      */
     public static VisitorData newVisitor () {
-        int visitorId = (new SecureRandom().nextInt() & 0x7FFFFFFF);
+        int visitorId = new SecureRandom().nextInt() & 0x7FFFFFFF;
         long now = now();
         return new VisitorData(visitorId, now, now, now, 1);
     }

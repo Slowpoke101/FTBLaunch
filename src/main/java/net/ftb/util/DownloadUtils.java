@@ -62,7 +62,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = downloadServers.containsKey(Settings.getSettings().getDownloadServer()) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
@@ -95,7 +95,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct static link or the backup link if the file isn't found
      */
     public static String getStaticCreeperhostLinkOrBackup (String file, String backupLink) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = downloadServers.containsKey(Settings.getSettings().getDownloadServer()) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
@@ -139,7 +139,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getStaticCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = downloadServers.containsKey(Settings.getSettings().getDownloadServer()) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
@@ -176,7 +176,7 @@ public final class DownloadUtils extends Thread {
             HttpURLConnection connection = (HttpURLConnection) new URL(getStaticCreeperhostLink(file)).openConnection();
             connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
-            return (connection.getResponseCode() == 200);
+            return connection.getResponseCode() == 200;
         } catch (Exception e) {
             return false;
         }
@@ -191,7 +191,7 @@ public final class DownloadUtils extends Thread {
             HttpURLConnection connection = (HttpURLConnection) new URL(Locations.masterRepo + "/FTB2/" + file).openConnection();
             connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
-            return (connection.getResponseCode() == 200);
+            return connection.getResponseCode() == 200;
         } catch (Exception e) {
             return false;
         }
@@ -207,7 +207,7 @@ public final class DownloadUtils extends Thread {
             connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             int code = connection.getResponseCode();
-            return (code == 200);
+            return code == 200;
         } catch (Exception e) {
             return false;
         }

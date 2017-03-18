@@ -182,7 +182,7 @@ public class ComparableVersion
         }
 
         public boolean isNull () {
-            return (comparableQualifier(value).compareTo(RELEASE_VERSION_INDEX) == 0);
+            return comparableQualifier(value).compareTo(RELEASE_VERSION_INDEX) == 0;
         }
 
         /**
@@ -241,7 +241,7 @@ public class ComparableVersion
         }
 
         public boolean isNull () {
-            return (size() == 0);
+            return size() == 0;
         }
 
         void normalize () {

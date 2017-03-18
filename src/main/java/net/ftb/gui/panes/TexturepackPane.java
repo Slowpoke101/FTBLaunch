@@ -223,8 +223,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
         texturePackPanels.add(p);
         texturePacks.add(p);
 
-        texturePacks.setMinimumSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
-        texturePacks.setPreferredSize(new Dimension(420, (texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
+        texturePacks.setMinimumSize(new Dimension(420, texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
+        texturePacks.setPreferredSize(new Dimension(420, texturePackPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
 
     }
 
@@ -328,7 +328,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     private static int getTexturePackNum () {
         if (currentTexturePacks.size() > 0) {
             if (!compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || !resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL"))) {
-                return currentTexturePacks.get((texturePackPanels.size() - 1)).getIndex();
+                return currentTexturePacks.get(texturePackPanels.size() - 1).getIndex();
             }
         }
         return texturePackPanels.size();
@@ -339,16 +339,16 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     }
 
     private static boolean compatibilityCheck (TexturePack tp) {
-        return (compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.isCompatible(compatible));
+        return compatible.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.isCompatible(compatible);
     }
 
     private static boolean resolutionCheck (TexturePack tp) {
-        return (resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.getResolution().equalsIgnoreCase(resolution));
+        return resolution.equalsIgnoreCase(I18N.getLocaleString("MAIN_ALL")) || tp.getResolution().equalsIgnoreCase(resolution);
     }
 
     private static boolean textSearch (TexturePack tp) {
         String searchString = SearchDialog.lastTextureSearch.toLowerCase();
-        return ((searchString.isEmpty()) || tp.getName().toLowerCase().contains(searchString) || tp.getAuthor().toLowerCase().contains(searchString));
+        return (searchString.isEmpty() || tp.getName().toLowerCase().contains(searchString) || tp.getAuthor().toLowerCase().contains(searchString));
     }
 
 }

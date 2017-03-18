@@ -41,7 +41,7 @@ public class FTBPacksPane extends AbstractModPackPane implements ILauncherPane {
     }
 
     boolean filterForTab (ModPack pack) {
-        return (!pack.isThirdPartyTab());
+        return !pack.isThirdPartyTab();
     }
 
     String getLastPack () {

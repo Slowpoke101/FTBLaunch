@@ -233,7 +233,7 @@ public abstract class AbstractModPackPane extends JPanel {
         @Override
         public void actionPerformed (ActionEvent arg0) {
             if (version.getItemCount() > 0) {
-                Settings.getSettings().setPackVer((String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem())));
+                Settings.getSettings().setPackVer(String.valueOf(version.getSelectedItem()).equalsIgnoreCase("recommended") ? "Recommended Version" : String.valueOf(version.getSelectedItem()));
                 Settings.getSettings().save();
             }
         }
@@ -288,8 +288,8 @@ public abstract class AbstractModPackPane extends JPanel {
         packPanels.add(p);
         packs.add(p);
 
-        packs.setMinimumSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
-        packs.setPreferredSize(new Dimension(420, (packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding))));
+        packs.setMinimumSize(new Dimension(420, packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
+        packs.setPreferredSize(new Dimension(420, packPanels.size() * (55 + ObjectInfoSplitPane.verticalItemPadding)));
 
         //packsScroll.revalidate();
         if (pack.getDir().equalsIgnoreCase(getLastPack())) {
@@ -427,7 +427,7 @@ public abstract class AbstractModPackPane extends JPanel {
 
     boolean textSearch (ModPack pack) {
         String s  = searchString.toLowerCase();
-        return ((s.isEmpty()) || pack.getName().toLowerCase().contains(s) || pack.getAuthor().toLowerCase().contains(s));
+        return (s.isEmpty() || pack.getName().toLowerCase().contains(s) || pack.getAuthor().toLowerCase().contains(s));
     }
 
     abstract boolean filterForTab (ModPack pack);
