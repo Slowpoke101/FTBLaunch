@@ -172,7 +172,7 @@ public class Main {
         Logger.logDebug("Launcher PID: " + OSUtils.getPID());
         URL mf = LaunchFrame.class.getResource("/buildproperties.properties");
         beta = 9999999;
-        String mfStr = "";
+        String mfStr;
         try {
             Properties props = new Properties();
             props.load(mf.openStream());

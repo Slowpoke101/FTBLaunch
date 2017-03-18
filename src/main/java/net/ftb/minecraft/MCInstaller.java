@@ -388,7 +388,7 @@ public class MCInstaller {
                 }
             }
             List<File> classpath = Lists.newArrayList();
-            Version packjson = new Version();
+            Version packjson;
             if (new File(gameDir, "pack.json").exists()) {
                 packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                 for (Library lib : packjson.getLibraries()) {

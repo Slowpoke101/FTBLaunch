@@ -82,7 +82,7 @@ public final class OSUtils {
             Logger.logDebug("Detected socks proxy");
         }
 
-        java.util.List<Proxy> l = null;
+        java.util.List<Proxy> l;
         try {
             l = ProxySelector.getDefault().select(new URI(url));
             if (l != null) {
@@ -653,7 +653,7 @@ public final class OSUtils {
     public static long getPID () {
         String name = ManagementFactory.getRuntimeMXBean().getName();
         String pid = name.split("@")[0];
-        long numericpid = -1;
+        long numericpid;
         try {
             numericpid = Long.parseLong(pid);
         } catch (Exception e) {
@@ -667,7 +667,7 @@ public final class OSUtils {
         // windows
         if (getCurrentOS()==OS.WINDOWS && (process.getClass().getName().equals("java.lang.Win32Process") ||
                 process.getClass().getName().equals("java.lang.ProcessImpl"))) {
-            long pid = -1;
+            long pid;
             try {
                 Field f = process.getClass().getDeclaredField("handle");
                 f.setAccessible(true);
@@ -685,7 +685,7 @@ public final class OSUtils {
         // http://openjdk.java.net/jeps/102
         if (process.getClass().getName().equals("java.lang.UNIXProcess") || process.getClass().getName().equals("java.lang.ProcessImpl")) {
         /* get the PID on unix/linux systems */
-            long pid = -1;
+            long pid;
             try {
                 Field f = process.getClass().getDeclaredField("pid");
                 f.setAccessible(true);
@@ -705,7 +705,7 @@ public final class OSUtils {
     public static boolean genThreadDump(long pid) {
         if (OSUtils.getCurrentOS()==OS.WINDOWS) {
             File directory = null;
-            File sendsignal = null;
+            File sendsignal;
             try {
                 directory = new File(OSUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParentFile();
             } catch (Exception e) {

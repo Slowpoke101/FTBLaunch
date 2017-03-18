@@ -118,8 +118,8 @@ public class JavaInfoTest {
         // ATT: simpler comparison method
         assertEquals(true, JavaVersion.PREFERRED_SORTING.compare(j7, j8) < 0);
 
-        JavaVersion j7_99 = null;
-        JavaVersion j7_65 = null;
+        JavaVersion j7_99;
+        JavaVersion j7_65;
         j7_99 = JavaVersion.createJavaVersion("1.7.0_99");
         j7_65 = JavaVersion.createJavaVersion("1.7.0_65");
 

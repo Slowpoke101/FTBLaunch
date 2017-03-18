@@ -113,7 +113,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         double totalDownloadSize = 0, totalDownloadedSize = 0;
         int[] fileSizes = new int[1];
         String hash = "";
-        HttpsURLConnection conn = null;
+        HttpsURLConnection conn;
         for (int i = 0; i < 1; i++) {
             try {
                 conn = (HttpsURLConnection) jarURLs.openConnection();
