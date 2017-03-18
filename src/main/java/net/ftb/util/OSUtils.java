@@ -422,6 +422,9 @@ public final class OSUtils {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface network = networkInterfaces.nextElement();
+                if  (network.getName().startsWith("vir")){
+                    continue;
+                }
                 byte[] mac = network.getHardwareAddress();
                 if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint() && network.getName().substring(0,3) != "ham" && network.getName().substring(0,3) != "vir" && !network.getName().startsWith("docker")) {
                     Logger.logDebug("Interface: " + network.getDisplayName() + " : " + network.getName());
