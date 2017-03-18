@@ -222,6 +222,8 @@ public class UserManager {
             User temp = findUser(user);
             if (temp != null) {
                 temp.setStore(encode);
+            } else {
+                Logger.logWarn("User: " + user + " not found. Can't save data for offline mode!");
             }
         }
     }
@@ -235,6 +237,7 @@ public class UserManager {
         return null;
     }
 
+    // TODO: check this!
     public static String getUUID (String username) {
         User temp = findUser(username);
         if (temp != null) {
@@ -247,6 +250,8 @@ public class UserManager {
         User temp = findUser(username);
         if (temp != null) {
             temp.setUUID(uuid);
+        } else {
+            Logger.logWarn("User: " + username + " not found. Can't save data for offline mode!");
         }
     }
 
