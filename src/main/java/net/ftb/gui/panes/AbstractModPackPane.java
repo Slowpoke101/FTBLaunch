@@ -128,7 +128,7 @@ public abstract class AbstractModPackPane extends JPanel {
         editModPack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e) {
-                if (packPanels.size() > 0) {
+                if (!packPanels.isEmpty()) {
                     //TODO: fix by rename
                     EditModPackDialog empd = new EditModPackDialog(LaunchFrame.getInstance(), selectedPack);
                     empd.setVisible(true);
@@ -172,7 +172,7 @@ public abstract class AbstractModPackPane extends JPanel {
                 ModPack pack = selectedPack;
 
                 if ((LaunchFrame.currentPane == LaunchFrame.Panes.MODPACK || LaunchFrame.currentPane == LaunchFrame.Panes.THIRDPARTY) && !pack.getServerUrl().isEmpty()) {
-                    if (packPanels.size() > 0 ) {
+                    if (!packPanels.isEmpty()) {
                         if (!pack.getServerUrl().equals("") && pack.getServerUrl() != null) {
                             String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version"))
                                     ? pack.getVersion().replace(".", "_")

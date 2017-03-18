@@ -253,7 +253,7 @@ public class JGoogleAnalyticsTracker {
         long absTimeout = System.currentTimeMillis() + timeoutMillis;
         while (System.currentTimeMillis() < absTimeout) {
             synchronized (fifo) {
-                fifoEmpty = (fifo.size() == 0);
+                fifoEmpty = (fifo.isEmpty());
             }
             synchronized (JGoogleAnalyticsTracker.class) {
                 asyncThreadsCompleted = (asyncThreadsRunning == 0);

@@ -187,14 +187,14 @@ public class JavaFinder {
 
             }
 
-            if (java64.size() > 0) {
+            if (!java64.isEmpty()) {
                 for (JavaInfo aJava64 : java64) {
                     if (!preferred.is64bits || preferred.isOlder(aJava64)) {
                         preferred = aJava64;
                     }
                 }
             }
-            if (java32.size() > 0) {
+            if (!java32.isEmpty()) {
                 for (JavaInfo aJava32 : java32) {
                     if (!preferred.is64bits && preferred.isOlder(aJava32)) {
                         preferred = aJava32;
