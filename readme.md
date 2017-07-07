@@ -4,7 +4,7 @@ FTB Launcher
 Note: some classes used in this project come from the community, and as such are under other open source licenses.
 please see the links in the headers of those java files for more information about the source & the open source license used.
 FTB's code uses the following license:
-##The license
+## The license
 Copyright 2012-2017 FTB Launcher Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-##Compiling
+## Compiling
 * Download the source from this repo, either with git or as a zip/tarball.
 * Install Eclipse or IDEA
 * you will need project lombok integration installed see http://projectlombok.org/download.html for more info on its IDE integration. Gradle adds this to the classpath for you in the IDE for IDE building
@@ -28,7 +28,7 @@ limitations under the License.
 
 * With Eclipse/idea, import generated project/module and build as usual.
 
-##Pull Request Standards
+## Pull Request Standards
 * Indent with spaces(4)
 * Avoid trailing whitespace
 * If using eclipse: Use formatter located at eclipse_formatter.xml
@@ -37,7 +37,7 @@ limitations under the License.
 * Avoid merge commits in pull requests
 * Squash your commits - have at most one commit per major change
 
-##Updating your fork
+## Updating your fork
 Before submitting a pull request, you should ensure that your fork is up to date.
 To do this, run these commands:
 
