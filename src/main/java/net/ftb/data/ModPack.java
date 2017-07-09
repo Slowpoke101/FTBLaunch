@@ -20,9 +20,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import net.ftb.events.PackChangeEvent;
-import net.ftb.gui.LaunchFrame;
-import net.ftb.gui.panes.FTBPacksPane;
-import net.ftb.gui.panes.ThirdPartyPane;
 import net.ftb.log.Logger;
 import net.ftb.main.Main;
 import net.ftb.util.DownloadUtils;
@@ -104,9 +101,7 @@ public class ModPack {
      */
     public static void addPacks (ArrayList<ModPack> packs_) {
         synchronized (packs) {
-            for (ModPack p : packs_) {
-                packs.add(p);
-            }
+            packs.addAll(packs_);
         }
     }
 

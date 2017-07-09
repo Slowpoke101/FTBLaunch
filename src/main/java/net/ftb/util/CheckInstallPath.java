@@ -16,7 +16,6 @@
  */
 package net.ftb.util;
 
-import net.ftb.data.Settings;
 import net.ftb.locale.I18N;
 import net.ftb.log.Logger;
 import net.ftb.util.OSUtils.OS;

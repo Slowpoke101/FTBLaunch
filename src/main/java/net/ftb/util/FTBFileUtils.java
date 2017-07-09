@@ -162,10 +162,7 @@ public final class FTBFileUtils {
             } catch (IOException e) {
             }
         }
-        if (!success) {
-            return backupSuccess;
-        }
-        return true;
+        return success || backupSuccess;
     }
 
     public static boolean backupExtract (String zipLocation, String outputLocation) {

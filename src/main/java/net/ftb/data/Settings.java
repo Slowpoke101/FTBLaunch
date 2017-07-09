@@ -299,15 +299,15 @@ public class Settings extends Properties {
     }
 
     public void setPrivatePacks (List<String> codes) {
-        String out = "";
+        StringBuilder out = new StringBuilder();
         String sep = "";
         for (String s : codes) {
             if (!s.isEmpty()) {
-                out += sep + s;
+                out.append(sep).append(s);
                 sep = ",";
             }
         }
-        setProperty("privatePacks", out);
+        setProperty("privatePacks", out.toString());
     }
 
     public ArrayList<String> getPrivatePacks () {

@@ -279,13 +279,13 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
     private static void updateTexturePacks () {
         for (int i = 0; i < texturePackPanels.size(); i++) {
             if (selectedTexturePack == i) {
-                String packs = "";
+                StringBuilder packs = new StringBuilder();
                 if (TexturePack.getTexturePack(getIndex()).getCompatible() != null) {
-                    packs += "<p>This texture pack works with the following packs:</p><ul>";
+                    packs.append("<p>This texture pack works with the following packs:</p><ul>");
                     for (String name : TexturePack.getTexturePack(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name) + "</li>";
+                        packs.append("<li>").append(ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name).append("</li>");
                     }
-                    packs += "</ul>";
+                    packs.append("</ul>");
                 }
                 texturePackPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 texturePackPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

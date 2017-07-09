@@ -294,13 +294,13 @@ public class MapUtils extends JPanel implements ILauncherPane, MapListener {
     private static void updateMaps () {
         for (int i = 0; i < mapPanels.size(); i++) {
             if (selectedMap == i) {
-                String packs = "";
+                StringBuilder packs = new StringBuilder();
                 if (Map.getMap(getIndex()).getCompatible() != null) {
-                    packs += "<p>This map works with the following packs:</p><ul>";
+                    packs.append("<p>This map works with the following packs:</p><ul>");
                     for (String name : Map.getMap(getIndex()).getCompatible()) {
-                        packs += "<li>" + (ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name) + "</li>";
+                        packs.append("<li>").append(ModPack.getPack(name) != null ? ModPack.getPack(name).getNameWithVersion() : name).append("</li>");
                     }
-                    packs += "</ul>";
+                    packs.append("</ul>");
                 }
                 mapPanels.get(i).setBackground(UIManager.getColor("control").darker().darker());
                 mapPanels.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

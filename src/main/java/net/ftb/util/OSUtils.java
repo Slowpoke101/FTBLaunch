@@ -316,18 +316,18 @@ public final class OSUtils {
      * @return true if 64-bit Posix OS
      */
     public static boolean is64BitPosix () {
-        String line, result = "";
+        String line;StringBuilder result = new StringBuilder();
         try {
             Process command = Runtime.getRuntime().exec("uname -m");
             BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
             while ((line = in.readLine()) != null) {
-                result += (line + "\n");
+                result.append(line).append("\n");
             }
         } catch (Exception e) {
             Logger.logError("Posix bitness check failed", e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
-        return result.contains("_64");
+        return result.toString().contains("_64");
     }
 
     /**
@@ -336,7 +336,7 @@ public final class OSUtils {
      */
 
     public static boolean is64BitOSX () {
-        String line, result = "";
+        String line;StringBuilder result = new StringBuilder();
         if (!(System.getProperty("os.version").startsWith("10.6") || System.getProperty("os.version").startsWith("10.5"))) {
             return true;//10.7+ only shipped on hardware capable of using 64 bit java
         }
@@ -344,12 +344,12 @@ public final class OSUtils {
             Process command = Runtime.getRuntime().exec("/usr/sbin/sysctl -n hw.cpu64bit_capable");
             BufferedReader in = new BufferedReader(new InputStreamReader(command.getInputStream()));
             while ((line = in.readLine()) != null) {
-                result += (line + "\n");
+                result.append(line).append("\n");
             }
         } catch (Exception e) {
             Logger.logError("OS X bitness check failed", e);
         }
-        return result.equals("1");
+        return result.toString().equals("1");
     }
 
     /**
@@ -423,7 +423,7 @@ public final class OSUtils {
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface network = networkInterfaces.nextElement();
                 byte[] mac = network.getHardwareAddress();
-                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint() && network.getName().substring(0,3) != "ham" && network.getName().substring(0,3) != "vir" && !network.getName().startsWith("docker")) {
+                if (mac != null && mac.length > 0 && !network.isLoopback() && !network.isVirtual() && !network.isPointToPoint() && !network.getName().substring(0,3).equals("ham") && !network.getName().substring(0, 3).equals("vir") && !network.getName().startsWith("docker")) {
                     Logger.logDebug("Interface: " + network.getDisplayName() + " : " + network.getName());
                     cachedMacAddress = new byte[mac.length * 10];
                     for (int i = 0; i < cachedMacAddress.length; i++) {

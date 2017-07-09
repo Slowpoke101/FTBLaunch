@@ -30,7 +30,6 @@ import net.ftb.gui.dialogs.EditModPackDialog;
 import net.ftb.gui.dialogs.ModPackFilterDialog;
 import net.ftb.gui.dialogs.PrivatePackDialog;
 import net.ftb.locale.I18N;
-import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.OSUtils;
@@ -344,13 +343,13 @@ public abstract class AbstractModPackPane extends JPanel {
         }
                 ModPack pack = selectedPack;
                 if (pack != null && panelByPack.get(selectedPack)!= null) {
-                    String mods = "";
+                    StringBuilder mods = new StringBuilder();
                     if (pack.getMods() != null) {
-                        mods += "<p>This pack contains the following mods by default:</p><ul>";
+                        mods.append("<p>This pack contains the following mods by default:</p><ul>");
                         for (String name : pack.getMods()) {
-                            mods += "<li>" + name + "</li>";
+                            mods.append("<li>").append(name).append("</li>");
                         }
-                        mods += "</ul>";
+                        mods.append("</ul>");
                     }
 
                     panelByPack.get(selectedPack).setBackground(UIManager.getColor("control").darker().darker());

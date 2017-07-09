@@ -22,7 +22,6 @@ import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.log.Logger;
 import net.ftb.util.DownloadUtils;
-import net.ftb.util.OSUtils;
 
 import java.io.File;
 import java.net.URL;
