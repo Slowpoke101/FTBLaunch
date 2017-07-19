@@ -207,6 +207,8 @@ public class MCInstaller {
                             list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
                         }
                     }
+                } else if (!lib.hasNativesForOS()) {
+                    //do nothing as this lib doesn't need natives and the raw jars are listed separately
                 } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
                     if (!local.exists() || forceUpdate) {
@@ -355,7 +357,7 @@ public class MCInstaller {
             Version base = JsonFactory.loadVersion(new File(installDir, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             byte[] buf = new byte[1024];
             for (Library lib : base.getLibraries()) {
-                if (lib.natives != null) {
+                if (lib.natives != null && lib.hasNativesForOS()) {
                     File local = new File(libDir, lib.getPathNatives());
                     ZipInputStream input = null;
                     try {

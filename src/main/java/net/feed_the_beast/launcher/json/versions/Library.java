@@ -60,6 +60,12 @@ public class Library {
         }
         return _artifact.getPath();
     }
+    public boolean hasNativesForOS() {
+        if (natives == null) {
+            return false;
+        }
+        return natives.containsKey(OS.CURRENT);
+    }
 
     public String getPathNatives () {
         if (natives == null) {
