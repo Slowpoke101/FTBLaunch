@@ -327,7 +327,7 @@ public final class OSUtils {
             Logger.logError("Posix bitness check failed", e);
         }
         // 32-bit Intel Linuces, it returns i[3-6]86. For 64-bit Intel, it says x86_64
-        return result.toString().contains("_64");
+        return result.toString().contains("_64") || result.toString().contains("amd64");
     }
 
     /**
