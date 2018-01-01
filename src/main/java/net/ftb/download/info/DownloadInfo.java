@@ -16,8 +16,11 @@
  */
 package net.ftb.download.info;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
+import net.feed_the_beast.launcher.json.versions.Artifact;
+import net.feed_the_beast.launcher.json.versions.Downloadable;
 
 import java.io.File;
 import java.net.URL;
@@ -50,6 +53,17 @@ public class DownloadInfo {
 
     public DownloadInfo (URL url, File local, String name) {
         this(url, local, name, null, "md5");
+    }
+
+    public DownloadInfo(Downloadable down, File local) {
+        this (down.getUrl(), local, local.getName(), Lists.newArrayList(down.getSha1()), "sha1");
+        this.size = down.getSize();
+    }
+
+
+    public DownloadInfo(Artifact down, File local) {
+        this (down.getUrl(), local, down.getPath(), Lists.newArrayList(down.getSha1()), "sha1");
+        this.size = down.getSize();
     }
 
     public DownloadInfo (URL url, File local, String name, List<String> hash, String hashType, DLType primary, DLType backup) {

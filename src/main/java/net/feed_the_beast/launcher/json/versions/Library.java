@@ -34,7 +34,7 @@ public class Library {
     public List<String> checksums;//contains sha1 hashes of the file -- must check against all values!
     public Boolean download;// used in pack.json to force DL's form mojang
     private Action _applies = null;
-
+    public Downloads downloads;
     public boolean applies () {
         if (_applies == null) {
             _applies = Action.DISALLOW;
@@ -65,6 +65,10 @@ public class Library {
             return false;
         }
         return natives.containsKey(OS.CURRENT);
+    }
+
+    public String getNativeName() {
+        return natives.get(OS.CURRENT).replace("${arch}", (Settings.getSettings().getCurrentJava().is64bits ? "64" : "32"));
     }
 
     public String getPathNatives () {

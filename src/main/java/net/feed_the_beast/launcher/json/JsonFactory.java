@@ -33,6 +33,7 @@ import net.feed_the_beast.launcher.json.launcher.Update;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
 
+import net.feed_the_beast.launcher.json.versions.VersionManifest;
 import net.ftb.log.Logger;
 import org.apache.commons.io.IOUtils;
 
@@ -63,6 +64,12 @@ public class JsonFactory {
         return v;
     }
 
+    public static VersionManifest loadVersionManifest (File json) throws JsonSyntaxException, JsonIOException, IOException {
+        FileReader reader = new FileReader(json);
+        VersionManifest v = GSON.fromJson(reader, VersionManifest.class);
+        reader.close();
+        return v;
+    }
     public static AssetIndex loadAssetIndex (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);
         AssetIndex a = GSON.fromJson(reader, AssetIndex.class);

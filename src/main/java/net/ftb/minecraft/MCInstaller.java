@@ -19,8 +19,12 @@ package net.ftb.minecraft;
 import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.versions.Artifact;
+import net.feed_the_beast.launcher.json.versions.DownloadType;
 import net.feed_the_beast.launcher.json.versions.Library;
+import net.feed_the_beast.launcher.json.versions.SlimVersion;
 import net.feed_the_beast.launcher.json.versions.Version;
+import net.feed_the_beast.launcher.json.versions.VersionManifest;
 import net.ftb.data.*;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
@@ -58,7 +62,6 @@ import javax.swing.*;
 public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
-
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
@@ -185,8 +188,20 @@ public class MCInstaller {
             if (packbasejson == null || packbasejson.isEmpty()) {
                 packbasejson = packmcversion;
             }
-            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
-                    + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
+
+            URL mcvsn = new URL(Locations.mc_versionsmanifest);
+            File base = new File(root, "versions/version_manifest.json");
+            DownloadUtils.downloadToFile(mcvsn, base, 3);
+            if (!base.exists()) {
+                Logger.logError("version manifest JSON not found");
+                return null;
+            }
+            VersionManifest versionManifest = JsonFactory.loadVersionManifest(base);
+            SlimVersion vsn = versionManifest.getVersionByName(packmcversion);
+            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), vsn.getUrl().toString()));
+
+           // URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
+            //        + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson));
 
             DownloadUtils.downloadToFile(url, json, 3);
@@ -202,9 +217,18 @@ public class MCInstaller {
                     local = new File(root, "libraries/" + lib.getPath());
                     if (!local.exists() || forceUpdate) {
                         if (!lib.getUrl().toLowerCase().equalsIgnoreCase(Locations.ftb_maven)) {//DL's shouldn't be coming from maven repos but ours or mojang's
-                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                            if(lib.downloads != null) {
+                                list.add(new DownloadInfo(lib.downloads.artifact, local));
+                            } else {
+                                list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+                            }
+
                         } else {
-                            list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
+                            if(lib.downloads != null) {
+                                list.add(new DownloadInfo(lib.downloads.artifact, local));
+                            } else {
+                                list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
+                            }
                         }
                     }
                 } else if (!lib.hasNativesForOS()) {
@@ -212,7 +236,11 @@ public class MCInstaller {
                 } else {
                     local = new File(root, "libraries/" + lib.getPathNatives());
                     if (!local.exists() || forceUpdate) {
-                        list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
+                        if (lib.downloads != null) {
+                            list.add(new DownloadInfo(lib.downloads.classifiers.get(lib.getNativeName()),local));
+                        } else {
+                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
+                        }
                     }
 
                 }
@@ -223,7 +251,12 @@ public class MCInstaller {
 
             local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion));
             if (!local.exists() || forceUpdate) {
-                list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), local, local.getName()));
+                if (version.hasDownloads()) {
+                    list.add(new DownloadInfo(version.getDownload(DownloadType.CLIENT), local));
+
+                } else {
+                    list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), local, local.getName()));
+                }
             }
 
             // Move the old format to the new:
@@ -267,9 +300,14 @@ public class MCInstaller {
              * assets/*
              */
             Logger.logDebug("Checking minecraft assets");
-            url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
+            if (version.assetIndex != null) {
+                url = version.assetIndex.getUrl();
+            } else {
+                url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
+            }
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
 
+            //TODO add hash support for version asset index if it exists here
             DownloadUtils.downloadToFile(url, json, 3);
             if (!json.exists()) {
                 Logger.logError("asset JSON not found");

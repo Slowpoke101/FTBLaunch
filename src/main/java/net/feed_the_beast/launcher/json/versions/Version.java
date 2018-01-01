@@ -17,12 +17,14 @@
 package net.feed_the_beast.launcher.json.versions;
 
 import com.google.common.collect.Maps;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@ToString
 public class Version {
     public String id;
     public Date time;
@@ -41,6 +43,12 @@ public class Version {
     public Asset assetIndex;
     private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 
+    public boolean hasDownloads(){
+        return !downloads.isEmpty();
+    }
+    public Downloadable getDownload(DownloadType dlt){
+        return downloads.get(dlt);
+    }
     public List<Library> getLibraries () {
         if (_libraries == null) {
             _libraries = new ArrayList<Library>();
