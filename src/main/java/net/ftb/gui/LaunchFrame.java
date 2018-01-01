@@ -947,7 +947,11 @@ public class LaunchFrame extends JFrame {
 
         // check selected java is at least version specified in pack's XML
         JavaVersion minSup = JavaVersion.createJavaVersion(pack.getMinJRE());
-        if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
+        JavaVersion maxSup = JavaVersion.createJavaVersion("1.9");
+        if (maxSup.isOlder(java)) {//TODO only enable this on versions that don't work on java 9
+            String message = "You must use java 8 to play this pack! Minecraft 1.12 and below will not work for java 9";
+            ErrorUtils.tossError(message, message);
+        } else if (minSup.isOlder(java) || minSup.isSameVersion(java)) {
             Logger.logDebug("Selected user: saved password: " + (UserManager.getPassword(users.getSelectedItem().toString()).length() > 0));
             Logger.logDebug("Selected user: will save auth token if online: " + UserManager.getSaveMojangData(users.getSelectedItem().toString()));
             doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()),

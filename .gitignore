@@ -10,6 +10,7 @@ target/
 .project
 .classpath
 /bin/
+/out/
 
 #idea
 /.idea
