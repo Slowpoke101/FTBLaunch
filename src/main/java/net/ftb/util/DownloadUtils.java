@@ -62,7 +62,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "https://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
@@ -75,7 +75,7 @@ public final class DownloadUtils extends Thread {
                 if (connection.getResponseCode() != 200) {
                     Logger.logDebug("failed");
                     AppUtils.debugConnection(connection);
-                    resolved = "http://" + server + "/FTB2/" + file;
+                    resolved = "https://" + server + "/FTB2/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setRequestMethod("HEAD");
@@ -95,7 +95,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct static link or the backup link if the file isn't found
      */
     public static String getStaticCreeperhostLinkOrBackup (String file, String backupLink) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "https://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
@@ -109,7 +109,7 @@ public final class DownloadUtils extends Thread {
                     Logger.logDebug("failed");
                     // TODO: remove responseCode test later.
                     AppUtils.debugConnection(connection, connection.getResponseCode() != 404);
-                    resolved = "http://" + server + "/FTB2/static/" + file;
+                    resolved = "https://" + server + "/FTB2/static/" + file;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     connection.setRequestMethod("HEAD");
@@ -139,7 +139,7 @@ public final class DownloadUtils extends Thread {
      * @return - the direct link
      */
     public static String getStaticCreeperhostLink (String file) {
-        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer())
+        String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "https://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
         resolved += "/FTB2/static/" + file;
         HttpURLConnection connection = null;
@@ -152,7 +152,7 @@ public final class DownloadUtils extends Thread {
                     if (connection.getResponseCode() != 200) {
                         Logger.logDebug("failed");
                         AppUtils.debugConnection(connection);
-                        resolved = "http://" + server + "/FTB2/static/" + file;
+                        resolved = "https://" + server + "/FTB2/static/" + file;
                         connection = (HttpURLConnection) new URL(resolved).openConnection();
                         connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                         connection.setRequestMethod("HEAD");
@@ -352,7 +352,7 @@ public final class DownloadUtils extends Thread {
             }
             if (response != 200 || (content == null || content.isEmpty())) {
                 for (String server : backupServers.values()) {
-                    resolved = "http://" + server + "/md5/FTB2/" + url;
+                    resolved = "https://" + server + "/md5/FTB2/" + url;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     response = connection.getResponseCode();
@@ -496,7 +496,7 @@ public final class DownloadUtils extends Thread {
                                 Logger.logInfo("Balance has selected Automatic:CurseCDN");
                             } else {
                                 Logger.logInfo("Balance has selected Automatic:CreeperRepo");
-                                Locations.masterRepoNoHTTP = Locations.chRepo.replaceAll("http://", "");
+                                Locations.masterRepoNoHTTP = Locations.chRepo.replaceAll("http://", "").replaceAll("https://", "");
                                 Locations.masterRepo = Locations.chRepo;
                                 Locations.primaryCH = true;
                                 downloadServers.remove("Automatic");
@@ -608,7 +608,7 @@ public final class DownloadUtils extends Thread {
                         try {
                             Logger.logDebug("Testing Server:" + e.getKey());
                             //test that the server will properly handle file DL's if it doesn't throw an error the web daemon should be functional
-                            IOUtils.toString(new URL("http://" + e.getValue().getAsString() + "/" + location));
+                            IOUtils.toString(new URL("https://" + e.getValue().getAsString() + "/" + location));
                             h.put(e.getKey(), e.getValue().getAsString());
                         } catch (Exception ex) {
                             Logger.logWarn((e.getValue().getAsString().contains("creeper") ? "CreeperHost" : "Curse") + " Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());

@@ -52,7 +52,7 @@ dependencies {
 
 project.ext {
     mainClass = 'net.ftb.main.Main'
-    currentYear = '2014'
+    currentYear = '2018'
 }
 if (System.getenv().BUILD_NUMBER != null) {
     ext.buildNum = System.getenv().BUILD_NUMBER

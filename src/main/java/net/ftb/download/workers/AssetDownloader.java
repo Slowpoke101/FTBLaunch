@@ -23,6 +23,7 @@ import static com.google.common.net.HttpHeaders.ETAG;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.info.DownloadInfo.DLType;
 import net.ftb.log.Logger;
@@ -32,6 +33,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
@@ -77,7 +80,15 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
         firePropertyChange("note", oldStatus, status);
     }
 
-    private void doDownload (DownloadInfo asset) {
+    private void doDownload (DownloadInfo assetOrig) {
+        DownloadInfo asset = assetOrig;
+        if(asset.url.getProtocol().equals("http") && asset.url.getHost().startsWith(Locations.oldMasterRepoNoHTTP)) {
+            try {//move all links to HTTPS on our repo
+                asset.url = new URL(assetOrig.url.toString().replace(Locations.oldMasterRepo, Locations.masterRepo));
+            } catch (MalformedURLException e) {
+                Logger.logError("error creating url", e);
+            }
+        }
         byte[] buffer = new byte[24000];
         boolean downloadSuccess = false;
         List<String> remoteHash = asset.hash;

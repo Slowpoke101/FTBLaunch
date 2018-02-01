@@ -577,7 +577,7 @@ public class MCInstaller {
 
         if (vsn_ >= Settings.getSettings().getMinJava8HackVsn() && vsn_ <= Settings.getSettings().getMaxJava8HackVsn()) {
             Logger.logDebug("adding legacyjavafixer to modpack as it is needed for this forge version to make java 8 function correctly");
-            String json = "{\"url\":\"http://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
+            String json = "{\"url\":\"https://ftb.cursecdn.com/FTB2/maven/\",\"name\":\"net.minecraftforge.lex:legacyjavafixer:1.0\",\"checksums\":[\"a11b502bef19f49bfc199722b94da5f3d7b470a8\"]}";
             Library l = JsonFactory.loadLibrary(json);//TODO this should be pulled from the same json file
             try {//TODO we should have a method to grab a single library file to a location
                 DownloadUtils.downloadToFile(installBase + "/minecraft/mods/legacyjavafixer-1.0.jar", l.getUrl() + l.getPath());
