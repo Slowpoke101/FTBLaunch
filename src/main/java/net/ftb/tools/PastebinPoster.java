@@ -42,7 +42,7 @@ public class PastebinPoster extends Thread {
         InputStream in = null;
         boolean failed = false;
         try {
-            URL url = new URL("http://paste.feed-the-beast.com/api/create?apikey=b6a30d5f030ce86a2b0723ed0b494cdd");
+            URL url = new URL("https://paste.feed-the-beast.com/api/create?apikey=b6a30d5f030ce86a2b0723ed0b494cdd");
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Cache-Control", "no-transform");
             conn.setConnectTimeout(5000);
