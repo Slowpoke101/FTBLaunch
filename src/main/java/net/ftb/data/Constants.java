@@ -1,7 +1,7 @@
 /*
  * This file is part of FTB Launcher.
  *
- * Copyright © 2012-2017, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
+ * Copyright © 2012-2018, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
  * FTB Launcher is licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,10 +19,10 @@ package net.ftb.data;
 public final class Constants {
 
     public static final String name = "Feed The Beast Launcher";
-    public static final String version = "1.4.16";
+    public static final String version = "1.4.17";
 
     //limit for version component is 99.
-    public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 16 * 1;
+    public static final int buildNumber = 1 * 100 * 100 + 4 * 100 + 17 * 1;
 
     private Constants () {
     }
