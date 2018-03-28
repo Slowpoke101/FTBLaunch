@@ -207,8 +207,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
-            archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".zip").replace("libs", "distributions"))
+            artifact file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
+            artifact file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".zip").replace("libs", "distributions"))
         }
     }
 
