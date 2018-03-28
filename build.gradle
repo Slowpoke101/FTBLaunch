@@ -4,13 +4,13 @@ plugins {
 
     id 'idea'
     id 'eclipse'
-
-    id 'net.minecraftforge.gradle.launch4j' version '2.0.2'
-    id 'edu.sc.seis.macAppBundle' version '2.1.6'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
+    id 'edu.sc.seis.macAppBundle' version '2.2.1'
     id 'be.insaneprogramming.gradle.animalsniffer' version '1.4.0'
 
-    id 'net.minecrell.licenser' version '0.1.5'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'net.minecrell.licenser' version '0.3'
+    id 'com.github.johnrengelman.shadow' version '2.0.3'
 }
 
 configurations {
@@ -177,7 +177,19 @@ def getCheckedOutGitCommitHash() {
     // .git/refs/heads/master
     refHead.text.trim().take takeFromHash
 }
-
+if (project.hasProperty("s3_url")) {
+    publishing {
+        repositories {
+            maven {
+                url "s3://${s3_url}"
+                credentials(AwsCredentials) {
+                    accessKey "${s3_key}"
+                    secretKey "${s3_secret}"
+                }
+            }
+        }
+    }
+}
 if (project.hasProperty("local_maven")) {
     uploadArchives {
         repositories {
