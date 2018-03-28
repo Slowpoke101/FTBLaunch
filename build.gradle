@@ -14,6 +14,7 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+apply plugin: "net.minecraftforge.gradle.launch4j"
 
 plugins {
     id 'java'
@@ -29,7 +30,6 @@ plugins {
     id 'net.minecrell.licenser' version '0.3'
     id 'com.github.johnrengelman.shadow' version '2.0.3'
 }
-apply plugin: "net.minecraftforge.gradle.launch4j"
 
 configurations {
     deployerJars
