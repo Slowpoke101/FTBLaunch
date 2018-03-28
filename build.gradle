@@ -1,3 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'java'
     id 'maven'
@@ -5,13 +22,14 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
+   // id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
     id 'edu.sc.seis.macAppBundle' version '2.2.1'
     id 'be.insaneprogramming.gradle.animalsniffer' version '1.4.0'
 
     id 'net.minecrell.licenser' version '0.3'
     id 'com.github.johnrengelman.shadow' version '2.0.3'
 }
+apply plugin: "net.minecraftforge.gradle.launch4j"
 
 configurations {
     deployerJars
