@@ -30,7 +30,7 @@ apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-   // id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
+// id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
 apply plugin: 'edu.sc.seis.macAppBundle'
 apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
 
@@ -124,7 +124,7 @@ shadowJar {
 task copyMainJar(type: Copy) {
     from("${buildDir}/libs/")
     destinationDir = file("${buildDir}/macApp/Feed The Beast.app/Contents/Java")
-    rename {String fileName ->
+    rename { String fileName ->
         fileName.replace("-${version}", '')
     }
     rename(/(.+)-${version}(.+)/, '$1$2')
@@ -202,15 +202,24 @@ def getCheckedOutGitCommitHash() {
     // .git/refs/heads/master
     refHead.text.trim().take takeFromHash
 }
-if (project.hasProperty("s3_url")) {
-    publishing {
-        repositories {
-            maven {
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".exe"))
+            archives file(project.tasks.jar.getArchivePath().getPath().replace(".jar", ".zip").replace("libs", "distributions"))
+        }
+    }
+
+    repositories {
+        maven {
+            if (project.hasProperty("s3_url")) {
                 url "s3://${s3_url}"
-                credentials(AwsCredentials) {
-                    accessKey "${s3_key}"
-                    secretKey "${s3_secret}"
-                }
+            }
+            credentials(AwsCredentials) {
+                accessKey "${s3_key}"
+                secretKey "${s3_secret}"
             }
         }
     }
