@@ -9,27 +9,34 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.2.1"
+        classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:1.4.0"
+        classpath "gradle.plugin.net.minecrell:licenser:0.3"
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.3"
     }
 }
 apply plugin: "net.minecraftforge.gradle.launch4j"
 
-plugins {
-    id 'java'
-    id 'maven'
+apply plugin: 'java'
+apply plugin: 'maven'
 
-    id 'idea'
-    id 'eclipse'
-    id 'maven-publish'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
    // id 'net.minecraftforge.gradle.launch4j' version '2.3-SNAPSHOT'
-    id 'edu.sc.seis.macAppBundle' version '2.2.1'
-    id 'be.insaneprogramming.gradle.animalsniffer' version '1.4.0'
+apply plugin: 'edu.sc.seis.macAppBundle'
+apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
 
-    id 'net.minecrell.licenser' version '0.3'
-    id 'com.github.johnrengelman.shadow' version '2.0.3'
-}
+apply plugin: 'net.minecrell.licenser'
+apply plugin: 'com.github.johnrengelman.shadow'
+
 
 configurations {
     deployerJars
