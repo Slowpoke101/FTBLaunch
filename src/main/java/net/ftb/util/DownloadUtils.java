@@ -463,7 +463,7 @@ public final class DownloadUtils extends Thread {
                 } catch (IOException e) {
                     curseFailed = true;
                 }
-                Benchmark.logBenchAs("DlUtils", "Download Utils Balance (curse)");
+                Benchmark.logBenchAs("DlUtils", "Download Utils Balance (forgecdn)");
 
                 if (curseFailed) {
                     try {
@@ -472,7 +472,7 @@ public final class DownloadUtils extends Thread {
                         creeperFailed = true;
                         bothReposFailed = true;
                     }
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance (creeper)");
+                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance (creeperrepo)");
                 }
 
                 // ok we got working balance.json
