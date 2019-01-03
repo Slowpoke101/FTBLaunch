@@ -82,6 +82,8 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
 
     private void doDownload (DownloadInfo assetOrig) {
         DownloadInfo asset = assetOrig;
+
+        // patch old data with http cursecdn dependencies
         if(asset.url.getProtocol().equals("http") && asset.url.getHost().startsWith(Locations.oldMasterRepoNoHTTP)) {
             try {//move all links to HTTPS on our repo
                 asset.url = new URL(assetOrig.url.toString().replace(Locations.oldMasterRepo, Locations.masterRepo));
@@ -89,6 +91,16 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
                 Logger.logError("error creating url", e);
             }
         }
+
+        // patch newer data with https cursecdn dependencies
+        if(asset.url.getProtocol().equals("https") && asset.url.getHost().startsWith(Locations.oldMasterRepoNoHTTP)) {
+            try {//move all links to HTTPS on our repo
+                asset.url = new URL(assetOrig.url.toString().replace("https://" + Locations.oldMasterRepoNoHTTP, Locations.masterRepo));
+            } catch (MalformedURLException e) {
+                Logger.logError("error creating url", e);
+            }
+        }
+
         byte[] buffer = new byte[24000];
         boolean downloadSuccess = false;
         List<String> remoteHash = asset.hash;
