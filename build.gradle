@@ -216,10 +216,11 @@ publishing {
         maven {
             if (project.hasProperty("s3_url")) {
                 url "s3://${s3_url}"
-            }
-            credentials(AwsCredentials) {
-                accessKey "${s3_key}"
-                secretKey "${s3_secret}"
+
+                credentials(AwsCredentials) {
+                    accessKey "${s3_key}"
+                    secretKey "${s3_secret}"
+                }
             }
         }
     }
