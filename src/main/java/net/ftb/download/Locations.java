@@ -35,11 +35,11 @@ public class Locations {
     public static final String ftb_maven = "maven/";
 
     public static final String chRepo = "https://www.creeperrepo.net";
-    public static final String curseRepo = "https://ftb.cursecdn.com";
+    public static final String curseRepo = "https://ftb.forgecdn.net";
     //this changes based on the primary automatic server in the balancing logic
     //DO NOT ACCESS UNILL 1st DL thread has finished setting up!!!!
-    public static String masterRepoNoHTTP = "ftb.cursecdn.com";
-    public static String masterRepo = "https://ftb.cursecdn.com";
+    public static String masterRepoNoHTTP = "ftb.forgecdn.net";
+    public static String masterRepo = "https://ftb.forgecdn.net";
     public static String oldMasterRepo = "http://ftb.cursecdn.com";
     public static String oldMasterRepoNoHTTP = "ftb.cursecdn.com";
     // used in mirroring logic

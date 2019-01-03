@@ -99,7 +99,7 @@ public class ModpackLoader extends Thread {
                 modPackFile.getParentFile().mkdirs();
                 String s = DownloadUtils.getStaticCreeperhostLink(xmlFile);
                 DownloadUtils.downloadToFile(new URL(s), modPackFile);
-                Benchmark.logBenchAs("ModpackLoader", "Modpack Loader " + s.replace(".creeperrepo.net/FTB2/static", "").replace(".cursecdn.com/FTB2/static", ""));
+                Benchmark.logBenchAs("ModpackLoader", "Modpack Loader " + s.replace(".creeperrepo.net/FTB2/static", "").replace(".forgecdn.net/FTB2/static", ""));
             } catch (IOException e) {
                 Logger.logWarn("Failed to load modpacks, loading from backup", e);
             }
