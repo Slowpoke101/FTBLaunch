@@ -108,7 +108,7 @@ public class MapManagerWorker extends SwingWorker<Boolean, Void> {
         Map map = Map.getSelectedMap();
         new File(installPath + "/" + MAPS + dir + "/").mkdirs();
         new File(installPath + "/" + MAPS + dir + "/" + mapName).createNewFile();
-        downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
+        downloadUrl(installPath + "/" + MAPS + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(MAPS.toLowerCase() + dir + "/" + map.getVersion().replace(".", "_") + "/" + mapName));
         FTBFileUtils.extractZipTo(installPath + "/" + MAPS + dir + "/" + mapName, installPath + "/" + MAPS + dir);
         installMap(mapName, dir);
     }

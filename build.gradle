@@ -99,7 +99,7 @@ processResources {
 
 }
 group = 'net.ftb'
-version = "1.4.17-${project.buildNum}"
+version = "1.4.18-${project.buildNum}"
 description = "FTB Launcher"
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
