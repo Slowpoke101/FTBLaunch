@@ -1,0 +1,204 @@
+LOCALE_NAME = 日本語
+LOCALE_LOADED = 日本語ファイルのロード完了！
+
+# Footer
+DONATE_BUTTON = 寄付
+
+# Main Tab
+EDIT_BUTTON = 編集
+LAUNCH_BUTTON = 起動
+PROFILE_CREATE = プロファイル作成
+PROFILE_SELECT = プロファイル選択
+DOWNLOAD_SERVER_PACK = サーバー用のModパックをダウンロード
+WARN_32BIT_OS = 32ビット OSの使用を検出しました．<ul><li>Modパックの中にはパフォーマンス上64ビット OSを必要とする場合があります．<li>32ビット Javaでは1.5GBを超えるメモリ確保できません．<li>問題が発生した場合は，FTB Liteパックまたはその他の小さいパックを試してください． <li>サポートチャンネルでこの問題を解決することはできません．最新，最大のパックプレイしたい場合は，64ビット OSとJavaを使用する必要があります．</ul>
+WARN_32BIT_JAVA = 64ビット OSで32ビット Javaの使用を検出しました． <ul><li>パフォーマンス上64ビット OSを必要とする場合があります．<li>32ビット Javaでは1.5GBを超えるメモリ確保できません．<li>問題が発生した場合は，FTB Liteパックまたはその他の小さいパックを試してください． <li>この問題は64ビット Javaを<a href="http://java.com/en/download/manual.jsp">オラクルウェブサイトからインストールすることで解決できます．.</a><li>64ビット Javaを使用すると，1GB以上のメモリが割り当て可能となります．</ul>
+WARN_JAVA6 = Java 6が検出されました． <ul><li>最新のModパックではJava 7以降が必要です． <li>この問題は最新のJavaを<a href="http://java.com/en/download/manual.jsp">オラクルウェブサイトからインストールすることで解決します．</a><li>ご使用のOSの場合システムはJava 7以降をサポートしていないため，最新のパック実効することはできません．</ul>
+
+# Console
+CONSOLE_TITLE = コンソール
+CONSOLE_COPYCLIP = クリップボードにコピー
+CONSOLE_CLIP_CONFIRM = 完全なログをクリップボードにコピーしますか？
+CONSOLE_PASTE = ログのアップロード
+CONSOLE_SUPPORT = サポートが必要ですか？ ここをクリックしてください！
+
+# Map Tab
+INSTALL_MAP = マップのインストール
+DOWNLOAD_MAP_SERVER = サーバー用のマップをダウンロード
+
+#tab swapping
+SWAP_MAP = マップ
+SWAP_TEXTURE = テクスチャパック
+
+# TexturePack Tab
+INSTALL_TEXTUREPACK = テクスチャパックのインストール
+
+# Options pane
+INSTALL_FOLDER = インストール先...
+FORCE_UPDATE = 強制アップデート
+RAM_MAX = 最大使用メモリ（MB）
+LANGUAGE = 言語
+SHOW_CONSOLE = コンソールを表示
+OPT_JAVA_ARGS= 最適化引数を使用しますか？
+USE_SYSTEM_PROXY = ネットワーク接続にプロキシを使用
+REOPEN_LAUNCHER = Minecraft終了後このランチャーを開く
+ADVANCED_OPTIONS = 詳細設定
+INSTALL_FIRSTUSE = このランチャーを初めて起動しました，インストールディレクトリを指定することをお勧めします．
+DOWNLOAD_JAVA64 = ダウンロード Java 64ビット
+DOWNLOAD_JAVA32 = ダウンロード Java 32ビット
+DOWNLOAD_JAVAGOOD = ダウンロード Java 推奨バージョン
+JAVA_OLD_Warning = Javaのバージョンが古すぎます．ほとんどのFTBパッケージにはJava 7推奨されています．
+JAVA_NEW_Warning = Java 8はサポートされていません．（MinecraftはMac上のJava 8をサポートしていません．）
+JAVA_32BIT_WARNING = お使いのシステムは32ビットのJavaを使用しています．これはMinecraftの使用メモリを1.5GBに制限します．
+
+# Shared strings
+FILTER_SETTINGS = フィルター設定
+
+# Modpacks pane
+MODS_EDIT_PACK = Modパック編集
+MODS_WAIT_WHILE_LOADING = Mod ロード中…
+DOWNLOAD_SERVER = サーバーのダウンロード
+MODPACK_VERSIONS = Modパック バージョン
+PACK_CODES = Modパックコード
+
+# EditModPackDialog
+MODS_EDIT_ENABLED_LABEL = Modの有効化
+MODS_EDIT_DISABLED_LABEL = Modの無効化
+MODS_EDIT_OPEN_FOLDER = フォルダを開く
+MODS_EDIT_ADD_MOD = Mod追加
+MODS_EDIT_ENABLE_MOD = << 有効
+MODS_EDIT_DISABLE_MOD = 無効 >>
+MODS_EDIT_TITLE = Modパック エディター
+
+# Maps pane
+MAPS_WAIT_WHILE_LOADING = マップ ロード中…
+
+# TexturePack pane
+TEXTURE_WAIT_WHILE_LOADING = テクスチャパック ロード中…
+
+# Advanced  Options
+ADVANCED_OPTIONS_TITLE = 詳細設定
+ADVANCED_OPTIONS_DLLOCATION = ダウンロード地域:
+ADVANCED_OPTIONS_MCWINDOW_SIZE = Minecraft ウィンドウサイズ:
+ADVANCED_OPTIONS_MCWINDOW_POS = Minecraft ウィンドウ位置:
+ADVANCED_OPTIONS_MCWINDOW_AUTOMAXCHECK = ウィンドウサイズの自動調整
+ADVANCED_OPTIONS_DISABLEGOOGLEANALYTICS = Google Analyticによる追跡を拒否
+ADVANCED_OPTIONS_JAVA_PATH = Java パス:
+ADVANCED_OPTIONS_ADDJAVAOPTIONS = Java 引数:
+ADVANCED_OPTIONS_DEBUGLAUNCHERVERBOSE = 詳細なデバッグメッセージの表示
+ADVANCED_OPTIONS_BETA= ベータバージョンを使用する
+
+# Update
+UPDATE_WICHUPDATE = 更新しますか？
+UPDATE_DOWNGRADE = ダウングレードしますか？
+
+# LUNCHERUPDATE
+LUNCHERUPDATE_ISAVAILABLE = of the launcher is available.
+LUNCHERUPDATE_CHANGELOG = 変更履歴を表示
+LUNCHERUPDATE_ISAVAILABLETITLE = ランチャーの更新があります
+LUNCHERUPDATE_CURRENTDEAD = ランチャーは以下のいずれかの理由により起動できません: \n パックを正しく開いたり更新ができない場合があります．
+
+# Modpack Update
+UPDATEMODPACK_ISAVALIBLE = Modパックの更新があります．
+UPDATEMODPACK_BACKUPCFG = 設定ファイルをバックアップしますか？
+UPDATEMODPACK_BACKUPSave = セーブデータをバックアップしますか？
+UPDATEMODPACK_TITLE = 利用可能なModパックの更新
+UPDATEMODPACK_DOWNGRADE = インストールされたバージョンは選択したバージョンよりも新しいです．
+UPDATEMODPACK_FROM_TO_VERSION = 現在のバージョン: %LOCALVER%\n選択したバージョン: %ONLINEVER%
+
+# Private Pack
+PRIVATEPACK_TITLE = プライベートパック
+PRIVATEPACK_ERROR = プライベートパックは無効です．
+PRIVATEPACK_TEXT = Modパックコードを入力し「追加」をクリックしてプライベートパックを追加します．自動ロードは起動時に開始されます．プライベートパックを削除したい場合は，Modパックコードをもう一度入力して「削除」をクリックしてください．
+PRIVATEPACK_SECCESS = 削除成功．
+PRIVATEPACK_NOTEXISTS = パック名が正しくありません．
+PRIVATEPACK_ALREADY_ADDED = このプライベートパックは既に追加されています．
+
+# Filter
+FILTER_PACKTYPE = Modパックタイプ :
+FILTER_ORIGIN = マップ作者:
+FILTER_3THPARTY = サードパーティ
+FILTER_FTB = FTB
+FILTER_COMPERTIBLEPACK = 互換性のあるパック:
+FILTER_APPLY = フィルターの適用
+FILTER_SEARCHMAP = マップの検索
+FILTER_TITLE = フィルター
+FILTER_PUBLIC = 公開
+FILTER_PRIVATE = プライベート
+FILTER_MODPACKAVALIABILITY = Modパックの入手方法:
+FILTER_MCVERSION = Minecraft バージョン:
+FILTER_RESULUTION = 解像度:
+FILTER_TEXSEARCH = パックを検索
+FILTER_SEARCHPACK = 検索
+
+# Play Offline
+PLAYOFFLINE_WANNA = 問題が発生しました… \オフラインで起動しますか？
+
+# Password
+PASSWORD_PASSLABEL = パスワード: 
+PASSWORD_TITLE = パスワードを入力してください 
+
+# Profile
+OLDCREDS = アカウント情報が存在しないかアカウント情報が古いです: 更新してください
+CHANGEDUUID = ログインできません，アカウント情報を再入力してください．
+PROFILEADDER_USERNAME = ユーザーネーム/メールアドレス:
+PROFILEADDER_PASSWORD = パスワード:
+PROFILEADDER_NAME = プロファイル名:
+PROFILEADDER_SAVEPASSWORD = パスワードを記憶
+PROFILEADDER_TITLE = プロファイル作成
+PROFILADDER_ERROR = プロファイルを作成できません．
+PROFILEADDER_UPDATE = 更新
+PROFILEDITOR_TITLE = プロファイル編集
+PROFILEADDER_SAVEMOJANGDATA = ログイン情報を記憶します
+
+# Map Override
+MAPOVERRIDE_FOUNDERROR = 警告！ その名前のマップ既に存在しています!
+MAPOVERRIDE_WISHOVERRIDE = 本当に上書きしますか？
+
+# Force Kill MC
+KILL_MC = Minecraftを強制終了
+KILL_MC_TITLE = 強制終了しますか？
+KILL_MC_MESSAGE = 警告！これはデータ破損の原因となる可能性があり，ゲームがフリーズした場合のみ使用してください．
+KILL_MC_CONFIRM = 本当に強制終了しますか？
+
+# Thread dump MC
+TD_MC = スレッドダンプを生成します
+TD_MC_TITLE = スレッドダンプを生成しますか？
+TD_MC_MESSAGE = <html>Minecraftにスレッドダンプを生成させます．<br>次に進む前にこの操作を理解しているか確認してください．<br>「はい」をクリックするとランチャーは自動的に必要な実行ファイルをダウンロードします．<br><br></html>
+TD_MC_CONFIRM = Minecraftのスレッドダンプを生成してよろしいですか？
+TD_MC_FAIL_MESSAGE = スレッドダンプの生成に失敗しました！</ul>
+
+# Main
+MAIN_EXIT = 終了
+MAIN_APPLY = 適用
+MAIN_YES = はい
+MAIN_NO = いいえ
+MAIN_ALL = すべて
+MAIN_CANCEL = キャンセル
+MAIN_SUBMIT = 送信
+MAIN_REMOVE = 削除
+MAIN_ADD = 追加
+MAIN_CLIENT = クライアント
+MAIN_SERVER = サーバー
+BUTTON_IGNORE = 無視
+BUTTON_OK = 確定
+NAG_SCREEN_MESSAGE = Ok（続ける），無視（警告を無視します）
+
+# First run dialog
+INSTALL_TITLE = 初回起動
+INSTALL_LANGUAGE = 言語…
+INSTALL_CHANGE = 変更
+
+# System Tray
+TRAY_QUIT = 終了
+TRAY_FTB_WEBSITE = FTB ウェブサイト
+
+# CheckInstallPath
+CIP_BADPATH = サポートされていないディレクトリ． Forgeは次の特殊文字おをサポートしていません，\n LIST 新しいディレクトリを選択してください．
+CIP_PROGRAMFILES = C:\Program Files\ 配下へのインストールはできません． \n新しいディレクトリを選択してください．
+CIP_INTERNETFILES = Temporary Internet Files 配下へのインストールはできません． \n新しいディレクトリを選択してください．
+CIP_USERPROFILE = C:\Users\<username> 配下へのインストールは問題が発生する可能性があります． \n新しいディレクトリを選択してください．
+CIP_WRITEPROTECT = 選択したディレクトリへのインストールができませんでした．\n書き込み権限のあるディレクトリを選択してください．
+CIP_EXISTS = 選択したインストールディレクトリが見つかりません！
+CIP_CREATE = インストールディレクトリの作成に失敗しました
+CIP_SELECTAGAIN = もう一度選択してください！
+CIP_PLEASECHANGE = Optionsタブでインストール場所を変更してください．

@@ -36,7 +36,7 @@ public class I18N {
     public static Locale currentLocale = Locale.enUS;
 
     public enum Locale {
-        cyGB, daDK, deDE, enGB, enUS, esES, fiFI, frCA, frFR, itIT, maHU, nlNL, noNO, plPL, ptBR, ptPT, ruRU, svSE, zhCN, zhTW
+        cyGB, daDK, deDE, enGB, enUS, esES, fiFI, frCA, frFR, jaJP, itIT, maHU, nlNL, noNO, plPL, ptBR, ptPT, ruRU, svSE, zhCN, zhTW
     }
 
     /**
