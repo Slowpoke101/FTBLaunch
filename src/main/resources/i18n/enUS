@@ -40,6 +40,7 @@ LANGUAGE = Language
 SHOW_CONSOLE = Show Console?
 OPT_JAVA_ARGS= Use Optimization Arguments for fast computers?
 USE_SYSTEM_PROXY = Use Internet Proxy to download files?
+IPV6_SUPPORT = Enable IPv6 Support?
 REOPEN_LAUNCHER = Reopen launcher after exiting Minecraft?
 ADVANCED_OPTIONS = Advanced Options
 INSTALL_FIRSTUSE = Since this is your first time using the launcher, we suggest setting the install directory.
