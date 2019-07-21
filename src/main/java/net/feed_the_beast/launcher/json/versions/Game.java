@@ -14,17 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ftb.data;
+package net.feed_the_beast.launcher.json.versions;
 
-public final class Constants {
+import lombok.Data;
 
-    public static final String name = "Feed The Beast Launcher";
-    public static final String version = "1.5.0";
+import java.util.List;
 
-    //limit for version component is 99.
-    public static final int buildNumber = 1 * 100 * 100 + 5 * 100 + 0 * 1;
-
-    private Constants () {
+@Data
+public class Game {
+    public Game () {
     }
 
+    public Game (String txt, boolean use) {
+        this.text = txt;
+        this.useText = use;
+    }
+
+    private boolean useText = false;
+    private String text;
+    private List<String> value;
+    private List<GameRule> rules;
 }

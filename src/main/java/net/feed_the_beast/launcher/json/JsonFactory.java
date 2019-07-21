@@ -30,6 +30,7 @@ import com.google.gson.*;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.launcher.RetiredPacks;
 import net.feed_the_beast.launcher.json.launcher.Update;
+import net.feed_the_beast.launcher.json.versions.Arguments;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
 
@@ -45,6 +46,7 @@ public class JsonFactory {
         builder.registerTypeAdapterFactory(new EnumAdaptorFactory());
         builder.registerTypeAdapter(Date.class, new DateAdapter());
         builder.registerTypeAdapter(File.class, new FileAdapter());
+        builder.registerTypeAdapter(Arguments.class, new ArgumentsAdapter());
         builder.enableComplexMapKeySerialization();
         builder.setPrettyPrinting();
         GSON = builder.create();
