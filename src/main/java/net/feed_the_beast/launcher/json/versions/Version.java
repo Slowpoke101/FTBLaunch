@@ -17,6 +17,8 @@
 package net.feed_the_beast.launcher.json.versions;
 
 import com.google.common.collect.Maps;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class Version {
     public Date releaseTime;
     public String type;
     public String minecraftArguments;
+    @Getter @Setter
+    private Arguments arguments;
     public List<Library> libraries;
     public String mainClass;
     public int minimumLauncherVersion;

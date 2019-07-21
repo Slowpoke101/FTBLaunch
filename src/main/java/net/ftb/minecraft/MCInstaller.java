@@ -19,13 +19,16 @@ package net.ftb.minecraft;
 import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
-import net.feed_the_beast.launcher.json.versions.Artifact;
 import net.feed_the_beast.launcher.json.versions.DownloadType;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.SlimVersion;
 import net.feed_the_beast.launcher.json.versions.Version;
 import net.feed_the_beast.launcher.json.versions.VersionManifest;
-import net.ftb.data.*;
+import net.ftb.data.CommandLineSettings;
+import net.ftb.data.LauncherStyle;
+import net.ftb.data.LoginResponse;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.download.info.DownloadInfo;
 import net.ftb.download.workers.AssetDownloader;
@@ -38,7 +41,14 @@ import net.ftb.log.Logger;
 import net.ftb.log.StreamLogger;
 import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
-import net.ftb.util.*;
+import net.ftb.util.AppUtils;
+import net.ftb.util.Benchmark;
+import net.ftb.util.DownloadUtils;
+import net.ftb.util.ErrorUtils;
+import net.ftb.util.FTBFileUtils;
+import net.ftb.util.OSUtils;
+import net.ftb.util.Parallel;
+import net.ftb.util.TrackerUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,6 +72,7 @@ import javax.swing.*;
 public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
+
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
@@ -200,7 +211,7 @@ public class MCInstaller {
             SlimVersion vsn = versionManifest.getVersionByName(packmcversion);
             URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), vsn.getUrl().toString()));
 
-           // URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
+            // URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
             //        + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
             File json = new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson));
 
@@ -217,14 +228,14 @@ public class MCInstaller {
                     local = new File(root, "libraries/" + lib.getPath());
                     if (!local.exists() || forceUpdate) {
                         if (!lib.getUrl().toLowerCase().equalsIgnoreCase(Locations.ftb_maven)) {//DL's shouldn't be coming from maven repos but ours or mojang's
-                            if(lib.downloads != null) {
+                            if (lib.downloads != null) {
                                 list.add(new DownloadInfo(lib.downloads.artifact, local));
                             } else {
                                 list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
                             }
 
                         } else {
-                            if(lib.downloads != null) {
+                            if (lib.downloads != null) {
                                 list.add(new DownloadInfo(lib.downloads.artifact, local));
                             } else {
                                 list.add(new DownloadInfo(new URL(DownloadUtils.getCreeperhostLink(lib.getUrl() + lib.getPath())), local, lib.getPath(), true));
@@ -237,7 +248,7 @@ public class MCInstaller {
                     local = new File(root, "libraries/" + lib.getPathNatives());
                     if (!local.exists() || forceUpdate) {
                         if (lib.downloads != null) {
-                            list.add(new DownloadInfo(lib.downloads.classifiers.get(lib.getNativeName()),local));
+                            list.add(new DownloadInfo(lib.downloads.classifiers.get(lib.getNativeName()), local));
                         } else {
                             list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPathNatives()), local, lib.getPathNatives()));
                         }
@@ -251,12 +262,7 @@ public class MCInstaller {
 
             local = new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion));
             if (!local.exists() || forceUpdate) {
-                if (version.hasDownloads()) {
-                    list.add(new DownloadInfo(version.getDownload(DownloadType.CLIENT), local));
-
-                } else {
-                    list.add(new DownloadInfo(new URL(Locations.mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packmcversion)), local, local.getName()));
-                }
+                list.add(new DownloadInfo(version.getDownload(DownloadType.CLIENT), local));
             }
 
             // Move the old format to the new:
@@ -300,11 +306,7 @@ public class MCInstaller {
              * assets/*
              */
             Logger.logDebug("Checking minecraft assets");
-            if (version.assetIndex != null) {
-                url = version.assetIndex.getUrl();
-            } else {
-                url = new URL(Locations.mc_dl + "indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
-            }
+            url = version.assetIndex.getUrl();
             json = new File(root, "assets/indexes/{INDEX}.json".replace("{INDEX}", version.getAssets()));
 
             //TODO add hash support for version asset index if it exists here
@@ -321,7 +323,7 @@ public class MCInstaller {
             Logger.logDebug("Starting TaskHandler to check MC assets");
             Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
                     .withFixedThreads(2 * OSUtils.getNumCores())
-                            //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+                    //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
                     .apply(new Parallel.F<Map.Entry<String, AssetIndex.Asset>, DownloadInfo>() {
                         public DownloadInfo apply (Map.Entry<String, AssetIndex.Asset> e) {
                             try {
@@ -452,7 +454,8 @@ public class MCInstaller {
 
             Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
-                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy, packjson.type);
+                    packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy,
+                    packjson.type);
             LaunchFrame.MCRunning = true;
 
             if (!CommandLineSettings.getSettings().isDisableMCLogging()) {
