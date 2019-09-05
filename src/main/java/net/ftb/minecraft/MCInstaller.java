@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.versions.DownloadType;
+import net.feed_the_beast.launcher.json.versions.LaunchStrings;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.SlimVersion;
 import net.feed_the_beast.launcher.json.versions.Version;
@@ -451,11 +452,13 @@ public class MCInstaller {
             for (Library lib : base.getLibraries()) {
                 classpath.add(new File(libDir, lib.getPath()));
             }
-
+            LaunchStrings pj = packjson.getArgumentsToLaunch();
+            LaunchStrings bjson = base.getArgumentsToLaunch();
+            LaunchStrings ls = pj != null ? pj : bjson;
             Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
-                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+                    packjson.mainClass != null ? packjson.mainClass : base.mainClass, ls.arguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy,
-                    packjson.type);
+                    packjson.type, ls.jvm);
             LaunchFrame.MCRunning = true;
 
             if (!CommandLineSettings.getSettings().isDisableMCLogging()) {

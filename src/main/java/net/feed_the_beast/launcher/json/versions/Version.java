@@ -47,12 +47,24 @@ public class Version {
     public Asset assetIndex;
     private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 
-    public boolean hasDownloads(){
+    public LaunchStrings getArgumentsToLaunch () {
+        if (minecraftArguments != null) {
+            return new LaunchStrings(minecraftArguments);
+        } else if (arguments != null) {
+            return arguments.getLaunchString();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean hasDownloads () {
         return !downloads.isEmpty();
     }
-    public Downloadable getDownload(DownloadType dlt){
+
+    public Downloadable getDownload (DownloadType dlt) {
         return downloads.get(dlt);
     }
+
     public List<Library> getLibraries () {
         if (_libraries == null) {
             _libraries = new ArrayList<Library>();

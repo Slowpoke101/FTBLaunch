@@ -17,6 +17,7 @@
 package net.feed_the_beast.launcher.json.versions;
 
 import lombok.Data;
+import net.ftb.data.Settings;
 
 import java.util.List;
 
@@ -30,15 +31,12 @@ public class GameRule {
         private boolean has_custom_resolution = false;
     }
 
-    public boolean applies (Features feature) {
-        if (feature == null) {
-            return false;
-        }
-        if (features == null || features.size() == 0) {
+    public boolean applies () {
+        if (features == null) {
             return false;
         }
         for (Features ft : features) {
-            if (ft.has_custom_resolution && feature.has_custom_resolution) {
+            if (ft.has_custom_resolution && Settings.getSettings().getLastDimension() != null) {
                 return true;
             }
         }
