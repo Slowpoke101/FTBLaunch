@@ -34,4 +34,13 @@ public class JVM {
     private List<String> value;
     private boolean useText = false;
     private String text;
+
+    public boolean applies () {
+        for (OSRule r : rules) {
+            if (r.applies()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

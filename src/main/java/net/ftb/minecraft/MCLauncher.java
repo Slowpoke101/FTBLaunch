@@ -29,6 +29,7 @@ import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.OldPropertyMapSerializer;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.assets.AssetIndex.Asset;
+import net.ftb.data.Constants;
 import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
@@ -62,8 +63,36 @@ public class MCLauncher {
     private static String gameDirectory;
     private static StringBuilder cpb;
 
+    public static List<String> addAdditionalArgs (List<String> args) {
+        String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
+        if (!additionalOptions.isEmpty()) {
+            Logger.logInfo("Additional java parameters: " + additionalOptions);
+            for (String s : additionalOptions.split("\\s+")) {
+                if (s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true") && !isLegacy) {
+                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() :
+                            Settings.getSettings().getPackVer()).replace(".", "_");
+                    TrackerUtils.sendPageView("JarmodAttempt", "JarmodAttempt / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
+                    ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
+                } else {
+                    args.add(s);
+                }
+            }
+        }
+        if (Settings.getSettings().getOptJavaArgs()) {
+            String optArgs = "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
+            JavaInfo java = Settings.getSettings().getCurrentJava();
+            JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
+            if (java8.isOlder(java)) {
+                optArgs = "-XX:+UseG1GC";
+            }
+            Logger.logInfo("Adding Optimization Arguments: " + optArgs);
+            Collections.addAll(args, optArgs.split("\\s+"));
+        }
+        return args;
+    }
+
     public static Process launchMinecraft (String javaPath, String gameFolder, File assetDir, File nativesDir, List<File> classpath, String mainClass, String args, String assetIndex, String rmax,
-            String maxPermSize, String version, UserAuthentication authentication, boolean legacy, String versionType) throws IOException {
+            String maxPermSize, String version, UserAuthentication authentication, boolean legacy, String versionType, String jvmArgs) throws IOException {
 
         cpb = new StringBuilder("");
         isLegacy = legacy;
@@ -113,49 +142,45 @@ public class MCLauncher {
 
             arguments.add("-XX:PermSize=" + maxPermSize);
         }
-        arguments.add("-Djava.library.path=" + nativesDir.getAbsolutePath());
-        arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
-        arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
-        arguments.add("-Duser.home=" + gameDir.getParentFile().getAbsolutePath());
-        arguments.add("-Duser.language=en");
 
-        if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
-            arguments.add("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
-        }
-
-        // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
-        //arguments.add("-Djava.net.preferIPv4Stack=true");
-
-        if (Settings.getSettings().getUseSystemProxy()) {
-            arguments.add("-Djava.net.useSystemProxies=true");
-        }
-
-        arguments.add("-cp");
-        arguments.add(cpb.toString());
-
-        String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
-        if (!additionalOptions.isEmpty()) {
-            Logger.logInfo("Additional java parameters: " + additionalOptions);
-            for (String s : additionalOptions.split("\\s+")) {
-                if (s.equalsIgnoreCase("-Dfml.ignoreInvalidMinecraftCertificates=true") && !isLegacy) {
-                    String curVersion = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? ModPack.getSelectedPack().getVersion() :
-                            Settings.getSettings().getPackVer()).replace(".", "_");
-                    TrackerUtils.sendPageView("JarmodAttempt", "JarmodAttempt / " + ModPack.getSelectedPack().getName() + " / " + curVersion.replace('_', '.'));
-                    ErrorUtils.tossError("JARMODDING DETECTED in 1.6.4+ " + s, "FTB Does not support jarmodding in MC 1.6+ ");
-                } else {
-                    arguments.add(s);
+        if (jvmArgs != null) {
+            for (String s : jvmArgs.split(" ")) {
+                if (s.contains("${natives_directory}")) {
+                    s.replace("${natives_directory}", nativesDir.getAbsolutePath());
+                } else if (s.contains("${launcher_name}")) {
+                    s.replace("${launcher_name}", "FTB Launcher");
+                } else if (s.contains("${launcher_version}")) {
+                    s.replace("${launcher_version}", Constants.version);
+                } else if (s.contains("${classpath}")) {
+                    s.replace("${classpath}", cpb.toString());
+                } else if (s.equals("-cp")) {
+                    arguments = addAdditionalArgs(arguments);
                 }
+                arguments.add(s);
             }
-        }
-        if (Settings.getSettings().getOptJavaArgs()) {
-            String optArgs = "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CICompilerCountPerCPU -XX:+TieredCompilation";
-            JavaInfo java = Settings.getSettings().getCurrentJava();
-            JavaVersion java8 = JavaVersion.createJavaVersion("1.8.0");
-            if(java8.isOlder(java)) {
-                optArgs = "-XX:+UseG1GC";
+
+        } else {
+            arguments.add("-Djava.library.path=" + nativesDir.getAbsolutePath());
+            arguments.add("-Dorg.lwjgl.librarypath=" + nativesDir.getAbsolutePath());
+            arguments.add("-Dnet.java.games.input.librarypath=" + nativesDir.getAbsolutePath());
+            arguments.add("-Duser.home=" + gameDir.getParentFile().getAbsolutePath());
+            arguments.add("-Duser.language=en");
+
+            if (OSUtils.getCurrentOS() == OSUtils.OS.WINDOWS) {
+                arguments.add("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
             }
-            Logger.logInfo("Adding Optimization Arguments: " + optArgs);
-            Collections.addAll(arguments, optArgs.split("\\s+"));
+
+            // Use IPv4 when possible, only use IPv6 when connecting to IPv6 only addresses
+            //arguments.add("-Djava.net.preferIPv4Stack=true");
+
+            if (Settings.getSettings().getUseSystemProxy()) {
+                arguments.add("-Djava.net.useSystemProxies=true");
+            }
+
+            arguments = addAdditionalArgs(arguments);
+            arguments.add("-cp");
+            arguments.add(cpb.toString());
+
         }
 
         //Undocumented environment variable to control JVM
@@ -227,7 +252,7 @@ public class MCLauncher {
                     arguments.add(new GsonBuilder().registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create().toJson(authentication.getUserProperties()));
                 } else if (isLegacy) {
                     arguments.add(parseLegacyArgs(s));
-                } else if(s.equals("${version_type}")) {
+                } else if (s.equals("${version_type}")) {
                     arguments.add(versionType);
                 } else {
                     arguments.add(s);
@@ -308,7 +333,7 @@ public class MCLauncher {
         Benchmark.reset("threading");
         Parallel.TaskHandler th = new Parallel.ForEach(index.objects.entrySet())
                 .withFixedThreads(2 * OSUtils.getNumCores())
-                        //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
+                //.configurePoolSize(2*2*OSUtils.getNumCores(), 10)
                 .apply(new Parallel.F<Entry<String, Asset>, Void>() {
                     public Void apply (Entry<String, Asset> e) {
                         Asset asset = e.getValue();
@@ -361,15 +386,15 @@ public class MCLauncher {
             return (OSUtils.getCacheStorageLocation() + "ModPacks" + separator + ModPack.getSelectedPack().getDir() + separator + ModPack.getSelectedPack().getLogoName());
         } else if (s.equals("${extended_state}")) {
             return (String.valueOf(Settings.getSettings().getLastExtendedState()));
-        } else if (s.equals("${width}")) {
+        } else if (s.equals("${width}") || s.equals("${resolution_width}")) {
             return (String.valueOf(Settings.getSettings().getLastDimension().getWidth()));
-        } else if (s.equals("${height}")) {
+        } else if (s.equals("${height}") || s.equals("${resolution_height}")) {
             return (String.valueOf(Settings.getSettings().getLastDimension().getHeight()));
         } else if (s.equals("${minecraft_jar}")) {
             return (gameDirectory + File.separator + "bin" + File.separator + Locations.OLDMCJARNAME);
         } else {
             return s;
-        }
+         }
     }
 
     public static void setupLegacyStuff (String workingDir, String forgename, String mcVersion) {

@@ -16,31 +16,19 @@
  */
 package net.feed_the_beast.launcher.json.versions;
 
-import lombok.Data;
-
-import java.util.List;
-
-@Data
-public class Game {
-    public Game () {
+public class LaunchStrings {
+    public LaunchStrings () {
     }
 
-    public Game (String txt, boolean use) {
-        this.text = txt;
-        this.useText = use;
+    public LaunchStrings (String arguments) {
+        this.arguments = arguments;
     }
 
-    private boolean useText = false;
-    private String text;
-    private List<String> value;
-    private List<GameRule> rules;
-
-    public boolean applies () {
-        for (GameRule g : rules) {
-            if (g.applies()) {
-                return true;
-            }
-        }
-        return false;
+    public LaunchStrings (String arguments, String jvm) {
+        this.arguments = arguments;
+        this.jvm = jvm;
     }
+
+    public String jvm;
+    public String arguments;
 }

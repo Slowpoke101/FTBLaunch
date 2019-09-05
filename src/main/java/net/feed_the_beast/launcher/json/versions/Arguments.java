@@ -22,10 +22,39 @@ import java.util.List;
 
 @Data
 public class Arguments {
-    public Arguments(List<Game> g, List<JVM> j) {
+    public Arguments (List<Game> g, List<JVM> j) {
         this.game = g;
         this.jvm = j;
     }
+
     List<Game> game;
     List<JVM> jvm;
+
+    public LaunchStrings getLaunchString () {
+        LaunchStrings ls = new LaunchStrings();
+        StringBuilder gm = new StringBuilder();
+        StringBuilder j = new StringBuilder();
+        for (JVM java : jvm) {
+            if (java.isUseText()) {
+                j.append(java.getText()).append(" ");
+            } else if (java.applies()) {
+                for (String s : java.getValue()) {
+                    j.append(s).append(" ");
+                }
+            }
+        }
+
+        for (Game g1 : game) {
+            if (g1.isUseText()) {
+                gm.append(g1.getText()).append(" ");
+            } else if (g1.applies()) {
+                for (String s : g1.getValue()) {
+                    gm.append(s).append(" ");
+                }
+            }
+        }
+        ls.arguments = gm.toString();
+        ls.jvm = j.toString();
+        return ls;
+    }
 }
