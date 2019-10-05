@@ -80,7 +80,9 @@ public class Library {
         }
         return _artifact.getPath(natives.get(OS.CURRENT).replace("${arch}", (Settings.getSettings().getCurrentJava().is64bits ? "64" : "32")));
     }
-
+    public Artifact getartifactforstring(String s) {
+        return new Artifact(s);
+    }
     public String getUrl () {
         return (url == null ? (localRepo ? DownloadUtils.getCreeperhostLink(Locations.ftb_maven) : Locations.mc_libs) : url);
     }

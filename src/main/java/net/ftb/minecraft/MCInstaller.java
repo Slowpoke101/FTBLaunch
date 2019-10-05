@@ -16,9 +16,12 @@
  */
 package net.ftb.minecraft;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
+import net.feed_the_beast.launcher.json.forge.InstallProfile;
+import net.feed_the_beast.launcher.json.forge.InstallerProcessor;
 import net.feed_the_beast.launcher.json.versions.DownloadType;
 import net.feed_the_beast.launcher.json.versions.LaunchStrings;
 import net.feed_the_beast.launcher.json.versions.Library;
@@ -44,6 +47,7 @@ import net.ftb.main.Main;
 import net.ftb.tools.ProcessMonitor;
 import net.ftb.util.AppUtils;
 import net.ftb.util.Benchmark;
+import net.ftb.util.ComparableVersion;
 import net.ftb.util.DownloadUtils;
 import net.ftb.util.ErrorUtils;
 import net.ftb.util.FTBFileUtils;
@@ -52,6 +56,7 @@ import net.ftb.util.Parallel;
 import net.ftb.util.TrackerUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -59,6 +64,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -74,10 +80,32 @@ public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
 
+    private static void installmodlauncher (final String installPath, final Version packversion, final ModPack pack, final File root) {
+        Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
+        InstallProfile profile = packversion.get_forgeprofile();
+        File local = new File(root, "libraries/");
+        Library libfake = new Library();
+        for (InstallerProcessor p : profile.getProcessors()) {
+            StringBuilder cp = new StringBuilder();
+            for (String l : p.getClasspath()) {
+                cp.append(new File(local, libfake.getartifactforstring(l).getPath()).getAbsolutePath()).append(" ");
+            }
+            String classpath = cp.toString();
+            Logger.logError("classpath for Processor " + classpath);
+            StringBuilder sb = new StringBuilder();
+            for (String arg : p.getArgs()) {
+                char start = arg.charAt(0);
+                char end = arg.charAt(arg.length() - 1);
+            }
+        }
+    }
+
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
-        List<DownloadInfo> assets = gatherAssets(new File(installPath), installPath, isLegacy);
+        Pair<List<DownloadInfo>, Version> pr = gatherAssets(new File(installPath), installPath, isLegacy);
+        List<DownloadInfo> assets = pr.getLeft();
+        final Version packversion = pr.getRight();
         if (assets != null && assets.size() > 0) {
             Logger.logInfo("Checking/Downloading " + assets.size() + " assets, this may take a while...");
 
@@ -91,6 +119,9 @@ public class MCInstaller {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
+                            if (packversion != null && packversion.get_forgeprofile() != null) {
+                                installmodlauncher(installPath, packversion, pack, new File(installPath))
+                            }
                             launchMinecraft(installPath, pack, RESPONSE, isLegacy);
                         } else {
                             ErrorUtils.tossError("Error occurred during downloading the assets");
@@ -130,6 +161,25 @@ public class MCInstaller {
         }
     }
 
+    private static Optional<DownloadInfo> checkDep (Library lib, final File root, boolean forceUpdate, File libDir, ModPack pack, String installDir, boolean modlauncher) throws MalformedURLException {
+        DownloadInfo ret = null;
+        Library.Artifact a;
+        File local = new File(root, "libraries/" + lib.getPath());
+        if (!new File(libDir, lib.getPath()).exists() || forceUpdate) {
+            if (lib.checksums != null) {
+                ret = (new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1",
+                        DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
+            } else if (lib.download != null && lib.download) {
+                ret = (new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
+            }
+        }
+        a = lib.get_artifact();
+        if (a.getDomain().equalsIgnoreCase("net.minecraftforge") && (a.getName().equalsIgnoreCase("forge") || a.getName().equalsIgnoreCase("minecraftforge")) && !modlauncher) {
+            grabJava8CompatFix(a, pack, packmcversion, installDir + "/" + pack.getDir());
+        }
+        return Optional.fromNullable(ret);
+    }
+
     /**
      * Gather assets to check/download. If force update is enabled this will return all assets
      *
@@ -137,12 +187,12 @@ public class MCInstaller {
      *              Normally, if offline mode works, setupNewStyle() and gatherAssets() are not called and error situation is impossible
      *              Returning null just in case of network breakge after authentication process
      */
-    private static List<DownloadInfo> gatherAssets (final File root, String installDir, boolean isLegacy) {
+    private static Pair<List<DownloadInfo>, Version> gatherAssets (final File root, String installDir, boolean isLegacy) {
         try {
+
             Logger.logInfo("Checking local assets file, for MC version " + packmcversion + " Please wait! ");
             List<DownloadInfo> list = Lists.newArrayList();
             Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
-            File local;
             //Pack JSON Libraries
             Logger.logDebug("Checking pack libraries");
             ModPack pack = ModPack.getSelectedPack();
@@ -155,31 +205,39 @@ public class MCInstaller {
                     extractLegacyJson(new File(gameDir, "pack.json"));
                 }
             }
-
+            Version packjson = null;
+            boolean modlauncher = false;
             if (new File(gameDir, "pack.json").exists()) {
-                Version packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
+                packjson = JsonFactory.loadVersion(new File(gameDir, "pack.json"));
                 if (packjson.jar != null && !packjson.jar.isEmpty()) {
                     packmcversion = packjson.jar;
+                }
+                ComparableVersion version_ml = new ComparableVersion("1.13");
+                if (version_ml.isOlder(packmcversion)) {
+                    modlauncher = true;
+                    InstallProfile forgeprofile = packjson.get_forgeprofile();
+                    for (Library lib : packjson.get_forgeprofile().getLibraries()) {
+                        Optional<DownloadInfo> dep = checkDep(lib, root, forceUpdate, libDir, pack, installDir, modlauncher);
+                        if (dep.isPresent()) {
+                            list.add(dep.get());
+                        }
+                    }
+
+                    /*Optional<DownloadInfo> dep = checkDep(forgeinstaller, root, forceUpdate, libDir, pack, installDir, modlauncher);
+                    if (dep.isPresent()){
+                        list.add(dep.get());
+                    }*/
+                    //This needs forge installing
                 }
                 if (packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty()) {
                     packbasejson = packjson.inheritsFrom;
                 }
-                Library.Artifact a;
                 for (Library lib : packjson.getLibraries()) {
                     //Logger.logError(new File(libDir, lib.getPath()).getAbsolutePath());
                     // These files are shipped inside pack.zip, can't do force update check yet
-                    local = new File(root, "libraries/" + lib.getPath());
-                    if (!new File(libDir, lib.getPath()).exists() || forceUpdate) {
-                        if (lib.checksums != null) {
-                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1",
-                                    DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
-                        } else if (lib.download != null && lib.download) {
-                            list.add(new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath()));
-                        }
-                    }
-                    a = lib.get_artifact();
-                    if (a.getDomain().equalsIgnoreCase("net.minecraftforge") && (a.getName().equalsIgnoreCase("forge") || a.getName().equalsIgnoreCase("minecraftforge"))) {
-                        grabJava8CompatFix(a, pack, packmcversion, installDir + "/" + pack.getDir());
+                    Optional<DownloadInfo> dep = checkDep(lib, root, forceUpdate, libDir, pack, installDir, modlauncher);
+                    if (dep.isPresent()) {
+                        list.add(dep.get());
                     }
                 }
                 //}
@@ -221,7 +279,7 @@ public class MCInstaller {
                 Logger.logError("library JSON not found");
                 return null;
             }
-
+            File local;
             Version version = JsonFactory.loadVersion(json);
             Logger.logDebug("checking minecraft libraries");
             for (Library lib : version.getLibraries()) {
@@ -351,7 +409,7 @@ public class MCInstaller {
             th.shutdown();
             Benchmark.logBenchAs("threading", "parallel asset check");
 
-            return list;
+            return Pair.of(list, packjson);
         } catch (Exception e) {
             Logger.logError("Error while gathering assets", e);
         }
