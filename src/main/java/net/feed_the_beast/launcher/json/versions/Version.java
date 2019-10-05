@@ -20,6 +20,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import net.feed_the_beast.launcher.json.forge.InstallProfile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +46,10 @@ public class Version {
     public String jar;
     private List<Library> _libraries;
     public Asset assetIndex;
+    // Added for 1.14.4 installer links
+    @Setter @Getter
+    private InstallProfile _forgeprofile;
+
     private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 
     public LaunchStrings getArgumentsToLaunch () {

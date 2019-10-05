@@ -9,11 +9,5 @@ public class InstallerProcessor {
     private String jar;
     private List<String> classpath;
     private List<String> args;
-
-/*
-            "outputs": {
-                "{PATCHED}": "{PATCHED_SHA}"
-            }
-
- */
+    private Outputs outputs;
 }
