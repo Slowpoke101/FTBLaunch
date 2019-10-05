@@ -89,12 +89,54 @@ public class MCInstaller {
     private static String getlocationofmavenfile (Library any, String location, File local) {
         return new File(local, any.getartifactforstring(location).getPath()).getAbsolutePath();
     }
-    private static File getfilenofmavenfile (Library any, String location, File local) {
+
+    private static File getfileofmavenfile (Library any, String location, File local) {
         return new File(local, any.getartifactforstring(location).getPath());
     }
 
     private static URL getmavenlocalurl (Library any, String location, File local) throws MalformedURLException {
         return new File(local, any.getartifactforstring(location).getPath()).toURI().toURL();
+    }
+
+    private static boolean checkoutputs (InstallerProcessor p, InstallProfile profile, Library any, File libroot) throws IOException {
+        for (Map.Entry<String, String> entry : p.getOutputs().entrySet()) {
+            String key = entry.getKey();
+            char start = key.charAt(0);
+            char end = key.charAt(key.length() - 1);
+            String outputsha = null;
+            if (start == '{' && end == '}') {
+                InstallerData d = profile.getData().get(key.substring(1, key.length() - 1));
+                if (d == null) {
+                    return false;
+                }
+                String dataval = d.getClient();
+                char cstart = dataval.charAt(0);
+                char cend = dataval.charAt(key.length() - 1);
+                File op = getfileofmavenfile(any, dataval.substring(1, dataval.length() - 1), libroot);
+                if (!op.exists()) {
+                    return false;
+                }
+                outputsha = DownloadUtils.fileSHA(op);
+                String value = entry.getValue();
+                char valueStart = value.charAt(0);
+                char valueEnd = value.charAt(value.length() - 1);
+
+                if (valueStart == '{' && valueEnd == '}') {
+                    String ev = profile.getData().get(dataval.substring(1, dataval.length() - 1)).getClient();
+
+                    String expectedHash = ev.charAt(0) == '\'' ? ev.substring(1, ev.length() - 1) : ev;
+
+                    Logger.logDebug("Expecting " + outputsha + " to equal " + expectedHash);
+                    if (!outputsha.equals(expectedHash)) {
+                        FileUtils.deleteQuietly(op);
+                        return false;
+                    }
+                }
+
+            }
+
+        }
+        return true;
     }
 
     private static void installmodlauncher (final String installPath, final Version packversion, final ModPack pack, final File root) throws IOException {
@@ -105,12 +147,12 @@ public class MCInstaller {
         File instjar = new File(local, profile.getInstallerjar().get_artifact().getPath());
         File extractedDir = new File(instjar.getParentFile(), "extracted");
         if (forceUpdate) {
-            if (extractedDir.exists()){
+            if (extractedDir.exists()) {
                 FileUtils.deleteDirectory(extractedDir);
             }
             //if extract exists delete it
         }
-        if(! extractedDir.exists()) {
+        if (!extractedDir.exists()) {
             FTBFileUtils.extractZipTo(instjar.getAbsolutePath(), extractedDir.getAbsolutePath());
         }
         Map<String, InstallerData> data = profile.getData();
@@ -186,7 +228,9 @@ public class MCInstaller {
                 //TODO throw error
             }
             //TODO check outputs here
-            
+            if (p.getOutputs() != null && !p.getOutputs().isEmpty()) {
+                checkoutputs(p, profile, libfake, root);
+            }
         }
 
     }
@@ -211,7 +255,20 @@ public class MCInstaller {
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
                             if (packversion != null && packversion.get_forgeprofile() != null) {
-                                installmodlauncher(installPath, packversion, pack, new File(installPath));
+                                // TODO only do this if it is needed or force is on
+                                if (Settings.getSettings().isForceUpdateEnabled()) {
+                                    installmodlauncher(installPath, packversion, pack, new File(installPath));
+                                } else {
+                                    boolean iml = false;
+                                    for (InstallerProcessor p : packversion.get_forgeprofile().getProcessors()) {
+                                        if (!checkoutputs(p, packversion.get_forgeprofile(), new Library(), new File(installPath))) {
+                                            iml = true;
+                                        }
+                                    }
+                                    if (iml) {
+                                        installmodlauncher(installPath, packversion, pack, new File(installPath));
+                                    }
+                                }
                             }
                             launchMinecraft(installPath, pack, RESPONSE, isLegacy);
                         } else {
