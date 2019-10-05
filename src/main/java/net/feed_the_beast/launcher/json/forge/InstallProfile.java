@@ -4,6 +4,7 @@ import lombok.Data;
 import net.feed_the_beast.launcher.json.versions.Library;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class InstallProfile {
@@ -15,9 +16,10 @@ public class InstallProfile {
     private String logo;
     private String minecraft;
     private String welcome;
-    private InstallerData data;
+    private Map<String, InstallerData> data;
     private List<InstallerProcessor> processors;
     private List<Library> libraries;
+    private Library installerjar;
 
     /*
         "spec": 0,
