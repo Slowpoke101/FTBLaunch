@@ -21,6 +21,7 @@ import com.google.common.collect.Lists;
 import net.feed_the_beast.launcher.json.JsonFactory;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.forge.InstallProfile;
+import net.feed_the_beast.launcher.json.forge.InstallerData;
 import net.feed_the_beast.launcher.json.forge.InstallerProcessor;
 import net.feed_the_beast.launcher.json.versions.DownloadType;
 import net.feed_the_beast.launcher.json.versions.LaunchStrings;
@@ -64,40 +65,130 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.processing.Processor;
 import javax.swing.*;
 
 public class MCInstaller {
     private static String packmcversion = new String();
     private static String packbasejson = new String();
 
-    private static void installmodlauncher (final String installPath, final Version packversion, final ModPack pack, final File root) {
+    private static String getlocationofmavenfile (Library any, String location, File local) {
+        return new File(local, any.getartifactforstring(location).getPath()).getAbsolutePath();
+    }
+    private static File getfilenofmavenfile (Library any, String location, File local) {
+        return new File(local, any.getartifactforstring(location).getPath());
+    }
+
+    private static URL getmavenlocalurl (Library any, String location, File local) throws MalformedURLException {
+        return new File(local, any.getartifactforstring(location).getPath()).toURI().toURL();
+    }
+
+    private static void installmodlauncher (final String installPath, final Version packversion, final ModPack pack, final File root) throws IOException {
         Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
         InstallProfile profile = packversion.get_forgeprofile();
-        File local = new File(root, "libraries/");
         Library libfake = new Library();
-        for (InstallerProcessor p : profile.getProcessors()) {
-            StringBuilder cp = new StringBuilder();
-            for (String l : p.getClasspath()) {
-                cp.append(new File(local, libfake.getartifactforstring(l).getPath()).getAbsolutePath()).append(" ");
+        File local = new File(root, "libraries/");
+        File instjar = new File(local, profile.getInstallerjar().get_artifact().getPath());
+        File extractedDir = new File(instjar.getParentFile(), "extracted");
+        if (forceUpdate) {
+            if (extractedDir.exists()){
+                FileUtils.deleteDirectory(extractedDir);
             }
-            String classpath = cp.toString();
-            Logger.logError("classpath for Processor " + classpath);
-            StringBuilder sb = new StringBuilder();
+            //if extract exists delete it
+        }
+        if(! extractedDir.exists()) {
+            FTBFileUtils.extractZipTo(instjar.getAbsolutePath(), extractedDir.getAbsolutePath());
+        }
+        Map<String, InstallerData> data = profile.getData();
+        for (InstallerProcessor p : profile.getProcessors()) {
+            String jarloc = getlocationofmavenfile(libfake, p.getJar(), local);
+            Logger.logDebug("Processor jar path is " + jarloc);
+            JarFile jarFile = new JarFile(jarloc);
+            String mainClass = jarFile.getManifest().getMainAttributes().getValue(Attributes.Name.MAIN_CLASS);
+            jarFile.close();
+
+            if (mainClass == null || mainClass.isEmpty()) {
+                Logger.logError("did not find Mainclass for " + jarloc + " as the mainclass wasn't found");
+                //TODO fail out here
+            }
+            List<URL> cp = Lists.newArrayList();
+            cp.add(new File(jarloc).toURI().toURL());
+            for (String l : p.getClasspath()) {
+                cp.add(getmavenlocalurl(libfake, l, local));
+            }
+            List<String> args = Lists.newArrayList();
             for (String arg : p.getArgs()) {
                 char start = arg.charAt(0);
                 char end = arg.charAt(arg.length() - 1);
+                if (start == '{' && end == '}') {
+                    String key = arg.substring(1, arg.length() - 1);
+                    InstallerData d = data.get(key);
+                    // TODO throw error and cancel install if no installer data is found
+                    String dataval = d.getClient();
+                    char cstart = dataval.charAt(0);
+                    char cend = dataval.charAt(arg.length() - 1);
+                    if (cstart == '[' && cend == ']') {
+                        dataval = getlocationofmavenfile(libfake, dataval.substring(1, dataval.length() - 1), local);
+                    } else {
+                        dataval = d.getClient();
+                    }
+                    if (dataval.contains(local.getAbsolutePath())) {
+                        args.add(dataval);
+                    } else {
+                        if (dataval.charAt(0) == '/') {
+                            File localFile = new File(extractedDir, dataval.substring(1));
+                            args.add(localFile.getAbsolutePath());
+
+                            // TODO handle Local extract data
+                        } else {
+                            args.add(dataval);
+                        }
+                    }
+                } else if (start == '[' && end == ']') {
+                    args.add(getlocationofmavenfile(libfake, arg.substring(1, arg.length() - 1), local));
+                    //TODO make sure this file exists and exit if its not
+                } else {
+                    args.add(arg);
+                }
             }
+            // we pass in some extra params for the forge installer tools DEOBF_REALMS task
+            if (p.getArgs().contains("DEOBF_REALMS")) {
+                args.add("--json");
+                //replace this with location of version json on disk from launchermeta
+                args.add(new File(root, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)).getAbsolutePath());
+                args.add("--libs");
+                args.add(local.getAbsolutePath());
+            }
+
+            ClassLoader cl = new URLClassLoader(cp.toArray(new URL[cp.size()]),
+                    Processor.class.getClassLoader());
+            try {
+                Logger.logDebug("Running processor");
+                Class<?> cls = Class.forName(mainClass, true, cl);
+                Method main = cls.getDeclaredMethod("main", String[].class);
+                main.invoke(null, (Object) args.toArray(new String[args.size()]));
+            } catch (Throwable e) {
+                Logger.logError("error processing " + jarloc, e);
+                //TODO throw error
+            }
+            //TODO check outputs here
+            
         }
+
     }
 
     public static void setupNewStyle (final String installPath, final ModPack pack, final boolean isLegacy, final LoginResponse RESPONSE) {
@@ -120,7 +211,7 @@ public class MCInstaller {
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
                             if (packversion != null && packversion.get_forgeprofile() != null) {
-                                installmodlauncher(installPath, packversion, pack, new File(installPath))
+                                installmodlauncher(installPath, packversion, pack, new File(installPath));
                             }
                             launchMinecraft(installPath, pack, RESPONSE, isLegacy);
                         } else {
@@ -216,6 +307,10 @@ public class MCInstaller {
                 if (version_ml.isOlder(packmcversion)) {
                     modlauncher = true;
                     InstallProfile forgeprofile = packjson.get_forgeprofile();
+                    Optional<DownloadInfo> depfi = checkDep(forgeprofile.getInstallerjar(), root, forceUpdate, libDir, pack, installDir, modlauncher);
+                    if (depfi.isPresent()) {
+                        list.add(depfi.get());
+                    }
                     for (Library lib : packjson.get_forgeprofile().getLibraries()) {
                         Optional<DownloadInfo> dep = checkDep(lib, root, forceUpdate, libDir, pack, installDir, modlauncher);
                         if (dep.isPresent()) {
