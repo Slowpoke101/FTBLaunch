@@ -99,6 +99,12 @@ public class AssetDownloader extends SwingWorker<Boolean, Void> {
             } catch (MalformedURLException e) {
                 Logger.logError("error creating url", e);
             }
+        } else if (asset.url.getProtocol().equals("https") && asset.url.getHost().startsWith(Locations.fcdnNoHTTP)) {
+            try {//move all links to HTTPS on our repo
+                asset.url = new URL(assetOrig.url.toString().replace("https://" + Locations.fcdnNoHTTP, Locations.masterRepo));
+            } catch (MalformedURLException e) {
+                Logger.logError("error creating url", e);
+            }
         }
 
         byte[] buffer = new byte[24000];
