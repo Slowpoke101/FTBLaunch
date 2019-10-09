@@ -30,22 +30,23 @@ public class Locations {
     public static final String mc_libs = "https://libraries.minecraft.net/";
     //location of the FTB maven repo within the FTB2/static part of the repository
     public static final String ftb_maven = "maven/";
-
-    public static final String chRepo = "https://www.creeperrepo.net";
-    public static final String curseRepo = "https://ftb.forgecdn.net";
+    //TODO fix MD5's on CH
+    public static final String chRepo = "https://dist.creeper.host";
     //this changes based on the primary automatic server in the balancing logic
     //DO NOT ACCESS UNILL 1st DL thread has finished setting up!!!!
-    public static String masterRepoNoHTTP = "ftb.forgecdn.net";
-    public static String masterRepo = "https://ftb.forgecdn.net";
+    public static String fcdn = "https://ftb.forgecdn.net";
+    public static String fcdnNoHTTP = "ftb.forgecdn.net";
+    public static String masterRepoNoHTTP = "dist.creeper.host";
+    public static String masterRepo = "https://dist.creeper.host";
     public static String oldMasterRepo = "http://ftb.cursecdn.com";
     public static String oldMasterRepoNoHTTP = "ftb.cursecdn.com";
     // used in mirroring logic
-    public static boolean primaryCH = false;
+    public static boolean primaryCH = true;
     public static boolean chEnabled = true;
 
     public static String FTB2 = "FTB2/";
     //FULL location of the FTB maven repo
-    public static final String FTBMAVENFULL = curseRepo + "/" + FTB2 + "maven/";
+    public static final String FTBMAVENFULL = chRepo + "/" + FTB2 + "maven/";
 
     //various values for mirrors located here so that multiple download threads don't need to re-initialize the data
     //worker's that rely on the server list being in tact should check serversloaded
@@ -81,13 +82,11 @@ public class Locations {
     public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
     public static final String FTBSITE = "http://www.feed-the-beast.com";
 
-    public static final String PIWIK = "http://stats.feed-the-beast.com/";
 
     public static final String CURSEVOICE = "http://beta.cursevoice.com/games/minecraft";
 
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
-    public static final String TUGLOGO = "/image/logo_TUG.png";
     public static final String CURSELOGO = "/image/logo_curse.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";

@@ -375,11 +375,6 @@ public class MCInstaller {
                         }
                     }
 
-                    /*Optional<DownloadInfo> dep = checkDep(forgeinstaller, root, forceUpdate, libDir, pack, installDir, modlauncher);
-                    if (dep.isPresent()){
-                        list.add(dep.get());
-                    }*/
-                    //This needs forge installing
                 }
                 if (packjson.inheritsFrom != null && !packjson.inheritsFrom.isEmpty()) {
                     packbasejson = packjson.inheritsFrom;

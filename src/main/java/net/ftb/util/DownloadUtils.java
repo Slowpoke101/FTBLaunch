@@ -29,7 +29,6 @@ import com.google.gson.JsonParser;
 import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
-import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import org.apache.commons.io.IOUtils;
 
@@ -145,6 +144,7 @@ public final class DownloadUtils extends Thread {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
+            connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty(CACHE_CONTROL, "no-transform");
             connection.setRequestMethod("HEAD");
             if (connection.getResponseCode() != 200) {
@@ -337,9 +337,8 @@ public final class DownloadUtils extends Thread {
         Scanner scanner = null;
         //String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "http://" + downloadServers.get(Settings.getSettings().getDownloadServer()) : Locations.masterRepo;
 
-        // Only curse has /md5/ do not try to use creeperrepo even if user has selected it
-        String resolved = Locations.curseRepo;
-        resolved += "/md5/FTB2/" + url;
+        String resolved = Locations.masterRepo + "/" + Locations.FTB2;
+        resolved += "md5/FTB2/" + url;
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
@@ -447,7 +446,6 @@ public final class DownloadUtils extends Thread {
         boolean creeperFailed = false;
         setName("DownloadUtils");
         // test for proxies
-        OSUtils.getProxy(Locations.curseRepo);
         OSUtils.getProxy(Locations.chRepo);
         if (!Locations.hasDLInitialized) {
             Benchmark.start("DlUtils");
@@ -456,71 +454,18 @@ public final class DownloadUtils extends Thread {
             Random r = new Random();
             double choice = r.nextDouble();
             try { // Super catch-all to ensure the launcher always renders
-                String json = null;
-                // Fetch the percentage json first
-                try {
-                    json = IOUtils.toString(new URL(Locations.curseRepo + "/FTB2/static/balance.json"));
-                } catch (IOException e) {
-                    curseFailed = true;
-                }
-                Benchmark.logBenchAs("DlUtils", "Download Utils Balance (forgecdn)");
-
-                if (curseFailed) {
-                    try {
-                        json = IOUtils.toString(new URL(Locations.chRepo + "/FTB2/static/balance.json"));
-                    } catch (IOException e) {
-                        creeperFailed = true;
-                        bothReposFailed = true;
-                    }
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance (creeperrepo)");
-                }
 
                 // ok we got working balance.json
-                if (!bothReposFailed) {
-                    // should we catch network failures here and try to fetch balance from creeperrepo
-                    // and if it also fails we can automatically start parsing hardcoded edges.json
-                    JsonElement element = new JsonParser().parse(json);
+                // should we catch network failures here and try to fetch balance from creeperrepo
+                // and if it also fails we can automatically start parsing hardcoded edges.json
 
-                    if (element != null && element.isJsonObject()) {
-                        JsonObject jso = element.getAsJsonObject();
-                        if (jso != null && jso.get("minUsableLauncherVersion") != null) {
-                            LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
-                        }
-                        if (jso != null && jso.get("chEnabled") != null) {
-                            Locations.chEnabled = jso.get("chEnabled").getAsBoolean();
-                        }
-                        if (jso != null && jso.get("repoSplitCurse") != null && Locations.chEnabled) {
-                            JsonElement e = jso.get("repoSplitCurse");
-                            Logger.logDebug("Balance Settings: " + e.getAsDouble() + " > " + choice);
-                            if (e != null && e.getAsDouble() > choice) {
-                                Logger.logInfo("Balance has selected Automatic:CurseCDN");
-                            } else {
-                                Logger.logInfo("Balance has selected Automatic:CreeperRepo");
-                                Locations.masterRepoNoHTTP = Locations.chRepo.replaceAll("http://", "").replaceAll("https://", "");
-                                Locations.masterRepo = Locations.chRepo;
-                                Locations.primaryCH = true;
-                                downloadServers.remove("Automatic");
-                                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
-                            }
-                        }
-                    }
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Balance");
-                    if (Locations.chEnabled) {
-                        // Fetch servers from creeperhost using edges.json first
-                        parseJSONtoMap(new URL(Locations.chRepo + "/edges.json"), "CH", downloadServers, false, "edges.json");
-                        Benchmark.logBenchAs("DlUtils", "Download Utils CH edges.json");
-                    }
-                    // Fetch servers list from curse using edges.json second
-                    parseJSONtoMap(new URL(Locations.curseRepo + "/edges.json"), "Curse", downloadServers, false, "edges.json");
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Curse edges.json");
-
-                } else {
-                    //both repos failed. use builtin edges.json, remove previously selected Automatic entry
-                    downloadServers.clear();
-                    Logger.logWarn("Primary mirror failed, Trying alternative mirrors");
-                    parseJSONtoMap(this.getClass().getResource("/edges.json"), "Backup", downloadServers, true, "edges.json");
-                    Benchmark.logBenchAs("DlUtils", "Download Utils Builtin servers tested");
-                }
+                Locations.chEnabled = true;
+                Logger.logInfo("Balance has selected Automatic:CreeperRepo");
+                Locations.masterRepoNoHTTP = Locations.chRepo.replaceAll("http://", "").replaceAll("https://", "");
+                Locations.masterRepo = Locations.chRepo;
+                Locations.primaryCH = true;
+                downloadServers.remove("Automatic");
+                downloadServers.put("Automatic", Locations.masterRepoNoHTTP);
 
                 if (downloadServers.size() == 0) {
                     // only if previous else block was executed and did not find working server. (e.g. network is down)
@@ -546,7 +491,7 @@ public final class DownloadUtils extends Thread {
             Locations.serversLoaded = true;
 
             // This line absolutely must be hit, or the console will not be shown
-            // and the user/we will not even know why an error has occurred. 
+            // and the user/we will not even know why an error has occurred.
             Logger.logDebug("DL ready");
 
             String selectedMirror = Settings.getSettings().getDownloadServer();
@@ -611,7 +556,7 @@ public final class DownloadUtils extends Thread {
                             IOUtils.toString(new URL("https://" + e.getValue().getAsString() + "/" + location));
                             h.put(e.getKey(), e.getValue().getAsString());
                         } catch (Exception ex) {
-                            Logger.logWarn((e.getValue().getAsString().contains("creeper") ? "CreeperHost" : "Curse") + " Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());
+                            Logger.logWarn("CreeperHost Server: " + e.getKey() + " was not accessible, ignoring." + ex.getMessage());
                         }
 
                         if (i < 90) {
