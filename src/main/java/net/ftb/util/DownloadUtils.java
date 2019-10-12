@@ -339,6 +339,7 @@ public final class DownloadUtils extends Thread {
 
         String resolved = Locations.masterRepo + "/" + Locations.FTB2;
         resolved += "md5/FTB2/" + url;
+        String backup = Locations.masterRepo + "/" + Locations.FTB2 + url + ".md5";
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(resolved).openConnection();
@@ -351,7 +352,7 @@ public final class DownloadUtils extends Thread {
             }
             if (response != 200 || (content == null || content.isEmpty())) {
                 for (String server : backupServers.values()) {
-                    resolved = "https://" + server + "/md5/FTB2/" + url;
+                    resolved = "https://" + server + "FTB2/md5/FTB2/" + url;
                     connection = (HttpURLConnection) new URL(resolved).openConnection();
                     connection.setRequestProperty(CACHE_CONTROL, "no-transform");
                     response = connection.getResponseCode();
@@ -360,7 +361,33 @@ public final class DownloadUtils extends Thread {
                         scanner.useDelimiter("\\Z");
                         content = scanner.next();
                         if (content != null && !content.isEmpty()) {
-                            break;
+                            resolved = backup;
+                            connection = (HttpURLConnection) new URL(resolved).openConnection();
+                            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
+                            response = connection.getResponseCode();
+                            if (response == 200) {
+                                scanner = new Scanner(connection.getInputStream());
+                                scanner.useDelimiter("\\Z");
+                                content = scanner.next();
+                                if (content != null && !content.isEmpty()) {
+
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        resolved = backup;
+                        connection = (HttpURLConnection) new URL(resolved).openConnection();
+                        connection.setRequestProperty(CACHE_CONTROL, "no-transform");
+                        response = connection.getResponseCode();
+                        if (response == 200) {
+                            scanner = new Scanner(connection.getInputStream());
+                            scanner.useDelimiter("\\Z");
+                            content = scanner.next();
+                            if (content != null && !content.isEmpty()) {
+
+                                break;
+                            }
                         }
                     }
                 }
