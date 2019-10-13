@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 public class InstallProfile {
-    private String _comment_;
+    //private String _comment_;
     private int spec;
     private String version;
     private String json;
