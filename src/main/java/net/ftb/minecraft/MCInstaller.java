@@ -367,8 +367,8 @@ public class MCInstaller {
                 if (version_ml.isOlder(packmcversion)) {
                     modlauncher = true;
                     InstallProfile forgeprofile = packjson.getForgeprofile();
-                    Logger.logError(packjson.toString());
-                    Logger.logError(forgeprofile.toString());
+                    //Logger.logError(packjson.toString());
+                    //Logger.logError(forgeprofile.toString());
                     Optional<DownloadInfo> depfi = checkDep(forgeprofile.getInstallerjar(), root, forceUpdate, libDir, pack, installDir, modlauncher);
                     if (depfi.isPresent()) {
                         list.add(depfi.get());

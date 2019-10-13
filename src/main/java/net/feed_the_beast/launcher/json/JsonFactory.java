@@ -31,6 +31,8 @@ import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.launcher.RetiredPacks;
 import net.feed_the_beast.launcher.json.launcher.Update;
 import net.feed_the_beast.launcher.json.versions.Arguments;
+import net.feed_the_beast.launcher.json.versions.Game;
+import net.feed_the_beast.launcher.json.versions.JVM;
 import net.feed_the_beast.launcher.json.versions.Library;
 import net.feed_the_beast.launcher.json.versions.Version;
 
@@ -47,6 +49,8 @@ public class JsonFactory {
         builder.registerTypeAdapter(Date.class, new DateAdapter());
         builder.registerTypeAdapter(File.class, new FileAdapter());
         builder.registerTypeAdapter(Arguments.class, new ArgumentsAdapter());
+        builder.registerTypeAdapter(Game.class, new GameAdapter());
+        builder.registerTypeAdapter(JVM.class, new JVMAdapter());
         builder.enableComplexMapKeySerialization();
         builder.setPrettyPrinting();
         GSON = builder.create();

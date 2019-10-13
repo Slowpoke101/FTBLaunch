@@ -29,6 +29,13 @@ public class JVM {
         this.text = txt;
         this.useText = use;
     }
+    public JVM(List<String> value, List<OSRule> rules, String text, boolean useText) {
+        this.useText = useText;
+        this.text = text;
+        this.value = value;
+        this.rules = rules;
+    }
+
 
     private List<OSRule> rules;
     private List<String> value;

@@ -45,9 +45,9 @@ public class ArgumentsAdapter implements JsonDeserializer<Arguments> {
                 if (gameArg.isJsonPrimitive()) {
                     gameList.add(new Game(gameArg.getAsString(), true));
                 } else if (gameArg.isJsonObject()) {
-                    gameList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), Game.class));
-                } else {
-                    gameList.add(new Game(gameArg.getAsString(), true));
+                    JsonObject jso = gameArg.getAsJsonObject();
+                    String js = JsonFactory.GSON.toJson(jso);
+                    gameList.add(JsonFactory.GSON.fromJson(js, Game.class));
                 }
             }
         }
@@ -56,10 +56,7 @@ public class ArgumentsAdapter implements JsonDeserializer<Arguments> {
                 if (gameArg.isJsonPrimitive()) {
                     jvmList.add(new JVM(gameArg.getAsString(), true));
                 } else if (gameArg.isJsonObject()) {
-                    jvmList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), JVM.class));
-                } else {
-                    jvmList.add(new JVM(gameArg.getAsString(), true));
-
+                    jvmList.add(JsonFactory.GSON.fromJson(gameArg, JVM.class));
                 }
             }
         }
