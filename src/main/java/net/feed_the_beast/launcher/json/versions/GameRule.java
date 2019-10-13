@@ -19,12 +19,10 @@ package net.feed_the_beast.launcher.json.versions;
 import lombok.Data;
 import net.ftb.data.Settings;
 
-import java.util.List;
-
 @Data
 public class GameRule {
     public Action action = Action.ALLOW;
-    public List<Features> features;
+    public Features features;
 
     public class Features {
         private boolean is_demo_user = false;
@@ -35,11 +33,10 @@ public class GameRule {
         if (features == null) {
             return false;
         }
-        for (Features ft : features) {
-            if (ft.has_custom_resolution && Settings.getSettings().getLastDimension() != null) {
-                return true;
-            }
+        if (features != null && features.has_custom_resolution && Settings.getSettings().getLastDimension() != null) {
+            return true;
         }
+
         return false;
     }
 
