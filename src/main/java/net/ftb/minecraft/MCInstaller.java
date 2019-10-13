@@ -317,7 +317,9 @@ public class MCInstaller {
         Library.Artifact a;
         File local = new File(root, "libraries/" + lib.getPath());
         if (!new File(libDir, lib.getPath()).exists() || forceUpdate) {
-            if (lib.checksums != null) {
+            if (lib.downloads != null && lib.downloads.artifact != null) {
+                ret = new DownloadInfo(lib.downloads.artifact, local);
+            } else if (lib.checksums != null) {
                 ret = (new DownloadInfo(new URL(lib.getUrl() + lib.getPath()), local, lib.getPath(), lib.checksums, "sha1",
                         DownloadInfo.DLType.NONE, DownloadInfo.DLType.NONE));
             } else if (lib.download != null && lib.download) {
