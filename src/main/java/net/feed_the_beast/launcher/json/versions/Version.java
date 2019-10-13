@@ -53,10 +53,11 @@ public class Version {
     private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 
     public LaunchStrings getArgumentsToLaunch () {
+        if (arguments != null) {
+            return arguments.getLaunchString();
+        }
         if (minecraftArguments != null) {
             return new LaunchStrings(minecraftArguments);
-        } else if (arguments != null) {
-            return arguments.getLaunchString();
         } else {
             return null;
         }
