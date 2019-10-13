@@ -239,6 +239,9 @@ public class MCInstaller {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
         Pair<List<DownloadInfo>, Version> pr = gatherAssets(new File(installPath), installPath, isLegacy);
+        if (pr == null){
+            Logger.logError("asset null " + installPath);
+        }
         List<DownloadInfo> assets = pr.getLeft();
         final Version packversion = pr.getRight();
         if (assets != null && assets.size() > 0) {
