@@ -19,7 +19,15 @@ package net.ftb.gui;
 import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import lombok.Setter;
-import net.ftb.data.*;
+import net.ftb.data.CommandLineSettings;
+import net.ftb.data.Constants;
+import net.ftb.data.LauncherStyle;
+import net.ftb.data.LoginResponse;
+import net.ftb.data.Map;
+import net.ftb.data.ModPack;
+import net.ftb.data.Settings;
+import net.ftb.data.TexturePack;
+import net.ftb.data.UserManager;
 import net.ftb.download.Locations;
 import net.ftb.events.EnableObjectsEvent;
 import net.ftb.gui.dialogs.LoadingDialog;
@@ -355,7 +363,6 @@ public class LaunchFrame extends JFrame {
         footer.add(logoPanel, BorderLayout.LINE_START);
         footer.add(buttonFooterPanel, BorderLayout.LINE_END);
 
-
         newsPane = new NewsPane();
         if (!CommandLineSettings.getSettings().isDisableNews()) {
             NewsWorker nw = new NewsWorker() {
@@ -438,7 +445,8 @@ public class LaunchFrame extends JFrame {
             while (LaunchFrame.instance == null) {
                 try {
                     Thread.sleep(5);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
             Benchmark.logBench("Waiting for main window");
 
@@ -673,7 +681,10 @@ public class LaunchFrame extends JFrame {
         } catch (Exception e1) {
         }
         boolean isLegacy = true;
-        if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("1.9") || pack.getMcVersion().startsWith("1.10") || pack.getMcVersion().startsWith("1.11") || pack.getMcVersion().startsWith("1.12") || pack.getMcVersion().startsWith("14w")|| pack.getMcVersion().startsWith("15w")|| pack.getMcVersion().startsWith("16w")) {
+        if (pack.getMcVersion().startsWith("1.6") || pack.getMcVersion().startsWith("1.7") || pack.getMcVersion().startsWith("1.8") || pack.getMcVersion().startsWith("1.9") || pack.getMcVersion()
+                .startsWith("1.10") || pack.getMcVersion().startsWith("1.11") || pack.getMcVersion().startsWith("1.12") || pack.getMcVersion().startsWith("1.13") || pack.getMcVersion()
+                .startsWith("1.14") || pack.getMcVersion().startsWith("1.15") || pack.getMcVersion().startsWith("14w") || pack.getMcVersion().startsWith("15w") || pack.getMcVersion().startsWith("16w")
+                || pack.getMcVersion().startsWith("17w") || pack.getMcVersion().startsWith("18w") || pack.getMcVersion().startsWith("19w") || pack.getMcVersion().startsWith("20w")) {
             isLegacy = false;
         }
         MCInstaller.setupNewStyle(installPath, pack, isLegacy, RESPONSE);
