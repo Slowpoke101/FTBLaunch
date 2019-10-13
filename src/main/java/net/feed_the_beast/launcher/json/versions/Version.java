@@ -48,7 +48,7 @@ public class Version {
     public Asset assetIndex;
     // Added for 1.14.4 installer links
     @Setter @Getter
-    private InstallProfile _forgeprofile;
+    private InstallProfile forgeprofile;
 
     private Map<DownloadType, Downloadable> downloads = Maps.newEnumMap(DownloadType.class);
 

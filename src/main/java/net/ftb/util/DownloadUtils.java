@@ -351,48 +351,21 @@ public final class DownloadUtils extends Thread {
                 content = scanner.next();
             }
             if (response != 200 || (content == null || content.isEmpty())) {
-                for (String server : backupServers.values()) {
-                    resolved = "https://" + server + "FTB2/md5/FTB2/" + url;
-                    connection = (HttpURLConnection) new URL(resolved).openConnection();
-                    connection.setRequestProperty(CACHE_CONTROL, "no-transform");
-                    response = connection.getResponseCode();
-                    if (response == 200) {
-                        scanner = new Scanner(connection.getInputStream());
-                        scanner.useDelimiter("\\Z");
-                        content = scanner.next();
-                        if (content != null && !content.isEmpty()) {
-                            resolved = backup;
-                            connection = (HttpURLConnection) new URL(resolved).openConnection();
-                            connection.setRequestProperty(CACHE_CONTROL, "no-transform");
-                            response = connection.getResponseCode();
-                            if (response == 200) {
-                                scanner = new Scanner(connection.getInputStream());
-                                scanner.useDelimiter("\\Z");
-                                content = scanner.next();
-                                if (content != null && !content.isEmpty()) {
-
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        resolved = backup;
-                        connection = (HttpURLConnection) new URL(resolved).openConnection();
-                        connection.setRequestProperty(CACHE_CONTROL, "no-transform");
-                        response = connection.getResponseCode();
-                        if (response == 200) {
-                            scanner = new Scanner(connection.getInputStream());
-                            scanner.useDelimiter("\\Z");
-                            content = scanner.next();
-                            if (content != null && !content.isEmpty()) {
-
-                                break;
-                            }
-                        }
-                    }
+                resolved = backup;
+                Logger.logDebug("using backup hash");
+                connection = (HttpURLConnection) new URL(resolved).openConnection();
+                connection.setRequestProperty(CACHE_CONTROL, "no-transform");
+                response = connection.getResponseCode();
+                if (response == 200) {
+                    scanner = new Scanner(connection.getInputStream());
+                    scanner.useDelimiter("\\Z");
+                    content = scanner.next();
+                } else {
+                    Logger.logError("error grabbing backup hash");
                 }
             }
         } catch (IOException e) {
+            Logger.logError("hash error", e);
         } finally {
             connection.disconnect();
             if (scanner != null) {
