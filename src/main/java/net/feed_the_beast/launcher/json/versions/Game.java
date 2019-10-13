@@ -29,6 +29,12 @@ public class Game {
         this.text = txt;
         this.useText = use;
     }
+    public Game(List<String> value, List<GameRule> rules, String text, boolean useText) {
+        this.useText = useText;
+        this.text = text;
+        this.value = value;
+        this.rules = rules;
+    }
 
     private boolean useText = false;
     private String text;
