@@ -40,21 +40,23 @@ public class ArgumentsAdapter implements JsonDeserializer<Arguments> {
         final JsonObject root = json.getAsJsonObject();
         final JsonArray game = root.getAsJsonArray("game");
         final JsonArray jvm = root.getAsJsonArray("jvm");
-
-        for (JsonElement gameArg : game) {
-            if (gameArg.isJsonObject()) {
-                gameList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), Game.class));
-            } else {
-                gameList.add(new Game(gameArg.getAsString(), true));
+        if (game != null) {
+            for (JsonElement gameArg : game) {
+                if (gameArg.isJsonObject()) {
+                    gameList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), Game.class));
+                } else {
+                    gameList.add(new Game(gameArg.getAsString(), true));
+                }
             }
         }
+        if (jvm != null) {
+            for (JsonElement gameArg : jvm) {
+                if (gameArg.isJsonObject()) {
+                    jvmList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), JVM.class));
+                } else {
+                    jvmList.add(new JVM(gameArg.getAsString(), true));
 
-        for (JsonElement gameArg : jvm) {
-            if (gameArg.isJsonObject()) {
-                jvmList.add(JsonFactory.GSON.fromJson(gameArg.getAsJsonObject(), JVM.class));
-            } else {
-                jvmList.add(new JVM(gameArg.getAsString(), true));
-
+                }
             }
         }
         return new Arguments(gameList, jvmList);
