@@ -63,6 +63,38 @@ public class MCLauncher {
     private static String gameDirectory;
     private static StringBuilder cpb;
 
+    public static int getheight () {
+        boolean fullscreen = false;
+        int height = 480;
+        if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+            GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Rectangle bounds = env.getMaximumWindowBounds();
+            height = (int) bounds.getHeight();
+            fullscreen = true;
+        }
+        Dimension def = new Dimension(854, 480);
+        if (Settings.getSettings().getLastDimension().getHeight() != def.getHeight() && !fullscreen) {
+            height = Math.abs((int) Settings.getSettings().getLastDimension().getHeight());
+        }
+        return height;
+    }
+
+    public static int getwidth () {
+        boolean fullscreen = false;
+        int width = 854;
+        if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
+            GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Rectangle bounds = env.getMaximumWindowBounds();
+            width = (int) bounds.getWidth();
+            fullscreen = true;
+        }
+        Dimension def = new Dimension(854, 480);
+        if (Settings.getSettings().getLastDimension().getWidth() != def.getWidth() && !fullscreen) {
+            width = Math.abs((int) Settings.getSettings().getLastDimension().getWidth());
+        }
+        return width;
+    }
+
     public static List<String> addAdditionalArgs (List<String> args) {
         String additionalOptions = Settings.getSettings().getAdditionalJavaOptions();
         if (!additionalOptions.isEmpty()) {
@@ -146,17 +178,22 @@ public class MCLauncher {
         if (jvmArgs != null) {
             for (String s : jvmArgs.split(" ")) {
                 if (s.contains("${natives_directory}")) {
-                    s.replace("${natives_directory}", nativesDir.getAbsolutePath());
+                    arguments.add(s.replace("${natives_directory}", nativesDir.getAbsolutePath()));
                 } else if (s.contains("${launcher_name}")) {
-                    s.replace("${launcher_name}", "FTB Launcher");
+                    arguments.add(s.replace("${launcher_name}", "FTB Launcher"));
                 } else if (s.contains("${launcher_version}")) {
-                    s.replace("${launcher_version}", Constants.version);
+                    arguments.add(s.replace("${launcher_version}", Constants.version));
                 } else if (s.contains("${classpath}")) {
-                    s.replace("${classpath}", cpb.toString());
+                    arguments.add(s.replace("${classpath}", cpb.toString()));
                 } else if (s.equals("-cp")) {
                     arguments = addAdditionalArgs(arguments);
+                    arguments.add(s);
+                } else if (s.equals("")) {
+                    //SKIP empty strings
+                } else {
+                    arguments.add(s);
                 }
-                arguments.add(s);
+
             }
 
         } else {
@@ -225,6 +262,7 @@ public class MCLauncher {
                     done = true;
                 }
             }
+
             if (!done) {
                 if (s.equals("${auth_session}")) {
                     if (authentication.isLoggedIn() && authentication.canPlayOnline()) {
@@ -254,12 +292,16 @@ public class MCLauncher {
                     arguments.add(parseLegacyArgs(s));
                 } else if (s.equals("${version_type}")) {
                     arguments.add(versionType);
+                } else if (s.contains("${resolution_width}")) {
+                    arguments.add(s.replace("${resolution_width}", String.valueOf(getwidth())));
+                } else if (s.contains("${resolution_height}")) {
+                    arguments.add(s.replace("${resolution_height}", String.valueOf(getheight())));
                 } else {
                     arguments.add(s);
                 }
             }
         }
-        if (!isLegacy) {//legacy is handled separately
+        if (!isLegacy && !(jvmArgs == null && (jvmArgs.length() > 0))) {//legacy is handled separately
             boolean fullscreen = false;
             if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
                 GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -282,10 +324,11 @@ public class MCLauncher {
         }
 
         ProcessBuilder builder = new ProcessBuilder(arguments);
-        /*
+
         StringBuilder tmp = new StringBuilder();
-        for (String a : builder.command())
+        for (String a : builder.command()) {
             tmp.append(a).append(" \n");
+        }
         Logger.logInfo("Launching: \n" + tmp.toString());
         //*/
         builder.directory(gameDir);
@@ -394,7 +437,7 @@ public class MCLauncher {
             return (gameDirectory + File.separator + "bin" + File.separator + Locations.OLDMCJARNAME);
         } else {
             return s;
-         }
+        }
     }
 
     public static void setupLegacyStuff (String workingDir, String forgename, String mcVersion) {
