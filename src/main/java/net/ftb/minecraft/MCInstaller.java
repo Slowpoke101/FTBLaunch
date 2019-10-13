@@ -183,7 +183,7 @@ public class MCInstaller {
                         // TODO throw error and cancel install if no installer data is found
                         String dataval = d.getClient();
                         char cstart = dataval.charAt(0);
-                        char cend = dataval.charAt(arg.length() - 1);
+                        char cend = dataval.charAt(dataval.length() - 1);
                         if (cstart == '[' && cend == ']') {
                             dataval = getlocationofmavenfile(libfake, dataval.substring(1, dataval.length() - 1), local);
                         } else {
@@ -226,6 +226,7 @@ public class MCInstaller {
                 Logger.logDebug("Running processor");
                 Class<?> cls = Class.forName(mainClass, true, cl);
                 Method main = cls.getDeclaredMethod("main", String[].class);
+                Logger.logDebug(cls + " " + main + args);
                 main.invoke(null, (Object) args.toArray(new String[args.size()]));
             } catch (Throwable e) {
                 Logger.logError("error processing " + jarloc, e);
