@@ -178,27 +178,31 @@ public class MCInstaller {
                 char end = arg.charAt(arg.length() - 1);
                 if (start == '{' && end == '}') {
                     String key = arg.substring(1, arg.length() - 1);
-                    InstallerData d = data.get(key);
-                    // TODO throw error and cancel install if no installer data is found
-                    String dataval = d.getClient();
-                    char cstart = dataval.charAt(0);
-                    char cend = dataval.charAt(arg.length() - 1);
-                    if (cstart == '[' && cend == ']') {
-                        dataval = getlocationofmavenfile(libfake, dataval.substring(1, dataval.length() - 1), local);
-                    } else {
-                        dataval = d.getClient();
-                    }
-                    if (dataval.contains(local.getAbsolutePath())) {
-                        args.add(dataval);
-                    } else {
-                        if (dataval.charAt(0) == '/') {
-                            File localFile = new File(extractedDir, dataval.substring(1));
-                            args.add(localFile.getAbsolutePath());
-
-                            // TODO handle Local extract data
+                    if (!key.equals("MINECRAFT_JAR")) {
+                        InstallerData d = data.get(key);
+                        // TODO throw error and cancel install if no installer data is found
+                        String dataval = d.getClient();
+                        char cstart = dataval.charAt(0);
+                        char cend = dataval.charAt(arg.length() - 1);
+                        if (cstart == '[' && cend == ']') {
+                            dataval = getlocationofmavenfile(libfake, dataval.substring(1, dataval.length() - 1), local);
                         } else {
-                            args.add(dataval);
+                            dataval = d.getClient();
                         }
+                        if (dataval.contains(local.getAbsolutePath())) {
+                            args.add(dataval);
+                        } else {
+                            if (dataval.charAt(0) == '/') {
+                                File localFile = new File(extractedDir, dataval.substring(1));
+                                args.add(localFile.getAbsolutePath());
+
+                                // TODO handle Local extract data
+                            } else {
+                                args.add(dataval);
+                            }
+                        }
+                    } else {
+                        args.add(new File(root, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", packversion.inheritsFrom)).getAbsolutePath());
                     }
                 } else if (start == '[' && end == ']') {
                     args.add(getlocationofmavenfile(libfake, arg.substring(1, arg.length() - 1), local));
@@ -239,7 +243,7 @@ public class MCInstaller {
         packmcversion = pack.getMcVersion(Settings.getSettings().getPackVer(pack.getDir()));
         packbasejson = "";
         Pair<List<DownloadInfo>, Version> pr = gatherAssets(new File(installPath), installPath, isLegacy);
-        if (pr == null){
+        if (pr == null) {
             Logger.logError("asset null " + installPath);
         }
         List<DownloadInfo> assets = pr.getLeft();
