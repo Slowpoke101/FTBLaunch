@@ -20,16 +20,4 @@ public class InstallProfile {
     private List<InstallerProcessor> processors;
     private List<Library> libraries;
     private Library installerjar;
-
-    /*
-        "spec": 0,
-    "profile": "forge",
-    "version": "1.14.4-forge-28.0.11",
-    "json": "/version.json",
-    "path": "net.minecraftforge:forge:1.14.4-28.0.11",
-    "logo": "/big_logo.png",
-    "minecraft": "1.14.4",
-    "welcome": "Welcome to the simple Forge installer.",
-
-     */
 }

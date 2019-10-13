@@ -141,7 +141,7 @@ public class MCInstaller {
 
     private static void installmodlauncher (final String installPath, final Version packversion, final ModPack pack, final File root) throws IOException {
         Boolean forceUpdate = Settings.getSettings().isForceUpdateEnabled();
-        InstallProfile profile = packversion.get_forgeprofile();
+        InstallProfile profile = packversion.getForgeprofile();
         Library libfake = new Library();
         File local = new File(root, "libraries/");
         File instjar = new File(local, profile.getInstallerjar().get_artifact().getPath());
@@ -254,14 +254,14 @@ public class MCInstaller {
                         prog.close();
                         if (get()) {
                             Logger.logInfo("Asset downloading complete");
-                            if (packversion != null && packversion.get_forgeprofile() != null) {
+                            if (packversion != null && packversion.getForgeprofile() != null) {
                                 // TODO only do this if it is needed or force is on
                                 if (Settings.getSettings().isForceUpdateEnabled()) {
                                     installmodlauncher(installPath, packversion, pack, new File(installPath));
                                 } else {
                                     boolean iml = false;
-                                    for (InstallerProcessor p : packversion.get_forgeprofile().getProcessors()) {
-                                        if (!checkoutputs(p, packversion.get_forgeprofile(), new Library(), new File(installPath))) {
+                                    for (InstallerProcessor p : packversion.getForgeprofile().getProcessors()) {
+                                        if (!checkoutputs(p, packversion.getForgeprofile(), new Library(), new File(installPath))) {
                                             iml = true;
                                         }
                                     }
@@ -363,12 +363,14 @@ public class MCInstaller {
                 ComparableVersion version_ml = new ComparableVersion("1.13");
                 if (version_ml.isOlder(packmcversion)) {
                     modlauncher = true;
-                    InstallProfile forgeprofile = packjson.get_forgeprofile();
+                    InstallProfile forgeprofile = packjson.getForgeprofile();
+                    Logger.logError(packjson.toString());
+                    Logger.logError(forgeprofile.toString());
                     Optional<DownloadInfo> depfi = checkDep(forgeprofile.getInstallerjar(), root, forceUpdate, libDir, pack, installDir, modlauncher);
                     if (depfi.isPresent()) {
                         list.add(depfi.get());
                     }
-                    for (Library lib : packjson.get_forgeprofile().getLibraries()) {
+                    for (Library lib : packjson.getForgeprofile().getLibraries()) {
                         Optional<DownloadInfo> dep = checkDep(lib, root, forceUpdate, libDir, pack, installDir, modlauncher);
                         if (dep.isPresent()) {
                             list.add(dep.get());
