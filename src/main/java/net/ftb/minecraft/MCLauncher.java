@@ -301,7 +301,13 @@ public class MCLauncher {
                 }
             }
         }
-        if (!isLegacy && !(jvmArgs == null && (jvmArgs.length() > 0))) {//legacy is handled separately
+        boolean usejvm = false;
+        if(jvmArgs != null) {
+            if(jvmArgs.length() > 0){
+                usejvm = true;
+            }
+        }
+        if (!isLegacy && !usejvm) {//legacy is handled separately as is modlauncher
             boolean fullscreen = false;
             if (Settings.getSettings().getLastExtendedState() == JFrame.MAXIMIZED_BOTH) {
                 GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
