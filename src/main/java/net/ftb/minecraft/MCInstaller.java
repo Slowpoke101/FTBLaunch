@@ -626,12 +626,17 @@ public class MCInstaller {
                             int n;
                             if (lib.extract == null || !lib.extract.exclude(name)) {
                                 File output = new File(natDir, name);
-                                output.getParentFile().mkdirs();
-                                FileOutputStream out = new FileOutputStream(output);
-                                while ((n = input.read(buf, 0, 1024)) > -1) {
-                                    out.write(buf, 0, n);
+                                boolean result = output.getParentFile().mkdirs();
+                                Logger.logDebug("mkdir " + output.getParentFile().getAbsolutePath() + " " + result);
+                                if (!output.getAbsolutePath().contains("META-INF")) {
+                                    FileOutputStream out = new FileOutputStream(output);
+                                    while ((n = input.read(buf, 0, 1024)) > -1) {
+                                        out.write(buf, 0, n);
+                                    }
+                                    out.close();
+                                } else {
+                                    Logger.logDebug("skipping meta inf native " + output.getAbsolutePath());
                                 }
-                                out.close();
                             }
                             input.closeEntry();
                             entry = input.getNextEntry();
