@@ -16,26 +16,10 @@
  */
 package net.ftb.gui.panes;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.Map;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
+import net.feed_the_beast.launcher.json.JsonFactory;
+import net.feed_the_beast.launcher.json.app.Export;
+import net.ftb.data.Constants;
+import net.ftb.data.ModPack;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
 import net.ftb.gui.ChooseDir;
@@ -48,6 +32,22 @@ import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
+import org.apache.commons.io.FileUtils;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class OptionsPane extends JPanel implements ILauncherPane {
@@ -61,7 +61,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
     private final Settings settings;
 
     private JPanel fitterPane;
-    
+
     private FocusListener settingsChangeListener = new FocusListener() {
         @Override
         public void focusLost (FocusEvent e) {
@@ -75,12 +75,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     public OptionsPane (Settings settings) {
         this.settings = settings;
-        
+
         fitterPane = new JPanel();
-        fitterPane.setMinimumSize(new Dimension(840, 320));
-        fitterPane.setMaximumSize(new Dimension(840, 320));
+        fitterPane.setMinimumSize(new Dimension(840, 340));
+        fitterPane.setMaximumSize(new Dimension(840, 340));
         fitterPane.setLayout(null);
-        
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(fitterPane);
 
@@ -229,6 +229,22 @@ public class OptionsPane extends JPanel implements ILauncherPane {
         }
     }
 
+    public static void exportData () {
+        Logger.logDebug("exporting data");
+        Export export = new Export(ModPack.getPackArray(), Constants.version, new File(Settings.getSettings().getInstallPath() + File.separator + "libraries/").getAbsolutePath(),
+                Settings.getSettings().getInstallPath());
+        String json = JsonFactory.exportToApp(export);
+        //TODO dump to disk
+        String base = OSUtils.getCacheStorageLocation();
+        try {
+            FileUtils.writeStringToFile(new File(base + File.separator + "migrationdata.json"), json);
+        } catch (IOException e) {
+            Logger.logError("Migration Data json write failed", e);
+        }
+
+        Logger.logDebug("done exporting data");
+    }
+
     public void setInstallFolderText (String text) {
         installFolderTextField.setText(text);
         saveSettingsInto(settings);
@@ -311,7 +327,9 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 
     public void updateJavaLabels () {
         remove(lbl32BitWarning);
-        remove(btnInstallJava);
+        if (btnInstallJava != null) {
+            remove(btnInstallJava);
+        }
         // Dependant on vmType from earlier RAM calculations to detect 64 bit JVM
         JavaInfo java = Settings.getSettings().getCurrentJava();
         JavaVersion java7 = JavaVersion.createJavaVersion("1.7.0");

@@ -43,6 +43,7 @@ public class Locations {
     // used in mirroring logic
     public static boolean primaryCH = true;
     public static boolean chEnabled = true;
+    public static boolean curseEnabled = true;
 
     public static String FTB2 = "FTB2/";
     //FULL location of the FTB maven repo

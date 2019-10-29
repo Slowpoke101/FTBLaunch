@@ -17,7 +17,6 @@
 package net.ftb.util;
 
 import static com.google.common.net.HttpHeaders.CACHE_CONTROL;
-import static net.ftb.download.Locations.backupServers;
 import static net.ftb.download.Locations.downloadServers;
 
 import com.google.common.collect.Lists;
@@ -29,6 +28,7 @@ import com.google.gson.JsonParser;
 import lombok.NonNull;
 import net.ftb.data.Settings;
 import net.ftb.download.Locations;
+import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import org.apache.commons.io.IOUtils;
 
@@ -63,6 +63,11 @@ public final class DownloadUtils extends Thread {
     public static String getCreeperhostLink (String file) {
         String resolved = (downloadServers.containsKey(Settings.getSettings().getDownloadServer())) ? "https://" + downloadServers.get(Settings.getSettings().getDownloadServer())
                 : Locations.masterRepo;
+        if (file.contains("modpacks") || file.contains("privatepacks")|| file.contains("maps")|| file.contains("texturepacks")) {
+            if (Locations.curseEnabled){ // Download pack zips from curse for now
+                resolved = Locations.fcdn;
+            }
+        }
         resolved += "/FTB2/" + file;
         HttpURLConnection connection = null;
         try {
@@ -454,6 +459,27 @@ public final class DownloadUtils extends Thread {
             Random r = new Random();
             double choice = r.nextDouble();
             try { // Super catch-all to ensure the launcher always renders
+
+                String json = null;
+                // Fetch the percentage json first
+                try {
+                    json = IOUtils.toString(new URL(Locations.chRepo + "/FTB2/static/repodata.json"));
+                } catch (IOException e) {
+                    curseFailed = true;
+                }
+                Benchmark.logBenchAs("DlUtils", "Download Utils Balance (creeperrepo)");
+
+                JsonElement element = new JsonParser().parse(json);
+
+                if (element != null && element.isJsonObject()) {
+                    JsonObject jso = element.getAsJsonObject();
+                    if (jso != null && jso.get("minUsableLauncherVersion") != null) {
+                        LaunchFrame.getInstance().minUsable = jso.get("minUsableLauncherVersion").getAsInt();
+                    }
+                    if (jso != null && jso.get("curseEnabled") != null) {
+                        Locations.curseEnabled = jso.get("curseEnabled").getAsBoolean();
+                    }
+                }
 
                 // ok we got working balance.json
                 // should we catch network failures here and try to fetch balance from creeperrepo

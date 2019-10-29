@@ -34,6 +34,7 @@ import net.ftb.gui.LauncherConsole;
 import net.ftb.gui.dialogs.FirstRunDialog;
 import net.ftb.gui.dialogs.LauncherUpdateDialog;
 import net.ftb.gui.dialogs.LoadingDialog;
+import net.ftb.gui.panes.OptionsPane;
 import net.ftb.locale.I18N;
 import net.ftb.log.LogLevel;
 import net.ftb.log.LogSource;
@@ -465,6 +466,7 @@ public class Main {
         };
         updateChecker.execute();
         LoadingDialog.advance("Downloading pack data");
+        OptionsPane.exportData();
     }
 
     private static ArrayList<String> getXmls () {

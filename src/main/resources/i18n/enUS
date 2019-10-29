@@ -49,6 +49,9 @@ DOWNLOAD_JAVAGOOD = Download recommended Java
 JAVA_OLD_Warning = Too old Java. Java 7 is recommended for most of the FTB packages.
 JAVA_NEW_Warning = Java 8 is not supported. (Minecraft does not support Java 8 on Mac.)
 JAVA_32BIT_WARNING = Your system is using a 32-bit version of Java. This will limit Minecraft to 1.5gb of RAM.
+EXPORT_BUTTON = Export data for the new FTB App to your clipboard
+EXPORT_POPUP = Export Data
+EXPORT_POPUP_CONFIRM = Are you sure you want to copy the export data to your clipboard? \n If you copy this to your clipboard you can import it into the new app using the Import from FTB Launcher option in the Import Pack dialog
 
 # Shared strings
 FILTER_SETTINGS = Filter Settings
