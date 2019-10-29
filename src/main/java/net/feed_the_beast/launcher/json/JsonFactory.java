@@ -27,6 +27,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
+import net.feed_the_beast.launcher.json.app.Export;
 import net.feed_the_beast.launcher.json.assets.AssetIndex;
 import net.feed_the_beast.launcher.json.launcher.RetiredPacks;
 import net.feed_the_beast.launcher.json.launcher.Update;
@@ -55,7 +56,9 @@ public class JsonFactory {
         builder.setPrettyPrinting();
         GSON = builder.create();
     }
-
+    public static String exportToApp(Export export) {
+        return GSON.toJson(export);
+    }
     public static RetiredPacks getRetiredPacks (File json) throws JsonSyntaxException, JsonIOException, IOException {
         FileReader reader = new FileReader(json);
         RetiredPacks packs = GSON.fromJson(reader, RetiredPacks.class);

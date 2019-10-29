@@ -99,6 +99,12 @@ public class MCInstaller {
     }
 
     private static boolean checkoutputs (InstallerProcessor p, InstallProfile profile, Library any, File libroot) throws IOException {
+        if (p == null) {
+            Logger.logError("p null");
+        }
+        if (p.getOutputs() == null) {
+            Logger.logError("p outputs null");
+        }
         for (Map.Entry<String, String> entry : p.getOutputs().entrySet()) {
             String key = entry.getKey();
             char start = key.charAt(0);
@@ -676,7 +682,13 @@ public class MCInstaller {
             }
             LaunchStrings pj = packjson.getArgumentsToLaunch();
             LaunchStrings bjson = base.getArgumentsToLaunch();
-            LaunchStrings ls = pj != null ? pj : bjson;
+            LaunchStrings ls;
+            if (pj != null && bjson.jvm != null) {
+                ls = bjson;
+                ls.arguments += " " + pj.arguments;
+            } else {
+                ls = pj != null ? pj : bjson;
+            }
             Process minecraftProcess = MCLauncher.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
                     packjson.mainClass != null ? packjson.mainClass : base.mainClass, ls.arguments,
                     packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(packVer), resp.getAuth(), isLegacy,

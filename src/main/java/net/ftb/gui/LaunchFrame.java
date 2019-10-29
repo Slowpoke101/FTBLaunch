@@ -645,7 +645,7 @@ public class LaunchFrame extends JFrame {
         Logger.logDebug("pack check path: " + pack.getDir() + File.separator + "version");
 
         File verFile = new File(installPath, pack.getDir() + File.separator + "version");
-
+        OptionsPane.exportData();
         if (verFile.exists()) {
             softUpdate = true;
         }
