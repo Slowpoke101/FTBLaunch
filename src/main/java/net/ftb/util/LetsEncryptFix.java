@@ -1,5 +1,6 @@
 package net.ftb.util;
 
+import net.ftb.download.Locations;
 import net.ftb.util.winreg.JavaVersion;
 
 import javax.net.ssl.*;
@@ -69,7 +70,7 @@ public class LetsEncryptFix {
 
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession sslSession) {
-                return hostname.equals("dist.creeper.host");
+                return hostname.equals(Locations.masterRepoNoHTTP);
             }
         });
     }
