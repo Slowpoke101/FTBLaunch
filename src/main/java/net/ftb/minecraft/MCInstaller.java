@@ -275,6 +275,9 @@ public class MCInstaller {
                                 } else {
                                     boolean iml = false;
                                     for (InstallerProcessor p : packversion.getForgeprofile().getProcessors()) {
+                                        if (p.getOutputs() == null) {
+                                            continue;
+                                        }
                                         if (!checkoutputs(p, packversion.getForgeprofile(), new Library(), new File(installPath))) {
                                             iml = true;
                                         }
