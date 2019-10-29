@@ -18,7 +18,6 @@ package net.ftb.workers;
 
 import net.ftb.download.Locations;
 import net.ftb.log.Logger;
-import net.ftb.main.Bootstrap;
 import net.ftb.main.Main;
 import net.ftb.util.Benchmark;
 import net.ftb.util.DownloadUtils;
@@ -74,7 +73,7 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         File f = new File(location);
         try {
             if (f.exists()) {
-                Bootstrap.CLASS_LOADER.addURL(f.toURI().toURL());
+                addURL(f.toURI().toURL());
                 this.getClass().forName("com.mojang.authlib.exceptions.AuthenticationException"); //will fail if not properly added to classpath
                 this.getClass().forName("com.mojang.authlib.Agent");
                 this.getClass().forName("com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService");
@@ -89,6 +88,19 @@ public class AuthlibDLWorker extends SwingWorker<Boolean, Void> {
         Main.setAuthlibReadyToUse(true);
         Benchmark.logBenchAs("Authlib", "Authlib DL Worker Init");
         return true;
+    }
+
+    public void addURL (URL u) throws IOException {
+        URLClassLoader sysloader = (URLClassLoader) this.getClass().getClassLoader();
+        Class sysclass = URLClassLoader.class;
+        try {
+            Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
+            method.setAccessible(true);
+            method.invoke(sysloader, u);
+        } catch (Throwable t) {
+            Logger.logWarn(t.getMessage(), t);
+            throw new IOException("Error, could not add URL to system classloader");
+        }
     }
 
     protected boolean downloadJars () {
