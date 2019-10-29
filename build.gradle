@@ -76,7 +76,7 @@ dependencies {
 }
 
 project.ext {
-    mainClass = 'net.ftb.main.Main'
+    mainClass = 'net.ftb.main.Bootstrap'
     currentYear = '2018'
 }
 if (System.getenv().BUILD_NUMBER != null) {
