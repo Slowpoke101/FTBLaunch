@@ -11,7 +11,7 @@ public abstract class WinRegistryAccess {
 
     public static WinRegistryAccess getInstance() {
         if(registryAccess == null) {
-            if(JavaVersion.createJavaVersion(System.getProperty("java.version")).isOlder("1.9")){
+            if(JavaVersion.createJavaVersion(System.getProperty("java.version")).isOlder("11")){
                 registryAccess = new WinRegistryLegacy();
             } else {
                 registryAccess = new WinRegistry();

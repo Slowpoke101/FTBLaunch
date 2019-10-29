@@ -17,18 +17,17 @@
 package net.ftb.main;
 
 import java.lang.reflect.Method;
+import java.net.URLClassLoader;
 
 /**
  * This is required to ensure the loader is loaded via a URLClassLoader, LauncherClassLoader is used only to make addUrl public
  */
 public class Bootstrap {
 
-    public static final LauncherClassLoader CLASS_LOADER = new LauncherClassLoader(Bootstrap.class.getClassLoader());
+    private static final URLClassLoader CLASS_LOADER = new LauncherClassLoader();
 
     public static void main(String[] args) throws Exception  {
-        Thread.currentThread().setContextClassLoader(CLASS_LOADER);
-
-        Class<?> mainClass = CLASS_LOADER.loadClass("net.ftb.main.Main");
+        Class<?> mainClass = Class.forName("net.ftb.main.Main", true, CLASS_LOADER);
         Method mainMethod = mainClass.getMethod("main", String[].class);
         mainMethod.invoke(null, (Object) args);
     }
