@@ -235,9 +235,12 @@ public class OptionsPane extends JPanel implements ILauncherPane {
                 Settings.getSettings().getInstallPath());
         String json = JsonFactory.exportToApp(export);
         //TODO dump to disk
-        String base = OSUtils.getCacheStorageLocation();
+        String bases = OSUtils.getCacheStorageLocation();
+        String based = OSUtils.getDynamicStorageLocation();
         try {
-            FileUtils.writeStringToFile(new File(base + File.separator + "migrationdata.json"), json);
+            FileUtils.writeStringToFile(new File(bases + File.separator + "migrationdata.json"), json);
+            FileUtils.writeStringToFile(new File(based + File.separator + "migrationdata.json"), json);
+
         } catch (IOException e) {
             Logger.logError("Migration Data json write failed", e);
         }
