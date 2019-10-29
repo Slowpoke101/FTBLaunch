@@ -23,9 +23,11 @@ import net.ftb.data.CommandLineSettings;
 import net.ftb.gui.LaunchFrame;
 import net.ftb.log.Logger;
 import net.ftb.util.winreg.JavaFinder;
+import net.ftb.util.winreg.JavaVersion;
 import net.ftb.util.winreg.RuntimeStreamer;
 import org.apache.commons.io.FileUtils;
 import oshi.SystemInfo;
+import oshi.hardware.GlobalMemory;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -35,7 +37,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.Proxy;
@@ -237,12 +241,45 @@ public final class OSUtils {
     }
 
     public static long getOSTotalMemory () {
-        return new SystemInfo().getHardware().getMemory().getTotal() / 1024 / 1024;
+        if(JavaVersion.createJavaVersion(System.getProperty("java.version")).isOlder("1.9")){
+            return getOSMemory("getTotalPhysicalMemorySize", "Could not get RAM Value");
+        }
+        return getGlobalMemory().getTotal() / 1024 / 1024;
     }
 
     public static long getOSFreeMemory () {
-        return new SystemInfo().getHardware().getMemory().getAvailable() / 1024 / 1024;
+        if(JavaVersion.createJavaVersion(System.getProperty("java.version")).isOlder("1.9")){
+            return getOSMemory("getFreePhysicalMemorySize", "Could not get free RAM Value");
+        }
+        return getGlobalMemory().getAvailable() / 1024 / 1024;
     }
+
+    private static long getOSMemory (String methodName, String warning) {
+        long ram = 0;
+
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+        Method m;
+        try {
+            m = operatingSystemMXBean.getClass().getDeclaredMethod(methodName);
+            m.setAccessible(true);
+            Object value = m.invoke(operatingSystemMXBean);
+            if (value != null) {
+                ram = Long.valueOf(value.toString()) / 1024 / 1024;
+            } else {
+                Logger.logWarn(warning);
+                ram = 1024;
+            }
+        } catch (Exception e) {
+            Logger.logError("Error while getting OS memory info", e);
+        }
+
+        return ram;
+    }
+
+    private static GlobalMemory getGlobalMemory(){
+        return new SystemInfo().getHardware().getMemory();
+    }
+
 
     /**
      * Used to get the java delimiter for current OS

@@ -31,9 +31,9 @@ public class JavaFinder {
     private static List<String> searchRegistry (String key, int wow64, final List<String> previous) {
         List<String> result = previous;
         try {
-            List<String> entries = WinRegistry.readStringSubKeys(WinRegistry.HKEY_LOCAL_MACHINE, key, wow64);
+            List<String> entries = WinRegistryAccess.getInstance().readStringSubKeys(WinRegistryAccess.getInstance().HKEY_LOCAL_MACHINE, key, wow64);
             for (int i = 0; entries != null && i < entries.size(); i++) {
-                String val = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, key + "\\" + entries.get(i), "JavaHome", wow64);
+                String val = WinRegistryAccess.getInstance().readString(WinRegistryAccess.getInstance().HKEY_LOCAL_MACHINE, key + "\\" + entries.get(i), "JavaHome", wow64);
                 if (!result.contains(val + "\\bin\\java.exe")) {
                     result.add(val + "\\bin\\java.exe");
                 }
@@ -69,10 +69,10 @@ public class JavaFinder {
     protected static List<JavaInfo> findWinJavas () {
         List<String> javaExecs = Lists.newArrayList();
 
-        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_32KEY, javaExecs);
-        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistry.KEY_WOW64_64KEY, javaExecs);
-        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistry.KEY_WOW64_32KEY, javaExecs);
-        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistry.KEY_WOW64_64KEY, javaExecs);
+        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistryAccess.getInstance().KEY_WOW64_32KEY, javaExecs);
+        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Runtime Environment", WinRegistryAccess.getInstance().KEY_WOW64_64KEY, javaExecs);
+        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistryAccess.getInstance().KEY_WOW64_32KEY, javaExecs);
+        javaExecs = JavaFinder.searchRegistry("SOFTWARE\\JavaSoft\\Java Development Kit", WinRegistryAccess.getInstance().KEY_WOW64_64KEY, javaExecs);
 
         javaExecs.add(System.getenv("WINDIR") + "\\system32\\java.exe");
         javaExecs.add(System.getenv("WINDIR") + "\\SysWOW64\\java.exe");

@@ -16,7 +16,6 @@
  */
 package net.ftb.main;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -26,7 +25,7 @@ public class Bootstrap {
 
     public static final LauncherClassLoader CLASS_LOADER = new LauncherClassLoader(Bootstrap.class.getClassLoader());
 
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) throws Exception  {
         Thread.currentThread().setContextClassLoader(CLASS_LOADER);
 
         Class<?> mainClass = CLASS_LOADER.loadClass("net.ftb.main.Main");
