@@ -17,7 +17,6 @@
 package net.ftb.main;
 
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
@@ -25,7 +24,7 @@ import java.net.URLClassLoader;
  */
 public class Bootstrap {
 
-    private static final URLClassLoader CLASS_LOADER = new URLClassLoader(new URL[]{Bootstrap.class.getProtectionDomain().getCodeSource().getLocation()}, Bootstrap.class.getClassLoader());
+    private static final URLClassLoader CLASS_LOADER = new LauncherClassLoader();
 
     public static void main(String[] args) throws Exception  {
         Class<?> mainClass = Class.forName("net.ftb.main.Main", true, CLASS_LOADER);
