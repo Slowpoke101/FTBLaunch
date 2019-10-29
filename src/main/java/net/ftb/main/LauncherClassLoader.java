@@ -19,14 +19,37 @@ package net.ftb.main;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+//Based off some really old fabric code: https://github.com/FabricMC/fabric-loader/blob/dev/0.3/src/main/java/net/fabricmc/loader/launch/server/InjectingURLClassLoader.java
 public class LauncherClassLoader extends URLClassLoader {
-    public LauncherClassLoader(ClassLoader parent) {
-        super(new URL[]{}, parent);
+
+    public LauncherClassLoader() {
+        super(new URL[]{Bootstrap.class.getProtectionDomain().getCodeSource().getLocation()}, Bootstrap.class.getClassLoader());
     }
 
-    //Overridden to make it public
     @Override
-    public void addURL(URL url) {
-        super.addURL(url);
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        Class clazz = findLoadedClass(name);
+
+        if (clazz == null) {
+            try {
+                clazz = findClass(name);
+            } catch (ClassNotFoundException e) {
+                // pass
+            }
+        }
+
+        if (clazz == null) {
+            clazz = getParent().loadClass(name);
+        }
+
+        if (clazz == null) {
+            throw new ClassNotFoundException(name);
+        }
+
+        if (resolve) {
+            resolveClass(clazz);
+        }
+
+        return clazz;
     }
 }
