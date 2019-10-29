@@ -45,13 +45,7 @@ import net.ftb.log.StdOutLogger;
 import net.ftb.tracking.google.AnalyticsConfigData;
 import net.ftb.tracking.google.JGoogleAnalyticsTracker;
 import net.ftb.updater.UpdateChecker;
-import net.ftb.util.Benchmark;
-import net.ftb.util.CheckInstallPath;
-import net.ftb.util.DownloadUtils;
-import net.ftb.util.ErrorUtils;
-import net.ftb.util.OSUtils;
-import net.ftb.util.StyleUtil;
-import net.ftb.util.TrackerUtils;
+import net.ftb.util.*;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
 import net.ftb.workers.AuthlibDLWorker;
@@ -189,6 +183,8 @@ public class Main {
         }
 
         System.setProperty("http.agent", "FTB Launcher/" + Constants.version);
+
+        LetsEncryptFix.fix();
 
         /*
          *  Posts information about OS, JVM and launcher version into Google Analytics

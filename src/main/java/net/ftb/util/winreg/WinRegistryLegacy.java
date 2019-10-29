@@ -16,35 +16,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-public class WinRegistry extends WinRegistryAccess {
+public class WinRegistryLegacy extends WinRegistryAccess {
     {
         try {
-            regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", new Class[] { long.class, byte[].class, int.class });
+            regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", new Class[] { int.class, byte[].class, int.class });
             regOpenKey.setAccessible(true);
-            regCloseKey = userClass.getDeclaredMethod("WindowsRegCloseKey", new Class[] { long.class });
+            regCloseKey = userClass.getDeclaredMethod("WindowsRegCloseKey", new Class[] { int.class });
             regCloseKey.setAccessible(true);
-            regQueryValueEx = userClass.getDeclaredMethod("WindowsRegQueryValueEx", new Class[] { long.class, byte[].class });
+            regQueryValueEx = userClass.getDeclaredMethod("WindowsRegQueryValueEx", new Class[] { int.class, byte[].class });
             regQueryValueEx.setAccessible(true);
-            regEnumValue = userClass.getDeclaredMethod("WindowsRegEnumValue", new Class[] { long.class, int.class, int.class });
+            regEnumValue = userClass.getDeclaredMethod("WindowsRegEnumValue", new Class[] { int.class, int.class, int.class });
             regEnumValue.setAccessible(true);
-            regQueryInfoKey = userClass.getDeclaredMethod("WindowsRegQueryInfoKey1", new Class[] { long.class });
+            regQueryInfoKey = userClass.getDeclaredMethod("WindowsRegQueryInfoKey1", new Class[] { int.class });
             regQueryInfoKey.setAccessible(true);
-            regEnumKeyEx = userClass.getDeclaredMethod("WindowsRegEnumKeyEx", new Class[] { long.class, int.class, int.class });
+            regEnumKeyEx = userClass.getDeclaredMethod("WindowsRegEnumKeyEx", new Class[] { int.class, int.class, int.class });
             regEnumKeyEx.setAccessible(true);
-            regCreateKeyEx = userClass.getDeclaredMethod("WindowsRegCreateKeyEx", new Class[] { long.class, byte[].class });
+            regCreateKeyEx = userClass.getDeclaredMethod("WindowsRegCreateKeyEx", new Class[] { int.class, byte[].class });
             regCreateKeyEx.setAccessible(true);
-            regSetValueEx = userClass.getDeclaredMethod("WindowsRegSetValueEx", new Class[] { long.class, byte[].class, byte[].class });
+            regSetValueEx = userClass.getDeclaredMethod("WindowsRegSetValueEx", new Class[] { int.class, byte[].class, byte[].class });
             regSetValueEx.setAccessible(true);
-            regDeleteValue = userClass.getDeclaredMethod("WindowsRegDeleteValue", new Class[] { long.class, byte[].class });
+            regDeleteValue = userClass.getDeclaredMethod("WindowsRegDeleteValue", new Class[] { int.class, byte[].class });
             regDeleteValue.setAccessible(true);
-            regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", new Class[] { long.class, byte[].class });
+            regDeleteKey = userClass.getDeclaredMethod("WindowsRegDeleteKey", new Class[] { int.class, byte[].class });
             regDeleteKey.setAccessible(true);
         } catch (Exception e) {
             Logger.logError("Error accessing windows registry classes", e);
         }
     }
 
-    WinRegistry() {
+    WinRegistryLegacy() {
     }
 
     /**
@@ -93,8 +93,8 @@ public class WinRegistry extends WinRegistryAccess {
     }
 
     //========================================================================
-    private String readString (Preferences root, long hkey, String key, String value, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        long[] handles = (long[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
+    private String readString (Preferences root, int hkey, String key, String value, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        int[] handles = (int[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
         if (handles[1] != REG_SUCCESS) {
             return null;
         }
@@ -104,16 +104,16 @@ public class WinRegistry extends WinRegistryAccess {
     }
 
     //========================================================================
-    private List<String> readStringSubKeys (Preferences root, long hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    private List<String> readStringSubKeys (Preferences root, int hkey, String key, int wow64) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         List<String> results = new ArrayList<String>();
-        long[] handles = (long[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
+        int[] handles = (int[]) regOpenKey.invoke(root, hkey, toCstr(key), KEY_READ | wow64);
         if (handles[1] != REG_SUCCESS) {
             return null;
         }
-        long[] info = (long[]) regQueryInfoKey.invoke(root, handles[0]);
+        int[] info = (int[]) regQueryInfoKey.invoke(root, handles[0]);
 
-        int count = (int) info[0]; // Fix: info[2] was being used here with wrong results. Suggested by davenpcj, confirmed by Petrucio
-        int maxlen = (int) info[3]; // value length max
+        int count = info[0]; // Fix: info[2] was being used here with wrong results. Suggested by davenpcj, confirmed by Petrucio
+        int maxlen = info[3]; // value length max
         for (int index = 0; index < count; index++) {
             byte[] name = (byte[]) regEnumKeyEx.invoke(root, handles[0], index, maxlen + 1);
             results.add(new String(name).trim());
