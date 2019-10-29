@@ -256,5 +256,6 @@ license {
     exclude 'net/ftb/gui/SmartScroller.java'
     exclude 'net/ftb/util/ComparableVersion.java'
     exclude 'net/ftb/util/Comparable*VersionTest.java'
+    exclude 'net/ftb/util/LetsEncryptFix.java'
     newLine = false
 }

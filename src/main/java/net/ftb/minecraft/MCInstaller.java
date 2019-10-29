@@ -436,7 +436,7 @@ public class MCInstaller {
             }
             VersionManifest versionManifest = JsonFactory.loadVersionManifest(base);
             SlimVersion vsn = versionManifest.getVersionByName(packmcversion);
-            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), vsn.getUrl().toString()));
+            URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), vsn.getUrl().toString()));
 
             // URL url = new URL(DownloadUtils.getStaticCreeperhostLinkOrBackup("mcjsons/versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson), Locations.mc_dl
             //        + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", packbasejson)));
