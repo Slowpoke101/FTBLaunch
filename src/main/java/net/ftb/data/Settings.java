@@ -24,6 +24,7 @@ import net.ftb.util.OSUtils;
 import net.ftb.util.OSUtils.OS;
 import net.ftb.util.winreg.JavaFinder;
 import net.ftb.util.winreg.JavaInfo;
+import org.apache.commons.codec.binary.Base64;
 
 import java.awt.*;
 import java.io.ByteArrayInputStream;
@@ -445,7 +446,7 @@ public class Settings extends Properties {
         if (s == null || s.isEmpty()) {
             return null;
         }
-        byte[] data = javax.xml.bind.DatatypeConverter.parseBase64Binary(s);
+        byte[] data = new Base64().decode(s);
         try {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
             try {
@@ -465,7 +466,7 @@ public class Settings extends Properties {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             try {
                 oos.writeObject(o);
-                return javax.xml.bind.DatatypeConverter.printBase64Binary(baos.toByteArray());
+                return new Base64().encodeAsString(baos.toByteArray());
             } finally {
                 baos.close();
                 oos.close();
