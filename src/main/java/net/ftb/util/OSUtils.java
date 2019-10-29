@@ -280,7 +280,6 @@ public final class OSUtils {
         return new SystemInfo().getHardware().getMemory();
     }
 
-
     /**
      * Used to get the java delimiter for current OS
      * @return string containing java delimiter for current OS
