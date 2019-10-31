@@ -242,7 +242,7 @@ if (project.hasProperty("remote_maven") && project.hasProperty("ftp_pass")) {
     uploadArchives {
         repositories.mavenDeployer {
             configuration = configurations.deployerJars
-            repository(url: "ftp://${remote_maven}/test") {
+            repository(url: "ftp://${remote_maven}") {
                 authentication(userName: "${ftp_username}", password: "${ftp_pass}")
             }
         }
