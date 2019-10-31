@@ -75,6 +75,8 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.3'
     testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.3'
     deployerJars 'org.apache.maven.wagon:wagon-ssh:2.2'
+    deployerJars 'org.apache.maven.wagon:wagon-ftp:2.2'
+
 }
 
 project.ext {
