@@ -25,7 +25,7 @@ public class Locations {
 
     //location of them Mojang server that MC's resources are pulled from
     public static final String mc_versionsmanifest = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
-    public static final String mc_res = "http://resources.download.minecraft.net/";
+    public static final String mc_res = "https://resources.download.minecraft.net/";
     //location of them Mojang server that hosts the Minecraft Maven host
     public static final String mc_libs = "https://libraries.minecraft.net/";
     //location of the FTB maven repo within the FTB2/static part of the repository
@@ -80,15 +80,13 @@ public class Locations {
     public static final String MODPACKXML = "modpacks.xml";
     public static final String THIRDPARTYXML = "thirdparty.xml";
     public static final String TEXTUREPACKXML = "texturepack.xml";
-    public static final String SUPPORTSITE = "http://support.feed-the-beast.com/";
-    public static final String FTBSITE = "http://www.feed-the-beast.com";
+    public static final String SUPPORTSITE = "https://support.feed-the-beast.com/";
+    public static final String FTBSITE = "https://www.feed-the-beast.com";
 
 
-    public static final String CURSEVOICE = "http://beta.cursevoice.com/games/minecraft";
 
     public static final String FTBLOGO = "/image/logo_ftb.png";
     public static final String CHLOGO = "/image/logo_creeperHost.png";
-    public static final String CURSELOGO = "/image/logo_curse.png";
     public static final String FORGENAME = "MinecraftForge.zip";
     public static final String OLDMCJARNAME = "minecraft.jar";
     public static final String launcherLogFile = "FTBLauncherLog.txt";
