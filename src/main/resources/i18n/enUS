@@ -205,3 +205,10 @@ CIP_EXISTS = FTB installation directory not found!
 CIP_CREATE = Could not create FTB installation location
 CIP_SELECTAGAIN = Please select again!
 CIP_PLEASECHANGE = Please change your installation location under options tab.
+
+
+# Migration stuff
+MIGRATION_TITLE = New FTB APP is Available
+MIGRATION_MESSAGE = <html><div style='text-align: center;'>The new FTB App is now available for installation. <br>You can download the launcher at www.feed-the-beast.com<br> All future updates for modpacks will be available exclusively on the new App.</div></html>
+MIGRATION_LINK = Open Download page
+MIGRATION_PLAY = Continue without downloading

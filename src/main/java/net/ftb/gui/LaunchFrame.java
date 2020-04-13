@@ -468,6 +468,15 @@ public class LaunchFrame extends JFrame {
                     loader.setVisible(false);
                     loader.dispose();
 
+                    //TODO add new stuff here
+                    Logger.logDebug("mdialog");
+                    try {
+                        MigrationNotifier mdialog = new MigrationNotifier();
+                        mdialog.setVisible(true);
+                    } catch (Exception e) {
+                        Logger.logDebug("failed", e.getCause());
+                    }
+                    new MigrationNotifier();
                     Benchmark.logBenchAs("main", "Launcher Startup(main window opened and ready to use)");
                     String packDir = CommandLineSettings.getSettings().getPackDir();
                     if (packDir != null) {
