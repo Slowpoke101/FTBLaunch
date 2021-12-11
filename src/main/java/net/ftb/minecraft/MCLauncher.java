@@ -43,10 +43,12 @@ import net.ftb.util.Parallel;
 import net.ftb.util.TrackerUtils;
 import net.ftb.util.winreg.JavaInfo;
 import net.ftb.util.winreg.JavaVersion;
+import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -174,6 +176,14 @@ public class MCLauncher {
 
             arguments.add("-XX:PermSize=" + maxPermSize);
         }
+
+        // Add the Log4jPatcher java agent.
+        final String log4jPatcherName = "Log4jPatcher.jar";
+        File log4jPatcher = new File(gameFolder, log4jPatcherName);
+        extractLog4jPatcher(log4jPatcher);
+        arguments.add("-javaagent:" + log4jPatcherName);
+
+        Logger.logInfo("Applied Log4jPatcher to mitigate Log4j JNDI Exploits.");
 
         if (jvmArgs != null) {
             for (String s : jvmArgs.split(" ")) {
@@ -472,6 +482,25 @@ public class MCLauncher {
             }
         } else {
             Logger.logInfo("Not loading any FML libs, as the directory does not exist.");
+        }
+    }
+
+    private static void extractLog4jPatcher(File outputFile) {
+        try {
+            if (!new File(outputFile.getParent()).exists()) {
+                new File(outputFile.getParent()).mkdirs();
+            }
+
+            if (outputFile.exists()) {
+                // Ensure we always copy the latest version.
+                outputFile.delete();
+            }
+
+            // Just a normal jar jar, `jarbin` is used to stop gradle extracting the jar into the launcher.
+            URL u = MCLauncher.class.getResource("/launch/Log4jPatcher.jarbin");
+            FileUtils.copyURLToFile(u, outputFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Error extracting Log4jPatcher", e);
         }
     }
 }
