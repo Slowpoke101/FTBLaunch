@@ -259,5 +259,6 @@ license {
     exclude 'net/ftb/util/ComparableVersion.java'
     exclude 'net/ftb/util/Comparable*VersionTest.java'
     exclude 'net/ftb/util/LetsEncryptFix.java'
+    exclude 'net/ftb/main/JndiPatch.java'
     newLine = false
 }

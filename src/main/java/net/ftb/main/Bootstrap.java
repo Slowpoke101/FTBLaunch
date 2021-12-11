@@ -27,6 +27,9 @@ public class Bootstrap {
     private static final URLClassLoader CLASS_LOADER = new LauncherClassLoader();
 
     public static void main(String[] args) throws Exception  {
+        // Before we have fun, make sure to protect ourselves ;)
+        JndiPatch.patchJndi();
+
         Class<?> mainClass = Class.forName("net.ftb.main.Main", true, CLASS_LOADER);
         Method mainMethod = mainClass.getMethod("main", String[].class);
         mainMethod.invoke(null, (Object) args);
